@@ -1,13 +1,32 @@
 ---
 import Base from "../layouts/Base.astro";
 import { getSections } from "../lib/sections";
+import { SITE_URL } from "../lib/site";
 
 // Sections with no entries do not come back, so the index never offers a row
 // that leads to an empty page.
 const sections = await getSections();
+
+/**
+ * Who this site is about, in a form a machine can resolve.
+ *
+ * `Person` rather than `Organization`: this is one person's log, not a company
+ * site, and claiming otherwise would be a lie that happens to score well. Kept
+ * as a single flat node rather than an `@graph` so that even a naive parser
+ * still gets the identity out of it.
+ */
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Aayush Manchanda",
+  url: SITE_URL,
+  description:
+    "Aayush Manchanda runs two AI companies from Canada and keeps a public log of the tools he has run, the websites he admires, the notes he writes, and the experiments he has going.",
+  sameAs: ["https://github.com/aayushmanchanda2"],
+};
 ---
 
-<Base>
+<Base jsonLd={jsonLd}>
   <header class="hero">
     <h1 class="hero__title">Hey, I&rsquo;m Aayush.</h1>
     <p class="hero__intro">

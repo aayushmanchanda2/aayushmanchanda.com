@@ -16,15 +16,25 @@ import ProximitySidebar, {
 } from "../components/ProximitySidebar.astro";
 import MobileNav from "../components/MobileNav.astro";
 import { getSections } from "../lib/sections";
+import { absolute } from "../lib/site";
 
 interface Props {
   title?: string;
   description?: string;
+  /**
+   * Structured data for this page, serialised into one `ld+json` block.
+   *
+   * A prop rather than a `<slot name="head">` because the value is data, not
+   * markup: the layout keeps sole ownership of how it gets serialised, and a
+   * page cannot push arbitrary script into the head through it.
+   */
+  jsonLd?: Record<string, unknown>;
 }
 
 const {
   title = "Aayush Manchanda",
   description = "The digital mindscape of Aayush Manchanda — tools he actually tests, sites that inspire him, notes, and experiments in flight.",
+  jsonLd,
 } = Astro.props;
 
 /**
@@ -56,6 +66,33 @@ const clocks = [
 
 const pathname = Astro.url.pathname;
 const year = new Date().getFullYear();
+
+/**
+ * The canonical URL for this page.
+ *
+ * Built through `absolute()` rather than `Astro.site`, though the two hold the
+ * same value: `Astro.site` is typed `URL | undefined`, and reading the origin
+ * from the module that owns it keeps the DNS cutover a genuinely one-line
+ * change instead of one line plus a fallback that could quietly disagree.
+ */
+const canonical = absolute(pathname);
+
+/** One static card for the whole site. Regenerate with `npm run og`. */
+const ogImage = absolute("/og.png");
+
+/**
+ * The pages that have a markdown variant. Advertising it with `rel=alternate`
+ * gives an agent a way to find the markdown by reading the HTML, without
+ * having to know the `Accept` negotiation trick or guess at a `.md` suffix.
+ *
+ * Trailing slashes are stripped first because Astro builds directory-format
+ * routes, so this page's own pathname arrives as `/tools/`.
+ */
+const MARKDOWN_ROUTES = new Set(["/", "/tools", "/sites", "/notes", "/experiments"]);
+const route = pathname !== "/" ? pathname.replace(/\/+$/, "") : "/";
+const markdownVariant = MARKDOWN_ROUTES.has(route)
+  ? absolute(route === "/" ? "/index.md" : `${route}.md`)
+  : null;
 ---
 
 <!doctype html>
@@ -69,10 +106,37 @@ const year = new Date().getFullYear();
     <meta name="theme-color" content="#09090B" media="(prefers-color-scheme: dark)" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
     <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Aayush Manchanda" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Aayush Manchanda" />
+    <meta property="og:locale" content="en_CA" />
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
+
+    {
+      markdownVariant && (
+        <link rel="alternate" type="text/markdown" href={markdownVariant} />
+      )
+    }
+    <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
+
+    {
+      jsonLd && (
+        <script
+          type="application/ld+json"
+          is:inline
+          set:html={JSON.stringify(jsonLd)}
+        />
+      )
+    }
   </head>
 
   <body>
@@ -117,7 +181,11 @@ const year = new Date().getFullYear();
           }
         </dl>
 
-        <p class="foot__meta mono tabular-nums">&copy; {year}</p>
+        <p class="foot__meta mono">
+          <a class="foot__quiet press" href="/privacy">Privacy</a>
+          <span aria-hidden="true">&middot;</span>
+          <span class="tabular-nums">&copy; {year}</span>
+        </p>
       </footer>
     </div>
 
@@ -251,6 +319,21 @@ const year = new Date().getFullYear();
       .foot__meta {
         color: var(--faint);
         margin: 0;
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+      }
+
+      /* Sits at the copyright's weight, not the social links': /privacy is
+         housekeeping, and it should read as housekeeping until hovered. */
+      .foot__quiet {
+        display: inline-block;
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .foot__quiet:hover {
+        color: var(--accent);
       }
 
       @media (max-width: 599px) {

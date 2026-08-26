@@ -1,0 +1,140 @@
+---
+/**
+ * 404 — the recovery page.
+ *
+ * Two readers land here and both need the same thing: a list of real links.
+ * So the way out is plain anchors to the live sections rather than a styled
+ * apology, and the sections come from `getSections()` for the same reason the
+ * nav and the home index do — a section that empties out must not be offered
+ * from a page whose entire job is to stop dead ends.
+ *
+ * Deliberately lighter than the home index: no numbers, no blurbs, no arrows.
+ * This is a detour sign, not a table of contents.
+ */
+import Base from "../layouts/Base.astro";
+import { getSections } from "../lib/sections";
+
+const sections = await getSections();
+---
+
+<Base
+  title="Not found · Aayush Manchanda"
+  description="That page does not exist. Links to everything this site actually has."
+>
+  <header>
+    {/*
+      Mono lowercase over the sans masthead, same call /notes makes: this is a
+      terse statement rather than a section name, and a 404 in the mono voice
+      reads as the machine answering plainly instead of the site shouting.
+    */}
+    <h1 class="page-title miss-title">Nothing here.</h1>
+    <p class="standfirst">
+      This URL does not exist. Either it never did, or I moved it and left no
+      forwarding note. Everything the site actually has is listed below, and
+      <a href="/">the front page</a> has not moved.
+    </p>
+  </header>
+
+  <nav class="ways" aria-labelledby="ways-heading">
+    <h2 class="ways__title mono" id="ways-heading">What is actually here</h2>
+
+    <ul class="ways__list">
+      {
+        sections.map((section) => (
+          <li>
+            <a class="row press" href={section.href}>
+              <span class="row__name">{section.name}</span>
+              <span class="row__count mono tabular-nums">{section.count}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  <p class="agents mono">
+    Agents can start at <a href="/llms.txt">/llms.txt</a>. Every URL is in
+    <a href="/sitemap-index.xml">/sitemap-index.xml</a>.
+  </p>
+</Base>
+
+<style>
+  .miss-title {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    /* mono glyphs are already wide; the sans tracking would crowd them */
+    letter-spacing: -0.02em;
+    font-size: clamp(2.25rem, 8vw, 4.25rem);
+    text-transform: lowercase;
+    /* mono has no side bearing to correct for */
+    margin-left: 0;
+  }
+
+  .ways {
+    margin-top: clamp(3.5rem, 12vh, 6rem);
+  }
+
+  .ways__title {
+    color: var(--faint);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+  }
+
+  .ways__list {
+    margin-top: 1.25rem;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .row {
+    /* a full-width row shrinking by 4% reads as a glitch, not a press */
+    --press-scale: 0.995;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: clamp(0.75rem, 1.8vw, 0.9rem);
+    border-bottom: 1px solid var(--hairline);
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .row:hover {
+    border-bottom-color: var(--hairline-strong);
+  }
+
+  .row__name {
+    font-size: 1.0625rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    transition-property: color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .row:hover .row__name {
+    color: var(--accent);
+  }
+
+  .row__count {
+    color: var(--faint);
+  }
+
+  .agents {
+    margin-top: clamp(2rem, 6vh, 3rem);
+    color: var(--faint);
+    /* the label voice is uppercase; a sentence with paths in it is not */
+    text-transform: none;
+    letter-spacing: 0.02em;
+    font-size: 0.75rem;
+    line-height: 1.7;
+  }
+
+  .agents a {
+    color: inherit;
+    text-decoration-color: var(--hairline-strong);
+  }
+
+  .agents a:hover {
+    color: var(--accent);
+  }
+</style>

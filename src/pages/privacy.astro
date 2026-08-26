@@ -1,0 +1,131 @@
+---
+/**
+ * /privacy — the trust anchor.
+ *
+ * Every claim on this page was checked against the code before it was written,
+ * and the page says so about the one exception rather than rounding down to
+ * "no third parties": `faviconUrl()` in `lib/tools.ts` is rendered by
+ * `components/ToolList.astro` and `pages/tools/[slug].astro`, so the tool pages
+ * really do hit Google. A privacy page that is wrong about its own build is
+ * worth less than no page at all.
+ *
+ * Not in the nav or the section manifest on purpose: it is a footer page.
+ */
+import Base from "../layouts/Base.astro";
+---
+
+<Base
+  title="Privacy · Aayush Manchanda"
+  description="What this site collects, what it loads from elsewhere, and how to get a screenshot of your site taken down."
+>
+  <header>
+    <h1 class="page-title">Privacy</h1>
+    <p class="standfirst">
+      Short version: this site is a pile of static files. It does not know who
+      you are and it is not set up to find out.
+    </p>
+  </header>
+
+  <div class="prose">
+    <section>
+      <h2 class="prose__head mono">What I collect</h2>
+      <p>
+        Nothing. There are no accounts, no forms, no comments, no newsletter
+        box. There is nothing here for you to fill in, and nowhere for it to go
+        if there were.
+      </p>
+      <p>
+        There is no analytics on this site. No Google Analytics, no Plausible,
+        no Vercel Analytics, no tracking pixel, no beacon. It sets no cookies
+        and writes nothing to local storage. The fonts are bundled into the
+        build and served from this domain, so reading a page here does not tell
+        a font CDN that you were reading it.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="prose__head mono">The one outside request</h2>
+      <p>
+        The tool pages are the exception and I would rather name it than claim a
+        clean sweep. Each tool row shows the favicon of that tool&rsquo;s own
+        website, and those come from Google&rsquo;s favicon service instead of
+        my server. So loading <a href="/tools">/tools</a> or any tool page makes
+        a request to Google with the tool&rsquo;s domain in the URL, and Google
+        sees your IP
+        address the way any host does when your browser fetches an image. The
+        request is sent with no referrer, so it does not carry which page you
+        were on. Nothing else on the site loads from anyone else.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="prose__head mono">Server logs</h2>
+      <p>
+        The site is hosted on Vercel, and Vercel keeps its own standard request
+        logs, same as any host. I do not read them, I do not analyse them, and I
+        have not wired anything to them. They are a side effect of being on the
+        internet, not something I set up to learn about you.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="prose__head mono">Screenshots of other people&rsquo;s sites</h2>
+      <p>
+        The <a href="/sites">/sites</a> gallery is screenshots of other
+        people&rsquo;s websites. A pipeline takes them automatically when I save
+        a link, and
+        every one of them gets a page that links out to the site it came from.
+        If one of them is yours and you want it gone, open an issue at
+        <a href="https://github.com/aayushmanchanda2" rel="noopener">
+          github.com/aayushmanchanda2
+        </a>
+        and I will take it down. You do not have to explain why. That is the only
+        contact route on this site.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="prose__head mono">Who owns what</h2>
+      <p>
+        My writing and my notes are mine. The screenshots and anything I quote
+        belong to whoever made the thing they are of. If you want to reuse
+        something I wrote, go ahead. A link back is plenty.
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .prose {
+    margin-top: clamp(3.5rem, 12vh, 6rem);
+    max-width: 62ch;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .prose section {
+    padding-block: clamp(1.75rem, 4vw, 2.25rem);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .prose__head {
+    color: var(--faint);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    /* the head is the label; the paragraph under it carries the reading size */
+    line-height: 1.6;
+  }
+
+  .prose p {
+    margin-top: 0.85rem;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  @media (max-width: 599px) {
+    .prose {
+      /* narrower column, so the measure is already short enough */
+      max-width: none;
+    }
+  }
+</style>
