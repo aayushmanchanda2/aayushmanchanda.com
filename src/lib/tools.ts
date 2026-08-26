@@ -8,7 +8,17 @@
  *
  * Past this module the types are earned, so the rest of the site can trust
  * them. Nothing here uses an `as` cast to skip that work.
+ *
+ * The generic half of the parse — the slug shape, the date check, "is this a
+ * non-empty string" — comes from `lib/parse.ts`, which all three data
+ * boundaries share. What stayed here is what only /tools knows: the verdict
+ * vocabulary, the http(s) URL rule, the category-collision check, and every
+ * error message, which are written for the person who has to go and fix the
+ * file.
  */
+
+import type { Fail } from "./parse";
+import { SLUG, readers } from "./parse";
 
 import rawTools from "../data/tools.json";
 
@@ -30,32 +40,36 @@ export interface Tool {
   status_date: string;
 }
 
-export interface ToolGroup {
+/**
+ * Both groups are `type` rather than `interface` on purpose.
+ *
+ * They are handed straight to `getStaticPaths` as a route's props, and Astro
+ * types props as an index-signature record. TypeScript gives an object *type
+ * alias* an implicit index signature and an *interface* none, so an interface
+ * here fails to satisfy `GetStaticPaths` for a reason that has nothing to do
+ * with the shape. The alternative was to spread the group at every call site.
+ */
+export type ToolGroup = {
   category: string;
   slug: string;
   tools: Tool[];
-}
+};
 
-export interface VerdictGroup {
+export type VerdictGroup = {
   verdict: Verdict;
   tools: Tool[];
-}
+};
 
 /* ---------------------------------------------------------------------------
    Parsing
    --------------------------------------------------------------------------- */
 
-const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 const VERDICT_NAMES: readonly string[] = VERDICTS;
 
-function fail(where: string, problem: string): never {
-  throw new Error(`src/data/tools.json: ${where} ${problem}`);
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
+const READ = readers("tools.json");
+/** Annotated, or TypeScript stops treating a call as the end of control flow. */
+const fail: Fail = READ.fail;
+const { readString, readDate, isRecord } = READ;
 
 function isVerdict(value: unknown): value is Verdict {
   return typeof value === "string" && VERDICT_NAMES.includes(value);
@@ -67,18 +81,6 @@ function safeUrl(value: string): URL | null {
   } catch {
     return null;
   }
-}
-
-function readString(
-  entry: Record<string, unknown>,
-  key: string,
-  where: string,
-): string {
-  const value = entry[key];
-  if (typeof value !== "string" || value.trim() === "") {
-    fail(where, `needs a non-empty string "${key}" (got ${JSON.stringify(value)})`);
-  }
-  return value;
 }
 
 function readUrl(entry: Record<string, unknown>, where: string): string | null {
@@ -98,20 +100,6 @@ function readUrl(entry: Record<string, unknown>, where: string): string | null {
 
   // Returned as authored, not as `parsed.toString()`, which would rewrite bare
   // origins with a trailing slash and change what the page shows.
-  return value;
-}
-
-function readDate(entry: Record<string, unknown>, where: string): string {
-  const value = readString(entry, "status_date", where);
-  const time = Date.parse(`${value}T00:00:00Z`);
-  const isRealDate =
-    ISO_DATE.test(value) &&
-    !Number.isNaN(time) &&
-    new Date(time).toISOString().slice(0, 10) === value;
-
-  if (!isRealDate) {
-    fail(where, `needs "status_date" as a real YYYY-MM-DD date (got ${JSON.stringify(value)})`);
-  }
   return value;
 }
 
@@ -149,7 +137,7 @@ export function parseTools(value: unknown): Tool[] {
       category: readString(item, "category", where),
       verdict,
       note: readString(item, "note", where),
-      status_date: readDate(item, where),
+      status_date: readDate(item, "status_date", where),
     };
   });
 
@@ -184,19 +172,6 @@ export function categorySlug(category: string): string {
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
-}
-
-/** Google's favicon service. The only third-party host the site touches. */
-export function faviconUrl(url: string): string {
-  const host = new URL(url).hostname;
-  return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=32`;
-}
-
-/** `github.com/block/buzz` — the link without the protocol noise. */
-export function linkLabel(url: string): string {
-  const parsed = new URL(url);
-  const path = parsed.pathname === "/" ? "" : parsed.pathname.replace(/\/+$/, "");
-  return `${parsed.hostname.replace(/^www\./, "")}${path}${parsed.search}`;
 }
 
 /** Groups in the order the categories first appear in the JSON. */

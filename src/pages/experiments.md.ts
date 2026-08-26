@@ -13,6 +13,7 @@ import type { APIRoute } from "astro";
 
 import type { Status } from "../lib/experiments";
 import { STATUSES, experiments } from "../lib/experiments";
+import { absolutize } from "../lib/links";
 import {
   PAGES,
   list,
@@ -21,7 +22,6 @@ import {
   table,
   newest,
 } from "../lib/markdown";
-import { absolute } from "../lib/site";
 
 /**
  * What the four words mean. Keyed by `Status`, so adding a fifth one fails the
@@ -37,9 +37,7 @@ const MEANING: Record<Status, string> = {
 /** An experiment links at the section it produced, or out at something else. */
 function links(paths: readonly string[]): string {
   if (paths.length === 0) return "none";
-  return paths
-    .map((path) => (path.startsWith("/") ? absolute(path) : path))
-    .join(" ");
+  return paths.map(absolutize).join(" ");
 }
 
 export const GET: APIRoute = () => {

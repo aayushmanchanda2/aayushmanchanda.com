@@ -19,13 +19,8 @@
  *    current pathname, and clicking navigates natively.
  */
 
-export type NavKind = "title" | "subtitle" | "section" | "body";
-
-export interface NavItem {
-  href: string;
-  label: string;
-  kind?: NavKind;
-}
+import { normalize } from "../lib/links";
+import type { NavItem } from "../lib/sections";
 
 interface Props {
   items: NavItem[];
@@ -33,9 +28,6 @@ interface Props {
 }
 
 const { items, pathname } = Astro.props;
-
-const normalize = (p: string) =>
-  p.length > 1 && p.endsWith("/") ? p.slice(0, -1) : p;
 
 const current = normalize(pathname);
 ---

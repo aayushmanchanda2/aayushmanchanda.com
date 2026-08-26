@@ -8,12 +8,9 @@
  * moving between the two sections should not have to relearn the page.
  */
 import Base from "../layouts/Base.astro";
+import EntryLink from "../components/EntryLink.astro";
 import StatusChip from "../components/StatusChip.astro";
 import { experiments } from "../lib/experiments";
-import { linkLabel } from "../lib/tools";
-
-/** Site paths show as written; outside links lose the protocol noise. */
-const label = (link: string) => (link.startsWith("/") ? link : linkLabel(link));
 ---
 
 <Base
@@ -48,20 +45,7 @@ const label = (link: string) => (link.startsWith("/") ? link : linkLabel(link));
             <ul class="row__links mono">
               {experiment.links.map((link) => (
                 <li>
-                  {link.startsWith("/") ? (
-                    <a class="row__link" href={link}>
-                      {label(link)}
-                    </a>
-                  ) : (
-                    <a
-                      class="row__link"
-                      href={link}
-                      rel="noopener nofollow"
-                      target="_blank"
-                    >
-                      {label(link)}
-                    </a>
-                  )}
+                  <EntryLink class="row__link" href={link} />
                 </li>
               ))}
             </ul>
@@ -137,18 +121,23 @@ const label = (link: string) => (link.startsWith("/") ? link : linkLabel(link));
     letter-spacing: 0;
   }
 
-  /* Carries its own underline: on touch there is no hover to reveal one. */
-  .row__link {
+  /* The anchor itself comes from `EntryLink`, and Astro's scoping stops at a
+     component boundary — the cid this page stamps on its own elements never
+     reaches a child's. `:global()` under an ancestor that does carry the cid is
+     the way through: the rule still cannot escape this page.
+
+     Carries its own underline: on touch there is no hover to reveal one. */
+  .row__links :global(.row__link) {
     color: var(--faint);
     text-decoration-line: underline;
     text-decoration-color: var(--hairline-strong);
   }
 
-  .row:hover .row__link {
+  .row:hover :global(.row__link) {
     color: var(--accent);
   }
 
-  .row__link:hover {
+  .row__links :global(.row__link:hover) {
     color: var(--accent);
     text-decoration-color: currentColor;
   }

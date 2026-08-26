@@ -93,35 +93,7 @@ const { site } = Astro.props;
     color: var(--faint);
   }
 
-  /* --- fields -------------------------------------------------------------- */
-
-  .facts {
-    margin-top: clamp(3rem, 10vh, 5rem);
-    border-top: 1px solid var(--hairline);
-  }
-
-  .fact {
-    display: grid;
-    grid-template-columns: 7rem minmax(0, 1fr);
-    gap: 0.35rem 1rem;
-    align-items: baseline;
-    padding-block: 0.95rem;
-    border-bottom: 1px solid var(--hairline);
-  }
-
-  .fact dt {
-    color: var(--faint);
-  }
-
-  .fact dd {
-    margin: 0;
-    min-width: 0;
-    overflow-wrap: anywhere;
-  }
-
-  @media (max-width: 599px) {
-    .fact {
-      grid-template-columns: minmax(0, 1fr);
-    }
-  }
+  /* The field table itself (`.facts`, `.fact`) is in global.css — /tools ends
+     in the same one. Every value on this page is plain text or a plain link,
+     so there is nothing left for this page to add to it. */
 </style>

@@ -13,10 +13,17 @@
  * `astro build` and never reaches a deploy.
  *
  * Nothing here uses an `as` cast to skip that work.
+ *
+ * The generic half of the parse comes from `lib/parse.ts`, shared with the
+ * other two boundaries. The shot guard, the domain cross-check and every error
+ * message stayed here: they are what /sites knows and the other two do not.
  */
 
 import { existsSync } from "node:fs";
 import path from "node:path";
+
+import type { Fail } from "./parse";
+import { SLUG, readers } from "./parse";
 
 import rawSites from "../data/sites.json";
 
@@ -39,19 +46,27 @@ export interface Site {
   shots: SiteShots;
 }
 
-export interface DomainGroup {
+/**
+ * `type` rather than `interface`: this is handed to `getStaticPaths` as a
+ * route's props, and only a type alias gets the implicit index signature Astro
+ * expects there. Same call as `ToolGroup` in `lib/tools.ts`.
+ */
+export type DomainGroup = {
   domain: string;
   slug: string;
   sites: Site[];
-}
+};
 
 /* ---------------------------------------------------------------------------
    Parsing
    --------------------------------------------------------------------------- */
 
-const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 const SHOT_PATH = /^\/shots\/[a-z0-9][a-z0-9-]*\.webp$/;
+
+const READ = readers("sites.json");
+/** Annotated, or TypeScript stops treating a call as the end of control flow. */
+const fail: Fail = READ.fail;
+const { readString, readDate, isRecord } = READ;
 
 /**
  * `public/` — the web root, so a `/shots/…` path resolves by joining here.
@@ -68,40 +83,6 @@ if (!existsSync(PUBLIC_DIR)) {
     `src/lib/sites.ts: no public/ directory at ${PUBLIC_DIR}. ` +
       `Astro must run from the project root for the shot guard to work.`,
   );
-}
-
-function fail(where: string, problem: string): never {
-  throw new Error(`src/data/sites.json: ${where} ${problem}`);
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
-
-function readString(
-  entry: Record<string, unknown>,
-  key: string,
-  where: string,
-): string {
-  const value = entry[key];
-  if (typeof value !== "string" || value.trim() === "") {
-    fail(where, `needs a non-empty string "${key}" (got ${JSON.stringify(value)})`);
-  }
-  return value;
-}
-
-function readDate(entry: Record<string, unknown>, where: string): string {
-  const value = readString(entry, "saved_date", where);
-  const time = Date.parse(`${value}T00:00:00Z`);
-  const isRealDate =
-    ISO_DATE.test(value) &&
-    !Number.isNaN(time) &&
-    new Date(time).toISOString().slice(0, 10) === value;
-
-  if (!isRealDate) {
-    fail(where, `needs "saved_date" as a real YYYY-MM-DD date (got ${JSON.stringify(value)})`);
-  }
-  return value;
 }
 
 /** Returns the parsed URL so the caller can cross-check the domain against it. */
@@ -215,7 +196,7 @@ export function parseSites(value: unknown): Site[] {
       // origins with a trailing slash and change what the page shows.
       url: readString(item, "url", where),
       domain: readDomain(item, url, where),
-      saved_date: readDate(item, where),
+      saved_date: readDate(item, "saved_date", where),
       shots: readShots(item, slug, where),
     };
   });

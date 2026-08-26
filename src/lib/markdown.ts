@@ -26,8 +26,11 @@ export interface MarkdownPage {
 /**
  * Every markdown variant the site serves.
  *
- * Kept as one list because each document has to link to the other four. A sixth
- * variant is added here and nowhere else.
+ * Kept as one list because each document has to link to the other four, and
+ * because four other surfaces need to know which pages have a variant: the
+ * section manifest, the `rel=alternate` link in the layout, the sitemap's
+ * custom pages, and `/llms.txt`. All four read it from here through
+ * `markdownVariantFor`. A sixth variant is added here and nowhere else.
  */
 export const PAGES: Record<
   "home" | "tools" | "sites" | "experiments" | "notes",
@@ -43,6 +46,19 @@ export const PAGES: Record<
   },
   notes: { html: "/notes", md: "/notes.md", name: "Notes" },
 };
+
+/**
+ * The markdown variant for an HTML path, or null when that page has none.
+ *
+ * Three of the surfaces above used to answer this by appending `.md` to the
+ * path and hoping. That guess reads as a fact, and it would point an agent at a
+ * 404 the first time a page shipped without a variant — which is precisely the
+ * case the guess cannot see.
+ */
+export function markdownVariantFor(html: string): string | null {
+  const page = Object.values(PAGES).find((variant) => variant.html === html);
+  return page === undefined ? null : page.md;
+}
 
 /* ---------------------------------------------------------------------------
    Inline pieces
@@ -127,6 +143,15 @@ export interface DocumentSpec {
    * page genuinely has no dated content.
    */
   updated?: string;
+  /**
+   * HTTP status. Defaults to 200.
+   *
+   * Only the markdown 404 sets it. That document is the same document as every
+   * other one — frontmatter, a canonical URL, the index of the other pages —
+   * and the only thing dead about it is the status line, so that is the only
+   * thing it gets to override.
+   */
+  status?: number;
   /** Rendered in order, one blank line between each. */
   blocks: readonly string[];
 }
@@ -188,6 +213,7 @@ export function markdownDocument(spec: DocumentSpec): Response {
     ].join("\n\n") + "\n";
 
   return new Response(body, {
+    status: spec.status ?? 200,
     headers: {
       "Content-Type": "text/markdown; charset=utf-8",
       // The static build writes these to disk, so the headers a client actually

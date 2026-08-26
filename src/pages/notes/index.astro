@@ -2,9 +2,9 @@
 /**
  * /notes — the commonplace book index.
  *
- * The heading is the one place on the site that breaks the huge-sans-masthead
- * rule: notes are the informal section, and a lowercase mono word with a full
- * stop after it says that faster than a paragraph could.
+ * The heading takes the mono masthead (`.page-title--mono` in global.css, which
+ * the 404 shares): notes are the informal section, and a lowercase mono word
+ * with a full stop after it says that faster than a paragraph could.
  */
 import { getCollection } from "astro:content";
 
@@ -23,7 +23,7 @@ const day = (date: Date) => date.toISOString().slice(0, 10);
   description="Short notes from Aayush Manchanda: musings written out, and whiteboard scratches with a line underneath."
 >
   <header>
-    <h1 class="page-title notes-title">notes.</h1>
+    <h1 class="page-title page-title--mono">notes.</h1>
     <p class="standfirst">
       Short things I wanted somewhere public. Some are written out, some are a
       photo of a whiteboard with one line under it.
@@ -58,17 +58,6 @@ const day = (date: Date) => date.toISOString().slice(0, 10);
 </Base>
 
 <style>
-  .notes-title {
-    font-family: var(--font-mono);
-    font-weight: 500;
-    /* mono glyphs are already wide; the sans tracking would crowd them */
-    letter-spacing: -0.02em;
-    font-size: clamp(2.25rem, 8vw, 4.25rem);
-    text-transform: lowercase;
-    /* mono has no side bearing to correct for */
-    margin-left: 0;
-  }
-
   .list {
     margin-top: clamp(3.5rem, 12vh, 6rem);
     border-top: 1px solid var(--hairline);

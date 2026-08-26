@@ -1,0 +1,39 @@
+---
+/**
+ * EntryLink — one link out of an entry, wherever it points.
+ *
+ * /experiments and /notes both render a row of links an entry carries, and both
+ * had the same ternary inline: a bare anchor for a site path, and the same
+ * anchor plus `rel="noopener nofollow" target="_blank"` for anything else. Two
+ * copies of a two-branch rule about outbound links is one copy too many, and
+ * the branch that gets forgotten is always the one with the attributes on it.
+ *
+ * `rel` and `target` are set to `undefined` for an internal link rather than to
+ * an empty string: Astro drops an attribute whose value is `undefined`, so the
+ * rendered markup for a site path is a plain `<a href>` with nothing on it.
+ *
+ * The default label is the link as a reader would want to read it — a site path
+ * as written, an outside URL without the protocol noise. A caller that wants
+ * something else passes children.
+ */
+import { isInternal, linkLabel } from "../lib/links";
+
+interface Props {
+  href: string;
+  /** Forwarded so the two pages can keep their own row styling. */
+  class?: string;
+}
+
+const { href, class: className } = Astro.props;
+
+const external = !isInternal(href);
+---
+
+<a
+  class={className}
+  href={href}
+  rel={external ? "noopener nofollow" : undefined}
+  target={external ? "_blank" : undefined}
+>
+  <slot>{external ? linkLabel(href) : href}</slot>
+</a>

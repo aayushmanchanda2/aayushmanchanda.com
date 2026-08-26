@@ -18,13 +18,11 @@
 
 import type { APIRoute } from "astro";
 
+import { PAGES } from "../lib/markdown";
 import { getSections } from "../lib/sections";
 import { sites } from "../lib/sites";
 import { categories, tools, verdictGroups } from "../lib/tools";
 import { absolute } from "../lib/site";
-
-/** `/tools` -> `/tools.md`. The markdown variant of a section page. */
-const markdownUrl = (href: string) => absolute(`${href}.md`);
 
 /** Counts are interpolated into prose, and "1 entries" reads as a bug. */
 const entries = (count: number) => `${count} ${count === 1 ? "entry" : "entries"}`;
@@ -32,11 +30,14 @@ const entries = (count: number) => `${count} ${count === 1 ? "entry" : "entries"
 export const GET: APIRoute = async () => {
   const sections = await getSections();
 
+  // `section.md` comes from the manifest, which reads it from `lib/markdown.ts`.
+  // A section that has no variant says nothing rather than being handed a URL
+  // derived from its path, which would point an agent at a file that is not there.
   const sectionList = sections
-    .map(
-      (section) =>
-        `- [${section.name}](${absolute(section.href)}) (${entries(section.count)}, markdown: ${markdownUrl(section.href)}): ${section.blurb}`,
-    )
+    .map((section) => {
+      const md = section.md === null ? "" : `, markdown: ${absolute(section.md)}`;
+      return `- [${section.name}](${absolute(section.href)}) (${entries(section.count)}${md}): ${section.blurb}`;
+    })
     .join("\n");
 
   const verdictCounts = verdictGroups
@@ -100,7 +101,7 @@ sitemap lists all of them.
 
 ## Pages
 
-- [Home](${absolute("/")}) (markdown: ${absolute("/index.md")}): who he is and
+- [Home](${absolute(PAGES.home.html)}) (markdown: ${absolute(PAGES.home.md)}): who he is and
   an index of the four sections.
 ${sectionList}
 - [Privacy](${absolute("/privacy")}): what this site does and does not collect,

@@ -7,8 +7,9 @@
  * verdict pages pass a subset and keep the headers; the category pages turn
  * them off, because there the h1 already says the category.
  */
+import { faviconUrl } from "../lib/links";
 import type { Tool } from "../lib/tools";
-import { faviconUrl, groupByCategory } from "../lib/tools";
+import { groupByCategory } from "../lib/tools";
 import VerdictBadge from "./VerdictBadge.astro";
 
 interface Props {

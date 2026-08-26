@@ -1,14 +1,21 @@
 ---
 /**
- * MobileNav — the emblemo flourish for < 900px.
+ * MobileNav — the emblemo flourish below 900px.
  *
  * A rotated vertical "MENU" label welded to the left edge; tapping it slides a
  * full-height electric-blue panel in from the left, white items in Geist Mono,
  * entering on a ~70ms stagger. Every transition is a CSS transition (never a
  * keyframe animation) so an interrupted open/close reverses from wherever it
  * happens to be, rather than snapping.
+ *
+ * "below 900px", not "< 900px", and that is not a style preference. A bare `<`
+ * anywhere in the frontmatter — inside a comment included — makes the Astro
+ * compiler lose the `Props` interface when it generates TSX, so `Astro.props`
+ * degrades to `Record<string, any>` and every prop on this component silently
+ * stops being typed. `npm run check` is what caught it. Write the word.
  */
-import type { NavItem } from "./ProximitySidebar.astro";
+import { normalize } from "../lib/links";
+import type { NavItem } from "../lib/sections";
 
 interface Props {
   items: NavItem[];
@@ -16,9 +23,6 @@ interface Props {
 }
 
 const { items, pathname } = Astro.props;
-
-const normalize = (p: string) =>
-  p.length > 1 && p.endsWith("/") ? p.slice(0, -1) : p;
 
 const current = normalize(pathname);
 ---
@@ -286,26 +290,31 @@ const current = normalize(pathname);
     const desktop = window.matchMedia("(min-width: 900px)");
     let open = false;
 
-    function setOpen(next: boolean) {
+    // A const arrow rather than a function declaration, so the four non-null
+    // narrowings the guard above just established still hold inside it. A
+    // hoisted `function` is reachable from before the guard as far as
+    // TypeScript is concerned, which is what used to force a `!` onto every
+    // one of these lines.
+    const setOpen = (next: boolean) => {
       if (next === open) return;
       open = next;
 
-      toggle!.setAttribute("aria-expanded", String(next));
+      toggle.setAttribute("aria-expanded", String(next));
       document.documentElement.style.overflow = next ? "hidden" : "";
 
       if (next) {
-        scrim!.hidden = false;
+        scrim.hidden = false;
         // one frame so the [hidden] -> display change lands before the
         // opacity transition starts
-        requestAnimationFrame(() => scrim!.setAttribute("data-open", ""));
-        panel!.setAttribute("data-open", "");
-        close!.focus({ preventScroll: true });
+        requestAnimationFrame(() => scrim.setAttribute("data-open", ""));
+        panel.setAttribute("data-open", "");
+        close.focus({ preventScroll: true });
       } else {
-        scrim!.removeAttribute("data-open");
-        panel!.removeAttribute("data-open");
-        toggle!.focus({ preventScroll: true });
+        scrim.removeAttribute("data-open");
+        panel.removeAttribute("data-open");
+        toggle.focus({ preventScroll: true });
       }
-    }
+    };
 
     // Keep the scrim out of the a11y/hit-test tree once it has faded out,
     // but never mid-transition (that would kill the fade).

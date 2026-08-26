@@ -18,12 +18,12 @@ import path from "node:path";
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
 
+// The same two link shapes every other section checks against, from the module
+// that owns them.
+import { EXTERNAL_URL, INTERNAL_PATH } from "./lib/links";
+
 /** Web paths under `public/notes`. Kept narrow so a note cannot link out. */
 const IMAGE_PATH = /^\/notes\/[a-z0-9][a-z0-9-]*\.(webp|png|jpe?g|svg)$/;
-
-/** Same rule the /experiments parser applies: a site path, or an http(s) URL. */
-const INTERNAL_PATH = /^\/[a-z0-9][a-z0-9\-/]*$/;
-const EXTERNAL_URL = /^https?:\/\/\S+$/;
 
 /**
  * A scratch note is mostly its image, and an image that 404s is worse than no

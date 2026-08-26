@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
+import { PAGES } from './src/lib/markdown.ts';
 import { SITE_URL, absolute } from './src/lib/site.ts';
 
 /**
@@ -14,16 +15,11 @@ import { SITE_URL, absolute } from './src/lib/site.ts';
  * markdown version of each page exists without knowing to guess a `.md` suffix
  * or to negotiate on `Accept`.
  *
- * This list mirrors `src/pages/*.md.ts` one to one. Adding a sixth variant
- * means adding it here too.
+ * Read from `src/lib/markdown.ts`, the one list of variants the site has. This
+ * file used to keep its own copy, and a copy goes stale quietly: a sixth
+ * variant would have shipped, worked, and stayed invisible to the sitemap.
  */
-const MARKDOWN_VARIANTS = [
-  '/index.md',
-  '/tools.md',
-  '/sites.md',
-  '/notes.md',
-  '/experiments.md',
-].map(absolute);
+const MARKDOWN_VARIANTS = Object.values(PAGES).map((page) => absolute(page.md));
 
 // https://astro.build/config
 export default defineConfig({

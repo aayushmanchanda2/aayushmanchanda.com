@@ -14,15 +14,12 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
 
+import { absolutize } from "../lib/links";
 import { PAGES, markdownDocument, newest } from "../lib/markdown";
 import { absolute } from "../lib/site";
 
 /** Dates are stored as dates and shown as `YYYY-MM-DD`, same as every page. */
 const day = (date: Date): string => date.toISOString().slice(0, 10);
-
-/** Site paths become absolute; anything else is already a full URL. */
-const target = (path: string): string =>
-  path.startsWith("/") ? absolute(path) : path;
 
 export const GET: APIRoute = async () => {
   const notes = (await getCollection("notes")).sort(
@@ -48,7 +45,7 @@ export const GET: APIRoute = async () => {
 
     const links = note.data.links ?? [];
     if (links.length > 0) {
-      parts.push(`See also: ${links.map(target).join(" ")}`);
+      parts.push(`See also: ${links.map(absolutize).join(" ")}`);
     }
 
     return parts.join("\n\n");

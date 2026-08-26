@@ -28,8 +28,8 @@ const jsonLd = {
 
 <Base jsonLd={jsonLd}>
   <header class="hero">
-    <h1 class="hero__title">Hey, I&rsquo;m Aayush.</h1>
-    <p class="hero__intro">
+    <h1 class="page-title">Hey, I&rsquo;m Aayush.</h1>
+    <p class="standfirst hero__intro">
       I&rsquo;m 28, and I run two AI companies from Canada. Orbis builds AI for
       healthcare; Vetted is my AI consulting practice. Most of my time goes
       into agent systems, including the one that publishes this site. I save a
@@ -77,21 +77,17 @@ const jsonLd = {
 <style>
   /* --- hero --------------------------------------------------------------- */
 
-  .hero__title {
-    font-size: clamp(2.75rem, 10vw, 5.25rem);
-    font-weight: 600;
-    letter-spacing: -0.045em;
-    line-height: 0.98;
-    /* optical: pull the H stem flush with the column edge */
-    margin-left: -0.04em;
-  }
+  /* The masthead and its standfirst are `.page-title` and `.standfirst` from
+     global.css, the same pair every section page uses. The home page had its
+     own copy of both declaration for declaration, which is a duplicate that
+     reads as a decision — and would have quietly drifted the day one of them
+     was retuned.
 
+     One real difference survives: the intro sits a step further from the title
+     than a section standfirst does, because the title above it is a sentence
+     rather than a single word, and the tighter gap crowded it. */
   .hero__intro {
     margin-top: clamp(1.75rem, 4vw, 2.5rem);
-    max-width: 46ch;
-    font-size: clamp(1.0625rem, 1.6vw, 1.1875rem);
-    line-height: 1.65;
-    color: var(--muted);
   }
 
   /* --- section index ------------------------------------------------------ */

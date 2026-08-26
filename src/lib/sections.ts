@@ -17,26 +17,50 @@
 import { getCollection } from "astro:content";
 
 import { experiments } from "./experiments";
+import { markdownVariantFor } from "./markdown";
 import { sites } from "./sites";
 import { tools } from "./tools";
 
 export type SectionHref = "/tools" | "/sites" | "/notes" | "/experiments";
+
+/**
+ * Dash weight in the rail nav, and how loudly an item reads in the mobile
+ * panel. `title` is the home entry; the two pipeline-fed sections carry more
+ * visual weight than the two hand-written ones.
+ */
+export type NavKind = "title" | "subtitle" | "section" | "body";
+
+/**
+ * One entry in either nav surface.
+ *
+ * Lives here rather than in one of the two components that render it: the rail
+ * and the mobile panel are peers, and a shared vocabulary that one peer owns is
+ * a vocabulary the other has to import a component to speak.
+ */
+export interface NavItem {
+  href: string;
+  label: string;
+  kind?: NavKind;
+}
 
 export interface Section {
   href: SectionHref;
   name: string;
   /** One line for the home-page index. Not used in the nav. */
   blurb: string;
-  /**
-   * Dash weight in the rail nav. The two pipeline-fed sections carry more
-   * visual weight than the two hand-written ones.
-   */
-  kind: "subtitle" | "section";
+  kind: Extract<NavKind, "subtitle" | "section">;
   /** Entries the section has right now. Never zero in a returned Section. */
   count: number;
+  /**
+   * This section's markdown variant, or null when it has none.
+   *
+   * Looked up from `lib/markdown.ts`, never derived from `href`: a section
+   * without a variant has to be able to say so, and `${href}.md` cannot.
+   */
+  md: string | null;
 }
 
-const CATALOGUE: readonly Omit<Section, "count">[] = [
+const CATALOGUE: readonly Omit<Section, "count" | "md">[] = [
   {
     href: "/tools",
     name: "Tools",
@@ -80,5 +104,6 @@ export async function getSections(): Promise<Section[]> {
   return CATALOGUE.map((section) => ({
     ...section,
     count: counts[section.href],
+    md: markdownVariantFor(section.href),
   })).filter((section) => section.count > 0);
 }

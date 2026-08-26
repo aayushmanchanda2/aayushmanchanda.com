@@ -11,10 +11,11 @@ import "../styles/global.css";
 // after global.css: the chip reads tokens defined there
 import "../styles/chip.css";
 
-import ProximitySidebar, {
-  type NavItem,
-} from "../components/ProximitySidebar.astro";
+import ProximitySidebar from "../components/ProximitySidebar.astro";
 import MobileNav from "../components/MobileNav.astro";
+import { normalize } from "../lib/links";
+import { markdownVariantFor } from "../lib/markdown";
+import type { NavItem } from "../lib/sections";
 import { getSections } from "../lib/sections";
 import { absolute } from "../lib/site";
 
@@ -53,11 +54,15 @@ const navItems: NavItem[] = [
   })),
 ];
 
-// TODO(T2): swap the X placeholder for the real handle once confirmed.
-const social = [
-  { label: "GitHub", href: "https://github.com/aayushmanchanda2" },
-  { label: "X", href: "https://x.com/" },
-];
+/**
+ * Only links that go somewhere.
+ *
+ * `rel="me"` is a claim of identity, and one pointing at a bare `https://x.com/`
+ * is a claim about nobody — worse than an absent row, because it is a dead link
+ * a reader has to click to find out. The handle gets added here when there is
+ * one to add.
+ */
+const social = [{ label: "GitHub", href: "https://github.com/aayushmanchanda2" }];
 
 const clocks = [
   { label: "Winnipeg", tz: "America/Winnipeg" },
@@ -81,18 +86,19 @@ const canonical = absolute(pathname);
 const ogImage = absolute("/og.png");
 
 /**
- * The pages that have a markdown variant. Advertising it with `rel=alternate`
- * gives an agent a way to find the markdown by reading the HTML, without
- * having to know the `Accept` negotiation trick or guess at a `.md` suffix.
+ * This page's markdown variant, if it has one. Advertising it with
+ * `rel=alternate` gives an agent a way to find the markdown by reading the
+ * HTML, without having to know the `Accept` negotiation trick.
  *
- * Trailing slashes are stripped first because Astro builds directory-format
- * routes, so this page's own pathname arrives as `/tools/`.
+ * Looked up in `lib/markdown.ts` rather than derived from the path: this layout
+ * wraps every page on the site, most of which have no variant, and appending
+ * `.md` to a pathname would advertise a file that is not there.
+ *
+ * The trailing slash goes first because Astro builds directory-format routes,
+ * so this page's own pathname arrives as `/tools/`.
  */
-const MARKDOWN_ROUTES = new Set(["/", "/tools", "/sites", "/notes", "/experiments"]);
-const route = pathname !== "/" ? pathname.replace(/\/+$/, "") : "/";
-const markdownVariant = MARKDOWN_ROUTES.has(route)
-  ? absolute(route === "/" ? "/index.md" : `${route}.md`)
-  : null;
+const variant = markdownVariantFor(normalize(pathname));
+const markdownVariant = variant === null ? null : absolute(variant);
 ---
 
 <!doctype html>

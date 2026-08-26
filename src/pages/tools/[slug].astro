@@ -8,7 +8,8 @@ import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 
 import Base from "../../layouts/Base.astro";
 import VerdictBadge from "../../components/VerdictBadge.astro";
-import { categorySlug, faviconUrl, linkLabel, tools } from "../../lib/tools";
+import { faviconUrl, linkLabel } from "../../lib/links";
+import { categorySlug, tools } from "../../lib/tools";
 
 export const getStaticPaths = (() =>
   tools.map((tool) => ({
@@ -82,29 +83,8 @@ const { tool } = Astro.props;
 </Base>
 
 <style>
-  .facts {
-    margin-top: clamp(3rem, 10vh, 5rem);
-    border-top: 1px solid var(--hairline);
-  }
-
-  .fact {
-    display: grid;
-    grid-template-columns: 7rem minmax(0, 1fr);
-    gap: 0.35rem 1rem;
-    align-items: baseline;
-    padding-block: 0.95rem;
-    border-bottom: 1px solid var(--hairline);
-  }
-
-  .fact dt {
-    color: var(--faint);
-  }
-
-  .fact dd {
-    margin: 0;
-    min-width: 0;
-    overflow-wrap: anywhere;
-  }
+  /* `.facts` and `.fact` are in global.css — /sites ends in the same table.
+     What is left here is the two values only a tool row has. */
 
   /* the badge does the talking; the anchor only carries the target */
   .fact__chip {
@@ -130,11 +110,5 @@ const { tool } = Astro.props;
 
   .fact__none {
     color: var(--faint);
-  }
-
-  @media (max-width: 599px) {
-    .fact {
-      grid-template-columns: minmax(0, 1fr);
-    }
   }
 </style>

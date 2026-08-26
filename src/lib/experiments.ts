@@ -12,7 +12,16 @@
  * empty-state rule in the plan says a section with no entries drops out of the
  * nav and the home index rather than shipping a "coming soon" page. That rule
  * needs a section that can legally reach zero.
+ *
+ * The generic half of the parse comes from `lib/parse.ts`, shared with the
+ * other two boundaries, and the internal-link shape comes from `lib/links.ts`,
+ * shared with the content schema and both surfaces that render one. What stayed
+ * here is the status vocabulary, the rank ordering, and the error messages.
  */
+
+import { INTERNAL_PATH, isInternal } from "./links";
+import type { Fail } from "./parse";
+import { SLUG, readers } from "./parse";
 
 import rawExperiments from "../data/experiments.json";
 
@@ -38,47 +47,15 @@ export interface Experiment {
    Parsing
    --------------------------------------------------------------------------- */
 
-const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
-const INTERNAL_PATH = /^\/[a-z0-9][a-z0-9\-/]*$/;
 const STATUS_NAMES: readonly string[] = STATUSES;
 
-function fail(where: string, problem: string): never {
-  throw new Error(`src/data/experiments.json: ${where} ${problem}`);
-}
-
-function isRecord(value: unknown): value is Record<string, unknown> {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
+const READ = readers("experiments.json");
+/** Annotated, or TypeScript stops treating a call as the end of control flow. */
+const fail: Fail = READ.fail;
+const { readString, readDate, isRecord } = READ;
 
 function isStatus(value: unknown): value is Status {
   return typeof value === "string" && STATUS_NAMES.includes(value);
-}
-
-function readString(
-  entry: Record<string, unknown>,
-  key: string,
-  where: string,
-): string {
-  const value = entry[key];
-  if (typeof value !== "string" || value.trim() === "") {
-    fail(where, `needs a non-empty string "${key}" (got ${JSON.stringify(value)})`);
-  }
-  return value;
-}
-
-function readDate(entry: Record<string, unknown>, where: string): string {
-  const value = readString(entry, "started", where);
-  const time = Date.parse(`${value}T00:00:00Z`);
-  const isRealDate =
-    ISO_DATE.test(value) &&
-    !Number.isNaN(time) &&
-    new Date(time).toISOString().slice(0, 10) === value;
-
-  if (!isRealDate) {
-    fail(where, `needs "started" as a real YYYY-MM-DD date (got ${JSON.stringify(value)})`);
-  }
-  return value;
 }
 
 /**
@@ -102,7 +79,7 @@ function readLinks(entry: Record<string, unknown>, where: string): string[] {
       fail(where, `has an empty link at position ${index}`);
     }
 
-    if (link.startsWith("/")) {
+    if (isInternal(link)) {
       if (!INTERNAL_PATH.test(link)) {
         fail(where, `has an internal link that is not a plain path: ${JSON.stringify(link)}`);
       }
@@ -158,7 +135,7 @@ export function parseExperiments(value: unknown): Experiment[] {
       name: readString(item, "name", where),
       status,
       one_liner: readString(item, "one_liner", where),
-      started: readDate(item, where),
+      started: readDate(item, "started", where),
       links: readLinks(item, where),
     };
   });

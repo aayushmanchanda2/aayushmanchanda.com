@@ -24,23 +24,19 @@ import { absolute } from "../lib/site";
 import { sites } from "../lib/sites";
 import { tools } from "../lib/tools";
 
-const VARIANTS = Object.values(PAGES);
-
 export const GET: APIRoute = async () => {
   const sections = await getSections();
 
-  const rows = sections.map((entry) => {
-    const variant = VARIANTS.find((page) => page.html === entry.href);
-    return [
-      entry.name,
-      String(entry.count),
-      absolute(entry.href),
-      // "none" rather than a guessed path: a section can exist without a
-      // markdown variant, and inventing a URL for it would send an agent to a 404.
-      variant === undefined ? "none" : absolute(variant.md),
-      entry.blurb,
-    ];
-  });
+  const rows = sections.map((entry) => [
+    entry.name,
+    String(entry.count),
+    absolute(entry.href),
+    // "none" rather than a guessed path: a section can exist without a markdown
+    // variant, and inventing a URL for it would send an agent to a 404. The
+    // manifest already carries the answer, so this page does not re-derive it.
+    entry.md === null ? "none" : absolute(entry.md),
+    entry.blurb,
+  ]);
 
   return markdownDocument({
     page: PAGES.home,
