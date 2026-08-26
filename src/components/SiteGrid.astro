@@ -1,0 +1,139 @@
+---
+/**
+ * SiteGrid — the only place a sites gallery is rendered.
+ *
+ * `/sites` passes everything; `/sites/domain/<domain>` passes a subset. Both
+ * get the same card, so the two pages can never drift apart.
+ *
+ * The card is mostly picture: a framed screenshot, the title, and the domain
+ * in mono underneath. Whole card is one link to the details page — the outward
+ * link to the site itself lives there, so a click here is never a surprise
+ * trip off-site.
+ */
+import type { Site } from "../lib/sites";
+import ShotFrame from "./ShotFrame.astro";
+
+interface Props {
+  sites: Site[];
+}
+
+const { sites } = Astro.props;
+
+/**
+ * Cards fade in one after another. Past this many the stagger stops growing,
+ * so a gallery of forty does not leave the last card waiting three seconds.
+ */
+const STAGGER_CAP = 8;
+
+/** The first row is the LCP candidate and must not be lazy-loaded. */
+const EAGER_COUNT = 2;
+---
+
+<ul class="grid">
+  {
+    sites.map((site, index) => (
+      <li class="card" style={`--stagger: ${Math.min(index, STAGGER_CAP)}`}>
+        <a class="card__link press" href={`/sites/${site.slug}`}>
+          <ShotFrame
+            src={site.shots.light}
+            darkSrc={site.shots.dark}
+            alt={`Screenshot of ${site.title}`}
+            eager={index < EAGER_COUNT}
+          />
+
+          <span class="card__meta">
+            <span class="card__title">{site.title}</span>
+            <span class="card__domain mono">{site.domain}</span>
+          </span>
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .grid {
+    display: grid;
+    /* 2 columns in the site's text column, 3 if it ever gets wider,
+       1 once a card would drop under ~15rem. */
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: clamp(1.25rem, 3vw, 2rem);
+    margin: 0;
+  }
+
+  .card {
+    min-width: 0;
+  }
+
+  .card__link {
+    /* A card is a wide target; 0.96 would visibly shove it sideways. */
+    --press-scale: 0.985;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* Named properties only — never `transition: all`. */
+  .card__link :global(.frame) {
+    transition-property: border-color, transform;
+    transition-duration: var(--dur);
+    transition-timing-function: var(--ease);
+  }
+
+  .card__link:hover :global(.frame) {
+    border-color: var(--hairline-strong);
+  }
+
+  .card__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  .card__title {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+    transition-property: color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .card__link:hover .card__title {
+    color: var(--accent);
+  }
+
+  .card__domain {
+    color: var(--faint);
+    overflow-wrap: anywhere;
+  }
+
+  /* --- entrance ------------------------------------------------------------
+     Gated on `no-preference` rather than leaning on the global reduced-motion
+     brake: that brake shortens durations but leaves delays alone, which would
+     hold a card invisible for its stagger and then pop it in. */
+
+  @media (prefers-reduced-motion: no-preference) {
+    .card {
+      animation: card-in var(--dur-slow) var(--ease-out) both;
+      animation-delay: calc(var(--stagger, 0) * 80ms);
+    }
+  }
+
+  @keyframes card-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>

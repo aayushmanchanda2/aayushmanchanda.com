@@ -1,0 +1,57 @@
+[
+  {
+    "slug": "designengineer-tools",
+    "title": "Design Engineer Tools",
+    "url": "https://designengineer.tools",
+    "domain": "designengineer.tools",
+    "saved_date": "2026-08-26",
+    "shots": {
+      "light": "/shots/designengineer-tools-light.webp",
+      "dark": "/shots/designengineer-tools-dark.webp"
+    }
+  },
+  {
+    "slug": "save-design",
+    "title": "Save.design",
+    "url": "https://save.design",
+    "domain": "save.design",
+    "saved_date": "2026-08-26",
+    "shots": {
+      "light": "/shots/save-design-light.webp",
+      "dark": "/shots/save-design-dark.webp"
+    }
+  },
+  {
+    "slug": "otherkind",
+    "title": "Otherkind",
+    "url": "https://otherkind.design",
+    "domain": "otherkind.design",
+    "saved_date": "2026-08-26",
+    "shots": {
+      "light": "/shots/otherkind-light.webp",
+      "dark": "/shots/otherkind-dark.webp"
+    }
+  },
+  {
+    "slug": "chester-how",
+    "title": "Chester's Garden",
+    "url": "https://chester.how",
+    "domain": "chester.how",
+    "saved_date": "2026-08-26",
+    "shots": {
+      "light": "/shots/chester-how-light.webp",
+      "dark": null
+    }
+  },
+  {
+    "slug": "rareui",
+    "title": "Rare UI",
+    "url": "https://rareui.com",
+    "domain": "rareui.com",
+    "saved_date": "2026-08-26",
+    "shots": {
+      "light": "/shots/rareui-light.webp",
+      "dark": "/shots/rareui-dark.webp"
+    }
+  }
+]

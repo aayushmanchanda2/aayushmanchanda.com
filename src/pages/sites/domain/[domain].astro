@@ -1,0 +1,54 @@
+---
+/**
+ * Every saved page from one domain. Reached from a site's details page.
+ * Today most domains hold a single entry; the route exists so that saving a
+ * second page from the same site groups instead of scattering.
+ */
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+
+import Base from "../../../layouts/Base.astro";
+import SiteGrid from "../../../components/SiteGrid.astro";
+import { domains } from "../../../lib/sites";
+
+export const getStaticPaths = (() =>
+  domains.map((group) => ({
+    params: { domain: group.slug },
+    props: group,
+  }))) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { domain, sites } = Astro.props;
+const count = sites.length;
+const lead = `${count} ${count === 1 ? "page" : "pages"} I saved from`;
+---
+
+<Base
+  title={`${domain} · Sites · Aayush Manchanda`}
+  description={`${lead} ${domain}.`}
+>
+  <p class="crumb mono"><a href="/sites">&larr; Sites</a></p>
+
+  <header>
+    <h1 class="page-title domain">{domain}</h1>
+    <p class="standfirst">{lead} {domain}.</p>
+  </header>
+
+  <div class="body">
+    <SiteGrid sites={sites} />
+  </div>
+</Base>
+
+<style>
+  /* A domain is a long, dot-heavy string; the section scale would overflow
+     the column on anything longer than a short hostname. */
+  .domain {
+    font-size: clamp(2rem, 6vw, 3.25rem);
+    letter-spacing: -0.035em;
+    overflow-wrap: anywhere;
+  }
+
+  .body {
+    margin-top: clamp(3.5rem, 12vh, 6rem);
+  }
+</style>

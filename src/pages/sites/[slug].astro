@@ -1,0 +1,127 @@
+---
+/**
+ * One site. Both themes are shown at once here rather than following the
+ * reader's own setting: on a details page the pair IS the content, and half of
+ * it would otherwise be invisible depending on who is looking.
+ *
+ * Domain is a link, not a label — the save.design anatomy, where every field
+ * value is also a way back out into the rest of the collection.
+ */
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+
+import Base from "../../layouts/Base.astro";
+import ShotFrame from "../../components/ShotFrame.astro";
+import { domainSlug, sites } from "../../lib/sites";
+
+export const getStaticPaths = (() =>
+  sites.map((site) => ({
+    params: { slug: site.slug },
+    props: { site },
+  }))) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { site } = Astro.props;
+---
+
+<Base
+  title={`${site.title} · Sites · Aayush Manchanda`}
+  description={`Screenshots of ${site.title} (${site.domain}), saved ${site.saved_date}.`}
+>
+  <p class="crumb mono"><a href="/sites">&larr; Sites</a></p>
+
+  <header>
+    <h1 class="page-title page-title--entry">{site.title}</h1>
+  </header>
+
+  <div class="shots">
+    <figure class="shot">
+      <ShotFrame src={site.shots.light} alt={`${site.title} in light mode`} eager />
+      <figcaption class="mono">Light</figcaption>
+    </figure>
+
+    {
+      site.shots.dark && (
+        <figure class="shot">
+          <ShotFrame src={site.shots.dark} alt={`${site.title} in dark mode`} />
+          <figcaption class="mono">Dark</figcaption>
+        </figure>
+      )
+    }
+  </div>
+
+  <dl class="facts">
+    <div class="fact">
+      <dt class="mono">Domain</dt>
+      <dd>
+        <a href={`/sites/domain/${domainSlug(site.domain)}`}>{site.domain}</a>
+      </dd>
+    </div>
+
+    <div class="fact">
+      <dt class="mono">Saved</dt>
+      <dd class="tabular-nums">{site.saved_date}</dd>
+    </div>
+
+    <div class="fact">
+      <dt class="mono">Link</dt>
+      <dd>
+        <a href={site.url} rel="noopener nofollow" target="_blank">
+          Visit {site.domain}
+        </a>
+      </dd>
+    </div>
+  </dl>
+</Base>
+
+<style>
+  .shots {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.5rem, 4vw, 2.25rem);
+    margin-top: clamp(2.5rem, 8vh, 4rem);
+  }
+
+  .shot {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .shot figcaption {
+    color: var(--faint);
+  }
+
+  /* --- fields -------------------------------------------------------------- */
+
+  .facts {
+    margin-top: clamp(3rem, 10vh, 5rem);
+    border-top: 1px solid var(--hairline);
+  }
+
+  .fact {
+    display: grid;
+    grid-template-columns: 7rem minmax(0, 1fr);
+    gap: 0.35rem 1rem;
+    align-items: baseline;
+    padding-block: 0.95rem;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .fact dt {
+    color: var(--faint);
+  }
+
+  .fact dd {
+    margin: 0;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 599px) {
+    .fact {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

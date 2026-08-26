@@ -1,0 +1,28 @@
+---
+import Base from "../layouts/Base.astro";
+import SiteGrid from "../components/SiteGrid.astro";
+import { sites } from "../lib/sites";
+---
+
+<Base
+  title="Sites · Aayush Manchanda"
+  description="Websites Aayush Manchanda saved for how they look, each one screenshotted in light and dark on the day it was saved."
+>
+  <header>
+    <h1 class="page-title">Sites</h1>
+    <p class="standfirst">
+      Sites I saved for how they look. Every screenshot was taken the day I
+      saved it, in light and dark where the site has both.
+    </p>
+  </header>
+
+  <div class="body">
+    <SiteGrid sites={sites} />
+  </div>
+</Base>
+
+<style>
+  .body {
+    margin-top: clamp(3.5rem, 12vh, 6rem);
+  }
+</style>

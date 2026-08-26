@@ -1,0 +1,72 @@
+---
+/**
+ * ShotFrame — a screenshot on graph paper.
+ *
+ * The save.design treatment from the plan: a dotted-grid backdrop, a hairline
+ * border, sharp corners, and a 1px optical outline on the image itself so a
+ * white screenshot does not bleed into a white page.
+ *
+ * Two modes, one component:
+ *   - pass `darkSrc` and the frame swaps itself with the system theme, via
+ *     `<picture>`. No JavaScript, no flash of the wrong shot.
+ *   - omit it and the frame shows exactly the file you named, which is what
+ *     the details page needs when it stacks both themes on one page.
+ */
+interface Props {
+  /** Web path of the shot to show (the light one, in theme-swap mode). */
+  src: string;
+  /** Web path of the dark shot. Given, the frame follows the system theme. */
+  darkSrc?: string | null;
+  alt: string;
+  /** True for above-the-fold shots: skips lazy loading for the LCP candidate. */
+  eager?: boolean;
+}
+
+const { src, darkSrc = null, alt, eager = false } = Astro.props;
+
+// Every shot is captured at this size, so the box can be reserved before the
+// bytes arrive and nothing on the page jumps.
+const WIDTH = 1440;
+const HEIGHT = 900;
+---
+
+<span class="frame dotted-grid dotted-grid--fine">
+  <picture>
+    {darkSrc && <source media="(prefers-color-scheme: dark)" srcset={darkSrc} />}
+    <img
+      class="frame__shot outlined"
+      src={src}
+      alt={alt}
+      width={WIDTH}
+      height={HEIGHT}
+      loading={eager ? "eager" : "lazy"}
+      decoding="async"
+      fetchpriority={eager ? "high" : "auto"}
+    />
+  </picture>
+</span>
+
+<style>
+  .frame {
+    display: block;
+    padding: 8px;
+    background-color: var(--bg);
+    border: 1px solid var(--hairline);
+    /* Sharp corners are the /sites house style: the screenshots supply all the
+       softness this page needs. */
+    border-radius: 0;
+  }
+
+  .frame__shot {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 8 / 5;
+    /* Defensive: today every shot is exactly 1440x900, so nothing is cropped.
+       A future shot at another size gets its masthead kept, not its middle. */
+    object-fit: cover;
+    object-position: top center;
+    border-radius: 0;
+    background-color: var(--bg);
+  }
+</style>
