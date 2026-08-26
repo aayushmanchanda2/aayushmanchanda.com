@@ -1,0 +1,17 @@
+[
+  {
+    "slug": "publish-pipeline",
+    "name": "The publish pipeline",
+    "status": "running",
+    "one_liner": "Save a link from my phone, and a few hours later it is on this site with a screenshot.",
+    "started": "2026-08-26",
+    "links": ["/sites"]
+  },
+  {
+    "slug": "aayushos",
+    "name": "AayushOS",
+    "status": "running",
+    "one_liner": "A markdown operating system for my life that agents read from and write back to.",
+    "started": "2026-03-01"
+  }
+]

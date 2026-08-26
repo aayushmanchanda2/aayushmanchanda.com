@@ -1,0 +1,172 @@
+---
+/**
+ * One note. Two shapes, because the two note types are read differently.
+ *
+ * A musing is prose, so it gets a title, a date, and a 65ch column.
+ * A scratch is a picture, so the picture comes first and the words underneath
+ * are the caption. Ordering the DOM that way rather than reordering with CSS
+ * keeps the reading order and the visual order the same.
+ *
+ * Body links are plain markdown links (`[the pipeline](/experiments)`). There
+ * is no wiki-link syntax and no remark plugin behind it: markdown already does
+ * this, and a custom `[[slug]]` parser would be a second link system to keep
+ * working for no reader-visible gain.
+ */
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+import { getCollection, render } from "astro:content";
+
+import Base from "../../layouts/Base.astro";
+import ImageFrame from "../../components/ImageFrame.astro";
+import { linkLabel } from "../../lib/tools";
+
+export const getStaticPaths = (async () => {
+  const notes = await getCollection("notes");
+  return notes.map((note) => ({ params: { slug: note.id }, props: { note } }));
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { note } = Astro.props;
+const { Content } = await render(note);
+
+const day = note.data.date.toISOString().slice(0, 10);
+const links = note.data.links ?? [];
+
+/** Site paths show as written; outside links lose the protocol noise. */
+const label = (link: string) =>
+  link.startsWith("/") ? link : linkLabel(link);
+---
+
+<Base
+  title={`${note.data.title} · Notes · Aayush Manchanda`}
+  description={`A note by Aayush Manchanda, written ${day}: ${note.data.title}.`}
+>
+  <p class="crumb mono"><a href="/notes">&larr; Notes</a></p>
+
+  <article class="note" data-type={note.data.type}>
+    {
+      note.data.type === "scratch" && (
+        <ImageFrame src={note.data.image} alt={note.data.title} />
+      )
+    }
+
+    <header class="note__head">
+      <h1 class="page-title page-title--entry">{note.data.title}</h1>
+      <time class="note__date mono tabular-nums" datetime={day}>{day}</time>
+    </header>
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    {
+      links.length > 0 && (
+        <nav class="also" aria-label="Elsewhere on this site">
+          <h2 class="also__head mono">See also</h2>
+          <ul class="also__list mono">
+            {links.map((link) => (
+              <li>
+                {link.startsWith("/") ? (
+                  <a href={link}>{label(link)}</a>
+                ) : (
+                  <a href={link} rel="noopener nofollow" target="_blank">
+                    {label(link)}
+                  </a>
+                )}
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )
+    }
+  </article>
+</Base>
+
+<style>
+  .note[data-type="scratch"] .note__head {
+    /* the picture is the headline; the title is what it is a picture of */
+    margin-top: clamp(1.5rem, 4vw, 2.25rem);
+  }
+
+  .note__date {
+    display: block;
+    margin-top: 1rem;
+    color: var(--faint);
+  }
+
+  /* --- body ---------------------------------------------------------------- */
+
+  .prose {
+    margin-top: clamp(2rem, 5vw, 3rem);
+    max-width: 65ch;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .prose :global(p + p),
+  .prose :global(ul),
+  .prose :global(ol),
+  .prose :global(blockquote) {
+    margin-top: 1.35em;
+  }
+
+  .prose :global(h2),
+  .prose :global(h3) {
+    margin-top: 2.25em;
+    color: var(--fg);
+    font-size: 1.125rem;
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    padding-left: 1.25rem;
+    list-style: disc;
+  }
+
+  .prose :global(ol) {
+    list-style: decimal;
+  }
+
+  .prose :global(li + li) {
+    margin-top: 0.4em;
+  }
+
+  .prose :global(blockquote) {
+    padding-left: 1rem;
+    border-left: 1px solid var(--hairline-strong);
+    color: var(--faint);
+  }
+
+  .prose :global(a) {
+    text-decoration-line: underline;
+  }
+
+  .prose :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.875em;
+  }
+
+  /* --- see also ------------------------------------------------------------ */
+
+  .also {
+    margin-top: clamp(3rem, 8vw, 4.5rem);
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .also__head {
+    color: var(--faint);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+  }
+
+  .also__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    margin-top: 0.75rem;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+</style>

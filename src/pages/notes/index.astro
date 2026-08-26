@@ -1,0 +1,139 @@
+---
+/**
+ * /notes — the commonplace book index.
+ *
+ * The heading is the one place on the site that breaks the huge-sans-masthead
+ * rule: notes are the informal section, and a lowercase mono word with a full
+ * stop after it says that faster than a paragraph could.
+ */
+import { getCollection } from "astro:content";
+
+import Base from "../../layouts/Base.astro";
+
+const notes = (await getCollection("notes")).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+);
+
+/** Dates are stored as dates and shown as `YYYY-MM-DD`, same as /tools. */
+const day = (date: Date) => date.toISOString().slice(0, 10);
+---
+
+<Base
+  title="Notes · Aayush Manchanda"
+  description="Short notes from Aayush Manchanda: musings written out, and whiteboard scratches with a line underneath."
+>
+  <header>
+    <h1 class="page-title notes-title">notes.</h1>
+    <p class="standfirst">
+      Short things I wanted somewhere public. Some are written out, some are a
+      photo of a whiteboard with one line under it.
+    </p>
+  </header>
+
+  <ul class="list">
+    {
+      notes.map((note) => (
+        <li>
+          <a class="row press" href={`/notes/${note.id}`}>
+            <span class="row__title">{note.data.title}</span>
+
+            <time class="row__date mono tabular-nums" datetime={day(note.data.date)}>
+              {day(note.data.date)}
+            </time>
+
+            {note.data.type === "scratch" && (
+              <img
+                class="row__thumb outlined"
+                src={note.data.image}
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
+            )}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Base>
+
+<style>
+  .notes-title {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    /* mono glyphs are already wide; the sans tracking would crowd them */
+    letter-spacing: -0.02em;
+    font-size: clamp(2.25rem, 8vw, 4.25rem);
+    text-transform: lowercase;
+    /* mono has no side bearing to correct for */
+    margin-left: 0;
+  }
+
+  .list {
+    margin-top: clamp(3.5rem, 12vh, 6rem);
+    border-top: 1px solid var(--hairline);
+  }
+
+  .row {
+    /* a full-width row shrinking by 4% reads as a glitch, not a press */
+    --press-scale: 0.995;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: baseline;
+    column-gap: 1.25rem;
+    padding-block: clamp(1rem, 2.2vw, 1.25rem);
+    border-bottom: 1px solid var(--hairline);
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .row:hover {
+    border-bottom-color: var(--hairline-strong);
+  }
+
+  .row__title {
+    font-size: 1.0625rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+    transition-property: color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .row:hover .row__title {
+    color: var(--accent);
+  }
+
+  .row__date {
+    color: var(--faint);
+    white-space: nowrap;
+  }
+
+  .row__thumb {
+    /* sits on the baseline grid rather than the row box */
+    align-self: center;
+    width: 44px;
+    height: 30px;
+    object-fit: cover;
+    object-position: top center;
+    border-radius: 3px;
+  }
+
+  @media (max-width: 599px) {
+    .row {
+      grid-template-columns: minmax(0, 1fr) auto;
+      row-gap: 0.35rem;
+    }
+
+    .row__date {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .row__thumb {
+      grid-column: 2;
+      grid-row: 1 / span 2;
+    }
+  }
+</style>

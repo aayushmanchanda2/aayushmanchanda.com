@@ -1,28 +1,10 @@
 ---
 import Base from "../layouts/Base.astro";
+import { getSections } from "../lib/sections";
 
-const sections = [
-  {
-    href: "/tools",
-    name: "Tools",
-    blurb: "Things I actually installed and ran, with an honest verdict.",
-  },
-  {
-    href: "/sites",
-    name: "Sites",
-    blurb: "Design and craft I keep coming back to.",
-  },
-  {
-    href: "/notes",
-    name: "Notes",
-    blurb: "A commonplace book. Short thoughts, kept as they come.",
-  },
-  {
-    href: "/experiments",
-    name: "Experiments",
-    blurb: "What's running right now, including what I killed.",
-  },
-];
+// Sections with no entries do not come back, so the index never offers a row
+// that leads to an empty page.
+const sections = await getSections();
 ---
 
 <Base>

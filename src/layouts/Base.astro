@@ -8,11 +8,14 @@
 import "@fontsource-variable/geist/wght.css";
 import "@fontsource-variable/geist-mono/wght.css";
 import "../styles/global.css";
+// after global.css: the chip reads tokens defined there
+import "../styles/chip.css";
 
 import ProximitySidebar, {
   type NavItem,
 } from "../components/ProximitySidebar.astro";
 import MobileNav from "../components/MobileNav.astro";
+import { getSections } from "../lib/sections";
 
 interface Props {
   title?: string;
@@ -25,16 +28,19 @@ const {
 } = Astro.props;
 
 /**
- * Dash hierarchy: home is the root (title), tools + sites are the two
- * pipeline-fed sections (subtitle), notes + experiments are the quieter
- * hand-written ones (section). Kinds map to the reference dash presets.
+ * Dash hierarchy: home is the root (title); the sections carry the weight the
+ * manifest gives them, which maps to the reference dash presets.
+ *
+ * Only sections that have entries come back from `getSections()`, so an empty
+ * one is never linked from the nav.
  */
 const navItems: NavItem[] = [
   { href: "/", label: "Home", kind: "title" },
-  { href: "/tools", label: "Tools", kind: "subtitle" },
-  { href: "/sites", label: "Sites", kind: "subtitle" },
-  { href: "/notes", label: "Notes", kind: "section" },
-  { href: "/experiments", label: "Experiments", kind: "section" },
+  ...(await getSections()).map((section) => ({
+    href: section.href,
+    label: section.name,
+    kind: section.kind,
+  })),
 ];
 
 // TODO(T2): swap the X placeholder for the real handle once confirmed.

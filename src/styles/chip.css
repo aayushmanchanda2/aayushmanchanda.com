@@ -1,0 +1,113 @@
+/* ==========================================================================
+   aayushmanchanda.com — status chip
+
+   Two sections need the same chip: /tools verdicts (VerdictBadge) and
+   /experiments statuses (StatusChip). The colour system lives here so those
+   two components only have to decide which tone a word gets, and so a verdict
+   and a status that mean the same thing look the same.
+
+   The chester.how pattern: a soft tint, not a solid fill, so a list of twenty
+   rows reads as one page instead of a traffic light. A tone sets three numbers
+   (hue, saturation, lightness) and the tint, the hairline, and the ink are all
+   derived from them, so light and dark stay in step without a second palette.
+
+   Measured against the page background (#FFFFFF / #09090B): every ink value
+   below clears 6:1, which holds up over its own 9-14% tint.
+
+   Loaded after global.css in layouts/Base.astro; every token it uses
+   (--r-sm, --font-mono) is defined there.
+   ========================================================================== */
+
+.chip {
+  /* neutral fallback; every tone below overrides all three */
+  --chip-h: 0;
+  --chip-s: 0%;
+  --chip-l: 38%;
+  --chip-tint: 0.09;
+  --chip-line: 0.2;
+
+  display: inline-block;
+  padding: 0.3rem 0.45rem 0.28rem;
+  border-radius: var(--r-sm);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: lowercase;
+  white-space: nowrap;
+  color: hsl(var(--chip-h) var(--chip-s) var(--chip-l));
+  background: hsl(var(--chip-h) var(--chip-s) var(--chip-l) / var(--chip-tint));
+  box-shadow: inset 0 0 0 1px
+    hsl(var(--chip-h) var(--chip-s) var(--chip-l) / var(--chip-line));
+}
+
+.chip[data-tone="green"] {
+  --chip-h: 148;
+  --chip-s: 65%;
+  --chip-l: 26%;
+}
+
+.chip[data-tone="amber"] {
+  --chip-h: 32;
+  --chip-s: 90%;
+  --chip-l: 30%;
+}
+
+.chip[data-tone="gray"] {
+  --chip-h: 0;
+  --chip-s: 0%;
+  --chip-l: 38%;
+}
+
+.chip[data-tone="red"] {
+  --chip-h: 0;
+  --chip-s: 70%;
+  --chip-l: 38%;
+}
+
+/* The accent hue, held back from the accent lightness: an inline link and a
+   shipped chip should not be the same blue on the same page. */
+.chip[data-tone="blue"] {
+  --chip-h: 231;
+  --chip-s: 80%;
+  --chip-l: 45%;
+}
+
+@media (prefers-color-scheme: dark) {
+  .chip {
+    /* dark ink is lighter, so the tint has to work a little harder */
+    --chip-tint: 0.14;
+    --chip-line: 0.26;
+  }
+
+  .chip[data-tone="green"] {
+    --chip-h: 148;
+    --chip-s: 55%;
+    --chip-l: 64%;
+  }
+
+  .chip[data-tone="amber"] {
+    --chip-h: 38;
+    --chip-s: 90%;
+    --chip-l: 64%;
+  }
+
+  .chip[data-tone="gray"] {
+    --chip-h: 0;
+    --chip-s: 0%;
+    --chip-l: 62%;
+  }
+
+  .chip[data-tone="red"] {
+    --chip-h: 0;
+    --chip-s: 80%;
+    --chip-l: 70%;
+  }
+
+  .chip[data-tone="blue"] {
+    --chip-h: 231;
+    --chip-s: 100%;
+    --chip-l: 74%;
+  }
+}

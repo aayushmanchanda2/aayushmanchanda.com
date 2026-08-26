@@ -1,0 +1,29 @@
+---
+/**
+ * StatusChip — an /experiments status, rendered as a chip.
+ *
+ * Sibling of VerdictBadge, and deliberately as thin: both defer to the `.chip`
+ * tone system in global.css, so a verdict and a status that mean roughly the
+ * same thing (`using` / `running`) look the same across the site.
+ *
+ * `shipped` is the only tone this file introduces. Green would have implied it
+ * is still being worked on, which is the opposite of what shipped means here.
+ */
+import type { Status } from "../lib/experiments";
+
+/** Exhaustive by type: a new status will not compile until it has a tone. */
+const TONES: Record<Status, string> = {
+  running: "green",
+  paused: "amber",
+  shipped: "blue",
+  killed: "red",
+};
+
+interface Props {
+  status: Status;
+}
+
+const { status } = Astro.props;
+---
+
+<span class="chip" data-tone={TONES[status]}>{status}</span>
