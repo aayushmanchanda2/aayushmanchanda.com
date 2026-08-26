@@ -261,12 +261,11 @@ export const POST_TEXT =
  * against — "never asked" is the whole point of the env-absent rule.
  *
  * @param {object} [options]
- * @param {string} [options.markdown]  What `scrapeMarkdown` returns.
- * @param {Buffer} [options.png]       What `screenshotFullPage` returns.
+ * @param {string} [options.markdown]   What `scrapeMarkdown` returns.
  * @param {string} [options.failScrape] Throw with this message instead.
  * @param {string} [options.failShot]   Throw with this message instead.
  */
-export function fakeFirecrawl({ markdown = postMarkdown(), png, failScrape, failShot } = {}) {
+export function fakeFirecrawl({ markdown = postMarkdown(), failScrape, failShot } = {}) {
   /** @type {{ scraped: string[], shot: string[] }} */
   const calls = { scraped: [], shot: [] };
 
@@ -281,7 +280,9 @@ export function fakeFirecrawl({ markdown = postMarkdown(), png, failScrape, fail
     async screenshotFullPage(url) {
       calls.shot.push(url);
       if (failShot !== undefined) throw new Error(failShot);
-      return png ?? Buffer.from("pretend-png");
+      // Never decoded by anything: `fakeFirecrawlShot` writes its own file and
+      // the real encode path is tested against real sharp in `capture.test.mjs`.
+      return Buffer.from("pretend-png");
     },
   };
 
@@ -310,6 +311,48 @@ export const NESTED = {
 export const FIRECRAWL_PALETTE = ["#8a2be2", "#fffaf0"];
 
 /**
+ * A stand-in for `captureWithFirecrawl` — which, unlike `captureSite`, is handed
+ * a client.
+ *
+ * It calls that client rather than ignoring it, and that is the entire reason
+ * this exists instead of another `fakeCapture`. `publish.mjs` is the only place
+ * the client gets bound to the capturer, and a fake that destructured only
+ * `{url, slug, outDir}` would pass every test with that binding deleted — while
+ * production threw on `undefined.screenshotFullPage`, got swallowed into a log
+ * line by `shootSite`, and disabled the second chance forever without anything
+ * going red. Asking the client through this seam is what makes the chain from
+ * `deps` to the API a thing the suite can see.
+ *
+ * @param {object} [options]
+ * @param {string[]} [options.palette]
+ */
+export function fakeFirecrawlShot({ palette = FIRECRAWL_PALETTE } = {}) {
+  /** @type {{ url: string, slug: string, outDir: string }[]} */
+  const calls = [];
+
+  /** @type {typeof import("./capture.mjs").captureWithFirecrawl} */
+  async function captureWithFirecrawl({ url, slug, outDir, client }) {
+    if (client === undefined || typeof client.screenshotFullPage !== "function") {
+      throw new Error("captureWithFirecrawl was called without a Firecrawl client");
+    }
+    calls.push({ url, slug, outDir: String(outDir) });
+
+    // The throw a failing client raises is the fallback's failure, and it has
+    // to travel exactly as the real one would.
+    await client.screenshotFullPage(url);
+
+    const dir = String(outDir);
+    await mkdir(dir, { recursive: true });
+    const shot = path.join(dir, `${slug}.webp`);
+    await writeFile(shot, `firecrawl-shot:${slug}`);
+
+    return { shot, palette };
+  }
+
+  return { calls, captureWithFirecrawl };
+}
+
+/**
  * The `deps` bag for a test run: a fake API, a fake browser, a fixed clock, and
  * a commit that does nothing (git is CI's concern, not this suite's).
  *
@@ -322,7 +365,7 @@ export const FIRECRAWL_PALETTE = ["#8a2be2", "#fffaf0"];
  * @param {import("./types.js").Paths} wiring.paths
  * @param {ReturnType<typeof raindropServer>} wiring.server
  * @param {ReturnType<typeof fakeCapture>} [wiring.capture]
- * @param {ReturnType<typeof fakeCapture>} [wiring.fallback] The second-chance shot.
+ * @param {ReturnType<typeof fakeFirecrawlShot>} [wiring.fallback] The second-chance shot.
  * @param {ReturnType<typeof fakeFirecrawl>["client"]} [wiring.firecrawl]
  * @param {ReturnType<typeof recorder>} wiring.out
  */
@@ -330,14 +373,14 @@ export function deps({
   paths,
   server,
   capture = fakeCapture(),
-  fallback = fakeCapture({ palette: FIRECRAWL_PALETTE }),
+  fallback = fakeFirecrawlShot(),
   firecrawl,
   out,
 }) {
   return {
     fetch: server.fetch,
     captureSite: capture.captureSite,
-    captureWithFirecrawl: fallback.captureSite,
+    captureWithFirecrawl: fallback.captureWithFirecrawl,
     makeFirecrawl: firecrawl === undefined ? firecrawlFrom : () => firecrawl,
     env: { RAINDROP_TOKEN: "test-token" },
     now: () => new Date("2026-08-26T10:00:00.000Z"),

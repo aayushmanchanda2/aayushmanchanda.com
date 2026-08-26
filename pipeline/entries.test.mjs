@@ -136,6 +136,29 @@ test("a clip does not leave punctuation stranded before the ellipsis", () => {
   assert.equal(clip("three weeks, and then some more of it", 13), "three weeks…");
 });
 
+test("a clip never ends on half a character", () => {
+  // Counted in code points, not UTF-16 units. A post is a place emoji live, and
+  // an odd-indexed cut inside a surrogate pair renders as a replacement glyph.
+  const clipped = clip("🧵".repeat(40), 9);
+
+  assert.equal(clipped, "🧵🧵🧵🧵🧵🧵🧵🧵🧵…");
+  assert.equal([...clipped].length, 10, "nine whole emoji and the ellipsis");
+});
+
+test("a title that clipped down to punctuation is refused in favour of the bookmark's", () => {
+  // `clip` can return a bare "…" — 80 characters of punctuation with no space
+  // in them strip to nothing and keep the ellipsis. That is not empty, so an
+  // emptiness test would publish a row whose entire link text is one character.
+  const entry = buildReadingEntry({
+    bookmark: saved(),
+    slug: "s",
+    date: "2026-08-26",
+    post: post(`${".".repeat(80)} and then the actual words`),
+  });
+
+  assert.equal(entry.title, "A post from @ephraimakanmu");
+});
+
 test("one word longer than the whole budget is cut hard rather than lost", () => {
   // Backing off to the last space would return nothing at all here, which is
   // worse than a hard cut: an empty title is a row with no link text.
@@ -189,18 +212,32 @@ test("a post short enough to fit in the title is not said twice", () => {
   assert.equal(entry.note, "@ephraimakanmu", "the attribution is all the title left unsaid");
 });
 
-test("a note Aayush typed outranks the post's own words", () => {
-  // `reading.ts` documents that field as one line in his voice. A fetched
-  // sentence is not that, so it only ever fills a note that would be null.
+test("the post outranks the excerpt Raindrop scraped off the same post", () => {
+  // Learned from the first real x.com save. Raindrop's excerpt for a post is
+  // not Aayush writing about it — it is a ragged copy of the same words, raw
+  // newlines and no attribution — so deferring to it meant shipping the worse
+  // of two copies. His own line goes in `src/data/reading.json`, which nothing
+  // here overwrites.
   const entry = buildReadingEntry({
-    bookmark: saved({ excerpt: "Came in over Telegram." }),
+    bookmark: saved({ excerpt: "So I spent the entire night going\n\nthrough my archives." }),
     slug: "s",
     date: "2026-08-26",
     post: post("Something the poster said instead."),
   });
 
+  assert.equal(entry.note, "@ephraimakanmu");
+  assert.equal(entry.title, "Something the poster said instead.");
+});
+
+test("with no post read, the excerpt is still exactly what the note was", () => {
+  const entry = buildReadingEntry({
+    bookmark: saved({ excerpt: "Came in over Telegram." }),
+    slug: "s",
+    date: "2026-08-26",
+    post: null,
+  });
+
   assert.equal(entry.note, "Came in over Telegram.");
-  assert.equal(entry.title, "Something the poster said instead.", "the title is still enriched");
 });
 
 test("no post is exactly the entry the pipeline built before", () => {

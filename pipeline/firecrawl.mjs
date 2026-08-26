@@ -32,12 +32,17 @@ import { isRecord } from "./util.mjs";
 const API_BASE = "https://api.firecrawl.dev/v2";
 
 /**
- * Wall-clock ceiling for one call. Firecrawl renders a real browser on their
- * side, so a slow page legitimately takes tens of seconds; what this stops is
- * the hang, not the wait. Without it a stuck socket would sit inside the
- * workflow's 30-minute budget and take the whole publish run down with it.
+ * Wall-clock ceiling for one call, and the same 45s `capture.mjs` gives one
+ * shot — a page that has not answered in that long is not about to.
+ *
+ * The number is chosen against the run, not against the request. Every saved
+ * post costs one of these, and the workflow has a 30-minute budget it must not
+ * be killed inside: `gitCommit` is the last statement of `run()`, so a hard kill
+ * loses the whole run's work rather than just the enrichment. At 45s a queue of
+ * twenty posts against a Firecrawl that hangs on every single one still finishes
+ * inside a quarter of an hour, which leaves the rest of the budget alone.
  */
-const REQUEST_TIMEOUT_MS = 90_000;
+const REQUEST_TIMEOUT_MS = 45_000;
 
 /**
  * The environment variable this module is configured by. Named once, because
@@ -238,6 +243,9 @@ const MAX_SHOT_BYTES = 40 * 1024 * 1024;
 /** Base64 with nothing else in it. Used to tell a payload from a link. */
 const BASE64 = /^[A-Za-z0-9+/\s]+={0,2}$/;
 
+/** The eight bytes every PNG starts with. */
+const PNG_MAGIC = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+
 /**
  * The PNG itself, whichever way Firecrawl chose to hand it over.
  *
@@ -246,6 +254,15 @@ const BASE64 = /^[A-Za-z0-9+/\s]+={0,2}$/;
  * Both are handled rather than picking one and hoping, because the difference is
  * invisible until the day it changes and the whole feature is a fallback nobody
  * is watching.
+ *
+ * Everything that leaves here has been checked to actually be a PNG, and that
+ * check is doing more work than it looks like. `Buffer.from(s, "base64")` will
+ * decode almost any English sentence without complaining — so a field holding
+ * `"Screenshot unavailable"` would sail past a base64 shape test and leave this
+ * module as fifteen junk bytes claiming to be an image. sharp would reject it
+ * two calls later with a message about buffer formats, and the run log would
+ * blame the encoder for a thing the API said. The boundary is where that has to
+ * be caught, or this module's whole promise is void.
  *
  * @param {string} shot
  * @param {typeof globalThis.fetch} fetch
@@ -256,7 +273,13 @@ async function toPng(shot, fetch, url) {
   if (shot.startsWith("data:")) {
     const comma = shot.indexOf(",");
     if (comma === -1) throw new FirecrawlError(`Firecrawl returned a malformed data URI for ${url}`);
-    return decode(shot.slice(comma + 1), url);
+    // Only the base64 flavour. A percent-encoded `data:image/png,%89PNG…` is a
+    // legal data URI that base64-decoding turns into garbage, so it is refused
+    // by name rather than mangled.
+    if (!/;base64$/i.test(shot.slice(0, comma))) {
+      throw new FirecrawlError(`Firecrawl returned a data URI that is not base64 for ${url}`);
+    }
+    return checkPng(Buffer.from(shot.slice(comma + 1), "base64"), url, shot);
   }
 
   if (/^https?:\/\//i.test(shot)) {
@@ -276,25 +299,38 @@ async function toPng(shot, fetch, url) {
       );
     }
 
-    const bytes = Buffer.from(await response.arrayBuffer());
-    if (bytes.length === 0) throw new FirecrawlError(`Firecrawl's screenshot for ${url} was empty`);
-    if (bytes.length > MAX_SHOT_BYTES) {
-      throw new FirecrawlError(`Firecrawl's screenshot for ${url} is ${bytes.length} bytes — too large to commit`);
+    // Asked before the body is read, so an oversized response is refused rather
+    // than merely reported. The check after the read is still the backstop: the
+    // header is advisory and may not be there at all.
+    const declared = Number(response.headers.get("content-length"));
+    if (Number.isFinite(declared) && declared > MAX_SHOT_BYTES) {
+      throw new FirecrawlError(`Firecrawl's screenshot for ${url} declares ${declared} bytes — too large to commit`);
     }
-    return bytes;
+
+    return checkPng(Buffer.from(await response.arrayBuffer()), url, shot);
   }
 
-  if (BASE64.test(shot)) return decode(shot, url);
+  if (BASE64.test(shot)) return checkPng(Buffer.from(shot, "base64"), url, shot);
 
   throw new FirecrawlError(`Firecrawl returned a screenshot that is neither a URL nor base64 for ${url}`);
 }
 
-/** @param {string} base64 @param {string} url @returns {Buffer} */
-function decode(base64, url) {
-  const bytes = Buffer.from(base64, "base64");
-  if (bytes.length === 0) throw new FirecrawlError(`Firecrawl's screenshot for ${url} was empty`);
+/**
+ * @param {Buffer} bytes @param {string} url
+ * @param {string} raw  What the field held, so the error can quote it.
+ * @returns {Buffer}
+ */
+function checkPng(bytes, url, raw) {
   if (bytes.length > MAX_SHOT_BYTES) {
     throw new FirecrawlError(`Firecrawl's screenshot for ${url} is ${bytes.length} bytes — too large to commit`);
+  }
+  if (!bytes.subarray(0, PNG_MAGIC.length).equals(PNG_MAGIC)) {
+    // The quote is the whole point of the message: this fires when the field
+    // held something that was never an image, and the first thing anyone will
+    // want to know is what it actually said.
+    throw new FirecrawlError(
+      `Firecrawl's screenshot for ${url} is not a PNG — the field held ${JSON.stringify(raw.slice(0, 40))}`,
+    );
   }
   return bytes;
 }
@@ -326,12 +362,22 @@ function decode(base64, url) {
 /** x.com handles: letters, digits, underscore, 15 at most. */
 const HANDLE = "[A-Za-z0-9_]{1,15}";
 
-const HEADING_HANDLE = new RegExp(`^#{0,3}\\s*Post by @(${HANDLE})\\b`, "im");
-const AUTHOR_HANDLE = new RegExp(`^\\**Author\\**:?\\s*.*?@(${HANDLE})\\b`, "im");
+const HEADING_HANDLE = new RegExp(`^#{0,3}[ \\t]*Post by @(${HANDLE})\\b`, "im");
+// `.*?` and nothing before it. A `\s*` here would be a second way to match the
+// same run of spaces, and two ways to match one thing is how a linear regex
+// becomes a quadratic one on input this module does not control.
+const AUTHOR_HANDLE = new RegExp(`^\\**Author\\**:?.*?@(${HANDLE})\\b`, "im");
 
 /** The body heading, and whatever heading ends it. */
 const POST_HEADING = /^#{1,3}\s+Post\s*$/im;
 const NEXT_HEADING = /^#{1,3}\s+\S/m;
+
+/**
+ * x.com paths whose first segment is the site's own routing rather than a
+ * person. `x.com/i/web/status/123` is the one that actually turns up, and
+ * attributing that post to "@i" would be worse than not attributing it at all.
+ */
+const NOT_A_HANDLE = new Set(["i", "home", "search", "intent", "notifications", "messages"]);
 
 /**
  * The handle in the URL itself: `x.com/<handle>/status/<id>`.
@@ -341,7 +387,8 @@ const NEXT_HEADING = /^#{1,3}\s+\S/m;
 function handleFromUrl(url) {
   try {
     const [first] = new URL(url).pathname.split("/").filter((part) => part !== "");
-    return first !== undefined && new RegExp(`^${HANDLE}$`).test(first) ? first : null;
+    if (first === undefined || NOT_A_HANDLE.has(first.toLowerCase())) return null;
+    return new RegExp(`^${HANDLE}$`).test(first) ? first : null;
   } catch {
     return null;
   }
@@ -357,14 +404,24 @@ function handleFromUrl(url) {
  * @param {string} body @returns {string}
  */
 function flatten(body) {
-  return body
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
-    .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
-    .replace(/^\s*>\s?/gm, "")
-    .replace(/\*\*(.+?)\*\*/gs, "$1")
-    .replace(/\s+/g, " ")
-    .trim();
+  return (
+    body
+      .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
+      .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
+      // `[ \t]`, never `\s`. A blockquote marker is a per-line thing, and `\s`
+      // matches a newline — which makes `^\s*` rescan to the end of the document
+      // from every single line start, turning this into a quadratic walk over
+      // markdown nobody here controls. A quote-tweet arrives as blockquotes, so
+      // this line is on the ordinary path, not an exotic one.
+      .replace(/^[ \t]*>[ \t]?/gm, "")
+      .replace(/\*\*(.+?)\*\*/gs, "$1")
+      .replace(/\s+/g, " ")
+      .trim()
+  );
 }
+
+/** Something a person could read. Punctuation and decoration alone is not. */
+const HAS_WORDS = /[\p{L}\p{N}]/u;
 
 /**
  * What the post says, or null if this markdown does not contain a post.
@@ -382,7 +439,10 @@ export function parsePost(markdown, url) {
   const after = markdown.slice(heading.index + heading[0].length);
   const ends = NEXT_HEADING.exec(after);
   const text = flatten(ends === null ? after : after.slice(0, ends.index));
-  if (text === "") return null;
+  // Not just non-empty: a body that survives flattening as `**` or `...` is a
+  // parse that found the section and nothing in it, and it would go on to become
+  // a /reading row whose entire link text is punctuation.
+  if (!HAS_WORDS.test(text)) return null;
 
   const handle =
     HEADING_HANDLE.exec(markdown)?.[1] ?? AUTHOR_HANDLE.exec(markdown)?.[1] ?? handleFromUrl(url);

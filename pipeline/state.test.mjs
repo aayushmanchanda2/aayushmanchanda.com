@@ -95,6 +95,38 @@ test("one unreadable row is dropped; the rest of the file survives", async (t) =
   assert.deepEqual(Object.keys(state), ["1"]);
 });
 
+test("a firecrawl note survives a load and a save, and a nonsense one does not", async (t) => {
+  const { paths } = await makeRepo(t);
+  const at = "2026-08-26T10:00:00.000Z";
+
+  await writeFile(
+    paths.statePath,
+    JSON.stringify({
+      1: { kind: "published", slug: "fortress", section: "sites", at, via: "firecrawl" },
+      2: { kind: "published", slug: "otherkind", section: "sites", at },
+      // Dropped, not carried: `via` is a note about one known exception, and an
+      // unrecognised note is worth less than no note. The row itself is fine.
+      3: { kind: "published", slug: "third", section: "sites", at, via: "carrier pigeon" },
+    }),
+  );
+
+  const state = await loadState(paths);
+
+  assert.deepEqual(state["1"], {
+    kind: "published",
+    slug: "fortress",
+    section: "sites",
+    at,
+    via: "firecrawl",
+  });
+  assert.equal("via" in state["2"], false, "the ordinary row grows no key");
+  assert.equal("via" in state["3"], false);
+
+  // And it is still there after a later run rewrites the whole file.
+  await saveState(paths, state);
+  assert.equal((await readJson(paths.statePath))["1"].via, "firecrawl");
+});
+
 test("state is written sorted, so its diffs read as changes", async (t) => {
   const { paths } = await makeRepo(t);
 

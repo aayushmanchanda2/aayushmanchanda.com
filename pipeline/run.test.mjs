@@ -25,6 +25,7 @@ import {
   exists,
   fakeCapture,
   fakeFirecrawl,
+  fakeFirecrawlShot,
   makeRepo,
   raindropServer,
   readJson,
@@ -345,8 +346,16 @@ test("a saved post lands with the words in it, not with Raindrop's placeholder",
     ...NESTED,
     raindrops: {
       [READING_ID]: [
-        bookmark(900, TWEET, { title: "A post from @ephraimakanmu" }),
-        bookmark(901, "https://gumclaw.github.io/how-i-work/", { title: "How Gumclaw Works" }),
+        // With the excerpt Raindrop really does attach to an x.com save: a
+        // ragged copy of the same post, which the fetched one has to beat.
+        bookmark(900, TWEET, {
+          title: "A post from @ephraimakanmu",
+          excerpt: "Been rebuilding the Diadem brand archive\n\nfor three weeks and",
+        }),
+        bookmark(901, "https://gumclaw.github.io/how-i-work/", {
+          title: "How Gumclaw Works",
+          excerpt: "A durable agent setup, written up in public.",
+        }),
       ],
     },
   });
@@ -427,9 +436,15 @@ test("with no key in the environment nothing is asked of anyone", async (t) => {
 
   assert.equal((await readJson(paths.readingJson))[0].title, "A post from @ephraimakanmu");
   assert.equal(
-    out.out.some((line) => line.includes("firecrawl")),
+    out.out.some((line) => line.startsWith("warn: firecrawl") || line.includes("found no post")),
     false,
-    "not attempted, not warned about, not mentioned",
+    "nothing was attempted, so there is nothing to report about it failing",
+  );
+  // But the run does say so, once. A missing or misspelt secret disables both
+  // enrichments silently by design, and in CI the only other symptom would be
+  // posts that quietly stopped getting titles.
+  assert.ok(
+    out.out.includes("firecrawl: no FIRECRAWL_API_KEY — posts unread, blocked shots not retried"),
   );
 });
 
@@ -442,7 +457,8 @@ test("a site that beats the browser on its last try is caught by Firecrawl", asy
     ...NESTED,
     raindrops: { [SITES_ID]: [bookmark(400, "https://fortress.example", { title: "Fortress" })] },
   });
-  const fallback = fakeCapture({ palette: FIRECRAWL_PALETTE });
+  const fallback = fakeFirecrawlShot();
+  const firecrawl = fakeFirecrawl();
   const out = recorder();
 
   const code = await run(
@@ -452,7 +468,7 @@ test("a site that beats the browser on its last try is caught by Firecrawl", asy
       server,
       capture: fakeCapture({ fail: "bot-blocked" }),
       fallback,
-      firecrawl: fakeFirecrawl().client,
+      firecrawl: firecrawl.client,
       out,
     }),
   );
@@ -462,6 +478,10 @@ test("a site that beats the browser on its last try is caught by Firecrawl", asy
     fallback.calls.map((call) => call.url),
     ["https://fortress.example"],
   );
+  // The chain publish.mjs is the only place that builds: env → client → bound
+  // capturer → the API actually being asked. Without this the binding could be
+  // deleted and the suite would not notice.
+  assert.deepEqual(firecrawl.calls.shot, ["https://fortress.example"]);
 
   const [site] = await readJson(paths.sitesJson);
   assert.deepEqual(site.palette, FIRECRAWL_PALETTE, "a fallback shot goes through the same path");
@@ -486,7 +506,8 @@ test("the second chance is not spent while free retries remain", async (t) => {
     ...NESTED,
     raindrops: { [SITES_ID]: [bookmark(400, "https://fortress.example", { title: "Fortress" })] },
   });
-  const fallback = fakeCapture();
+  const fallback = fakeFirecrawlShot();
+  const firecrawl = fakeFirecrawl();
   const out = recorder();
 
   await run(
@@ -496,12 +517,13 @@ test("the second chance is not spent while free retries remain", async (t) => {
       server,
       capture: fakeCapture({ fail: "bot-blocked" }),
       fallback,
-      firecrawl: fakeFirecrawl().client,
+      firecrawl: firecrawl.client,
       out,
     }),
   );
 
   assert.equal(fallback.calls.length, 0, "most capture failures are a slow page, not a wall");
+  assert.deepEqual(firecrawl.calls.shot, [], "and no credit is spent finding that out");
   assert.deepEqual((await loadState(paths))["400"], {
     kind: "pending",
     attempts: 1,
@@ -526,8 +548,9 @@ test("when Firecrawl cannot shoot it either, the third strike lands as normal", 
       paths,
       server,
       capture: fakeCapture({ fail: "bot-blocked" }),
-      fallback: fakeCapture({ fail: "Firecrawl returned no screenshot" }),
-      firecrawl: fakeFirecrawl().client,
+      // The failure comes out of the client, the way a real one would, rather
+      // than out of a capturer that never asked it anything.
+      firecrawl: fakeFirecrawl({ failShot: "Firecrawl returned no screenshot" }).client,
       out,
     }),
   );
@@ -553,38 +576,28 @@ test("when Firecrawl cannot shoot it either, the third strike lands as normal", 
   assert.equal(server.tagCalls("failed").length, 1);
 });
 
-test("a published row keeps its firecrawl note across a reload", async (t) => {
-  const entry = {
-    slug: "fortress",
-    title: "Fortress",
-    url: "https://fortress.example",
-    domain: "fortress.example",
-    saved_date: "2026-08-26",
-    shot: "/shots/fortress.webp",
-    palette: ["#111111"],
-    collections: [],
-  };
+test("a dry run decides the second chance without spending a credit on it", async (t) => {
+  // The design constraint stated in `shootSite`, asserted rather than trusted:
+  // a run that writes nothing must also buy nothing.
   const { paths } = await makeRepo(t, {
-    sites: [entry],
-    shots: ["fortress.webp"],
-    state: {
-      400: {
-        kind: "published",
-        slug: "fortress",
-        section: "sites",
-        at: "2026-08-26T10:00:00.000Z",
-        via: "firecrawl",
-      },
+    state: { 400: { kind: "pending", attempts: 2, lastError: "bot-blocked" } },
+  });
+  const server = raindropServer({
+    ...NESTED,
+    raindrops: {
+      [SITES_ID]: [bookmark(400, "https://fortress.example", { title: "Fortress" })],
+      [READING_ID]: [bookmark(900, TWEET, { title: "A post from @ephraimakanmu" })],
     },
   });
+  const firecrawl = fakeFirecrawl();
+  const out = recorder();
 
-  assert.deepEqual((await loadState(paths))["400"], {
-    kind: "published",
-    slug: "fortress",
-    section: "sites",
-    at: "2026-08-26T10:00:00.000Z",
-    via: "firecrawl",
-  });
+  assert.equal(
+    await run(["--dry-run"], deps({ paths, server, firecrawl: firecrawl.client, out })),
+    0,
+  );
+
+  assert.deepEqual(firecrawl.calls, { scraped: [], shot: [] });
 });
 
 /* ---------------------------------------------------------------------------

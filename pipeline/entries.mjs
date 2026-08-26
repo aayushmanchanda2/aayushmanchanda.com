@@ -379,6 +379,9 @@ export const POST_TITLE_MAX = 80;
 /** How much of it the note shows. A tweet's own limit, near enough. */
 export const POST_NOTE_MAX = 280;
 
+/** Something a person could read. Punctuation and decoration alone is not. */
+const HAS_WORDS = /[\p{L}\p{N}]/u;
+
 /**
  * `text`, or as much of it as fits, ending on a word.
  *
@@ -388,13 +391,19 @@ export const POST_NOTE_MAX = 280;
  * backing off to the last space would return almost nothing. Then a hard cut is
  * the only cut there is.
  *
+ * Counted in code points rather than UTF-16 units, because a post is a place
+ * emoji live and slicing a string at an odd index inside a surrogate pair leaves
+ * half a character behind. The build would accept it — `readString` only refuses
+ * empty — and the row would render a replacement glyph.
+ *
  * @param {string} text @param {number} max @returns {string}
  */
 export function clip(text, max) {
   const tidy = text.trim();
-  if (tidy.length <= max) return tidy;
+  const points = [...tidy];
+  if (points.length <= max) return tidy;
 
-  const cut = tidy.slice(0, max);
+  const cut = points.slice(0, max).join("");
   const space = cut.lastIndexOf(" ");
   const body = space > max / 2 ? cut.slice(0, space) : cut;
 
@@ -414,9 +423,15 @@ export function clip(text, max) {
  * has been able to read the post (see `firecrawl.mjs`), the words themselves are
  * a better title than that sentence, so they win.
  *
- * The note is the other way round. `reading.ts` documents that field as one line
- * in Aayush's voice, so an excerpt he typed in Raindrop outranks anything
- * fetched — the post's own words only fill a note that would otherwise be null.
+ * They win the note too, and that is worth saying because the first version of
+ * this let Raindrop's excerpt outrank them. The reasoning was that `reading.ts`
+ * documents the note as one line in Aayush's voice — but the first real x.com
+ * save proved the premise wrong. Raindrop does fill an excerpt for a post: it
+ * fills it with a ragged, unattributed copy of the same words this function
+ * already has, newlines and all. Preferring it meant preferring the worse copy.
+ * A note Aayush actually wrote is one he edits into `src/data/reading.json`,
+ * which the README already names as the better tool for it, and which nothing
+ * here ever overwrites.
  *
  * @param {object} input
  * @param {Bookmark} input.bookmark
@@ -430,7 +445,13 @@ export function buildReadingEntry({ bookmark, slug, date, post = null }) {
 
   return {
     slug,
-    title: headline === "" ? fallbackTitle : headline,
+    // Tested for words rather than for emptiness. `clip` can return a bare "…"
+    // — a post whose first 80 characters are punctuation with no space in them
+    // strips down to nothing and keeps the ellipsis — and that is not empty, so
+    // an emptiness test would let it through and publish a row whose entire
+    // link text is one character of punctuation. The bookmark's own title is a
+    // worse title than the post's, but it is a better one than that.
+    title: HAS_WORDS.test(headline) ? headline : fallbackTitle,
     url: bookmark.url,
     domain: hostnameOf(bookmark.url),
     saved_date: date,
@@ -438,24 +459,22 @@ export function buildReadingEntry({ bookmark, slug, date, post = null }) {
     // null, not a stand-in sentence: `reading.ts` takes null and renders the
     // row without a second line, which is the honest shape for a link Raindrop
     // gave us no excerpt for.
-    note: bookmark.excerpt === "" ? postNote(post) : bookmark.excerpt,
+    note: post !== null ? postNote(post) : bookmark.excerpt === "" ? null : bookmark.excerpt,
   };
 }
 
 /**
- * The second line for a post nobody wrote a note for: who said it, and more of
- * what they said than the title had room for.
+ * The second line for a post: who said it, and more of what they said than the
+ * title had room for.
  *
  * The handle leads so the line reads as a quotation rather than as Aayush
  * talking. When the title already holds the whole post, the words are not
  * repeated — the attribution is the only thing left that the title did not
  * already say.
  *
- * @param {Post | null} post @returns {string | null}
+ * @param {Post} post @returns {string}
  */
 function postNote(post) {
-  if (post === null) return null;
-
   const whole = clip(post.text, POST_TITLE_MAX) === post.text.trim();
   return whole ? `@${post.handle}` : `@${post.handle}: ${clip(post.text, POST_NOTE_MAX)}`;
 }

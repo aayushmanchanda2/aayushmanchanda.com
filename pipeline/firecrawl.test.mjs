@@ -84,13 +84,21 @@ test("markdown is asked for by name, with the key as a bearer token", async () =
   assert.equal(calls[0].headers.Authorization, "Bearer fc-test");
 });
 
-test("a full-page shot uses the v2 format object, not the v1 string", async () => {
+test("the v2 format object is what a full-page shot asks for, not the v1 string", async () => {
   // `"screenshot@fullPage"` and a sibling `screenshotOptions` are both v1. Both
   // would be accepted by v2 as a request for something else — a viewport crop —
   // so this assertion is the only thing standing between the gallery and a
   // 900px sliver that looks like a working capture.
   const { calls, client: firecrawl } = client(() =>
-    json({ success: true, data: { screenshot: Buffer.from("png-bytes").toString("base64") } }),
+    json({
+      success: true,
+      data: {
+        screenshot: Buffer.concat([
+          Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
+          Buffer.from("bytes"),
+        ]).toString("base64"),
+      },
+    }),
   );
 
   await firecrawl.screenshotFullPage("https://fortress.example");
@@ -105,34 +113,89 @@ test("a full-page shot uses the v2 format object, not the v1 string", async () =
    Screenshots arrive in two shapes
    --------------------------------------------------------------------------- */
 
+/** A buffer that starts the way every PNG does. */
+const PNG = Buffer.concat([
+  Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
+  Buffer.from("pretend-image-data"),
+]);
+
 test("an inline base64 screenshot comes back as bytes", async () => {
-  const png = Buffer.from("pretend-png-bytes");
   const { client: firecrawl } = client(() =>
-    json({ success: true, data: { screenshot: png.toString("base64") } }),
+    json({ success: true, data: { screenshot: PNG.toString("base64") } }),
   );
 
-  assert.deepEqual(await firecrawl.screenshotFullPage("https://a.example"), png);
+  assert.deepEqual(await firecrawl.screenshotFullPage("https://a.example"), PNG);
 });
 
 test("a data URI is unwrapped the same way", async () => {
-  const png = Buffer.from("pretend-png-bytes");
   const { client: firecrawl } = client(() =>
-    json({ success: true, data: { screenshot: `data:image/png;base64,${png.toString("base64")}` } }),
+    json({ success: true, data: { screenshot: `data:image/png;base64,${PNG.toString("base64")}` } }),
   );
 
-  assert.deepEqual(await firecrawl.screenshotFullPage("https://a.example"), png);
+  assert.deepEqual(await firecrawl.screenshotFullPage("https://a.example"), PNG);
 });
 
 test("a hosted screenshot URL is downloaded, so the caller never learns which shape it was", async () => {
-  const png = Buffer.from("pretend-png-bytes");
   const { calls, client: firecrawl } = client((url) =>
     url.includes("/v2/scrape")
       ? json({ success: true, data: { screenshot: "https://storage.example/shot-123.png" } })
-      : new Response(png, { status: 200 }),
+      : new Response(PNG, { status: 200 }),
   );
 
-  assert.deepEqual(await firecrawl.screenshotFullPage("https://a.example"), png);
+  assert.deepEqual(await firecrawl.screenshotFullPage("https://a.example"), PNG);
   assert.equal(calls[1].url, "https://storage.example/shot-123.png");
+  assert.equal(
+    calls[1].headers,
+    undefined,
+    "and the API key does not travel to whoever is hosting the image",
+  );
+});
+
+test("a sentence where the screenshot should be is refused, not decoded", async () => {
+  // The reason the PNG magic bytes are checked at all. `Buffer.from(s,"base64")`
+  // decodes ordinary English without complaining, so a field holding a status
+  // message would otherwise leave this module as fifteen junk bytes claiming to
+  // be an image, and sharp would report it two calls later as an encoder fault.
+  const { client: firecrawl } = client(() =>
+    json({ success: true, data: { screenshot: "Screenshot unavailable" } }),
+  );
+
+  await assert.rejects(firecrawl.screenshotFullPage("https://a.example"), (error) => {
+    assert.ok(error instanceof FirecrawlError);
+    assert.match(error.message, /is not a PNG/);
+    assert.match(error.message, /Screenshot unavailable/, "the message quotes what actually came back");
+    return true;
+  });
+});
+
+test("a downloaded body that is not a PNG is refused too", async () => {
+  const { client: firecrawl } = client((url) =>
+    url.includes("/v2/scrape")
+      ? json({ success: true, data: { screenshot: "https://storage.example/shot.png" } })
+      : new Response("<html>404</html>", { status: 200 }),
+  );
+
+  await assert.rejects(firecrawl.screenshotFullPage("https://a.example"), /is not a PNG/);
+});
+
+test("a data URI that is not base64 is refused rather than mangled", async () => {
+  // `data:image/png,%89PNG…` is a legal data URI. Base64-decoding it produces
+  // garbage, so it is turned down by name.
+  const { client: firecrawl } = client(() =>
+    json({ success: true, data: { screenshot: "data:image/png,%89PNG%0D%0A" } }),
+  );
+
+  await assert.rejects(firecrawl.screenshotFullPage("https://a.example"), /not base64/);
+});
+
+test("a body larger than the ceiling is refused on the header alone", async () => {
+  const { client: firecrawl } = client((url) =>
+    url.includes("/v2/scrape")
+      ? json({ success: true, data: { screenshot: "https://storage.example/huge.png" } })
+      : new Response(PNG, { status: 200, headers: { "content-length": String(80 * 1024 * 1024) } }),
+  );
+
+  await assert.rejects(firecrawl.screenshotFullPage("https://a.example"), /too large to commit/);
 });
 
 test("an expired screenshot link is an error, not an empty file", async () => {
@@ -251,4 +314,33 @@ test("a post section with nothing under it is null", () => {
 
 test("a handle nothing can supply is null, even with words in hand", () => {
   assert.equal(parsePost("## Post\n\nWords.", "https://x.com/"), null);
+});
+
+test("x.com's own routing is not a person", () => {
+  // `x.com/i/web/status/123` is a real shape, and attributing the post to "@i"
+  // would be worse than not attributing it.
+  assert.equal(parsePost("## Post\n\nWords.", "https://x.com/i/web/status/123"), null);
+  assert.equal(parsePost("## Post\n\nWords.", "https://x.com/home"), null);
+});
+
+test("a body that is only punctuation is not a post", () => {
+  // Otherwise this becomes a /reading row whose entire link text is "**" or a
+  // single ellipsis — strictly worse than the "A post from @someone" it would
+  // have replaced.
+  assert.equal(parsePost("# Post by @someone\n\n## Post\n\n**\n", POST_URL), null);
+  assert.equal(parsePost("# Post by @someone\n\n## Post\n\n... --- ...\n", POST_URL), null);
+});
+
+test("a blockquote-heavy document parses in linear time", () => {
+  // A quote-tweet arrives as blockquotes, so `flatten`'s marker strip is on the
+  // ordinary path. Written with `\s` it rescanned to end-of-document from every
+  // line start: 60k lines took six seconds of blocked event loop, on markdown
+  // this module does not control.
+  const markdown = `# Post by @someone\n\n## Post\n\n${"> quoted line\n".repeat(40_000)}`;
+
+  const started = Date.now();
+  assert.equal(parsePost(markdown, POST_URL)?.handle, "someone");
+  const elapsed = Date.now() - started;
+
+  assert.ok(elapsed < 2_000, `parsing took ${elapsed}ms, which is the quadratic walk again`);
 });

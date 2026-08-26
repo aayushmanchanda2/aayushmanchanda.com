@@ -273,7 +273,16 @@ export async function run(argv = [], overrides = {}) {
     // here so `apply.mjs` sees two ordinary functions, or two nulls, and never
     // a service.
     const firecrawl = deps.makeFirecrawl(deps.env, deps.fetch);
-    if (firecrawl !== null) log("firecrawl: configured — posts will be read, blocked shots retried");
+    // Both cases are logged, and the quiet one is the one that matters. A key
+    // that is missing, misspelt or expired disables both enrichments silently by
+    // design — which is right for a laptop and wrong for CI, where the only
+    // symptom would be posts that stopped getting titles. Saying so makes an
+    // unset secret a thing you can read in the run log rather than deduce.
+    log(
+      firecrawl === null
+        ? "firecrawl: no FIRECRAWL_API_KEY — posts unread, blocked shots not retried"
+        : "firecrawl: configured — posts will be read, blocked shots retried",
+    );
 
     /** @type {import("./apply.mjs").ApplyContext} */
     const ctx = {
