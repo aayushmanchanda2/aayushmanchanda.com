@@ -10,6 +10,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "check": "astro check",
     "og": "node scripts/og.mjs",
     "test": "node --test pipeline/*.test.mjs"
   },
@@ -23,7 +24,9 @@
     "esbuild": true
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.10",
     "playwright": "^1.62.1",
-    "sharp": "^0.35.3"
+    "sharp": "^0.35.3",
+    "typescript": "^6.0.3"
   }
 }

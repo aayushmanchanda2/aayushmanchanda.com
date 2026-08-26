@@ -1,5 +1,15 @@
 {
   "extends": "astro/tsconfigs/strict",
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"]
+  "exclude": ["dist"],
+  "compilerOptions": {
+    /**
+     * The publish pipeline is plain `.mjs` annotated with JSDoc, and
+     * `pipeline/types.d.ts` is where its domain model is written down. Without
+     * this, that whole directory is parsed and then ignored — the declaration
+     * file is decoration rather than a contract, and a JSDoc type that stops
+     * matching the code says nothing. `npm run check` is what makes it load-bearing.
+     */
+    "checkJs": true
+  }
 }
