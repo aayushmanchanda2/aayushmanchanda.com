@@ -1,0 +1,173 @@
+[
+  {
+    "slug": "paperclip",
+    "name": "Paperclip",
+    "url": "https://github.com/paperclipai/paperclip",
+    "category": "agent systems",
+    "verdict": "using",
+    "note": "Agent org control plane. Verified working on the overnight bench — boots clean, embedded Postgres, telemetry off.",
+    "status_date": "2026-08-17"
+  },
+  {
+    "slug": "agent-browser",
+    "name": "agent-browser",
+    "url": "https://agent-browser.dev",
+    "category": "web tools",
+    "verdict": "using",
+    "note": "Browser automation CLI for agents — accessibility-tree snapshots at a fraction of screenshot token cost. Daily driver.",
+    "status_date": "2026-08-26"
+  },
+  {
+    "slug": "firecrawl",
+    "name": "Firecrawl",
+    "url": "https://firecrawl.dev",
+    "category": "web tools",
+    "verdict": "using",
+    "note": "Scrape/crawl/extract API for pages that fight plain fetch. Its X postprocessor is the only reliable way I read tweets programmatically.",
+    "status_date": "2026-08-26"
+  },
+  {
+    "slug": "hermes",
+    "name": "Hermes",
+    "url": null,
+    "category": "agent systems",
+    "verdict": "using",
+    "note": "Telegram-gateway agent runtime I run 24/7 (v0.20.5 + lifecycle manager). Inbound queue has a known interruption quirk.",
+    "status_date": "2026-08-26"
+  },
+  {
+    "slug": "improve-skill",
+    "name": "improve (shadcn skill)",
+    "url": null,
+    "category": "claude skills",
+    "verdict": "using",
+    "note": "Plan-cheap-execute optimization loop as a Claude skill. Cherry-picked from the bench.",
+    "status_date": "2026-08-17"
+  },
+  {
+    "slug": "davidondrej-skill-pack",
+    "name": "davidondrej skill pack",
+    "url": null,
+    "category": "claude skills",
+    "verdict": "using",
+    "note": "Three skills kept after a security read: risky-changes (adapted), folder-specific-claude-md, effective-agent-skills.",
+    "status_date": "2026-08-17"
+  },
+  {
+    "slug": "synara",
+    "name": "Synara",
+    "url": "https://github.com/Emanuele-web04/synara",
+    "category": "apps",
+    "verdict": "watching",
+    "note": "Desktop app builds and boots clean end-to-end (Bun + Electron). Works; not yet part of the daily stack.",
+    "status_date": "2026-08-19"
+  },
+  {
+    "slug": "eve",
+    "name": "Eve",
+    "url": "https://github.com/vercel/eve",
+    "category": "sandboxes",
+    "verdict": "watching",
+    "note": "Vercel's agent sandbox. Scaffolded and ready to test — needs Node 24.",
+    "status_date": "2026-08-17"
+  },
+  {
+    "slug": "headlong",
+    "name": "Headlong",
+    "url": "https://github.com/laude-institute/headlong",
+    "category": "agent systems",
+    "verdict": "watching",
+    "note": "Persistent agent harness. Installed on a Factory droid backend; first real run still pending.",
+    "status_date": "2026-08-26"
+  },
+  {
+    "slug": "buzz",
+    "name": "Buzz",
+    "url": "https://github.com/block/buzz",
+    "category": "agent systems",
+    "verdict": "on-hold",
+    "note": "Block's agent workspace. Cloned, never judged — the source build wants multi-GB toolchain and disk ran out mid-bench. Prebuilt release is the easy path.",
+    "status_date": "2026-08-17"
+  },
+  {
+    "slug": "cabinet",
+    "name": "Cabinet",
+    "url": "https://github.com/cabinetai/cabinet",
+    "category": "agent systems",
+    "verdict": "on-hold",
+    "note": "Won my head-to-head demo comparison against two alternatives; full re-scaffold pending. Promising.",
+    "status_date": "2026-08-17"
+  },
+  {
+    "slug": "cloudflare-os",
+    "name": "cloudflare-os",
+    "url": "https://github.com/cloudflare/cloudflare-os",
+    "category": "agent systems",
+    "verdict": "skipped",
+    "note": "Lost the same head-to-head to Cabinet on my use case.",
+    "status_date": "2026-08-17"
+  },
+  {
+    "slug": "dinky",
+    "name": "Dinky",
+    "url": "https://github.com/heyderekj/dinky",
+    "category": "apps",
+    "verdict": "skipped",
+    "note": "Unsigned app from a personal tap — not worth the trust exception.",
+    "status_date": "2026-08-17"
+  },
+  {
+    "slug": "pxpipe",
+    "name": "pxpipe",
+    "url": null,
+    "category": "web tools",
+    "verdict": "skipped",
+    "note": "Token-saving MITM proxy with documented silent string corruption. Unusable anywhere fidelity matters.",
+    "status_date": "2026-08-17"
+  },
+  {
+    "slug": "wuphf",
+    "name": "WUPHF",
+    "url": null,
+    "category": "agent systems",
+    "verdict": "skipped",
+    "note": "Weaker take on what Buzz does, with a restrictive license on top.",
+    "status_date": "2026-08-17"
+  },
+  {
+    "slug": "hubble-md",
+    "name": "hubble.md",
+    "url": null,
+    "category": "apps",
+    "verdict": "skipped",
+    "note": "Duplicates my existing markdown vault workflow.",
+    "status_date": "2026-08-17"
+  },
+  {
+    "slug": "macro",
+    "name": "Macro",
+    "url": null,
+    "category": "apps",
+    "verdict": "skipped",
+    "note": "The workspace product turned out to be a Notion replacement, not the PDF tool I wanted.",
+    "status_date": "2026-08-17"
+  },
+  {
+    "slug": "papercuts",
+    "name": "Papercuts",
+    "url": null,
+    "category": "apps",
+    "verdict": "skipped",
+    "note": "Fine tool, but requires a Rust toolchain I don't want to carry right now.",
+    "status_date": "2026-08-17"
+  },
+  {
+    "slug": "lazyweb-skill",
+    "name": "lazyweb skill",
+    "url": null,
+    "category": "claude skills",
+    "verdict": "skipped",
+    "note": "Design-research skill pack with a curl|bash installer; paid tier can decrypt browser cookies. Only ever deliberately.",
+    "status_date": "2026-08-17"
+  }
+]
