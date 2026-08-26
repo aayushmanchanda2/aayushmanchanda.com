@@ -1,0 +1,181 @@
+---
+/**
+ * PaletteRow — the colours a capture is made of, as things you can take.
+ *
+ * `pipeline/capture.mjs` reads these off the pixels, so the row is a fact about
+ * the screenshot rather than an opinion about the site. What makes it worth
+ * rendering at all is that a designer looking at someone else's page mostly
+ * wants two things from it: the layout (the frame above) and the hex (this).
+ *
+ * Every swatch is a `<button>`, not a coloured `<span>` with a click handler.
+ * The whole point of the row is that it is operable, and a button is the only
+ * element that is operable by the keyboard, announced as operable, and pressed
+ * by Space and Enter without any of that being reimplemented here.
+ *
+ * The hex sits under the chip permanently rather than on hover: hover-only text
+ * is invisible to a touchscreen and to a keyboard, and the label is also the
+ * slot the "copied" confirmation lands in — so it has to be a place the eye is
+ * already looking.
+ */
+interface Props {
+  /** Dominant-first hex colours, straight off `Site.palette`. */
+  palette: string[];
+  /** The site these were read from; names the row for a screen reader. */
+  title: string;
+}
+
+const { palette, title } = Astro.props;
+---
+
+<div class="palette" data-palette>
+  <ul class="palette__row" aria-label={`Colours read off the ${title} screenshot`}>
+    {
+      palette.map((hex) => (
+        <li>
+          <button type="button" class="swatch press" data-hex={hex} aria-label={`Copy ${hex}`}>
+            {/*
+              An inline background is the only way to paint a value that comes
+              from data. It is safe to interpolate because `readPalette()` in
+              lib/sites.ts has already held every one of these to
+              /^#[0-9a-f]{6}$/ — nothing else reaches this line.
+            */}
+            <span class="swatch__chip" style={`background-color: ${hex}`} aria-hidden="true" />
+            {/*
+              Hidden from the a11y tree because the button's own aria-label
+              already says the hex, and this text is about to be swapped for a
+              transient "copied" that would otherwise rename the control
+              mid-press. The announcement goes through the status line below.
+            */}
+            <span class="swatch__hex" data-hex-label aria-hidden="true">
+              {hex}
+            </span>
+          </button>
+        </li>
+      ))
+    }
+  </ul>
+
+  <p class="visually-hidden" role="status" data-palette-status></p>
+</div>
+
+<style>
+  .palette__row {
+    display: flex;
+    flex-wrap: wrap;
+    /* Row gap is the larger one: the chips carry their hex underneath, so two
+       wrapped lines need clearance the columns do not. */
+    gap: 0.85rem 0.6rem;
+    margin: 0;
+  }
+
+  .swatch {
+    display: grid;
+    justify-items: center;
+    gap: 0.4rem;
+    cursor: pointer;
+  }
+
+  .swatch__chip {
+    /* 44px square. Above the 40px hit-area floor with the label thrown in for
+       free, and square because a palette entry is a colour, not a bar. */
+    width: 44px;
+    height: 44px;
+    /* /sites is the sharp-corner section — the screenshots supply the softness. */
+    border-radius: 0;
+    /* Inset, so a #ffffff swatch on a white page is a chip rather than a hole,
+       and the hairline eats the chip's own edge instead of growing the box. */
+    box-shadow: inset 0 0 0 1px var(--hairline-strong);
+    /* Named, never `transition: all`. */
+    transition-property: box-shadow;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  /* A soft outer ring rather than a colour change: the chip IS a colour, and
+     nothing here is allowed to lie about which one. */
+  .swatch:hover .swatch__chip,
+  .swatch:focus-visible .swatch__chip {
+    box-shadow:
+      inset 0 0 0 1px var(--hairline-strong),
+      0 0 0 3px var(--hairline);
+  }
+
+  .swatch__hex {
+    /* Not the `.mono` utility: that voice is uppercase with wide tracking, which
+       is right for a field label and wrong for a value you are about to paste.
+       A hex is a code — it should read exactly as it will arrive. */
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 0.625rem;
+    letter-spacing: 0;
+    line-height: 1;
+    color: var(--faint);
+    /* "#rrggbb" is 7 characters, and in a monospace face 7ch is exactly that
+       wide — so swapping in the shorter "copied" cannot shift the row. */
+    min-width: 7ch;
+    text-align: center;
+    transition-property: color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .swatch:hover .swatch__hex,
+  .swatch:focus-visible .swatch__hex {
+    color: var(--fg);
+  }
+</style>
+
+<script>
+  /** How long a confirmation holds before the hex comes back. */
+  const FLASH_MS = 1200;
+
+  function initPalette(root: HTMLElement) {
+    const status = root.querySelector<HTMLElement>("[data-palette-status]");
+    /**
+     * One pending reset per swatch, so hammering two chips in a row cannot
+     * leave the first one reading "copied" forever.
+     */
+    const timers = new WeakMap<HTMLButtonElement, number>();
+
+    root.querySelectorAll<HTMLButtonElement>("[data-hex]").forEach((button) => {
+      const label = button.querySelector<HTMLElement>("[data-hex-label]");
+      const hex = button.dataset.hex;
+      if (!label || !hex) return;
+
+      button.addEventListener("click", async () => {
+        let copied = true;
+        try {
+          // Throws on its own in an insecure context, where `navigator.clipboard`
+          // is not there to have a method — same catch either way.
+          await navigator.clipboard.writeText(hex);
+        } catch {
+          copied = false;
+        }
+
+        /*
+         * Unlike the image-copy button next to the frame, a swatch that cannot
+         * copy is not hidden: it is the only place this colour is written down,
+         * so it has to stay on the page and say what happened instead.
+         */
+        label.textContent = copied ? "copied" : "failed";
+        if (status) {
+          status.textContent = copied ? `Copied ${hex}` : `Could not copy ${hex}`;
+        }
+
+        window.clearTimeout(timers.get(button));
+        timers.set(
+          button,
+          window.setTimeout(() => {
+            label.textContent = hex;
+            if (status) status.textContent = "";
+            timers.delete(button);
+          }, FLASH_MS),
+        );
+      });
+    });
+  }
+
+  document
+    .querySelectorAll<HTMLElement>("[data-palette]")
+    .forEach((root) => initPalette(root));
+</script>

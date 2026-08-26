@@ -8,23 +8,103 @@
  * onto it rather than a thumbnail of it.
  *
  * Domain is a link, not a label — the save.design anatomy, where every field
- * value is also a way back out into the rest of the collection.
+ * value is also a way back out into the rest of the collection. The rest of
+ * that anatomy is the two things a page like this is actually used for:
+ * taking something away from it (the palette row, the shot buttons) and moving
+ * to the next one without going back to the gallery (the hint row at the foot,
+ * which is both the keyboard legend and the links themselves).
  */
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 
 import Base from "../../layouts/Base.astro";
+import PaletteRow from "../../components/PaletteRow.astro";
+import ShotActions from "../../components/ShotActions.astro";
 import ShotFrame from "../../components/ShotFrame.astro";
 import { domainSlug, sites } from "../../lib/sites";
 
+/**
+ * Neighbours are resolved here rather than in the browser: the build already
+ * knows the whole gallery and its order, so the page can ship the two hrefs as
+ * markup instead of shipping the gallery as data and computing them again on
+ * every load.
+ *
+ * The order is `sites` — the same array `/sites` renders, so pressing the right
+ * arrow moves the way the eye moved through the grid.
+ */
 export const getStaticPaths = (() =>
-  sites.map((site) => ({
-    params: { slug: site.slug },
-    props: { site },
-  }))) satisfies GetStaticPaths;
+  sites.map((site, index) => {
+    const step = (offset: number) => {
+      // Wraps: the gallery is a ring, so walking it with the arrow keys never
+      // dead-ends on the first or last entry.
+      const neighbour = sites[(index + offset + sites.length) % sites.length];
+      // A one-entry gallery would otherwise offer prev and next links pointing
+      // at the page you are already on.
+      return neighbour === undefined || neighbour.slug === site.slug
+        ? null
+        : { href: `/sites/${neighbour.slug}`, title: neighbour.title };
+    };
+
+    return {
+      params: { slug: site.slug },
+      props: { site, prev: step(-1), next: step(1) },
+    };
+  })) satisfies GetStaticPaths;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-const { site } = Astro.props;
+const { site, prev, next } = Astro.props;
+
+interface Hint {
+  /** Which key drives this row. The script reads it back off the markup. */
+  role: "close" | "prev" | "next";
+  key: string;
+  label: string;
+  href: string;
+  rel?: string;
+  aria: string;
+}
+
+/**
+ * The hint row is the legend and the navigation at once.
+ *
+ * Written as links rather than as three lines of static text plus a key
+ * handler, because a legend that only a keyboard can act on is a legend a
+ * touchscreen has to read and cannot use. The script below takes its
+ * destinations from these anchors, so there is one place each key goes.
+ */
+const hints: Hint[] = [
+  {
+    role: "close",
+    key: "esc",
+    label: "close",
+    href: "/sites",
+    aria: "Close and go back to Sites",
+  },
+  ...(prev
+    ? [
+        {
+          role: "prev" as const,
+          key: "←",
+          label: "prev",
+          href: prev.href,
+          rel: "prev",
+          aria: `Previous site: ${prev.title}`,
+        },
+      ]
+    : []),
+  ...(next
+    ? [
+        {
+          role: "next" as const,
+          key: "→",
+          label: "next",
+          href: next.href,
+          rel: "next",
+          aria: `Next site: ${next.title}`,
+        },
+      ]
+    : []),
+];
 ---
 
 <Base
@@ -39,7 +119,17 @@ const { site } = Astro.props;
 
   <figure class="shot">
     <ShotFrame src={site.shot} alt={`Full page of ${site.title}`} scroll eager />
-    <figcaption class="mono">Full page &mdash; scroll inside the frame</figcaption>
+
+    {/*
+      The caption IS the bar. `figcaption` has to be the first or last child of
+      its `figure`, so wrapping it and the buttons in a div together would be
+      invalid; putting the buttons inside it keeps the markup honest and the
+      two things on one line.
+    */}
+    <figcaption class="shot__bar">
+      <span class="shot__caption mono">Full page &mdash; scroll inside the frame</span>
+      <ShotActions src={site.shot} title={site.title} slug={site.slug} />
+    </figcaption>
   </figure>
 
   <dl class="facts">
@@ -55,6 +145,14 @@ const { site } = Astro.props;
       <dd class="tabular-nums">{site.saved_date}</dd>
     </div>
 
+    <div class="fact fact--palette">
+      <dt class="mono">Palette</dt>
+      <dd>
+        <PaletteRow palette={site.palette} title={site.title} />
+      </dd>
+    </div>
+
+    {/* Last, because it is the way out. */}
     <div class="fact">
       <dt class="mono">Link</dt>
       <dd>
@@ -64,6 +162,27 @@ const { site } = Astro.props;
       </dd>
     </div>
   </dl>
+
+  <nav class="hints" aria-label="Sites entries" data-entry-nav>
+    <ul class="hints__row">
+      {
+        hints.map((hint) => (
+          <li class="hints__item">
+            <a
+              class="hint press"
+              href={hint.href}
+              rel={hint.rel}
+              data-nav={hint.role}
+              aria-label={hint.aria}
+            >
+              <kbd class="hint__key">{hint.key}</kbd>
+              {hint.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
 </Base>
 
 <style>
@@ -71,14 +190,145 @@ const { site } = Astro.props;
     margin: clamp(2.5rem, 8vh, 4rem) 0 0;
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
+    gap: 0.4rem;
   }
 
-  .shot figcaption {
+  .shot__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+  }
+
+  .shot__caption {
     color: var(--faint);
   }
 
   /* The field table itself (`.facts`, `.fact`) is in global.css — /tools ends
-     in the same one. Every value on this page is plain text or a plain link,
-     so there is nothing left for this page to add to it. */
+     in the same one. What is left here is the one row that is not a line of
+     text, and the foot of the page. */
+
+  /* A swatch row is a block of colour, not a line of type: baseline alignment
+     would drop the label onto the hex captions three rows down, so both columns
+     start at the top instead. */
+  .fact--palette dt,
+  .fact--palette dd {
+    align-self: start;
+  }
+
+  /* --- the hint row ------------------------------------------------------- */
+
+  .hints {
+    margin-top: clamp(2rem, 6vh, 3rem);
+  }
+
+  .hints__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    /* Matches the gap inside an item, so the separator sits centred between two
+       hints rather than welded to the end of the one before it. */
+    gap: 0 0.75rem;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    /* Lowercase, against the site's uppercase mono label voice. These are key
+       caps, and the key is printed `esc` on the keyboard the reader is looking
+       at — shouting it would be naming a different key. */
+    text-transform: lowercase;
+    color: var(--faint);
+  }
+
+  .hints__item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  /* The separator sits in the list item, outside the anchor, so it is never
+     part of the link's text or its target. */
+  .hints__item + .hints__item::before {
+    content: "\00b7";
+    color: var(--hairline-strong);
+  }
+
+  .hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    /* Not a 40px block: these are text hints, and padding is what turns them
+       into a target without giving the foot of the page a toolbar's weight. */
+    padding-block: 0.5rem;
+    color: inherit;
+    text-decoration: none;
+    /* `.press` names the transition; a second one here would race it. */
+  }
+
+  .hint:hover {
+    color: var(--accent);
+  }
+
+  .hint__key {
+    font: inherit;
+    color: var(--muted);
+  }
 </style>
+
+<script>
+  /**
+   * The three keys, and which hint each one presses.
+   *
+   * The destinations are not in here on purpose. They are read off the anchors
+   * in the hint row, which means the legend a reader can see and the behaviour
+   * a keyboard gets cannot drift apart: delete a link and the key goes quiet
+   * with it.
+   */
+  const KEYS: Record<string, string> = {
+    Escape: "close",
+    ArrowLeft: "prev",
+    ArrowRight: "next",
+  };
+
+  const nav = document.querySelector<HTMLElement>("[data-entry-nav]");
+
+  if (nav) {
+    document.addEventListener("keydown", (event) => {
+      // Already handled by something closer to the action, or mid-IME.
+      if (event.defaultPrevented || event.isComposing) return;
+      // A modifier means the reader is asking the browser for something —
+      // Cmd+Left is Back, and taking that over would be a hijack.
+      if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
+
+      const role = KEYS[event.key];
+      if (!role) return;
+
+      // Typing beats navigating. There is no field on this page today, but a
+      // bare arrow key belongs to whatever is taking text.
+      const target = event.target;
+      if (
+        target instanceof HTMLElement &&
+        (target.isContentEditable ||
+          target instanceof HTMLInputElement ||
+          target instanceof HTMLTextAreaElement ||
+          target instanceof HTMLSelectElement)
+      ) {
+        return;
+      }
+
+      // Escape belongs to whatever is on top. The mobile nav panel is the only
+      // modal on the site today and it closes on Escape too; the order two
+      // document-level listeners run in is a bundling detail rather than a
+      // guarantee, so this asks the page instead of trusting it.
+      if (document.querySelector('[aria-modal="true"][data-open]')) return;
+
+      const link = nav.querySelector<HTMLAnchorElement>(`[data-nav="${role}"]`);
+      if (!link) return;
+
+      event.preventDefault();
+      window.location.href = link.href;
+    });
+  }
+</script>

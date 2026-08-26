@@ -1,0 +1,262 @@
+---
+/**
+ * ShotActions — take the picture with you.
+ *
+ * Two quiet mono controls under the frame. Download is a plain anchor and works
+ * with the tab closed on scripting; copy is a button that only appears once the
+ * page has established the browser can actually do it, because the alternative
+ * is a control that looks live and fails on press.
+ *
+ * The order is deliberate: copy first, download second. Copy is the one most
+ * people want and the one that can fail, and the fallback should be sitting
+ * immediately to its right when it does.
+ */
+interface Props {
+  /** Web path of the shot — the same file the frame renders. */
+  src: string;
+  /** The site this shot is of. Every control names it for a screen reader. */
+  title: string;
+  /** Slug, which becomes the filename on disk after a download. */
+  slug: string;
+}
+
+const { src, title, slug } = Astro.props;
+---
+
+<div class="acts" data-shot-actions>
+  {/*
+    Rendered hidden and revealed by the script below. Hidden is the honest
+    default twice over: without JavaScript the button could never do anything,
+    and with it the capability still has to be checked before the control is
+    offered.
+  */}
+  <button
+    type="button"
+    class="act mono press"
+    data-shot-copy
+    data-src={src}
+    hidden
+    aria-label={`Copy the ${title} screenshot to the clipboard`}
+  >
+    <svg class="act__icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+      <path
+        d="M5.75 5.75 H13 V13 H5.75 Z M10.25 5.75 V3 H3 V10.25 H5.75"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.25"
+        stroke-linecap="square"></path>
+    </svg>
+
+    {/*
+      Two labels stacked in one grid cell. The idle label always occupies the
+      box, so it is the idle label that sets the width and a shorter "Copied"
+      cannot pull the download button sideways mid-press.
+    */}
+    <span class="act__labels">
+      <span class="act__label act__label--base">Copy image</span>
+      <span class="act__label act__label--flash" data-shot-flash aria-hidden="true"></span>
+    </span>
+  </button>
+
+  <a
+    class="act mono press"
+    href={src}
+    download={`${slug}.webp`}
+    aria-label={`Download the ${title} screenshot`}
+  >
+    <svg class="act__icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+      <path
+        d="M8 2.5 V10.5 M4.75 7.25 L8 10.5 L11.25 7.25 M3 13.25 H13"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.25"
+        stroke-linecap="square"></path>
+    </svg>
+    <span class="act__label">Download</span>
+  </a>
+
+  <p class="visually-hidden" role="status" data-shot-status></p>
+</div>
+
+<style>
+  .acts {
+    display: flex;
+    align-items: center;
+    /* Tight: the buttons carry their own padding, and a wide gap would read as
+       two unrelated controls rather than one pair. */
+    gap: 0.15rem;
+  }
+
+  .act {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    /* The hit-area floor the swatches keep, held here too. */
+    min-height: 40px;
+    padding-inline: 0.5rem;
+    /* Beats the global `a { color: var(--accent) }` — these are utilities, not
+       links into the collection, and should read as housekeeping until hovered. */
+    color: var(--faint);
+    text-decoration: none;
+    cursor: pointer;
+    /* `.press` already names `color` and `transform`; adding a second
+       transition-property here would race it depending on stylesheet order. */
+  }
+
+  /* `.act` sets `display`, which would otherwise beat the UA sheet's
+     `[hidden] { display: none }` and render the button anyway. */
+  .act[hidden] {
+    display: none;
+  }
+
+  .act:hover {
+    color: var(--fg);
+  }
+
+  .act__icon {
+    /* Optical, not literal: a 16-unit icon set at 14px sits at the weight of
+       the 11px mono beside it instead of shouting over it. */
+    width: 14px;
+    height: 14px;
+    flex: 0 0 auto;
+  }
+
+  .act__labels {
+    display: grid;
+  }
+
+  .act__labels > * {
+    grid-area: 1 / 1;
+    transition-property: opacity;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .act__label--flash {
+    opacity: 0;
+  }
+
+  .act[data-flash] .act__label--base {
+    opacity: 0;
+  }
+
+  .act[data-flash] .act__label--flash {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  /** How long a confirmation holds before the button goes back to normal. */
+  const FLASH_MS = 1200;
+  /** A failure is something to read, so it stays up longer. */
+  const FAIL_MS = 2400;
+
+  /**
+   * Every piece the copy path needs, checked before the control is shown.
+   *
+   * `navigator.clipboard` is absent outside a secure context, `ClipboardItem`
+   * is the part that lands last in any engine, and `createImageBitmap` is what
+   * decodes the WebP on the way to the canvas.
+   */
+  function canCopyImages(): boolean {
+    return (
+      typeof ClipboardItem === "function" &&
+      typeof createImageBitmap === "function" &&
+      typeof navigator.clipboard?.write === "function"
+    );
+  }
+
+  /**
+   * The shot, re-encoded as a PNG.
+   *
+   * The clipboard does not take WebP. Chrome and Safari both write a short
+   * allow-list — text/plain, text/html, image/png — so handing `ClipboardItem`
+   * the fetched file directly would fail on every browser rather than none, and
+   * the button would be exactly the broken control it is not allowed to be.
+   *
+   * This can still fail on a very tall capture: shots run to 12,000px and every
+   * engine caps canvas area (iOS Safari at ~16.7M pixels, which the tallest
+   * shot in the gallery is over). That failure is caught by the caller and told
+   * to the user, with Download sitting right beside it.
+   */
+  async function pngFrom(src: string): Promise<Blob> {
+    const response = await fetch(src);
+    if (!response.ok) throw new Error(`${src} responded ${response.status}`);
+
+    const bitmap = await createImageBitmap(await response.blob());
+    try {
+      const canvas = document.createElement("canvas");
+      canvas.width = bitmap.width;
+      canvas.height = bitmap.height;
+
+      const context = canvas.getContext("2d");
+      if (!context) throw new Error("no 2d context for the re-encode");
+      context.drawImage(bitmap, 0, 0);
+
+      const png = await new Promise<Blob | null>((resolve) =>
+        canvas.toBlob(resolve, "image/png"),
+      );
+      if (!png) throw new Error("the canvas would not encode a PNG");
+      return png;
+    } finally {
+      // A full-page capture is tens of megabytes decoded; do not wait for GC.
+      bitmap.close();
+    }
+  }
+
+  function initShotActions(root: HTMLElement) {
+    const button = root.querySelector<HTMLButtonElement>("[data-shot-copy]");
+    const flash = root.querySelector<HTMLElement>("[data-shot-flash]");
+    const status = root.querySelector<HTMLElement>("[data-shot-status]");
+    const src = button?.dataset.src;
+    if (!button || !flash || !status || !src) return;
+
+    // Left hidden otherwise. Download is still there and still works.
+    if (!canCopyImages()) return;
+    button.hidden = false;
+
+    let timer = 0;
+
+    /** `hold` of 0 leaves the state up until the next call replaces it. */
+    const show = (label: string, spoken: string, hold: number) => {
+      window.clearTimeout(timer);
+      flash.textContent = label;
+      button.setAttribute("data-flash", "");
+      status.textContent = spoken;
+
+      if (hold > 0) {
+        timer = window.setTimeout(() => {
+          button.removeAttribute("data-flash");
+          flash.textContent = "";
+          status.textContent = "";
+        }, hold);
+      }
+    };
+
+    button.addEventListener("click", () => {
+      show("Copying", "Copying the screenshot", 0);
+
+      /*
+       * The blob goes in as a promise rather than being awaited first. Safari
+       * ends the user-activation window at the first `await`, so awaiting the
+       * re-encode and then writing would be a clipboard write with no gesture
+       * behind it; a pending value inside `ClipboardItem` is the sanctioned way
+       * to keep a slow encode inside the press that started it.
+       */
+      navigator.clipboard
+        .write([new ClipboardItem({ "image/png": pngFrom(src) })])
+        .then(() => show("Copied", "Screenshot copied", FLASH_MS))
+        .catch(() =>
+          show(
+            "Failed",
+            "Could not copy the screenshot. Use Download instead.",
+            FAIL_MS,
+          ),
+        );
+    });
+  }
+
+  document
+    .querySelectorAll<HTMLElement>("[data-shot-actions]")
+    .forEach((root) => initShotActions(root));
+</script>
