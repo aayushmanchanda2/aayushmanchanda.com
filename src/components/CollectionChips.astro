@@ -1,0 +1,52 @@
+---
+/**
+ * CollectionChips — the collections one site is in, as links out to them.
+ *
+ * Fourth user of the chip vocabulary in `styles/chip.css`, after VerdictBadge,
+ * StatusChip and KindChip, and the same `chip--link` form the /reading filter
+ * bar uses: these are filters, so they get the filter's affordances rather than
+ * a label's.
+ *
+ * Gray, always. The other three components pick a tone per word because their
+ * words mean something on a scale — `using` is not `skipped`, `shipped` is not
+ * `paused`. A collection name means nothing of the sort; `portfolios` is not
+ * better or worse than `personal-sites`, and colouring them would invent a
+ * gradient that is not there. Gray is also the quietest tone in the system,
+ * which is right for a row that sits in a facts table under a palette.
+ *
+ * The label drops the hyphens (`collectionLabel`), the href keeps them. The
+ * slug is the route and the join key; the reader only ever needs the words.
+ */
+import { collectionLabel } from "../lib/sites";
+
+interface Props {
+  /** Collection slugs, as stored on the entry. */
+  collections: string[];
+}
+
+const { collections } = Astro.props;
+---
+
+<ul class="collections">
+  {
+    collections.map((slug) => (
+      <li>
+        <a class="chip chip--link" data-tone="gray" href={`/sites/collection/${slug}`}>
+          {collectionLabel(slug)}
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  /* A `ul`, so a site being in three collections is three items to anything
+     reading the page out loud rather than one run-on line. `global.css` already
+     takes the bullets and the padding off every list on the site. */
+  .collections {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0;
+  }
+</style>

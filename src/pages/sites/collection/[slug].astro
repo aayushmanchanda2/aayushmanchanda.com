@@ -1,0 +1,64 @@
+---
+/**
+ * One collection: every site I put in it.
+ *
+ * Sibling of `/sites/domain/<domain>`, and deliberately the same page with a
+ * different reason for the grouping. A domain page answers "what else have I
+ * saved from here", which is a fact about the URL. This one answers "what else
+ * did I file with this", which is a judgement — so the two must not look like
+ * different kinds of thing, and both hand the same `SiteGrid` a subset.
+ *
+ * Reached from the chips on any entry's details page, and from the line under
+ * the standfirst on /sites.
+ */
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+
+import Base from "../../../layouts/Base.astro";
+import SiteGrid from "../../../components/SiteGrid.astro";
+import { collectionGroups } from "../../../lib/sites";
+
+export const getStaticPaths = (() =>
+  collectionGroups.map((group) => ({
+    params: { slug: group.slug },
+    props: group,
+  }))) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { label, sites } = Astro.props;
+const count = sites.length;
+const lead = `${count} ${count === 1 ? "site" : "sites"} I filed under`;
+---
+
+<Base
+  title={`${label} · Sites · Aayush Manchanda`}
+  description={`${lead} ${label}.`}
+>
+  <p class="crumb mono"><a href="/sites">&larr; Sites</a></p>
+
+  <header>
+    <h1 class="page-title collection">{label}</h1>
+    <p class="standfirst">
+      {lead} {label}. Collections are mine and they overlap &mdash; a site can
+      be in several, or in none.
+    </p>
+  </header>
+
+  <div class="body">
+    <SiteGrid sites={sites} />
+  </div>
+</Base>
+
+<style>
+  /* Collection names run to two or three words, so they need the same brake the
+     domain page puts on a long hostname. */
+  .collection {
+    font-size: clamp(2rem, 6vw, 3.25rem);
+    letter-spacing: -0.035em;
+    overflow-wrap: anywhere;
+  }
+
+  .body {
+    margin-top: clamp(3.5rem, 12vh, 6rem);
+  }
+</style>

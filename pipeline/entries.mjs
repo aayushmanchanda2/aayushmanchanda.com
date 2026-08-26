@@ -20,6 +20,8 @@
  *     excerpt gets null rather than a stand-in sentence. /tools needs the
  *     fallback because a verdict with no note is a row that says nothing; a
  *     reading row already says what it is with its title and its kind.
+ *   - a site entry's `collections` come from the tags on the bookmark, minus
+ *     the two the pipeline writes itself. See `RESERVED_TAGS` below.
  */
 
 import { readFile, rename, writeFile } from "node:fs/promises";
@@ -30,6 +32,29 @@ import { isRecord } from "./util.mjs";
 /** @typedef {import("./types.js").Bookmark} Bookmark */
 /** @typedef {import("./types.js").ReadingKind} ReadingKind */
 /** @typedef {import("./types.js").Section} Section */
+
+/* ---------------------------------------------------------------------------
+   Tags the pipeline owns
+   --------------------------------------------------------------------------- */
+
+/**
+ * Written back to Raindrop once a bookmark is settled. `apply.mjs` does the
+ * writing; they live here because the same two words are what `collectionsFrom`
+ * has to refuse, and a curation vocabulary that can silently absorb the
+ * pipeline's own bookkeeping is a vocabulary with a `published` collection in
+ * it. One definition, so the two rules cannot drift apart.
+ */
+export const PUBLISHED_TAG = "published";
+export const FAILED_TAG = "failed";
+
+/**
+ * Tags that are the pipeline talking to itself, never curation.
+ *
+ * Compared AFTER slugification, so `Published`, `PUBLISHED` and ` published `
+ * are all the same reserved word. Raindrop's tag field is free text a human
+ * types on a phone, and case is not a thing they will be careful about.
+ */
+export const RESERVED_TAGS = new Set([PUBLISHED_TAG, FAILED_TAG]);
 
 /** New tool saves are never a verdict — they are a note to self to look. */
 export const NEW_TOOL_VERDICT = "watching";
@@ -130,6 +155,34 @@ export function slugify(text) {
     .replace(/^-+|-+$/g, "")
     .slice(0, 60)
     .replace(/-+$/g, "");
+}
+
+/**
+ * The collections a bookmark's tags put it in.
+ *
+ * This is the whole curation model: a tag typed in Raindrop is a collection on
+ * the site, and there is no second place to maintain. "Handy Tools" and
+ * "handy tools" are one collection because both fold to `handy-tools`, which is
+ * also the route the site will answer on.
+ *
+ * Four things happen to the list, in this order and for these reasons:
+ *
+ *   - slugified, because a collection is a URL segment before it is a label;
+ *   - emptied entries dropped, because a tag of pure punctuation ("!!!") folds
+ *     to "" and there is no route with no name;
+ *   - reserved tags dropped, so the pipeline's own bookkeeping never becomes a
+ *     collection the reader can click into;
+ *   - deduped and sorted, so re-tagging in a different order is not a diff.
+ *
+ * @param {readonly string[]} tags
+ * @returns {string[]}
+ */
+export function collectionsFrom(tags) {
+  const slugs = tags
+    .map((tag) => slugify(tag))
+    .filter((slug) => slug !== "" && !RESERVED_TAGS.has(slug));
+
+  return [...new Set(slugs)].sort();
 }
 
 /**
@@ -266,6 +319,16 @@ export function shotFilesOf(entry) {
 }
 
 /**
+ * /sites is the only section that carries collections.
+ *
+ * Not a scoping accident, and not "for now": /tools already has `category` and
+ * /reading already has `kind`, and both of those are single-valued taxonomies
+ * their own pages, routes and filter bars are built around. Writing a second,
+ * many-to-many one into those entries would put a field in the JSON that no
+ * parser reads and no page renders — data that claims to do something and does
+ * not. /sites had no taxonomy at all before this, only the domain, which is a
+ * fact about the URL rather than a judgement about the site.
+ *
  * @param {object} input
  * @param {Bookmark} input.bookmark
  * @param {string} input.slug
@@ -283,6 +346,7 @@ export function buildSiteEntry({ bookmark, slug, date, palette }) {
     // Copied, not aliased: the capture's array must not stay reachable from the
     // gallery it was written into.
     palette: [...palette],
+    collections: collectionsFrom(bookmark.tags),
   };
 }
 

@@ -70,6 +70,50 @@ test("publishes a site, moves its shot, records state, tags the bookmark", async
   assert.equal(out.summary, "published=2 failed=0 skipped=0 pending=0");
 });
 
+test("the tags on a saved site become its collections", async (t) => {
+  const { paths } = await makeRepo(t);
+  const server = raindropServer({
+    ...NESTED,
+    raindrops: {
+      // `published` is on the bookmark already — hand-typed, or left by a run
+      // whose state row never landed. Tags are not how this pipeline dedupes,
+      // so it publishes anyway, and the tag must not survive as a collection.
+      [SITES_ID]: [
+        bookmark(200, "https://bychudy.com", {
+          title: "bychudy",
+          tags: ["Personal Sites", "portfolios", "published"],
+        }),
+      ],
+      [TOOLS_ID]: [bookmark(201, "https://linear.app", { title: "Linear", tags: ["Portfolios"] })],
+    },
+  });
+  const out = recorder();
+
+  assert.equal(await run([], deps({ paths, server, out })), 0);
+
+  const [site] = await readJson(paths.sitesJson);
+  assert.deepEqual(site.collections, ["personal-sites", "portfolios"], "slugified, sorted, deduped");
+
+  const [tool] = await readJson(paths.toolsJson);
+  assert.equal(tool.collections, undefined, "collections are a /sites field only");
+});
+
+test("a site saved with no tags gets an empty collections list, not a missing one", async (t) => {
+  const { paths } = await makeRepo(t);
+  const server = raindropServer({
+    ...NESTED,
+    raindrops: {
+      [SITES_ID]: [bookmark(200, "https://otherkind.design", { title: "Otherkind" })],
+    },
+  });
+  const out = recorder();
+
+  assert.equal(await run([], deps({ paths, server, out })), 0);
+
+  const [site] = await readJson(paths.sitesJson);
+  assert.deepEqual(site.collections, [], "the field is always written, so the shape never varies");
+});
+
 test("a tool with no excerpt still gets a note the build will accept", async (t) => {
   const { paths } = await makeRepo(t);
   const server = raindropServer({

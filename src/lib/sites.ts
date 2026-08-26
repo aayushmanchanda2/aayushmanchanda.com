@@ -46,7 +46,31 @@ export interface Site {
    * pixels by `pipeline/capture.mjs`, never authored by hand.
    */
   palette: string[];
+  /**
+   * Curated groupings this site belongs to, each also a filter route
+   * (`/sites/collection/<slug>`). Many-to-many and unordered: a site can be in
+   * none, one, or several, and a collection is simply every site naming it.
+   *
+   * Written by the pipeline from the bookmark's Raindrop tags, and meant to be
+   * edited by hand afterwards — unlike `palette`, this is a judgement about the
+   * site rather than a measurement of it. Empty is the normal case.
+   */
+  collections: string[];
 }
+
+/**
+ * A collection, and everything in it.
+ *
+ * `type` rather than `interface` for the same reason as `DomainGroup`: it is
+ * handed to `getStaticPaths` as route props.
+ */
+export type CollectionGroup = {
+  /** The route segment, and what the JSON entries actually store. */
+  slug: string;
+  /** The slug as prose — `reference-libraries` reads "reference libraries". */
+  label: string;
+  sites: Site[];
+};
 
 /**
  * `type` rather than `interface`: this is handed to `getStaticPaths` as a
@@ -208,6 +232,49 @@ function readPalette(entry: Record<string, unknown>, where: string): string[] {
   });
 }
 
+/**
+ * Optional, and absent means none — a site with no collections is the ordinary
+ * case, not an incomplete entry, so there is nothing to fall back to.
+ *
+ * Every member has to be a slug already, because the value IS the route segment
+ * and the join key at once: `/sites/collection/<x>` is built from it verbatim,
+ * and two entries land in the same collection only if their strings match
+ * exactly. Folding "Reference Libraries" down to `reference-libraries` here
+ * instead of rejecting it would make the file's contents and the site's routes
+ * two different things, and a typo would quietly mint a collection of one.
+ *
+ * Deliberately uncapped. The pipeline writes this from however many tags a
+ * bookmark carries, and `pipeline/entries.mjs` promises that everything it
+ * writes is something this parser accepts — a ceiling here that the pipeline
+ * did not also enforce would turn an enthusiastic tagging session into a failed
+ * build.
+ */
+function readCollections(entry: Record<string, unknown>, where: string): string[] {
+  const value = entry["collections"];
+  if (value === undefined) return [];
+
+  if (!Array.isArray(value)) {
+    fail(where, `needs "collections" to be an array of slugs, or to leave it out entirely`);
+  }
+
+  const seen = new Set<string>();
+
+  return value.map((name: unknown, index): string => {
+    if (typeof name !== "string" || !SLUG.test(name)) {
+      fail(
+        where,
+        `has a "collections" entry at ${index} that is not a URL-safe slug ` +
+          `(lowercase, digits, single hyphens): ${JSON.stringify(name)}`,
+      );
+    }
+    if (seen.has(name)) {
+      fail(where, `lists the collection "${name}" twice`);
+    }
+    seen.add(name);
+    return name;
+  });
+}
+
 export function parseSites(value: unknown): Site[] {
   if (!Array.isArray(value)) fail("root", "must be a JSON array of site entries");
   if (value.length === 0) fail("root", "must hold at least one site entry");
@@ -243,6 +310,7 @@ export function parseSites(value: unknown): Site[] {
       saved_date: readDate(item, "saved_date", where),
       shot: readShot(item, slug, where),
       palette: readPalette(item, where),
+      collections: readCollections(item, where),
     };
   });
 
@@ -277,6 +345,19 @@ export function domainSlug(domain: string): string {
   return routeSlug(domain);
 }
 
+/**
+ * `reference-libraries` -> `reference libraries`.
+ *
+ * The hyphens are there to make the slug a route, and a reader has no use for
+ * them. Nothing round-trips this back into a slug — the slug is what the JSON
+ * stores and what every href is built from — so a collection whose name really
+ * did contain a hyphen loses it in the label only, which is a cosmetic price
+ * worth paying to stop every chip reading like a filename.
+ */
+export function collectionLabel(slug: string): string {
+  return slug.replace(/-/g, " ");
+}
+
 /** Newest save first; ties keep the order they were written in the JSON. */
 export const sites: Site[] = parseSites(rawSites)
   .map((site, index) => ({ site, index }))
@@ -286,6 +367,35 @@ export const sites: Site[] = parseSites(rawSites)
       : b.site.saved_date.localeCompare(a.site.saved_date),
   )
   .map(({ site }) => site);
+
+/**
+ * Every collection named by at least one site, alphabetically.
+ *
+ * Alphabetical rather than by size: this list is rendered as a row of links on
+ * /sites, and a row that reorders itself every time an entry is tagged asks the
+ * reader to re-find the one they wanted. Alphabetical is the order that holds
+ * still.
+ *
+ * A collection exists because something is in it, so there is no registry to
+ * keep and no way to end up with an empty one. Sites inside a group keep the
+ * gallery's own newest-first order.
+ */
+export const collectionGroups: CollectionGroup[] = (() => {
+  const groups = new Map<string, CollectionGroup>();
+
+  for (const site of sites) {
+    for (const slug of site.collections) {
+      const group = groups.get(slug);
+      if (group) {
+        group.sites.push(site);
+      } else {
+        groups.set(slug, { slug, label: collectionLabel(slug), sites: [site] });
+      }
+    }
+  }
+
+  return [...groups.values()].sort((a, b) => a.slug.localeCompare(b.slug));
+})();
 
 export const domains: DomainGroup[] = (() => {
   const groups = new Map<string, DomainGroup>();

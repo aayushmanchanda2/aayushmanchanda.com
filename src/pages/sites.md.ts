@@ -34,6 +34,11 @@ export const GET: APIRoute = () => {
     absolute(`/sites/${site.slug}`),
     link("shot", absolute(site.shot)),
     site.palette.join(" "),
+    // Space-separated slugs, as stored, rather than the prose labels the HTML
+    // page shows: an agent asking "what else is in this collection" needs the
+    // string that builds `/sites/collection/<slug>`, and most entries are in
+    // none, so the usual cell here is empty.
+    site.collections.join(" "),
   ]);
 
   return markdownDocument({
@@ -44,7 +49,7 @@ export const GET: APIRoute = () => {
     updated: newest(sites.map((site) => site.saved_date)),
     blocks: [
       table(
-        ["Site", "Domain", "Saved", "Page", "Screenshot", "Palette"],
+        ["Site", "Domain", "Saved", "Page", "Screenshot", "Palette", "Collections"],
         rows,
       ),
       section(
@@ -52,6 +57,11 @@ export const GET: APIRoute = () => {
         "These are screenshots of other people's sites, captured automatically on the day the site was saved. Every row credits the original with a link to it.",
         "Each shot is the whole page, top to bottom, in whatever colour scheme the site itself renders by default. Very long pages are cut off after 12,000 pixels.",
         "The palette is read off the pixels of that screenshot, most-used colour first. It is measured, not chosen, so it is a description of the capture rather than the designer's own swatches.",
+      ),
+      section(
+        "About the collections",
+        "Collections are groupings I made by hand. They overlap: a site can be in several of them, or in none, and the column is empty for most entries.",
+        "Each one is browsable at /sites/collection/<slug>, using the slug exactly as it appears in the column.",
       ),
     ],
   });

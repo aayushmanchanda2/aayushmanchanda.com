@@ -13,6 +13,9 @@
       "#b0afaf",
       "#555555",
       "#919191"
+    ],
+    "collections": [
+      "reference-libraries"
     ]
   },
   {
@@ -29,6 +32,10 @@
       "#53578a",
       "#8d9053",
       "#b26d6e"
+    ],
+    "collections": [
+      "dark-by-default",
+      "reference-libraries"
     ]
   },
   {
@@ -45,6 +52,9 @@
       "#30302f",
       "#737373",
       "#afb1b1"
+    ],
+    "collections": [
+      "portfolios"
     ]
   },
   {
@@ -61,6 +71,9 @@
       "#abacaa",
       "#727171",
       "#2c2c2c"
+    ],
+    "collections": [
+      "personal-sites"
     ]
   },
   {
@@ -77,6 +90,10 @@
       "#4e1700",
       "#fd7941",
       "#b13501"
+    ],
+    "collections": [
+      "dark-by-default",
+      "reference-libraries"
     ]
   },
   {
@@ -93,6 +110,10 @@
       "#b26a53",
       "#cd8971",
       "#b2aeb1"
+    ],
+    "collections": [
+      "personal-sites",
+      "portfolios"
     ]
   }
 ]

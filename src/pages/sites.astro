@@ -1,7 +1,19 @@
 ---
 import Base from "../layouts/Base.astro";
 import SiteGrid from "../components/SiteGrid.astro";
-import { sites } from "../lib/sites";
+import { collectionGroups, sites } from "../lib/sites";
+
+/**
+ * The line renders at two collections, not at one.
+ *
+ * One collection is not a way of slicing the gallery, it is a single link
+ * pretending to be one — and a reader who follows it lands on a page that is
+ * the gallery minus a few, with nothing to compare it to. Two is the smallest
+ * number where the row is doing what it looks like it does. Below that it does
+ * not render at all, which is the same rule `lib/sections.ts` applies to an
+ * empty section: no scaffolding for content that is not there yet.
+ */
+const showCollections = collectionGroups.length >= 2;
 ---
 
 <Base
@@ -14,6 +26,29 @@ import { sites } from "../lib/sites";
       Sites I saved for how they look. Every screenshot was taken the day I
       saved it, top to bottom &mdash; open one to scroll the whole page.
     </p>
+
+    {/*
+      A line of text, not the chip bar /reading uses. The chips there sit above
+      a list of rows and are the loudest thing on the page by design; here they
+      would sit above a wall of screenshots and compete with the one thing this
+      page is for. So the collections get the mono voice the crumb and the
+      keyboard hints already use — present, findable, and quiet enough that the
+      pictures still go first.
+    */}
+    {
+      showCollections && (
+        <nav class="collections mono" aria-label="Filter sites by collection">
+          <span class="collections__label">Collections</span>
+          <ul class="collections__row">
+            {collectionGroups.map((group) => (
+              <li>
+                <a href={`/sites/collection/${group.slug}`}>{group.label}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )
+    }
   </header>
 
   <div class="body">
@@ -24,5 +59,61 @@ import { sites } from "../lib/sites";
 <style>
   .body {
     margin-top: clamp(3.5rem, 12vh, 6rem);
+  }
+
+  .collections {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem 0.75rem;
+    margin-top: clamp(1.5rem, 4vh, 2.25rem);
+    color: var(--faint);
+  }
+
+  /* The label keeps the uppercase `.mono` voice every `dt` in a facts table
+     speaks. The names do not: a chip renders them lowercase (`styles/chip.css`
+     sets that for the whole vocabulary), and "PERSONAL SITES" here against
+     "personal sites" on the entry page would be one collection wearing two
+     faces. The row that names them and the chip that links to them agree. */
+  .collections__row {
+    display: flex;
+    flex-wrap: wrap;
+    text-transform: lowercase;
+    /* Matches the gap inside an item so the separator sits centred between two
+       links rather than welded to the end of the one before it — the same trick
+       the keyboard hint row on an entry page plays. */
+    gap: 0 0.75rem;
+    margin: 0;
+  }
+
+  .collections__row li {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+  }
+
+  /* Outside the anchor, so the dot is never part of a link's text or target.
+     Trailing rather than leading, unlike the keyboard hint row this borrows
+     from: that row is three short items and never wraps, while this one wraps
+     at four collections on a narrow column. A separator travels with its own
+     list item, so a leading dot would start the second line — `· reference
+     libraries` — where a trailing one ends the first, which is what a line
+     continuing is supposed to look like. */
+  .collections__row li:not(:last-child)::after {
+    content: "\00b7";
+    color: var(--hairline-strong);
+  }
+
+  .collections a {
+    color: inherit;
+    text-decoration: none;
+    transition-property: color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .collections a:hover,
+  .collections a:focus-visible {
+    color: var(--accent);
   }
 </style>

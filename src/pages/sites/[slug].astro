@@ -17,6 +17,7 @@
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 
 import Base from "../../layouts/Base.astro";
+import CollectionChips from "../../components/CollectionChips.astro";
 import PaletteRow from "../../components/PaletteRow.astro";
 import ShotActions from "../../components/ShotActions.astro";
 import ShotFrame from "../../components/ShotFrame.astro";
@@ -140,6 +141,23 @@ const hints: Hint[] = [
       </dd>
     </div>
 
+    {/*
+      Straight after the domain, because the two rows do the same job: both are
+      a way out of this page and back into the rest of the gallery. Absent
+      entirely when the site is in no collections — an empty row would be a
+      field admitting it has no value, and most entries have none.
+    */}
+    {
+      site.collections.length > 0 && (
+        <div class="fact fact--collections">
+          <dt class="mono">Collections</dt>
+          <dd>
+            <CollectionChips collections={site.collections} />
+          </dd>
+        </div>
+      )
+    }
+
     <div class="fact">
       <dt class="mono">Saved</dt>
       <dd class="tabular-nums">{site.saved_date}</dd>
@@ -211,9 +229,13 @@ const hints: Hint[] = [
 
   /* A swatch row is a block of colour, not a line of type: baseline alignment
      would drop the label onto the hex captions three rows down, so both columns
-     start at the top instead. */
+     start at the top instead. A chip has the same problem for the same reason —
+     its baseline sits inside a tinted box, so the label would ride low against
+     it, and lower still once the row wraps. */
   .fact--palette dt,
-  .fact--palette dd {
+  .fact--palette dd,
+  .fact--collections dt,
+  .fact--collections dd {
     align-self: start;
   }
 

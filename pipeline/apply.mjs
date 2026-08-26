@@ -29,6 +29,8 @@ import { copyFile, mkdir, rename, rm, unlink } from "node:fs/promises";
 import path from "node:path";
 
 import {
+  FAILED_TAG,
+  PUBLISHED_TAG,
   buildReadingEntry,
   buildSiteEntry,
   buildToolEntry,
@@ -64,8 +66,15 @@ import { describe, isRecord } from "./util.mjs";
  * @property {typeof import("./capture.mjs").captureSite} captureSite
  */
 
-export const PUBLISHED_TAG = "published";
-export const FAILED_TAG = "failed";
+/**
+ * Re-exported, not defined here.
+ *
+ * These two words are also the two `entries.mjs` refuses to turn into a
+ * collection, and that refusal is the load-bearing half: a reader must never
+ * find a `published` collection on /sites. So the definition sits next to the
+ * rule that depends on it, and this file — which does the writing — borrows it.
+ */
+export { FAILED_TAG, PUBLISHED_TAG };
 
 /**
  * @param {PlannedItem} item

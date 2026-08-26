@@ -11,9 +11,12 @@ file I edited and committed. Everything else is a build step.
 Save a link. That is the whole workflow.
 
 1. On the iPhone, share sheet, Raindrop.
-2. Pick the collection: **Publish/Tools** or **Publish/Sites**. The collection is
-   the only classification. There is no tagging step and no sorting rules.
-3. Wait.
+2. Pick the collection: **Publish/Tools** or **Publish/Sites**. That decides
+   which section the link lands in, and it is the only thing that has to be
+   right.
+3. Optionally, tag it. Tags are curation — see below. Skipping this is fine;
+   most entries have no tags.
+4. Wait.
 
 A GitHub Actions cron (`.github/workflows/publish.yml`, `23 */3 * * *`, so :23
 past every third hour) reads both collections, screenshots what is new, commits
@@ -24,6 +27,33 @@ renders by default and cut off after 12,000px, plus the dominant colours read
 off it. Tools do not get a picture, only an entry, and it lands as category
 `unsorted` with verdict `watching` and the note "Saved from Raindrop. Not tested
 yet." Fix it later by hand, see below.
+
+### Tagging is curation
+
+A tag on a **Publish/Sites** bookmark becomes a collection on the site: a
+browsable page at `/sites/collection/<slug>`, a chip on the entry, and a link in
+the line under the standfirst on /sites. There is no second place to maintain
+and no admin screen. Tag a bookmark "Reference Libraries" and that collection
+exists, holding every site tagged the same way.
+
+- **Tags are folded into slugs.** "Reference Libraries", "reference libraries"
+  and `reference-libraries` are one collection, so capitalisation on a phone
+  keyboard does not matter. The page shows the words; the URL uses the hyphens.
+- **A site can be in several collections, or none.** They overlap on purpose.
+  None is the ordinary case.
+- **`published` and `failed` are reserved.** The pipeline writes those two tags
+  back to Raindrop itself (see *When something fails*), so they are refused as
+  collection names. Tagging a bookmark `published` by hand does nothing. The
+  reserved set is `RESERVED_TAGS` in `pipeline/entries.mjs`, defined next to the
+  constants the pipeline tags with, so the two cannot drift apart.
+- **Tag before the run picks it up.** Collections are read once, when the entry
+  is first written. Re-tagging in Raindrop afterwards does not reach a site that
+  has already published — edit `src/data/sites.json` instead, which is the
+  better tool for it anyway.
+- **/tools and /reading ignore tags.** They already have `category` and `kind`.
+
+The collections line on /sites appears once there are two collections. Below
+that it renders nothing, the same way an empty section hides itself.
 
 Do not want to wait three hours:
 
@@ -53,6 +83,13 @@ nothing broken reaches the site.
 
 Worth fixing `category` at the same time. Categories become routes, so two
 spellings of one idea land on two pages.
+
+**Site collections** live on each entry in `src/data/sites.json`, as
+`"collections": ["portfolios", "personal-sites"]`. Leave the field out for a site
+that is in none. Each value has to be a slug already — lowercase, digits, single
+hyphens — because it is the route segment and the join key at once, and the build
+fails on anything else rather than guessing. Adding a collection is adding the
+same string to a second entry; deleting the last mention of one deletes its page.
 
 **Notes** are markdown files in `src/content/notes/`. Frontmatter:
 
