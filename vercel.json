@@ -1,53 +1,77 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
 
-  "rewrites": [
+  "routes": [
     {
-      "source": "/",
+      "src": "^/$",
       "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
-      "destination": "/index.md"
+      "dest": "/index.md",
+      "headers": {
+        "Content-Type": "text/markdown; charset=utf-8",
+        "Vary": "Accept, Accept-Encoding"
+      }
     },
     {
-      "source": "/tools",
+      "src": "^/tools/?$",
       "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
-      "destination": "/tools.md"
+      "dest": "/tools.md",
+      "headers": {
+        "Content-Type": "text/markdown; charset=utf-8",
+        "Vary": "Accept, Accept-Encoding"
+      }
     },
     {
-      "source": "/sites",
+      "src": "^/sites/?$",
       "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
-      "destination": "/sites.md"
+      "dest": "/sites.md",
+      "headers": {
+        "Content-Type": "text/markdown; charset=utf-8",
+        "Vary": "Accept, Accept-Encoding"
+      }
     },
     {
-      "source": "/experiments",
+      "src": "^/experiments/?$",
       "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
-      "destination": "/experiments.md"
+      "dest": "/experiments.md",
+      "headers": {
+        "Content-Type": "text/markdown; charset=utf-8",
+        "Vary": "Accept, Accept-Encoding"
+      }
     },
     {
-      "source": "/notes",
+      "src": "^/notes/?$",
       "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
-      "destination": "/notes.md"
-    }
-  ],
+      "dest": "/notes.md",
+      "headers": {
+        "Content-Type": "text/markdown; charset=utf-8",
+        "Vary": "Accept, Accept-Encoding"
+      }
+    },
 
-  "headers": [
     {
-      "source": "/",
-      "headers": [{ "key": "Vary", "value": "Accept, Accept-Encoding" }]
+      "src": "^/(tools|sites|experiments|notes)/?$",
+      "headers": { "Vary": "Accept, Accept-Encoding" },
+      "continue": true
     },
     {
-      "source": "/(tools|sites|experiments|notes)",
-      "headers": [{ "key": "Vary", "value": "Accept, Accept-Encoding" }]
+      "src": "^/$",
+      "headers": { "Vary": "Accept, Accept-Encoding" },
+      "continue": true
     },
     {
-      "source": "/(index|tools|sites|experiments|notes).md",
-      "headers": [
-        { "key": "Content-Type", "value": "text/markdown; charset=utf-8" },
-        { "key": "Vary", "value": "Accept, Accept-Encoding" }
-      ]
+      "src": "^/(index|tools|sites|experiments|notes)\\.md$",
+      "headers": {
+        "Content-Type": "text/markdown; charset=utf-8",
+        "Vary": "Accept, Accept-Encoding"
+      },
+      "continue": true
     },
     {
-      "source": "/llms.txt",
-      "headers": [{ "key": "Content-Type", "value": "text/plain; charset=utf-8" }]
-    }
+      "src": "^/llms\\.txt$",
+      "headers": { "Content-Type": "text/plain; charset=utf-8" },
+      "continue": true
+    },
+
+    { "handle": "filesystem" }
   ]
 }
