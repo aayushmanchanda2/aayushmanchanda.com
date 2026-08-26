@@ -55,6 +55,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Before a browser is downloaded and before the token is used. `plan()` is
+      # what decides which bookmarks get published and which get dead-lettered,
+      # and a run whose decision logic is broken should stop at the cheapest
+      # point available rather than after forty screenshots.
+      - name: Test the pipeline
+        run: npm test
+
       - name: Resolve Playwright version
         id: playwright
         run: |
@@ -131,6 +138,23 @@ jobs:
           fi
           git add -- "${paths[@]}"
           git commit -m "publish: ${SUMMARY}"
+
+      # The last gate before generated data becomes everyone's problem.
+      #
+      # `src/lib/{tools,sites,experiments}.ts` refuse to build on a malformed
+      # entry, and `sites.ts` additionally checks every shot path against the
+      # disk. Building here means an entry that would fail those checks fails
+      # this workflow instead: the commit stays on the runner, the push below
+      # never runs, and main keeps building. Without it that same commit lands
+      # on main and breaks every deploy until someone reverts it by hand.
+      #
+      # After the commit rather than before it, so what is built is exactly the
+      # tree that is about to be pushed.
+      #
+      # Keepalive below is unaffected: it only acts when the newest commit is
+      # 25 days old, which cannot be true on a run that just committed.
+      - name: Verify the committed tree still builds
+        run: npx astro build
 
       - name: Push
         env:

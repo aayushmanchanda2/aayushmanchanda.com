@@ -28,6 +28,8 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { chromium } from "playwright";
 import sharp from "sharp";
 
+import { describe } from "./util.mjs";
+
 /** Desktop shot, 1x. Retina would quadruple the bytes for no gallery gain. */
 const VIEWPORT = { width: 1440, height: 900 };
 const DEVICE_SCALE_FACTOR = 1;
@@ -140,11 +142,22 @@ async function writeWebp(png, file) {
  * @param {string} options.url        Page to shoot.
  * @param {string} options.slug       Filename stem; also the gallery slug.
  * @param {string} [options.outDir]   Defaults to repo `public/shots`.
+ * @param {(line: string) => void} [options.log]
+ *   Where the two light-only downgrades are reported. `console.warn` by
+ *   default, which is right for the CLI at the bottom of this file and wrong
+ *   inside a pipeline run: those lines went to stderr, outside the run log,
+ *   so the one sentence explaining why an entry has a single screenshot landed
+ *   where nobody was reading. `apply.mjs` passes the run's own logger.
  * @returns {Promise<{ light: string, dark: string | null }>}
  *   Absolute paths of the files written. `dark` is null when the dark shot
  *   failed and the entry is publishing light-only.
  */
-export async function captureSite({ url, slug, outDir = DEFAULT_OUT_DIR }) {
+export async function captureSite({
+  url,
+  slug,
+  outDir = DEFAULT_OUT_DIR,
+  log = console.warn,
+}) {
   if (typeof url !== "string" || url.trim() === "") {
     throw new Error("captureSite needs a url");
   }
@@ -166,7 +179,7 @@ export async function captureSite({ url, slug, outDir = DEFAULT_OUT_DIR }) {
       } catch (error) {
         // Light is load-bearing, dark is a bonus. Rethrow one, log the other.
         if (scheme === "light") throw error;
-        console.warn(
+        log(
           `capture: ${slug} dark shot failed, publishing light-only — ${describe(error)}`,
         );
       }
@@ -182,7 +195,7 @@ export async function captureSite({ url, slug, outDir = DEFAULT_OUT_DIR }) {
       shots.dark !== undefined && !shots.dark.equals(lightPng);
 
     if (shots.dark !== undefined && !hasDarkRendering) {
-      console.warn(`capture: ${slug} renders the same in both themes, publishing light-only`);
+      log(`capture: ${slug} renders the same in both themes, publishing light-only`);
     }
 
     const light = await writeWebp(lightPng, path.join(outDir, `${slug}-light.webp`));
@@ -202,15 +215,6 @@ export async function captureSite({ url, slug, outDir = DEFAULT_OUT_DIR }) {
   } finally {
     await browser.close();
   }
-}
-
-/**
- * @param {unknown} error
- * @returns {string}
- */
-function describe(error) {
-  if (error instanceof Error) return error.message.split("\n")[0];
-  return String(error);
 }
 
 /* ---------------------------------------------------------------------------

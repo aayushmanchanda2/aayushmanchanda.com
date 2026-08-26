@@ -17,7 +17,15 @@ import { COLLECTION_NAMES, isTweetHost, plan, run } from "./publish.mjs";
 import { RaindropError, createClient, resolveCollections } from "./raindrop.mjs";
 import { MAX_ATTEMPTS } from "./state.mjs";
 
-/** A parsed bookmark — what `plan()` sees after the Raindrop boundary. */
+/**
+ * A parsed bookmark — what `plan()` sees after the Raindrop boundary.
+ *
+ * @param {string} id
+ * @param {string} url
+ * @param {import("./types.js").Section} section
+ * @param {{ title?: string, excerpt?: string, tags?: string[] }} [extra]
+ * @returns {import("./types.js").Bookmark}
+ */
 function mark(id, url, section, extra = {}) {
   return {
     id,
@@ -41,6 +49,7 @@ test("plan: a settled state row means the bookmark is never looked at again", ()
     mark("1", "https://a.example", "sites"),
     mark("2", "https://b.example", "sites"),
   ];
+  /** @type {import("./types.js").StateMap} */
   const state = {
     1: { kind: "published", slug: "a", section: "sites", at: "2026-08-26T10:00:00.000Z" },
     2: { kind: "failed", attempts: 3, lastError: "bot-blocked", at: "2026-08-26T10:00:00.000Z" },
@@ -81,7 +90,12 @@ test("plan: x.com and twitter.com are rejected before a browser is opened", () =
     work.map((item) => item.kind),
     ["reject", "reject", "capture"],
   );
-  assert.match(work[0].reason, /save the product's URL/);
+
+  // Narrowed by hand: `reason` belongs to one arm of `PlannedItem`, and
+  // `assert.fail` returns `never`, so the line below reads as a rejection.
+  const [first] = work;
+  if (first?.kind !== "reject") assert.fail(`expected a reject, got ${first?.kind}`);
+  assert.match(first.reason, /save the product's URL/);
 });
 
 test("isTweetHost: subdomains count, lookalikes do not", () => {

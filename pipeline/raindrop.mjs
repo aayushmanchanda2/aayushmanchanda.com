@@ -12,6 +12,8 @@
  * read — no code path lists raindrops from anywhere else.
  */
 
+import { describe, isRecord } from "./util.mjs";
+
 /** @typedef {import("./types.js").Bookmark} Bookmark */
 /** @typedef {import("./types.js").Collection} Collection */
 /** @typedef {import("./types.js").Section} Section */
@@ -32,17 +34,6 @@ export class RaindropError extends Error {
     super(message);
     this.name = "RaindropError";
   }
-}
-
-/** @param {unknown} value @returns {value is Record<string, unknown>} */
-function isRecord(value) {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
-
-/** @param {unknown} error @returns {string} */
-function describe(error) {
-  if (error instanceof Error) return error.message.split("\n")[0];
-  return String(error);
 }
 
 /**

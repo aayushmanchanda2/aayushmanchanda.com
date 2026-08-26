@@ -25,7 +25,8 @@
 import { readFile, readdir, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
-import { SHOT_FILE, isRecord, readEntries, shotFilesOf } from "./entries.mjs";
+import { SHOT_FILE, readEntries, shotFilesOf } from "./entries.mjs";
+import { isRecord } from "./util.mjs";
 
 /** @typedef {import("./types.js").ItemState} ItemState */
 /** @typedef {import("./types.js").Paths} Paths */

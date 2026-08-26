@@ -142,6 +142,11 @@ export function raindropServer({ roots = [], children = [], raindrops = {} } = {
  * A stand-in for `captureSite` that writes plausible files and records what it
  * was asked to shoot — so "never called" is a thing a test can assert.
  *
+ * It also honours `log` the way the real one does. That is the only cheap way
+ * to check the wiring: a real light-only downgrade needs a browser and a site
+ * with no dark rendering, but whether `apply.mjs` hands its own logger down so
+ * the notice reaches the run log is a question this fixture can answer.
+ *
  * @param {object} [options]
  * @param {boolean} [options.dark]  Whether the site has a dark rendering.
  * @param {string} [options.fail]   Throw with this message instead of shooting.
@@ -151,7 +156,7 @@ export function fakeCapture({ dark = true, fail } = {}) {
   const calls = [];
 
   /** @type {typeof import("./capture.mjs").captureSite} */
-  async function captureSite({ url, slug, outDir }) {
+  async function captureSite({ url, slug, outDir, log = console.warn }) {
     calls.push({ url, slug, outDir: String(outDir) });
     if (fail !== undefined) throw new Error(fail);
 
@@ -161,7 +166,11 @@ export function fakeCapture({ dark = true, fail } = {}) {
     const light = path.join(dir, `${slug}-light.webp`);
     await writeFile(light, `light:${slug}`);
 
-    if (!dark) return { light, dark: null };
+    if (!dark) {
+      // Word for word what capture.mjs says in this situation.
+      log(`capture: ${slug} renders the same in both themes, publishing light-only`);
+      return { light, dark: null };
+    }
 
     const darkFile = path.join(dir, `${slug}-dark.webp`);
     await writeFile(darkFile, `dark:${slug}`);

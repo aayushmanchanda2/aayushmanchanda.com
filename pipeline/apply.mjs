@@ -26,7 +26,6 @@ import path from "node:path";
 import {
   buildSiteEntry,
   buildToolEntry,
-  isRecord,
   shotFileName,
   slugBase,
   uniqueSlug,
@@ -34,6 +33,7 @@ import {
 } from "./entries.mjs";
 import { tagBookmark } from "./raindrop.mjs";
 import { MAX_ATTEMPTS, galleryFor, saveState } from "./state.mjs";
+import { describe, isRecord } from "./util.mjs";
 
 /** @typedef {import("./types.js").Bookmark} Bookmark */
 /** @typedef {import("./types.js").Paths} Paths */
@@ -60,12 +60,6 @@ import { MAX_ATTEMPTS, galleryFor, saveState } from "./state.mjs";
 
 export const PUBLISHED_TAG = "published";
 export const FAILED_TAG = "failed";
-
-/** @param {unknown} error @returns {string} */
-function describe(error) {
-  if (error instanceof Error) return error.message.split("\n")[0];
-  return String(error);
-}
 
 /**
  * @param {PlannedItem} item
@@ -142,7 +136,14 @@ async function captureAndPublish(bookmark, attempts, ctx) {
     // Tools are a link with a verdict attached; only sites are a picture.
     if (section === "sites") {
       await mkdir(scratch, { recursive: true });
-      const shots = await ctx.captureSite({ url: bookmark.url, slug, outDir: scratch });
+      // `log` so a light-only downgrade is reported in the run log, next to
+      // the entry it explains, instead of on stderr where nothing reads it.
+      const shots = await ctx.captureSite({
+        url: bookmark.url,
+        slug,
+        outDir: scratch,
+        log: ctx.log,
+      });
       await mkdir(ctx.paths.shotsDir, { recursive: true });
 
       await moveShot(shots.light, path.join(ctx.paths.shotsDir, shotFileName(slug, "light")));

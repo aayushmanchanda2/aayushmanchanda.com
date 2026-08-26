@@ -124,7 +124,7 @@ test("a title that collides with an existing entry gets a suffixed slug", async 
 
   const sites = await readJson(paths.sitesJson);
   assert.deepEqual(
-    sites.map((entry) => entry.slug),
+    sites.map((/** @type {Record<string, unknown>} */ entry) => entry["slug"]),
     ["save-design", "save-design-2"],
   );
   assert.equal(sites[1].shots.light, "/shots/save-design-2-light.webp");
@@ -193,6 +193,13 @@ test("a site with no dark rendering publishes light-only", async (t) => {
   const [site] = await readJson(paths.sitesJson);
   assert.equal(site.shots.dark, null);
   assert.equal(await exists(path.join(paths.shotsDir, "chester-dark.webp")), false);
+
+  // And the reason is in the run log rather than on stderr, which only happens
+  // if `apply.mjs` hands its own logger down to `captureSite`.
+  assert.ok(
+    out.out.some((line) => line.includes("chester") && line.includes("light-only")),
+    "the light-only downgrade is explained in the run log",
+  );
 });
 
 /* ---------------------------------------------------------------------------

@@ -26,6 +26,7 @@ import { captureSite } from "./capture.mjs";
 import { readEntries, urlKey } from "./entries.mjs";
 import { RaindropError, createClient, fetchBookmarks, resolveCollections } from "./raindrop.mjs";
 import { MAX_ATTEMPTS, reconcile, resolvePaths } from "./state.mjs";
+import { describe } from "./util.mjs";
 
 /** @typedef {import("./types.js").Bookmark} Bookmark */
 /** @typedef {import("./types.js").Paths} Paths */
@@ -46,12 +47,6 @@ export const COLLECTION_NAMES = /** @type {Record<Section, string>} */ ({
 });
 
 const REPO_ROOT = fileURLToPath(new URL("..", import.meta.url));
-
-/** @param {unknown} error @returns {string} */
-function describe(error) {
-  if (error instanceof Error) return error.message.split("\n")[0];
-  return String(error);
-}
 
 /**
  * Tweets bot-block a headless browser, so a shot would fail three times and

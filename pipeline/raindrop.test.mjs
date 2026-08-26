@@ -10,14 +10,19 @@ import { bookmark } from "./fixtures.mjs";
 
 /** @param {(url: URL, init: RequestInit) => Response} handler */
 function client(handler) {
+  /** @type {{ url: URL, init: RequestInit }[]} */
   const calls = [];
+
+  /** @type {typeof globalThis.fetch} */
   const fetch = async (input, init = {}) => {
     calls.push({ url: new URL(String(input)), init });
     return handler(new URL(String(input)), init);
   };
+
   return { client: createClient({ token: "t", fetch }), calls };
 }
 
+/** @param {unknown} payload @param {number} [status] */
 function json(payload, status = 200) {
   return new Response(JSON.stringify(payload), {
     status,

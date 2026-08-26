@@ -21,6 +21,8 @@
 import { readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 
+import { isRecord } from "./util.mjs";
+
 /** @typedef {import("./types.js").Bookmark} Bookmark */
 /** @typedef {import("./types.js").Section} Section */
 
@@ -35,11 +37,6 @@ export const NEW_TOOL_NOTE = "Saved from Raindrop. Not tested yet.";
 
 /** The shot filenames the pipeline owns; anything else in the dir is left alone. */
 export const SHOT_FILE = /^[a-z0-9][a-z0-9-]*-(light|dark)\.webp$/;
-
-/** @param {unknown} value @returns {value is Record<string, unknown>} */
-export function isRecord(value) {
-  return typeof value === "object" && value !== null && !Array.isArray(value);
-}
 
 /* ---------------------------------------------------------------------------
    Reading and writing
