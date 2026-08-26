@@ -1,0 +1,165 @@
+# Save a link on your phone, find it on the site.
+#
+# Every three hours this reads the two Raindrop collections, screenshots what is
+# new, and commits the result. The pipeline itself is the interesting part; this
+# file is only the four things CI has to own that `pipeline/publish.mjs` cannot:
+# a browser, a token, a git identity, and a push.
+#
+# The identity matters more than it looks. `publish.mjs` makes its own commit
+# (see `gitCommit`) and deliberately does not push — so the bot identity has to
+# be configured *before* the run, not after it, or `git commit` fails inside the
+# pipeline and takes the whole run down with it.
+
+name: publish
+
+on:
+  schedule:
+    # :23 past every third hour — off the hour, where the scheduler is least
+    # congested and a run is least likely to be dropped.
+    - cron: "23 */3 * * *"
+  workflow_dispatch:
+
+# One publish at a time, and never cancel the one that is already running: it
+# may be holding a half-written gallery, and `reconcile()` repairs a crash far
+# more cheaply than it repairs a kill.
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    defaults:
+      run:
+        # `shell: bash` is what turns on `pipefail`, which is what makes the
+        # `| tee` below report the pipeline's exit code instead of tee's.
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Resolve Playwright version
+        id: playwright
+        run: |
+          version="$(node -p "require('./package-lock.json').packages['node_modules/playwright'].version")"
+          echo "resolved playwright ${version} from the lockfile"
+          echo "version=${version}" >> "$GITHUB_OUTPUT"
+
+      # Keyed on the locked version, so a Playwright bump invalidates the cache
+      # on its own and a stale browser can never outlive the library that drives
+      # it.
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-${{ steps.playwright.outputs.version }}
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      # Before the run, not after: the pipeline commits for itself.
+      - name: Configure the committer
+        id: identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Publish
+        env:
+          RAINDROP_TOKEN: ${{ secrets.RAINDROP_TOKEN }}
+        run: node pipeline/publish.mjs | tee "${RUNNER_TEMP}/publish.log"
+
+      # The contract: the last line of stdout, and the only line with this
+      # shape. Matching the shape rather than taking `tail -1` on faith means a
+      # run that dies quietly after printing something else fails here instead
+      # of reporting a confident zero.
+      - name: Summarise
+        id: summary
+        run: |
+          line="$(grep -E '^published=[0-9]+ failed=[0-9]+ skipped=[0-9]+ pending=[0-9]+$' "${RUNNER_TEMP}/publish.log" | tail -n 1)"
+          if [ -z "$line" ]; then
+            echo "::error::publish.mjs finished without printing a summary line"
+            exit 1
+          fi
+          echo "line=${line}" >> "$GITHUB_OUTPUT"
+          {
+            echo "### Raindrop → site"
+            echo
+            echo "| outcome | count |"
+            echo "| --- | ----: |"
+            # One field per line, then split on the `=`. Explicit rather than
+            # leaning on the shell to word-split an unquoted variable — that
+            # trick silently yields a single wrong row under any shell whose
+            # splitting rules differ.
+            printf '%s\n' "${line}" | tr ' ' '\n' | while IFS='=' read -r name count; do
+              echo "| ${name} | ${count} |"
+            done
+            echo
+            echo '`'"${line}"'`'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      # `publish.mjs` stages and commits exactly these paths and nothing else,
+      # so a clean tree here is the normal case, not an error. This step exists
+      # for the run where it left something behind — and it stages the same
+      # narrow path list, so it can never turn a stray file into a commit.
+      - name: Commit whatever the pipeline left behind
+        env:
+          SUMMARY: ${{ steps.summary.outputs.line }}
+        run: |
+          paths=(src/data public/shots pipeline/state.json)
+          if [ -z "$(git status --porcelain -- "${paths[@]}")" ]; then
+            echo "nothing left over — the pipeline committed its own work"
+            exit 0
+          fi
+          git add -- "${paths[@]}"
+          git commit -m "publish: ${SUMMARY}"
+
+      - name: Push
+        env:
+          BEFORE: ${{ steps.identity.outputs.sha }}
+        run: |
+          if [ "$(git rev-parse HEAD)" = "${BEFORE}" ]; then
+            echo "no new commits to push"
+            exit 0
+          fi
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+      # GitHub disables a scheduled workflow after 60 days without repository
+      # activity, which is exactly the failure mode a quiet inbox produces: the
+      # cron stops precisely because nothing was worth publishing. An empty
+      # commit every 25 days costs nothing and keeps the schedule alive.
+      #
+      # Runs even when the publish step failed — a broken run is still a run
+      # that must not leave the cron to expire. It stages nothing, so a failed
+      # run's partial state can never ride along.
+      - name: Keepalive
+        if: always() && steps.identity.outcome == 'success'
+        env:
+          MAX_AGE_DAYS: "25"
+        run: |
+          age=$(( ( $(date +%s) - $(git log -1 --format=%ct) ) / 86400 ))
+          echo "newest commit is ${age} day(s) old"
+          if [ "${age}" -lt "${MAX_AGE_DAYS}" ]; then
+            echo "well inside the window — nothing to do"
+            exit 0
+          fi
+          git commit --allow-empty -m "keepalive"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
