@@ -56,6 +56,20 @@ export interface Site {
    * site rather than a measurement of it. Empty is the normal case.
    */
   collections: string[];
+
+  /* --- the voice fields ----------------------------------------------------
+     The same optional sentences /tools carries, for the same reason: a
+     screenshot shows what a site looks like and says nothing about what he
+     thought of it. Null on most entries, and null renders nothing.
+
+     /sites gets two of the four. `why` and `try` are questions about a tool you
+     might install; a gallery entry is a page you either like the look of or do
+     not, and there is no command to run against it. */
+
+  /** What is good about how it looks or how it is built. */
+  like: string | null;
+  /** What is not. */
+  dislike: string | null;
 }
 
 /**
@@ -98,7 +112,7 @@ const MAX_PALETTE = 6;
 const READ = readers("sites.json");
 /** Annotated, or TypeScript stops treating a call as the end of control flow. */
 const fail: Fail = READ.fail;
-const { readString, readDate, isRecord } = READ;
+const { readString, readDate, readOptional, isRecord } = READ;
 
 /**
  * `public/` — the web root, so a `/shots/…` path resolves by joining here.
@@ -311,6 +325,8 @@ export function parseSites(value: unknown): Site[] {
       shot: readShot(item, slug, where),
       palette: readPalette(item, where),
       collections: readCollections(item, where),
+      like: readOptional(item, "like", where),
+      dislike: readOptional(item, "dislike", where),
     };
   });
 

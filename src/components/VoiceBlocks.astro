@@ -1,0 +1,122 @@
+---
+/**
+ * VoiceBlocks — the entry in his own words, under mono labels.
+ *
+ * The swipe.md convention: a verdict tells you where something landed, and a
+ * one-line note tells you roughly why, but neither says what it is actually
+ * like to use. These do. Four fields, one labelled block each, prose
+ * underneath.
+ *
+ * Both details pages render this, and both hand it whatever they have. /sites
+ * only ever has two of the four, so the props are all optional rather than
+ * making a gallery entry pass `why={null} try={null}` to say nothing twice.
+ *
+ * Absent means absent. A field that is null contributes no block, and a caller
+ * with nothing at all gets no wrapper, no heading and no rule — the component
+ * renders literally nothing. That is the whole point of the field being
+ * optional: an empty labelled box is worse than silence, because it reads as a
+ * page that failed rather than a tool he has not written up yet.
+ *
+ * The order is fixed here rather than at the call sites: why (when to reach for
+ * it) orients, like and dislike are the judgement, and try is the way out into
+ * actually using the thing, so it goes last.
+ */
+
+interface Props {
+  why?: string | null;
+  like?: string | null;
+  dislike?: string | null;
+  /** Quoted, because `try` is a reserved word and reads as one otherwise. */
+  try?: string | null;
+}
+
+const {
+  why = null,
+  like = null,
+  dislike = null,
+  try: command = null,
+} = Astro.props;
+
+interface Block {
+  /** Title case here; `.mono` does the shouting in CSS. */
+  label: string;
+  body: string;
+  /**
+   * Machine text — a command to paste, or a bare URL. Set in mono at reading
+   * size rather than in the prose face, because a command in a proportional
+   * font is a command you have to squint at before you trust it.
+   */
+  code?: boolean;
+}
+
+const blocks: Block[] = [
+  ...(why === null ? [] : [{ label: "Why", body: why }]),
+  ...(like === null ? [] : [{ label: "What I like", body: like }]),
+  ...(dislike === null ? [] : [{ label: "What I don’t", body: dislike }]),
+  ...(command === null ? [] : [{ label: "Try", body: command, code: true }]),
+];
+---
+
+{
+  blocks.length > 0 && (
+    <div class="voice">
+      {blocks.map((block) => (
+        <section class="voice__block">
+          <h2 class="voice__label mono">{block.label}</h2>
+          <p class:list={["voice__body", block.code && "voice__body--code"]}>
+            {block.body}
+          </p>
+        </section>
+      ))}
+    </div>
+  )
+}
+
+<style>
+  /* Measured against /privacy, which is the site's other block of labelled
+     prose: same mono label at --faint, same muted body at 1.7. Two pages that
+     are both "a label and a paragraph" should not be two typographic systems.
+
+     What is different is the rules. /privacy hairlines every section because it
+     is a long document you scan for the clause you came for. Three or four
+     short blocks on an entry page are one thought, and ruling them would slice
+     it up and then compete with the facts table underneath. Gap does the work. */
+  .voice {
+    margin-top: clamp(2.5rem, 8vh, 4rem);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.5rem, 4vw, 2rem);
+    max-width: 62ch;
+  }
+
+  .voice__label {
+    color: var(--faint);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    /* the label is metadata; the paragraph under it carries the reading size */
+    line-height: 1.6;
+  }
+
+  .voice__body {
+    margin-top: 0.4rem;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .voice__body--code {
+    font-family: var(--font-mono);
+    /* mono runs wide, so it steps down to sit level with the prose around it */
+    font-size: 0.875rem;
+    /* full ink: this is the one line on the page a reader is meant to copy */
+    color: var(--fg);
+    /* a long install command must wrap rather than push the column sideways */
+    overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 599px) {
+    .voice {
+      max-width: none;
+    }
+  }
+</style>

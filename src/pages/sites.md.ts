@@ -22,6 +22,7 @@ import {
   section,
   table,
   newest,
+  voiceSection,
 } from "../lib/markdown";
 import { absolute } from "../lib/site";
 import { sites } from "../lib/sites";
@@ -41,6 +42,11 @@ export const GET: APIRoute = () => {
     site.collections.join(" "),
   ]);
 
+  /** Prose, so it goes under the table rather than into another column of it. */
+  const words = voiceSection(
+    sites.map((site) => ({ name: site.title, voice: site })),
+  );
+
   return markdownDocument({
     page: PAGES.sites,
     title: "Sites",
@@ -52,6 +58,7 @@ export const GET: APIRoute = () => {
         ["Site", "Domain", "Saved", "Page", "Screenshot", "Palette", "Collections"],
         rows,
       ),
+      ...(words === null ? [] : [words]),
       section(
         "About the screenshots",
         "These are screenshots of other people's sites, captured automatically on the day the site was saved. Every row credits the original with a link to it.",

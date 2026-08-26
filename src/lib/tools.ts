@@ -38,6 +38,25 @@ export interface Tool {
   note: string;
   /** ISO calendar date (YYYY-MM-DD) the verdict was last true. */
   status_date: string;
+
+  /* --- the voice fields ----------------------------------------------------
+     Four optional sentences that say more than a verdict can. All four are null
+     on most entries and that is the intended state: a tool earns one of these
+     when there is a real opinion to record, and the details page renders
+     nothing at all for the ones that are null. There is no fallback text,
+     because a stand-in sentence would be the site putting words in his mouth.
+
+     Written by hand only. `pipeline/entries.mjs` does not author any of them —
+     it can tell you a bookmark exists, not what he thought of it. */
+
+  /** What is good about it. */
+  like: string | null;
+  /** What is not. Named "what I don't" on the page, because it is rarely hate. */
+  dislike: string | null;
+  /** When to reach for this one instead of the next one along. */
+  why: string | null;
+  /** One command or link, so a reader can go and find out for themselves. */
+  try: string | null;
 }
 
 /**
@@ -69,7 +88,7 @@ const VERDICT_NAMES: readonly string[] = VERDICTS;
 const READ = readers("tools.json");
 /** Annotated, or TypeScript stops treating a call as the end of control flow. */
 const fail: Fail = READ.fail;
-const { readString, readDate, isRecord } = READ;
+const { readString, readDate, readOptional, isRecord } = READ;
 
 function isVerdict(value: unknown): value is Verdict {
   return typeof value === "string" && VERDICT_NAMES.includes(value);
@@ -138,6 +157,10 @@ export function parseTools(value: unknown): Tool[] {
       verdict,
       note: readString(item, "note", where),
       status_date: readDate(item, "status_date", where),
+      like: readOptional(item, "like", where),
+      dislike: readOptional(item, "dislike", where),
+      why: readOptional(item, "why", where),
+      try: readOptional(item, "try", where),
     };
   });
 

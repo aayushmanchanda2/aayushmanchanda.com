@@ -1,13 +1,28 @@
 ---
 /**
- * One tool. Category and verdict are links, not labels — the save.design
- * details-page anatomy, where every field value is also a way back out into
- * the rest of the collection.
+ * One tool, in the swipe.md shape: a strip of metadata up top, the opinion in
+ * the middle, and the source at the foot.
+ *
+ * This page used to end in the `.facts` table that /sites still ends in, and
+ * the two pages are not the same page. A site entry has rows worth tabulating —
+ * a palette, a set of collections, a picture — so a label column earns its
+ * keep there. A tool has four facts, three of them one word long, and setting
+ * them as a table put a 7rem label column and four hairlines around about
+ * twelve characters of content, then pushed the part a reader came for below
+ * all of it.
+ *
+ * So the same four facts are still here and still linked; they are just
+ * arranged as the reference arranges them. Category and verdict stay links
+ * rather than labels — the save.design anatomy, where every field value is also
+ * a way back out into the rest of the collection — and the URL becomes the
+ * Source line at the bottom, which is where a reader looks for it after
+ * reading rather than before.
  */
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 
 import Base from "../../layouts/Base.astro";
 import VerdictBadge from "../../components/VerdictBadge.astro";
+import VoiceBlocks from "../../components/VoiceBlocks.astro";
 import { faviconUrl, linkLabel } from "../../lib/links";
 import { categorySlug, tools } from "../../lib/tools";
 
@@ -27,88 +42,151 @@ const { tool } = Astro.props;
 
   <header>
     <h1 class="page-title page-title--entry">{tool.name}</h1>
-    <p class="standfirst">{tool.note}</p>
-  </header>
 
-  <dl class="facts">
-    <div class="fact">
-      <dt class="mono">Verdict</dt>
-      <dd>
-        <a class="fact__chip" href={`/tools/verdict/${tool.verdict}`}>
+    {/*
+      A `ul`, so three facts are three items to anything reading the page out
+      loud rather than one run-on line with dots in it. The dots are separators
+      drawn by CSS between the items, never characters in the content.
+    */}
+    <ul class="strip mono">
+      <li class="strip__item">
+        <a class="strip__chip" href={`/tools/verdict/${tool.verdict}`}>
           <VerdictBadge verdict={tool.verdict} />
         </a>
-      </dd>
-    </div>
-
-    <div class="fact">
-      <dt class="mono">Category</dt>
-      <dd>
+      </li>
+      <li class="strip__item">
         <a href={`/tools/category/${categorySlug(tool.category)}`}>
           {tool.category}
         </a>
-      </dd>
-    </div>
+      </li>
+      <li class="strip__item">
+        <span class="tabular-nums">as of {tool.status_date}</span>
+      </li>
+    </ul>
 
-    <div class="fact">
-      <dt class="mono">As of</dt>
-      <dd class="tabular-nums">{tool.status_date}</dd>
-    </div>
+    <p class="standfirst">{tool.note}</p>
+  </header>
 
-    <div class="fact">
-      <dt class="mono">Link</dt>
-      <dd>
-        {
-          tool.url ? (
-            <span class="fact__link">
-              <img
-                class="fact__favicon outlined"
-                src={faviconUrl(tool.url)}
-                alt=""
-                width="16"
-                height="16"
-                decoding="async"
-                referrerpolicy="no-referrer"
-              />
-              <a href={tool.url} rel="noopener nofollow" target="_blank">
-                {linkLabel(tool.url)}
-              </a>
-            </span>
-          ) : (
-            <span class="fact__none">No public link</span>
-          )
-        }
-      </dd>
-    </div>
-  </dl>
+  <VoiceBlocks
+    why={tool.why}
+    like={tool.like}
+    dislike={tool.dislike}
+    try={tool.try}
+  />
+
+  {
+    /*
+      Skipped entirely when there is nothing to point at, rather than printing a
+      row that admits it has no value. Same call as the collections row on a
+      site page: most of the reason a field is optional is so that its absence
+      costs the reader nothing.
+    */
+    tool.url && (
+      <p class="source">
+        <span class="source__label mono">Source</span>
+        <img
+          class="source__favicon outlined"
+          src={faviconUrl(tool.url)}
+          alt=""
+          width="16"
+          height="16"
+          decoding="async"
+          referrerpolicy="no-referrer"
+        />
+        <a class="ext" href={tool.url} rel="noopener nofollow" target="_blank">
+          {linkLabel(tool.url)}
+        </a>
+      </p>
+    )
+  }
 </Base>
 
 <style>
-  /* `.facts` and `.fact` are in global.css — /sites ends in the same table.
-     What is left here is the two values only a tool row has. */
+  /* --- the metadata strip --------------------------------------------------- */
+
+  /* Between the title and the standfirst, not under it: the strip is what the
+     title is, and the standfirst is the first thing said about it. */
+  .strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    /* Matches the gap inside an item, so a separator sits centred between two
+       facts rather than welded to the end of the one before it. Same idiom as
+       the hint row at the foot of a site page. */
+    gap: 0 0.7rem;
+    margin-top: clamp(1rem, 2.5vw, 1.4rem);
+    color: var(--faint);
+    text-transform: none;
+    letter-spacing: 0.02em;
+  }
+
+  .strip__item {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  /* The separator lives in the list item, outside the anchor, so it is never
+     part of a link's text or its target. */
+  .strip__item + .strip__item::before {
+    content: "\00b7";
+    color: var(--hairline-strong);
+  }
+
+  /* Quiet by default and accent on hover, like the crumb and the hint row —
+     this is navigation furniture, not prose, so it is deliberately outside the
+     bold-and-underlined treatment prose links get in global.css. The hairline
+     underline is the compromise: enough to say "this is a link" at a glance,
+     not enough to make a metadata strip look like a paragraph. */
+  /* `:not(.strip__chip)` because the verdict anchor is a box, not a word: an
+     underline under a tinted chip would draw a second line across the row. */
+  .strip a:not(.strip__chip) {
+    color: inherit;
+    text-decoration-line: underline;
+    text-decoration-color: var(--hairline-strong);
+    text-underline-offset: 0.25em;
+    transition-property: color, text-decoration-color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .strip a:not(.strip__chip):hover {
+    color: var(--accent);
+    text-decoration-color: var(--accent);
+  }
 
   /* the badge does the talking; the anchor only carries the target */
-  .fact__chip {
-    display: inline-block;
+  .strip__chip {
+    display: inline-flex;
     text-decoration: none;
   }
 
-  .fact__chip:hover {
+  .strip__chip:hover {
     opacity: 0.75;
   }
 
-  .fact__link {
+  /* --- the source line ------------------------------------------------------ */
+
+  .source {
     display: flex;
+    flex-wrap: wrap;
     align-items: baseline;
-    gap: 0.5rem;
+    gap: 0.25rem 0.6rem;
+    margin-top: clamp(2.5rem, 8vh, 4rem);
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--hairline);
+    /* a URL has no spaces to break at, so it must be allowed to break anywhere */
+    overflow-wrap: anywhere;
   }
 
-  .fact__favicon {
+  .source__label {
+    color: var(--faint);
+    letter-spacing: 0.1em;
+  }
+
+  .source__favicon {
     /* baseline alignment moves the box, so nudge it back onto the text */
     align-self: center;
     border-radius: 3px;
-  }
-
-  .fact__none {
-    color: var(--faint);
   }
 </style>

@@ -105,7 +105,8 @@
     "category": "web utility",
     "verdict": "using",
     "note": "Browser automation CLI for agents — accessibility-tree snapshots at a fraction of screenshot token cost. Daily driver.",
-    "status_date": "2026-08-26"
+    "status_date": "2026-08-26",
+    "like": "It hands back the accessibility tree instead of a screenshot, so reading a page costs a fraction of the tokens. Around 82% less in my own use. The tree comes with element refs, so an agent clicks a named thing instead of guessing at pixel coordinates."
   },
   {
     "slug": "firecrawl",
@@ -114,7 +115,10 @@
     "category": "web utility",
     "verdict": "using",
     "note": "Scrape/crawl/extract API for pages that fight plain fetch. Its X postprocessor is the only reliable way I read tweets programmatically.",
-    "status_date": "2026-08-26"
+    "status_date": "2026-08-26",
+    "like": "Its X postprocessor is the only reliable way I read tweets programmatically.",
+    "why": "When the job is to get the content, not to click through a UI. A page that blocks a plain fetch, a whole site I want as markdown, a structured field I want pulled out. If the job needs a login or real clicking, I reach for agent-browser instead.",
+    "try": "npx -y firecrawl-cli@latest"
   },
   {
     "slug": "is-agentic",
@@ -132,7 +136,8 @@
     "category": "web utility",
     "verdict": "skipped",
     "note": "Token-saving MITM proxy with documented silent string corruption. Unusable anywhere fidelity matters.",
-    "status_date": "2026-08-17"
+    "status_date": "2026-08-17",
+    "dislike": "It corrupts strings on the way through and says nothing about it. That is not my finding, it is in the project's own documentation. A proxy that quietly changes the bytes is worse than no proxy at all, because you do not find out where it broke, you find out somewhere downstream when a thing that should have matched does not. No token saving buys that back."
   },
   {
     "slug": "dinky",

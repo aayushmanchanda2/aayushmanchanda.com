@@ -20,6 +20,7 @@ import {
   section,
   table,
   newest,
+  voiceSection,
 } from "../lib/markdown";
 import { absolute } from "../lib/site";
 import type { Verdict } from "../lib/tools";
@@ -47,6 +48,16 @@ export const GET: APIRoute = () => {
     tool.note,
   ]);
 
+  /**
+   * The voice fields do not go in the table. They are paragraphs, and four more
+   * columns of paragraph would make every row unreadable to pay for the two
+   * entries that have anything in them. They get their own section instead, and
+   * no section at all on the day none of them do.
+   */
+  const words = voiceSection(
+    tools.map((tool) => ({ name: tool.name, voice: tool })),
+  );
+
   return markdownDocument({
     page: PAGES.tools,
     title: "Tools",
@@ -55,6 +66,7 @@ export const GET: APIRoute = () => {
     updated: newest(tools.map((tool) => tool.status_date)),
     blocks: [
       table(["Tool", "Verdict", "Category", "Updated", "Note"], rows),
+      ...(words === null ? [] : [words]),
       section(
         "Verdicts",
         list(VERDICTS.map((verdict) => `\`${verdict}\`: ${MEANING[verdict]}`)),

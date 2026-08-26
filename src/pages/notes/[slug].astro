@@ -128,9 +128,9 @@ const links = note.data.links ?? [];
     color: var(--faint);
   }
 
-  .prose :global(a) {
-    text-decoration-line: underline;
-  }
+  /* A link in the body is bold and underlined, and that rule now lives in
+     global.css as `.prose a` — one convention across note bodies, /privacy, the
+     standfirsts and the entry pages, rather than this file's own half of it. */
 
   .prose :global(code) {
     font-family: var(--font-mono);

@@ -21,6 +21,7 @@ import CollectionChips from "../../components/CollectionChips.astro";
 import PaletteRow from "../../components/PaletteRow.astro";
 import ShotActions from "../../components/ShotActions.astro";
 import ShotFrame from "../../components/ShotFrame.astro";
+import VoiceBlocks from "../../components/VoiceBlocks.astro";
 import { domainSlug, sites } from "../../lib/sites";
 
 /**
@@ -133,6 +134,14 @@ const hints: Hint[] = [
     </figcaption>
   </figure>
 
+  {/*
+    Under the picture and above the table, because that is the order the
+    question comes in: here is the site, here is what I thought of it, here is
+    the metadata if you want it. Renders nothing at all when the entry carries
+    neither sentence, which is most of them.
+  */}
+  <VoiceBlocks like={site.like} dislike={site.dislike} />
+
   <dl class="facts">
     <div class="fact">
       <dt class="mono">Domain</dt>
@@ -174,7 +183,7 @@ const hints: Hint[] = [
     <div class="fact">
       <dt class="mono">Link</dt>
       <dd>
-        <a href={site.url} rel="noopener nofollow" target="_blank">
+        <a class="ext" href={site.url} rel="noopener nofollow" target="_blank">
           Visit {site.domain}
         </a>
       </dd>

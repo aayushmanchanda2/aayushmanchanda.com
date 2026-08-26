@@ -143,6 +143,32 @@ a:hover {
   color: var(--accent);
 }
 
+/* A link inside a sentence is bold and underlined. The swipe.md convention, and
+   it is the right one for a page whose body text is set at --muted: a blue word
+   at 400 in a muted paragraph is a colour difference and nothing else, which is
+   the one signal that goes missing on a bad screen, in bright sun, or for a
+   reader who cannot separate those two hues at all. Weight and a line are two
+   more, and neither depends on seeing colour.
+
+   Scoped to the places prose actually lives, not to `a`. Everywhere else on
+   this site a link is furniture — a nav dash, a filter chip, a footer item, a
+   whole row on the front page that is a link from edge to edge — and bolding
+   and underlining those would turn navigation into a paragraph of shouting.
+   Those surfaces set their own `text-decoration: none` and are simply not
+   matched here. `:not(.chip)` keeps a collection chip in a facts row out of it
+   for the same reason.
+
+   Both themes: --accent already swaps, and weight and underline are identical
+   in either one. */
+.prose a,
+.standfirst a,
+.voice__body a,
+.source a,
+.fact dd a:not(.chip) {
+  font-weight: 600;
+  text-decoration-line: underline;
+}
+
 img,
 svg,
 video,
@@ -226,6 +252,28 @@ ol {
 /* 1px optical outline for imagery sitting on the page background. */
 .outlined {
   box-shadow: inset 0 0 0 1px var(--outline);
+}
+
+/* A link that leaves the site, marked with the arrow rather than with a word.
+   One rule, so the glyph is never typed into markup: hand-adding "↗" per link
+   is how a convention ends up on nine links and missing from the tenth, and how
+   the arrow ends up inside the link text a screen reader has to read out.
+
+   `/ ""` is the alt-text form of `content`. It gives the generated glyph an
+   empty accessible name, so a screen reader announces the link and not "north
+   east arrow" after it. Browsers that do not support the form show the same
+   arrow and announce it; that is the fallback, and it is a small one.
+
+   `inline-block` keeps the parent's underline from running under the arrow,
+   which otherwise reads as part of the last word. */
+.ext::after {
+  content: "\2197" / "";
+  display: inline-block;
+  margin-left: 0.15em;
+  font-size: 0.85em;
+  font-weight: 400;
+  line-height: 1;
+  text-decoration: none;
 }
 
 /* The masthead: one huge h1, one line of standfirst under it. Every page that

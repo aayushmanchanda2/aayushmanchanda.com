@@ -4,8 +4,9 @@
  * `lib/tools.ts`, `lib/sites.ts` and `lib/experiments.ts` each parse an
  * untrusted file at build time and throw on the first bad entry. Three quarters
  * of that work was the same three quarters in all three files: the slug shape,
- * the date shape, "is this an object", "is this a non-empty string", and the
- * one-line `fail()` that puts the filename in front of the message.
+ * the date shape, "is this an object", "is this a non-empty string", "is this
+ * an optional string that is either absent or real", and the one-line `fail()`
+ * that puts the filename in front of the message.
  *
  * Only that floor moved here. Everything each boundary knows that the other two
  * do not — `readUrl` in /tools, `readShots` in /sites, `readLinks` in
@@ -81,6 +82,26 @@ export interface Readers {
     key: string,
     where: string,
   ) => string;
+  /**
+   * A field that may simply not be there: absent or `null` reads as null, and a
+   * present value has to be a non-empty string.
+   *
+   * The voice fields on /tools and /sites — what I like, what I don't, why, try
+   * — are all this shape, and most entries carry none of them. Silence is the
+   * ordinary case, so absence is data rather than a hole to fill in.
+   *
+   * `""` is rejected rather than folded to null on purpose. The pages render
+   * one labelled block per field that is present, so an empty string would put
+   * a heading on the page with nothing underneath it: the empty scaffolding the
+   * whole "absent renders nothing" rule exists to prevent. A key with no value
+   * behind it is a half-finished edit, and it should stop the build the way
+   * every other half-finished edit here does.
+   */
+  readOptional: (
+    entry: Record<string, unknown>,
+    key: string,
+    where: string,
+  ) => string | null;
   isRecord: (value: unknown) => value is Record<string, unknown>;
 }
 
@@ -129,5 +150,26 @@ export function readers(filename: string): Readers {
     return value;
   };
 
-  return { fail, readString, readDate, isRecord };
+  const readOptional = (
+    entry: Record<string, unknown>,
+    key: string,
+    where: string,
+  ): string | null => {
+    const value = entry[key];
+    // `null` alongside `undefined`, because a hand-edited file that once had a
+    // sentence in this field will more often be blanked to null than have the
+    // key deleted, and both mean the same thing: I have not said.
+    if (value === undefined || value === null) return null;
+
+    if (typeof value !== "string" || value.trim() === "") {
+      fail(
+        where,
+        `has "${key}", which is optional but must be a non-empty string when it is ` +
+          `there (got ${JSON.stringify(value)}). Leave the key out to say nothing.`,
+      );
+    }
+    return value;
+  };
+
+  return { fail, readString, readDate, readOptional, isRecord };
 }

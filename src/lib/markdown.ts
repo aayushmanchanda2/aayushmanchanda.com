@@ -127,6 +127,81 @@ export function section(heading: string, ...body: readonly string[]): string {
 }
 
 /* ---------------------------------------------------------------------------
+   The voice fields
+   --------------------------------------------------------------------------- */
+
+/**
+ * The optional sentences a /tools or /sites entry can carry.
+ *
+ * Every field optional, because the two sections carry different subsets — a
+ * gallery entry has no `why` and nothing to `try` — and a section that does not
+ * have a field should not have to pass null to say so.
+ */
+export interface Voice {
+  like?: string | null;
+  dislike?: string | null;
+  why?: string | null;
+  try?: string | null;
+}
+
+/**
+ * Labels and order, matching `components/VoiceBlocks.astro` exactly.
+ *
+ * Here rather than in each endpoint because the markdown variant of a page and
+ * the page itself are two renderings of one thing, and the first one to
+ * disagree about what a field is called would be the one nobody reads with
+ * their own eyes.
+ */
+const VOICE_FIELDS: readonly (readonly [keyof Voice, string])[] = [
+  ["why", "Why"],
+  ["like", "What I like"],
+  ["dislike", "What I don't"],
+  ["try", "Try"],
+];
+
+/**
+ * One entry's voice fields as a `###` block, or null when it has none.
+ *
+ * `try` is fenced in backticks: it is a command to paste or a bare URL, and an
+ * agent reading this should be able to tell that from the prose around it.
+ */
+function voiceEntry(name: string, voice: Voice): string | null {
+  const lines = VOICE_FIELDS.flatMap(([key, label]) => {
+    const value = voice[key];
+    if (value === undefined || value === null) return [];
+    return [`${label}: ${key === "try" ? `\`${value}\`` : value}`];
+  });
+
+  return lines.length === 0 ? null : [`### ${name}`, list(lines)].join("\n\n");
+}
+
+/**
+ * Every entry that has something in it, as one section — or null when none do.
+ *
+ * Null rather than an empty section, for the same reason the HTML component
+ * renders nothing rather than an empty labelled box: a heading over nothing
+ * reads as a document that broke, not as a section he has not filled in.
+ */
+export function voiceSection(
+  entries: readonly { name: string; voice: Voice }[],
+): string | null {
+  const blocks = entries.flatMap((entry) => {
+    const block = voiceEntry(entry.name, entry.voice);
+    return block === null ? [] : [block];
+  });
+
+  if (blocks.length === 0) return null;
+
+  return [
+    section(
+      "In my words",
+      "Some entries carry more than the one-line note. Most do not, and an entry missing from this list simply means I have not written it up, not that I had nothing good to say.",
+    ),
+    ...blocks,
+  ].join("\n\n");
+}
+
+/* ---------------------------------------------------------------------------
    The document
    --------------------------------------------------------------------------- */
 
