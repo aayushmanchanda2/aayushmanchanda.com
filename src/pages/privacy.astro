@@ -6,8 +6,9 @@
  * and the page says so about the one exception rather than rounding down to
  * "no third parties": `faviconUrl()` in `lib/links.ts` is rendered by
  * `components/ToolList.astro` and `pages/tools/[slug].astro`, so the tool pages
- * really do hit Google. A privacy page that is wrong about its own build is
- * worth less than no page at all.
+ * really do hit logo.dev. A privacy page that is wrong about its own build is
+ * worth less than no page at all; changing the logo host means changing this
+ * page in the same commit.
  *
  * Not in the nav or the section manifest on purpose: it is a footer page.
  */
@@ -54,7 +55,9 @@ import Base from "../layouts/Base.astro";
         with the tool&rsquo;s domain in the URL, and logo.dev sees your IP
         address the way any host does when your browser fetches an image. The
         request is sent with no referrer, so it does not carry which page you
-        were on. Nothing else on the site loads from anyone else.
+        were on. The URL carries a publishable key that identifies my logo.dev
+        account for quota, not you. Nothing else on the site loads from anyone
+        else.
       </p>
     </section>
 
