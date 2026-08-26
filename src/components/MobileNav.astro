@@ -47,6 +47,7 @@ const current = normalize(pathname);
     role="dialog"
     aria-modal="true"
     aria-label="Site navigation"
+    style={`--search-i:${items.length}`}
   >
     <button
       type="button"
@@ -83,6 +84,23 @@ const current = normalize(pathname);
         }
       </ul>
     </nav>
+
+    {/*
+      The palette's way in on a touch device, where there is no Cmd+K to press.
+
+      Deliberately quieter than the section links and set below them: this is a
+      way to reach the same places faster, not a sixth section. `data-mnav-search`
+      is what the script below hangs the "close this panel first" behaviour on;
+      `data-palette-open` is what `lib/palette.ts` listens for.
+    */}
+    <button
+      class="mnav__search mono press"
+      type="button"
+      data-mnav-search
+      data-palette-open
+    >
+      Search
+    </button>
   </div>
 </div>
 
@@ -269,8 +287,42 @@ const current = normalize(pathname);
     background: currentColor;
   }
 
+  /* --- search ------------------------------------------------------------ */
+
+  .mnav__search {
+    align-self: start;
+    margin-top: clamp(1.5rem, 6vw, 2.25rem);
+    padding: 0.5rem 0.9rem;
+    color: var(--accent-panel-ink);
+    border: 1px solid rgb(255 255 255 / 0.4);
+    cursor: pointer;
+    opacity: 0;
+    transform: translateX(-14px);
+    transition-property: opacity, transform, border-color;
+    transition-duration: var(--dur);
+    transition-timing-function: var(--ease-out);
+    transition-delay: 0s;
+  }
+
+  .mnav__panel[data-open] .mnav__search {
+    opacity: 1;
+    transform: translateX(0);
+    /* Lands after the last section link, continuing the same stagger. */
+    transition-delay: calc(80ms + var(--search-i, 6) * 70ms);
+  }
+
+  .mnav__search:hover {
+    border-color: var(--accent-panel-ink);
+  }
+
+  .mnav__search:focus-visible {
+    outline: 2px solid var(--accent-panel-ink);
+    outline-offset: 4px;
+  }
+
   @media (prefers-reduced-motion: reduce) {
-    .mnav__item {
+    .mnav__item,
+    .mnav__search {
       transform: none;
     }
     .mnav__panel {
@@ -332,11 +384,34 @@ const current = normalize(pathname);
       .querySelectorAll<HTMLAnchorElement>("[data-mnav-link]")
       .forEach((link) => link.addEventListener("click", () => setOpen(false)));
 
+    /**
+     * The search row hands over to the palette, and this panel gets out of the
+     * way first — two stacked modals is a state neither of them should have to
+     * reason about.
+     *
+     * This listener is on the button, so it runs in the target phase, before
+     * the delegated `[data-palette-open]` listener that `lib/palette.ts` puts
+     * on `document` sees the same click in the bubble phase. That ordering is
+     * the DOM's, not a bundling accident: the panel is always closed by the
+     * time the palette opens and takes focus.
+     */
+    root
+      .querySelector<HTMLButtonElement>("[data-mnav-search]")
+      ?.addEventListener("click", () => setOpen(false));
+
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && open) {
-        e.preventDefault();
-        setOpen(false);
-      }
+      if (e.key !== "Escape" || !open) return;
+
+      // An open palette owns Escape. Asked of the document rather than settled
+      // by listener order, which is a bundling detail: the same reasoning the
+      // /sites entry pages use for their own Escape handler. In practice the
+      // two are never open together — the search row above closes this panel
+      // on its way out — so this is the guard for the case where something
+      // opens the palette while the panel is up without going through it.
+      if (document.querySelector("[data-palette][data-open]")) return;
+
+      e.preventDefault();
+      setOpen(false);
     });
 
     // Rotating a phone into the desktop breakpoint hides the panel via CSS —

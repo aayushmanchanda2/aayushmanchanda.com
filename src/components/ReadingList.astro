@@ -34,7 +34,20 @@ const { entries, showDomain = true } = Astro.props;
 <ul class="list">
   {
     entries.map((entry) => (
-      <li class="row">
+      /*
+       * The slug as an id, so the row is a destination.
+       *
+       * /reading has no per-entry page — the row's own link goes to the
+       * article — which left the command palette with nowhere on this site to
+       * send someone who searched for one. `/reading#slug` is that somewhere,
+       * and it lands them on the entry in context, with its note and its
+       * neighbours, rather than ejecting them to a third-party page from what
+       * is meant to be a navigation control.
+       *
+       * Unique per page: the two filter routes render subsets of the same
+       * list, and a slug appears at most once in any of them.
+       */
+      <li class="row" id={entry.slug}>
         <span class="row__name">
           <a
             class="row__link"
@@ -71,6 +84,9 @@ const { entries, showDomain = true } = Astro.props;
   }
 
   .row {
+    /* Arriving from /reading#slug, the row should not sit flush against the
+       top edge of the window. */
+    scroll-margin-block: 5rem;
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:

@@ -14,7 +14,7 @@
     "url": "https://github.com/NousResearch/hermes-agent",
     "category": "agent infra",
     "verdict": "using",
-    "note": "Telegram-gateway agent runtime I run 24/7 (v0.20.5 + lifecycle manager). Inbound queue has a known interruption quirk.",
+    "note": "Telegram-gateway agent runtime. My daily driver.",
     "status_date": "2026-08-26"
   },
   {
@@ -95,7 +95,7 @@
     "url": "https://lazyweb.com",
     "category": "claude skills",
     "verdict": "skipped",
-    "note": "Design-research skill pack with a curl|bash installer; paid tier can decrypt browser cookies. Only ever deliberately.",
+    "note": "Design-research skill pack with a curl|bash installer; paid tier can decrypt browser cookies. Only ever deliberately, with the cookie-decryption caveat in mind.",
     "status_date": "2026-08-17"
   },
   {
@@ -106,7 +106,7 @@
     "verdict": "using",
     "note": "Browser automation CLI for agents — accessibility-tree snapshots at a fraction of screenshot token cost. Daily driver.",
     "status_date": "2026-08-26",
-    "like": "It hands back the accessibility tree instead of a screenshot, so reading a page costs a fraction of the tokens. Around 82% less in my own use. The tree comes with element refs, so an agent clicks a named thing instead of guessing at pixel coordinates."
+    "like": "The accessibility-tree snapshots cost a fraction of what screenshots do. The project claims about 82 percent less; feels right in my use. The tree comes with element refs, so an agent clicks a named thing instead of guessing at pixel coordinates."
   },
   {
     "slug": "firecrawl",

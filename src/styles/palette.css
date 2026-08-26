@@ -1,0 +1,250 @@
+/* ==========================================================================
+   Command palette — the Cmd+K overlay rendered by components/CommandPalette.astro
+
+   A plain stylesheet rather than a scoped `<style>` block in the component,
+   for the same reason `chip.css` is one, plus a second reason specific to this
+   surface: half of what needs styling here does not exist at build time.
+
+   The result rows and their section headings are built by `lib/palette.ts` in
+   the browser, so they never carry the `data-astro-cid-*` attribute Astro
+   stamps onto markup it compiled. Scoped rules matched none of them — the
+   first version of this shipped with an unstyled list of blue links. The fix
+   was `:global()` around every one of those selectors, which is a lot of
+   ceremony to say "this file is global"; saying it once, here, is clearer.
+
+   Loaded from `layouts/Base.astro` after `global.css`, because every colour,
+   duration and easing below is a token defined there.
+   ========================================================================== */
+
+/* The palette sits above every other layer the site has — the mobile nav panel
+   tops out at 80. */
+.palette {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+
+  /* Hidden with `visibility`, not with the `hidden` attribute or `display`.
+     Visibility takes it out of the hit-test and the accessibility tree just as
+     thoroughly, and unlike `display` it can be transitioned — which is what
+     lets `lib/palette.ts` set `data-open` synchronously (two other components
+     read that attribute to decide who owns Escape) and still get an open and
+     close animation out of it.
+
+     The delay is the same trick `MobileNav.astro` uses on its panel: on the way
+     out, visibility waits for the fade to finish before flipping, so the
+     palette does not vanish mid-transition. */
+  visibility: hidden;
+  transition-property: visibility;
+  transition-duration: 0s;
+  transition-delay: var(--dur-fast);
+}
+
+.palette[data-open] {
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.palette__scrim {
+  position: absolute;
+  inset: 0;
+  background: rgb(0 0 0 / 0.4);
+  opacity: 0;
+  transition-property: opacity;
+  transition-duration: var(--dur-fast);
+  transition-timing-function: var(--ease-out);
+}
+
+.palette[data-open] .palette__scrim {
+  opacity: 1;
+}
+
+/* --- panel ---------------------------------------------------------------- */
+
+.palette__panel {
+  position: absolute;
+  top: 12vh;
+
+  /* Centred with auto margins, not with `left: 50%` and a `translate`. That was
+     the first version and it shipped off-centre: the build's CSS minifier folds
+     a standalone `translate` declaration into `transform`, `transform` here is
+     already carrying the entrance animation, and the centring lost the
+     collision — silently, and only in the built output, so it looked right in
+     dev. Auto margins have nothing to collide with. */
+  inset-inline: 0;
+  margin-inline: auto;
+
+  width: min(92vw, 34rem);
+  max-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  /* Square, and a hairline. The site rounds one thing, the chip. */
+  border: 1px solid var(--hairline-strong);
+  box-shadow: 0 24px 60px rgb(0 0 0 / 0.18);
+
+  opacity: 0;
+  transform: translateY(-6px);
+  transition-property: opacity, transform;
+  transition-duration: var(--dur-fast);
+  transition-timing-function: var(--ease-out);
+}
+
+.palette[data-open] .palette__panel {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* --- field ---------------------------------------------------------------- */
+
+.palette__field {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.palette__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  font: inherit;
+  font-size: 1.0625rem;
+  letter-spacing: -0.01em;
+  color: var(--fg);
+  background: none;
+  border: 0;
+  padding: 0;
+}
+
+/* The field is the only focusable control in an open palette and it is focused
+   the moment the palette opens, so a ring around it would be permanent
+   furniture rather than a signal. The highlighted row is the cursor here. */
+.palette__input:focus {
+  outline: none;
+}
+
+.palette__input::placeholder {
+  color: var(--faint);
+}
+
+.palette__esc {
+  flex: none;
+  color: var(--faint);
+  border: 1px solid var(--hairline);
+  padding: 0.15rem 0.4rem;
+}
+
+/* --- results -------------------------------------------------------------- */
+
+.palette__results {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0.4rem 0;
+}
+
+.palette__results[hidden] {
+  display: none;
+}
+
+.palette__heading {
+  color: var(--faint);
+  padding: 0.5rem 1rem 0.3rem;
+}
+
+.palette__row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  color: var(--fg);
+  text-decoration: none;
+  /* Never `transition: all` — the two that change are named. */
+  transition-property: background-color, color;
+  transition-duration: var(--dur-fast);
+  transition-timing-function: var(--ease);
+}
+
+/* The selected row, in the one token pair that stays legible in both themes.
+   `--accent` lifts to #5C74FF in the dark theme, where white on it is 3.9:1 and
+   fails AA; `--accent-panel` is deliberately held at the vivid blue in both, so
+   `--accent-panel-ink` clears AA either way. Same pair the mobile nav uses. */
+.palette__row[data-active] {
+  background: var(--accent-panel);
+  color: var(--accent-panel-ink);
+}
+
+.palette__row-title {
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.palette__row-where {
+  flex: none;
+  color: var(--faint);
+  /* undo the uppercasing `.mono` applies — a path is not a label */
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+.palette__row[data-active] .palette__row-where {
+  color: inherit;
+  opacity: 0.72;
+}
+
+.palette__empty,
+.palette__legend {
+  color: var(--faint);
+}
+
+.palette__empty {
+  padding: 1.25rem 1rem;
+}
+
+.palette__empty[hidden] {
+  display: none;
+}
+
+.palette__legend {
+  display: flex;
+  gap: 1rem;
+  padding: 0.6rem 1rem;
+  border-top: 1px solid var(--hairline);
+}
+
+/* --- below 900px: a full-screen sheet ------------------------------------- */
+
+@media (max-width: 899px) {
+  .palette__panel {
+    top: 0;
+    width: 100%;
+    height: 100svh;
+    max-height: none;
+    border: 0;
+    box-shadow: none;
+    /* A sheet arrives from the bottom edge, not from above. */
+    transform: translateY(8px);
+  }
+
+  .palette__results {
+    flex: 1 1 auto;
+  }
+
+  .palette__legend {
+    /* No keyboard to legend for. */
+    display: none;
+  }
+}
+
+/* The global brake in `global.css` already flattens every transition under
+   `prefers-reduced-motion`. What it cannot do is undo a transform the element
+   rests at, so the panel is put at its final position here rather than left
+   sitting six pixels high. */
+@media (prefers-reduced-motion: reduce) {
+  .palette__panel {
+    transform: none;
+  }
+}

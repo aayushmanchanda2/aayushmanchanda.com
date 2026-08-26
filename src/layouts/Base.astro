@@ -8,9 +8,11 @@
 import "@fontsource-variable/geist/wght.css";
 import "@fontsource-variable/geist-mono/wght.css";
 import "../styles/global.css";
-// after global.css: the chip reads tokens defined there
+// after global.css: both of these read tokens defined there
 import "../styles/chip.css";
+import "../styles/palette.css";
 
+import CommandPalette from "../components/CommandPalette.astro";
 import ProximitySidebar from "../components/ProximitySidebar.astro";
 import MobileNav from "../components/MobileNav.astro";
 import { normalize } from "../lib/links";
@@ -157,6 +159,7 @@ const markdownVariant = variant === null ? null : absolute(variant);
 
     <ProximitySidebar items={navItems} pathname={pathname} />
     <MobileNav items={navItems} pathname={pathname} />
+    <CommandPalette />
 
     <div class="shell">
       <main class="shell__main" id="main">
@@ -195,6 +198,18 @@ const markdownVariant = variant === null ? null : absolute(variant);
         </dl>
 
         <p class="foot__meta mono">
+          {/* The palette's only permanently visible affordance on desktop. A
+              shortcut nobody is told about is a shortcut nobody uses, and the
+              footer is where this site already keeps its housekeeping. The key
+              cap is corrected to Ctrl off macOS by `lib/palette.ts`. */}
+          <button
+            class="foot__quiet foot__search press"
+            type="button"
+            data-palette-open
+          >
+            Search <kbd data-palette-hint>&#8984;K</kbd>
+          </button>
+          <span aria-hidden="true">&middot;</span>
           <a class="foot__quiet press" href="/privacy">Privacy</a>
           <span aria-hidden="true">&middot;</span>
           <span class="tabular-nums">&copy; {year}</span>
@@ -347,6 +362,21 @@ const markdownVariant = variant === null ? null : absolute(variant);
 
       .foot__quiet:hover {
         color: var(--accent);
+      }
+
+      .foot__search {
+        cursor: pointer;
+      }
+
+      .foot__search kbd {
+        font: inherit;
+        margin-left: 0.35rem;
+        padding: 0.1rem 0.35rem;
+        border: 1px solid var(--hairline);
+      }
+
+      .foot__search:hover kbd {
+        border-color: currentColor;
       }
 
       @media (max-width: 599px) {

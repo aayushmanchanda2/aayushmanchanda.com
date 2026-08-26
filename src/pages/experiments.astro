@@ -29,7 +29,13 @@ import { experiments } from "../lib/experiments";
   <ul class="list">
     {
       experiments.map((experiment) => (
-        <li class="row">
+        /*
+         * The slug as an id, so the command palette has somewhere to send
+         * someone who searched for an experiment. Same reasoning as the
+         * /reading rows, and more forced here: an experiment's `links` may be
+         * empty, so for some of these there is no other destination at all.
+         */
+        <li class="row" id={experiment.slug}>
           <span class="row__name">
             {experiment.name}
             <StatusChip status={experiment.status} />
@@ -63,6 +69,9 @@ import { experiments } from "../lib/experiments";
   }
 
   .row {
+    /* Arriving from /experiments#slug, the row should not sit flush against
+       the top edge of the window. */
+    scroll-margin-block: 5rem;
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:

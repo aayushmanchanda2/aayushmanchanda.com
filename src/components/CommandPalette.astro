@@ -1,0 +1,108 @@
+---
+/**
+ * CommandPalette — Cmd+K over every entry and page on the site.
+ *
+ * Rendered once, by `layouts/Base.astro`, so the shortcut works from anywhere.
+ *
+ * What is in here is the empty shell and the index it searches. The rest of the
+ * feature is next door, split along one line — what can be tested, and what
+ * cannot:
+ *
+ *   `lib/search.ts`        the ranking. No imports, so `node --test` runs it.
+ *   `lib/search.test.mjs`  which it does, 20 times.
+ *   `lib/search-index.ts`  every destination on the site, built once per build.
+ *   `lib/palette-rows.ts`  the result rows, as DOM.
+ *   `lib/palette.ts`       open, close, keys, focus.
+ *   `styles/palette.css`   the look — global, because half of what it styles is
+ *                          created at runtime and never sees Astro's scoping.
+ *
+ * Six files rather than one because exactly one of them holds logic worth
+ * asserting on, and leaving it buried in a `.astro` component would have meant
+ * asserting on none of it.
+ *
+ * Not built on bearnie's Command component, which was the starting candidate.
+ * It is genuinely framework-free, but it is Tailwind markup over a seven-module
+ * shared runtime, and this site has neither. See the audit for the numbers.
+ */
+import { buildSearchIndex } from "../lib/search-index";
+
+const index = await buildSearchIndex();
+
+/**
+ * The index, as JSON for the client.
+ *
+ * `<` is escaped because the payload sits inside a `<script>` element: a title
+ * containing `</script>` would otherwise end the block early and spill the rest
+ * of the index into the document as markup. The data files are ours and none of
+ * them do that today, which is exactly the kind of assumption that stops being
+ * true quietly.
+ *
+ * Measured at build: 46 entries, 5.5 KB of JSON, 1.5 KB once gzipped. It ships
+ * on every page, which is the trade for the palette answering on the first
+ * keystroke instead of fetching an index the moment someone opens it. Worth
+ * re-measuring if the site ever carries ten times the entries; at this size the
+ * inline copy costs less than the request to avoid it would.
+ */
+const payload = JSON.stringify(index).replace(/</g, "\\u003c");
+---
+
+<div
+  class="palette"
+  data-palette
+  role="dialog"
+  aria-modal="true"
+  aria-label="Search this site"
+>
+  <div class="palette__scrim" data-palette-scrim></div>
+
+  <div class="palette__panel">
+    <div class="palette__field">
+      <input
+        class="palette__input"
+        data-palette-input
+        type="text"
+        role="combobox"
+        aria-expanded="true"
+        aria-controls="palette-results"
+        aria-autocomplete="list"
+        aria-label="Search this site"
+        placeholder="Search tools, sites, reading&hellip;"
+        autocomplete="off"
+        autocorrect="off"
+        spellcheck="false"
+      />
+      <kbd class="palette__esc mono">Esc</kbd>
+    </div>
+
+    <div
+      class="palette__results"
+      id="palette-results"
+      data-palette-results
+      role="listbox"
+      aria-label="Results"
+    >
+    </div>
+
+    <p class="palette__empty mono" data-palette-empty hidden>No matches</p>
+
+    <p class="palette__legend mono" aria-hidden="true">
+      <span>&uarr;&darr; move</span>
+      <span>&crarr; open</span>
+      <span>esc close</span>
+    </p>
+  </div>
+</div>
+
+<script
+  type="application/json"
+  data-palette-index
+  is:inline
+  set:html={payload}
+/>
+
+<script>
+  import { initPalette } from "../lib/palette";
+
+  const root = document.querySelector<HTMLElement>("[data-palette]");
+  if (root) initPalette(root);
+</script>
