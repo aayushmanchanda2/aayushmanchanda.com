@@ -349,10 +349,11 @@ const hints: Hint[] = [
         return;
       }
 
-      // Escape belongs to whatever is on top. The mobile nav panel is the only
-      // modal on the site today and it closes on Escape too; the order two
-      // document-level listeners run in is a bundling detail rather than a
-      // guarantee, so this asks the page instead of trusting it.
+      // Escape belongs to whatever is on top. Two surfaces match this selector
+      // today — the command palette and the mobile nav panel — and both close
+      // on Escape themselves; the order two document-level listeners run in is
+      // a bundling detail rather than a guarantee, so this asks the page
+      // instead of trusting it. See the precedence note in lib/palette.ts.
       if (document.querySelector('[aria-modal="true"][data-open]')) return;
 
       const link = nav.querySelector<HTMLAnchorElement>(`[data-nav="${role}"]`);

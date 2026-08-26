@@ -14,8 +14,9 @@
    --------------------------------------------------------------------------
    Accent contrast (WCAG, computed):
      light #2B4BFF on #FFFFFF -> 5.91:1  (AA normal text)
-     dark  #5C74FF on #09090B -> 5.13:1  (AA normal text)
-     white #FFFFFF on #2B4BFF -> 5.91:1  (AA — mobile panel items)
+     dark  #5C74FF on #09090B -> 5.11:1  (AA normal text)
+     white #FFFFFF on #2B4BFF -> 5.91:1  (AA — panel items, skip link, selection)
+     white #FFFFFF on #5C74FF -> 3.89:1  (FAILS — never paint ink on --accent)
    Both accents are hsl(231, 100%, L) — identical hue across themes,
    lightness is the only difference, because no single lightness can clear
    4.5:1 against both #FFFFFF and #09090B simultaneously.
@@ -191,9 +192,12 @@ ol {
   list-style: none;
 }
 
+/* The panel pair, for the same reason the mobile nav and the palette's active
+   row use it: this paints the accent as a background with text on it, and the
+   dark theme's --accent is 3.89:1 against white. Selected text is still text. */
 ::selection {
-  background: var(--accent);
-  color: #fff;
+  background: var(--accent-panel);
+  color: var(--accent-panel-ink);
 }
 
 :focus-visible {

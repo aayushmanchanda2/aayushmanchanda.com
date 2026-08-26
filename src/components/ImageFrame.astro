@@ -6,11 +6,13 @@
  * outline as the /sites frame, so a whiteboard photo on a note and a screenshot
  * on a gallery card read as the same furniture.
  *
- * What it does not do is reserve the box. ShotFrame can hard-code 1440x900
- * because the pipeline captures every shot at that size; a scratch note is
- * whatever came off a phone camera, so the frame lets the image keep its own
- * proportions and caps its height instead. The trade is a small layout shift
- * on first paint. Worth it against cropping someone's handwriting.
+ * What it does not do is reserve the box. ShotFrame reserves its own in CSS —
+ * by `aspect-ratio` on a card, by the scroller's fixed height on a details page
+ * — because every shot is a full-page capture of unknown height. A scratch note
+ * is whatever came off a phone camera, and cropping it to a ratio would crop
+ * someone's handwriting, so the frame lets the image keep its own proportions
+ * and caps its height instead. The trade is a small layout shift on first
+ * paint, and it is the right way round.
  */
 interface Props {
   /** Web path under /notes. */

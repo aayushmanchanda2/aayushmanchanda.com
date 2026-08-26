@@ -261,8 +261,14 @@ const markdownVariant = variant === null ? null : absolute(variant);
         top: 0;
         z-index: 100;
         padding: 0.75rem 1rem;
-        background: var(--accent);
-        color: #fff;
+        /* `--accent-panel`, not `--accent`: this paints the accent as a
+           background with text on it, and `--accent` lifts to #5C74FF in the
+           dark theme, where white on it is 3.89:1 and fails AA. The panel pair
+           is held at the vivid blue in both themes for exactly this. A skip
+           link is the one control a keyboard user meets first, so it is the
+           last place on the site that should be hard to read. */
+        background: var(--accent-panel);
+        color: var(--accent-panel-ink);
         text-decoration: none;
       }
 

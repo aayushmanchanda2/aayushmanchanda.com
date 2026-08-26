@@ -172,9 +172,10 @@ export function initPalette(root: HTMLElement): void {
    * Follow a row.
    *
    * Assigning `location.href` rather than synthesising `row.click()`. The click
-   * was the first attempt and it silently did nothing: `setOpen(false)` puts
-   * `hidden` on the palette root on its way out, and a synthetic click on an
-   * anchor inside a subtree that is no longer rendered does not navigate. The
+   * was the first attempt and it silently did nothing: `setOpen(false)` takes
+   * `data-open` off the palette root on its way out, which drops the whole
+   * subtree to `visibility: hidden`, and a synthetic click on an anchor inside
+   * a subtree that is no longer rendered does not navigate. The
    * href is read first here, so the close cannot affect it — and this is the
    * same one-liner the /sites entry pages already use for their arrow keys.
    */
