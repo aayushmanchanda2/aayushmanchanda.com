@@ -40,8 +40,15 @@ export const NEW_TOOL_CATEGORY = "unsorted";
 /** Used when the bookmark has no excerpt. `tools.ts` rejects an empty note. */
 export const NEW_TOOL_NOTE = "Saved from Raindrop. Not tested yet.";
 
-/** The shot filenames the pipeline owns; anything else in the dir is left alone. */
-export const SHOT_FILE = /^[a-z0-9][a-z0-9-]*-(light|dark)\.webp$/;
+/**
+ * The shot filenames the pipeline owns; anything else in the dir is left alone.
+ *
+ * One file per slug since the light/dark pair was retired, so the `-(light|dark)`
+ * suffix went with it. The `.webp` extension is doing the real work here: it is
+ * what keeps the orphan sweep away from `og-image.png` and anything else a human
+ * has parked in `public/shots`.
+ */
+export const SHOT_FILE = /^[a-z0-9][a-z0-9-]*\.webp$/;
 
 /* ---------------------------------------------------------------------------
    Reading and writing
@@ -233,31 +240,29 @@ export function urlKey(url) {
    Entry construction
    --------------------------------------------------------------------------- */
 
-/** @param {string} slug @param {"light" | "dark"} scheme @returns {string} */
-export function shotWebPath(slug, scheme) {
-  return `/shots/${slug}-${scheme}.webp`;
+/** @param {string} slug @returns {string} */
+export function shotWebPath(slug) {
+  return `/shots/${slug}.webp`;
 }
 
-/** @param {string} slug @param {"light" | "dark"} scheme @returns {string} */
-export function shotFileName(slug, scheme) {
-  return `${slug}-${scheme}.webp`;
+/** @param {string} slug @returns {string} */
+export function shotFileName(slug) {
+  return `${slug}.webp`;
 }
 
 /**
  * The shot filenames an entry points at, for the orphan sweep.
+ *
+ * An array for one filename, because that is what the sweep wants to flatten and
+ * because an entry shape is a thing that changes: this returned two names a
+ * version ago and the caller never had to know.
+ *
  * @param {Record<string, unknown>} entry @returns {string[]}
  */
 export function shotFilesOf(entry) {
-  const shots = entry["shots"];
-  if (!isRecord(shots)) return [];
-
-  /** @type {string[]} */
-  const files = [];
-  for (const key of /** @type {const} */ (["light", "dark"])) {
-    const value = shots[key];
-    if (typeof value === "string" && value !== "") files.push(path.basename(value));
-  }
-  return files;
+  const shot = entry["shot"];
+  if (typeof shot !== "string" || shot === "") return [];
+  return [path.basename(shot)];
 }
 
 /**
@@ -265,19 +270,19 @@ export function shotFilesOf(entry) {
  * @param {Bookmark} input.bookmark
  * @param {string} input.slug
  * @param {string} input.date ISO calendar date.
- * @param {boolean} input.hasDark
+ * @param {string[]} input.palette Dominant colours, from the capture.
  */
-export function buildSiteEntry({ bookmark, slug, date, hasDark }) {
+export function buildSiteEntry({ bookmark, slug, date, palette }) {
   return {
     slug,
     title: bookmark.title === "" ? hostnameOf(bookmark.url) : bookmark.title,
     url: bookmark.url,
     domain: hostnameOf(bookmark.url),
     saved_date: date,
-    shots: {
-      light: shotWebPath(slug, "light"),
-      dark: hasDark ? shotWebPath(slug, "dark") : null,
-    },
+    shot: shotWebPath(slug),
+    // Copied, not aliased: the capture's array must not stay reachable from the
+    // gallery it was written into.
+    palette: [...palette],
   };
 }
 

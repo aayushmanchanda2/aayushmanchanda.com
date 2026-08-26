@@ -27,13 +27,6 @@ import { SLUG, readers, routeSlug } from "./parse";
 
 import rawSites from "../data/sites.json";
 
-export interface SiteShots {
-  /** Web path under /shots. Always present: an entry needs a picture. */
-  light: string;
-  /** null when the site has no dark rendering worth shooting. */
-  dark: string | null;
-}
-
 export interface Site {
   /** URL-safe id; also the details page path (`/sites/<slug>`). */
   slug: string;
@@ -43,7 +36,16 @@ export interface Site {
   domain: string;
   /** ISO calendar date (YYYY-MM-DD) the site was saved. */
   saved_date: string;
-  shots: SiteShots;
+  /**
+   * Web path under /shots — one full-page capture in the site's own default
+   * colour scheme. Always present: an entry needs a picture.
+   */
+  shot: string;
+  /**
+   * The colours that capture is mostly made of, dominant first. Read off the
+   * pixels by `pipeline/capture.mjs`, never authored by hand.
+   */
+  palette: string[];
 }
 
 /**
@@ -62,6 +64,12 @@ export type DomainGroup = {
    --------------------------------------------------------------------------- */
 
 const SHOT_PATH = /^\/shots\/[a-z0-9][a-z0-9-]*\.webp$/;
+
+/** Lowercase six-digit hex. The capture writes nothing else, so nothing else parses. */
+const HEX_COLOUR = /^#[0-9a-f]{6}$/;
+
+/** Six swatches is a row. More than that is not a palette, it is a histogram. */
+const MAX_PALETTE = 6;
 
 const READ = readers("sites.json");
 /** Annotated, or TypeScript stops treating a call as the end of control flow. */
@@ -125,47 +133,79 @@ function readDomain(
 }
 
 /**
- * Shot paths are web paths (`/shots/name-light.webp`) and must exist under
+ * The pre-VET-23 shape, caught early and named.
+ *
+ * `shots: { light, dark }` became `shot` plus `palette`, and every field of the
+ * old shape is absent from the new one — so an un-migrated entry would otherwise
+ * fail on `"shot" is missing`, which is true and tells you nothing. This says
+ * which schema the file is written in and what turns it into the other one.
+ */
+function rejectLegacyShots(entry: Record<string, unknown>, where: string): void {
+  if (!("shots" in entry)) return;
+  fail(
+    where,
+    `uses the retired "shots" object (light/dark pair). Entries now carry a single ` +
+      `full-page "shot" plus a "palette" array. Re-capture to migrate: ` +
+      `node pipeline/capture.mjs <url> <slug>, then replace "shots" with ` +
+      `"shot": "/shots/<slug>.webp" and the printed "palette".`,
+  );
+}
+
+/**
+ * The shot path is a web path (`/shots/name.webp`) and must exist under
  * `public/` right now. This is the build guard: no entry ships without its
  * imagery on disk.
  */
-function readShots(
+function readShot(
   entry: Record<string, unknown>,
   slug: string,
   where: string,
-): SiteShots {
-  const value = entry["shots"];
-  if (!isRecord(value)) {
-    fail(where, `needs "shots" to be an object with "light" and "dark"`);
+): string {
+  const shot = readString(entry, "shot", where);
+
+  if (!SHOT_PATH.test(shot)) {
+    fail(where, `has a "shot" that is not a /shots/*.webp path: ${JSON.stringify(shot)}`);
   }
 
-  const check = (which: "light" | "dark", shot: string): string => {
-    if (!SHOT_PATH.test(shot)) {
-      fail(
-        where,
-        `has a ${which} shot that is not a /shots/*.webp path: ${JSON.stringify(shot)}`,
-      );
-    }
-    const onDisk = path.join(PUBLIC_DIR, shot);
-    if (!existsSync(onDisk)) {
-      fail(
-        where,
-        `points its ${which} shot at ${shot}, which is missing from public/shots. ` +
-          `Re-run: node pipeline/capture.mjs <url> ${slug}`,
-      );
-    }
-    return shot;
-  };
-
-  const light = check("light", readString(value, "light", where));
-
-  const rawDark = value["dark"];
-  if (rawDark !== null && typeof rawDark !== "string") {
-    fail(where, `needs "shots.dark" to be a string or null (got ${JSON.stringify(rawDark)})`);
+  const onDisk = path.join(PUBLIC_DIR, shot);
+  if (!existsSync(onDisk)) {
+    fail(
+      where,
+      `points its shot at ${shot}, which is missing from public/shots. ` +
+        `Re-run: node pipeline/capture.mjs <url> ${slug}`,
+    );
   }
-  const dark = rawDark === null ? null : check("dark", readString(value, "dark", where));
 
-  return { light, dark };
+  return shot;
+}
+
+/**
+ * The palette is machine-written, so this is checking the pipeline rather than a
+ * human: a malformed colour here means `extractPalette` changed shape and every
+ * swatch downstream would render as nothing at all.
+ */
+function readPalette(entry: Record<string, unknown>, where: string): string[] {
+  const value = entry["palette"];
+  if (!Array.isArray(value)) {
+    fail(where, `needs "palette" to be an array of hex colours`);
+  }
+  if (value.length === 0) {
+    fail(where, `has an empty "palette"; a capture always yields at least one colour`);
+  }
+  if (value.length > MAX_PALETTE) {
+    fail(where, `has ${value.length} palette colours; the cap is ${MAX_PALETTE}`);
+  }
+
+  return value.map((colour: unknown, index): string => {
+    if (typeof colour !== "string" || !HEX_COLOUR.test(colour)) {
+      fail(
+        where,
+        `has a "palette" entry at ${index} that is not a lowercase #rrggbb colour: ` +
+          JSON.stringify(colour),
+      );
+    }
+    return colour;
+  });
 }
 
 export function parseSites(value: unknown): Site[] {
@@ -177,6 +217,10 @@ export function parseSites(value: unknown): Site[] {
   const parsed = value.map((item: unknown, index): Site => {
     const where = `entry ${index}`;
     if (!isRecord(item)) fail(where, "must be an object");
+
+    // Before anything else, so a stale file is told it is stale rather than
+    // told that one of its fields is missing.
+    rejectLegacyShots(item, where);
 
     const slug = readString(item, "slug", where);
     if (!SLUG.test(slug)) {
@@ -197,7 +241,8 @@ export function parseSites(value: unknown): Site[] {
       url: readString(item, "url", where),
       domain: readDomain(item, url, where),
       saved_date: readDate(item, "saved_date", where),
-      shots: readShots(item, slug, where),
+      shot: readShot(item, slug, where),
+      palette: readPalette(item, where),
     };
   });
 

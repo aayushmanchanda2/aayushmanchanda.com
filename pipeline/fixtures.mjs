@@ -143,20 +143,24 @@ export function raindropServer({ roots = [], children = [], raindrops = {} } = {
   return { fetch, calls, tagCalls };
 }
 
+/** What `fakeCapture` reports when a test does not ask for something else. */
+export const FAKE_PALETTE = ["#1c1c1e", "#f5f3ef", "#3b6cf6"];
+
 /**
- * A stand-in for `captureSite` that writes plausible files and records what it
+ * A stand-in for `captureSite` that writes a plausible file and records what it
  * was asked to shoot — so "never called" is a thing a test can assert.
  *
  * It also honours `log` the way the real one does. That is the only cheap way
- * to check the wiring: a real light-only downgrade needs a browser and a site
- * with no dark rendering, but whether `apply.mjs` hands its own logger down so
- * the notice reaches the run log is a question this fixture can answer.
+ * to check the wiring: a real clip needs a browser and a 12,000px page, but
+ * whether `apply.mjs` hands its own logger down so the notice reaches the run
+ * log is a question this fixture can answer.
  *
  * @param {object} [options]
- * @param {boolean} [options.dark]  Whether the site has a dark rendering.
- * @param {string} [options.fail]   Throw with this message instead of shooting.
+ * @param {string[]} [options.palette] Colours to report for the shot.
+ * @param {boolean} [options.clipped]  Report the page as too tall to shoot whole.
+ * @param {string} [options.fail]      Throw with this message instead of shooting.
  */
-export function fakeCapture({ dark = true, fail } = {}) {
+export function fakeCapture({ palette = FAKE_PALETTE, clipped = false, fail } = {}) {
   /** @type {{ url: string, slug: string, outDir: string }[]} */
   const calls = [];
 
@@ -168,18 +172,16 @@ export function fakeCapture({ dark = true, fail } = {}) {
     const dir = String(outDir);
     await mkdir(dir, { recursive: true });
 
-    const light = path.join(dir, `${slug}-light.webp`);
-    await writeFile(light, `light:${slug}`);
+    const shot = path.join(dir, `${slug}.webp`);
+    await writeFile(shot, `shot:${slug}`);
 
-    if (!dark) {
-      // Word for word what capture.mjs says in this situation.
-      log(`capture: ${slug} renders the same in both themes, publishing light-only`);
-      return { light, dark: null };
+    if (clipped) {
+      // Shaped like the sentence capture.mjs writes, so the assertion in
+      // run.test.mjs is about the wiring and not about this fixture's wording.
+      log(`capture: ${slug} is 30000px tall, clipped to the first 12000px`);
     }
 
-    const darkFile = path.join(dir, `${slug}-dark.webp`);
-    await writeFile(darkFile, `dark:${slug}`);
-    return { light, dark: darkFile };
+    return { shot, palette };
   }
 
   return { calls, captureSite };

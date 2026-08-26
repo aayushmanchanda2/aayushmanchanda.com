@@ -1,8 +1,11 @@
 ---
 /**
- * One site. Both themes are shown at once here rather than following the
- * reader's own setting: on a details page the pair IS the content, and half of
- * it would otherwise be invisible depending on who is looking.
+ * One site: the whole page of it, in a window you scroll.
+ *
+ * The gallery card shows the masthead, which answers "which site is this". This
+ * page has to answer "how is it built", and that lives below the fold of the
+ * site being shown — so the capture is full-page and the frame is a viewport
+ * onto it rather than a thumbnail of it.
  *
  * Domain is a link, not a label — the save.design anatomy, where every field
  * value is also a way back out into the rest of the collection.
@@ -26,7 +29,7 @@ const { site } = Astro.props;
 
 <Base
   title={`${site.title} · Sites · Aayush Manchanda`}
-  description={`Screenshots of ${site.title} (${site.domain}), saved ${site.saved_date}.`}
+  description={`Full-page screenshot of ${site.title} (${site.domain}), saved ${site.saved_date}.`}
 >
   <p class="crumb mono"><a href="/sites">&larr; Sites</a></p>
 
@@ -34,21 +37,10 @@ const { site } = Astro.props;
     <h1 class="page-title page-title--entry">{site.title}</h1>
   </header>
 
-  <div class="shots">
-    <figure class="shot">
-      <ShotFrame src={site.shots.light} alt={`${site.title} in light mode`} eager />
-      <figcaption class="mono">Light</figcaption>
-    </figure>
-
-    {
-      site.shots.dark && (
-        <figure class="shot">
-          <ShotFrame src={site.shots.dark} alt={`${site.title} in dark mode`} />
-          <figcaption class="mono">Dark</figcaption>
-        </figure>
-      )
-    }
-  </div>
+  <figure class="shot">
+    <ShotFrame src={site.shot} alt={`Full page of ${site.title}`} scroll eager />
+    <figcaption class="mono">Full page &mdash; scroll inside the frame</figcaption>
+  </figure>
 
   <dl class="facts">
     <div class="fact">
@@ -75,15 +67,8 @@ const { site } = Astro.props;
 </Base>
 
 <style>
-  .shots {
-    display: flex;
-    flex-direction: column;
-    gap: clamp(1.5rem, 4vw, 2.25rem);
-    margin-top: clamp(2.5rem, 8vh, 4rem);
-  }
-
   .shot {
-    margin: 0;
+    margin: clamp(2.5rem, 8vh, 4rem) 0 0;
     display: flex;
     flex-direction: column;
     gap: 0.6rem;

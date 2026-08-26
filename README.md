@@ -19,8 +19,9 @@ A GitHub Actions cron (`.github/workflows/publish.yml`, `23 */3 * * *`, so :23
 past every third hour) reads both collections, screenshots what is new, commits
 the result to `main`, and Vercel deploys the push.
 
-Sites get a screenshot in light and dark, or light only when the site has no
-dark mode. Tools do not get a picture, only an entry, and it lands as category
+Sites get one full-page screenshot, taken in whatever colour scheme the site
+renders by default and cut off after 12,000px, plus the dominant colours read
+off it. Tools do not get a picture, only an entry, and it lands as category
 `unsorted` with verdict `watching` and the note "Saved from Raindrop. Not tested
 yet." Fix it later by hand, see below.
 

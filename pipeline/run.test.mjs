@@ -14,6 +14,7 @@ import path from "node:path";
 import test from "node:test";
 
 import {
+  FAKE_PALETTE,
   NESTED,
   READING_ID,
   SITES_ID,
@@ -30,7 +31,7 @@ import {
 import { run } from "./publish.mjs";
 import { MAX_ATTEMPTS, loadState } from "./state.mjs";
 
-test("publishes a site, moves its shots, records state, tags the bookmark", async (t) => {
+test("publishes a site, moves its shot, records state, tags the bookmark", async (t) => {
   const { paths } = await makeRepo(t);
   const server = raindropServer({
     ...NESTED,
@@ -48,11 +49,9 @@ test("publishes a site, moves its shots, records state, tags the bookmark", asyn
   assert.equal(site.slug, "otherkind");
   assert.equal(site.domain, "otherkind.design", "domain comes from the URL, not from Raindrop");
   assert.equal(site.saved_date, "2026-08-26");
-  assert.deepEqual(site.shots, {
-    light: "/shots/otherkind-light.webp",
-    dark: "/shots/otherkind-dark.webp",
-  });
-  assert.ok(await exists(path.join(paths.shotsDir, "otherkind-light.webp")));
+  assert.equal(site.shot, "/shots/otherkind.webp");
+  assert.deepEqual(site.palette, FAKE_PALETTE, "the capture's colours reach the entry");
+  assert.ok(await exists(path.join(paths.shotsDir, "otherkind.webp")));
 
   // The /tools contract: new saves land as `watching`, dated today.
   const [tool] = await readJson(paths.toolsJson);
@@ -194,9 +193,10 @@ test("a title that collides with an existing entry gets a suffixed slug", async 
     url: "https://save.design",
     domain: "save.design",
     saved_date: "2026-08-01",
-    shots: { light: "/shots/save-design-light.webp", dark: null },
+    shot: "/shots/save-design.webp",
+    palette: ["#111111"],
   };
-  const { paths } = await makeRepo(t, { sites: [seeded], shots: ["save-design-light.webp"] });
+  const { paths } = await makeRepo(t, { sites: [seeded], shots: ["save-design.webp"] });
 
   const server = raindropServer({
     ...NESTED,
@@ -213,7 +213,7 @@ test("a title that collides with an existing entry gets a suffixed slug", async 
     sites.map((/** @type {Record<string, unknown>} */ entry) => entry["slug"]),
     ["save-design", "save-design-2"],
   );
-  assert.equal(sites[1].shots.light, "/shots/save-design-2-light.webp");
+  assert.equal(sites[1].shot, "/shots/save-design-2.webp");
 });
 
 /* ---------------------------------------------------------------------------
@@ -266,7 +266,7 @@ test("a capture failure costs one attempt and leaves the gallery untouched", asy
   assert.equal(out.summary, "published=0 failed=0 skipped=0 pending=1");
 });
 
-test("a site with no dark rendering publishes light-only", async (t) => {
+test("a page too tall to shoot whole still publishes, and says so in the run log", async (t) => {
   const { paths } = await makeRepo(t);
   const server = raindropServer({
     ...NESTED,
@@ -274,17 +274,16 @@ test("a site with no dark rendering publishes light-only", async (t) => {
   });
   const out = recorder();
 
-  await run([], deps({ paths, server, capture: fakeCapture({ dark: false }), out }));
+  await run([], deps({ paths, server, capture: fakeCapture({ clipped: true }), out }));
 
   const [site] = await readJson(paths.sitesJson);
-  assert.equal(site.shots.dark, null);
-  assert.equal(await exists(path.join(paths.shotsDir, "chester-dark.webp")), false);
+  assert.equal(site.shot, "/shots/chester.webp", "a clip is still a publishable shot");
 
   // And the reason is in the run log rather than on stderr, which only happens
   // if `apply.mjs` hands its own logger down to `captureSite`.
   assert.ok(
-    out.out.some((line) => line.includes("chester") && line.includes("light-only")),
-    "the light-only downgrade is explained in the run log",
+    out.out.some((line) => line.includes("chester") && line.includes("clipped")),
+    "the clip is explained in the run log",
   );
 });
 
@@ -293,8 +292,8 @@ test("a site with no dark rendering publishes light-only", async (t) => {
    --------------------------------------------------------------------------- */
 
 test("converges after a crash between the shot move and the JSON append", async (t) => {
-  // The images made it to public/shots; the gallery never saw the entry.
-  const { paths } = await makeRepo(t, { shots: ["otherkind-light.webp", "otherkind-dark.webp"] });
+  // The image made it to public/shots; the gallery never saw the entry.
+  const { paths } = await makeRepo(t, { shots: ["otherkind.webp"] });
   const server = raindropServer({
     ...NESTED,
     raindrops: { [SITES_ID]: [bookmark(200, "https://otherkind.design", { title: "Otherkind" })] },
@@ -317,9 +316,10 @@ test("converges after a crash between the JSON append and the state row", async 
     url: "https://otherkind.design",
     domain: "otherkind.design",
     saved_date: "2026-08-26",
-    shots: { light: "/shots/otherkind-light.webp", dark: null },
+    shot: "/shots/otherkind.webp",
+    palette: ["#0a0a0a", "#fafafa"],
   };
-  const { paths } = await makeRepo(t, { sites: [entry], shots: ["otherkind-light.webp"] });
+  const { paths } = await makeRepo(t, { sites: [entry], shots: ["otherkind.webp"] });
   const server = raindropServer({
     ...NESTED,
     raindrops: { [SITES_ID]: [bookmark(200, "https://otherkind.design", { title: "Otherkind" })] },
@@ -351,7 +351,7 @@ test("a temp directory left by a crash is wiped before work starts", async (t) =
    --------------------------------------------------------------------------- */
 
 test("--dry-run decides everything and writes nothing", async (t) => {
-  const { paths } = await makeRepo(t, { shots: ["ghost-light.webp"] });
+  const { paths } = await makeRepo(t, { shots: ["ghost.webp"] });
   const server = raindropServer({
     ...NESTED,
     raindrops: {
@@ -367,7 +367,7 @@ test("--dry-run decides everything and writes nothing", async (t) => {
   assert.equal(capture.calls.length, 0);
   assert.deepEqual(await readJson(paths.sitesJson), []);
   assert.deepEqual(await readJson(paths.statePath), {});
-  assert.ok(await exists(path.join(paths.shotsDir, "ghost-light.webp")), "the orphan survives");
+  assert.ok(await exists(path.join(paths.shotsDir, "ghost.webp")), "the orphan survives");
   assert.equal(server.calls.filter((call) => call.method === "PUT").length, 0);
   assert.equal(out.summary, "published=1 failed=1 skipped=0 pending=0");
 });

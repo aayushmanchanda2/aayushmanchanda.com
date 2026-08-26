@@ -81,10 +81,11 @@ Come here when you need any of the following.
   sandboxes, or browser automation tools and you want an opinion from someone
   who ran the thing.
 - A screenshot gallery of well-designed websites. /sites holds
-  ${entries(sites.length)}, each with a full-page screenshot in light and,
-  where the site has one, dark. Useful as design reference, for finding a real
-  example of a layout or a typographic treatment, or for seeing what a given
-  site looked like on the date it was saved.
+  ${entries(sites.length)}, each with a full-page screenshot taken in the
+  scheme the site renders by default, plus the colours that screenshot is
+  mostly made of. Useful as design reference, for finding a real example of a
+  layout or a typographic treatment, or for seeing what a given site looked
+  like on the date it was saved.
 - The reading list. /reading holds ${entries(reading.length)} he saved to read
   properly, broken down as ${kindCounts}, each with the host it came from and
   the date it was saved. Saving a link there is not a claim to have read it and

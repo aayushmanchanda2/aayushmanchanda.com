@@ -5,10 +5,15 @@
     "url": "https://designengineer.tools",
     "domain": "designengineer.tools",
     "saved_date": "2026-08-26",
-    "shots": {
-      "light": "/shots/designengineer-tools-light.webp",
-      "dark": "/shots/designengineer-tools-dark.webp"
-    }
+    "shot": "/shots/designengineer-tools.webp",
+    "palette": [
+      "#ffffff",
+      "#d7d7d7",
+      "#6e6f6f",
+      "#b0afaf",
+      "#555555",
+      "#919191"
+    ]
   },
   {
     "slug": "save-design",
@@ -16,10 +21,15 @@
     "url": "https://save.design",
     "domain": "save.design",
     "saved_date": "2026-08-26",
-    "shots": {
-      "light": "/shots/save-design-light.webp",
-      "dark": "/shots/save-design-dark.webp"
-    }
+    "shot": "/shots/save-design.webp",
+    "palette": [
+      "#09090b",
+      "#b190ba",
+      "#272630",
+      "#53578a",
+      "#8d9053",
+      "#b26d6e"
+    ]
   },
   {
     "slug": "otherkind",
@@ -27,10 +37,15 @@
     "url": "https://otherkind.design",
     "domain": "otherkind.design",
     "saved_date": "2026-08-26",
-    "shots": {
-      "light": "/shots/otherkind-light.webp",
-      "dark": "/shots/otherkind-dark.webp"
-    }
+    "shot": "/shots/otherkind.webp",
+    "palette": [
+      "#f8f8f7",
+      "#e7dacd",
+      "#8f8f8e",
+      "#30302f",
+      "#737373",
+      "#afb1b1"
+    ]
   },
   {
     "slug": "chester-how",
@@ -38,10 +53,15 @@
     "url": "https://chester.how",
     "domain": "chester.how",
     "saved_date": "2026-08-26",
-    "shots": {
-      "light": "/shots/chester-how-light.webp",
-      "dark": null
-    }
+    "shot": "/shots/chester-how.webp",
+    "palette": [
+      "#fcfcfc",
+      "#d3d3d1",
+      "#90908f",
+      "#abacaa",
+      "#727171",
+      "#2c2c2c"
+    ]
   },
   {
     "slug": "rareui",
@@ -49,10 +69,15 @@
     "url": "https://rareui.com",
     "domain": "rareui.com",
     "saved_date": "2026-08-26",
-    "shots": {
-      "light": "/shots/rareui-light.webp",
-      "dark": "/shots/rareui-dark.webp"
-    }
+    "shot": "/shots/rareui.webp",
+    "palette": [
+      "#080808",
+      "#fa4c01",
+      "#232323",
+      "#4e1700",
+      "#fd7941",
+      "#b13501"
+    ]
   },
   {
     "slug": "bychudy",
@@ -60,9 +85,14 @@
     "url": "https://www.bychudy.com/",
     "domain": "bychudy.com",
     "saved_date": "2026-08-26",
-    "shots": {
-      "light": "/shots/bychudy-light.webp",
-      "dark": "/shots/bychudy-dark.webp"
-    }
+    "shot": "/shots/bychudy.webp",
+    "palette": [
+      "#f1f1f1",
+      "#2f251b",
+      "#d2ced3",
+      "#b26a53",
+      "#cd8971",
+      "#b2aeb1"
+    ]
   }
 ]

@@ -3,48 +3,64 @@
  * ShotFrame — a screenshot on graph paper.
  *
  * The save.design treatment from the plan: a dotted-grid backdrop, a hairline
- * border, sharp corners, and a 1px optical outline on the image itself so a
+ * border, sharp corners, and a 1px optical outline on the imagery itself so a
  * white screenshot does not bleed into a white page.
  *
- * Two modes, one component:
- *   - pass `darkSrc` and the frame swaps itself with the system theme, via
- *     `<picture>`. No JavaScript, no flash of the wrong shot.
- *   - omit it and the frame shows exactly the file you named, which is what
- *     the details page needs when it stacks both themes on one page.
+ * Every shot is now one full-page capture of unknown height, which splits the
+ * component in two rather than making one layout do both jobs badly:
+ *
+ *   - `scroll` (the details page) puts the whole capture inside a fixed-height
+ *     window you scroll through. The picture IS the content there, so the page
+ *     hands it a viewport rather than a thumbnail.
+ *   - the default (a grid card) crops the same file to a fixed aspect ratio and
+ *     shows the top of it. A card is a thing you skim past; a card that scrolls
+ *     would eat the page's own scroll on a trackpad and turn a gallery into
+ *     forty little scroll traps.
+ *
+ * Neither mode sets `width`/`height` on the `<img>`. Full-page captures have no
+ * one intrinsic size to declare, so the box is reserved in CSS instead — by
+ * `aspect-ratio` in preview mode and by the scroller's own height in scroll
+ * mode. Nothing reflows once the bytes land either way.
  */
 interface Props {
-  /** Web path of the shot to show (the light one, in theme-swap mode). */
+  /** Web path of the full-page shot. */
   src: string;
-  /** Web path of the dark shot. Given, the frame follows the system theme. */
-  darkSrc?: string | null;
   alt: string;
+  /** Fixed-height window with the whole capture scrolling inside it. */
+  scroll?: boolean;
   /** True for above-the-fold shots: skips lazy loading for the LCP candidate. */
   eager?: boolean;
 }
 
-const { src, darkSrc = null, alt, eager = false } = Astro.props;
+const { src, alt, scroll = false, eager = false } = Astro.props;
 
-// Every shot is captured at this size, so the box can be reserved before the
-// bytes arrive and nothing on the page jumps.
-const WIDTH = 1440;
-const HEIGHT = 900;
+const img = {
+  src,
+  alt,
+  loading: eager ? ("eager" as const) : ("lazy" as const),
+  decoding: "async" as const,
+  fetchpriority: eager ? ("high" as const) : ("auto" as const),
+};
 ---
 
-<span class="frame dotted-grid dotted-grid--fine">
-  <picture>
-    {darkSrc && <source media="(prefers-color-scheme: dark)" srcset={darkSrc} />}
-    <img
-      class="frame__shot outlined"
-      src={src}
-      alt={alt}
-      width={WIDTH}
-      height={HEIGHT}
-      loading={eager ? "eager" : "lazy"}
-      decoding="async"
-      fetchpriority={eager ? "high" : "auto"}
-    />
-  </picture>
-</span>
+{
+  scroll ? (
+    <span class="frame frame--scroll dotted-grid dotted-grid--fine">
+      {/*
+        Focusable and named: a scrollable region that only a mouse can reach is
+        a region a keyboard user cannot read. `tabindex` is what gives the
+        arrow keys somewhere to land.
+      */}
+      <span class="scroller" tabindex="0" role="region" aria-label={alt}>
+        <img class="scroller__shot" {...img} />
+      </span>
+    </span>
+  ) : (
+    <span class="frame dotted-grid dotted-grid--fine">
+      <img class="preview__shot outlined" {...img} />
+    </span>
+  )
+}
 
 <style>
   .frame {
@@ -57,16 +73,103 @@ const HEIGHT = 900;
     border-radius: 0;
   }
 
-  .frame__shot {
+  /* --- preview: the top of the page, cropped to a card ---------------------- */
+
+  .preview__shot {
     display: block;
     width: 100%;
     height: auto;
     aspect-ratio: 8 / 5;
-    /* Defensive: today every shot is exactly 1440x900, so nothing is cropped.
-       A future shot at another size gets its masthead kept, not its middle. */
+    /* A full-page capture is many screens tall. Anchored to the top so the card
+       shows the masthead — the part of a site you recognise — rather than a
+       slice of whatever happened to be halfway down. */
     object-fit: cover;
     object-position: top center;
     border-radius: 0;
     background-color: var(--bg);
+  }
+
+  /* --- scroll: the whole page, in a window ---------------------------------- */
+
+  .frame--scroll {
+    display: block;
+  }
+
+  .scroller {
+    /* Column flex, not block, only so of `justify-content` below can reach it. */
+    display: flex;
+    flex-direction: column;
+    /* `safe` is the whole point: it centres a shot shorter than the frame and
+       falls back to flush-top the moment one is taller, instead of centring the
+       overflow and putting the masthead out of reach above the scroll origin.
+       A browser that does not know the keyword drops the declaration and gets
+       flush-top everywhere, which is the same behaviour minus the nicety. */
+    justify-content: safe center;
+    /* Fixed, not `max-height`: a full-page capture has no intrinsic size to
+       declare, so this is the only thing reserving the box before the bytes
+       land. Tall enough to read a layout, short enough that the page's own
+       scroll is still reachable past the bottom of it. */
+    height: clamp(20rem, 70vh, 46rem);
+    overflow-y: auto;
+    overflow-x: hidden;
+    /* Keeps a flick at the bottom of the shot from carrying on into the page. */
+    overscroll-behavior-y: contain;
+    /* iOS gives a nested scroller momentum only when it is asked to. */
+    -webkit-overflow-scrolling: touch;
+    background-color: var(--bg);
+
+    /* `outline` rather than the `.outlined` inset shadow: a shadow is painted
+       under the element's own children, so a 12,000px screenshot would cover
+       it. An outline is painted on top and does not travel with the scroll. */
+    outline: 1px solid var(--outline);
+    outline-offset: -1px;
+
+    /* The standard properties, which is what actually governs here: every
+       current engine honours these, and a browser that reads them ignores the
+       `::-webkit-scrollbar` rules below entirely. */
+    scrollbar-width: thin;
+    scrollbar-color: var(--hairline-strong) transparent;
+  }
+
+  /* Same line, two steps louder — the frame IS the focus ring. */
+  .scroller:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  /* Dead code on anything that understands `scrollbar-width`, which is every
+     engine shipping today — kept for Safari before 18.2, where these are the
+     only vocabulary for a quiet scrollbar and the alternative is the default
+     one sitting on top of the screenshot. */
+  .scroller::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  .scroller::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scroller::-webkit-scrollbar-thumb {
+    background-color: var(--hairline-strong);
+    /* Inset by a transparent border so the thumb reads as a hairline rail
+       rather than a bar bolted to the edge of the screenshot. */
+    background-clip: padding-box;
+    border: 3px solid transparent;
+    border-radius: 999px;
+  }
+
+  .scroller:hover::-webkit-scrollbar-thumb {
+    background-color: var(--faint);
+  }
+
+  .scroller__shot {
+    display: block;
+    width: 100%;
+    height: auto;
+    /* A flex item defaults to shrinking to fit the line. Without this a tall
+       shot would be squashed into the frame instead of overflowing it, and the
+       scroller would have nothing to scroll. */
+    flex: 0 0 auto;
+    border-radius: 0;
   }
 </style>

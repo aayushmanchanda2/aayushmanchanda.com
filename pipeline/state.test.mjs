@@ -35,44 +35,47 @@ test("a published row whose entry left the gallery goes back to pending", async 
 
 test("reconcile only sweeps files that look like its own shots", async (t) => {
   const { paths } = await makeRepo(t, {
-    shots: ["ghost-light.webp", "og-image.png", "README.md"],
+    shots: ["ghost.webp", "og-image.png", "README.md"],
   });
 
   const report = await reconcile({ paths });
 
-  assert.deepEqual(report.orphans, ["ghost-light.webp"]);
+  assert.deepEqual(report.orphans, ["ghost.webp"]);
   assert.ok(await exists(path.join(paths.shotsDir, "og-image.png")));
   assert.ok(await exists(path.join(paths.shotsDir, "README.md")));
 });
 
-test("a dark shot still referenced by its entry survives the sweep", async (t) => {
+test("a shot still referenced by its entry survives the sweep", async (t) => {
   const entry = {
     slug: "otherkind",
     url: "https://otherkind.design",
-    shots: { light: "/shots/otherkind-light.webp", dark: "/shots/otherkind-dark.webp" },
+    shot: "/shots/otherkind.webp",
+    palette: ["#101010"],
   };
+  // `stray.webp` is the control: same directory, same extension, nothing
+  // pointing at it. Without it this test could pass on a sweep that never ran.
   const { paths } = await makeRepo(t, {
     sites: [entry],
-    shots: ["otherkind-light.webp", "otherkind-dark.webp"],
+    shots: ["otherkind.webp", "stray.webp"],
   });
 
   const report = await reconcile({ paths });
 
-  assert.deepEqual(report.orphans, []);
-  assert.ok(await exists(path.join(paths.shotsDir, "otherkind-dark.webp")));
+  assert.deepEqual(report.orphans, ["stray.webp"]);
+  assert.ok(await exists(path.join(paths.shotsDir, "otherkind.webp")));
 });
 
 test("a dry run reports the same repairs and performs none of them", async (t) => {
   const { paths } = await makeRepo(t, {
     state: { 42: { kind: "published", slug: "gone", section: "sites", at: "" } },
-    shots: ["ghost-light.webp"],
+    shots: ["ghost.webp"],
   });
 
   const report = await reconcile({ paths, dryRun: true });
 
   assert.deepEqual(report.downgraded, ["42"]);
-  assert.deepEqual(report.orphans, ["ghost-light.webp"]);
-  assert.ok(await exists(path.join(paths.shotsDir, "ghost-light.webp")));
+  assert.deepEqual(report.orphans, ["ghost.webp"]);
+  assert.ok(await exists(path.join(paths.shotsDir, "ghost.webp")));
   assert.equal((await readJson(paths.statePath))["42"].kind, "published");
 });
 

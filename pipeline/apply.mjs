@@ -9,7 +9,7 @@
  * For a new site entry the order is:
  *
  *   1. capture into `pipeline/tmp/<id>/`, never straight into `public/`
- *   2. move the shots into `public/shots/`
+ *   2. move the shot into `public/shots/`
  *   3. append the JSON entry
  *   4. write the state row
  *   5. tag the bookmark in Raindrop
@@ -123,13 +123,13 @@ async function moveShot(from, to) {
  * a fourth section has to be handled here or the `never` arm stops compiling.
  *
  * @param {Section} section
- * @param {{ bookmark: Bookmark, slug: string, date: string, hasDark: boolean }} input
+ * @param {{ bookmark: Bookmark, slug: string, date: string, palette: string[] }} input
  * @returns {Record<string, unknown>}
  */
-function buildEntry(section, { bookmark, slug, date, hasDark }) {
+function buildEntry(section, { bookmark, slug, date, palette }) {
   switch (section) {
     case "sites":
-      return buildSiteEntry({ bookmark, slug, date, hasDark });
+      return buildSiteEntry({ bookmark, slug, date, palette });
     case "tools":
       return buildToolEntry({ bookmark, slug, date });
     case "reading":
@@ -160,15 +160,16 @@ async function captureAndPublish(bookmark, attempts, ctx) {
   const scratch = path.join(ctx.paths.tmpDir, bookmark.id);
 
   try {
-    let hasDark = false;
+    /** @type {string[]} */
+    let palette = [];
 
     // Only /sites is a picture. A tool is a link with a verdict attached and a
     // reading row is a link with a kind attached; neither opens a browser.
     if (section === "sites") {
       await mkdir(scratch, { recursive: true });
-      // `log` so a light-only downgrade is reported in the run log, next to
-      // the entry it explains, instead of on stderr where nothing reads it.
-      const shots = await ctx.captureSite({
+      // `log` so a clipped capture is reported in the run log, next to the
+      // entry it explains, instead of on stderr where nothing reads it.
+      const capture = await ctx.captureSite({
         url: bookmark.url,
         slug,
         outDir: scratch,
@@ -176,14 +177,11 @@ async function captureAndPublish(bookmark, attempts, ctx) {
       });
       await mkdir(ctx.paths.shotsDir, { recursive: true });
 
-      await moveShot(shots.light, path.join(ctx.paths.shotsDir, shotFileName(slug, "light")));
-      if (shots.dark !== null) {
-        await moveShot(shots.dark, path.join(ctx.paths.shotsDir, shotFileName(slug, "dark")));
-        hasDark = true;
-      }
+      await moveShot(capture.shot, path.join(ctx.paths.shotsDir, shotFileName(slug)));
+      palette = capture.palette;
     }
 
-    const entry = buildEntry(section, { bookmark, slug, date: ctx.date, hasDark });
+    const entry = buildEntry(section, { bookmark, slug, date: ctx.date, palette });
 
     // The file is written before the in-memory list advances, so a failed write
     // leaves the run's view of the gallery matching what is on disk.
