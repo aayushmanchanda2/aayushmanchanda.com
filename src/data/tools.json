@@ -169,5 +169,14 @@
     "verdict": "skipped",
     "note": "Design-research skill pack with a curl|bash installer; paid tier can decrypt browser cookies. Only ever deliberately.",
     "status_date": "2026-08-17"
+  },
+  {
+    "slug": "is-agentic",
+    "name": "Is Agentic",
+    "url": "https://is-agentic.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Score how ready a website is for AI agents, then get evidence and recommendations to improve it.",
+    "status_date": "2026-08-26"
   }
 ]

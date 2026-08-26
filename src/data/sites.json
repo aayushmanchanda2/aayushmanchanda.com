@@ -53,5 +53,16 @@
       "light": "/shots/rareui-light.webp",
       "dark": "/shots/rareui-dark.webp"
     }
+  },
+  {
+    "slug": "bychudy",
+    "title": "bychudy",
+    "url": "https://www.bychudy.com/",
+    "domain": "bychudy.com",
+    "saved_date": "2026-08-26",
+    "shots": {
+      "light": "/shots/bychudy-light.webp",
+      "dark": "/shots/bychudy-dark.webp"
+    }
   }
 ]
