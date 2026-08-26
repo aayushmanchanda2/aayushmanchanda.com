@@ -15,6 +15,7 @@ import test from "node:test";
 
 import {
   FAKE_PALETTE,
+  FIRECRAWL_PALETTE,
   NESTED,
   READING_ID,
   SITES_ID,
@@ -23,6 +24,7 @@ import {
   deps,
   exists,
   fakeCapture,
+  fakeFirecrawl,
   makeRepo,
   raindropServer,
   readJson,
@@ -329,6 +331,260 @@ test("a page too tall to shoot whole still publishes, and says so in the run log
     out.out.some((line) => line.includes("chester") && line.includes("clipped")),
     "the clip is explained in the run log",
   );
+});
+
+/* ---------------------------------------------------------------------------
+   Firecrawl
+   --------------------------------------------------------------------------- */
+
+const TWEET = "https://x.com/ephraimakanmu/status/2081234457588056305";
+
+test("a saved post lands with the words in it, not with Raindrop's placeholder", async (t) => {
+  const { paths } = await makeRepo(t);
+  const server = raindropServer({
+    ...NESTED,
+    raindrops: {
+      [READING_ID]: [
+        bookmark(900, TWEET, { title: "A post from @ephraimakanmu" }),
+        bookmark(901, "https://gumclaw.github.io/how-i-work/", { title: "How Gumclaw Works" }),
+      ],
+    },
+  });
+  const firecrawl = fakeFirecrawl();
+  const out = recorder();
+
+  assert.equal(await run([], deps({ paths, server, firecrawl: firecrawl.client, out })), 0);
+
+  const [post, article] = await readJson(paths.readingJson);
+
+  assert.equal(
+    post.title,
+    "Been rebuilding the Diadem brand archive for three weeks and the thing nobody…",
+    "the title is what the post says",
+  );
+  assert.match(post.note, /^@EphraimAkanmu: Been rebuilding/, "and the note says whose it was");
+  assert.equal(post.kind, "post");
+  assert.equal(post.url, TWEET, "the link is untouched");
+
+  assert.deepEqual(firecrawl.calls.scraped, [TWEET], "only a post is worth asking about");
+  assert.equal(article.title, "How Gumclaw Works", "an article already has a title");
+  assert.equal(out.summary, "published=2 failed=0 skipped=0 pending=0");
+});
+
+test("markdown that is not a post leaves the row exactly as it was", async (t) => {
+  // x.com behind a login wall is the ordinary shape of this failure: Firecrawl
+  // answers, the answer is a sign-in page, and there is nothing in it to use.
+  const { paths } = await makeRepo(t);
+  const server = raindropServer({
+    ...NESTED,
+    raindrops: { [READING_ID]: [bookmark(900, TWEET, { title: "A post from @ephraimakanmu" })] },
+  });
+  const firecrawl = fakeFirecrawl({ markdown: "# Sign in to X\n\nSomething went wrong." });
+  const out = recorder();
+
+  assert.equal(await run([], deps({ paths, server, firecrawl: firecrawl.client, out })), 0);
+
+  const [entry] = await readJson(paths.readingJson);
+  assert.equal(entry.title, "A post from @ephraimakanmu");
+  assert.equal(entry.note, null);
+  assert.ok(
+    out.out.some((line) => line.includes("found no post in it")),
+    "an answer with no post in it reads differently in the log than no answer at all",
+  );
+  assert.equal(out.summary, "published=1 failed=0 skipped=0 pending=0");
+});
+
+test("a Firecrawl outage costs a warning line and nothing else", async (t) => {
+  const { paths } = await makeRepo(t);
+  const server = raindropServer({
+    ...NESTED,
+    raindrops: { [READING_ID]: [bookmark(900, TWEET, { title: "A post from @ephraimakanmu" })] },
+  });
+  const out = recorder();
+
+  const code = await run(
+    [],
+    deps({ paths, server, firecrawl: fakeFirecrawl({ failScrape: "HTTP 429" }).client, out }),
+  );
+
+  assert.equal(code, 0, "the enrichment is a nicety; the row publishes without it");
+  assert.equal((await readJson(paths.readingJson))[0].title, "A post from @ephraimakanmu");
+  assert.equal((await loadState(paths))["900"].kind, "published", "never an attempt, never a strike");
+  assert.ok(out.out.some((line) => line.startsWith("warn: firecrawl")));
+});
+
+test("with no key in the environment nothing is asked of anyone", async (t) => {
+  // The default `deps()` goes through the real `firecrawlFrom()` against a test
+  // environment holding only RAINDROP_TOKEN — which is the local case exactly.
+  const { paths } = await makeRepo(t);
+  const server = raindropServer({
+    ...NESTED,
+    raindrops: { [READING_ID]: [bookmark(900, TWEET, { title: "A post from @ephraimakanmu" })] },
+  });
+  const out = recorder();
+
+  assert.equal(await run([], deps({ paths, server, out })), 0);
+
+  assert.equal((await readJson(paths.readingJson))[0].title, "A post from @ephraimakanmu");
+  assert.equal(
+    out.out.some((line) => line.includes("firecrawl")),
+    false,
+    "not attempted, not warned about, not mentioned",
+  );
+});
+
+test("a site that beats the browser on its last try is caught by Firecrawl", async (t) => {
+  // Two attempts already spent, so this run is the one before the dead letter.
+  const { paths } = await makeRepo(t, {
+    state: { 400: { kind: "pending", attempts: 2, lastError: "bot-blocked" } },
+  });
+  const server = raindropServer({
+    ...NESTED,
+    raindrops: { [SITES_ID]: [bookmark(400, "https://fortress.example", { title: "Fortress" })] },
+  });
+  const fallback = fakeCapture({ palette: FIRECRAWL_PALETTE });
+  const out = recorder();
+
+  const code = await run(
+    [],
+    deps({
+      paths,
+      server,
+      capture: fakeCapture({ fail: "bot-blocked" }),
+      fallback,
+      firecrawl: fakeFirecrawl().client,
+      out,
+    }),
+  );
+
+  assert.equal(code, 0);
+  assert.deepEqual(
+    fallback.calls.map((call) => call.url),
+    ["https://fortress.example"],
+  );
+
+  const [site] = await readJson(paths.sitesJson);
+  assert.deepEqual(site.palette, FIRECRAWL_PALETTE, "a fallback shot goes through the same path");
+  assert.equal(site.shot, "/shots/fortress.webp");
+  assert.equal("via" in site, false, "who took the picture is not the reader's business");
+  assert.ok(await exists(path.join(paths.shotsDir, "fortress.webp")));
+
+  assert.deepEqual((await loadState(paths))["400"], {
+    kind: "published",
+    slug: "fortress",
+    section: "sites",
+    at: "2026-08-26T10:00:00.000Z",
+    via: "firecrawl",
+  });
+  assert.equal(server.tagCalls("published").length, 1);
+  assert.equal(out.summary, "published=1 failed=0 skipped=0 pending=0");
+});
+
+test("the second chance is not spent while free retries remain", async (t) => {
+  const { paths } = await makeRepo(t);
+  const server = raindropServer({
+    ...NESTED,
+    raindrops: { [SITES_ID]: [bookmark(400, "https://fortress.example", { title: "Fortress" })] },
+  });
+  const fallback = fakeCapture();
+  const out = recorder();
+
+  await run(
+    [],
+    deps({
+      paths,
+      server,
+      capture: fakeCapture({ fail: "bot-blocked" }),
+      fallback,
+      firecrawl: fakeFirecrawl().client,
+      out,
+    }),
+  );
+
+  assert.equal(fallback.calls.length, 0, "most capture failures are a slow page, not a wall");
+  assert.deepEqual((await loadState(paths))["400"], {
+    kind: "pending",
+    attempts: 1,
+    lastError: "bot-blocked",
+  });
+  assert.equal(out.summary, "published=0 failed=0 skipped=0 pending=1");
+});
+
+test("when Firecrawl cannot shoot it either, the third strike lands as normal", async (t) => {
+  const { paths } = await makeRepo(t, {
+    state: { 400: { kind: "pending", attempts: 2, lastError: "bot-blocked" } },
+  });
+  const server = raindropServer({
+    ...NESTED,
+    raindrops: { [SITES_ID]: [bookmark(400, "https://fortress.example", { title: "Fortress" })] },
+  });
+  const out = recorder();
+
+  const code = await run(
+    [],
+    deps({
+      paths,
+      server,
+      capture: fakeCapture({ fail: "bot-blocked" }),
+      fallback: fakeCapture({ fail: "Firecrawl returned no screenshot" }),
+      firecrawl: fakeFirecrawl().client,
+      out,
+    }),
+  );
+
+  assert.equal(code, 0);
+  assert.deepEqual(await readJson(paths.sitesJson), []);
+  assert.deepEqual((await loadState(paths))["400"], {
+    kind: "pending",
+    attempts: 3,
+    lastError: "bot-blocked",
+  });
+  assert.ok(
+    out.out.some((line) => line.includes("firecrawl could not shoot fortress")),
+    "the fallback's own reason is a footnote in the log, not the state row",
+  );
+  assert.equal(out.summary, "published=0 failed=0 skipped=0 pending=1");
+
+  // And the run after this one is the dead letter, unchanged by any of it.
+  const next = recorder();
+  await run([], deps({ paths, server, capture: fakeCapture({ fail: "bot-blocked" }), out: next }));
+
+  assert.equal((await loadState(paths))["400"].kind, "failed");
+  assert.equal(server.tagCalls("failed").length, 1);
+});
+
+test("a published row keeps its firecrawl note across a reload", async (t) => {
+  const entry = {
+    slug: "fortress",
+    title: "Fortress",
+    url: "https://fortress.example",
+    domain: "fortress.example",
+    saved_date: "2026-08-26",
+    shot: "/shots/fortress.webp",
+    palette: ["#111111"],
+    collections: [],
+  };
+  const { paths } = await makeRepo(t, {
+    sites: [entry],
+    shots: ["fortress.webp"],
+    state: {
+      400: {
+        kind: "published",
+        slug: "fortress",
+        section: "sites",
+        at: "2026-08-26T10:00:00.000Z",
+        via: "firecrawl",
+      },
+    },
+  });
+
+  assert.deepEqual((await loadState(paths))["400"], {
+    kind: "published",
+    slug: "fortress",
+    section: "sites",
+    at: "2026-08-26T10:00:00.000Z",
+    via: "firecrawl",
+  });
 });
 
 /* ---------------------------------------------------------------------------

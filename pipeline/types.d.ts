@@ -19,8 +19,19 @@ export type Section = "tools" | "sites" | "reading";
 /** What a /reading entry points at, derived from its host. */
 export type ReadingKind = "article" | "post" | "video";
 
+/**
+ * Where a published shot came from, when it was not the runner's own browser.
+ *
+ * Absent is the ordinary case and the only other value is `"firecrawl"`, so this
+ * is a note about one exception rather than a general provenance field. It lives
+ * in `pipeline/state.json` and never in `src/data/`: which service took the
+ * picture is operational trivia, and a reader looking at /sites is owed the
+ * screenshot, not the story of how many tries it took.
+ */
+export type CaptureVia = "firecrawl";
+
 export type ItemState =
-  | { kind: "published"; slug: string; section: Section; at: string }
+  | { kind: "published"; slug: string; section: Section; at: string; via?: CaptureVia }
   | { kind: "failed"; attempts: number; lastError: string; at: string }
   | { kind: "pending"; attempts: number; lastError?: string };
 
@@ -51,6 +62,22 @@ export interface Collection {
   title: string;
   /** null for a root collection. */
   parentId: number | null;
+}
+
+/**
+ * An x.com post, as read back out of Firecrawl's markdown.
+ *
+ * Only the two fields a /reading row can use. Firecrawl's post-processed
+ * document also carries a display name, a posted date and an engagement count,
+ * and none of them is written anywhere: the row's date is the day it was saved
+ * by contract, and a like count is a number that is wrong by the time it is
+ * committed.
+ */
+export interface Post {
+  /** The @handle, without the @. */
+  handle: string;
+  /** The post's own words, decoration stripped and collapsed to one line. */
+  text: string;
 }
 
 /** What `plan()` decided to do about one bookmark. */

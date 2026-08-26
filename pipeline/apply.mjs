@@ -34,6 +34,7 @@ import {
   buildReadingEntry,
   buildSiteEntry,
   buildToolEntry,
+  deriveKind,
   shotFileName,
   slugBase,
   uniqueSlug,
@@ -44,10 +45,15 @@ import { MAX_ATTEMPTS, galleryFor, saveState } from "./state.mjs";
 import { describe, isRecord } from "./util.mjs";
 
 /** @typedef {import("./types.js").Bookmark} Bookmark */
+/** @typedef {import("./types.js").CaptureVia} CaptureVia */
 /** @typedef {import("./types.js").Paths} Paths */
 /** @typedef {import("./types.js").PlannedItem} PlannedItem */
+/** @typedef {import("./types.js").Post} Post */
 /** @typedef {import("./types.js").Section} Section */
 /** @typedef {import("./types.js").StateMap} StateMap */
+
+/** A thing that turns a URL into a shot on disk. Two of them exist. */
+/** @typedef {typeof import("./capture.mjs").captureSite} Capturer */
 
 /** How one bookmark ended up — the four counters in the summary line. */
 /** @typedef {"published" | "failed" | "skipped" | "pending"} Outcome */
@@ -63,7 +69,13 @@ import { describe, isRecord } from "./util.mjs";
  * @property {string} at      ISO timestamp for the run.
  * @property {boolean} dryRun
  * @property {(line: string) => void} log
- * @property {typeof import("./capture.mjs").captureSite} captureSite
+ * @property {Capturer} captureSite
+ * @property {Capturer | null} firecrawlShot
+ *   The second chance for a /sites capture, or null when Firecrawl is not
+ *   configured. Same signature as `captureSite` on purpose: `publish.mjs` has
+ *   already bound the client, so this file never learns there is one.
+ * @property {((url: string) => Promise<Post | null>) | null} lookUpPost
+ *   Reads an x.com post, or null when Firecrawl is not configured.
  */
 
 /**
@@ -132,20 +144,96 @@ async function moveShot(from, to) {
  * a fourth section has to be handled here or the `never` arm stops compiling.
  *
  * @param {Section} section
- * @param {{ bookmark: Bookmark, slug: string, date: string, palette: string[] }} input
+ * @param {{ bookmark: Bookmark, slug: string, date: string, palette: string[], post: Post | null }} input
  * @returns {Record<string, unknown>}
  */
-function buildEntry(section, { bookmark, slug, date, palette }) {
+function buildEntry(section, { bookmark, slug, date, palette, post }) {
   switch (section) {
     case "sites":
       return buildSiteEntry({ bookmark, slug, date, palette });
     case "tools":
       return buildToolEntry({ bookmark, slug, date });
     case "reading":
-      return buildReadingEntry({ bookmark, slug, date });
+      return buildReadingEntry({ bookmark, slug, date, post });
     default: {
       const never = /** @type {never} */ (section);
       throw new Error(`unknown section ${JSON.stringify(never)}`);
+    }
+  }
+}
+
+/**
+ * What an x.com post says, when this is one and Firecrawl is configured to ask.
+ *
+ * Quiet on failure, like `tagQuietly` and for the same reason: the enrichment is
+ * a nicety on top of a row that publishes fine without it, so a Firecrawl outage
+ * must cost a warning line and nothing else. Never an attempt, never a strike.
+ * The row lands with Raindrop's own title, exactly as it did before this
+ * existed.
+ *
+ * @param {Bookmark} bookmark @param {ApplyContext} ctx
+ * @returns {Promise<Post | null>}
+ */
+async function postFor(bookmark, ctx) {
+  // `deriveKind` rather than a second host list: the question "is this a post"
+  // already has one answer in this pipeline, and it is the one the entry's own
+  // `kind` field is about to be set from.
+  if (ctx.lookUpPost === null || deriveKind(bookmark.url) !== "post") return null;
+
+  try {
+    const post = await ctx.lookUpPost(bookmark.url);
+    // Two different disappointments, and the run log has to tell them apart:
+    // this one means Firecrawl answered and the answer held no post — a login
+    // wall, a deleted tweet, a document shaped differently than it was. The
+    // `warn` below means the call itself did not happen. Both publish the row
+    // unchanged, and only one of them is worth going and looking at the
+    // markdown for.
+    if (post === null) ctx.log(`firecrawl: read ${bookmark.url}, found no post in it`);
+    return post;
+  } catch (error) {
+    ctx.log(`warn: firecrawl could not read ${bookmark.url} — ${describe(error)}`);
+    return null;
+  }
+}
+
+/**
+ * The shot, and who took it.
+ *
+ * Firecrawl is asked only on the last attempt, and only after the browser has
+ * already failed. Both halves of that matter. Asking earlier would spend credits
+ * on sites that a retry would have got for free — most capture failures are a
+ * slow page, not a wall — and asking on any attempt but the last would put a
+ * paid call on a path that still has free retries left in it. So the second
+ * chance sits exactly where the alternative is a dead letter.
+ *
+ * A Firecrawl failure re-throws the BROWSER's error rather than its own. The
+ * state row is a record of why the capture did not work, and "Playwright timed
+ * out" is that reason; the fallback's failure is a footnote, and it goes in the
+ * run log where footnotes belong.
+ *
+ * @param {Bookmark} bookmark @param {string} slug @param {string} outDir
+ * @param {number} attempts  Attempts already spent before this one.
+ * @param {ApplyContext} ctx
+ * @returns {Promise<{ shot: string, palette: string[], via: CaptureVia | null }>}
+ */
+async function shootSite(bookmark, slug, outDir, attempts, ctx) {
+  // `log` so a clipped capture is reported in the run log, next to the entry it
+  // explains, instead of on stderr where nothing reads it.
+  const input = { url: bookmark.url, slug, outDir, log: ctx.log };
+
+  try {
+    return { ...(await ctx.captureSite(input)), via: null };
+  } catch (error) {
+    const lastAttempt = attempts + 1 >= MAX_ATTEMPTS;
+    if (!lastAttempt || ctx.firecrawlShot === null) throw error;
+
+    ctx.log(`capture: ${slug} failed its last browser attempt — asking firecrawl for the shot`);
+
+    try {
+      return { ...(await ctx.firecrawlShot(input)), via: "firecrawl" };
+    } catch (fallbackError) {
+      ctx.log(`capture: firecrawl could not shoot ${slug} either — ${describe(fallbackError)}`);
+      throw error;
     }
   }
 }
@@ -171,26 +259,23 @@ async function captureAndPublish(bookmark, attempts, ctx) {
   try {
     /** @type {string[]} */
     let palette = [];
+    /** @type {CaptureVia | null} */
+    let via = null;
 
     // Only /sites is a picture. A tool is a link with a verdict attached and a
     // reading row is a link with a kind attached; neither opens a browser.
     if (section === "sites") {
       await mkdir(scratch, { recursive: true });
-      // `log` so a clipped capture is reported in the run log, next to the
-      // entry it explains, instead of on stderr where nothing reads it.
-      const capture = await ctx.captureSite({
-        url: bookmark.url,
-        slug,
-        outDir: scratch,
-        log: ctx.log,
-      });
+      const capture = await shootSite(bookmark, slug, scratch, attempts, ctx);
       await mkdir(ctx.paths.shotsDir, { recursive: true });
 
       await moveShot(capture.shot, path.join(ctx.paths.shotsDir, shotFileName(slug)));
       palette = capture.palette;
+      via = capture.via;
     }
 
-    const entry = buildEntry(section, { bookmark, slug, date: ctx.date, palette });
+    const post = section === "reading" ? await postFor(bookmark, ctx) : null;
+    const entry = buildEntry(section, { bookmark, slug, date: ctx.date, palette, post });
 
     // The file is written before the in-memory list advances, so a failed write
     // leaves the run's view of the gallery matching what is on disk.
@@ -199,7 +284,13 @@ async function captureAndPublish(bookmark, attempts, ctx) {
     ctx.gallery[section] = next;
     ctx.taken[section].add(slug);
 
-    ctx.state[bookmark.id] = { kind: "published", slug, section, at: ctx.at };
+    // `via` is written only when there is something to say. The ordinary row
+    // has no such key, so the state file does not grow a field that is null on
+    // every line but the rare one.
+    ctx.state[bookmark.id] =
+      via === null
+        ? { kind: "published", slug, section, at: ctx.at }
+        : { kind: "published", slug, section, at: ctx.at, via };
     await saveState(ctx.paths, ctx.state);
   } catch (error) {
     await rm(scratch, { recursive: true, force: true });

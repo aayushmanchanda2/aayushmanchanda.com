@@ -14,6 +14,7 @@ import { mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
+import { firecrawlFrom } from "./firecrawl.mjs";
 import { resolvePaths } from "./state.mjs";
 
 /**
@@ -112,6 +113,15 @@ export function raindropServer({ roots = [], children = [], raindrops = {} } = {
   /** @type {typeof globalThis.fetch} */
   const fetch = async (input, init = {}) => {
     const url = new URL(String(input));
+
+    // A fixture that answers 404 to a host it has never heard of is a fixture
+    // that lies. Throwing means any test which accidentally reaches a real
+    // service — Firecrawl, most plausibly — fails saying so, instead of quietly
+    // taking the "that call failed, carry on" branch and looking like a pass.
+    if (url.hostname !== "api.raindrop.io") {
+      throw new Error(`the test raindrop was asked for ${url.hostname}`);
+    }
+
     const route = url.pathname.replace("/rest/v1", "");
     const method = init.method ?? "GET";
     calls.push({
@@ -188,6 +198,97 @@ export function fakeCapture({ palette = FAKE_PALETTE, clipped = false, fail } = 
 }
 
 /* ---------------------------------------------------------------------------
+   Firecrawl, in a literal
+   --------------------------------------------------------------------------- */
+
+/**
+ * What Firecrawl's `x-twitter` post-processor hands back.
+ *
+ * Copied from a real response rather than imagined, down to the escaped dates
+ * and the unbolded `Author:` line, because every one of those details is
+ * something `parsePost` either steps over or trips on. The sections after the
+ * post are the part that earns its place here: a saved thread carries ten more
+ * posts and a reply under `## Thread` and `## Top Comments`, and a parser that
+ * let those through would put a stranger's words in the note.
+ *
+ * @param {object} [options]
+ * @param {string} [options.handle]
+ * @param {string} [options.text]
+ */
+export function postMarkdown({ handle = "EphraimAkanmu", text = POST_TEXT } = {}) {
+  return [
+    `# Post by @${handle}`,
+    "",
+    `Author: Diadem @${handle}`,
+    "Posted: 2026\\-07\\-26T04:25:36\\.000Z",
+    `URL: [https://x\\.com/${handle}/status/2081234457588056305](https://x.com/${handle}/status/2081234457588056305)`,
+    "Likes: 636 | Retweets: 78",
+    "",
+    "## Post",
+    "",
+    text,
+    "",
+    "## Thread",
+    "",
+    "### 1. Thread Post",
+    `Author: @${handle}`,
+    "",
+    "> BEHANCE",
+    ">",
+    "> Starting with some individual designers whose projects I study.",
+    "",
+    "Likes: 35 | Retweets: 1",
+    "",
+    "## Top Comments",
+    "",
+    "### 1. @Jstmaiking",
+    "Author: Maiking",
+    "",
+    "> Can any one do something like this for web and app designers?",
+    "",
+  ].join("\n");
+}
+
+/** Long enough that both the 80-char title and the 280-char note have to clip. */
+export const POST_TEXT =
+  "Been rebuilding the Diadem brand archive for three weeks and the thing nobody " +
+  "tells you about design systems is that the hard part was never the tokens. It " +
+  "is getting everyone to reach for them at the moment they are about to invent a " +
+  "ninth shade of grey instead, which is a habit problem wearing a tooling costume.";
+
+/**
+ * A stand-in for the Firecrawl client, with the call log the tests assert
+ * against — "never asked" is the whole point of the env-absent rule.
+ *
+ * @param {object} [options]
+ * @param {string} [options.markdown]  What `scrapeMarkdown` returns.
+ * @param {Buffer} [options.png]       What `screenshotFullPage` returns.
+ * @param {string} [options.failScrape] Throw with this message instead.
+ * @param {string} [options.failShot]   Throw with this message instead.
+ */
+export function fakeFirecrawl({ markdown = postMarkdown(), png, failScrape, failShot } = {}) {
+  /** @type {{ scraped: string[], shot: string[] }} */
+  const calls = { scraped: [], shot: [] };
+
+  const client = {
+    /** @param {string} url */
+    async scrapeMarkdown(url) {
+      calls.scraped.push(url);
+      if (failScrape !== undefined) throw new Error(failScrape);
+      return markdown;
+    },
+    /** @param {string} url */
+    async screenshotFullPage(url) {
+      calls.shot.push(url);
+      if (failShot !== undefined) throw new Error(failShot);
+      return png ?? Buffer.from("pretend-png");
+    },
+  };
+
+  return { calls, client };
+}
+
+/* ---------------------------------------------------------------------------
    The wiring every test starts from
    --------------------------------------------------------------------------- */
 
@@ -205,20 +306,39 @@ export const NESTED = {
   ],
 };
 
+/** Distinct from `FAKE_PALETTE`, so a test can tell which capturer ran. */
+export const FIRECRAWL_PALETTE = ["#8a2be2", "#fffaf0"];
+
 /**
  * The `deps` bag for a test run: a fake API, a fake browser, a fixed clock, and
  * a commit that does nothing (git is CI's concern, not this suite's).
+ *
+ * `firecrawl` is left out by default on purpose. The default run therefore goes
+ * through the real `firecrawlFrom()` against an environment with no key in it,
+ * which is exactly the local case — so every test that does not mention
+ * Firecrawl is also a test that the feature stays out of the way.
  *
  * @param {object} wiring
  * @param {import("./types.js").Paths} wiring.paths
  * @param {ReturnType<typeof raindropServer>} wiring.server
  * @param {ReturnType<typeof fakeCapture>} [wiring.capture]
+ * @param {ReturnType<typeof fakeCapture>} [wiring.fallback] The second-chance shot.
+ * @param {ReturnType<typeof fakeFirecrawl>["client"]} [wiring.firecrawl]
  * @param {ReturnType<typeof recorder>} wiring.out
  */
-export function deps({ paths, server, capture = fakeCapture(), out }) {
+export function deps({
+  paths,
+  server,
+  capture = fakeCapture(),
+  fallback = fakeCapture({ palette: FIRECRAWL_PALETTE }),
+  firecrawl,
+  out,
+}) {
   return {
     fetch: server.fetch,
     captureSite: capture.captureSite,
+    captureWithFirecrawl: fallback.captureSite,
+    makeFirecrawl: firecrawl === undefined ? firecrawlFrom : () => firecrawl,
     env: { RAINDROP_TOKEN: "test-token" },
     now: () => new Date("2026-08-26T10:00:00.000Z"),
     log: out.log,

@@ -16,10 +16,13 @@ import test from "node:test";
 
 import {
   FAILED_TAG,
+  POST_NOTE_MAX,
+  POST_TITLE_MAX,
   PUBLISHED_TAG,
   buildReadingEntry,
   buildSiteEntry,
   buildToolEntry,
+  clip,
   collectionsFrom,
 } from "./entries.mjs";
 
@@ -95,6 +98,128 @@ test("a site entry carries its collections", () => {
   });
 
   assert.deepEqual(entry.collections, ["portfolios"]);
+});
+
+/* ---------------------------------------------------------------------------
+   Posts
+   --------------------------------------------------------------------------- */
+
+const POST_URL = "https://x.com/ephraimakanmu/status/2081234457588056305";
+
+/** @param {string} text @returns {import("./types.js").Post} */
+const post = (text) => ({ handle: "ephraimakanmu", text });
+
+/**
+ * @param {object} [extra]
+ * @param {string} [extra.title]
+ * @param {string} [extra.excerpt]
+ * @returns {import("./types.js").Bookmark}
+ */
+function saved({ title = "A post from @ephraimakanmu", excerpt = "" } = {}) {
+  return { id: "9", url: POST_URL, title, excerpt, domain: "x.com", collection: "reading", tags: [] };
+}
+
+test("a clip that fits is returned whole, ellipsis and all left off", () => {
+  assert.equal(clip("Short one.", 80), "Short one.");
+  assert.equal(clip("  padded  ", 80), "padded");
+});
+
+test("a clip ends on a word, not mid-syllable", () => {
+  const clipped = clip("the hard part was never the tokens at all", 20);
+
+  assert.ok(clipped.endsWith("…"));
+  assert.ok(clipped.length <= 21, `${clipped} is longer than the budget`);
+  assert.equal(clipped, "the hard part was…", "and the trailing space goes with it");
+});
+
+test("a clip does not leave punctuation stranded before the ellipsis", () => {
+  assert.equal(clip("three weeks, and then some more of it", 13), "three weeks…");
+});
+
+test("one word longer than the whole budget is cut hard rather than lost", () => {
+  // Backing off to the last space would return nothing at all here, which is
+  // worse than a hard cut: an empty title is a row with no link text.
+  assert.equal(clip("Supercalifragilisticexpialidocious", 10), "Supercalif…");
+});
+
+test("a post Raindrop could not read supplies the title it could not", () => {
+  const text =
+    "Been rebuilding the Diadem brand archive for three weeks and the thing nobody tells you " +
+    "about design systems is that the hard part was never the tokens.";
+
+  const entry = buildReadingEntry({
+    bookmark: saved(),
+    slug: "a-post-from-ephraimakanmu",
+    date: "2026-08-26",
+    post: post(text),
+  });
+
+  assert.notEqual(entry.title, "A post from @ephraimakanmu");
+  assert.ok(entry.title.length <= POST_TITLE_MAX + 1);
+  assert.ok(text.startsWith(String(entry.title).replace("…", "")));
+  assert.equal(entry.kind, "post");
+});
+
+test("the note quotes the post and says whose it was", () => {
+  const text = "a ".repeat(300);
+
+  const entry = buildReadingEntry({
+    bookmark: saved(),
+    slug: "s",
+    date: "2026-08-26",
+    post: post(text),
+  });
+
+  assert.match(String(entry.note), /^@ephraimakanmu: /, "the handle leads, so it reads as a quote");
+  assert.ok(
+    String(entry.note).length <= POST_NOTE_MAX + "@ephraimakanmu: ".length + 1,
+    "the note stays inside its budget",
+  );
+});
+
+test("a post short enough to fit in the title is not said twice", () => {
+  const entry = buildReadingEntry({
+    bookmark: saved(),
+    slug: "s",
+    date: "2026-08-26",
+    post: post("Ship it on a Friday."),
+  });
+
+  assert.equal(entry.title, "Ship it on a Friday.");
+  assert.equal(entry.note, "@ephraimakanmu", "the attribution is all the title left unsaid");
+});
+
+test("a note Aayush typed outranks the post's own words", () => {
+  // `reading.ts` documents that field as one line in his voice. A fetched
+  // sentence is not that, so it only ever fills a note that would be null.
+  const entry = buildReadingEntry({
+    bookmark: saved({ excerpt: "Came in over Telegram." }),
+    slug: "s",
+    date: "2026-08-26",
+    post: post("Something the poster said instead."),
+  });
+
+  assert.equal(entry.note, "Came in over Telegram.");
+  assert.equal(entry.title, "Something the poster said instead.", "the title is still enriched");
+});
+
+test("no post is exactly the entry the pipeline built before", () => {
+  const bookmark = saved({ excerpt: "" });
+
+  assert.deepEqual(
+    buildReadingEntry({ bookmark, slug: "s", date: "2026-08-26", post: null }),
+    buildReadingEntry({ bookmark, slug: "s", date: "2026-08-26" }),
+    "an absent post and a null one are the same answer",
+  );
+  assert.deepEqual(buildReadingEntry({ bookmark, slug: "s", date: "2026-08-26" }), {
+    slug: "s",
+    title: "A post from @ephraimakanmu",
+    url: POST_URL,
+    domain: "x.com",
+    saved_date: "2026-08-26",
+    kind: "post",
+    note: null,
+  });
 });
 
 test("tools and reading entries carry no collections", () => {

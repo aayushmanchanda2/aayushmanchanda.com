@@ -108,7 +108,12 @@ function parseItemState(value) {
       const slug = value["slug"];
       const section = value["section"];
       if (typeof slug !== "string" || !isSection(section)) return null;
-      return { kind: "published", slug, section, at };
+      // Anything but the one known value is dropped rather than carried: this
+      // field is a note about an exception, and an unrecognised note is worth
+      // less than no note. The row itself is still perfectly good.
+      return value["via"] === "firecrawl"
+        ? { kind: "published", slug, section, at, via: "firecrawl" }
+        : { kind: "published", slug, section, at };
     }
     case "failed":
       return { kind: "failed", attempts, lastError: lastError ?? "unknown", at };

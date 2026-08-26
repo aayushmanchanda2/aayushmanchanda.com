@@ -13,11 +13,14 @@
  */
 
 import assert from "node:assert/strict";
+import { mkdtemp, rm } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import path from "node:path";
 import test from "node:test";
 
 import sharp from "sharp";
 
-import { extractPalette } from "./capture.mjs";
+import { MAX_SHOT_PX, captureWithFirecrawl, extractPalette } from "./capture.mjs";
 
 /**
  * A PNG built from horizontal bands, top to bottom.
@@ -148,6 +151,97 @@ test("a page of nothing but near-white still yields a colour", async () => {
 
   assert.ok(palette.length >= 1, "an empty palette is never the honest answer");
   assert.match(palette[0], /^#[0-9a-f]{6}$/);
+});
+
+/* ---------------------------------------------------------------------------
+   The Firecrawl capturer
+   --------------------------------------------------------------------------- */
+
+/**
+ * The other half of `capture.mjs` that needs no browser. `captureWithFirecrawl`
+ * takes its client as an argument, so the whole encode path — clip, palette,
+ * WebP, file on disk — runs here for real against real sharp, with only the
+ * network stubbed. That is the half worth testing: `run.test.mjs` replaces this
+ * function wholesale, so without these two the sharp side would never execute.
+ *
+ * @param {import("node:test").TestContext} t
+ */
+async function scratch(t) {
+  const dir = await mkdtemp(path.join(tmpdir(), "capture-test-"));
+  t.after(() => rm(dir, { recursive: true, force: true }));
+  return dir;
+}
+
+/** @param {Buffer} png @returns {any} A client that answers with this PNG. */
+const clientReturning = (png) => ({
+  screenshotFullPage: async () => png,
+  scrapeMarkdown: async () => "",
+});
+
+test("a Firecrawl shot lands as a WebP with a palette read off it", async (t) => {
+  const outDir = await scratch(t);
+  const png = await bandedPng([
+    { colour: BLUE, rows: 300 },
+    { colour: RED, rows: 100 },
+  ]);
+
+  const result = await captureWithFirecrawl({
+    url: "https://fortress.example",
+    slug: "fortress",
+    client: clientReturning(png),
+    outDir,
+  });
+
+  assert.equal(result.shot, path.join(outDir, "fortress.webp"));
+  assert.deepEqual(result.palette, ["#2846dc", "#dc2828"], "the same binning as any other shot");
+
+  const written = await sharp(result.shot).metadata();
+  assert.equal(written.format, "webp", "and the same encoder, so the gallery cannot tell them apart");
+});
+
+test("a Firecrawl shot too tall to keep is clipped to the same ceiling", async (t) => {
+  const outDir = await scratch(t);
+  /** @type {string[]} */
+  const lines = [];
+
+  // Firecrawl has no clip parameter, so the whole scroll arrives and the trim
+  // has to happen locally. Narrow on purpose: the height is the point.
+  const png = await bandedPng([{ colour: RED, rows: MAX_SHOT_PX + 500 }], 8);
+
+  await captureWithFirecrawl({
+    url: "https://endless.example",
+    slug: "endless",
+    client: clientReturning(png),
+    outDir,
+    log: (line) => lines.push(line),
+  });
+
+  const written = await sharp(path.join(outDir, "endless.webp")).metadata();
+  assert.equal(written.height, MAX_SHOT_PX, "the ceiling is the ceiling whoever took the picture");
+  assert.deepEqual(lines, [`capture: endless is ${MAX_SHOT_PX + 500}px tall, clipped to the first ${MAX_SHOT_PX}px`]);
+});
+
+test("a slug that is not URL-safe is refused before anything is asked of Firecrawl", async (t) => {
+  const outDir = await scratch(t);
+  let asked = false;
+
+  await assert.rejects(
+    captureWithFirecrawl({
+      url: "https://a.example",
+      slug: "../../etc/passwd",
+      outDir,
+      client: {
+        screenshotFullPage: async () => {
+          asked = true;
+          return Buffer.alloc(0);
+        },
+        scrapeMarkdown: async () => "",
+      },
+    }),
+    /URL-safe slug/,
+  );
+
+  assert.equal(asked, false, "a slug is a filename before it is anything else");
 });
 
 test("transparency is composited onto white, not read as black", async () => {

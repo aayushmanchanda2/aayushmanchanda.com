@@ -347,6 +347,37 @@ async function writeWebp(png, file) {
 }
 
 /**
+ * The arguments both capturers refuse. A bad slug is a filename and a URL path
+ * at once, so it is worth rejecting before anything opens a socket.
+ *
+ * @param {string} who @param {unknown} url @param {unknown} slug
+ */
+function checkArgs(who, url, slug) {
+  if (typeof url !== "string" || url.trim() === "") {
+    throw new Error(`${who} needs a url`);
+  }
+  if (typeof slug !== "string" || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
+    throw new Error(`${who} needs a URL-safe slug (got ${JSON.stringify(slug)})`);
+  }
+}
+
+/**
+ * PNG buffer to the pair the gallery wants. Shared by both capturers so a shot
+ * is encoded and read the same way whoever took it.
+ *
+ * @param {Buffer} png @param {string} slug @param {string} outDir
+ * @returns {Promise<{ shot: string, palette: string[] }>}
+ */
+async function finish(png, slug, outDir) {
+  // Palette off the PNG, not the WebP: lossy encoding smears flat colour into
+  // a spray of near-neighbours, which is exactly what the binning counts.
+  const palette = await extractPalette(png);
+  const shot = await writeWebp(png, path.join(outDir, `${slug}.webp`));
+
+  return { shot, palette };
+}
+
+/**
  * Capture one site: one full-page shot, and the colours it is made of.
  *
  * @param {object} options
@@ -368,12 +399,7 @@ export async function captureSite({
   outDir = DEFAULT_OUT_DIR,
   log = console.warn,
 }) {
-  if (typeof url !== "string" || url.trim() === "") {
-    throw new Error("captureSite needs a url");
-  }
-  if (typeof slug !== "string" || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
-    throw new Error(`captureSite needs a URL-safe slug (got ${JSON.stringify(slug)})`);
-  }
+  checkArgs("captureSite", url, slug);
 
   await mkdir(outDir, { recursive: true });
 
@@ -381,16 +407,70 @@ export async function captureSite({
 
   try {
     const png = await shoot(browser, url, log, slug);
-
-    // Palette off the PNG, not the WebP: lossy encoding smears flat colour into
-    // a spray of near-neighbours, which is exactly what the binning counts.
-    const palette = await extractPalette(png);
-    const shot = await writeWebp(png, path.join(outDir, `${slug}.webp`));
-
-    return { shot, palette };
+    return await finish(png, slug, outDir);
   } finally {
     await browser.close();
   }
+}
+
+/**
+ * The same capture, asked of Firecrawl instead of the runner's own browser.
+ *
+ * This is a second chance, not an alternative engine. Playwright is better at
+ * this in every way that matters — it is local, it is free, and it is the code
+ * the clip rule and the settle beat were tuned against. The one thing it cannot
+ * do is come from somewhere else, and "somewhere else" is the entire reason a
+ * site that bot-blocks a GitHub Actions runner sometimes answers Firecrawl.
+ * `apply.mjs` decides when that is worth spending; this function only knows how.
+ *
+ * The height ceiling is enforced here rather than at the request, because the
+ * clip has to be the same 12,000px `MAX_SHOT_PX` either way: a /sites entry
+ * should not be a different shape depending on which service happened to be
+ * able to reach the page.
+ *
+ * @param {object} options
+ * @param {string} options.url
+ * @param {string} options.slug
+ * @param {import("./firecrawl.mjs").FirecrawlClient} options.client
+ * @param {string} [options.outDir]
+ * @param {(line: string) => void} [options.log]
+ * @returns {Promise<{ shot: string, palette: string[] }>}
+ */
+export async function captureWithFirecrawl({
+  url,
+  slug,
+  client,
+  outDir = DEFAULT_OUT_DIR,
+  log = console.warn,
+}) {
+  checkArgs("captureWithFirecrawl", url, slug);
+
+  await mkdir(outDir, { recursive: true });
+
+  const png = await client.screenshotFullPage(url);
+  return await finish(await clipTall(png, slug, log), slug, outDir);
+}
+
+/**
+ * The top `MAX_SHOT_PX` of a PNG, when there is more of it than that.
+ *
+ * Playwright is told the clip up front and hands back an already-short image.
+ * Firecrawl has no such parameter, so the whole scroll arrives and the trim
+ * happens here — same ceiling, same sentence in the run log, so the two paths
+ * are indistinguishable from the gallery's side.
+ *
+ * @param {Buffer} png @param {string} slug @param {(line: string) => void} log
+ * @returns {Promise<Buffer>}
+ */
+async function clipTall(png, slug, log) {
+  const { width, height } = await sharp(png).metadata();
+  if (width === undefined || height === undefined || height <= MAX_SHOT_PX) return png;
+
+  log(`capture: ${slug} is ${height}px tall, clipped to the first ${MAX_SHOT_PX}px`);
+  return await sharp(png)
+    .extract({ left: 0, top: 0, width, height: MAX_SHOT_PX })
+    .png()
+    .toBuffer();
 }
 
 /* ---------------------------------------------------------------------------

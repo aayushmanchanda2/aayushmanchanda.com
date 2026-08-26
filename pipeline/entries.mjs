@@ -30,6 +30,7 @@ import path from "node:path";
 import { isRecord } from "./util.mjs";
 
 /** @typedef {import("./types.js").Bookmark} Bookmark */
+/** @typedef {import("./types.js").Post} Post */
 /** @typedef {import("./types.js").ReadingKind} ReadingKind */
 /** @typedef {import("./types.js").Section} Section */
 
@@ -368,6 +369,38 @@ export function buildToolEntry({ bookmark, slug, date }) {
   };
 }
 
+/* ---------------------------------------------------------------------------
+   Posts
+   --------------------------------------------------------------------------- */
+
+/** How much of a post the title shows. About one line at the page's measure. */
+export const POST_TITLE_MAX = 80;
+
+/** How much of it the note shows. A tweet's own limit, near enough. */
+export const POST_NOTE_MAX = 280;
+
+/**
+ * `text`, or as much of it as fits, ending on a word.
+ *
+ * The trailing-punctuation strip is what stops "three weeks," becoming
+ * "three weeks,…". The half-budget floor is for the one input a word-boundary
+ * cut cannot handle: a single token longer than the whole allowance, where
+ * backing off to the last space would return almost nothing. Then a hard cut is
+ * the only cut there is.
+ *
+ * @param {string} text @param {number} max @returns {string}
+ */
+export function clip(text, max) {
+  const tidy = text.trim();
+  if (tidy.length <= max) return tidy;
+
+  const cut = tidy.slice(0, max);
+  const space = cut.lastIndexOf(" ");
+  const body = space > max / 2 ? cut.slice(0, space) : cut;
+
+  return `${body.replace(/[\s,.;:!?—–-]+$/u, "")}…`;
+}
+
 /**
  * A /reading entry: metadata and nothing else.
  *
@@ -375,15 +408,29 @@ export function buildToolEntry({ bookmark, slug, date }) {
  * for what it is, and the day it was saved — every one of which is already in
  * the bookmark by the time this runs.
  *
+ * The one exception is `post`, and it exists because of a hole Raindrop cannot
+ * fill: x.com is behind a login wall, so every post Aayush saves arrives titled
+ * "A post from @someone", which is a row that says nothing. When the pipeline
+ * has been able to read the post (see `firecrawl.mjs`), the words themselves are
+ * a better title than that sentence, so they win.
+ *
+ * The note is the other way round. `reading.ts` documents that field as one line
+ * in Aayush's voice, so an excerpt he typed in Raindrop outranks anything
+ * fetched — the post's own words only fill a note that would otherwise be null.
+ *
  * @param {object} input
  * @param {Bookmark} input.bookmark
  * @param {string} input.slug
  * @param {string} input.date ISO calendar date; the run date, per contract.
+ * @param {Post | null} [input.post] What the post said, when it could be read.
  */
-export function buildReadingEntry({ bookmark, slug, date }) {
+export function buildReadingEntry({ bookmark, slug, date, post = null }) {
+  const fallbackTitle = bookmark.title === "" ? hostnameOf(bookmark.url) : bookmark.title;
+  const headline = post === null ? "" : clip(post.text, POST_TITLE_MAX);
+
   return {
     slug,
-    title: bookmark.title === "" ? hostnameOf(bookmark.url) : bookmark.title,
+    title: headline === "" ? fallbackTitle : headline,
     url: bookmark.url,
     domain: hostnameOf(bookmark.url),
     saved_date: date,
@@ -391,6 +438,24 @@ export function buildReadingEntry({ bookmark, slug, date }) {
     // null, not a stand-in sentence: `reading.ts` takes null and renders the
     // row without a second line, which is the honest shape for a link Raindrop
     // gave us no excerpt for.
-    note: bookmark.excerpt === "" ? null : bookmark.excerpt,
+    note: bookmark.excerpt === "" ? postNote(post) : bookmark.excerpt,
   };
+}
+
+/**
+ * The second line for a post nobody wrote a note for: who said it, and more of
+ * what they said than the title had room for.
+ *
+ * The handle leads so the line reads as a quotation rather than as Aayush
+ * talking. When the title already holds the whole post, the words are not
+ * repeated — the attribution is the only thing left that the title did not
+ * already say.
+ *
+ * @param {Post | null} post @returns {string | null}
+ */
+function postNote(post) {
+  if (post === null) return null;
+
+  const whole = clip(post.text, POST_TITLE_MAX) === post.text.trim();
+  return whole ? `@${post.handle}` : `@${post.handle}: ${clip(post.text, POST_NOTE_MAX)}`;
 }

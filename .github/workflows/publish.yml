@@ -90,9 +90,15 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
+      # FIRECRAWL_API_KEY is optional, and the pipeline treats it that way: with
+      # no key it reads no posts and retries no blocked shots, which is exactly
+      # how a run on a laptop behaves. An unset or expired secret therefore
+      # quietly costs those two enrichments instead of failing the workflow, and
+      # the run log names which of the two modes it is in.
       - name: Publish
         env:
           RAINDROP_TOKEN: ${{ secrets.RAINDROP_TOKEN }}
+          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
         run: node pipeline/publish.mjs | tee "${RUNNER_TEMP}/publish.log"
 
       # The contract: the last line of stdout, and the only line with this

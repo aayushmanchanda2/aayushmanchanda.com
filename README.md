@@ -11,22 +11,40 @@ file I edited and committed. Everything else is a build step.
 Save a link. That is the whole workflow.
 
 1. On the iPhone, share sheet, Raindrop.
-2. Pick the collection: **Publish/Tools** or **Publish/Sites**. That decides
-   which section the link lands in, and it is the only thing that has to be
-   right.
+2. Pick the collection: **Publish/Tools**, **Publish/Sites** or
+   **Publish/Reading**. That decides which section the link lands in, and it is
+   the only thing that has to be right.
 3. Optionally, tag it. Tags are curation — see below. Skipping this is fine;
    most entries have no tags.
 4. Wait.
 
 A GitHub Actions cron (`.github/workflows/publish.yml`, `23 */3 * * *`, so :23
-past every third hour) reads both collections, screenshots what is new, commits
-the result to `main`, and Vercel deploys the push.
+past every third hour) reads the three collections, screenshots what is new,
+commits the result to `main`, and Vercel deploys the push.
 
 Sites get one full-page screenshot, taken in whatever colour scheme the site
 renders by default and cut off after 12,000px, plus the dominant colours read
 off it. Tools do not get a picture, only an entry, and it lands as category
 `unsorted` with verdict `watching` and the note "Saved from Raindrop. Not tested
 yet." Fix it later by hand, see below.
+
+Two things in the run are done by [Firecrawl](https://firecrawl.dev) rather than
+by the runner, and both are optional: they happen when the `FIRECRAWL_API_KEY`
+repo secret is set and are skipped silently when it is not, so a run on a laptop
+never touches the service. The first is x.com. Raindrop cannot see past the login
+wall, so every post I save arrives titled "A post from @someone" — a /reading row
+that says nothing. When the key is present the pipeline reads the post and uses
+its opening line as the title, with more of it and the handle as the note. A note
+I typed in Raindrop myself always wins over the fetched one. The second is the
+last-chance screenshot: a **Publish/Sites** link that has already failed twice
+gets one Firecrawl attempt on its third, before it dead-letters, because coming
+from a different network is sometimes the whole difference for a site that blocks
+the runner. That shot goes through the same WebP and palette path as any other,
+so nothing about the entry gives it away; `pipeline/state.json` notes `"via":
+"firecrawl"` on the row and that is the only trace. Either failing costs a line
+in the run log and nothing else — the entry publishes exactly as it would have.
+None of this touches the site a reader loads, which is why /privacy does not
+mention it.
 
 ### Tagging is curation
 
@@ -123,7 +141,8 @@ run stays green and reports it.
   After the third, it is dead-lettered: the bookmark is tagged `failed` in
   Raindrop and never picked up again. The tag is the notification. It shows up
   where the link was saved, so a scroll through the collection is the whole
-  triage step.
+  triage step. The third attempt is also where Firecrawl gets its one try at the
+  shot, if a key is configured — see *Daily use* above.
 - **x.com and twitter.com fail on sight.** Deliberate. Tweets block a headless
   browser, so the shot would fail three times and dead-letter anyway. The
   pipeline skips the pointless retries. Save the product's URL, not the post

@@ -22,8 +22,9 @@ import { execFileSync } from "node:child_process";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { applyItem } from "./apply.mjs";
-import { captureSite } from "./capture.mjs";
+import { captureSite, captureWithFirecrawl } from "./capture.mjs";
 import { POST_HOSTS, hostIsOneOf, readEntries, urlKey } from "./entries.mjs";
+import { firecrawlFrom, parsePost } from "./firecrawl.mjs";
 import { RaindropError, createClient, fetchBookmarks, resolveCollections } from "./raindrop.mjs";
 import { MAX_ATTEMPTS, SECTIONS, reconcile, resolvePaths } from "./state.mjs";
 import { describe } from "./util.mjs";
@@ -202,6 +203,14 @@ function baseDeps() {
   return {
     fetch: globalThis.fetch,
     captureSite,
+    captureWithFirecrawl,
+    /**
+     * Firecrawl, or null. A function rather than a client so the decision is
+     * made from the run's own `env` — a test that hands in a different
+     * environment gets the answer that environment deserves, and the default
+     * (no key anywhere but CI) is the one that keeps a local run offline.
+     */
+    makeFirecrawl: firecrawlFrom,
     env: process.env,
     now: () => new Date(),
     log: (/** @type {string} */ line) => console.log(line),
@@ -259,6 +268,13 @@ export async function run(argv = [], overrides = {}) {
 
     const { work, skipped } = plan({ bookmarks, state, gallery });
 
+    // Firecrawl is optional twice over: no key means no client, and a client
+    // that fails means the run does what it always did. Both bindings are made
+    // here so `apply.mjs` sees two ordinary functions, or two nulls, and never
+    // a service.
+    const firecrawl = deps.makeFirecrawl(deps.env, deps.fetch);
+    if (firecrawl !== null) log("firecrawl: configured — posts will be read, blocked shots retried");
+
     /** @type {import("./apply.mjs").ApplyContext} */
     const ctx = {
       paths,
@@ -275,6 +291,14 @@ export async function run(argv = [], overrides = {}) {
       dryRun,
       log,
       captureSite: deps.captureSite,
+      firecrawlShot:
+        firecrawl === null
+          ? null
+          : (input) => deps.captureWithFirecrawl({ ...input, client: firecrawl }),
+      lookUpPost:
+        firecrawl === null
+          ? null
+          : async (url) => parsePost(await firecrawl.scrapeMarkdown(url), url),
     };
 
     /** @type {Summary} */
