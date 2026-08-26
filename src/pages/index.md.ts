@@ -55,10 +55,11 @@ export const GET: APIRoute = async () => {
     ]),
     blocks: [
       [
-        "Aayush is 28 and runs two AI companies from Canada. Orbis builds AI for",
-        "healthcare, and Vetted is his AI consulting practice. Most of his time",
-        "goes into agent systems, including the pipeline that publishes this site:",
-        "he saves a link from his phone and it turns up here a few hours later.",
+        "Aayush is 28 and based in Canada. He co-founded Orbis, an AI healthcare",
+        "company, and he runs Vetted, his AI consulting practice. Most of his",
+        "time goes into agent systems, including the pipeline he built to publish",
+        "this site: it runs every three hours, so a link he saves on his phone is",
+        "here by the next run.",
       ].join(" "),
       [
         "The site is a log rather than a portfolio. Every entry carries the date",

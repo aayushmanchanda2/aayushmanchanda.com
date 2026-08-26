@@ -60,7 +60,28 @@ export function linkLabel(url: string): string {
   return `${parsed.hostname.replace(/^www\./, "")}${path}${parsed.search}`;
 }
 
-/** Google's favicon service. The only third-party host the site touches. */
+/**
+ * Google's favicon service. The only third-party host the site touches, and
+ * /privacy names it as exactly that.
+ *
+ * A logo.dev swap is written and tested but deliberately not landed here yet.
+ * It is a better mark for this row (the product's real logo instead of its
+ * 16px browser favicon) and it needs no `onerror` fallback, because logo.dev
+ * answers every request with an image and falls back to a generated monogram
+ * for a domain it does not know. Verified against a nonsense domain:
+ *
+ *   https://img.logo.dev/${host}?token=pk_YsFOVGNeRx6b1C0u0e0yTw&size=64&format=webp
+ *
+ * The `pk_` half of a logo.dev key pair is meant to ship in public HTML, so it
+ * belongs in this file rather than in an env var that would buy no secrecy.
+ *
+ * What blocks it is /privacy, not this line. That page names Google as the one
+ * outside request, and pointing this function at a different host without
+ * changing that page in the same commit would publish a privacy page that is
+ * wrong about which third party sees a reader's IP. The page's own header
+ * comment says a privacy page wrong about its build is worth less than none,
+ * and that rule is worth more than a sharper favicon. Land both together.
+ */
 export function faviconUrl(url: string): string {
   const host = new URL(url).hostname;
   return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(host)}&sz=32`;

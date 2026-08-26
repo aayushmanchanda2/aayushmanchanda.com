@@ -57,12 +57,19 @@ const navItems: NavItem[] = [
 /**
  * Only links that go somewhere.
  *
- * `rel="me"` is a claim of identity, and one pointing at a bare `https://x.com/`
- * is a claim about nobody — worse than an absent row, because it is a dead link
- * a reader has to click to find out. The handle gets added here when there is
- * one to add.
+ * `rel="me"` is a claim of identity, so every row here has to resolve to a real
+ * profile. A row pointing at a bare `https://x.com/` would be a claim about
+ * nobody, and worse than an absent row: a dead link a reader has to click to
+ * find out. Both of these are handles, so both are safe to make the claim.
+ *
+ * The same two profiles are the `sameAs` list on the home page's Person node.
+ * Two copies, because one is markup a reader clicks and the other is structured
+ * data a machine resolves; if a third profile ever appears, it goes in both.
  */
-const social = [{ label: "GitHub", href: "https://github.com/aayushmanchanda2" }];
+const social = [
+  { label: "GitHub", href: "https://github.com/aayushmanchanda2" },
+  { label: "X", href: "https://x.com/amanchanda7" },
+];
 
 const clocks = [
   { label: "Winnipeg", tz: "America/Winnipeg" },

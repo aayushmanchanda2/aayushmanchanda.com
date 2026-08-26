@@ -52,11 +52,12 @@ export const GET: APIRoute = async () => {
 > installed and actually run, websites whose design he keeps going back to,
 > short notes, and experiments that are in flight right now.
 
-Aayush is 28 and runs two AI companies from Canada. Orbis builds AI for
-healthcare. Vetted is his AI consulting practice. Most of his time goes into
-agent systems, including the pipeline that publishes this site: he saves a link
-from his phone and it shows up here a few hours later with a screenshot next
-to it.
+Aayush is 28 and based in Canada. He co-founded Orbis, an AI healthcare
+company, and he runs Vetted, his AI consulting practice. Most of his time goes
+into agent systems, including the pipeline he built to publish this site: he
+saves a link from his phone, and the next run puts it here with a screenshot
+next to it. That run happens every three hours, or on demand when he starts one
+himself, which takes a couple of minutes.
 
 The site is static HTML. No accounts, no paywall, no gated routes, and no
 JavaScript is needed to read any of it.
