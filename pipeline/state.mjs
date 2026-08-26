@@ -1,10 +1,10 @@
 /**
  * state.mjs — `pipeline/state.json`, and the convergence step that repairs it.
  *
- * The pipeline writes three things per item: image files, a JSON entry, and a
- * state row. A crash can land between any two of them, and no ordering makes
- * all three land together. So instead of pretending the write is atomic, the
- * run starts by making the three agree again.
+ * The pipeline writes up to three things per item: image files (sites only), a
+ * JSON entry, and a state row. A crash can land between any two of them, and no
+ * ordering makes all three land together. So instead of pretending the write is
+ * atomic, the run starts by making them agree again.
  *
  * `reconcile()` is that step. It runs before any network write, it is pure with
  * respect to Raindrop, and it can run twice with the same result:
@@ -38,6 +38,19 @@ import { isRecord } from "./util.mjs";
 export const MAX_ATTEMPTS = 3;
 
 /**
+ * Every section the pipeline writes to. One list, so `reconcile` and the state
+ * reader iterate the same three rather than each keeping their own spelling.
+ *
+ * @type {readonly Section[]}
+ */
+export const SECTIONS = ["sites", "tools", "reading"];
+
+/** @param {unknown} value @returns {value is Section} */
+export function isSection(value) {
+  return typeof value === "string" && /** @type {readonly string[]} */ (SECTIONS).includes(value);
+}
+
+/**
  * Every path the pipeline touches, from the repo root.
  *
  * @param {string} root
@@ -49,6 +62,7 @@ export function resolvePaths(root) {
     statePath: path.join(root, "pipeline", "state.json"),
     sitesJson: path.join(root, "src", "data", "sites.json"),
     toolsJson: path.join(root, "src", "data", "tools.json"),
+    readingJson: path.join(root, "src", "data", "reading.json"),
     shotsDir: path.join(root, "public", "shots"),
     tmpDir: path.join(root, "pipeline", "tmp"),
   };
@@ -61,6 +75,8 @@ export function galleryFor(paths, section) {
       return paths.sitesJson;
     case "tools":
       return paths.toolsJson;
+    case "reading":
+      return paths.readingJson;
     default: {
       const never = /** @type {never} */ (section);
       throw new Error(`unknown section ${JSON.stringify(never)}`);
@@ -91,7 +107,7 @@ function parseItemState(value) {
     case "published": {
       const slug = value["slug"];
       const section = value["section"];
-      if (typeof slug !== "string" || (section !== "tools" && section !== "sites")) return null;
+      if (typeof slug !== "string" || !isSection(section)) return null;
       return { kind: "published", slug, section, at };
     }
     case "failed":
@@ -172,11 +188,13 @@ export async function reconcile({ paths, dryRun = false, log = () => {} }) {
   const state = await loadState(paths);
   const sites = await readEntries(paths.sitesJson);
   const tools = await readEntries(paths.toolsJson);
+  const readingEntries = await readEntries(paths.readingJson);
 
   /** @type {Record<Section, Set<string>>} */
   const slugs = {
     sites: new Set(sites.map((entry) => String(entry["slug"]))),
     tools: new Set(tools.map((entry) => String(entry["slug"]))),
+    reading: new Set(readingEntries.map((entry) => String(entry["slug"]))),
   };
 
   /** @type {string[]} */

@@ -9,14 +9,14 @@ import { SITE_URL, absolute } from './src/lib/site.ts';
  * The markdown variants, which the sitemap does not find on its own.
  *
  * `@astrojs/sitemap` walks the HTML pages the build emitted, and a static file
- * endpoint (`src/pages/tools.md.ts`) is not one, so all five would be invisible
- * to anything that discovers the site through its sitemap. They are added back
- * by hand because an agent reading the sitemap should be able to see that a
- * markdown version of each page exists without knowing to guess a `.md` suffix
- * or to negotiate on `Accept`.
+ * endpoint (`src/pages/tools.md.ts`) is not one, so every one of them would be
+ * invisible to anything that discovers the site through its sitemap. They are
+ * added back by hand because an agent reading the sitemap should be able to see
+ * that a markdown version of each page exists without knowing to guess a `.md`
+ * suffix or to negotiate on `Accept`.
  *
  * Read from `src/lib/markdown.ts`, the one list of variants the site has. This
- * file used to keep its own copy, and a copy goes stale quietly: a sixth
+ * file used to keep its own copy, and a copy goes stale quietly: /reading's
  * variant would have shipped, worked, and stayed invisible to the sitemap.
  */
 const MARKDOWN_VARIANTS = Object.values(PAGES).map((page) => absolute(page.md));

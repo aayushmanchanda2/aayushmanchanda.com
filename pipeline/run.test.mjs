@@ -15,6 +15,7 @@ import test from "node:test";
 
 import {
   NESTED,
+  READING_ID,
   SITES_ID,
   TOOLS_ID,
   bookmark,
@@ -83,6 +84,91 @@ test("a tool with no excerpt still gets a note the build will accept", async (t)
   const [tool] = await readJson(paths.toolsJson);
   assert.notEqual(tool.note, "");
   assert.notEqual(tool.category, "");
+});
+
+test("a reading save is published without opening a browser", async (t) => {
+  const { paths } = await makeRepo(t);
+  const server = raindropServer({
+    ...NESTED,
+    raindrops: {
+      [READING_ID]: [
+        bookmark(600, "https://gumclaw.github.io/how-i-work/", {
+          title: "How Gumclaw Works",
+          excerpt: "A durable agent setup, written up in public.",
+        }),
+      ],
+    },
+  });
+  const capture = fakeCapture();
+  const out = recorder();
+
+  assert.equal(await run([], deps({ paths, server, capture, out })), 0);
+
+  assert.equal(capture.calls.length, 0, "a reading row is metadata, not a picture");
+  assert.deepEqual(await readJson(paths.readingJson), [
+    {
+      slug: "how-gumclaw-works",
+      title: "How Gumclaw Works",
+      url: "https://gumclaw.github.io/how-i-work/",
+      domain: "gumclaw.github.io",
+      saved_date: "2026-08-26",
+      kind: "article",
+      note: "A durable agent setup, written up in public.",
+    },
+  ]);
+
+  assert.deepEqual((await loadState(paths))["600"], {
+    kind: "published",
+    slug: "how-gumclaw-works",
+    section: "reading",
+    at: "2026-08-26T10:00:00.000Z",
+  });
+  assert.equal(server.tagCalls("published").length, 1);
+  assert.equal(out.summary, "published=1 failed=0 skipped=0 pending=0");
+});
+
+test("a tweet saved to reading is published; the same tweet to sites is not", async (t) => {
+  const { paths } = await makeRepo(t);
+  const tweet = "https://x.com/benln/status/2006057848430604705";
+  const server = raindropServer({
+    ...NESTED,
+    raindrops: {
+      [READING_ID]: [bookmark(700, tweet, { title: "A post from @benln" })],
+      [SITES_ID]: [bookmark(701, tweet, { title: "The same post" })],
+    },
+  });
+  const capture = fakeCapture();
+  const out = recorder();
+
+  assert.equal(await run([], deps({ paths, server, capture, out })), 0);
+
+  const [entry] = await readJson(paths.readingJson);
+  assert.equal(entry.kind, "post", "derived from the host, not from the collection");
+  assert.equal(entry.domain, "x.com");
+  assert.deepEqual(await readJson(paths.sitesJson), [], "the screenshot rule still holds there");
+
+  assert.equal(capture.calls.length, 0);
+  assert.equal((await loadState(paths))["701"].kind, "failed");
+  assert.equal(out.summary, "published=1 failed=1 skipped=0 pending=0");
+});
+
+test("a reading save with no excerpt gets a null note, not a stand-in", async (t) => {
+  const { paths } = await makeRepo(t);
+  const server = raindropServer({
+    ...NESTED,
+    raindrops: {
+      [READING_ID]: [
+        bookmark(800, "https://www.youtube.com/watch?v=vJEy3nP2_C8", { title: "Managing AI Agents" }),
+      ],
+    },
+  });
+  const out = recorder();
+
+  await run([], deps({ paths, server, out }));
+
+  const [entry] = await readJson(paths.readingJson);
+  assert.equal(entry.note, null, "/tools needs a fallback sentence; a reading row does not");
+  assert.equal(entry.kind, "video");
 });
 
 test("a second run with nothing new publishes nothing", async (t) => {

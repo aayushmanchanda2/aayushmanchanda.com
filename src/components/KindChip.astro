@@ -1,0 +1,53 @@
+---
+/**
+ * KindChip — what sort of thing a /reading row points at.
+ *
+ * Third sibling of VerdictBadge and StatusChip, and as thin as both: the tone
+ * system lives in `styles/chip.css`, and this file only decides which tone each
+ * of the three words gets.
+ *
+ * `article` takes blue, the tone /experiments already gives `shipped`: it is the
+ * thing on this page that is finished and asks to be sat down with. `post` is
+ * gray on purpose — a saved post is the lightest row here, and any colour would
+ * argue otherwise. `video` takes amber, which on /experiments means `paused`
+ * and here means the same thing in a different register: it wants a block of
+ * time before it gives anything back.
+ *
+ * The `href` form is the filter bar on /reading. It is the same chip with the
+ * same tone, because a filter for `video` and the `video` on a row are the same
+ * word about the same thing, and giving the filter its own look would ask a
+ * reader to learn the vocabulary twice.
+ */
+import type { Kind } from "../lib/reading";
+
+/** Exhaustive by type: a new kind will not compile until it has a tone. */
+const TONES: Record<Kind, string> = {
+  article: "blue",
+  post: "gray",
+  video: "amber",
+};
+
+interface Props {
+  kind: Kind;
+  /** Renders the chip as a link to a filter page instead of a label. */
+  href?: string;
+  /** Shown after the word, in the filter bar. Omitted on a row. */
+  count?: number;
+}
+
+const { kind, href, count } = Astro.props;
+const tone = TONES[kind];
+---
+
+{
+  href ? (
+    <a class="chip chip--link" data-tone={tone} href={href}>
+      {kind}
+      {count !== undefined && <span class="tabular-nums">{count}</span>}
+    </a>
+  ) : (
+    <span class="chip" data-tone={tone}>
+      {kind}
+    </span>
+  )
+}

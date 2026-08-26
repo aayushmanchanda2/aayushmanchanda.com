@@ -8,7 +8,7 @@
  *
  * Two rules the rest of the pipeline depends on: collections are addressed BY
  * NAME, never by a committed id (ids are account-specific, and a wrong one
- * would publish someone's private pile); and only the two resolved ids are ever
+ * would publish someone's private pile); and only the resolved ids are ever
  * read — no code path lists raindrops from anywhere else.
  */
 
@@ -186,10 +186,13 @@ function normalizeName(name) {
 }
 
 /**
- * Turn the two collection NAMES into ids. Raindrop lists root and nested
+ * Turn the collection NAMES into ids. Raindrop lists root and nested
  * collections from two endpoints, and someone asked for "Publish/Tools" may
  * well have built it as a `Tools` child of a `Publish` parent — so both the
  * full parent path and the literal title are matched.
+ *
+ * Generic over whatever `wanted` holds rather than naming the sections: adding
+ * a fourth collection should be an edit to `COLLECTION_NAMES` and nothing else.
  *
  * @param {RaindropClient} client
  * @param {Record<Section, string>} wanted
@@ -244,7 +247,9 @@ export async function resolveCollections(client, wanted) {
     found[section] = hit.id;
   }
 
-  return { tools: found["tools"], sites: found["sites"] };
+  // Every key of `wanted` was just filled or the loop threw, and `wanted` is
+  // keyed by Section, so the map is complete by construction.
+  return /** @type {Record<Section, number>} */ (found);
 }
 
 /**

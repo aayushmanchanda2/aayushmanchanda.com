@@ -8,8 +8,8 @@
  *
  *   reconcile — make local truth agree with itself before anything external
  *               happens (state.mjs)
- *   plan      — read the two Raindrop collections, diff them against state, and
- *               decide exactly one thing to do about every bookmark (below)
+ *   plan      — read the three Raindrop collections, diff them against state,
+ *               and decide exactly one thing to do about every bookmark (below)
  *   apply     — do that one thing, in an order where every crash point is
  *               repairable by the next reconcile (apply.mjs)
  *
@@ -23,9 +23,9 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { applyItem } from "./apply.mjs";
 import { captureSite } from "./capture.mjs";
-import { readEntries, urlKey } from "./entries.mjs";
+import { POST_HOSTS, hostIsOneOf, readEntries, urlKey } from "./entries.mjs";
 import { RaindropError, createClient, fetchBookmarks, resolveCollections } from "./raindrop.mjs";
-import { MAX_ATTEMPTS, reconcile, resolvePaths } from "./state.mjs";
+import { MAX_ATTEMPTS, SECTIONS, reconcile, resolvePaths } from "./state.mjs";
 import { describe } from "./util.mjs";
 
 /** @typedef {import("./types.js").Bookmark} Bookmark */
@@ -39,11 +39,12 @@ import { describe } from "./util.mjs";
  * The classification IS the collection. No AI sorting, no keyword rules — the
  * share sheet asks which one, and that answer is the whole taxonomy. Resolved
  * by name at run time, so no account-specific id is ever committed, and these
- * two are the only collections the pipeline can see.
+ * three are the only collections the pipeline can see.
  */
 export const COLLECTION_NAMES = /** @type {Record<Section, string>} */ ({
   tools: "Publish/Tools",
   sites: "Publish/Sites",
+  reading: "Publish/Reading",
 });
 
 const REPO_ROOT = fileURLToPath(new URL("..", import.meta.url));
@@ -53,17 +54,15 @@ const REPO_ROOT = fileURLToPath(new URL("..", import.meta.url));
  * dead-letter anyway. Failing on sight skips the pointless retries and says the
  * useful thing instead: save the product, not the post about it.
  *
+ * The host test itself lives in `entries.mjs`, next to the other one that asks
+ * the same question of a URL. This export stays because the rule is a /sites
+ * and /tools rule, not a fact about hostnames, and `plan()` reads better saying
+ * what it means.
+ *
  * @param {string} url @returns {boolean}
  */
 export function isTweetHost(url) {
-  /** @type {string} */
-  let host;
-  try {
-    host = new URL(url).hostname.toLowerCase().replace(/^www\./, "");
-  } catch {
-    return false;
-  }
-  return ["x.com", "twitter.com"].some((base) => host === base || host.endsWith(`.${base}`));
+  return hostIsOneOf(url, POST_HOSTS);
 }
 
 /* ---------------------------------------------------------------------------
@@ -82,9 +81,9 @@ export function isTweetHost(url) {
  */
 export function plan({ bookmarks, state, gallery }) {
   /** @type {Record<Section, Map<string, string>>} */
-  const byUrl = { sites: new Map(), tools: new Map() };
+  const byUrl = { sites: new Map(), tools: new Map(), reading: new Map() };
 
-  for (const section of /** @type {Section[]} */ (["sites", "tools"])) {
+  for (const section of SECTIONS) {
     for (const entry of gallery[section]) {
       const url = entry["url"];
       if (typeof url === "string") byUrl[section].set(urlKey(url), String(entry["slug"]));
@@ -114,7 +113,13 @@ export function plan({ bookmarks, state, gallery }) {
       continue;
     }
 
-    if (isTweetHost(bookmark.url)) {
+    // The x.com rule is a rule about screenshots, so it stops at the section
+    // that takes them. /sites cannot shoot a tweet and /tools would file one as
+    // a product it is not; /reading only ever wanted the link, and a saved post
+    // is a first-class row there rather than a capture that is going to fail.
+    // Rejecting one here would make the section unable to hold the single
+    // commonest thing Aayush saves.
+    if (bookmark.collection !== "reading" && isTweetHost(bookmark.url)) {
       work.push({
         kind: "reject",
         bookmark,
@@ -146,7 +151,13 @@ export function plan({ bookmarks, state, gallery }) {
    --------------------------------------------------------------------------- */
 
 /** Paths the pipeline may commit. Nothing else is ever staged. */
-const COMMITTED = ["src/data/sites.json", "src/data/tools.json", "public/shots", "pipeline/state.json"];
+const COMMITTED = [
+  "src/data/sites.json",
+  "src/data/tools.json",
+  "src/data/reading.json",
+  "public/shots",
+  "pipeline/state.json",
+];
 
 /**
  * One commit per run, and none when nothing moved. Pushing is CI's job.
@@ -236,12 +247,14 @@ export async function run(argv = [], overrides = {}) {
     const bookmarks = [
       ...(await fetchBookmarks(client, ids.tools, "tools")),
       ...(await fetchBookmarks(client, ids.sites, "sites")),
+      ...(await fetchBookmarks(client, ids.reading, "reading")),
     ];
 
     /** @type {Record<Section, Record<string, unknown>[]>} */
     const gallery = {
       sites: await readEntries(paths.sitesJson),
       tools: await readEntries(paths.toolsJson),
+      reading: await readEntries(paths.readingJson),
     };
 
     const { work, skipped } = plan({ bookmarks, state, gallery });
@@ -255,6 +268,7 @@ export async function run(argv = [], overrides = {}) {
       taken: {
         sites: new Set(gallery.sites.map((entry) => String(entry["slug"]))),
         tools: new Set(gallery.tools.map((entry) => String(entry["slug"]))),
+        reading: new Set(gallery.reading.map((entry) => String(entry["slug"]))),
       },
       date: clock.toISOString().slice(0, 10),
       at: clock.toISOString(),

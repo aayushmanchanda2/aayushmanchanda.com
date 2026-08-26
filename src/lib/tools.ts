@@ -18,7 +18,7 @@
  */
 
 import type { Fail } from "./parse";
-import { SLUG, readers } from "./parse";
+import { SLUG, readers, routeSlug } from "./parse";
 
 import rawTools from "../data/tools.json";
 
@@ -166,12 +166,9 @@ export function parseTools(value: unknown): Tool[] {
    Derived views — computed once, at build time
    --------------------------------------------------------------------------- */
 
+/** Via the fold in `lib/parse.ts` that /sites and /reading share. */
 export function categorySlug(category: string): string {
-  return category
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
+  return routeSlug(category);
 }
 
 /** Groups in the order the categories first appear in the JSON. */

@@ -1,0 +1,56 @@
+---
+/**
+ * Everything saved from one host. Reached from the mono hostname on a row.
+ *
+ * The list drops its domain column here: the h1 is already the domain, and a
+ * column repeating it nine times would be the page explaining itself to someone
+ * who arrived by clicking that exact word.
+ */
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+
+import Base from "../../../layouts/Base.astro";
+import ReadingList from "../../../components/ReadingList.astro";
+import { readingDomains } from "../../../lib/reading";
+
+export const getStaticPaths = (() =>
+  readingDomains.map((group) => ({
+    params: { domain: group.slug },
+    props: group,
+  }))) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { domain, entries } = Astro.props;
+const count = entries.length;
+const lead = `${count} ${count === 1 ? "link" : "links"} I saved from`;
+---
+
+<Base
+  title={`${domain} · Reading · Aayush Manchanda`}
+  description={`${lead} ${domain}.`}
+>
+  <p class="crumb mono"><a href="/reading">&larr; Reading</a></p>
+
+  <header>
+    <h1 class="page-title domain">{domain}</h1>
+    <p class="standfirst">{lead} {domain}.</p>
+  </header>
+
+  <div class="body">
+    <ReadingList entries={entries} showDomain={false} />
+  </div>
+</Base>
+
+<style>
+  /* A domain is a long, dot-heavy string; the section scale would overflow the
+     column on anything longer than a short hostname. Same call as /sites. */
+  .domain {
+    font-size: clamp(2rem, 6vw, 3.25rem);
+    letter-spacing: -0.035em;
+    overflow-wrap: anywhere;
+  }
+
+  .body {
+    margin-top: clamp(3.5rem, 12vh, 6rem);
+  }
+</style>

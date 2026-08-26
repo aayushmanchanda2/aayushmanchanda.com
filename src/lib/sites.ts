@@ -23,7 +23,7 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 
 import type { Fail } from "./parse";
-import { SLUG, readers } from "./parse";
+import { SLUG, readers, routeSlug } from "./parse";
 
 import rawSites from "../data/sites.json";
 
@@ -226,14 +226,10 @@ export function parseSites(value: unknown): Site[] {
    Derived views — computed once, at build time
    --------------------------------------------------------------------------- */
 
-/** `designengineer.tools` -> `designengineer-tools`. Dots are legal in a path
- *  segment but read as file extensions to static hosts, so they are flattened. */
+/** `designengineer.tools` -> `designengineer-tools`, via the fold in
+ *  `lib/parse.ts` that /tools and /reading mint their own filter routes with. */
 export function domainSlug(domain: string): string {
-  return domain
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
+  return routeSlug(domain);
 }
 
 /** Newest save first; ties keep the order they were written in the JSON. */

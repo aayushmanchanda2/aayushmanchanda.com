@@ -74,11 +74,44 @@
   --chip-l: 45%;
 }
 
+/* A chip that is a filter link (the /reading bar), not a label on a row.
+
+   Same tone, same size, so the vocabulary reads as one vocabulary. The only
+   things added are the affordances a label has no use for: a pointer cursor
+   comes free, the tint deepens on hover so the target is obvious without
+   changing colour, and the count sits inside the chip at the ink's own opacity
+   rather than beside it as a second element to align. */
+.chip--link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  text-decoration: none;
+  transition-property: background-color, box-shadow;
+  transition-duration: var(--dur-fast);
+  transition-timing-function: var(--ease);
+}
+
+.chip--link:hover,
+.chip--link:focus-visible {
+  --chip-tint: 0.2;
+  --chip-line: 0.45;
+}
+
+.chip--link > .tabular-nums {
+  opacity: 0.65;
+}
+
 @media (prefers-color-scheme: dark) {
   .chip {
     /* dark ink is lighter, so the tint has to work a little harder */
     --chip-tint: 0.14;
     --chip-line: 0.26;
+  }
+
+  .chip--link:hover,
+  .chip--link:focus-visible {
+    --chip-tint: 0.26;
+    --chip-line: 0.5;
   }
 
   .chip[data-tone="green"] {

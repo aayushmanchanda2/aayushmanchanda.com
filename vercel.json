@@ -30,6 +30,15 @@
       }
     },
     {
+      "src": "^/reading/?$",
+      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "dest": "/reading.md",
+      "headers": {
+        "Content-Type": "text/markdown; charset=utf-8",
+        "Vary": "Accept, Accept-Encoding"
+      }
+    },
+    {
       "src": "^/experiments/?$",
       "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
       "dest": "/experiments.md",
@@ -49,7 +58,7 @@
     },
 
     {
-      "src": "^/(tools|sites|experiments|notes)/?$",
+      "src": "^/(tools|sites|reading|experiments|notes)/?$",
       "headers": { "Vary": "Accept, Accept-Encoding" },
       "continue": true
     },
@@ -59,7 +68,7 @@
       "continue": true
     },
     {
-      "src": "^/(index|tools|sites|experiments|notes)\\.md$",
+      "src": "^/(index|tools|sites|reading|experiments|notes)\\.md$",
       "headers": {
         "Content-Type": "text/markdown; charset=utf-8",
         "Vary": "Accept, Accept-Encoding"

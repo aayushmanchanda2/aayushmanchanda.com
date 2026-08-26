@@ -1,0 +1,55 @@
+---
+/**
+ * Every saved link of one kind. Reached from the filter bar on /reading.
+ * Kinds with no entries never get a page.
+ */
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+
+import Base from "../../../layouts/Base.astro";
+import ReadingList from "../../../components/ReadingList.astro";
+import type { Kind } from "../../../lib/reading";
+import { kindGroups } from "../../../lib/reading";
+
+const HEADING: Record<Kind, string> = {
+  article: "Articles",
+  post: "Posts",
+  video: "Videos",
+};
+
+const STANDFIRST: Record<Kind, string> = {
+  article: "Long enough to need a chair and a cup of something.",
+  post: "Short things somebody put on a timeline, saved before they scrolled away.",
+  video: "Talks and interviews. These want a block of time before they give anything back.",
+};
+
+export const getStaticPaths = (() =>
+  kindGroups.map((group) => ({
+    params: { kind: group.kind },
+    props: group,
+  }))) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { kind, entries } = Astro.props;
+const heading = HEADING[kind];
+const standfirst = STANDFIRST[kind];
+---
+
+<Base title={`${heading} · Reading · Aayush Manchanda`} description={standfirst}>
+  <p class="crumb mono"><a href="/reading">&larr; Reading</a></p>
+
+  <header>
+    <h1 class="page-title">{heading}</h1>
+    <p class="standfirst">{standfirst}</p>
+  </header>
+
+  <div class="body">
+    <ReadingList entries={entries} />
+  </div>
+</Base>
+
+<style>
+  .body {
+    margin-top: clamp(3.5rem, 12vh, 6rem);
+  }
+</style>

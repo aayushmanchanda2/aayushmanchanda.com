@@ -23,10 +23,14 @@ import { resolvePaths } from "./state.mjs";
  * @param {object} [seed]
  * @param {unknown[]} [seed.sites]
  * @param {unknown[]} [seed.tools]
+ * @param {unknown[]} [seed.reading]
  * @param {Record<string, unknown>} [seed.state]
  * @param {string[]} [seed.shots] Filenames to drop into `public/shots`.
  */
-export async function makeRepo(t, { sites = [], tools = [], state = {}, shots = [] } = {}) {
+export async function makeRepo(
+  t,
+  { sites = [], tools = [], reading = [], state = {}, shots = [] } = {},
+) {
   const root = await mkdtemp(path.join(tmpdir(), "publish-test-"));
   t.after(() => rm(root, { recursive: true, force: true }));
 
@@ -38,6 +42,7 @@ export async function makeRepo(t, { sites = [], tools = [], state = {}, shots = 
 
   await writeFile(paths.sitesJson, JSON.stringify(sites, null, 2));
   await writeFile(paths.toolsJson, JSON.stringify(tools, null, 2));
+  await writeFile(paths.readingJson, JSON.stringify(reading, null, 2));
   await writeFile(paths.statePath, JSON.stringify(state, null, 2));
 
   for (const shot of shots) {
@@ -186,11 +191,16 @@ export function fakeCapture({ dark = true, fail } = {}) {
 
 export const TOOLS_ID = 11;
 export const SITES_ID = 12;
+export const READING_ID = 13;
 
-/** A root `Publish` collection with `Tools` and `Sites` nested underneath. */
+/** A root `Publish` collection with the three sections nested underneath. */
 export const NESTED = {
   roots: [collection(1, "Publish")],
-  children: [collection(TOOLS_ID, "Tools", 1), collection(SITES_ID, "Sites", 1)],
+  children: [
+    collection(TOOLS_ID, "Tools", 1),
+    collection(SITES_ID, "Sites", 1),
+    collection(READING_ID, "Reading", 1),
+  ],
 };
 
 /**

@@ -1,0 +1,83 @@
+[
+  {
+    "slug": "benln-post",
+    "title": "A post from @benln",
+    "url": "https://x.com/benln/status/2006057848430604705",
+    "domain": "x.com",
+    "saved_date": "2026-07-20",
+    "kind": "post",
+    "note": "Came in over Telegram. First one up when I next sit down to read."
+  },
+  {
+    "slug": "philosopher-ceo-kareem-amin",
+    "title": "The Philosopher CEO | Clay Co-Founder Kareem Amin",
+    "url": "https://www.youtube.com/watch?v=xoE_pE26yDQ",
+    "domain": "youtube.com",
+    "saved_date": "2026-07-20",
+    "kind": "video",
+    "note": "Bill Halligan interviewing Clay's co-founder."
+  },
+  {
+    "slug": "matt-van-horn-agent-first-workflow",
+    "title": "Matt Van Horn on the agent-first workflow",
+    "url": "https://x.com/businessbarista/status/2080756544765882773",
+    "domain": "x.com",
+    "saved_date": "2026-07-20",
+    "kind": "post",
+    "note": "Alex Lieberman's clip. There is no podcast link in the post, so this is the whole thing."
+  },
+  {
+    "slug": "anthropic-agents-that-run-for-hours",
+    "title": "Anthropic Workshop: Build Agents That Run for Hours",
+    "url": "https://www.youtube.com/watch?v=mR-WAvEPRwE",
+    "domain": "youtube.com",
+    "saved_date": "2026-07-20",
+    "kind": "video",
+    "note": "Graph engineering for harnesses that stay up for hours. Came to me through Anatoli Kopadze."
+  },
+  {
+    "slug": "how-gumclaw-works",
+    "title": "How Gumclaw Works",
+    "url": "https://gumclaw.github.io/how-i-work/",
+    "domain": "gumclaw.github.io",
+    "saved_date": "2026-07-20",
+    "kind": "article",
+    "note": "A whole agent setup written up in public. The operating loop is the part worth stealing."
+  },
+  {
+    "slug": "most-valuable-skill-2026-managing-ai-agents",
+    "title": "Most Valuable Skill of 2026: Managing AI Agents",
+    "url": "https://www.youtube.com/watch?v=vJEy3nP2_C8",
+    "domain": "youtube.com",
+    "saved_date": "2026-07-20",
+    "kind": "video",
+    "note": "Greg Isenberg on managing agents instead of writing the code yourself. Worth going back to whenever my stack shifts."
+  },
+  {
+    "slug": "ecom-eddie-post",
+    "title": "A post from @ecomeddie",
+    "url": "https://x.com/ecomeddie/status/1755217559312269550",
+    "domain": "x.com",
+    "saved_date": "2026-07-20",
+    "kind": "post",
+    "note": "Carried over from an old Apple Reminders list, from before I had anywhere better to put it."
+  },
+  {
+    "slug": "google-fell-out-of-the-ai-race",
+    "title": "The Actual Reason Why Google \"Fell Out\" of the AI Race Changes Everything",
+    "url": "https://www.thealgorithmicbridge.com/p/the-actual-reason-why-google-fell",
+    "domain": "thealgorithmicbridge.com",
+    "saved_date": "2026-07-20",
+    "kind": "article",
+    "note": "Alberto Romero on world models against the self-improvement race. Paywalls partway down."
+  },
+  {
+    "slug": "jason-liu-codex-operating-system",
+    "title": "Jason Liu's Codex operating system",
+    "url": "https://x.com/petergyang/status/2081382827548148091",
+    "domain": "x.com",
+    "saved_date": "2026-07-20",
+    "kind": "post",
+    "note": "Peter Yang on how Jason Liu runs Codex. The YouTube version is the fuller one."
+  }
+]

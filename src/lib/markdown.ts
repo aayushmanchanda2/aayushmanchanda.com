@@ -26,19 +26,20 @@ export interface MarkdownPage {
 /**
  * Every markdown variant the site serves.
  *
- * Kept as one list because each document has to link to the other four, and
+ * Kept as one list because each document has to link to all the others, and
  * because four other surfaces need to know which pages have a variant: the
  * section manifest, the `rel=alternate` link in the layout, the sitemap's
  * custom pages, and `/llms.txt`. All four read it from here through
- * `markdownVariantFor`. A sixth variant is added here and nowhere else.
+ * `markdownVariantFor`. A seventh variant is added here and nowhere else.
  */
 export const PAGES: Record<
-  "home" | "tools" | "sites" | "experiments" | "notes",
+  "home" | "tools" | "sites" | "reading" | "experiments" | "notes",
   MarkdownPage
 > = {
   home: { html: "/", md: "/index.md", name: "Home" },
   tools: { html: "/tools", md: "/tools.md", name: "Tools" },
   sites: { html: "/sites", md: "/sites.md", name: "Sites" },
+  reading: { html: "/reading", md: "/reading.md", name: "Reading" },
   experiments: {
     html: "/experiments",
     md: "/experiments.md",
@@ -183,7 +184,7 @@ export function newest(dates: readonly string[]): string | undefined {
   return dates.length === 0 ? undefined : [...dates].sort().at(-1);
 }
 
-/** The other four variants, then the two files that describe the whole site. */
+/** Every other variant, then the two files that describe the whole site. */
 function otherPages(current: MarkdownPage): string {
   const others = Object.values(PAGES)
     .filter((page) => page.md !== current.md)

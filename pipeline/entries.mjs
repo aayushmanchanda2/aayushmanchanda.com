@@ -16,6 +16,10 @@
  *   - `tools.ts` requires a non-empty `note` and a non-empty `category`.
  *     Raindrop supplies neither reliably, so both have honest fallbacks below
  *     rather than an empty string that would fail `astro build`.
+ *   - `reading.ts` takes `note` as `string | null`, so a bookmark with no
+ *     excerpt gets null rather than a stand-in sentence. /tools needs the
+ *     fallback because a verdict with no note is a row that says nothing; a
+ *     reading row already says what it is with its title and its kind.
  */
 
 import { readFile, rename, writeFile } from "node:fs/promises";
@@ -24,6 +28,7 @@ import path from "node:path";
 import { isRecord } from "./util.mjs";
 
 /** @typedef {import("./types.js").Bookmark} Bookmark */
+/** @typedef {import("./types.js").ReadingKind} ReadingKind */
 /** @typedef {import("./types.js").Section} Section */
 
 /** New tool saves are never a verdict — they are a note to self to look. */
@@ -168,6 +173,45 @@ export function hostnameOf(url) {
 }
 
 /**
+ * Whether a URL's host is one of `bases`, or a subdomain of one.
+ *
+ * The subdomain half is the part worth having: `mobile.twitter.com` is Twitter
+ * and `x.company` is not, and a bare `includes()` on the hostname gets both of
+ * those wrong in opposite directions.
+ *
+ * @param {string} url @param {readonly string[]} bases @returns {boolean}
+ */
+export function hostIsOneOf(url, bases) {
+  const host = hostnameOf(url).toLowerCase();
+  if (host === "") return false;
+  return bases.some((base) => host === base || host.endsWith(`.${base}`));
+}
+
+/** Hosts whose links are a post on a timeline rather than a page. */
+export const POST_HOSTS = ["x.com", "twitter.com"];
+
+/** Hosts whose links are something you watch. */
+export const VIDEO_HOSTS = ["youtube.com", "youtu.be"];
+
+/**
+ * What a saved link is, from its host alone.
+ *
+ * Host-based rather than clever, and `article` is the fallback, because the two
+ * exceptions are the only two the site can be sure about: a `/status/` URL is a
+ * post and a YouTube URL is a video, and everything else on the open web is a
+ * page with words on it until a human says otherwise. Getting this wrong costs
+ * one word in a chip that Aayush can edit in the JSON, so it is not worth a
+ * network call to be surer.
+ *
+ * @param {string} url @returns {ReadingKind}
+ */
+export function deriveKind(url) {
+  if (hostIsOneOf(url, POST_HOSTS)) return "post";
+  if (hostIsOneOf(url, VIDEO_HOSTS)) return "video";
+  return "article";
+}
+
+/**
  * The comparison key for "is this the same link". Protocol, `www.`, a trailing
  * slash and the fragment are all noise when the question is whether the gallery
  * already holds this bookmark.
@@ -252,5 +296,32 @@ export function buildToolEntry({ bookmark, slug, date }) {
     verdict: NEW_TOOL_VERDICT,
     note: bookmark.excerpt === "" ? NEW_TOOL_NOTE : bookmark.excerpt,
     status_date: date,
+  };
+}
+
+/**
+ * A /reading entry: metadata and nothing else.
+ *
+ * No shots, no capture, no browser. A reading row is a title, a host, a word
+ * for what it is, and the day it was saved — every one of which is already in
+ * the bookmark by the time this runs.
+ *
+ * @param {object} input
+ * @param {Bookmark} input.bookmark
+ * @param {string} input.slug
+ * @param {string} input.date ISO calendar date; the run date, per contract.
+ */
+export function buildReadingEntry({ bookmark, slug, date }) {
+  return {
+    slug,
+    title: bookmark.title === "" ? hostnameOf(bookmark.url) : bookmark.title,
+    url: bookmark.url,
+    domain: hostnameOf(bookmark.url),
+    saved_date: date,
+    kind: deriveKind(bookmark.url),
+    // null, not a stand-in sentence: `reading.ts` takes null and renders the
+    // row without a second line, which is the honest shape for a link Raindrop
+    // gave us no excerpt for.
+    note: bookmark.excerpt === "" ? null : bookmark.excerpt,
   };
 }

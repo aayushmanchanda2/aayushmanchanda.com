@@ -23,6 +23,32 @@
 /** URL-safe id: lowercase, digits, single hyphens, no leading or trailing one. */
 export const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
+/**
+ * Free text folded down to one route segment.
+ *
+ * Three boundaries mint a filter route out of a value a human typed — a /tools
+ * category, a /sites domain, a /reading domain — and each had written this same
+ * fold. It lives here rather than in one of them because there is a fourth kind
+ * of caller: a row that links to `/reading/domain/<x>` has to spell the segment
+ * exactly the way the route answering it does, and importing a whole data
+ * boundary to borrow a string function is the wrong direction.
+ *
+ * `designengineer.tools` becomes `designengineer-tools`. A dot is legal in a
+ * path segment but reads as a file extension to a static host, so it is
+ * flattened with everything else that is not a letter or a digit.
+ *
+ * The empty string is a possible answer — a value with no URL-safe characters
+ * in it at all — and every caller treats that as a data error rather than
+ * minting a route with no name.
+ */
+export function routeSlug(value: string): string {
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
 /** Shape only. Whether it is a real calendar date is `readDate`'s job. */
 export const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 

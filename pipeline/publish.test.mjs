@@ -11,7 +11,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { uniqueSlug } from "./entries.mjs";
+import { deriveKind, uniqueSlug } from "./entries.mjs";
 import { NESTED, collection, makeRepo, raindropServer, recorder } from "./fixtures.mjs";
 import { COLLECTION_NAMES, isTweetHost, plan, run } from "./publish.mjs";
 import { RaindropError, createClient, resolveCollections } from "./raindrop.mjs";
@@ -38,7 +38,7 @@ function mark(id, url, section, extra = {}) {
   };
 }
 
-const EMPTY = { sites: [], tools: [] };
+const EMPTY = { sites: [], tools: [], reading: [] };
 
 /* ---------------------------------------------------------------------------
    Dedupe, the retry cap, the short-circuit
@@ -98,6 +98,56 @@ test("plan: x.com and twitter.com are rejected before a browser is opened", () =
   assert.match(first.reason, /save the product's URL/);
 });
 
+test("plan: x.com is allowed into /reading, where a post is the point", () => {
+  const bookmarks = [
+    mark("1", "https://x.com/benln/status/2006057848430604705", "reading"),
+    mark("2", "https://mobile.twitter.com/someone/status/1", "reading"),
+    mark("3", "https://www.thealgorithmicbridge.com/p/something", "reading"),
+  ];
+
+  const { work } = plan({ bookmarks, state: {}, gallery: EMPTY });
+
+  assert.deepEqual(
+    work.map((item) => item.kind),
+    ["capture", "capture", "capture"],
+    "the screenshot rule does not follow the link into a section that takes no screenshots",
+  );
+});
+
+test("plan: the same tweet is still rejected from /sites and /tools", () => {
+  const url = "https://x.com/someone/status/1";
+  const both = ["sites", "tools"].map((section) =>
+    plan({
+      bookmarks: [mark("1", url, /** @type {import("./types.js").Section} */ (section))],
+      state: {},
+      gallery: EMPTY,
+    }),
+  );
+
+  assert.deepEqual(
+    both.map((result) => result.work[0]?.kind),
+    ["reject", "reject"],
+  );
+});
+
+test("deriveKind: the two hosts the site is sure about, and the fallback", () => {
+  assert.equal(deriveKind("https://x.com/a/status/1"), "post");
+  assert.equal(deriveKind("https://www.twitter.com/a/status/1"), "post");
+  assert.equal(deriveKind("https://mobile.twitter.com/a"), "post");
+  assert.equal(deriveKind("https://www.youtube.com/watch?v=xoE_pE26yDQ"), "video");
+  assert.equal(deriveKind("https://youtu.be/xoE_pE26yDQ"), "video");
+  assert.equal(deriveKind("https://m.youtube.com/watch?v=x"), "video");
+
+  // Everything else is words on a page until a human says otherwise.
+  assert.equal(deriveKind("https://www.thealgorithmicbridge.com/p/google"), "article");
+  assert.equal(deriveKind("https://gumclaw.github.io/how-i-work/"), "article");
+
+  // The lookalikes `isTweetHost` already refuses, asked the other way round.
+  assert.equal(deriveKind("https://x.company/a"), "article");
+  assert.equal(deriveKind("https://notyoutube.com/watch"), "article");
+  assert.equal(deriveKind("not a url"), "article");
+});
+
 test("isTweetHost: subdomains count, lookalikes do not", () => {
   assert.equal(isTweetHost("https://x.com/a/status/1"), true);
   assert.equal(isTweetHost("https://www.twitter.com/a"), true);
@@ -108,7 +158,7 @@ test("isTweetHost: subdomains count, lookalikes do not", () => {
 });
 
 test("plan: a link the gallery already holds is adopted, not re-published", () => {
-  const gallery = { sites: [{ slug: "linear", url: "https://linear.app/" }], tools: [] };
+  const gallery = { sites: [{ slug: "linear", url: "https://linear.app/" }], tools: [], reading: [] };
   // The same link, spelled differently: www, no trailing slash.
   const { work } = plan({ bookmarks: [mark("9", "https://www.linear.app", "sites")], state: {}, gallery });
 
@@ -117,7 +167,7 @@ test("plan: a link the gallery already holds is adopted, not re-published", () =
 });
 
 test("plan: the same URL in the other gallery is not a match", () => {
-  const gallery = { sites: [{ slug: "linear", url: "https://linear.app" }], tools: [] };
+  const gallery = { sites: [{ slug: "linear", url: "https://linear.app" }], tools: [], reading: [] };
   const { work } = plan({ bookmarks: [mark("9", "https://linear.app", "tools")], state: {}, gallery });
 
   assert.equal(work[0].kind, "capture", "a site and a tool are different pages");
@@ -127,27 +177,37 @@ test("plan: the same URL in the other gallery is not a match", () => {
    Collections, resolved by name
    --------------------------------------------------------------------------- */
 
-test("resolveCollections: finds Tools and Sites nested under a Publish parent", async () => {
+test("resolveCollections: finds all three nested under a Publish parent", async () => {
   const server = raindropServer(NESTED);
   const ids = await resolveCollections(
     createClient({ token: "t", fetch: server.fetch }),
     COLLECTION_NAMES,
   );
-  assert.deepEqual(ids, { tools: 11, sites: 12 });
+  assert.deepEqual(ids, { tools: 11, sites: 12, reading: 13 });
 });
 
 test("resolveCollections: finds collections literally titled 'Publish/Tools'", async () => {
   const server = raindropServer({
-    roots: [collection(31, "publish / tools"), collection(32, "Publish/Sites")],
+    roots: [
+      collection(31, "publish / tools"),
+      collection(32, "Publish/Sites"),
+      collection(33, "PUBLISH/Reading"),
+    ],
   });
   const ids = await resolveCollections(
     createClient({ token: "t", fetch: server.fetch }),
     COLLECTION_NAMES,
   );
-  assert.deepEqual(ids, { tools: 31, sites: 32 }, "case and spacing are not the user's problem");
+  assert.deepEqual(
+    ids,
+    { tools: 31, sites: 32, reading: 33 },
+    "case and spacing are not the user's problem",
+  );
 });
 
 test("resolveCollections: a missing collection names itself and the alternatives", async () => {
+  // A bare `Reading` is not `Publish/Reading`, which is the point: the pipeline
+  // must never read a collection the user did not put under Publish.
   const server = raindropServer({ roots: [collection(5, "Reading")] });
   const client = createClient({ token: "t", fetch: server.fetch });
 
@@ -157,6 +217,22 @@ test("resolveCollections: a missing collection names itself and the alternatives
       assert.ok(error instanceof RaindropError);
       assert.match(error.message, /"Publish\/Tools" not found/);
       assert.match(error.message, /Reading/);
+      return true;
+    },
+  );
+});
+
+test("resolveCollections: Publish/Reading missing is named on its own", async () => {
+  const server = raindropServer({
+    roots: [collection(41, "Publish/Tools"), collection(42, "Publish/Sites")],
+  });
+  const client = createClient({ token: "t", fetch: server.fetch });
+
+  await assert.rejects(
+    () => resolveCollections(client, COLLECTION_NAMES),
+    (error) => {
+      assert.ok(error instanceof RaindropError);
+      assert.match(error.message, /"Publish\/Reading" not found/);
       return true;
     },
   );

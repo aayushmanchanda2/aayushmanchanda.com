@@ -1,7 +1,8 @@
 # Save a link on your phone, find it on the site.
 #
-# Every three hours this reads the two Raindrop collections, screenshots what is
-# new, and commits the result. The pipeline itself is the interesting part; this
+# Every three hours this reads the three Raindrop collections, screenshots what
+# is new (only /sites needs a browser), and commits the result. The pipeline
+# itself is the interesting part; this
 # file is only the four things CI has to own that `pipeline/publish.mjs` cannot:
 # a browser, a token, a git identity, and a push.
 #
@@ -141,9 +142,10 @@ jobs:
 
       # The last gate before generated data becomes everyone's problem.
       #
-      # `src/lib/{tools,sites,experiments}.ts` refuse to build on a malformed
-      # entry, and `sites.ts` additionally checks every shot path against the
-      # disk. Building here means an entry that would fail those checks fails
+      # `src/lib/{tools,sites,reading,experiments}.ts` refuse to build on a
+      # malformed entry, and `sites.ts` additionally checks every shot path
+      # against the disk. Building here means an entry that would fail those
+      # checks fails
       # this workflow instead: the commit stays on the runner, the push below
       # never runs, and main keeps building. Without it that same commit lands
       # on main and breaks every deploy until someone reverts it by hand.

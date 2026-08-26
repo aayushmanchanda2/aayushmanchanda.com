@@ -14,7 +14,10 @@
  */
 
 /** Which gallery a bookmark belongs to. Decided by the Raindrop collection. */
-export type Section = "tools" | "sites";
+export type Section = "tools" | "sites" | "reading";
+
+/** What a /reading entry points at, derived from its host. */
+export type ReadingKind = "article" | "post" | "video";
 
 export type ItemState =
   | { kind: "published"; slug: string; section: Section; at: string }
@@ -63,6 +66,7 @@ export interface Paths {
   statePath: string;
   sitesJson: string;
   toolsJson: string;
+  readingJson: string;
   shotsDir: string;
   tmpDir: string;
 }

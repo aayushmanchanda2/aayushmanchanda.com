@@ -1,7 +1,12 @@
 /**
  * apply.mjs — doing the one thing `plan()` decided, for one bookmark.
  *
- * The whole file is about write ordering. For a new site entry the order is:
+ * The whole file is about write ordering, and only /sites has enough writes for
+ * the ordering to be interesting. /tools and /reading are metadata: an entry and
+ * a state row, no files on disk, so their only crash point is the one between
+ * those two, which the next `plan()` adopts by URL.
+ *
+ * For a new site entry the order is:
  *
  *   1. capture into `pipeline/tmp/<id>/`, never straight into `public/`
  *   2. move the shots into `public/shots/`
@@ -24,6 +29,7 @@ import { copyFile, mkdir, rename, rm, unlink } from "node:fs/promises";
 import path from "node:path";
 
 import {
+  buildReadingEntry,
   buildSiteEntry,
   buildToolEntry,
   shotFileName,
@@ -113,6 +119,29 @@ async function moveShot(from, to) {
 }
 
 /**
+ * The entry shape for a section, as a switch rather than a chain of ternaries:
+ * a fourth section has to be handled here or the `never` arm stops compiling.
+ *
+ * @param {Section} section
+ * @param {{ bookmark: Bookmark, slug: string, date: string, hasDark: boolean }} input
+ * @returns {Record<string, unknown>}
+ */
+function buildEntry(section, { bookmark, slug, date, hasDark }) {
+  switch (section) {
+    case "sites":
+      return buildSiteEntry({ bookmark, slug, date, hasDark });
+    case "tools":
+      return buildToolEntry({ bookmark, slug, date });
+    case "reading":
+      return buildReadingEntry({ bookmark, slug, date });
+    default: {
+      const never = /** @type {never} */ (section);
+      throw new Error(`unknown section ${JSON.stringify(never)}`);
+    }
+  }
+}
+
+/**
  * @param {Bookmark} bookmark
  * @param {number} attempts   Attempts already spent on this bookmark.
  * @param {ApplyContext} ctx
@@ -133,7 +162,8 @@ async function captureAndPublish(bookmark, attempts, ctx) {
   try {
     let hasDark = false;
 
-    // Tools are a link with a verdict attached; only sites are a picture.
+    // Only /sites is a picture. A tool is a link with a verdict attached and a
+    // reading row is a link with a kind attached; neither opens a browser.
     if (section === "sites") {
       await mkdir(scratch, { recursive: true });
       // `log` so a light-only downgrade is reported in the run log, next to
@@ -153,10 +183,7 @@ async function captureAndPublish(bookmark, attempts, ctx) {
       }
     }
 
-    const entry =
-      section === "sites"
-        ? buildSiteEntry({ bookmark, slug, date: ctx.date, hasDark })
-        : buildToolEntry({ bookmark, slug, date: ctx.date });
+    const entry = buildEntry(section, { bookmark, slug, date: ctx.date, hasDark });
 
     // The file is written before the in-memory list advances, so a failed write
     // leaves the run's view of the gallery matching what is on disk.

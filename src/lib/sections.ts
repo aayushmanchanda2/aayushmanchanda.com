@@ -18,14 +18,20 @@ import { getCollection } from "astro:content";
 
 import { experiments } from "./experiments";
 import { markdownVariantFor } from "./markdown";
+import { reading } from "./reading";
 import { sites } from "./sites";
 import { tools } from "./tools";
 
-export type SectionHref = "/tools" | "/sites" | "/notes" | "/experiments";
+export type SectionHref =
+  | "/tools"
+  | "/sites"
+  | "/reading"
+  | "/notes"
+  | "/experiments";
 
 /**
  * Dash weight in the rail nav, and how loudly an item reads in the mobile
- * panel. `title` is the home entry; the two pipeline-fed sections carry more
+ * panel. `title` is the home entry; the three pipeline-fed sections carry more
  * visual weight than the two hand-written ones.
  */
 export type NavKind = "title" | "subtitle" | "section" | "body";
@@ -74,6 +80,12 @@ const CATALOGUE: readonly Omit<Section, "count" | "md">[] = [
     kind: "subtitle",
   },
   {
+    href: "/reading",
+    name: "Reading",
+    blurb: "Articles, posts and talks I saved to read properly.",
+    kind: "subtitle",
+  },
+  {
     href: "/notes",
     name: "Notes",
     blurb: "A commonplace book. Short thoughts, kept as they come.",
@@ -97,6 +109,7 @@ export async function getSections(): Promise<Section[]> {
   const counts: Record<SectionHref, number> = {
     "/tools": tools.length,
     "/sites": sites.length,
+    "/reading": reading.length,
     "/notes": notes.length,
     "/experiments": experiments.length,
   };

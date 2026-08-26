@@ -1,0 +1,187 @@
+---
+/**
+ * ReadingList — the only place a reading list is rendered.
+ *
+ * `/reading` shows everything; the two filter routes pass a subset. The domain
+ * filter page turns the domain column off, because there the h1 already says
+ * the domain and repeating it on every row would be the page telling a reader
+ * something they came in knowing. Same call `ToolList` makes about its category
+ * headers, for the same reason.
+ *
+ * The row is the /tools row anatomy with the favicon column removed. A tools
+ * list is a list of products, and a mark is how you recognise one at a glance;
+ * a reading list is mostly four hosts, so the same column would have been three
+ * identical YouTube marks stacked down the page, plus a third-party request per
+ * row to fetch them. The domain in mono does that job here and does it in text.
+ *
+ * The title is the only link out. There is no `/reading/<slug>` to offer as a
+ * "details" affordance the way /tools does, which is the point of the section:
+ * the row's destination is the article.
+ */
+import KindChip from "./KindChip.astro";
+import { routeSlug } from "../lib/parse";
+import type { ReadingEntry } from "../lib/reading";
+
+interface Props {
+  entries: ReadingEntry[];
+  /** Off on the domain filter page, where the h1 is already the domain. */
+  showDomain?: boolean;
+}
+
+const { entries, showDomain = true } = Astro.props;
+---
+
+<ul class="list">
+  {
+    entries.map((entry) => (
+      <li class="row">
+        <span class="row__name">
+          <a
+            class="row__link"
+            href={entry.url}
+            rel="noopener nofollow"
+            target="_blank"
+          >
+            {entry.title}
+          </a>
+          <KindChip kind={entry.kind} />
+        </span>
+
+        <span class="row__meta">
+          {showDomain && (
+            <a
+              class="row__domain mono"
+              href={`/reading/domain/${routeSlug(entry.domain)}`}
+            >
+              {entry.domain}
+            </a>
+          )}
+          <span class="row__date mono tabular-nums">{entry.saved_date}</span>
+        </span>
+
+        {entry.note && <p class="row__note">{entry.note}</p>}
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .list {
+    border-top: 1px solid var(--hairline);
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "name meta"
+      "note meta";
+    column-gap: 1rem;
+    row-gap: 0.3rem;
+    align-items: start;
+    padding-block: clamp(1rem, 2.2vw, 1.25rem);
+    border-bottom: 1px solid var(--hairline);
+    transition-property: border-color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .row:hover {
+    border-bottom-color: var(--hairline-strong);
+  }
+
+  .row__name {
+    grid-area: name;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 0.65rem;
+    font-size: 1.0625rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+  }
+
+  .row__link {
+    color: inherit;
+    text-decoration-line: underline;
+    text-decoration-color: var(--hairline-strong);
+  }
+
+  .row__link:hover {
+    color: var(--accent);
+    text-decoration-color: currentColor;
+  }
+
+  .row__note {
+    grid-area: note;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  .row__meta {
+    grid-area: meta;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.35rem;
+    /* optical: line the domain up with the title, not the row box */
+    padding-top: 0.2rem;
+  }
+
+  /* Carries its own underline: on touch there is no hover to reveal one, and a
+     bare mono hostname next to the date would read as a second label rather
+     than as the way into that host's page. */
+  /* Never wrapped, and deliberately uncapped.
+     A hostname has no word boundaries a browser can find, so any width limit
+     breaks it mid-token — `gumclaw.github.io` split across two lines as
+     `GUMCLAW.GITH` / `UB.IO`, which reads as a rendering bug rather than as a
+     wrap. The meta column is `auto` and the title column is `minmax(0, 1fr)`,
+     so letting the domain take its natural width costs the title a little room
+     and costs the row nothing. */
+  .row__domain {
+    color: var(--faint);
+    text-decoration-line: underline;
+    text-decoration-color: var(--hairline-strong);
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  .row:hover .row__domain,
+  .row__domain:hover {
+    color: var(--accent);
+  }
+
+  .row__domain:hover {
+    text-decoration-color: currentColor;
+  }
+
+  .row__date {
+    color: var(--faint);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 639px) {
+    .row {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas:
+        "name"
+        "note"
+        "meta";
+      row-gap: 0.45rem;
+    }
+
+    .row__meta {
+      flex-direction: row;
+      align-items: baseline;
+      justify-content: flex-start;
+      gap: 0.9rem;
+      padding-top: 0.1rem;
+    }
+
+    .row__domain {
+      text-align: left;
+    }
+  }
+</style>
