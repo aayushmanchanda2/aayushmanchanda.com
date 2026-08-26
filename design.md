@@ -10,7 +10,7 @@ Paths are relative to `src/`. `file › thing` means "grep for `thing` in that f
 
 All of them live in `styles/global.css › :root`. If you typed a hex outside `styles/`, you broke something.
 
-| | Light | Dark (`prefers-color-scheme`) |
+| | Light | Dark |
 |---|---|---|
 | `--bg` | `#ffffff` | `#09090b` |
 | `--fg` | `#171717` | `#fafafa` |
@@ -21,6 +21,18 @@ All of them live in `styles/global.css › :root`. If you typed a hex outside `s
 | `--outline` | `rgb(0 0 0 / 0.1)` | `rgb(255 255 255 / 0.1)` |
 | `--dot` | fg @ 14% | fg @ 10% |
 | `--accent` | `#2b4bff` | `#5c74ff` |
+
+**Light is the base; dark is declared twice.** The theme is three-state — follow the OS, or pin light, or pin dark — and it lives in one place at runtime, `data-theme` on `<html>`, always carrying one of `system` / `light` / `dark`. Light is plain `:root`, so it is what a page is with no attribute, no media query and no scripting. Dark then has to arrive from two directions, and both blocks must declare **exactly** the same properties with the same values:
+
+```css
+:root { /* light: the base */ }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { /* dark */ } }
+:root[data-theme="dark"] { /* dark, again, identically */ }
+```
+
+The `:not()` is what lets a pinned light theme win on a dark OS, and `system` matches it on purpose. CSS has no way to say a block twice without writing it twice, so `lib/theme.test.mjs` parses `global.css` and `chip.css`, keys every dark rule by its selector with the guard stripped off, and fails if the two sets differ by a property, a value or a selector — or if a rule inside the media query forgets its guard. **Add a token to one block, add it to the other.** The failure it exists to catch is silent: a token declared only under `prefers-color-scheme` looks right to everyone whose OS is already dark, and ships a half-themed page to everyone who pinned dark on a light machine.
+
+Everything else derives. `palette.css` has no theme-conditional declaration at all and must keep it that way; the same test asserts it. The only other theme-conditional thing in the build is the pair of `theme-color` metas, which JS re-points by rewriting their `media` to `all` / `not all` when a theme is pinned (`lib/theme.ts › THEME_COLOR_MEDIA`), because a browser resolves those queries against the OS and not against us.
 
 **The accent is one hue at two lightnesses**, `hsl(231 100% 58.4%)` and `hsl(231 100% 68%)`. Hue is identical across themes; lightness is the only difference, because no single lightness clears 4.5:1 against both `#FFFFFF` and `#09090B`. Measured: `#2B4BFF` on white is 5.91:1, `#5C74FF` on `#09090B` is 5.11:1. Both AA for normal text.
 
@@ -80,6 +92,10 @@ Optical corrections in force: the masthead pulls `-0.04em` left so the first ste
 
 **The shell** (`layouts/Base.astro › .shell`) is a flex column at `min-height: 100svh` — main, then footer, both capped at `--page-max`. Left padding is what clears whichever nav is showing: `calc(var(--page-pad) + 2.5rem)` for the fixed vertical MENU label, and `clamp(17rem, 24vw, 21rem)` above 900px for the dash rail.
 
+**The site mark** (`components/SiteMark.astro`) is a constructed geometric A on a 16-unit grid, fixed at the top left of every page, 24px, `currentColor`, `aria-label="Home"`, 40px hit area via a `::before`. One stroke weight throughout (1.5) and one idea: the crossbar does not touch the legs. The rail below it is a stack of free-floating dashes and the crossbar is one more of them. The gap is **0.5 units, measured at the bar's top corner** where the leg leans furthest inboard, which is the tightest point — wide enough to read from 24px up, narrow enough that when it closes at favicon size the mark degrades into a plain solid A instead of a smudge.
+
+It sits at `left: var(--page-pad)` below 900px, inside the strip the shell already clears for the MENU label, so the page scrolls past to the right of it rather than underneath it; above 900px it moves to `clamp(1.5rem, 3vw, 2.75rem)`, the rail's own left edge, so mark and dashes share a column. The same geometry is copied into `public/favicon.svg` and `scripts/og.mjs` — three files, changed together. `npm run og` regenerates the card and the raster icon from the copy in that script.
+
 **900px is the only structural breakpoint.** Above it: the rail. Below it: the MENU panel, and the palette becomes a full-screen sheet. 599px and 639px exist only to reflow list rows from three columns to a stack.
 
 **Proximity sidebar contract** (`components/ProximitySidebar.astro`). A vanilla port of rareui's `proximity-sidebar` — same dash presets, same scaleX-from-distance mapping, same spring constants, no framework JS.
@@ -92,7 +108,7 @@ Optical corrections in force: the masthead pulls `-0.04em` left so the first ste
 - Measure the `<a>`, never the inner `<span>` — the span carries the transform, so its rect moves with the animation (`› function measure`).
 - `prefers-reduced-motion`, or below 900px, detaches every listener and removes the inline `--dash-scale` (`› function sync`). The rail degrades to a plain list of links; labels still reveal on hover.
 
-**Mobile MENU panel** (`components/MobileNav.astro`). A rotated vertical label on the left edge opens a full-height `--accent-panel` sheet, `min(86vw, 380px)`, mono items entering on a 70ms stagger after an 80ms lead-in; the search row continues the same stagger via `--search-i`. Closing sets every delay to 0 — nothing leaves on a stagger. Layers: trigger 60, scrim 70, panel 80, palette 100.
+**Mobile MENU panel** (`components/MobileNav.astro`). A rotated vertical label on the left edge opens a full-height `--accent-panel` sheet, `min(86vw, 380px)`, mono items entering on a 70ms stagger after an 80ms lead-in; the actions row (search, then the theme toggle) continues the same stagger via `--search-i`. The **row** is what carries the entrance, not the controls in it, so a second control did not mean a second delay to keep in step. Closing sets every delay to 0 — nothing leaves on a stagger. Layers: rail 40, mark 50, trigger 60, scrim 70, panel 80, palette 100 — the mark is above the rail and under everything modal, so an open panel covers it rather than fighting it.
 
 Every transition here is a **CSS transition, never a keyframe animation**, so an interrupted open/close reverses from wherever it is instead of snapping. `visibility` flips only after the slide-out finishes.
 
@@ -122,6 +138,12 @@ Every transition here is a **CSS transition, never a keyframe animation**, so an
 **Precedence: an open palette wins.** Three surfaces listen for keys on `document`, and the order two document-level listeners run in is a bundling detail, not a guarantee — so none of them may depend on running first. Every other surface **asks the document** whether a palette is open: `MobileNav.astro` queries `[data-palette][data-open]`, `sites/[slug].astro` queries `[aria-modal="true"][data-open]`. The palette sets `data-open` **synchronously**, which is exactly why `styles/palette.css` hides with `visibility` rather than `display` — visibility can still be transitioned off one synchronous attribute. The full note is the header comment of `lib/palette.ts`.
 
 **Scroll chaining, the VET-32 lesson.** `overscroll-behavior: contain` is for **modals only**: the palette results and the mobile nav panel. Anything in the normal flow of a page states `overscroll-behavior-y: auto` and lets the page take over at either edge (`ShotFrame.astro › .scroller`). `contain` on a details page whose main content *is* the scroller is a trap — the reader hits the bottom of the picture, keeps scrolling to read the notes below it, and nothing happens until they physically move the pointer off the frame.
+
+**The theme toggle** (`components/ThemeToggle.astro`, state in `lib/theme.ts`). One button, three states, cycling system → light → dark → system. It renders twice — quiet in the footer beside the clocks, and on the mobile nav panel where the footer is a long scroll away — and the hoisted script drives every instance from one listener. 14px glyph in a 40px `::before` hit area, the same trick the rail dashes use, so a control with a toolbar's hit area does not put a toolbar's height into the footer row.
+
+Three things are worth not re-deriving. **The glyph is swapped by CSS off `[data-theme]`, never by script**, because the attribute is written before the first paint and a JS swap would show a sun for a frame to everyone who pinned dark. **The accessible name is the half CSS cannot do**, so `aria-label` and `title` ship saying `system` — which is the truth with scripting off — and the module corrects them on load; the label names the current state *and* the next one, because `aria-pressed` cannot describe three states honestly. **One `aria-live` region for the whole page** (`layouts/Base.astro › [data-theme-live]`), outside the buttons, because text inside a control is that control's accessible name, and two regions would announce one change twice.
+
+Nothing is written to storage until a press. `/privacy` names the one key that then exists, and anything else reaching for `localStorage` has to go and edit that page.
 
 **Hit areas: 40px floor.** Rail dashes get 110×41 via a `::before`, swatches are 44×44 (`PaletteRow.astro › .swatch__chip`), the mobile close is 44×44, shot actions set `min-height: 40px`. One stated exception: the `/sites` hint row uses `padding-block: 0.5rem` instead, because those are text hints and a 40px block would give the foot of the page a toolbar's weight.
 
@@ -161,9 +183,9 @@ Applies to everything a reader sees: data notes, standfirsts, blurbs, labels, al
 **Gates, all of them, every time.**
 
 1. `npx astro check` → **0 errors, 0 warnings.** Hints have a known baseline of 13 (eleven `z is deprecated` from `content.config.ts`, one unused `Props`, one unreachable-code hint); do not add to it.
-2. `npm test` → all pass (156 at the time of writing).
+2. `npm test` → all pass (169 at the time of writing).
 3. `npm run build` → clean.
-4. **Both themes.** Toggle the OS setting and look. Every colour is a token; a hex outside `styles/` is the bug.
+4. **Both themes, and both forced states.** Four looks, not two: OS light, OS dark, and then a pinned theme fighting each of them — `data-theme="dark"` on a light OS is the one that catches a token declared in only one of the two dark blocks. Every colour is a token; a hex outside `styles/` is the bug.
 5. **Mobile.** At 375px: the MENU rail and panel, the row reflows at 599/639, the palette as a full-screen sheet.
 6. **Reduced motion.** Turn it on and look again. Nothing resting on a transform may be left displaced; nothing may sit invisible waiting out a stagger delay.
 7. **Live verification against the real page.** `npm run dev`, open it, and press the thing you changed. Reading the built HTML is not verification.

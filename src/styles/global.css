@@ -65,8 +65,31 @@
   --page-pad: clamp(1.5rem, 5vw, 3rem);
 }
 
+/* --------------------------------------------------------------------------
+   1b. The dark theme, in two places on purpose
+
+   `:root` above is the light theme and the site's base. Dark arrives twice:
+
+     1. under `prefers-color-scheme: dark`, guarded by
+        `:not([data-theme="light"])`, so a reader who has pinned light in an OS
+        that is dark actually gets light; and
+     2. under `:root[data-theme="dark"]`, so a reader who has pinned dark in an
+        OS that is light actually gets dark.
+
+   `data-theme` is written by the pre-paint script in `layouts/Base.astro` and
+   always carries one of `system` / `light` / `dark` — `system` matches the
+   `:not()` guard, which is the whole reason the guard is written that way round.
+   With scripting off the attribute is absent, which also matches, so the OS
+   still wins by default.
+
+   The two blocks must declare exactly the same properties with exactly the same
+   values. CSS gives no way to say that once, so `lib/theme.test.mjs` parses this
+   file and `chip.css` and fails the build if they ever drift. Add a token to one
+   block, add it to the other.
+   -------------------------------------------------------------------------- */
+
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     color-scheme: dark;
 
     --bg: #09090b;
@@ -78,6 +101,19 @@
     /* hsl(231 100% 68%) — same hue, lifted for AA on #09090B */
     --accent: #5c74ff;
   }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #09090b;
+  --fg: #fafafa;
+  --fg-channels: 250 250 250;
+  --outline: rgb(255 255 255 / 0.1);
+  --dot: rgb(var(--fg-channels) / 0.1);
+
+  /* hsl(231 100% 68%) — same hue, lifted for AA on #09090B */
+  --accent: #5c74ff;
 }
 
 /* --------------------------------------------------------------------------

@@ -15,11 +15,14 @@ import "../styles/palette.css";
 import CommandPalette from "../components/CommandPalette.astro";
 import ProximitySidebar from "../components/ProximitySidebar.astro";
 import MobileNav from "../components/MobileNav.astro";
+import SiteMark from "../components/SiteMark.astro";
+import ThemeToggle from "../components/ThemeToggle.astro";
 import { normalize } from "../lib/links";
 import { markdownVariantFor } from "../lib/markdown";
 import type { NavItem } from "../lib/sections";
 import { getSections } from "../lib/sections";
 import { absolute } from "../lib/site";
+import { PREPAINT, THEME_COLORS } from "../lib/theme";
 
 interface Props {
   title?: string;
@@ -117,8 +120,36 @@ const markdownVariant = variant === null ? null : absolute(variant);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#09090B" media="(prefers-color-scheme: dark)" />
+    {/*
+      One meta per scheme, carrying the `prefers-color-scheme` queries a
+      browser resolves without help — which is what keeps the mobile status bar
+      correct with scripting off. `data-scheme` is the handle the theme script
+      uses to re-point their `media` when a reader pins a theme; see
+      `lib/theme.ts › THEME_COLOR_MEDIA`.
+    */}
+    <meta
+      name="theme-color"
+      data-scheme="light"
+      content={THEME_COLORS.light}
+      media="(prefers-color-scheme: light)"
+    />
+    <meta
+      name="theme-color"
+      data-scheme="dark"
+      content={THEME_COLORS.dark}
+      media="(prefers-color-scheme: dark)"
+    />
+
+    {/*
+      The theme, before the first paint.
+
+      Blocking and inline on purpose: a deferred module runs after the browser
+      has already painted, so a reader who pinned dark would get a white flash
+      on every navigation. It sits after the metas because it re-points them,
+      and it is the only script on this site that is not bundled.
+    */}
+    <script is:inline set:html={PREPAINT} />
+
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
@@ -157,6 +188,15 @@ const markdownVariant = variant === null ? null : absolute(variant);
   <body>
     <a class="skip mono" href="#main">Skip to content</a>
 
+    {/*
+      One region for every theme button on the page. It is empty until a press,
+      so it never announces on load, and it lives here rather than inside a
+      button because changing text inside a control also changes that control's
+      accessible name.
+    */}
+    <span class="visually-hidden" aria-live="polite" data-theme-live></span>
+
+    <SiteMark />
     <ProximitySidebar items={navItems} pathname={pathname} />
     <MobileNav items={navItems} pathname={pathname} />
     <CommandPalette />
@@ -196,6 +236,14 @@ const markdownVariant = variant === null ? null : absolute(variant);
             ))
           }
         </dl>
+
+        {/*
+          Beside the clocks, at the clocks' weight: the theme is housekeeping,
+          like the timezone readouts and the copyright, not a feature the page
+          is selling. The mobile nav panel carries the same control, because
+          below 900px this footer is a long scroll away.
+        */}
+        <ThemeToggle />
 
         <p class="foot__meta mono">
           {/* The palette's only permanently visible affordance on desktop. A

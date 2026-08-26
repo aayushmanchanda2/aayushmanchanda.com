@@ -10,6 +10,11 @@
  * worth less than no page at all; changing the logo host means changing this
  * page in the same commit.
  *
+ * The storage paragraph is the same rule applied a second time. This page used
+ * to say the site "writes nothing to local storage", which stopped being true
+ * the moment the theme toggle shipped, so it now names the one key instead.
+ * Anything that reaches for `localStorage` has to come back and edit this.
+ *
  * Not in the nav or the section manifest on purpose: it is a footer page.
  */
 import Base from "../layouts/Base.astro";
@@ -37,10 +42,17 @@ import Base from "../layouts/Base.astro";
       </p>
       <p>
         There is no analytics on this site. No Google Analytics, no Plausible,
-        no Vercel Analytics, no tracking pixel, no beacon. It sets no cookies
-        and writes nothing to local storage. The fonts are bundled into the
-        build and served from this domain, so reading a page here does not tell
-        a font CDN that you were reading it.
+        no Vercel Analytics, no tracking pixel, no beacon. It sets no cookies.
+        The fonts are bundled into the build and served from this domain, so
+        reading a page here does not tell a font CDN that you were reading it.
+      </p>
+      <p>
+        It writes one thing to local storage, and only after you ask it to: the
+        theme. If you press the theme button in the footer, the site saves the
+        word <em>light</em>, <em>dark</em> or <em>system</em> so the next page
+        you open is the colour you picked. That is the whole entry. It never
+        leaves your browser, nothing reads it but this site, and clearing your
+        site data forgets it. Until you press it, nothing is stored at all.
       </p>
     </section>
 

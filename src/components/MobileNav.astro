@@ -14,6 +14,7 @@
  * degrades to `Record<string, any>` and every prop on this component silently
  * stops being typed. `npm run check` is what caught it. Write the word.
  */
+import ThemeToggle from "./ThemeToggle.astro";
 import { normalize } from "../lib/links";
 import type { NavItem } from "../lib/sections";
 
@@ -86,21 +87,31 @@ const current = normalize(pathname);
     </nav>
 
     {/*
-      The palette's way in on a touch device, where there is no Cmd+K to press.
+      The two controls a touch reader cannot get to any other way: the palette,
+      which has no Cmd+K to press here, and the theme, whose only other home is
+      a footer that is a long scroll away below 900px.
 
-      Deliberately quieter than the section links and set below them: this is a
-      way to reach the same places faster, not a sixth section. `data-mnav-search`
-      is what the script below hangs the "close this panel first" behaviour on;
-      `data-palette-open` is what `lib/palette.ts` listens for.
+      Deliberately quieter than the section links and set below them: these are
+      ways to work the site, not a sixth and seventh section. They enter
+      together on the beat after the last link, continuing the same stagger.
     */}
-    <button
-      class="mnav__search mono press"
-      type="button"
-      data-mnav-search
-      data-palette-open
-    >
-      Search
-    </button>
+    <div class="mnav__actions">
+      {/*
+        `data-mnav-search` is what the script below hangs the "close this panel
+        first" behaviour on; `data-palette-open` is what `lib/palette.ts`
+        listens for.
+      */}
+      <button
+        class="mnav__search mono press"
+        type="button"
+        data-mnav-search
+        data-palette-open
+      >
+        Search
+      </button>
+
+      <ThemeToggle variant="panel" />
+    </div>
   </div>
 </div>
 
@@ -287,28 +298,39 @@ const current = normalize(pathname);
     background: currentColor;
   }
 
-  /* --- search ------------------------------------------------------------ */
+  /* --- actions ------------------------------------------------------------ */
 
-  .mnav__search {
+  /* The row is what enters, not the controls in it: one delay to keep in step
+     with the links above instead of one per control. */
+  .mnav__actions {
     align-self: start;
     margin-top: clamp(1.5rem, 6vw, 2.25rem);
-    padding: 0.5rem 0.9rem;
-    color: var(--accent-panel-ink);
-    border: 1px solid rgb(255 255 255 / 0.4);
-    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
     opacity: 0;
     transform: translateX(-14px);
-    transition-property: opacity, transform, border-color;
+    transition-property: opacity, transform;
     transition-duration: var(--dur);
     transition-timing-function: var(--ease-out);
     transition-delay: 0s;
   }
 
-  .mnav__panel[data-open] .mnav__search {
+  .mnav__panel[data-open] .mnav__actions {
     opacity: 1;
     transform: translateX(0);
     /* Lands after the last section link, continuing the same stagger. */
     transition-delay: calc(80ms + var(--search-i, 6) * 70ms);
+  }
+
+  /* No `transition-property` here: this button carries `.press`, which already
+     names `border-color`, and a second declaration would race it depending on
+     stylesheet order. The entrance belongs to the row above. */
+  .mnav__search {
+    padding: 0.5rem 0.9rem;
+    color: var(--accent-panel-ink);
+    border: 1px solid rgb(255 255 255 / 0.4);
+    cursor: pointer;
   }
 
   .mnav__search:hover {
@@ -322,7 +344,7 @@ const current = normalize(pathname);
 
   @media (prefers-reduced-motion: reduce) {
     .mnav__item,
-    .mnav__search {
+    .mnav__actions {
       transform: none;
     }
     .mnav__panel {

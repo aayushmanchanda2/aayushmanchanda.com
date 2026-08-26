@@ -1,0 +1,108 @@
+---
+/**
+ * SiteMark — the "A", and the way home from anywhere.
+ *
+ * A constructed geometric A on a 16-unit grid, drawn in one stroke weight:
+ * two diagonals mitered to a sharp apex, and a crossbar that does not touch
+ * them. The detached bar is the whole idea. The rail down the left edge of
+ * every page is a stack of free-floating 1px dashes, and the crossbar is one
+ * more of them, parked inside the letter.
+ *
+ * The gap is 0.5 units, measured at the bar's top corner where the leg leans
+ * furthest inboard, which is the tightest point. That is wide enough to read as
+ * deliberate from about 24px up and narrow enough that when it does close — a
+ * 16px favicon on a low-density screen — the mark degrades into an ordinary
+ * solid A rather than into a smudge. A mark whose failure mode is "still a
+ * letter" is the only kind worth shipping at favicon size.
+ *
+ * One weight throughout, 1.5 units, because `design.md` says the hairline scale
+ * has two steps and no third. A lighter crossbar was drawn and rejected for
+ * introducing one.
+ *
+ * `currentColor`, so it themes for free: the anchor sets the ink and the glyph
+ * follows, in either theme and in either forced state. `public/favicon.svg` is
+ * the same geometry with real colours pinned, because a favicon renders with no
+ * inherited colour to pick up.
+ */
+---
+
+{/*
+  No `aria-current` on home. The rail's Home dash already carries it, and two
+  "current page" announcements for one destination is noise, not redundancy.
+*/}
+<a class="mark press" href="/" aria-label="Home">
+  <svg
+    class="mark__glyph"
+    viewBox="0 0 16 16"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      d="M2.2 14.1 L8 3.1 L13.8 14.1"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linejoin="miter"
+      stroke-linecap="butt"></path>
+    <path
+      d="M5.9 10.4 H10.1"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linecap="butt"></path>
+  </svg>
+</a>
+
+<style>
+  /* Above the rail (40), below the mobile trigger (60) and everything modal:
+     an open nav panel or palette should cover the mark, not fight it. */
+  .mark {
+    --mark-size: 24px;
+
+    /* Optical, and the same correction the masthead makes with its -0.04em:
+       line up the ink, not the box. The glyph carries its own left bearing —
+       on the 16-unit grid its leftmost point is the outer corner of the left
+       foot, 1.537 units in, or 9.6% of the size — so a box flush with the rail
+       would put the letter 2px inboard of the dashes under it. */
+    margin-left: calc(var(--mark-size) * -0.096);
+
+    position: fixed;
+    top: clamp(1.25rem, 3.5vh, 2rem);
+    /* Below 900px the shell clears `--page-pad + 2.5rem` on the left for the
+       vertical MENU label. Sitting inside that strip is what keeps the mark
+       out of the content column: the page scrolls past to the right of it
+       rather than underneath it, and the MENU label is at the vertical middle,
+       so the two never meet. */
+    left: var(--page-pad);
+    z-index: 50;
+    display: block;
+    color: var(--fg);
+  }
+
+  @media (min-width: 900px) {
+    .mark {
+      /* The rail's own left edge. Mark and dashes share a column. */
+      left: clamp(1.5rem, 3vw, 2.75rem);
+    }
+  }
+
+  .mark:hover {
+    color: var(--accent);
+  }
+
+  .mark__glyph {
+    width: var(--mark-size);
+    height: var(--mark-size);
+  }
+
+  /* 40x40 hit area without a 40px layout box, the same `::before` trick the
+     rail dashes use — the glyph stays exactly where `left` puts it. */
+  .mark::before {
+    content: "";
+    position: absolute;
+    left: -8px;
+    top: -8px;
+    width: 40px;
+    height: 40px;
+  }
+</style>

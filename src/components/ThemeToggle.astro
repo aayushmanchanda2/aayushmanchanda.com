@@ -1,0 +1,251 @@
+---
+/**
+ * ThemeToggle — system, light, dark, in one button.
+ *
+ * Three states, one control, cycling in the order `lib/theme.ts` defines. It is
+ * a plain button rather than a group of three radios because the theme is not a
+ * setting a reader comes here to manage; it is a thing they poke once when the
+ * page is the wrong colour for the room they are in.
+ *
+ * The glyph is swapped by CSS off `[data-theme]` on `<html>`, not by script.
+ * That matters more than it looks: the attribute is written by the pre-paint
+ * script in `layouts/Base.astro`, so the correct glyph is already painted on the
+ * first frame. Swapping it from the module would put a sun on screen for a
+ * moment on every load for a reader who pinned dark.
+ *
+ * The accessible name is the half that cannot work that way — `aria-label` and
+ * `title` are strings, and CSS cannot write them. They ship saying "system",
+ * which is the truth with scripting off, and the module corrects them on load.
+ *
+ * Rendered twice per page (the footer, and the mobile nav panel). The script
+ * below is hoisted by Astro and runs once, over every instance.
+ */
+import { labelFor, titleFor } from "../lib/theme";
+
+interface Props {
+  /**
+   * `quiet` is the footer, at housekeeping weight beside the clocks.
+   * `panel` is the blue mobile sheet, where the ink and the focus ring are the
+   * panel pair rather than the accent.
+   */
+  variant?: "quiet" | "panel";
+}
+
+const { variant = "quiet" } = Astro.props;
+---
+
+<button
+  type="button"
+  class="tt press"
+  data-theme-toggle
+  data-variant={variant}
+  aria-label={labelFor("system")}
+  title={titleFor("system")}
+>
+  {/*
+    Three glyphs, one visible. All three ship in the markup so the swap is a
+    `display` flip with nothing to load or draw.
+  */}
+
+  {/* system: a disc lit from one side, the state that follows something else */}
+  <svg
+    class="tt__icon tt__icon--auto"
+    viewBox="0 0 16 16"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <circle
+      cx="8"
+      cy="8"
+      r="5.4"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.25"></circle>
+    <path d="M8 2.6 A5.4 5.4 0 0 0 8 13.4 Z" fill="currentColor"></path>
+  </svg>
+
+  {/* light */}
+  <svg
+    class="tt__icon tt__icon--sun"
+    viewBox="0 0 16 16"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <circle
+      cx="8"
+      cy="8"
+      r="3"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.25"></circle>
+    <path
+      d="M8 1.2 V2.9 M8 13.1 V14.8 M1.2 8 H2.9 M13.1 8 H14.8 M3.19 3.19 L4.39 4.39 M11.61 11.61 L12.81 12.81 M12.81 3.19 L11.61 4.39 M4.39 11.61 L3.19 12.81"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.25"
+      stroke-linecap="butt"></path>
+  </svg>
+
+  {/* dark */}
+  <svg
+    class="tt__icon tt__icon--moon"
+    viewBox="0 0 16 16"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <path
+      d="M8 2 A4 4 0 0 0 14 8 A6 6 0 1 1 8 2 Z"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.25"
+      stroke-linejoin="round"></path>
+  </svg>
+</button>
+
+<style>
+  .tt {
+    position: relative;
+    display: inline-flex;
+    /* The footer aligns on the baseline, and a 14px box with no text in it has
+       nothing sensible to put on one. Centre it in the line instead. */
+    align-self: center;
+    cursor: pointer;
+    color: var(--faint);
+  }
+
+  .tt:hover {
+    color: var(--accent);
+  }
+
+  /* 40x40 hit area around a 14px glyph, without a 40px layout box putting a
+     toolbar's worth of height into the footer row. Offsets, not a centring
+     transform, so nothing here rests on one. */
+  .tt::before {
+    content: "";
+    position: absolute;
+    left: -13px;
+    top: -13px;
+    width: 40px;
+    height: 40px;
+  }
+
+  /* A 16-unit icon set at 14px sits at the weight of the 11px mono beside it
+     instead of shouting over it. Same call as `ShotActions.astro`. */
+  .tt__icon {
+    width: 14px;
+    height: 14px;
+    display: none;
+  }
+
+  /* `system` is the default and the only state with no attribute to match, so
+     the auto glyph is the one that shows when the attribute is missing
+     entirely — which is exactly the state a page with scripting off is in. */
+  .tt__icon--auto {
+    display: block;
+  }
+
+  /* `:global()` around the root half on purpose: the state lives on <html>,
+     which is not part of this component, so it must not be scoped to it. */
+  :global(:root[data-theme="light"]) .tt__icon--auto,
+  :global(:root[data-theme="dark"]) .tt__icon--auto {
+    display: none;
+  }
+
+  :global(:root[data-theme="light"]) .tt__icon--sun {
+    display: block;
+  }
+
+  :global(:root[data-theme="dark"]) .tt__icon--moon {
+    display: block;
+  }
+
+  /* --- the blue panel ----------------------------------------------------- */
+
+  .tt[data-variant="panel"] {
+    color: var(--accent-panel-ink);
+    opacity: 0.75;
+  }
+
+  .tt[data-variant="panel"]:hover {
+    color: var(--accent-panel-ink);
+    opacity: 1;
+  }
+
+  /* White on the panel, for the same reason `MobileNav.astro` does it: an
+     accent ring on the accent background is not a ring. */
+  .tt[data-variant="panel"]:focus-visible {
+    outline: 2px solid var(--accent-panel-ink);
+    outline-offset: 4px;
+  }
+</style>
+
+<script>
+  import {
+    ATTRIBUTE,
+    STORAGE_KEY,
+    THEME_COLOR_MEDIA,
+    isTheme,
+    labelFor,
+    nextTheme,
+    statusFor,
+    titleFor,
+  } from "../lib/theme";
+  import type { Theme } from "../lib/theme";
+
+  const root = document.documentElement;
+  const buttons = Array.from(
+    document.querySelectorAll<HTMLButtonElement>("[data-theme-toggle]"),
+  );
+
+  if (buttons.length) {
+    // One region for however many buttons are on the page. Two live regions
+    // announcing the same change would say it twice.
+    const live = document.querySelector<HTMLElement>("[data-theme-live]");
+
+    const current = (): Theme => {
+      const value = root.getAttribute(ATTRIBUTE);
+      return isTheme(value) ? value : "system";
+    };
+
+    /** Names only. The attribute and the metas are already right on load. */
+    const name = (theme: Theme) => {
+      for (const button of buttons) {
+        button.setAttribute("aria-label", labelFor(theme));
+        button.title = titleFor(theme);
+      }
+    };
+
+    const choose = (theme: Theme) => {
+      root.setAttribute(ATTRIBUTE, theme);
+
+      // Same guard the pre-paint script uses: `localStorage` throws outright
+      // when storage is blocked, and a reader who has it switched off should
+      // still get a working toggle for the length of the page.
+      try {
+        localStorage.setItem(STORAGE_KEY, theme);
+      } catch {
+        /* not persisted, still applied */
+      }
+
+      const media = THEME_COLOR_MEDIA[theme];
+      for (const scheme of ["light", "dark"] as const) {
+        const meta = document.querySelector<HTMLMetaElement>(
+          `meta[name="theme-color"][data-scheme="${scheme}"]`,
+        );
+        if (meta) meta.media = media[scheme];
+      }
+
+      name(theme);
+      if (live) live.textContent = statusFor(theme);
+    };
+
+    // Correct the names the server rendered. Deliberately not a `choose()`:
+    // that would write storage for a reader who has not pressed anything yet,
+    // and /privacy says the only thing this site stores is a theme they picked.
+    name(current());
+
+    for (const button of buttons) {
+      button.addEventListener("click", () => choose(nextTheme(current())));
+    }
+  }
+</script>

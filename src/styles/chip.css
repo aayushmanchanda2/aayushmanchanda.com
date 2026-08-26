@@ -101,46 +101,93 @@
   opacity: 0.65;
 }
 
+/* The dark tones, twice, for the reason written out at the top of the dark
+   section in `global.css`: once for the OS preference (guarded so a pinned
+   light theme wins over it) and once for a pinned dark theme. `theme.test.mjs`
+   asserts the two blocks stay identical, so edit them as a pair. */
+
 @media (prefers-color-scheme: dark) {
-  .chip {
+  :root:not([data-theme="light"]) .chip {
     /* dark ink is lighter, so the tint has to work a little harder */
     --chip-tint: 0.14;
     --chip-line: 0.26;
   }
 
-  .chip--link:hover,
-  .chip--link:focus-visible {
+  :root:not([data-theme="light"]) .chip--link:hover,
+  :root:not([data-theme="light"]) .chip--link:focus-visible {
     --chip-tint: 0.26;
     --chip-line: 0.5;
   }
 
-  .chip[data-tone="green"] {
+  :root:not([data-theme="light"]) .chip[data-tone="green"] {
     --chip-h: 148;
     --chip-s: 55%;
     --chip-l: 64%;
   }
 
-  .chip[data-tone="amber"] {
+  :root:not([data-theme="light"]) .chip[data-tone="amber"] {
     --chip-h: 38;
     --chip-s: 90%;
     --chip-l: 64%;
   }
 
-  .chip[data-tone="gray"] {
+  :root:not([data-theme="light"]) .chip[data-tone="gray"] {
     --chip-h: 0;
     --chip-s: 0%;
     --chip-l: 62%;
   }
 
-  .chip[data-tone="red"] {
+  :root:not([data-theme="light"]) .chip[data-tone="red"] {
     --chip-h: 0;
     --chip-s: 80%;
     --chip-l: 70%;
   }
 
-  .chip[data-tone="blue"] {
+  :root:not([data-theme="light"]) .chip[data-tone="blue"] {
     --chip-h: 231;
     --chip-s: 100%;
     --chip-l: 74%;
   }
+}
+
+:root[data-theme="dark"] .chip {
+  /* dark ink is lighter, so the tint has to work a little harder */
+  --chip-tint: 0.14;
+  --chip-line: 0.26;
+}
+
+:root[data-theme="dark"] .chip--link:hover,
+:root[data-theme="dark"] .chip--link:focus-visible {
+  --chip-tint: 0.26;
+  --chip-line: 0.5;
+}
+
+:root[data-theme="dark"] .chip[data-tone="green"] {
+  --chip-h: 148;
+  --chip-s: 55%;
+  --chip-l: 64%;
+}
+
+:root[data-theme="dark"] .chip[data-tone="amber"] {
+  --chip-h: 38;
+  --chip-s: 90%;
+  --chip-l: 64%;
+}
+
+:root[data-theme="dark"] .chip[data-tone="gray"] {
+  --chip-h: 0;
+  --chip-s: 0%;
+  --chip-l: 62%;
+}
+
+:root[data-theme="dark"] .chip[data-tone="red"] {
+  --chip-h: 0;
+  --chip-s: 80%;
+  --chip-l: 70%;
+}
+
+:root[data-theme="dark"] .chip[data-tone="blue"] {
+  --chip-h: 231;
+  --chip-s: 100%;
+  --chip-l: 74%;
 }
