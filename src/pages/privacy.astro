@@ -47,11 +47,11 @@ import Base from "../layouts/Base.astro";
       <h2 class="prose__head mono">The one outside request</h2>
       <p>
         The tool pages are the exception and I would rather name it than claim a
-        clean sweep. Each tool row shows the favicon of that tool&rsquo;s own
-        website, and those come from Google&rsquo;s favicon service instead of
-        my server. So loading <a href="/tools">/tools</a> or any tool page makes
-        a request to Google with the tool&rsquo;s domain in the URL, and Google
-        sees your IP
+        clean sweep. Each tool row shows the logo of that tool&rsquo;s own
+        website, and those come from <a href="https://logo.dev" rel="noopener"
+        >logo.dev</a>, a logo API, instead of my server. So loading
+        <a href="/tools">/tools</a> or any tool page makes a request to logo.dev
+        with the tool&rsquo;s domain in the URL, and logo.dev sees your IP
         address the way any host does when your browser fetches an image. The
         request is sent with no referrer, so it does not carry which page you
         were on. Nothing else on the site loads from anyone else.
