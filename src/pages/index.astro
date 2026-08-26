@@ -1,16 +1,189 @@
 ---
+import Base from "../layouts/Base.astro";
+
+const sections = [
+  {
+    href: "/tools",
+    name: "Tools",
+    blurb: "Things I actually installed and ran, with an honest verdict.",
+  },
+  {
+    href: "/sites",
+    name: "Sites",
+    blurb: "Design and craft I keep coming back to.",
+  },
+  {
+    href: "/notes",
+    name: "Notes",
+    blurb: "A commonplace book. Short thoughts, kept as they come.",
+  },
+  {
+    href: "/experiments",
+    name: "Experiments",
+    blurb: "What's running right now, including what I killed.",
+  },
+];
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Aayush Manchanda</title>
-	</head>
-	<body>
-		<h1>Aayush Manchanda</h1>
-		<p>Digital mindscape under construction.</p>
-	</body>
-</html>
+<Base>
+  <header class="hero">
+    <h1 class="hero__title">Hey, I&rsquo;m Aayush.</h1>
+    <p class="hero__intro">
+      I&rsquo;m 28, and I run two AI companies from Canada. Orbis builds AI for
+      healthcare; Vetted is my AI consulting practice. Most of my time goes
+      into agent systems, including the one that publishes this site. I save a
+      link from my phone, and a few hours later it turns up here. This is where
+      I keep the rest of it.
+    </p>
+  </header>
+
+  <section class="index" aria-labelledby="index-heading">
+    <h2 class="index__title mono" id="index-heading">The mindscape</h2>
+
+    <ul class="index__list">
+      {
+        sections.map((section, i) => (
+          <li>
+            <a class="row press" href={section.href}>
+              <span class="row__num mono tabular-nums">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <span class="row__body">
+                <span class="row__name">{section.name}</span>
+                <span class="row__blurb">{section.blurb}</span>
+              </span>
+              <svg
+                class="row__arrow"
+                viewBox="0 0 16 16"
+                aria-hidden="true"
+                focusable="false"
+              >
+                <path
+                  d="M2.5 8h11M9 3.5 13.5 8 9 12.5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.25"
+                />
+              </svg>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Base>
+
+<style>
+  /* --- hero --------------------------------------------------------------- */
+
+  .hero__title {
+    font-size: clamp(2.75rem, 10vw, 5.25rem);
+    font-weight: 600;
+    letter-spacing: -0.045em;
+    line-height: 0.98;
+    /* optical: pull the H stem flush with the column edge */
+    margin-left: -0.04em;
+  }
+
+  .hero__intro {
+    margin-top: clamp(1.75rem, 4vw, 2.5rem);
+    max-width: 46ch;
+    font-size: clamp(1.0625rem, 1.6vw, 1.1875rem);
+    line-height: 1.65;
+    color: var(--muted);
+  }
+
+  /* --- section index ------------------------------------------------------ */
+
+  .index {
+    margin-top: clamp(5rem, 16vh, 9rem);
+  }
+
+  .index__title {
+    color: var(--faint);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+  }
+
+  .index__list {
+    margin-top: 1.25rem;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .row {
+    /* a full-width row shrinking by 4% reads as a glitch, not a press */
+    --press-scale: 0.995;
+    display: grid;
+    grid-template-columns: 2.5rem 1fr auto;
+    align-items: baseline;
+    gap: 0 1rem;
+    padding-block: clamp(1.1rem, 2.5vw, 1.5rem);
+    border-bottom: 1px solid var(--hairline);
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .row:hover {
+    border-bottom-color: var(--hairline-strong);
+  }
+
+  .row__num {
+    color: var(--faint);
+    transition-property: color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .row:hover .row__num {
+    color: var(--accent);
+  }
+
+  .row__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 0;
+  }
+
+  .row__name {
+    font-size: clamp(1.375rem, 3vw, 1.75rem);
+    font-weight: 500;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
+    transition-property: color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .row:hover .row__name {
+    color: var(--accent);
+  }
+
+  .row__blurb {
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--muted);
+    text-wrap: pretty;
+  }
+
+  .row__arrow {
+    width: 16px;
+    height: 16px;
+    align-self: center;
+    color: var(--faint);
+    transition-property: transform, color;
+    transition-duration: var(--dur);
+    transition-timing-function: var(--ease-out);
+  }
+
+  .row:hover .row__arrow {
+    color: var(--accent);
+    transform: translateX(4px);
+  }
+
+  @media (max-width: 599px) {
+    .row {
+      grid-template-columns: 2rem 1fr auto;
+    }
+  }
+</style>

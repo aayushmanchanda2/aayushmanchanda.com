@@ -1,0 +1,270 @@
+---
+/**
+ * Base — the site shell: fonts, tokens, both nav surfaces, footer.
+ *
+ * Fonts are bundled from npm (@fontsource-variable/*) and served from our own
+ * origin. The site loads nothing from a third-party CDN.
+ */
+import "@fontsource-variable/geist/wght.css";
+import "@fontsource-variable/geist-mono/wght.css";
+import "../styles/global.css";
+
+import ProximitySidebar, {
+  type NavItem,
+} from "../components/ProximitySidebar.astro";
+import MobileNav from "../components/MobileNav.astro";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = "Aayush Manchanda",
+  description = "The digital mindscape of Aayush Manchanda — tools he actually tests, sites that inspire him, notes, and experiments in flight.",
+} = Astro.props;
+
+/**
+ * Dash hierarchy: home is the root (title), tools + sites are the two
+ * pipeline-fed sections (subtitle), notes + experiments are the quieter
+ * hand-written ones (section). Kinds map to the reference dash presets.
+ */
+const navItems: NavItem[] = [
+  { href: "/", label: "Home", kind: "title" },
+  { href: "/tools", label: "Tools", kind: "subtitle" },
+  { href: "/sites", label: "Sites", kind: "subtitle" },
+  { href: "/notes", label: "Notes", kind: "section" },
+  { href: "/experiments", label: "Experiments", kind: "section" },
+];
+
+// TODO(T2): swap the X placeholder for the real handle once confirmed.
+const social = [
+  { label: "GitHub", href: "https://github.com/aayushmanchanda2" },
+  { label: "X", href: "https://x.com/" },
+];
+
+const clocks = [
+  { label: "Winnipeg", tz: "America/Winnipeg" },
+  { label: "New Delhi", tz: "Asia/Kolkata" },
+];
+
+const pathname = Astro.url.pathname;
+const year = new Date().getFullYear();
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#FFFFFF" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#09090B" media="(prefers-color-scheme: dark)" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta name="twitter:card" content="summary_large_image" />
+  </head>
+
+  <body>
+    <a class="skip mono" href="#main">Skip to content</a>
+
+    <ProximitySidebar items={navItems} pathname={pathname} />
+    <MobileNav items={navItems} pathname={pathname} />
+
+    <div class="shell">
+      <main class="shell__main" id="main">
+        <slot />
+      </main>
+
+      <footer class="foot">
+        <ul class="foot__links mono">
+          {
+            social.map((link) => (
+              <li>
+                <a
+                  class="foot__link press"
+                  href={link.href}
+                  rel="me noopener"
+                  target="_blank"
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+
+        <dl class="foot__clocks mono">
+          {
+            clocks.map((clock) => (
+              <div class="foot__clock">
+                <dt>{clock.label}</dt>
+                <dd class="tabular-nums" data-clock={clock.tz}>
+                  --:--:--
+                </dd>
+              </div>
+            ))
+          }
+        </dl>
+
+        <p class="foot__meta mono tabular-nums">&copy; {year}</p>
+      </footer>
+    </div>
+
+    <script>
+      // Dual-city clocks. Formatting is delegated to Intl, so DST for both
+      // Winnipeg and New Delhi is handled by the platform, not by us.
+      const nodes = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-clock]"),
+      );
+
+      if (nodes.length) {
+        const clocks = nodes.map((el) => ({
+          el,
+          format: new Intl.DateTimeFormat("en-GB", {
+            timeZone: el.dataset.clock,
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: false,
+          }),
+        }));
+
+        const tick = () => {
+          const now = new Date();
+          for (const clock of clocks) {
+            const next = clock.format.format(now);
+            // avoid a pointless DOM write 59 times out of 60 per minute
+            if (clock.el.textContent !== next) clock.el.textContent = next;
+          }
+        };
+
+        tick();
+        // align to the next whole second, then tick on the beat
+        setTimeout(() => {
+          tick();
+          setInterval(tick, 1000);
+        }, 1000 - (Date.now() % 1000));
+      }
+    </script>
+
+    <style>
+      .skip {
+        position: absolute;
+        left: -9999px;
+        top: 0;
+        z-index: 100;
+        padding: 0.75rem 1rem;
+        background: var(--accent);
+        color: #fff;
+        text-decoration: none;
+      }
+
+      .skip:focus {
+        left: 0;
+      }
+
+      .shell {
+        min-height: 100svh;
+        display: flex;
+        flex-direction: column;
+        /* clears the fixed vertical MENU label on mobile */
+        padding-left: calc(var(--page-pad) + 2.5rem);
+        padding-right: var(--page-pad);
+        padding-top: clamp(4.5rem, 14vh, 9rem);
+        padding-bottom: clamp(2.5rem, 6vh, 4rem);
+      }
+
+      @media (min-width: 900px) {
+        .shell {
+          /* clears the fixed dash rail */
+          padding-left: clamp(17rem, 24vw, 21rem);
+          padding-right: clamp(2rem, 6vw, 5rem);
+        }
+      }
+
+      .shell__main {
+        flex: 1 0 auto;
+        width: 100%;
+        max-width: var(--page-max);
+      }
+
+      /* --- footer ---------------------------------------------------------- */
+
+      .foot {
+        width: 100%;
+        max-width: var(--page-max);
+        margin-top: clamp(5rem, 16vh, 10rem);
+        padding-top: 1.25rem;
+        border-top: 1px solid var(--hairline);
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 1.25rem 2.5rem;
+      }
+
+      .foot__links {
+        display: flex;
+        gap: 1.25rem;
+        margin: 0;
+      }
+
+      .foot__link {
+        display: inline-block;
+        color: var(--muted);
+        text-decoration: none;
+      }
+
+      .foot__link:hover {
+        color: var(--accent);
+      }
+
+      .foot__clocks {
+        display: flex;
+        gap: 1.5rem;
+        margin: 0;
+        margin-left: auto;
+      }
+
+      .foot__clock {
+        display: flex;
+        gap: 0.5rem;
+        align-items: baseline;
+        color: var(--faint);
+      }
+
+      .foot__clock dd {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .foot__meta {
+        color: var(--faint);
+        margin: 0;
+      }
+
+      @media (max-width: 599px) {
+        .foot__clocks {
+          margin-left: 0;
+          flex-direction: column;
+          gap: 0.35rem;
+        }
+
+        .foot__clock {
+          justify-content: space-between;
+          min-width: 11rem;
+        }
+
+        /* drop the copyright onto its own line instead of letting it sit
+           alongside the first clock row */
+        .foot__meta {
+          width: 100%;
+        }
+      }
+    </style>
+  </body>
+</html>

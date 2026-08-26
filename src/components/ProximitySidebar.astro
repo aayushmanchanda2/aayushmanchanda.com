@@ -1,0 +1,396 @@
+---
+/**
+ * ProximitySidebar — fixed left-edge dash nav (desktop >= 900px).
+ *
+ * Vanilla port of rareui's `proximity-sidebar` (shadcn registry:
+ * https://www.rareui.com/r/proximity-sidebar.json). Same dash presets, same
+ * scaleX-from-distance mapping, same spring constants — but the React +
+ * `motion` runtime is replaced by ~90 lines of rAF, so the site ships zero
+ * framework JS.
+ *
+ * Deviations from the reference, and why:
+ *  - Reference RADIUS is 40px against a 9px dash pitch (a scroll minimap).
+ *    Our hit-area floor of 40x40px forces a 41px pitch, so the falloff radius
+ *    is widened to 96px to keep the neighbouring-dash "wave" feel.
+ *  - Adds a horizontal proximity gate: the rail is fixed to the viewport edge,
+ *    so it should react as the pointer *approaches* it, not only once the
+ *    pointer is inside the container (the reference listens on the container).
+ *  - Dashes are links, not scroll-spy buttons: `aria-current` comes from the
+ *    current pathname, and clicking navigates natively.
+ */
+
+export type NavKind = "title" | "subtitle" | "section" | "body";
+
+export interface NavItem {
+  href: string;
+  label: string;
+  kind?: NavKind;
+}
+
+interface Props {
+  items: NavItem[];
+  pathname: string;
+}
+
+const { items, pathname } = Astro.props;
+
+const normalize = (p: string) =>
+  p.length > 1 && p.endsWith("/") ? p.slice(0, -1) : p;
+
+const current = normalize(pathname);
+---
+
+<nav class="rail" aria-label="Primary">
+  <ul class="rail__list" data-rail-list>
+    {
+      items.map((item) => (
+        <li>
+          <a
+            class="rail__item"
+            href={item.href}
+            data-kind={item.kind ?? "section"}
+            data-rail-item
+            aria-current={normalize(item.href) === current ? "page" : undefined}
+          >
+            <span class="rail__dash" />
+            <span class="rail__label mono">{item.label}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .rail {
+    position: fixed;
+    top: 50%;
+    left: clamp(1.5rem, 3vw, 2.75rem);
+    transform: translateY(-50%);
+    z-index: 40;
+    display: none;
+    /* the <ul> owns all pointer targets; the nav box itself must not
+       swallow clicks meant for the page. */
+    pointer-events: none;
+  }
+
+  @media (min-width: 900px) {
+    .rail {
+      display: block;
+    }
+  }
+
+  .rail__list {
+    display: flex;
+    flex-direction: column;
+    /* 1px dash + 40px gap = 41px pitch, which is exactly the height of one
+       hit area — adjacent hit areas touch but never overlap. */
+    gap: 40px;
+    margin: 0;
+  }
+
+  /* --- dash presets (verbatim from the reference registry source) --------- */
+
+  .rail__item[data-kind="title"] {
+    --dash-base: 40;
+    --dash-color: var(--fg);
+  }
+  .rail__item[data-kind="subtitle"] {
+    --dash-base: 36;
+    --dash-color: var(--fg);
+  }
+  .rail__item[data-kind="section"] {
+    --dash-base: 30;
+    --dash-color: var(--faint);
+  }
+  .rail__item[data-kind="body"] {
+    --dash-base: 24;
+    --dash-color: var(--faint);
+  }
+
+  .rail__item {
+    position: relative;
+    display: block;
+    /* the visual row is the 1px dash itself, like the reference's `h-px` */
+    height: 1px;
+    width: 110px;
+    pointer-events: auto;
+    outline: none;
+  }
+
+  /* >= 40x40px hit area (110 x 41), centred on the dash. */
+  .rail__item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: -20px;
+    height: 41px;
+  }
+
+  .rail__dash {
+    display: block;
+    width: 110px;
+    height: 1px;
+    background: var(--dash-color);
+    transform: scaleX(var(--dash-scale, calc(var(--dash-base) / 110)));
+    transform-origin: left center;
+    transition-property: background-color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .rail__item[aria-current="page"] {
+    --dash-color: var(--accent);
+  }
+
+  .rail__item:hover .rail__dash,
+  .rail__item:focus-visible .rail__dash {
+    background: var(--accent);
+  }
+
+  .rail__item:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 12px;
+    border-radius: 1px;
+  }
+
+  /* --- label ------------------------------------------------------------- */
+
+  .rail__label {
+    position: absolute;
+    left: 122px; /* clears the 110px max dash extent */
+    top: 50%;
+    translate: 0 -50%;
+    white-space: nowrap;
+    color: var(--muted);
+    /* never a click target — the dash is the only hit area */
+    pointer-events: none;
+    opacity: 0;
+    transform: translateX(-4px);
+    transition-property: opacity, transform, color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .rail__item:hover .rail__label,
+  .rail__item:focus-visible .rail__label,
+  .rail__item[data-near] .rail__label {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .rail__item[aria-current="page"] .rail__label,
+  .rail__item:hover .rail__label {
+    color: var(--accent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rail__label {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  // Reference constants (rareui proximity-sidebar).
+  const MAX_DASH_WIDTH = 110;
+  const DASH_BUMP: Record<string, number> = {
+    title: 70,
+    subtitle: 64,
+    section: 56,
+    body: 50,
+  };
+
+  // Falloff. RADIUS_Y widened from the reference's 40 (see component doc).
+  const RADIUS_Y = 96;
+  const RADIUS_X = 260;
+  // Only the single closest dash reveals its label, and only once the pointer
+  // is genuinely alongside it — several labels at once reads as clutter.
+  const NEAR_THRESHOLD = 0.62;
+
+  // Reference spring: { stiffness: 320, damping: 34, mass: 0.7 }
+  const STIFFNESS = 320;
+  const DAMPING = 34;
+  const MASS = 0.7;
+  const REST = 0.0004;
+
+  type Dash = {
+    el: HTMLElement;
+    base: number;
+    bump: number;
+    centerY: number;
+    scale: number;
+    vel: number;
+    target: number;
+    near: boolean;
+  };
+
+  function initRail(list: HTMLElement) {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const desktop = window.matchMedia("(min-width: 900px)");
+
+    const dashes: Dash[] = Array.from(
+      list.querySelectorAll<HTMLElement>("[data-rail-item]"),
+    ).map((el) => {
+      const kind = el.dataset.kind || "section";
+      const base = Number(
+        getComputedStyle(el).getPropertyValue("--dash-base").trim() || 30,
+      );
+      const rest = base / MAX_DASH_WIDTH;
+      return {
+        el,
+        base,
+        bump: DASH_BUMP[kind] ?? DASH_BUMP.section,
+        centerY: 0,
+        scale: rest,
+        vel: 0,
+        target: rest,
+        near: false,
+      };
+    });
+
+    if (!dashes.length) return;
+
+    let railLeft = 0;
+    let railRight = 0;
+    let frame = 0;
+    let last = 0;
+    let listening = false;
+
+    // Measure the <a> elements, never the inner <span> — the span carries the
+    // scaleX transform, so its client rect moves with the animation.
+    function measure() {
+      const listRect = list.getBoundingClientRect();
+      railLeft = listRect.left;
+      railRight = listRect.right;
+      for (const d of dashes) {
+        const r = d.el.getBoundingClientRect();
+        d.centerY = r.top + r.height / 2;
+      }
+    }
+
+    function setNear(d: Dash, near: boolean) {
+      if (near === d.near) return;
+      d.near = near;
+      if (near) d.el.setAttribute("data-near", "");
+      else d.el.removeAttribute("data-near");
+    }
+
+    function setTargets(x: number, y: number) {
+      const dx = Math.max(0, railLeft - x, x - railRight);
+      const gateX = 1 - Math.min(1, dx / RADIUS_X);
+
+      let nearest: Dash | null = null;
+      let bestGate = NEAR_THRESHOLD;
+
+      for (const d of dashes) {
+        const dy = Math.abs(y - d.centerY);
+        const gateY = 1 - Math.min(1, dy / RADIUS_Y);
+        const g = gateX * gateY;
+
+        d.target = (d.base + d.bump * g) / MAX_DASH_WIDTH;
+
+        if (g >= bestGate) {
+          bestGate = g;
+          nearest = d;
+        }
+      }
+
+      for (const d of dashes) setNear(d, d === nearest);
+      start();
+    }
+
+    function relax() {
+      for (const d of dashes) {
+        d.target = d.base / MAX_DASH_WIDTH;
+        setNear(d, false);
+      }
+      start();
+    }
+
+    // Semi-implicit Euler on the reference's spring constants.
+    function step(now: number) {
+      const dt = Math.min((now - last) / 1000, 1 / 30);
+      last = now;
+
+      let moving = false;
+      for (const d of dashes) {
+        const delta = d.target - d.scale;
+        const accel = (STIFFNESS * delta - DAMPING * d.vel) / MASS;
+        d.vel += accel * dt;
+        d.scale += d.vel * dt;
+
+        if (Math.abs(d.target - d.scale) < REST && Math.abs(d.vel) < REST) {
+          d.scale = d.target;
+          d.vel = 0;
+        } else {
+          moving = true;
+        }
+        d.el.style.setProperty("--dash-scale", d.scale.toFixed(4));
+      }
+
+      frame = moving ? requestAnimationFrame(step) : 0;
+    }
+
+    function start() {
+      if (frame) return;
+      last = performance.now();
+      frame = requestAnimationFrame(step);
+    }
+
+    const onPointerMove = (e: PointerEvent) => {
+      if (e.pointerType === "touch") return;
+      setTargets(e.clientX, e.clientY);
+    };
+
+    const onResize = () => {
+      measure();
+      relax();
+    };
+
+    function attach() {
+      if (listening) return;
+      listening = true;
+      measure();
+      window.addEventListener("pointermove", onPointerMove, { passive: true });
+      window.addEventListener("pointerleave", relax, { passive: true });
+      window.addEventListener("blur", relax);
+      window.addEventListener("resize", onResize, { passive: true });
+    }
+
+    function detach() {
+      if (!listening) return;
+      listening = false;
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerleave", relax);
+      window.removeEventListener("blur", relax);
+      window.removeEventListener("resize", onResize);
+      if (frame) cancelAnimationFrame(frame);
+      frame = 0;
+      // Hand styling back to CSS: plain list behaviour, dashes at base length.
+      for (const d of dashes) {
+        d.el.style.removeProperty("--dash-scale");
+        d.el.removeAttribute("data-near");
+        d.scale = d.target = d.base / MAX_DASH_WIDTH;
+        d.vel = 0;
+        d.near = false;
+      }
+    }
+
+    // prefers-reduced-motion => no proximity animation at all, and the rail
+    // behaves as an ordinary list of links (labels still reveal on :hover).
+    function sync() {
+      if (desktop.matches && !reduceMotion.matches) attach();
+      else detach();
+    }
+
+    desktop.addEventListener("change", sync);
+    reduceMotion.addEventListener("change", sync);
+    sync();
+  }
+
+  document
+    .querySelectorAll<HTMLElement>("[data-rail-list]")
+    .forEach((list) => initRail(list));
+</script>

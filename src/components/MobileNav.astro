@@ -1,0 +1,343 @@
+---
+/**
+ * MobileNav — the emblemo flourish for < 900px.
+ *
+ * A rotated vertical "MENU" label welded to the left edge; tapping it slides a
+ * full-height electric-blue panel in from the left, white items in Geist Mono,
+ * entering on a ~70ms stagger. Every transition is a CSS transition (never a
+ * keyframe animation) so an interrupted open/close reverses from wherever it
+ * happens to be, rather than snapping.
+ */
+import type { NavItem } from "./ProximitySidebar.astro";
+
+interface Props {
+  items: NavItem[];
+  pathname: string;
+}
+
+const { items, pathname } = Astro.props;
+
+const normalize = (p: string) =>
+  p.length > 1 && p.endsWith("/") ? p.slice(0, -1) : p;
+
+const current = normalize(pathname);
+---
+
+<div class="mnav" data-mnav>
+  <button
+    type="button"
+    class="mnav__trigger mono press"
+    data-mnav-toggle
+    aria-expanded="false"
+    aria-controls="mobile-nav-panel"
+  >
+    Menu
+  </button>
+
+  <div class="mnav__scrim" data-mnav-scrim hidden></div>
+
+  <div
+    class="mnav__panel"
+    id="mobile-nav-panel"
+    data-mnav-panel
+    role="dialog"
+    aria-modal="true"
+    aria-label="Site navigation"
+  >
+    <button
+      type="button"
+      class="mnav__close press"
+      data-mnav-close
+      aria-label="Close menu"
+    >
+      <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+        <path
+          d="M3 3 L13 13 M13 3 L3 13"
+          stroke="currentColor"
+          stroke-width="1.25"
+          stroke-linecap="square"></path>
+      </svg>
+    </button>
+
+    <nav aria-label="Primary">
+      <ul class="mnav__list">
+        {
+          items.map((item, i) => (
+            <li class="mnav__item" style={`--i:${i}`}>
+              <a
+                class="mnav__link"
+                href={item.href}
+                data-mnav-link
+                aria-current={
+                  normalize(item.href) === current ? "page" : undefined
+                }
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</div>
+
+<style>
+  .mnav {
+    display: block;
+  }
+
+  @media (min-width: 900px) {
+    .mnav {
+      display: none;
+    }
+  }
+
+  /* --- edge label -------------------------------------------------------- */
+
+  .mnav__trigger {
+    position: fixed;
+    top: 50%;
+    left: 0;
+    translate: 0 -50%;
+    z-index: 60;
+    /* reads bottom-to-top, like the emblemo edge label */
+    writing-mode: vertical-rl;
+    rotate: 180deg;
+    padding: 1rem 0.75rem;
+    color: var(--muted);
+    cursor: pointer;
+    /* a tap must open the menu, not select the word "Menu" */
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    transition-property: color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .mnav__trigger:hover,
+  .mnav__trigger[aria-expanded="true"] {
+    color: var(--accent);
+  }
+
+  /* --- scrim ------------------------------------------------------------- */
+
+  .mnav__scrim {
+    position: fixed;
+    inset: 0;
+    z-index: 70;
+    background: rgb(0 0 0 / 0.4);
+    opacity: 0;
+    transition-property: opacity;
+    transition-duration: var(--dur);
+    transition-timing-function: var(--ease-out);
+  }
+
+  .mnav__scrim[hidden] {
+    display: none;
+  }
+
+  .mnav__scrim[data-open] {
+    opacity: 1;
+  }
+
+  /* --- panel ------------------------------------------------------------- */
+
+  .mnav__panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 80;
+    width: min(86vw, 380px);
+    height: 100%;
+    height: 100svh;
+    padding: clamp(1.5rem, 6vw, 2.5rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: var(--accent-panel);
+    color: var(--accent-panel-ink);
+    overscroll-behavior: contain;
+    overflow-y: auto;
+
+    visibility: hidden;
+    transform: translateX(-100%);
+    /* transform animates; visibility flips only after the slide-out finishes */
+    transition-property: transform, visibility;
+    transition-duration: var(--dur-slow), 0s;
+    transition-delay: 0s, var(--dur-slow);
+    transition-timing-function: var(--ease-out);
+  }
+
+  .mnav__panel[data-open] {
+    visibility: visible;
+    transform: translateX(0);
+    transition-delay: 0s, 0s;
+  }
+
+  .mnav__close {
+    position: absolute;
+    top: clamp(0.75rem, 4vw, 1.25rem);
+    right: clamp(0.75rem, 4vw, 1.25rem);
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    color: var(--accent-panel-ink);
+    cursor: pointer;
+    opacity: 0.75;
+  }
+
+  .mnav__close:hover {
+    opacity: 1;
+  }
+
+  .mnav__close svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .mnav__close:focus-visible,
+  .mnav__link:focus-visible {
+    outline: 2px solid var(--accent-panel-ink);
+    outline-offset: 4px;
+  }
+
+  /* --- items ------------------------------------------------------------- */
+
+  .mnav__list {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.35rem, 2vw, 0.75rem);
+    margin: 0;
+  }
+
+  .mnav__item {
+    opacity: 0;
+    transform: translateX(-14px);
+    transition-property: opacity, transform;
+    transition-duration: var(--dur);
+    transition-timing-function: var(--ease-out);
+    /* closing: everything leaves together, no stagger to sit through */
+    transition-delay: 0s;
+  }
+
+  .mnav__panel[data-open] .mnav__item {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: calc(80ms + var(--i) * 70ms);
+  }
+
+  .mnav__link {
+    display: inline-block;
+    position: relative;
+    font-family: var(--font-mono);
+    font-size: clamp(1.75rem, 8.5vw, 2.5rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1.25;
+    color: var(--accent-panel-ink);
+    text-decoration: none;
+    padding-block: 0.15em;
+    transition-property: opacity;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .mnav__link:not([aria-current]) {
+    opacity: 0.62;
+  }
+
+  .mnav__link:hover,
+  .mnav__link:active {
+    opacity: 1;
+  }
+
+  /* current page marker — a hairline under the label */
+  .mnav__link[aria-current="page"]::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.1em;
+    height: 1px;
+    background: currentColor;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mnav__item {
+      transform: none;
+    }
+    .mnav__panel {
+      transition-delay: 0s, 0s;
+    }
+  }
+</style>
+
+<script>
+  function initMobileNav(root: HTMLElement) {
+    const toggle = root.querySelector<HTMLButtonElement>("[data-mnav-toggle]");
+    const panel = root.querySelector<HTMLElement>("[data-mnav-panel]");
+    const scrim = root.querySelector<HTMLElement>("[data-mnav-scrim]");
+    const close = root.querySelector<HTMLButtonElement>("[data-mnav-close]");
+    if (!toggle || !panel || !scrim || !close) return;
+
+    const desktop = window.matchMedia("(min-width: 900px)");
+    let open = false;
+
+    function setOpen(next: boolean) {
+      if (next === open) return;
+      open = next;
+
+      toggle!.setAttribute("aria-expanded", String(next));
+      document.documentElement.style.overflow = next ? "hidden" : "";
+
+      if (next) {
+        scrim!.hidden = false;
+        // one frame so the [hidden] -> display change lands before the
+        // opacity transition starts
+        requestAnimationFrame(() => scrim!.setAttribute("data-open", ""));
+        panel!.setAttribute("data-open", "");
+        close!.focus({ preventScroll: true });
+      } else {
+        scrim!.removeAttribute("data-open");
+        panel!.removeAttribute("data-open");
+        toggle!.focus({ preventScroll: true });
+      }
+    }
+
+    // Keep the scrim out of the a11y/hit-test tree once it has faded out,
+    // but never mid-transition (that would kill the fade).
+    scrim.addEventListener("transitionend", (e) => {
+      if (e.propertyName === "opacity" && !open) scrim.hidden = true;
+    });
+
+    toggle.addEventListener("click", () => setOpen(!open));
+    close.addEventListener("click", () => setOpen(false));
+    scrim.addEventListener("click", () => setOpen(false));
+
+    // Close on item tap (matters for same-page links, where no navigation
+    // would otherwise tear the panel down).
+    root
+      .querySelectorAll<HTMLAnchorElement>("[data-mnav-link]")
+      .forEach((link) => link.addEventListener("click", () => setOpen(false)));
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && open) {
+        e.preventDefault();
+        setOpen(false);
+      }
+    });
+
+    // Rotating a phone into the desktop breakpoint hides the panel via CSS —
+    // make sure the scroll lock and focus state go with it.
+    desktop.addEventListener("change", (e) => {
+      if (e.matches) setOpen(false);
+    });
+  }
+
+  document
+    .querySelectorAll<HTMLElement>("[data-mnav]")
+    .forEach((root) => initMobileNav(root));
+</script>
