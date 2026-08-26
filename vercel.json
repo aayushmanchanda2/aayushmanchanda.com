@@ -72,6 +72,19 @@
       "continue": true
     },
 
-    { "handle": "filesystem" }
+    { "handle": "filesystem" },
+
+    { "handle": "error" },
+    {
+      "src": "^/.*$",
+      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "status": 404,
+      "dest": "/404.md",
+      "headers": {
+        "Content-Type": "text/markdown; charset=utf-8",
+        "Vary": "Accept, Accept-Encoding"
+      }
+    },
+    { "src": "^/.*$", "status": 404, "dest": "/404.html" }
   ]
 }

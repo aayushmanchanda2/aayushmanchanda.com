@@ -19,6 +19,7 @@ import {
   markdownDocument,
   section,
   table,
+  newest,
 } from "../lib/markdown";
 import { absolute } from "../lib/site";
 
@@ -55,6 +56,7 @@ export const GET: APIRoute = () => {
     title: "Experiments",
     description:
       "What Aayush Manchanda is running right now, with a status and a start date on each one. The dead ones stay listed.",
+    updated: newest(experiments.map((experiment) => experiment.started)),
     blocks: [
       rows.length === 0
         ? "Nothing is listed right now."

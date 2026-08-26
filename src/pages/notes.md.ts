@@ -14,7 +14,7 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
 
-import { PAGES, markdownDocument } from "../lib/markdown";
+import { PAGES, markdownDocument, newest } from "../lib/markdown";
 import { absolute } from "../lib/site";
 
 /** Dates are stored as dates and shown as `YYYY-MM-DD`, same as every page. */
@@ -59,6 +59,7 @@ export const GET: APIRoute = async () => {
     title: "Notes",
     description:
       "Every note Aayush Manchanda has published, newest first, with the full text of each one.",
+    updated: newest(notes.map((note) => day(note.data.date))),
     blocks:
       blocks.length === 0
         ? ["No notes yet."]

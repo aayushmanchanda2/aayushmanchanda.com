@@ -19,6 +19,7 @@ import {
   markdownDocument,
   section,
   table,
+  newest,
 } from "../lib/markdown";
 import { absolute } from "../lib/site";
 import type { Verdict } from "../lib/tools";
@@ -51,6 +52,7 @@ export const GET: APIRoute = () => {
     title: "Tools",
     description:
       "Software Aayush Manchanda installed, ran, and formed an opinion about, with a dated verdict on each one.",
+    updated: newest(tools.map((tool) => tool.status_date)),
     blocks: [
       table(["Tool", "Verdict", "Category", "Updated", "Note"], rows),
       section(

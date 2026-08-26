@@ -119,8 +119,43 @@ export interface DocumentSpec {
   title: string;
   /** One line under it, for an agent deciding whether to read on. */
   description: string;
+  /**
+   * Newest content date on the page, `YYYY-MM-DD`.
+   *
+   * The real date from the data, not the build date: a rebuild triggered by a
+   * CSS change should not tell an agent the content is fresh. Omitted where a
+   * page genuinely has no dated content.
+   */
+  updated?: string;
   /** Rendered in order, one blank line between each. */
   blocks: readonly string[];
+}
+
+/**
+ * YAML frontmatter, so an agent gets the document's metadata without scraping
+ * the body for it. A markdown file has no `<head>`, so `canonical` is the only
+ * way it can say which URL it speaks for.
+ *
+ * Values are quoted because a title or description containing a colon would
+ * otherwise parse as a nested key.
+ */
+function frontmatter(spec: DocumentSpec): string {
+  const quote = (value: string) => `"${value.replace(/"/g, '\\"')}"`;
+
+  const fields: [string, string][] = [
+    ["title", quote(spec.title)],
+    ["description", quote(spec.description)],
+    ["canonical", quote(absolute(spec.page.html))],
+    ["source", quote(absolute(spec.page.md))],
+  ];
+  if (spec.updated) fields.push(["last-updated", spec.updated]);
+
+  return ["---", ...fields.map(([k, v]) => `${k}: ${v}`), "---"].join("\n");
+}
+
+/** Newest `YYYY-MM-DD` in a list, or undefined when the list is empty. */
+export function newest(dates: readonly string[]): string | undefined {
+  return dates.length === 0 ? undefined : [...dates].sort().at(-1);
 }
 
 /** The other four variants, then the two files that describe the whole site. */
@@ -142,6 +177,7 @@ function otherPages(current: MarkdownPage): string {
 export function markdownDocument(spec: DocumentSpec): Response {
   const body =
     [
+      frontmatter(spec),
       `# ${spec.title}`,
       spec.description,
       // An agent that wants the rendered page, or wants to cite it, needs the

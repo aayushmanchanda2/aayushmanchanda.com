@@ -17,6 +17,7 @@ import {
   markdownDocument,
   section,
   table,
+  newest,
 } from "../lib/markdown";
 import { absolute } from "../lib/site";
 import type { SiteShots } from "../lib/sites";
@@ -44,6 +45,7 @@ export const GET: APIRoute = () => {
     title: "Sites",
     description:
       "Websites Aayush Manchanda saved for how they look, each one screenshotted in light and dark on the day it was saved.",
+    updated: newest(sites.map((site) => site.saved_date)),
     blocks: [
       table(["Site", "Domain", "Saved", "Page", "Screenshots"], rows),
       section(

@@ -41,6 +41,19 @@ export default defineConfig({
       customPages: MARKDOWN_VARIANTS,
 
       /**
+       * A build-time `lastmod` on every entry, so an agent can tell how stale
+       * the site is without fetching each page.
+       *
+       * Build time rather than per-page content dates: this site rebuilds when
+       * its content changes (the publish pipeline commits, Vercel rebuilds), so
+       * the two are the same date in practice, and Astro does not hand the
+       * integration a per-route content date to use instead. The markdown
+       * variants carry a real per-section `last-updated` in their frontmatter
+       * for anything that needs the precise answer.
+       */
+      lastmod: new Date(),
+
+      /**
        * `/robots.txt` and `/llms.txt` are instructions to a crawler, not
        * content for one to index. The integration already skips them today
        * because they are endpoints rather than pages; this keeps them out if

@@ -8,15 +8,21 @@
  */
 import type { APIRoute } from "astro";
 
+import { getCollection } from "astro:content";
+
+import { experiments } from "../lib/experiments";
 import {
   PAGES,
   list,
   markdownDocument,
+  newest,
   section,
   table,
 } from "../lib/markdown";
 import { getSections } from "../lib/sections";
 import { absolute } from "../lib/site";
+import { sites } from "../lib/sites";
+import { tools } from "../lib/tools";
 
 const VARIANTS = Object.values(PAGES);
 
@@ -41,6 +47,16 @@ export const GET: APIRoute = async () => {
     title: "Aayush Manchanda",
     description:
       "The personal site of Aayush Manchanda: a log of the tools he has run, the sites he likes, his notes, and what he has going.",
+    // The home page summarises every section, so its freshness is the freshest
+    // thing any section has.
+    updated: newest([
+      ...tools.map((tool) => tool.status_date),
+      ...sites.map((site) => site.saved_date),
+      ...experiments.map((experiment) => experiment.started),
+      ...(await getCollection("notes")).map((note) =>
+        note.data.date.toISOString().slice(0, 10),
+      ),
+    ]),
     blocks: [
       [
         "Aayush is 28 and runs two AI companies from Canada. Orbis builds AI for",
