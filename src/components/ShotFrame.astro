@@ -112,8 +112,21 @@ const img = {
     height: clamp(20rem, 70vh, 46rem);
     overflow-y: auto;
     overflow-x: hidden;
-    /* Keeps a flick at the bottom of the shot from carrying on into the page. */
-    overscroll-behavior-y: contain;
+    /* `auto`, stated rather than left to the default, because the obvious thing
+       to write here is `contain` and it is wrong.
+
+       `contain` stops scroll CHAINING: once the shot hits its last pixel the
+       wheel stops meaning anything, and the page behind it sits still until the
+       pointer is physically moved off the frame. On a details page whose main
+       content IS this frame, that is a trap — the reader scrolls to the bottom
+       of the picture, keeps scrolling to read the notes under it, and nothing
+       happens. `contain` earns its keep on a modal, where the thing behind
+       genuinely should not move (see the palette and the mobile nav); it costs
+       more than it saves on a region sitting in the normal flow of a page.
+
+       So: reach either edge and the page takes over, which is what every other
+       scroller on the web does. */
+    overscroll-behavior-y: auto;
     /* iOS gives a nested scroller momentum only when it is asked to. */
     -webkit-overflow-scrolling: touch;
     background-color: var(--bg);

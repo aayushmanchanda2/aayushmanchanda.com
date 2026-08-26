@@ -6,7 +6,7 @@
  * `publish.mjs` calls `captureSite()` per new bookmark; the CLI entry at the
  * bottom is for seeding and for re-shooting a single entry by hand.
  *
- * Three deliberate choices, each learned the hard way by everyone who has built
+ * Four deliberate choices, each learned the hard way by everyone who has built
  * one of these:
  *
  *   1. NEVER `networkidle`. Analytics beacons, poll loops, and video ads keep
@@ -24,6 +24,10 @@
  *      headline; the full scroll tells you how it is built. Past `MAX_SHOT_PX`
  *      the picture stops being reference and starts being a megabyte, so the
  *      capture is clipped there and says so in the log.
+ *   4. WALK the page before shooting it. `fullPage` renders the document at its
+ *      full height in one pass, which is not the same thing as scrolling
+ *      through it: lazy images below the fold never fetch, and scroll-revealed
+ *      sections never reveal. See `scrollThroughPage`.
  */
 
 import { mkdir, writeFile } from "node:fs/promises";
@@ -44,6 +48,32 @@ const SETTLE_MS = 2500;
 
 /** Wall-clock ceiling for one shot, navigation and settle included. */
 const SHOT_TIMEOUT_MS = 45_000;
+
+/* ---------------------------------------------------------------------------
+   The walk-down
+   --------------------------------------------------------------------------- */
+
+/**
+ * Pause after each step of the walk-down, in ms.
+ *
+ * This is the number that does the work: it is the window in which a lazy image
+ * below the fold starts fetching and a scroll-revealed section stops being
+ * `opacity: 0`. Measured on save.design, which is the page that exposed the bug:
+ * 26 of 43 images undecoded before the walk, 1 of 45 after. Raising this to
+ * 300ms, or halving the step, moved neither number — 150ms is already past the
+ * knee, and everything beyond it is wall-clock spent for nothing.
+ */
+const SCROLL_STEP_MS = 150;
+
+/** After the last step, and again after returning to the top. */
+const SCROLL_SETTLE_MS = 1000;
+
+/**
+ * Hard stop on the walk. The ceiling below already bounds a well-behaved page;
+ * this bounds a page that reports a new, larger height every time it is asked —
+ * an infinite feed can otherwise walk until the shot deadline kills it.
+ */
+const MAX_SCROLL_STEPS = 200;
 
 /**
  * Tallest page we will keep, in CSS pixels. Roughly thirteen screens: long
@@ -110,6 +140,121 @@ export const DEFAULT_OUT_DIR = fileURLToPath(
 class ShotTimeout extends Error {}
 
 /**
+ * What the walk-down needs from a page, and nothing else.
+ *
+ * `scrollThroughPage` below is the part of this module most worth testing and
+ * the part hardest to reach, because everything it does happens inside a live
+ * browser. Naming the four operations it actually performs is what separates
+ * the two: the routine gets a plain object, the browser adapter is the four
+ * lines under it, and the tests hand it a fake that records where it was asked
+ * to go.
+ *
+ * @typedef {object} Scroller
+ * @property {() => Promise<number>} viewportHeight
+ * @property {() => Promise<number>} documentHeight
+ * @property {(y: number) => Promise<unknown>} scrollTo
+ * @property {(ms: number) => Promise<unknown>} pause
+ */
+
+/**
+ * A {@link Scroller} backed by a real Playwright page.
+ *
+ * `behavior: "instant"` rather than the default: a page with
+ * `html { scroll-behavior: smooth }` would otherwise animate every hop, and the
+ * step pause would be spent watching the scroll rather than waiting for what
+ * the scroll was supposed to trigger.
+ *
+ * @param {import("playwright").Page} page
+ * @returns {Scroller}
+ */
+export function pageScroller(page) {
+  return {
+    viewportHeight: () => page.evaluate(() => window.innerHeight),
+    documentHeight: () => page.evaluate(() => document.documentElement.scrollHeight),
+    scrollTo: (y) => page.evaluate((top) => window.scrollTo({ top, behavior: "instant" }), y),
+    pause: (ms) => page.waitForTimeout(ms),
+  };
+}
+
+/**
+ * Walk the page from top to bottom and back, a screen at a time.
+ *
+ * A full-page screenshot is not a scroll. Chromium renders the document at its
+ * full height and captures it in one pass, which means anything the page was
+ * waiting for a scroll to do never happens: `loading="lazy"` images below the
+ * first screen are never fetched, and sections held at `opacity: 0` until an
+ * IntersectionObserver fires stay held. On a dark site the two together produce
+ * exactly the reported symptom — a correct hero, then thousands of pixels of
+ * flat background where the rest of the page should be.
+ *
+ * So the shot is preceded by a walk: stop on every screen long enough for the
+ * observers to fire and the image requests to go out, settle at the bottom, then
+ * return to the top so a sticky header is photographed in its resting state
+ * rather than the compact one it collapses to mid-page.
+ *
+ * The walk stops at `maxPx` plus one screen rather than at the true bottom.
+ * Nothing past `MAX_SHOT_PX` survives the clip, so mounting it is time spent on
+ * pixels that get thrown away — on a 23,000px page that is the difference
+ * between a 2s walk and a 6s one, inside a 45s deadline shared with navigation.
+ *
+ * @param {Scroller} scroller
+ * @param {object} [options]
+ * @param {number} [options.maxPx]      Deepest pixel worth mounting.
+ * @param {number} [options.stepMs]     Pause on each screen.
+ * @param {number} [options.settleMs]   Pause at the bottom, and again at the top.
+ * @param {number} [options.maxSteps]   Guard against a page that never ends.
+ * @returns {Promise<{ steps: number, depth: number }>}
+ *   How many screens were visited, and the deepest pixel reached.
+ */
+export async function scrollThroughPage(
+  scroller,
+  {
+    maxPx = MAX_SHOT_PX,
+    stepMs = SCROLL_STEP_MS,
+    settleMs = SCROLL_SETTLE_MS,
+    maxSteps = MAX_SCROLL_STEPS,
+  } = {},
+) {
+  // Fall back to the configured viewport rather than to 1: a page reporting no
+  // height at all would otherwise be walked a pixel at a time, which is not a
+  // spin — `maxSteps` catches it — but is 200 steps to cover 200px, and every
+  // one of them costs `stepMs`. The height we asked the context for is the
+  // better guess about the height it has.
+  const measured = await scroller.viewportHeight();
+  const viewport = measured > 0 ? measured : VIEWPORT.height;
+  const ceiling = maxPx + viewport;
+
+  let y = 0;
+  let steps = 0;
+  let depth = 0;
+
+  while (steps < maxSteps) {
+    // Re-read every step rather than once up front: mounting the content is the
+    // whole point, and content that mounts makes the document taller.
+    const furthest = Math.min(await scroller.documentHeight(), ceiling);
+    if (y >= furthest) break;
+
+    await scroller.scrollTo(y);
+    await scroller.pause(stepMs);
+
+    depth = y;
+    y += viewport;
+    steps += 1;
+  }
+
+  // The last screen, whose top the loop may have stepped straight past.
+  const bottom = Math.min(await scroller.documentHeight(), ceiling);
+  await scroller.scrollTo(bottom);
+  await scroller.pause(settleMs);
+  depth = Math.max(depth, bottom);
+
+  await scroller.scrollTo(0);
+  await scroller.pause(settleMs);
+
+  return { steps, depth };
+}
+
+/**
  * Rejects if `work` outruns the deadline. The underlying page work is not
  * cancellable, so the caller still has to close the context afterwards —
  * which is why the context below is closed by its owner, not by `shoot`.
@@ -168,6 +313,10 @@ async function shoot(browser, url, log, slug) {
         await page.evaluate(() => document.fonts.ready);
 
         await page.waitForTimeout(SETTLE_MS);
+
+        // Before the height is measured, not after: the walk is what mounts the
+        // lazy half of the page, and a page that mounts gets taller.
+        await scrollThroughPage(pageScroller(page));
 
         const height = await page.evaluate(() => {
           const { body, documentElement: root } = document;

@@ -20,7 +20,12 @@ import test from "node:test";
 
 import sharp from "sharp";
 
-import { MAX_SHOT_PX, captureWithFirecrawl, extractPalette } from "./capture.mjs";
+import {
+  MAX_SHOT_PX,
+  captureWithFirecrawl,
+  extractPalette,
+  scrollThroughPage,
+} from "./capture.mjs";
 
 /**
  * A PNG built from horizontal bands, top to bottom.
@@ -242,6 +247,135 @@ test("a slug that is not URL-safe is refused before anything is asked of Firecra
   );
 
   assert.equal(asked, false, "a slug is a filename before it is anything else");
+});
+
+/* ---------------------------------------------------------------------------
+   The walk-down
+
+   `scrollThroughPage` is the fix for a shot that came back as a correct hero
+   over thousands of pixels of flat background: the page's lazy images and
+   scroll-revealed sections were never asked to mount. It takes its page as a
+   four-method object precisely so the walk can be checked without a browser —
+   what matters is WHERE it goes and that it pauses once it gets there, and a
+   fake answers that better than Chromium does.
+   --------------------------------------------------------------------------- */
+
+/**
+ * A page that records the walk instead of performing it.
+ *
+ * @param {object} [options]
+ * @param {number} [options.height]    Document height, or the first of them.
+ * @param {number} [options.viewport]
+ * @param {number} [options.growth]    Added to the height on every measurement.
+ */
+function fakePage({ height = 5_000, viewport = 900, growth = 0 } = {}) {
+  /** @type {number[]} */
+  const visited = [];
+  /** @type {number[]} */
+  const pauses = [];
+  let measured = height;
+
+  return {
+    visited,
+    pauses,
+    scroller: {
+      viewportHeight: async () => viewport,
+      documentHeight: async () => {
+        const now = measured;
+        measured += growth;
+        return now;
+      },
+      scrollTo: async (/** @type {number} */ y) => void visited.push(y),
+      pause: async (/** @type {number} */ ms) => void pauses.push(ms),
+    },
+  };
+}
+
+test("the walk visits every screen of the page, a viewport at a time", async () => {
+  const page = fakePage({ height: 4_000, viewport: 900 });
+
+  const { steps } = await scrollThroughPage(page.scroller, { stepMs: 5, settleMs: 5 });
+
+  // 0, 900, 1800, 2700, 3600 — then the bottom, then home.
+  assert.deepEqual(
+    page.visited,
+    [0, 900, 1800, 2700, 3600, 4000, 0],
+    "a screen skipped is a screen of content that never mounts",
+  );
+  assert.equal(steps, 5);
+});
+
+test("the walk pauses on every screen, which is the whole point of it", async () => {
+  const page = fakePage({ height: 2_700, viewport: 900 });
+
+  await scrollThroughPage(page.scroller, { stepMs: 150, settleMs: 1_000 });
+
+  assert.deepEqual(
+    page.pauses,
+    [150, 150, 150, 1_000, 1_000],
+    "three steps at the step pause, then the bottom and the top at the settle",
+  );
+});
+
+test("the walk ends at the top, not wherever it finished", async () => {
+  const page = fakePage({ height: 9_000 });
+
+  await scrollThroughPage(page.scroller, { stepMs: 1, settleMs: 1 });
+
+  assert.equal(
+    page.visited.at(-1),
+    0,
+    "a sticky header photographed mid-page is the wrong picture of the top of the page",
+  );
+});
+
+test("the walk stops at the clip ceiling instead of touring the whole page", async () => {
+  const page = fakePage({ height: 60_000, viewport: 900 });
+
+  const { depth } = await scrollThroughPage(page.scroller, { stepMs: 1, settleMs: 1 });
+
+  assert.ok(
+    depth <= MAX_SHOT_PX + 900,
+    `nothing past the ceiling survives the clip, so ${depth} is time spent on discarded pixels`,
+  );
+  assert.ok(Math.max(...page.visited) <= MAX_SHOT_PX + 900);
+});
+
+test("a page shorter than one screen is one stop and no wasted steps", async () => {
+  const page = fakePage({ height: 400, viewport: 900 });
+
+  const { steps } = await scrollThroughPage(page.scroller, { stepMs: 1, settleMs: 1 });
+
+  assert.equal(steps, 1, "the top still has to be visited; the second screen does not exist");
+  assert.deepEqual(page.visited, [0, 400, 0]);
+});
+
+test("a page that grows every time it is measured is still bounded", async () => {
+  // An infinite feed: every measurement reports a taller document than the last,
+  // so the ceiling is never reached and only the step guard can end this.
+  const page = fakePage({ height: 5_000, viewport: 900, growth: 5_000 });
+
+  const { steps } = await scrollThroughPage(page.scroller, {
+    stepMs: 1,
+    settleMs: 1,
+    maxSteps: 12,
+  });
+
+  assert.equal(steps, 12, "the guard is the only thing standing between this and the deadline");
+});
+
+test("a page reporting a zero-height viewport falls back to the shot viewport", async () => {
+  const page = fakePage({ height: 3_000, viewport: 0 });
+
+  const { steps } = await scrollThroughPage(page.scroller, {
+    stepMs: 1,
+    settleMs: 1,
+    maxSteps: 200,
+  });
+
+  // Stepping by 1px would take 200 steps to cover 200px and burn the deadline.
+  assert.deepEqual(page.visited, [0, 900, 1800, 2700, 3000, 0]);
+  assert.equal(steps, 4);
 });
 
 test("transparency is composited onto white, not read as black", async () => {

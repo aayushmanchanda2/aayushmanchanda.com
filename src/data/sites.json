@@ -28,11 +28,11 @@
     "shot": "/shots/save-design.webp",
     "palette": [
       "#09090b",
+      "#29292e",
       "#b190ba",
-      "#272630",
-      "#53578a",
-      "#8d9053",
-      "#b26d6e"
+      "#716f71",
+      "#4e4e50",
+      "#53578a"
     ],
     "collections": [
       "dark-by-default",
@@ -87,10 +87,10 @@
     "palette": [
       "#080808",
       "#fa4c01",
-      "#232323",
+      "#242424",
       "#4e1700",
-      "#fd7941",
-      "#b13501"
+      "#b4b4b4",
+      "#fd7941"
     ],
     "collections": [
       "dark-by-default",
