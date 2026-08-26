@@ -7,13 +7,17 @@
  * and the JSON-LD on the home page.
  *
  * ---------------------------------------------------------------------------
- * DNS CUTOVER: when aayushmanchanda.com points at this deployment, change the
- * one line below and nothing else. Every absolute URL on the site is derived
- * from it, including the ones inside /llms.txt and /robots.txt, which are
- * generated rather than kept as static files for exactly this reason.
+ * DNS CUTOVER: done. The apex resolves to this deployment and the line below
+ * is the apex, so every canonical, og:url, sitemap <loc>, robots Sitemap line
+ * and llms.txt link now advertises it. `aayushmanchandacom.vercel.app` still
+ * serves the same build, but nothing on the site points at it any more.
+ *
+ * If the origin ever moves again, this one line is still the whole change:
+ * /llms.txt and /robots.txt are generated rather than kept as static files for
+ * exactly that reason.
  * ---------------------------------------------------------------------------
  */
-export const SITE_URL = "https://aayushmanchandacom.vercel.app";
+export const SITE_URL = "https://aayushmanchanda.com";
 
 /**
  * Absolute URL for a site-relative path.

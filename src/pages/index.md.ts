@@ -41,8 +41,11 @@ export const GET: APIRoute = async () => {
   return markdownDocument({
     page: PAGES.home,
     title: "Aayush Manchanda",
+    // `markdownDocument` renders this as the lede under the h1, so it carries
+    // the identity beat and the first block picks up at the purpose beat. Both
+    // here would print the same sentence twice in a row.
     description:
-      "The personal site of Aayush Manchanda: a log of the tools he has run, the sites he likes, his notes, and what he has going.",
+      "Part entrepreneur, part marketer, part operator. Aayush Manchanda co-founded Orbis, runs Vetted, and uses AI to build things on the internet from Canada.",
     // The home page summarises every section, so its freshness is the freshest
     // thing any section has.
     updated: newest([
@@ -55,11 +58,9 @@ export const GET: APIRoute = async () => {
     ]),
     blocks: [
       [
-        "Aayush is 28 and based in Canada. He co-founded Orbis, an AI healthcare",
-        "company, and he runs Vetted, his AI consulting practice. Most of his",
-        "time goes into agent systems, including the pipeline he built to publish",
-        "this site: it runs every three hours, so a link he saves on his phone is",
-        "here by the next run.",
+        "There is a lot of noise in AI. He reads it, tests it on his own",
+        "companies and his clients, and what survives shows up here with a date",
+        "on it.",
       ].join(" "),
       [
         "The site is a log rather than a portfolio. Every entry carries the date",

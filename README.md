@@ -183,30 +183,46 @@ rather than an SVG rasteriser so the card is actually set in Geist instead of
 falling back to whatever sans the build machine happens to have. The output is
 committed.
 
-## DNS cutover
+## DNS cutover (done)
 
-Moving from `aayushmanchandacom.vercel.app` to `aayushmanchanda.com`.
+The site is on `aayushmanchanda.com`. DNS resolves to the Vercel deployment, and
+`SITE_URL` in `src/lib/site.ts` is the apex, so every canonical tag, `og:url`,
+sitemap `<loc>`, the `Sitemap:` line in `/robots.txt`, every link in `/llms.txt`
+and every `source:`/`canonical:` field in the markdown variants advertises it.
+
+`aayushmanchandacom.vercel.app` still serves the same build, because Vercel keeps
+the project domain alive alongside the production one. Nothing on the site points
+at it any more, so search engines and agents that arrive there are told the apex
+is canonical.
+
+The cutover itself was run by:
 
 ```
 scripts/dns-cutover-wizard.sh
 ```
 
-The wizard is interactive and safe to re-run. It walks the Vercel domain add, the
-registrar records, removing the old GitHub Pages A records, and the wait for
-propagation, confirming at each stage. It reads the exact A and CNAME values off
-the Vercel domain card rather than assuming them, because Vercel now issues
-project-specific ones.
+The wizard is interactive and safe to re-run, so it is still the tool to reach for
+if the origin ever moves again. It walks the Vercel domain add, the registrar
+records, removing the old GitHub Pages A records, and the wait for propagation,
+confirming at each stage. It reads the exact A and CNAME values off the Vercel
+domain card rather than assuming them, because Vercel now issues project-specific
+ones.
 
-Two things happen after DNS resolves, and the wizard prompts for both:
+Two things happen after DNS resolves, and the wizard prompts for both. Both are
+done:
 
 1. **Flip the origin.** `SITE_URL` in `src/lib/site.ts` is the canonical origin
-   and the only place it is written down. Change that one line to
-   `https://aayushmanchanda.com` and commit. The Astro config, canonical tags,
-   sitemap, JSON-LD, `/llms.txt`, `/robots.txt` and every absolute URL in the
-   markdown variants are all derived from it. That is why `/llms.txt` and
-   `/robots.txt` are generated rather than kept as static files.
-2. **Set the production domain in Vercel** so the new apex is the primary one and
+   and the only place it is written down. It now reads
+   `https://aayushmanchanda.com`. The Astro config, canonical tags, sitemap,
+   JSON-LD, `/llms.txt`, `/robots.txt` and every absolute URL in the markdown
+   variants are all derived from it, which is the whole reason `/llms.txt` and
+   `/robots.txt` are generated rather than kept as static files: moving origin is
+   a one-line change, not a find-and-replace.
+2. **Set the production domain in Vercel** so the apex is the primary one and
    `www` redirects to it.
+
+`public/og.png` needed no regeneration. The card renders the wordmark and the
+section list, not the URL, so it carries no origin to go stale.
 
 ## How agents read this site
 

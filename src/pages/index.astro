@@ -21,7 +21,7 @@ const jsonLd = {
   name: "Aayush Manchanda",
   url: SITE_URL,
   description:
-    "Aayush Manchanda co-founded Orbis, an AI healthcare company, and runs Vetted, his AI consulting practice, from Canada. He keeps a public log of the tools he has run, the websites he admires, the links he saved to read, the notes he writes, and the experiments he has going.",
+    "Aayush Manchanda is part entrepreneur, part marketer, part operator. He co-founded Orbis, runs Vetted, and uses AI to build things on the internet from Canada. There is a lot of noise in AI, so he reads it, tests it on his own companies and his clients, and what survives shows up on this site with a date on it.",
   sameAs: [
     "https://github.com/aayushmanchanda2",
     "https://x.com/amanchanda7",
@@ -33,11 +33,12 @@ const jsonLd = {
   <header class="hero">
     <h1 class="page-title">Hey, I&rsquo;m Aayush.</h1>
     <p class="standfirst hero__intro">
-      I&rsquo;m 28, based in Canada. I co-founded Orbis, an AI healthcare
-      company, and I run Vetted, my AI consulting practice. Most of my time
-      goes into agent systems, including the one I built to publish this site.
-      It runs every three hours, so a link I save on my phone is here by the
-      next run. This is where I keep the rest of it.
+      Part entrepreneur, part marketer, part operator. I co-founded Orbis, run
+      Vetted, and use AI to build things on the internet from Canada.
+    </p>
+    <p class="standfirst hero__purpose">
+      There&rsquo;s a lot of noise in AI. I read it, test it on my own companies
+      and my clients, and what survives shows up here with a date on it.
     </p>
   </header>
 
@@ -91,6 +92,14 @@ const jsonLd = {
      rather than a single word, and the tighter gap crowded it. */
   .hero__intro {
     margin-top: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  /* Identity and purpose are two sentences of the same voice, so the break
+     between them is a paragraph break, not the title-to-standfirst gap the
+     `.standfirst` default would give it. At the default they read as two
+     unrelated standfirsts stacked up. */
+  .hero__purpose {
+    margin-top: 0.9rem;
   }
 
   /* --- section index ------------------------------------------------------ */
