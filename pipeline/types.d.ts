@@ -1,0 +1,84 @@
+/**
+ * Shared shapes for the publish pipeline.
+ *
+ * The pipeline is plain `.mjs`, so this file is the one place the domain model
+ * is written down as types. The modules pull it in through JSDoc
+ * (`import("./types.js")` — TypeScript resolves that to this declaration file),
+ * which keeps the runtime dependency-free while the editor still knows what a
+ * state row is.
+ *
+ * `ItemState` is a discriminated union on purpose. A row is never "published
+ * with an attempt count" or "failed with a slug"; each kind carries exactly the
+ * fields that kind can justify, and every branch on `kind` ends in a `never`
+ * arm so a fourth kind cannot be added silently.
+ */
+
+/** Which gallery a bookmark belongs to. Decided by the Raindrop collection. */
+export type Section = "tools" | "sites";
+
+export type ItemState =
+  | { kind: "published"; slug: string; section: Section; at: string }
+  | { kind: "failed"; attempts: number; lastError: string; at: string }
+  | { kind: "pending"; attempts: number; lastError?: string };
+
+/** `pipeline/state.json` — Raindrop bookmark id to what we know about it. */
+export type StateMap = Record<string, ItemState>;
+
+/**
+ * A Raindrop API item, parsed at the fetch boundary. Nothing downstream of
+ * `raindrop.mjs` ever touches the raw API JSON.
+ */
+export interface Bookmark {
+  /** Raindrop `_id`, stringified: it is a JSON object key from here on. */
+  id: string;
+  url: string;
+  /** May be empty; the slug falls back to the domain when it is. */
+  title: string;
+  /** May be empty. Becomes the /tools note when present. */
+  excerpt: string;
+  /** Raindrop's own domain field. Advisory only — entries recompute it. */
+  domain: string;
+  collection: Section;
+  /** Existing tags, so a tag write can merge rather than overwrite. */
+  tags: string[];
+}
+
+export interface Collection {
+  id: number;
+  title: string;
+  /** null for a root collection. */
+  parentId: number | null;
+}
+
+/** What `plan()` decided to do about one bookmark. */
+export type PlannedItem =
+  | { kind: "capture"; bookmark: Bookmark; attempts: number }
+  | { kind: "adopt"; bookmark: Bookmark; slug: string }
+  | { kind: "reject"; bookmark: Bookmark; reason: string }
+  | { kind: "dead-letter"; bookmark: Bookmark; attempts: number; lastError: string };
+
+/** Every path the pipeline reads or writes, resolved once from the repo root. */
+export interface Paths {
+  root: string;
+  statePath: string;
+  sitesJson: string;
+  toolsJson: string;
+  shotsDir: string;
+  tmpDir: string;
+}
+
+/** The last stdout line, and what the CI step summary parses. */
+export interface Summary {
+  published: number;
+  failed: number;
+  skipped: number;
+  pending: number;
+}
+
+export interface ReconcileReport {
+  state: StateMap;
+  /** Ids whose `published` row lost its JSON entry and went back to pending. */
+  downgraded: string[];
+  /** Shot filenames deleted because no entry pointed at them. */
+  orphans: string[];
+}
