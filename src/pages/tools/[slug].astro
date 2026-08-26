@@ -1,0 +1,140 @@
+---
+/**
+ * One tool. Category and verdict are links, not labels — the save.design
+ * details-page anatomy, where every field value is also a way back out into
+ * the rest of the collection.
+ */
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+
+import Base from "../../layouts/Base.astro";
+import VerdictBadge from "../../components/VerdictBadge.astro";
+import { categorySlug, faviconUrl, linkLabel, tools } from "../../lib/tools";
+
+export const getStaticPaths = (() =>
+  tools.map((tool) => ({
+    params: { slug: tool.slug },
+    props: { tool },
+  }))) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { tool } = Astro.props;
+---
+
+<Base title={`${tool.name} · Tools · Aayush Manchanda`} description={tool.note}>
+  <p class="crumb mono"><a href="/tools">&larr; Tools</a></p>
+
+  <header>
+    <h1 class="page-title page-title--entry">{tool.name}</h1>
+    <p class="standfirst">{tool.note}</p>
+  </header>
+
+  <dl class="facts">
+    <div class="fact">
+      <dt class="mono">Verdict</dt>
+      <dd>
+        <a class="fact__chip" href={`/tools/verdict/${tool.verdict}`}>
+          <VerdictBadge verdict={tool.verdict} />
+        </a>
+      </dd>
+    </div>
+
+    <div class="fact">
+      <dt class="mono">Category</dt>
+      <dd>
+        <a href={`/tools/category/${categorySlug(tool.category)}`}>
+          {tool.category}
+        </a>
+      </dd>
+    </div>
+
+    <div class="fact">
+      <dt class="mono">As of</dt>
+      <dd class="tabular-nums">{tool.status_date}</dd>
+    </div>
+
+    <div class="fact">
+      <dt class="mono">Link</dt>
+      <dd>
+        {
+          tool.url ? (
+            <span class="fact__link">
+              <img
+                class="fact__favicon outlined"
+                src={faviconUrl(tool.url)}
+                alt=""
+                width="16"
+                height="16"
+                decoding="async"
+                referrerpolicy="no-referrer"
+              />
+              <a href={tool.url} rel="noopener nofollow" target="_blank">
+                {linkLabel(tool.url)}
+              </a>
+            </span>
+          ) : (
+            <span class="fact__none">No public link</span>
+          )
+        }
+      </dd>
+    </div>
+  </dl>
+</Base>
+
+<style>
+  .facts {
+    margin-top: clamp(3rem, 10vh, 5rem);
+    border-top: 1px solid var(--hairline);
+  }
+
+  .fact {
+    display: grid;
+    grid-template-columns: 7rem minmax(0, 1fr);
+    gap: 0.35rem 1rem;
+    align-items: baseline;
+    padding-block: 0.95rem;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .fact dt {
+    color: var(--faint);
+  }
+
+  .fact dd {
+    margin: 0;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  /* the badge does the talking; the anchor only carries the target */
+  .fact__chip {
+    display: inline-block;
+    text-decoration: none;
+  }
+
+  .fact__chip:hover {
+    opacity: 0.75;
+  }
+
+  .fact__link {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .fact__favicon {
+    /* baseline alignment moves the box, so nudge it back onto the text */
+    align-self: center;
+    border-radius: 3px;
+  }
+
+  .fact__none {
+    color: var(--faint);
+  }
+
+  @media (max-width: 599px) {
+    .fact {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

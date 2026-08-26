@@ -1,0 +1,51 @@
+---
+/**
+ * Every tool in one category. Reached from a tool's details page.
+ * The list runs flat here: the h1 already says the category.
+ */
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+
+import Base from "../../../layouts/Base.astro";
+import ToolList from "../../../components/ToolList.astro";
+import { categories } from "../../../lib/tools";
+
+export const getStaticPaths = (() =>
+  categories.map((group) => ({
+    params: { category: group.slug },
+    props: group,
+  }))) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { category, tools } = Astro.props;
+const count = tools.length;
+const lead = `${count} ${count === 1 ? "tool" : "tools"} I filed under`;
+---
+
+<Base
+  title={`${category} · Tools · Aayush Manchanda`}
+  description={`${lead} ${category}.`}
+>
+  <p class="crumb mono"><a href="/tools">&larr; Tools</a></p>
+
+  <header>
+    <h1 class="page-title title">{category}</h1>
+    <p class="standfirst">{lead} <span class="title">{category}</span>.</p>
+  </header>
+
+  <div class="body">
+    <ToolList tools={tools} grouped={false} />
+  </div>
+</Base>
+
+<style>
+  /* categories are stored lowercase; the masthead is the one place they
+     are spoken as a proper name */
+  .title {
+    text-transform: capitalize;
+  }
+
+  .body {
+    margin-top: clamp(3.5rem, 12vh, 6rem);
+  }
+</style>

@@ -1,0 +1,104 @@
+---
+/**
+ * VerdictBadge — the one place in the site where a verdict gets a colour.
+ *
+ * The chester.how status-chip pattern: a soft tint, not a solid fill, so a
+ * list of twenty rows reads as one page instead of a traffic light. Each
+ * verdict sets three numbers (hue, saturation, lightness) and the tint, the
+ * hairline, and the ink are all derived from them, so light and dark stay in
+ * step without a second set of colours.
+ *
+ * Measured against the page background (#FFFFFF / #09090B): every ink value
+ * below clears 6:1, which holds up over its own 9-14% tint.
+ */
+import type { Verdict } from "../lib/tools";
+
+interface Props {
+  verdict: Verdict;
+}
+
+const { verdict } = Astro.props;
+---
+
+<span class="badge" data-verdict={verdict}>{verdict}</span>
+
+<style>
+  .badge {
+    /* neutral fallback; every verdict below overrides all three */
+    --h: 0;
+    --s: 0%;
+    --l: 38%;
+    --tint: 0.09;
+    --line: 0.2;
+
+    display: inline-block;
+    padding: 0.3rem 0.45rem 0.28rem;
+    border-radius: var(--r-sm);
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    line-height: 1;
+    text-transform: lowercase;
+    white-space: nowrap;
+    color: hsl(var(--h) var(--s) var(--l));
+    background: hsl(var(--h) var(--s) var(--l) / var(--tint));
+    box-shadow: inset 0 0 0 1px hsl(var(--h) var(--s) var(--l) / var(--line));
+  }
+
+  .badge[data-verdict="using"] {
+    --h: 148;
+    --s: 65%;
+    --l: 26%;
+  }
+
+  .badge[data-verdict="watching"] {
+    --h: 32;
+    --s: 90%;
+    --l: 30%;
+  }
+
+  .badge[data-verdict="on-hold"] {
+    --h: 0;
+    --s: 0%;
+    --l: 38%;
+  }
+
+  .badge[data-verdict="skipped"] {
+    --h: 0;
+    --s: 70%;
+    --l: 38%;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .badge {
+      /* dark ink is lighter, so the tint has to work a little harder */
+      --tint: 0.14;
+      --line: 0.26;
+    }
+
+    .badge[data-verdict="using"] {
+      --h: 148;
+      --s: 55%;
+      --l: 64%;
+    }
+
+    .badge[data-verdict="watching"] {
+      --h: 38;
+      --s: 90%;
+      --l: 64%;
+    }
+
+    .badge[data-verdict="on-hold"] {
+      --h: 0;
+      --s: 0%;
+      --l: 62%;
+    }
+
+    .badge[data-verdict="skipped"] {
+      --h: 0;
+      --s: 80%;
+      --l: 70%;
+    }
+  }
+</style>

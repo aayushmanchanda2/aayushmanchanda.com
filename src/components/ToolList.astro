@@ -1,0 +1,231 @@
+---
+/**
+ * ToolList — the only place a tools list is rendered.
+ *
+ * `/tools` shows every entry under mono category headers (the
+ * designengineer.tools model, where the category IS the navigation). The
+ * verdict pages pass a subset and keep the headers; the category pages turn
+ * them off, because there the h1 already says the category.
+ */
+import type { Tool } from "../lib/tools";
+import { faviconUrl, groupByCategory } from "../lib/tools";
+import VerdictBadge from "./VerdictBadge.astro";
+
+interface Props {
+  tools: Tool[];
+  grouped?: boolean;
+}
+
+const { tools, grouped = true } = Astro.props;
+
+const groups = grouped
+  ? groupByCategory(tools).map((group) => ({
+      heading: group.category,
+      tools: group.tools,
+    }))
+  : [{ heading: null, tools }];
+---
+
+<div class="list">
+  {
+    groups.map((group) => (
+      <section class="group">
+        {group.heading && (
+          <h2 class="group__head mono">
+            {group.heading}
+            <span class="group__count tabular-nums">{group.tools.length}</span>
+          </h2>
+        )}
+
+        <ul class="group__rows">
+          {group.tools.map((tool) => (
+            <li class="row">
+              {tool.url ? (
+                <img
+                  class="row__mark outlined"
+                  src={faviconUrl(tool.url)}
+                  alt=""
+                  width="16"
+                  height="16"
+                  loading="lazy"
+                  decoding="async"
+                  referrerpolicy="no-referrer"
+                />
+              ) : (
+                <span class="row__mark row__mark--blank outlined" />
+              )}
+
+              <span class="row__name">
+                {tool.url ? (
+                  <a
+                    class="row__link"
+                    href={tool.url}
+                    rel="noopener nofollow"
+                    target="_blank"
+                  >
+                    {tool.name}
+                  </a>
+                ) : (
+                  tool.name
+                )}
+                <VerdictBadge verdict={tool.verdict} />
+              </span>
+
+              <span class="row__meta">
+                <span class="row__date mono tabular-nums">
+                  as of {tool.status_date}
+                </span>
+                <a class="row__more mono" href={`/tools/${tool.slug}`}>
+                  details<span class="visually-hidden"> for {tool.name}</span>
+                </a>
+              </span>
+
+              <p class="row__note">{tool.note}</p>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ))
+  }
+</div>
+
+<style>
+  .group + .group {
+    margin-top: clamp(2.75rem, 7vw, 4rem);
+  }
+
+  /* Same voice as "THE MINDSCAPE" on the home page. */
+  .group__head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    color: var(--faint);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+  }
+
+  .group__count {
+    font-size: 0.625rem;
+  }
+
+  .group__rows {
+    margin-top: 1rem;
+    border-top: 1px solid var(--hairline);
+  }
+
+  /* --- one tool ----------------------------------------------------------- */
+
+  .row {
+    display: grid;
+    grid-template-columns: 1.5rem minmax(0, 1fr) auto;
+    grid-template-areas:
+      "mark name meta"
+      ".    note meta";
+    column-gap: 1rem;
+    row-gap: 0.3rem;
+    align-items: start;
+    padding-block: clamp(1rem, 2.2vw, 1.25rem);
+    border-bottom: 1px solid var(--hairline);
+    transition-property: border-color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .row:hover {
+    border-bottom-color: var(--hairline-strong);
+  }
+
+  .row__mark {
+    grid-area: mark;
+    width: 16px;
+    height: 16px;
+    /* sits on the cap height of the name rather than its line box */
+    margin-top: 0.25rem;
+    border-radius: 3px;
+  }
+
+  .row__mark--blank {
+    display: block;
+    background: var(--dot);
+  }
+
+  .row__name {
+    grid-area: name;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem 0.65rem;
+    font-size: 1.0625rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+  }
+
+  .row__link {
+    color: inherit;
+    text-decoration-line: underline;
+    text-decoration-color: var(--hairline-strong);
+  }
+
+  .row__link:hover {
+    color: var(--accent);
+    text-decoration-color: currentColor;
+  }
+
+  .row__note {
+    grid-area: note;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  .row__meta {
+    grid-area: meta;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.35rem;
+    /* optical: line the date up with the name, not the row box */
+    padding-top: 0.2rem;
+  }
+
+  .row__date {
+    color: var(--faint);
+    white-space: nowrap;
+  }
+
+  /* Carries its own underline: on touch there is no hover to reveal one, and
+     a bare mono word next to the date would read as a second label. */
+  .row__more {
+    color: var(--faint);
+    text-decoration-line: underline;
+    text-decoration-color: var(--hairline-strong);
+  }
+
+  .row:hover .row__more,
+  .row__more:hover {
+    color: var(--accent);
+  }
+
+  .row__more:hover {
+    text-decoration-color: currentColor;
+  }
+
+  @media (max-width: 639px) {
+    .row {
+      grid-template-columns: 1.5rem minmax(0, 1fr);
+      grid-template-areas:
+        "mark name"
+        ".    note"
+        ".    meta";
+      row-gap: 0.45rem;
+    }
+
+    .row__meta {
+      flex-direction: row;
+      align-items: baseline;
+      gap: 0.9rem;
+      padding-top: 0.1rem;
+    }
+  }
+</style>

@@ -1,0 +1,28 @@
+---
+import Base from "../layouts/Base.astro";
+import ToolList from "../components/ToolList.astro";
+import { tools } from "../lib/tools";
+---
+
+<Base
+  title="Tools · Aayush Manchanda"
+  description="Software Aayush Manchanda installed, ran, and formed an opinion about, with a dated verdict on each one."
+>
+  <header>
+    <h1 class="page-title">Tools</h1>
+    <p class="standfirst">
+      Software I installed, ran, and formed an opinion about. Every verdict is
+      dated, so you can see how stale it is.
+    </p>
+  </header>
+
+  <div class="body">
+    <ToolList tools={tools} />
+  </div>
+</Base>
+
+<style>
+  .body {
+    margin-top: clamp(3.5rem, 12vh, 6rem);
+  }
+</style>

@@ -1,0 +1,60 @@
+---
+/**
+ * Every tool sharing one verdict. Reached from a tool's details page.
+ * Verdicts with no entries never get a page.
+ */
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+
+import Base from "../../../layouts/Base.astro";
+import ToolList from "../../../components/ToolList.astro";
+import type { Verdict } from "../../../lib/tools";
+import { verdictGroups } from "../../../lib/tools";
+
+const HEADING: Record<Verdict, string> = {
+  using: "Using",
+  watching: "Watching",
+  "on-hold": "On hold",
+  skipped: "Skipped",
+};
+
+const STANDFIRST: Record<Verdict, string> = {
+  using: "Tools that earned a place in how I work day to day.",
+  watching: "Tools that run fine and have not made it into the daily stack yet.",
+  "on-hold": "Tools I started testing and stopped before reaching a verdict.",
+  skipped: "Tools I looked at and set aside, with the reason I set them aside.",
+};
+
+export const getStaticPaths = (() =>
+  verdictGroups.map((group) => ({
+    params: { verdict: group.verdict },
+    props: group,
+  }))) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { verdict, tools } = Astro.props;
+const heading = HEADING[verdict];
+const standfirst = STANDFIRST[verdict];
+---
+
+<Base
+  title={`${heading} · Tools · Aayush Manchanda`}
+  description={standfirst}
+>
+  <p class="crumb mono"><a href="/tools">&larr; Tools</a></p>
+
+  <header>
+    <h1 class="page-title">{heading}</h1>
+    <p class="standfirst">{standfirst}</p>
+  </header>
+
+  <div class="body">
+    <ToolList tools={tools} />
+  </div>
+</Base>
+
+<style>
+  .body {
+    margin-top: clamp(3.5rem, 12vh, 6rem);
+  }
+</style>
