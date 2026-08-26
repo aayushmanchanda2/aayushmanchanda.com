@@ -1,25 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
 
-  "_comment": [
-    "Markdown content negotiation, done at the edge because the site is static.",
-    "",
-    "An agent that sends `Accept: text/markdown` to /tools gets the markdown",
-    "variant back at that same URL, which is what acceptmarkdown.com asks for.",
-    "Vercel's routing layer supports `has` conditions on request headers for",
-    "static deployments, so this needs no server, no adapter, and no middleware.",
-    "The `.*text/markdown.*` regex is deliberately loose: real clients send a",
-    "q-weighted list, not a bare type.",
-    "",
-    "`Vary: Accept` is attached to the SOURCE paths, not the destinations,",
-    "because Vercel applies `headers` by incoming request path. One rule",
-    "therefore covers both variants of the same URL, which is the point: a CDN",
-    "that cached the HTML must not hand it to an agent that asked for markdown.",
-    "",
-    "The .md URLs stay directly fetchable for clients that would rather not",
-    "negotiate. They are listed in /llms.txt and in the sitemap."
-  ],
-
   "rewrites": [
     {
       "source": "/",
