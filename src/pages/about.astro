@@ -3,10 +3,14 @@
  * /about — the long version of the home page's hero.
  *
  * The hero is two sentences because a masthead cannot carry more than that.
- * This page is the same claims with the qualifications restored: which company
- * he runs and which one he only co-founded, what the five sections actually
- * hold, and where a verdict on this site comes from before anyone decides how
- * much to trust one.
+ * This page is the same claims at length: what he builds, what the five
+ * sections actually hold, and where a verdict on this site comes from before
+ * anyone decides how much to trust one.
+ *
+ * The copy states what is true and stops there. "I co-founded Orbis" carries
+ * the whole fact; a disclaimer about what he does not run is liability
+ * management, not accuracy, and it does not belong on a page whose job is to
+ * build a reader's confidence. See `design.md` §6 and `PURPOSE.md`.
  *
  * It is the only page other than the home page that emits the long-form
  * `Person`, because it is the only other page whose visible copy makes those
@@ -24,14 +28,13 @@ const jsonLd = aboutJsonLd();
 
 <Base
   title="About · Aayush Manchanda"
-  description="Who Aayush Manchanda is, what this site is, and where everything on it comes from. The long version of the two lines on the front page."
+  description="Who Aayush Manchanda is, what this site is, and where everything on it comes from."
   jsonLd={jsonLd}
 >
   <header>
     <h1 class="page-title">About</h1>
     <p class="standfirst">
-      The long version of the two lines on the front page: who I am, what this
-      site is, and where the things on it come from.
+      Who I am, what this site is, and where the things on it come from.
     </p>
   </header>
 
@@ -39,9 +42,9 @@ const jsonLd = aboutJsonLd();
     <section>
       <h2 class="doc__head mono">Who I am</h2>
       <p>
-        I co-founded Orbis, an AI healthcare company. I am not the one running
-        it. The thing I run is Vetted, my AI consulting practice, and that is
-        where most of my working hours go.
+        I co-founded Orbis, an AI healthcare company, and I run Vetted, my AI
+        consulting practice. Between them I am building with this stuff every
+        week, and that is where everything on this site comes from.
       </p>
       <p>
         Part entrepreneur, part marketer, part operator is the closest I get to
@@ -75,8 +78,7 @@ const jsonLd = aboutJsonLd();
       </p>
       <p>
         A section only exists here if it has something in it. There are no
-        coming-soon pages, and nothing is waiting in a drafts folder, because
-        there is no drafts folder.
+        coming-soon pages and no drafts folder.
       </p>
     </section>
 
@@ -85,20 +87,19 @@ const jsonLd = aboutJsonLd();
       <p>
         Me, on my own work. I test this software on my companies and on client
         projects, so a verdict here is one I formed while trying to ship
-        something, not one I formed while reading a launch post. That is also
-        the limit of it. My use case is agent tooling and small-team software,
-        and a tool that lost a head-to-head on my work might win on yours.
+        something rather than while reading a launch post. That is also the
+        limit of it: my use case is agent tooling and small-team software, and a
+        tool that lost a head-to-head on my work might win on yours.
       </p>
       <p>
         Every opinion carries the date it was last true. An old date is a
-        warning, not a badge, and I would rather you saw it than not.
+        warning, not a badge.
       </p>
       <p>
         The site publishes itself. I save a link on my phone and a run a few
-        hours later puts it here with a screenshot beside it. That is why some
-        rows say nothing more than that I saved the thing and have not tested it
-        yet. It is the truth on that date, and better than a verdict I have not
-        earned.
+        hours later puts it here with a screenshot beside it. Some rows say
+        nothing more than that I saved the thing and have not tested it yet,
+        which is the truth on that date.
       </p>
     </section>
 
@@ -106,10 +107,9 @@ const jsonLd = aboutJsonLd();
       <h2 class="doc__head mono">Elsewhere</h2>
       <p>
         GitHub and X are in the footer of every page. If you want to write to
-        me, <a href="/contact">/contact</a> has the address and an honest note
-        about what I answer. <a href="/privacy">/privacy</a> covers what this
-        site collects, which is nothing, and how to get a screenshot of your own
-        site taken down.
+        me, <a href="/contact">/contact</a> has the address and what I answer. <a
+          href="/privacy">/privacy</a> covers what this site collects, which is
+        nothing, and how to get a screenshot of your own site taken down.
       </p>
     </section>
   </div>

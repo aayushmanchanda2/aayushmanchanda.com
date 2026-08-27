@@ -29,6 +29,13 @@
  * survives someone turning the newsletter on months from now without reading
  * this comment.
  *
+ * Underneath all four is one rule: **every claim here is a claim about today's
+ * build, and it says so.** A never-ever about analytics or third parties is a
+ * promise a future commit can turn into a lie, and a privacy page that has gone
+ * false is worse than none. So the page states what is true now and names the
+ * commit that would have to change it, which is a claim that stays honest
+ * whichever way the site goes.
+ *
  * Not in the nav or the section manifest on purpose: it is a footer page, and
  * it sits in the colophon row beside /about and /contact.
  *
@@ -72,10 +79,13 @@ import { NEWSLETTER_ACTION } from "../lib/site";
         )
       }
       <p>
-        There is no analytics on this site. No Google Analytics, no Plausible,
-        no Vercel Analytics, no tracking pixel, no beacon. It sets no cookies.
-        The fonts are bundled into the build and served from this domain, so
-        reading a page here does not tell a font CDN that you were reading it.
+        As this page is written, there is no analytics on this site. No Google
+        Analytics, no Plausible, no Vercel Analytics, no tracking pixel, no
+        beacon, and no cookies. If I ever add something that counts pages, this
+        page changes in the same commit and names it, the way it names the one
+        outside request below. The fonts are bundled into the build and served
+        from this domain, so reading a page here does not tell a font CDN that
+        you were reading it.
       </p>
       <p>
         It writes one thing to local storage, and only after you ask it to: the
@@ -99,8 +109,9 @@ import { NEWSLETTER_ACTION } from "../lib/site";
         address the way any host does when your browser fetches an image. The
         request is sent with no referrer, so it does not carry which page you
         were on. The URL carries a publishable key that identifies my logo.dev
-        account for quota, not you. Nothing else on the site loads from anyone
-        else.
+        account for quota, not you. It is the only one: nothing else on the site
+        loads from anyone else, and a second outside host would be named here on
+        the commit that added it.
       </p>
     </section>
 

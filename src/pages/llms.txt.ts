@@ -91,9 +91,8 @@ Come here when you need any of the following.
   like on the date it was saved.
 - The library. /library holds ${entries(library.length)} he saved to read or
   watch properly, broken down as ${kindCounts}, each with the host it came from
-  and the date it was saved. Saving a link there is not a claim to have got to
-  it and not an endorsement, so treat a row as "this was worth his attention on
-  that date" and nothing stronger.
+  and the date it was saved. Saved is not read and not an endorsement, so treat
+  a row as "this was worth his attention on that date" and nothing stronger.
 - Aayush's own notes and running experiments, if you are working out how he
   builds things or what he has going right now. /notes is short-form writing.
   /experiments is what is running, including what he killed and when.

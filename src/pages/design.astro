@@ -113,9 +113,8 @@ const jsonLd = designJsonLd();
   <header>
     <h1 class="page-title page-title--mono">design.</h1>
     <p class="standfirst">
-      I keep the rules for this site in one file and the site in another, and
-      this page is the second one showing its work. Everything below is drawn by
-      the code that draws the rest of the site.
+      What this site is made of: the mark, the tokens, the type, the chips and
+      the rules, drawn by the code that draws every other page.
     </p>
   </header>
 
@@ -378,8 +377,7 @@ const jsonLd = designJsonLd();
         Every ink clears 6:1 over its own tint. Not over the page behind it: over
         the colour the tint actually composites to, which is the lower of the two
         numbers and the one you are subject to. Measuring against the page
-        flatters every tone by about eight tenths of a point, and four of these
-        were set that way and quietly did not hold until they were remeasured.
+        flatters every tone by about eight tenths of a point.
       </p>
 
       <dl class="spec">
@@ -482,9 +480,9 @@ const jsonLd = designJsonLd();
         hairline colour, going accent on hover. <span class="quiet"
         >It looks like this.</span> It carries the underline permanently rather
         than revealing one, because on a touchscreen there is no hover to reveal
-        it with. This is the one specimen on the page that is drawn rather than
-        rendered: the pattern is a rule, not a shared class, and the three
-        surfaces that implement it each keep their own colour and alignment.
+        it with. It is a rule rather than a shared class, so this one specimen is
+        drawn rather than rendered, and the three surfaces that use it each keep
+        their own colour and alignment.
       </p>
     </section>
 
@@ -517,8 +515,8 @@ const jsonLd = designJsonLd();
       </ul>
 
       <p>
-        They do nothing else. A control that cannot work is not shown at all on
-        this site, so these three exist to be pressed and say so.
+        They do nothing else. A control that cannot work is not shown on this
+        site, so these three exist to be pressed.
       </p>
       <p>
         Every transition names its properties. There is no <span class="code"
@@ -528,8 +526,7 @@ const jsonLd = designJsonLd();
       </p>
       <p>
         Reduced motion flattens every animation and transition to almost nothing,
-        zeroes delays, kills smooth scrolling and disables the press scale.
-        Turning it on is the first thing I do before shipping any of this. What
+        zeroes delays, kills smooth scrolling and disables the press scale. What
         the global brake cannot do is two things, so components handle both:
         anything that rests on a transform restates that transform under reduced
         motion, and a staggered entrance is gated on the preference rather than

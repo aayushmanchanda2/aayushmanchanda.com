@@ -22,11 +22,13 @@ npm test            # all pass
 npm run build       # clean
 ```
 
-Then verify against the real page, not the built HTML: `npm run dev`, open it, press the thing you changed. Check both themes, 375px wide, and reduced motion. The full checklist is §7 of `design.md`.
+Then verify against the real page, not the built HTML: `npm run dev`, open it, press the thing you changed. Check both themes, 375px wide, and reduced motion. The full checklist is §8 of `design.md`.
 
 ## Copy
 
-Unslop everything a reader will see, including data notes, standfirsts, blurbs, labels and alt text. First person, plain words, real opinions only, honest dates, no em dashes. §6 of `design.md` is the rule set.
+**Read the voice guide before changing a word a reader sees.** It is `feature-research/aayushmanchanda-com/voice-guide-for-site.md` in the AayushOS repo, extracted from the gbrain page `voice-guide`. `PURPOSE.md` at this repo's root is what the copy is for; §6 of `design.md` is the rule set.
+
+Everything earns its place: writing exists for the reader, not to show its work. Audit voice stays in audits. First person, plain words, real opinions only, honest dates, no em dashes, accuracy without defensiveness.
 
 ## Dev server
 
