@@ -28,9 +28,9 @@ export const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
  * Free text folded down to one route segment.
  *
  * Three boundaries mint a filter route out of a value a human typed — a /tools
- * category, a /sites domain, a /reading domain — and each had written this same
+ * category, a /sites domain, a /library domain — and each had written this same
  * fold. It lives here rather than in one of them because there is a fourth kind
- * of caller: a row that links to `/reading/domain/<x>` has to spell the segment
+ * of caller: a row that links to `/library/domain/<x>` has to spell the segment
  * exactly the way the route answering it does, and importing a whole data
  * boundary to borrow a string function is the wrong direction.
  *

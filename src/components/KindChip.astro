@@ -1,6 +1,6 @@
 ---
 /**
- * KindChip — what sort of thing a /reading row points at.
+ * KindChip — what sort of thing a /library row points at.
  *
  * Third sibling of VerdictBadge and StatusChip, and as thin as both: the tone
  * system lives in `styles/chip.css`, and this file only decides which tone each
@@ -13,12 +13,17 @@
  * and here means the same thing in a different register: it wants a block of
  * time before it gives anything back.
  *
- * The `href` form is the filter bar on /reading. It is the same chip with the
- * same tone, because a filter for `video` and the `video` on a row are the same
- * word about the same thing, and giving the filter its own look would ask a
- * reader to learn the vocabulary twice.
+ * A label and nothing else. It used to carry an `href` too, and that form was
+ * the filter bar above the list, on the reasoning that a filter for `video` and
+ * the `video` on a row are the same word about the same thing. `KindTabs` took
+ * that job because the bar had to grow a selected state, and a selected state is
+ * the one thing this vocabulary cannot express: the tone is already spent saying
+ * which kind a row is, and the accent a selection would need is the blue an
+ * `article` chip is wearing on the row underneath. So the chip went back to
+ * being what it reads as, a label saying what a thing is, and the tab row says
+ * where the reader is. Same three words, two jobs, neither one borrowed.
  */
-import type { Kind } from "../lib/reading";
+import type { Kind } from "../lib/library";
 
 /** Exhaustive by type: a new kind will not compile until it has a tone. */
 const TONES: Record<Kind, string> = {
@@ -29,25 +34,10 @@ const TONES: Record<Kind, string> = {
 
 interface Props {
   kind: Kind;
-  /** Renders the chip as a link to a filter page instead of a label. */
-  href?: string;
-  /** Shown after the word, in the filter bar. Omitted on a row. */
-  count?: number;
 }
 
-const { kind, href, count } = Astro.props;
+const { kind } = Astro.props;
 const tone = TONES[kind];
 ---
 
-{
-  href ? (
-    <a class="chip chip--link" data-tone={tone} href={href}>
-      {kind}
-      {count !== undefined && <span class="tabular-nums">{count}</span>}
-    </a>
-  ) : (
-    <span class="chip" data-tone={tone}>
-      {kind}
-    </span>
-  )
-}
+<span class="chip" data-tone={tone}>{kind}</span>

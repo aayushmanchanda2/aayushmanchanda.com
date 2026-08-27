@@ -148,7 +148,7 @@ jobs:
 
       # The last gate before generated data becomes everyone's problem.
       #
-      # `src/lib/{tools,sites,reading,experiments}.ts` refuse to build on a
+      # `src/lib/{tools,sites,library,experiments}.ts` refuse to build on a
       # malformed entry, and `sites.ts` additionally checks every shot path
       # against the disk. Building here means an entry that would fail those
       # checks fails

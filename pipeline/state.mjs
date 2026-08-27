@@ -62,13 +62,27 @@ export function resolvePaths(root) {
     statePath: path.join(root, "pipeline", "state.json"),
     sitesJson: path.join(root, "src", "data", "sites.json"),
     toolsJson: path.join(root, "src", "data", "tools.json"),
-    readingJson: path.join(root, "src", "data", "reading.json"),
+    libraryJson: path.join(root, "src", "data", "library.json"),
     shotsDir: path.join(root, "public", "shots"),
     tmpDir: path.join(root, "pipeline", "tmp"),
   };
 }
 
-/** @param {Paths} paths @param {Section} section @returns {string} */
+/**
+ * The file each section is written into.
+ *
+ * **This switch is the seam, and `reading` is on purpose.** A section key here
+ * is the name of the Raindrop collection Aayush saves into — `Publish/Reading`,
+ * the folder he taps on his phone — and that name is his to change, not this
+ * repo's. The site calls the same section Library, because "reading" was never
+ * true of a list that is a third videos. So the pipeline keeps Raindrop's word,
+ * the site keeps the reader's, and the translation happens on exactly one line:
+ * this one. Renaming the key instead would mean rewriting the `section` field of
+ * every published row in `state.json`, and any row that survived the rewrite
+ * would come back through the `never` guard below as a thrown run.
+ *
+ * @param {Paths} paths @param {Section} section @returns {string}
+ */
 export function galleryFor(paths, section) {
   switch (section) {
     case "sites":
@@ -76,7 +90,7 @@ export function galleryFor(paths, section) {
     case "tools":
       return paths.toolsJson;
     case "reading":
-      return paths.readingJson;
+      return paths.libraryJson;
     default: {
       const never = /** @type {never} */ (section);
       throw new Error(`unknown section ${JSON.stringify(never)}`);
@@ -193,13 +207,13 @@ export async function reconcile({ paths, dryRun = false, log = () => {} }) {
   const state = await loadState(paths);
   const sites = await readEntries(paths.sitesJson);
   const tools = await readEntries(paths.toolsJson);
-  const readingEntries = await readEntries(paths.readingJson);
+  const libraryEntries = await readEntries(paths.libraryJson);
 
   /** @type {Record<Section, Set<string>>} */
   const slugs = {
     sites: new Set(sites.map((entry) => String(entry["slug"]))),
     tools: new Set(tools.map((entry) => String(entry["slug"]))),
-    reading: new Set(readingEntries.map((entry) => String(entry["slug"]))),
+    reading: new Set(libraryEntries.map((entry) => String(entry["slug"]))),
   };
 
   /** @type {string[]} */

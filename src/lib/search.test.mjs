@@ -167,30 +167,30 @@ test("on a tie, the shorter title wins", () => {
 
 test("results are grouped by section, best section first", () => {
   const entries = [
-    entry("Astro Docs", "Reading", ""),
+    entry("Astro Docs", "Library", ""),
     entry("Astro", "Tools", ""),
   ];
   const groups = search(entries, "astro");
 
-  // "Astro" is the stronger hit, so Tools leads even though Reading came first
+  // "Astro" is the stronger hit, so Tools leads even though Library came first
   // in the index.
   assert.deepEqual(
     groups.map((group) => group.section),
-    ["Tools", "Reading"],
+    ["Tools", "Library"],
   );
 });
 
 test("a section appears once, with its hits together", () => {
   const entries = [
     entry("Astro", "Tools"),
-    entry("Astro Docs", "Reading"),
+    entry("Astro Docs", "Library"),
     entry("Astro Islands", "Tools"),
   ];
   const groups = search(entries, "astro");
 
   assert.deepEqual(
     groups.map((group) => group.section),
-    ["Tools", "Reading"],
+    ["Tools", "Library"],
   );
   assert.deepEqual(groups[0].hits.map((hit) => hit.entry.title), [
     "Astro",
@@ -200,7 +200,7 @@ test("a section appears once, with its hits together", () => {
 
 test("flattening a grouped result gives the order the arrow keys walk", () => {
   const entries = [
-    entry("Astro Docs", "Reading"),
+    entry("Astro Docs", "Library"),
     entry("Astro", "Tools"),
     entry("Astro Islands", "Tools"),
   ];
@@ -217,7 +217,7 @@ test("flattening a grouped result gives the order the arrow keys walk", () => {
 test("the cap applies to results overall, not per section", () => {
   const entries = [
     ...Array.from({ length: 10 }, (_, i) => entry(`Astro Tool ${i}`, "Tools")),
-    ...Array.from({ length: 10 }, (_, i) => entry(`Astro Read ${i}`, "Reading")),
+    ...Array.from({ length: 10 }, (_, i) => entry(`Astro Read ${i}`, "Library")),
   ];
   const groups = search(entries, "astro", 5);
 

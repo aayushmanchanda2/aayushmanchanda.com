@@ -16,7 +16,7 @@ import { SITE_URL, absolute } from './src/lib/site.ts';
  * suffix or to negotiate on `Accept`.
  *
  * Read from `src/lib/markdown.ts`, the one list of variants the site has. This
- * file used to keep its own copy, and a copy goes stale quietly: /reading's
+ * file used to keep its own copy, and a copy goes stale quietly: /library's
  * variant would have shipped, worked, and stayed invisible to the sitemap.
  */
 const MARKDOWN_VARIANTS = Object.values(PAGES).map((page) => absolute(page.md));
@@ -31,6 +31,23 @@ export default defineConfig({
    * See that file for the DNS cutover note.
    */
   site: SITE_URL,
+
+  /**
+   * Opt-in prefetching, for the library's kind tabs and nothing else so far.
+   *
+   * `prefetchAll` stays off deliberately. Turning it on would have the browser
+   * fetch every link in view, which on a page that is a list of forty rows is
+   * forty requests nobody asked for, and on /tools most of those links leave
+   * the site. So a link prefetches only where the markup says `data-astro-prefetch`,
+   * and the default strategy for one is `hover`: the tabs are four adjacent
+   * targets, and a reader crossing the row on the way to the third one should
+   * not pull the first two down with them the way `viewport` or `load` would.
+   *
+   * It costs one small module on the pages that carry a prefetching link, and
+   * nothing on the pages that do not. No page needs it to be readable, which is
+   * the claim /llms.txt makes about JavaScript on this site.
+   */
+  prefetch: { defaultStrategy: 'hover' },
 
   integrations: [
     sitemap({

@@ -477,10 +477,10 @@ test("an empty section still reports an honest zero", () => {
   assert.equal(list["numberOfItems"], 0);
 });
 
-test("a reading row keeps its off-site URL, because that is where the row goes", () => {
+test("a library row keeps its off-site URL, because that is where the row goes", () => {
   const url = "https://x.com/benln/status/2006057848430604705";
   const list = at(
-    listJsonLd({ name: "Reading", path: "/reading", entries: [{ name: "A post", url }] }),
+    listJsonLd({ name: "Library", path: "/library", entries: [{ name: "A post", url }] }),
     0,
   );
 

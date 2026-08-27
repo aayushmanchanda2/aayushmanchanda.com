@@ -1,33 +1,39 @@
 /**
- * The /reading data boundary.
+ * The /library data boundary.
  *
- * Same contract as `lib/tools.ts` and `lib/sites.ts`: `src/data/reading.json` is
+ * Same contract as `lib/tools.ts` and `lib/sites.ts`: `src/data/library.json` is
  * untrusted input until it has been parsed here, everything runs once at build
  * time, and the first bad entry throws instead of rendering. Nothing here uses
  * an `as` cast to skip that work.
  *
  * The generic half of the parse comes from `lib/parse.ts`, shared with the other
- * three boundaries. What stayed here is what only /reading knows: the kind
+ * three boundaries. What stayed here is what only /library knows: the kind
  * vocabulary, the note that is allowed to be absent, the domain cross-check, and
  * every error message.
  *
- * One thing /reading does that no other section does. Every other entry on the
+ * One thing /library does that no other section does. Every other entry on the
  * site gets a page of its own — `/tools/<slug>`, `/sites/<slug>`, `/notes/<slug>`
- * — and a reading row does not. A row's destination is the article, so the title
- * links straight out and there is nothing at `/reading/<slug>`. A page about a
- * link, holding one line I wrote and a button to leave, would be a stop on the
- * way to the thing rather than the thing.
+ * — and a library row does not. A row's destination is the thing itself, so the
+ * title links straight out and there is nothing at `/library/<slug>`. A page
+ * about a link, holding one line I wrote and a button to leave, would be a stop
+ * on the way to the thing rather than the thing.
  *
  * The slug survives that decision anyway, and is still parsed and still has to
  * be unique. It is the key the publish pipeline writes into `pipeline/state.json`
  * to remember that a bookmark has already been published, so it is a real
  * identifier even though it is not currently a URL.
+ *
+ * The pipeline still calls this section `reading`, and that is deliberate: its
+ * section key is the name of the Raindrop collection Aayush saves into
+ * (`Publish/Reading`), which is his to rename and not this repo's. The
+ * translation happens once, at the line in `pipeline/state.mjs` that names the
+ * file this module reads.
  */
 
 import type { Fail } from "./parse";
 import { SLUG, readers, routeSlug } from "./parse";
 
-import rawReading from "../data/reading.json";
+import rawLibrary from "../data/library.json";
 
 /**
  * What a saved link is. Ordered as the page and the filter bar order them:
@@ -38,12 +44,26 @@ export const KINDS = ["article", "post", "video"] as const;
 
 export type Kind = (typeof KINDS)[number];
 
-export interface ReadingEntry {
+/**
+ * The plural of each kind, for a heading or a tab.
+ *
+ * Here rather than in either of the two files that render it: the tab row and
+ * the kind page's own `h1` are two surfaces naming the same three things, and
+ * the first one to disagree would be the one nobody notices. `Record<Kind, …>`,
+ * so a fourth kind will not compile until it has been named.
+ */
+export const KIND_LABELS: Record<Kind, string> = {
+  article: "Articles",
+  post: "Posts",
+  video: "Videos",
+};
+
+export interface LibraryEntry {
   /** URL-safe id. Not a page — see the note at the top of this file. */
   slug: string;
   title: string;
   url: string;
-  /** Hostname without `www.`; also the filter page (`/reading/domain/<slug>`). */
+  /** Hostname without `www.`; also the filter page (`/library/domain/<slug>`). */
   domain: string;
   /** ISO calendar date (YYYY-MM-DD) the link was saved. */
   saved_date: string;
@@ -65,13 +85,13 @@ export interface ReadingEntry {
  */
 export type KindGroup = {
   kind: Kind;
-  entries: ReadingEntry[];
+  entries: LibraryEntry[];
 };
 
-export type ReadingDomainGroup = {
+export type LibraryDomainGroup = {
   domain: string;
   slug: string;
-  entries: ReadingEntry[];
+  entries: LibraryEntry[];
 };
 
 /* ---------------------------------------------------------------------------
@@ -80,7 +100,7 @@ export type ReadingDomainGroup = {
 
 const KIND_NAMES: readonly string[] = KINDS;
 
-const READ = readers("reading.json");
+const READ = readers("library.json");
 /** Annotated, or TypeScript stops treating a call as the end of control flow. */
 const fail: Fail = READ.fail;
 const { readString, readDate, isRecord } = READ;
@@ -146,13 +166,13 @@ function readNote(entry: Record<string, unknown>, where: string): string | null 
   return value;
 }
 
-export function parseReading(value: unknown): ReadingEntry[] {
-  if (!Array.isArray(value)) fail("root", "must be a JSON array of reading entries");
-  if (value.length === 0) fail("root", "must hold at least one reading entry");
+export function parseLibrary(value: unknown): LibraryEntry[] {
+  if (!Array.isArray(value)) fail("root", "must be a JSON array of library entries");
+  if (value.length === 0) fail("root", "must hold at least one library entry");
 
   const slugs = new Set<string>();
 
-  const parsed = value.map((item: unknown, index): ReadingEntry => {
+  const parsed = value.map((item: unknown, index): LibraryEntry => {
     const where = `entry ${index}`;
     if (!isRecord(item)) fail(where, "must be an object");
 
@@ -197,7 +217,7 @@ export function parseReading(value: unknown): ReadingEntry[] {
     if (owner !== undefined && owner !== entry.domain) {
       fail(
         where,
-        `has domain ${JSON.stringify(entry.domain)}, which collides with ${JSON.stringify(owner)} at /reading/domain/${slug}`,
+        `has domain ${JSON.stringify(entry.domain)}, which collides with ${JSON.stringify(owner)} at /library/domain/${slug}`,
       );
     }
     claimed.set(slug, entry.domain);
@@ -211,7 +231,7 @@ export function parseReading(value: unknown): ReadingEntry[] {
    --------------------------------------------------------------------------- */
 
 /** Newest save first; ties keep the order they were written in the JSON. */
-export const reading: ReadingEntry[] = parseReading(rawReading)
+export const library: LibraryEntry[] = parseLibrary(rawLibrary)
   .map((entry, index) => ({ entry, index }))
   .sort((a, b) =>
     a.entry.saved_date === b.entry.saved_date
@@ -223,13 +243,13 @@ export const reading: ReadingEntry[] = parseReading(rawReading)
 /** Kinds in vocabulary order, empty ones dropped: no page without entries. */
 export const kindGroups: KindGroup[] = KINDS.map((kind) => ({
   kind,
-  entries: reading.filter((entry) => entry.kind === kind),
+  entries: library.filter((entry) => entry.kind === kind),
 })).filter((group) => group.entries.length > 0);
 
-export const readingDomains: ReadingDomainGroup[] = (() => {
-  const groups = new Map<string, ReadingDomainGroup>();
+export const libraryDomains: LibraryDomainGroup[] = (() => {
+  const groups = new Map<string, LibraryDomainGroup>();
 
-  for (const entry of reading) {
+  for (const entry of library) {
     const group = groups.get(entry.domain);
     if (group) {
       group.entries.push(entry);

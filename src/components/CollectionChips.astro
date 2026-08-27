@@ -3,9 +3,11 @@
  * CollectionChips — the collections one site is in, as links out to them.
  *
  * Fourth user of the chip vocabulary in `styles/chip.css`, after VerdictBadge,
- * StatusChip and KindChip, and the same `chip--link` form the /reading filter
- * bar uses: these are filters, so they get the filter's affordances rather than
- * a label's.
+ * StatusChip and KindChip, and now the only user of the `chip--link` form:
+ * these are filters, so they get the filter's affordances rather than a
+ * label's. The other filter bar the site had, the one over /library, is a tab
+ * row now (`KindTabs.astro`). It needed a selected state, and a chip's tone is
+ * already spent saying something else.
  *
  * Gray, always. The other three components pick a tone per word because their
  * words mean something on a scale — `using` is not `skipped`, `shipped` is not

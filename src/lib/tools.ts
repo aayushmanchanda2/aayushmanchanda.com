@@ -257,7 +257,7 @@ export function parseTools(value: unknown): Tool[] {
    Derived views — computed once, at build time
    --------------------------------------------------------------------------- */
 
-/** Via the fold in `lib/parse.ts` that /sites and /reading share. */
+/** Via the fold in `lib/parse.ts` that /sites and /library share. */
 export function categorySlug(category: string): string {
   return routeSlug(category);
 }

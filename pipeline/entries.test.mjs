@@ -217,7 +217,7 @@ test("the post outranks the excerpt Raindrop scraped off the same post", () => {
   // Learned from the first real x.com save. Raindrop's excerpt for a post is
   // not Aayush writing about it — it is a ragged copy of the same words, raw
   // newlines and no attribution — so deferring to it meant shipping the worse
-  // of two copies. His own line goes in `src/data/reading.json`, which nothing
+  // of two copies. His own line goes in `src/data/library.json`, which nothing
   // here overwrites.
   const entry = buildReadingEntry({
     bookmark: saved({ excerpt: "So I spent the entire night going\n\nthrough my archives." }),
@@ -330,7 +330,7 @@ test("a profile is not a repository, so it stays a url", () => {
 
 test("tools and reading entries carry no collections", () => {
   // The scoping call, asserted rather than only commented: /tools has
-  // `category` and /reading has `kind`, and a second taxonomy in those files
+  // `category` and /library has `kind`, and a second taxonomy in those files
   // would be a field no parser reads and no page renders.
   const tagged = bookmark({ tags: ["Portfolios"] });
 

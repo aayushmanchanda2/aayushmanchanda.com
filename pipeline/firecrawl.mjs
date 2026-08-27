@@ -9,7 +9,7 @@
  * The pipeline uses Firecrawl for exactly two things, and neither of them is
  * load-bearing:
  *
- *   - `scrapeMarkdown()` reads an x.com post, so a /reading row can say what the
+ *   - `scrapeMarkdown()` reads an x.com post, so a /library row can say what the
  *     post actually said instead of "A post from @someone", which is all
  *     Raindrop can see from behind the login wall.
  *   - `screenshotFullPage()` is the second chance for a /sites capture that
@@ -441,7 +441,7 @@ export function parsePost(markdown, url) {
   const text = flatten(ends === null ? after : after.slice(0, ends.index));
   // Not just non-empty: a body that survives flattening as `**` or `...` is a
   // parse that found the section and nothing in it, and it would go on to become
-  // a /reading row whose entire link text is punctuation.
+  // a /library row whose entire link text is punctuation.
   if (!HAS_WORDS.test(text)) return null;
 
   const handle =

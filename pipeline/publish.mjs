@@ -92,7 +92,7 @@ export function plan({ bookmarks, state, gallery }) {
    * `repo` (`entries.mjs › buildToolEntry`), so an index built from `url` alone
    * would not contain it — and the next time that same link was saved, the
    * gallery-holds-it check below would miss and publish a second copy of the
-   * entry. /sites and /reading carry no `repo`, so for them this loop is the
+   * entry. /sites and /library carry no `repo`, so for them this loop is the
    * one it always was.
    */
   for (const section of SECTIONS) {
@@ -127,7 +127,7 @@ export function plan({ bookmarks, state, gallery }) {
      * project from its README on a phone saves `.../blob/main/README.md`, and
      * that is the same tool as the one already on the page. Only /tools folds:
      * two files in one repository really are two different pages to save to
-     * /reading.
+     * /library.
      */
     const saved =
       bookmark.collection === "tools" ? (repoFrom(bookmark.url) ?? bookmark.url) : bookmark.url;
@@ -139,7 +139,7 @@ export function plan({ bookmarks, state, gallery }) {
 
     // The x.com rule is a rule about screenshots, so it stops at the section
     // that takes them. /sites cannot shoot a tweet and /tools would file one as
-    // a product it is not; /reading only ever wanted the link, and a saved post
+    // a product it is not; /library only ever wanted the link, and a saved post
     // is a first-class row there rather than a capture that is going to fail.
     // Rejecting one here would make the section unable to hold the single
     // commonest thing Aayush saves.
@@ -178,7 +178,7 @@ export function plan({ bookmarks, state, gallery }) {
 const COMMITTED = [
   "src/data/sites.json",
   "src/data/tools.json",
-  "src/data/reading.json",
+  "src/data/library.json",
   "public/shots",
   "pipeline/state.json",
 ];
@@ -286,7 +286,7 @@ export async function run(argv = [], overrides = {}) {
     const gallery = {
       sites: await readEntries(paths.sitesJson),
       tools: await readEntries(paths.toolsJson),
-      reading: await readEntries(paths.readingJson),
+      reading: await readEntries(paths.libraryJson),
     };
 
     const { work, skipped } = plan({ bookmarks, state, gallery });

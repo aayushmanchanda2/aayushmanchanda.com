@@ -297,7 +297,7 @@ function listItems(entries: readonly ListEntry[]): JsonLdNode[] {
  * rendered, each row pointing where the row points.
  *
  * `url` on the `ListItem` rather than a nested `item` object, because that is
- * all these rows are — a name and a destination. Half of them (every `/reading`
+ * all these rows are — a name and a destination. Half of them (every `/library`
  * row) go straight off-site, which is exactly what the visible row does, and
  * inventing a local landing page for them in the graph would describe a site
  * that does not exist.

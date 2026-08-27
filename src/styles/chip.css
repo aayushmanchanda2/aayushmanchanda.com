@@ -83,13 +83,13 @@
   --chip-l: 45%;
 }
 
-/* A chip that is a filter link (the /reading bar), not a label on a row.
+/* A chip that is a filter link (the collections on a /sites entry), not a label
+   on a row.
 
    Same tone, same size, so the vocabulary reads as one vocabulary. The only
    things added are the affordances a label has no use for: a pointer cursor
-   comes free, the tint deepens on hover so the target is obvious without
-   changing colour, and the count sits inside the chip at the ink's own opacity
-   rather than beside it as a second element to align. */
+   comes free, and the tint deepens on hover so the target is obvious without
+   changing colour. */
 .chip--link {
   display: inline-flex;
   align-items: baseline;
@@ -104,10 +104,6 @@
 .chip--link:focus-visible {
   --chip-tint: 0.2;
   --chip-line: 0.45;
-}
-
-.chip--link > .tabular-nums {
-  opacity: 0.65;
 }
 
 /* The dark tones, twice, for the reason written out at the top of the dark

@@ -1,0 +1,143 @@
+---
+/**
+ * KindTabs — the persistent filter row on /library and every /library/kind page.
+ *
+ * A tab row rather than the chip bar that used to sit here, and the difference
+ * is what the two things say. A chip is a label: it names what a row **is**, and
+ * `KindChip` still does that job on every row in the list. A tab names where the
+ * reader **is**. Asking one chip to carry both would put selection into the tone
+ * system, which already spends itself on the kind, and the accent it would need
+ * for the selected state is a blue the `article` chip is already wearing two
+ * inches below it. Two blues, one page, one word: exactly the collision §1 of
+ * `design.md` holds the chip palette back from the link palette to avoid.
+ *
+ * The row is identical on all four pages, which is the point of it. Before this
+ * a reader who clicked `video` landed on a page with no way back to the other
+ * kinds except the crumb, so the three kind routes were a one-way door. Now the
+ * whole vocabulary is on every one of them, and `All` is the fourth tab rather
+ * than a second control somewhere else.
+ *
+ * `/sites` deliberately does not get this treatment. Its collections overlap (a
+ * site can be in several, or in none), so a tab row there would draw a partition
+ * that is not in the data. Kinds are a real partition: every entry has exactly
+ * one, and the four tabs add up to the list.
+ */
+import type { Kind, KindGroup } from "../lib/library";
+import { KIND_LABELS } from "../lib/library";
+
+interface Props {
+  groups: KindGroup[];
+  /** Total across every kind, for the `All` tab. */
+  total: number;
+  /** The kind this page is showing, or null on the index. */
+  current: Kind | null;
+}
+
+const { groups, total, current } = Astro.props;
+---
+
+{/*
+  Links, not `role="tab"`. These navigate to real pages rather than swapping a
+  panel in place, and calling them tabs to a screen reader would promise a
+  keyboard contract (arrow keys inside a tablist) that a static site does not
+  implement. `aria-current="page"` is the honest way to say which one you are on.
+*/}
+<nav class="tabs" aria-label="Filter the library by kind">
+  <ul class="tabs__row">
+    <li>
+      <a
+        class="tabs__tab mono"
+        href="/library"
+        data-astro-prefetch
+        aria-current={current === null ? "page" : undefined}
+      >
+        All<span class="tabs__count tabular-nums">{total}</span>
+      </a>
+    </li>
+    {
+      groups.map((group) => (
+        <li>
+          <a
+            class="tabs__tab mono"
+            href={`/library/kind/${group.kind}`}
+            data-astro-prefetch
+            aria-current={current === group.kind ? "page" : undefined}
+          >
+            {KIND_LABELS[group.kind]}
+            <span class="tabs__count tabular-nums">{group.entries.length}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .tabs {
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  /* Wraps rather than scrolls. Four tabs and their counts hold one line in a
+     375px column, but a fifth kind or a three-digit count would not, and
+     `.foot__meta` already answers this exact question the same way: a flex row
+     that cannot wrap pushes its last item off the side instead of dropping it
+     to a second line. A wrapped tab keeps its own bar directly under itself. */
+  .tabs__row {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: clamp(0.85rem, 3.2vw, 1.5rem);
+  }
+
+  /* So the anchor fills the line box and its bar lands on the row's own rule. */
+  .tabs__row > li {
+    display: flex;
+  }
+
+  .tabs__tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    /* 11px of mono in a 40px target, reached the way the rail dashes and the
+       theme toggle reach it: the hit floor without a toolbar's height in the
+       row. */
+    min-height: 40px;
+    /* `--muted`, not the `--faint` the row metadata uses. A date is metadata
+       and a tab is a control, and an unselected control that a reader is meant
+       to press has to clear AA on its own rather than lean on the one beside
+       it being brighter. */
+    color: var(--muted);
+    text-decoration: none;
+    white-space: nowrap;
+    transition-property: color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .tabs__tab:hover {
+    color: var(--fg);
+  }
+
+  /* The accent as ink, never as a panel: `aria-current` is one of the four
+     things §1 reserves `--accent` for. The bar is the same 1px weight the row's
+     own rule is and sits exactly on it, so the selected tab reads as a break in
+     the hairline rather than as a second line stacked over it. */
+  .tabs__tab[aria-current="page"] {
+    color: var(--accent);
+  }
+
+  .tabs__tab[aria-current="page"]::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: -1px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  /* The count sits inside the tab at the ink's own opacity, the same call
+     `.chip--link` makes about its own count. */
+  .tabs__count {
+    opacity: 0.65;
+  }
+</style>

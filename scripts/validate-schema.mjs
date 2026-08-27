@@ -138,7 +138,7 @@ const EXPECTED = [
   {
     name: "section index",
     match: (page) =>
-      ["tools", "sites", "reading", "experiments", "notes"].some(
+      ["tools", "sites", "library", "experiments", "notes"].some(
         (section) => page === `${section}/index.html`,
       ),
     types: ["ItemList"],
@@ -161,7 +161,7 @@ const EXPECTED = [
   {
     name: "filter",
     match: (page) =>
-      /^(tools\/(category|verdict)|sites\/(collection|domain)|reading\/(kind|domain))\/[^/]+\/index\.html$/.test(
+      /^(tools\/(category|verdict)|sites\/(collection|domain)|library\/(kind|domain))\/[^/]+\/index\.html$/.test(
         page,
       ),
     types: ["ItemList", "BreadcrumbList"],

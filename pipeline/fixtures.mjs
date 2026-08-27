@@ -43,7 +43,7 @@ export async function makeRepo(
 
   await writeFile(paths.sitesJson, JSON.stringify(sites, null, 2));
   await writeFile(paths.toolsJson, JSON.stringify(tools, null, 2));
-  await writeFile(paths.readingJson, JSON.stringify(reading, null, 2));
+  await writeFile(paths.libraryJson, JSON.stringify(reading, null, 2));
   await writeFile(paths.statePath, JSON.stringify(state, null, 2));
 
   for (const shot of shots) {

@@ -16,7 +16,7 @@
 /** Which gallery a bookmark belongs to. Decided by the Raindrop collection. */
 export type Section = "tools" | "sites" | "reading";
 
-/** What a /reading entry points at, derived from its host. */
+/** What a /library entry points at, derived from its host. */
 export type ReadingKind = "article" | "post" | "video";
 
 /**
@@ -67,7 +67,7 @@ export interface Collection {
 /**
  * An x.com post, as read back out of Firecrawl's markdown.
  *
- * Only the two fields a /reading row can use. Firecrawl's post-processed
+ * Only the two fields a /library row can use. Firecrawl's post-processed
  * document also carries a display name, a posted date and an engagement count,
  * and none of them is written anywhere: the row's date is the day it was saved
  * by contract, and a like count is a number that is wrong by the time it is
@@ -93,7 +93,7 @@ export interface Paths {
   statePath: string;
   sitesJson: string;
   toolsJson: string;
-  readingJson: string;
+  libraryJson: string;
   shotsDir: string;
   tmpDir: string;
 }

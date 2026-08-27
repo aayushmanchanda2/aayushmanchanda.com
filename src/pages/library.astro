@@ -1,0 +1,68 @@
+---
+/**
+ * /library — what I read and watch, saved as it comes.
+ *
+ * The tab row above the list is doing more work here than the equivalent would
+ * on /tools. /tools reaches its category and verdict pages from a tool's own
+ * details page; /library has no details pages, so without this row the three
+ * `/library/kind/<kind>` routes would exist, sit in the sitemap, and be
+ * unreachable by anyone using the site with their eyes. The domain routes are
+ * already reachable from the mono hostname on every row.
+ *
+ * The row is `KindTabs`, and it is the same component, in the same slot, on
+ * this page and on all three kind pages. See the note in that file for why it
+ * is a tab row and not the chip bar it replaced.
+ */
+import Base from "../layouts/Base.astro";
+import KindTabs from "../components/KindTabs.astro";
+import LibraryList from "../components/LibraryList.astro";
+import { kindGroups, library } from "../lib/library";
+import { listJsonLd } from "../lib/schema";
+
+/**
+ * The only list on the site whose rows point off-site, because that is what the
+ * rows do: /library has no details pages, and every visible row goes straight
+ * to the source. Minting a local URL per entry for the graph would describe a
+ * section that does not exist.
+ */
+const jsonLd = listJsonLd({
+  name: "Library",
+  path: "/library",
+  entries: library.map((entry) => ({ name: entry.title, url: entry.url })),
+});
+---
+
+<Base
+  title="Library · Aayush Manchanda"
+  description="Articles, posts and videos Aayush Manchanda saved to read or watch properly, with the date he saved each one."
+  jsonLd={jsonLd}
+>
+  <header>
+    <h1 class="page-title">Library</h1>
+    <p class="standfirst">
+      Things I saved to read or watch properly. Saving one is not the same as
+      having done either, and neither one is a recommendation. Every row goes
+      straight to the source.
+    </p>
+  </header>
+
+  <div class="body">
+    <KindTabs groups={kindGroups} total={library.length} current={null} />
+
+    <div class="rows">
+      <LibraryList entries={library} />
+    </div>
+  </div>
+</Base>
+
+<style>
+  .body {
+    margin-top: clamp(3.5rem, 12vh, 6rem);
+  }
+
+  /* Closer to the tabs than the tabs are to the standfirst: the row belongs to
+     the list under it, not to the header above it. */
+  .rows {
+    margin-top: 1.25rem;
+  }
+</style>

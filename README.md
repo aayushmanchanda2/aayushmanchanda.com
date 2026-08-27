@@ -18,6 +18,14 @@ Save a link. That is the whole workflow.
    most entries have no tags.
 4. Wait.
 
+**Publish/Reading fills /library.** The section was called Reading until a third
+of it turned out to be videos, and the page was renamed rather than left lying.
+The Raindrop collection kept its name, because that is the folder I actually tap
+and renaming it would break every already-published row's record of where it came
+from. So the pipeline says `reading` and the site says Library, and the one line
+that translates is `galleryFor` in `pipeline/state.mjs`. `/reading` and
+everything under it 308s to the `/library` equivalent, in `vercel.json`.
+
 A GitHub Actions cron (`.github/workflows/publish.yml`, `23 */3 * * *`, so :23
 past every third hour) reads the three collections, screenshots what is new,
 commits the result to `main`, and Vercel deploys the push.
@@ -34,7 +42,7 @@ Two things in the run are done by [Firecrawl](https://firecrawl.dev) rather than
 by the runner, and both are optional: they happen when the `FIRECRAWL_API_KEY`
 repo secret is set and are skipped silently when it is not, so a run on a laptop
 never touches the service. The first is x.com. Raindrop cannot see past the login
-wall, so every post I save arrives titled "A post from @someone" — a /reading row
+wall, so every post I save arrives titled "A post from @someone" — a /library row
 that says nothing. When the key is present the pipeline reads the post and uses
 its opening line as the title, with more of it and the handle as the note. A note
 I typed in Raindrop myself always wins over the fetched one. The second is the
@@ -70,7 +78,7 @@ exists, holding every site tagged the same way.
   is first written. Re-tagging in Raindrop afterwards does not reach a site that
   has already published — edit `src/data/sites.json` instead, which is the
   better tool for it anyway.
-- **/tools and /reading ignore tags.** They already have `category` and `kind`.
+- **/tools and /library ignore tags.** They already have `category` and `kind`.
 
 The collections line on /sites appears once there are two collections. Below
 that it renders nothing, the same way an empty section hides itself.

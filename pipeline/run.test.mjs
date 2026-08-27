@@ -151,7 +151,7 @@ test("a reading save is published without opening a browser", async (t) => {
   assert.equal(await run([], deps({ paths, server, capture, out })), 0);
 
   assert.equal(capture.calls.length, 0, "a reading row is metadata, not a picture");
-  assert.deepEqual(await readJson(paths.readingJson), [
+  assert.deepEqual(await readJson(paths.libraryJson), [
     {
       slug: "how-gumclaw-works",
       title: "How Gumclaw Works",
@@ -188,7 +188,7 @@ test("a tweet saved to reading is published; the same tweet to sites is not", as
 
   assert.equal(await run([], deps({ paths, server, capture, out })), 0);
 
-  const [entry] = await readJson(paths.readingJson);
+  const [entry] = await readJson(paths.libraryJson);
   assert.equal(entry.kind, "post", "derived from the host, not from the collection");
   assert.equal(entry.domain, "x.com");
   assert.deepEqual(await readJson(paths.sitesJson), [], "the screenshot rule still holds there");
@@ -212,7 +212,7 @@ test("a reading save with no excerpt gets a null note, not a stand-in", async (t
 
   await run([], deps({ paths, server, out }));
 
-  const [entry] = await readJson(paths.readingJson);
+  const [entry] = await readJson(paths.libraryJson);
   assert.equal(entry.note, null, "/tools needs a fallback sentence; a reading row does not");
   assert.equal(entry.kind, "video");
 });
@@ -364,7 +364,7 @@ test("a saved post lands with the words in it, not with Raindrop's placeholder",
 
   assert.equal(await run([], deps({ paths, server, firecrawl: firecrawl.client, out })), 0);
 
-  const [post, article] = await readJson(paths.readingJson);
+  const [post, article] = await readJson(paths.libraryJson);
 
   assert.equal(
     post.title,
@@ -393,7 +393,7 @@ test("markdown that is not a post leaves the row exactly as it was", async (t) =
 
   assert.equal(await run([], deps({ paths, server, firecrawl: firecrawl.client, out })), 0);
 
-  const [entry] = await readJson(paths.readingJson);
+  const [entry] = await readJson(paths.libraryJson);
   assert.equal(entry.title, "A post from @ephraimakanmu");
   assert.equal(entry.note, null);
   assert.ok(
@@ -417,7 +417,7 @@ test("a Firecrawl outage costs a warning line and nothing else", async (t) => {
   );
 
   assert.equal(code, 0, "the enrichment is a nicety; the row publishes without it");
-  assert.equal((await readJson(paths.readingJson))[0].title, "A post from @ephraimakanmu");
+  assert.equal((await readJson(paths.libraryJson))[0].title, "A post from @ephraimakanmu");
   assert.equal((await loadState(paths))["900"].kind, "published", "never an attempt, never a strike");
   assert.ok(out.out.some((line) => line.startsWith("warn: firecrawl")));
 });
@@ -434,7 +434,7 @@ test("with no key in the environment nothing is asked of anyone", async (t) => {
 
   assert.equal(await run([], deps({ paths, server, out })), 0);
 
-  assert.equal((await readJson(paths.readingJson))[0].title, "A post from @ephraimakanmu");
+  assert.equal((await readJson(paths.libraryJson))[0].title, "A post from @ephraimakanmu");
   assert.equal(
     out.out.some((line) => line.startsWith("warn: firecrawl") || line.includes("found no post")),
     false,

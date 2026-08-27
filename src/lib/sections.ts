@@ -18,14 +18,14 @@ import { getCollection } from "astro:content";
 
 import { experiments } from "./experiments";
 import { markdownVariantFor } from "./markdown";
-import { reading } from "./reading";
+import { library } from "./library";
 import { sites } from "./sites";
 import { tools } from "./tools";
 
 export type SectionHref =
   | "/tools"
   | "/sites"
-  | "/reading"
+  | "/library"
   | "/notes"
   | "/experiments";
 
@@ -80,9 +80,9 @@ const CATALOGUE: readonly Omit<Section, "count" | "md">[] = [
     kind: "subtitle",
   },
   {
-    href: "/reading",
-    name: "Reading",
-    blurb: "Articles, posts and talks I saved to read properly.",
+    href: "/library",
+    name: "Library",
+    blurb: "Articles, posts and videos I saved to get to properly.",
     kind: "subtitle",
   },
   {
@@ -109,7 +109,7 @@ export async function getSections(): Promise<Section[]> {
   const counts: Record<SectionHref, number> = {
     "/tools": tools.length,
     "/sites": sites.length,
-    "/reading": reading.length,
+    "/library": library.length,
     "/notes": notes.length,
     "/experiments": experiments.length,
   };

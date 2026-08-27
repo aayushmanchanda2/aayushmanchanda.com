@@ -1,8 +1,8 @@
 ---
 /**
- * ReadingList — the only place a reading list is rendered.
+ * LibraryList — the only place the library list is rendered.
  *
- * `/reading` shows everything; the two filter routes pass a subset. The domain
+ * `/library` shows everything; the two filter routes pass a subset. The domain
  * filter page turns the domain column off, because there the h1 already says
  * the domain and repeating it on every row would be the page telling a reader
  * something they came in knowing. Same call `ToolList` makes about its category
@@ -10,20 +10,20 @@
  *
  * The row is the /tools row anatomy with the favicon column removed. A tools
  * list is a list of products, and a mark is how you recognise one at a glance;
- * a reading list is mostly four hosts, so the same column would have been three
+ * the library is mostly four hosts, so the same column would have been three
  * identical YouTube marks stacked down the page, plus a third-party request per
  * row to fetch them. The domain in mono does that job here and does it in text.
  *
- * The title is the only link out. There is no `/reading/<slug>` to offer as a
+ * The title is the only link out. There is no `/library/<slug>` to offer as a
  * "details" affordance the way /tools does, which is the point of the section:
- * the row's destination is the article.
+ * the row's destination is the thing itself.
  */
 import KindChip from "./KindChip.astro";
 import { routeSlug } from "../lib/parse";
-import type { ReadingEntry } from "../lib/reading";
+import type { LibraryEntry } from "../lib/library";
 
 interface Props {
-  entries: ReadingEntry[];
+  entries: LibraryEntry[];
   /** Off on the domain filter page, where the h1 is already the domain. */
   showDomain?: boolean;
 }
@@ -37,9 +37,9 @@ const { entries, showDomain = true } = Astro.props;
       /*
        * The slug as an id, so the row is a destination.
        *
-       * /reading has no per-entry page — the row's own link goes to the
-       * article — which left the command palette with nowhere on this site to
-       * send someone who searched for one. `/reading#slug` is that somewhere,
+       * /library has no per-entry page — the row's own link goes to the source
+       * — which left the command palette with nowhere on this site to send
+       * someone who searched for one. `/library#slug` is that somewhere,
        * and it lands them on the entry in context, with its note and its
        * neighbours, rather than ejecting them to a third-party page from what
        * is meant to be a navigation control.
@@ -64,7 +64,7 @@ const { entries, showDomain = true } = Astro.props;
           {showDomain && (
             <a
               class="row__domain mono"
-              href={`/reading/domain/${routeSlug(entry.domain)}`}
+              href={`/library/domain/${routeSlug(entry.domain)}`}
             >
               {entry.domain}
             </a>
@@ -84,7 +84,7 @@ const { entries, showDomain = true } = Astro.props;
   }
 
   .row {
-    /* Arriving from /reading#slug, the row should not sit flush against the
+    /* Arriving from /library#slug, the row should not sit flush against the
        top edge of the window. */
     scroll-margin-block: 5rem;
     display: grid;

@@ -356,7 +356,7 @@ export function parseSites(value: unknown): Site[] {
    --------------------------------------------------------------------------- */
 
 /** `designengineer.tools` -> `designengineer-tools`, via the fold in
- *  `lib/parse.ts` that /tools and /reading mint their own filter routes with. */
+ *  `lib/parse.ts` that /tools and /library mint their own filter routes with. */
 export function domainSlug(domain: string): string {
   return routeSlug(domain);
 }

@@ -21,7 +21,7 @@
  *     `tools.ts` fails the build on a repository written into `url`. A saved
  *     GitHub link therefore becomes `repo` with `url` left null. See
  *     `repoFrom` and `buildToolEntry` below.
- *   - `reading.ts` takes `note` as `string | null`, so a bookmark with no
+ *   - `library.ts` takes `note` as `string | null`, so a bookmark with no
  *     excerpt gets null rather than a stand-in sentence. /tools needs the
  *     fallback because a verdict with no note is a row that says nothing; a
  *     reading row already says what it is with its title and its kind.
@@ -374,7 +374,7 @@ export function shotFilesOf(entry) {
  * /sites is the only section that carries collections.
  *
  * Not a scoping accident, and not "for now": /tools already has `category` and
- * /reading already has `kind`, and both of those are single-valued taxonomies
+ * /library already has `kind`, and both of those are single-valued taxonomies
  * their own pages, routes and filter bars are built around. Writing a second,
  * many-to-many one into those entries would put a field in the JSON that no
  * parser reads and no page renders — data that claims to do something and does
@@ -481,7 +481,7 @@ export function clip(text, max) {
 }
 
 /**
- * A /reading entry: metadata and nothing else.
+ * A /library entry: metadata and nothing else.
  *
  * No shots, no capture, no browser. A reading row is a title, a host, a word
  * for what it is, and the day it was saved — every one of which is already in
@@ -494,12 +494,12 @@ export function clip(text, max) {
  * a better title than that sentence, so they win.
  *
  * They win the note too, and that is worth saying because the first version of
- * this let Raindrop's excerpt outrank them. The reasoning was that `reading.ts`
+ * this let Raindrop's excerpt outrank them. The reasoning was that `library.ts`
  * documents the note as one line in Aayush's voice — but the first real x.com
  * save proved the premise wrong. Raindrop does fill an excerpt for a post: it
  * fills it with a ragged, unattributed copy of the same words this function
  * already has, newlines and all. Preferring it meant preferring the worse copy.
- * A note Aayush actually wrote is one he edits into `src/data/reading.json`,
+ * A note Aayush actually wrote is one he edits into `src/data/library.json`,
  * which the README already names as the better tool for it, and which nothing
  * here ever overwrites.
  *
@@ -526,7 +526,7 @@ export function buildReadingEntry({ bookmark, slug, date, post = null }) {
     domain: hostnameOf(bookmark.url),
     saved_date: date,
     kind: deriveKind(bookmark.url),
-    // null, not a stand-in sentence: `reading.ts` takes null and renders the
+    // null, not a stand-in sentence: `library.ts` takes null and renders the
     // row without a second line, which is the honest shape for a link Raindrop
     // gave us no excerpt for.
     note: post !== null ? postNote(post) : bookmark.excerpt === "" ? null : bookmark.excerpt,

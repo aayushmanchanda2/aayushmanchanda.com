@@ -9,12 +9,12 @@
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 
 import Base from "../../../layouts/Base.astro";
-import ReadingList from "../../../components/ReadingList.astro";
-import { readingDomains } from "../../../lib/reading";
+import LibraryList from "../../../components/LibraryList.astro";
+import { libraryDomains } from "../../../lib/library";
 import { listJsonLd } from "../../../lib/schema";
 
 export const getStaticPaths = (() =>
-  readingDomains.map((group) => ({
+  libraryDomains.map((group) => ({
     params: { domain: group.slug },
     props: group,
   }))) satisfies GetStaticPaths;
@@ -25,21 +25,21 @@ const { domain, slug, entries } = Astro.props;
 const count = entries.length;
 const lead = `${count} ${count === 1 ? "link" : "links"} I saved from`;
 
-/** Off-site rows, same as /reading, plus the crumb this page draws. */
+/** Off-site rows, same as /library, plus the crumb this page draws. */
 const jsonLd = listJsonLd({
   name: domain,
-  path: `/reading/domain/${slug}`,
-  parent: { name: "Reading", path: "/reading" },
+  path: `/library/domain/${slug}`,
+  parent: { name: "Library", path: "/library" },
   entries: entries.map((entry) => ({ name: entry.title, url: entry.url })),
 });
 ---
 
 <Base
-  title={`${domain} · Reading · Aayush Manchanda`}
+  title={`${domain} · Library · Aayush Manchanda`}
   description={`${lead} ${domain}.`}
   jsonLd={jsonLd}
 >
-  <p class="crumb mono"><a href="/reading">&larr; Reading</a></p>
+  <p class="crumb mono"><a href="/library">&larr; Library</a></p>
 
   <header>
     <h1 class="page-title domain">{domain}</h1>
@@ -47,7 +47,7 @@ const jsonLd = listJsonLd({
   </header>
 
   <div class="body">
-    <ReadingList entries={entries} showDomain={false} />
+    <LibraryList entries={entries} showDomain={false} />
   </div>
 </Base>
 

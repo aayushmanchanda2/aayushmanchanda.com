@@ -44,12 +44,15 @@ const jsonLd = listJsonLd({
     </p>
 
     {/*
-      A line of text, not the chip bar /reading uses. The chips there sit above
-      a list of rows and are the loudest thing on the page by design; here they
-      would sit above a wall of screenshots and compete with the one thing this
-      page is for. So the collections get the mono voice the crumb and the
-      keyboard hints already use — present, findable, and quiet enough that the
-      pictures still go first.
+      A line of text, and not the tab row /library uses either. Two reasons, and
+      the second is the one that settles it. A control sitting over a wall of
+      screenshots competes with the one thing this page is for, so the
+      collections get the mono voice the crumb and the keyboard hints already
+      use: present, findable, quiet enough that the pictures still go first. And
+      a tab row draws a partition. Kinds are one, because every entry has exactly
+      one and the tabs add up to the list; collections are not, because a site
+      can be in three of them or in none, so tabs here would claim a shape the
+      data does not have.
     */}
     {
       showCollections && (

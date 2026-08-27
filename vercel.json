@@ -3,6 +3,22 @@
 
   "routes": [
     {
+      "src": "^/reading/?$",
+      "status": 308,
+      "headers": { "Location": "/library" }
+    },
+    {
+      "src": "^/reading\\.md$",
+      "status": 308,
+      "headers": { "Location": "/library.md" }
+    },
+    {
+      "src": "^/reading/(.*)$",
+      "status": 308,
+      "headers": { "Location": "/library/$1" }
+    },
+
+    {
       "src": "^/$",
       "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
       "dest": "/index.md",
@@ -30,9 +46,9 @@
       }
     },
     {
-      "src": "^/reading/?$",
+      "src": "^/library/?$",
       "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
-      "dest": "/reading.md",
+      "dest": "/library.md",
       "headers": {
         "Content-Type": "text/markdown; charset=utf-8",
         "Vary": "Accept, Accept-Encoding"
@@ -58,7 +74,7 @@
     },
 
     {
-      "src": "^/(tools|sites|reading|experiments|notes)/?$",
+      "src": "^/(tools|sites|library|experiments|notes)/?$",
       "headers": { "Vary": "Accept, Accept-Encoding" },
       "continue": true
     },
@@ -68,7 +84,7 @@
       "continue": true
     },
     {
-      "src": "^/(index|tools|sites|reading|experiments|notes)\\.md$",
+      "src": "^/(index|tools|sites|library|experiments|notes)\\.md$",
       "headers": {
         "Content-Type": "text/markdown; charset=utf-8",
         "Vary": "Accept, Accept-Encoding"

@@ -33,13 +33,13 @@ export interface MarkdownPage {
  * `markdownVariantFor`. A seventh variant is added here and nowhere else.
  */
 export const PAGES: Record<
-  "home" | "tools" | "sites" | "reading" | "experiments" | "notes",
+  "home" | "tools" | "sites" | "library" | "experiments" | "notes",
   MarkdownPage
 > = {
   home: { html: "/", md: "/index.md", name: "Home" },
   tools: { html: "/tools", md: "/tools.md", name: "Tools" },
   sites: { html: "/sites", md: "/sites.md", name: "Sites" },
-  reading: { html: "/reading", md: "/reading.md", name: "Reading" },
+  library: { html: "/library", md: "/library.md", name: "Library" },
   experiments: {
     html: "/experiments",
     md: "/experiments.md",

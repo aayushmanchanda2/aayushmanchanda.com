@@ -21,7 +21,7 @@ import { getCollection } from "astro:content";
 
 import { experiments } from "./experiments";
 import { repoOwner } from "./links";
-import { reading } from "./reading";
+import { library } from "./library";
 import type { SearchEntry } from "./search";
 import { collectionLabel, sites } from "./sites";
 import type { Tool } from "./tools";
@@ -38,7 +38,7 @@ const SECTION = {
   pages: "Pages",
   tools: "Tools",
   sites: "Sites",
-  reading: "Reading",
+  library: "Library",
   notes: "Notes",
   experiments: "Experiments",
 } as const;
@@ -118,8 +118,8 @@ function hostOf(url: string): string {
  * a module-level constant that was parsed when its file was imported.
  *
  * Entry hrefs point at the site, never off it, including for the two sections
- * that have no per-entry page. A reading row and an experiment row each carry
- * an `id`, so `/reading#slug` lands on the row in context — with its note, its
+ * that have no per-entry page. A library row and an experiment row each carry
+ * an `id`, so `/library#slug` lands on the row in context — with its note, its
  * date and its neighbours — instead of ejecting the reader to a third-party
  * article they did not ask to open from a nav control. The one place the
  * palette will leave the site is a row that says so.
@@ -157,11 +157,11 @@ async function build(): Promise<SearchEntry[]> {
       }),
     ),
 
-    ...reading.map(
+    ...library.map(
       (entry): SearchEntry => ({
         title: entry.title,
-        section: SECTION.reading,
-        href: `/reading#${entry.slug}`,
+        section: SECTION.library,
+        href: `/library#${entry.slug}`,
         terms: `${entry.domain} ${entry.kind}`,
       }),
     ),

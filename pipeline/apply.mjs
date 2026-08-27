@@ -2,7 +2,7 @@
  * apply.mjs — doing the one thing `plan()` decided, for one bookmark.
  *
  * The whole file is about write ordering, and only /sites has enough writes for
- * the ordering to be interesting. /tools and /reading are metadata: an entry and
+ * the ordering to be interesting. /tools and /library are metadata: an entry and
  * a state row, no files on disk, so their only crash point is the one between
  * those two, which the next `plan()` adopts by URL.
  *

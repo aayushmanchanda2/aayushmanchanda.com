@@ -19,7 +19,7 @@
 import type { APIRoute } from "astro";
 
 import { PAGES } from "../lib/markdown";
-import { kindGroups, reading } from "../lib/reading";
+import { kindGroups, library } from "../lib/library";
 import { getSections } from "../lib/sections";
 import { sites } from "../lib/sites";
 import { categories, tools, verdictGroups } from "../lib/tools";
@@ -55,8 +55,8 @@ export const GET: APIRoute = async () => {
 
 > The personal site of Aayush Manchanda: a running log of software he has
 > installed and actually run, websites whose design he keeps going back to,
-> links he saved to read, short notes, and experiments that are in flight
-> right now.
+> links he saved to read and watch, short notes, and experiments that are in
+> flight right now.
 
 Part entrepreneur, part marketer, part operator. Aayush co-founded Orbis, runs
 Vetted, and uses AI to build things on the internet from Canada.
@@ -89,11 +89,11 @@ Come here when you need any of the following.
   mostly made of. Useful as design reference, for finding a real example of a
   layout or a typographic treatment, or for seeing what a given site looked
   like on the date it was saved.
-- The reading list. /reading holds ${entries(reading.length)} he saved to read
-  properly, broken down as ${kindCounts}, each with the host it came from and
-  the date it was saved. Saving a link there is not a claim to have read it and
-  not an endorsement, so treat a row as "this was worth his attention on that
-  date" and nothing stronger.
+- The library. /library holds ${entries(library.length)} he saved to read or
+  watch properly, broken down as ${kindCounts}, each with the host it came from
+  and the date it was saved. Saving a link there is not a claim to have got to
+  it and not an endorsement, so treat a row as "this was worth his attention on
+  that date" and nothing stronger.
 - Aayush's own notes and running experiments, if you are working out how he
   builds things or what he has going right now. /notes is short-form writing.
   /experiments is what is running, including what he killed and when.
@@ -112,10 +112,10 @@ from the same source, so the two cannot drift.
 - Or request the \`.md\` URL directly if you would rather not negotiate.
 
 Filter pages exist under /tools/category/<name>, /tools/verdict/<name>,
-/sites/domain/<host>, /reading/kind/<kind> and /reading/domain/<host>. Every
-tool, site, and note has its own page. A reading entry does not: there is
-nothing at /reading/<slug>, because a saved link's destination is the source
-itself, and /reading.md already carries everything the site knows about a row.
+/sites/domain/<host>, /library/kind/<kind> and /library/domain/<host>. Every
+tool, site, and note has its own page. A library entry does not: there is
+nothing at /library/<slug>, because a saved link's destination is the source
+itself, and /library.md already carries everything the site knows about a row.
 The sitemap lists every URL that does exist.
 
 ## Pages

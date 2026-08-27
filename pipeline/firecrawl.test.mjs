@@ -324,7 +324,7 @@ test("x.com's own routing is not a person", () => {
 });
 
 test("a body that is only punctuation is not a post", () => {
-  // Otherwise this becomes a /reading row whose entire link text is "**" or a
+  // Otherwise this becomes a /library row whose entire link text is "**" or a
   // single ellipsis — strictly worse than the "A post from @someone" it would
   // have replaced.
   assert.equal(parsePost("# Post by @someone\n\n## Post\n\n**\n", POST_URL), null);

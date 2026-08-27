@@ -98,7 +98,7 @@ test("plan: x.com and twitter.com are rejected before a browser is opened", () =
   assert.match(first.reason, /save the product's URL/);
 });
 
-test("plan: x.com is allowed into /reading, where a post is the point", () => {
+test("plan: x.com is allowed into /library, where a post is the point", () => {
   const bookmarks = [
     mark("1", "https://x.com/benln/status/2006057848430604705", "reading"),
     mark("2", "https://mobile.twitter.com/someone/status/1", "reading"),
@@ -213,7 +213,7 @@ test("plan: a deep link into a repo already on the page is the same tool", () =>
   assert.equal(work[0].slug, "buzz");
 });
 
-test("plan: /reading does not fold two files in one repo into one entry", () => {
+test("plan: /library does not fold two files in one repo into one entry", () => {
   // The fold is a /tools rule. Two pages in a repository are two things to read.
   const gallery = {
     sites: [],
