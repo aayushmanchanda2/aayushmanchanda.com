@@ -400,6 +400,20 @@ const current = normalize(pathname);
       toggle.setAttribute("aria-expanded", String(next));
       document.documentElement.style.overflow = next ? "hidden" : "";
 
+      /**
+       * The panel is `aria-modal`, and `inert` is what makes that true for a
+       * keyboard: without it, Tab walks off the last control in here and into
+       * the page behind the scrim — focusable, invisible, pointer-dead. The
+       * marked surfaces are the shell, the skip link and the site mark
+       * (`layouts/Base.astro`, `SiteMark.astro`); the theme live region is
+       * deliberately unmarked so the panel's own toggle still announces. The
+       * trigger goes inert too — it sits under the scrim while the panel is
+       * up — and comes back before focus returns to it below.
+       */
+      const inertables = Array.from(
+        document.querySelectorAll<HTMLElement>("[data-mnav-inert]"),
+      );
+
       if (next) {
         scrim.hidden = false;
         // one frame so the [hidden] -> display change lands before the
@@ -407,7 +421,11 @@ const current = normalize(pathname);
         requestAnimationFrame(() => scrim.setAttribute("data-open", ""));
         panel.setAttribute("data-open", "");
         close.focus({ preventScroll: true });
+        for (const el of inertables) el.inert = true;
+        toggle.inert = true;
       } else {
+        for (const el of inertables) el.inert = false;
+        toggle.inert = false;
         scrim.removeAttribute("data-open");
         panel.removeAttribute("data-open");
         toggle.focus({ preventScroll: true });

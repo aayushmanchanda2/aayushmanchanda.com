@@ -293,7 +293,17 @@ const markdownVariant = variant === null ? null : absolute(variant);
   </head>
 
   <body>
-    <a class="skip mono" href="#main">Skip to content</a>
+    {/*
+      `data-mnav-inert` marks what the mobile MENU panel takes out of the tab
+      order and the accessibility tree while it is open: the skip link, the
+      site mark and the whole shell. The panel is `aria-modal`, and before this
+      a keyboard could Tab straight out of it into content sitting behind the
+      scrim. The theme live region below deliberately does not carry it — the
+      panel's own theme toggle announces through it while the panel is open.
+      `MobileNav.astro › setOpen` flips the property; `lib/mnav.test.mjs` holds
+      the wiring.
+    */}
+    <a class="skip mono" href="#main" data-mnav-inert>Skip to content</a>
 
     {/*
       One region for every theme button on the page. It is empty until a press,
@@ -308,7 +318,7 @@ const markdownVariant = variant === null ? null : absolute(variant);
     <MobileNav items={navItems} pathname={pathname} />
     <CommandPalette />
 
-    <div class="shell">
+    <div class="shell" data-mnav-inert>
       <main class="shell__main" id="main">
         <slot />
       </main>

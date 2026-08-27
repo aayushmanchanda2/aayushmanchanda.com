@@ -33,8 +33,13 @@ import MarkGlyph from "./MarkGlyph.astro";
 
   The glyph takes no label: this anchor is already named "Home", and naming the
   drawing as well would read the letters out after it.
+
+  `data-mnav-inert`: the open MENU panel covers this anchor (layer 80 over 50),
+  so it goes inert with the rest of the background — a focusable control behind
+  a modal is a stop the keyboard can reach and the eye cannot. The wiring is
+  `MobileNav.astro › setOpen`; `lib/mnav.test.mjs` holds it.
 */}
-<a class="mark press" href="/" aria-label="Home">
+<a class="mark press" href="/" aria-label="Home" data-mnav-inert>
   <MarkGlyph />
 </a>
 
