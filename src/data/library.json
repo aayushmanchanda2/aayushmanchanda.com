@@ -88,5 +88,41 @@
     "saved_date": "2026-08-26",
     "kind": "post",
     "note": "@EphraimAkanmu's archive of brand designers, agencies, and identity systems worth studying. The advice that stuck: study the reasoning, not the surface."
+  },
+  {
+    "slug": "david-senra-podcast",
+    "title": "David Senra's podcast",
+    "url": "https://www.davidsenra.com/podcast",
+    "domain": "davidsenra.com",
+    "saved_date": "2026-07-26",
+    "kind": "article",
+    "note": "Founder-interview corpus. The DHH episode's point that stuck: constraints are the antidote to AI-cheapened implementation, so state non-goals before building."
+  },
+  {
+    "slug": "anatomy-of-an-agent-harness",
+    "title": "The Anatomy of an Agent Harness",
+    "url": "https://www.langchain.com/blog/the-anatomy-of-an-agent-harness",
+    "domain": "langchain.com",
+    "saved_date": "2026-07-26",
+    "kind": "article",
+    "note": "The decision ladder I use: harness, then loop, then graph. Only formalize a graph when branching or recovery actually earn it."
+  },
+  {
+    "slug": "introducing-buzz",
+    "title": "Introducing Buzz: where humans and agents work together",
+    "url": "https://block.xyz/inside/introducing-buzz-where-humans-and-agents-work-together",
+    "domain": "block.xyz",
+    "saved_date": "2026-07-28",
+    "kind": "article",
+    "note": "Context as an operating asset is the transferable idea. Watching, not migrating."
+  },
+  {
+    "slug": "claude-video-watch-skill",
+    "title": "claude-video: give Claude the ability to watch any video",
+    "url": "https://github.com/bradautomates/claude-video",
+    "domain": "github.com",
+    "saved_date": "2026-07-26",
+    "kind": "article",
+    "note": "Frame-aware video analysis. Indexed as a capability gap; deliberately not installed."
   }
 ]

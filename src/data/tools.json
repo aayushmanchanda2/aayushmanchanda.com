@@ -197,5 +197,24 @@
     "verdict": "watching",
     "note": "Vercel's agent sandbox. Scaffolded and ready to test — needs Node 24.",
     "status_date": "2026-08-17"
+  },
+  {
+    "slug": "markdown-preview",
+    "name": "Markdown Preview",
+    "url": "https://markdownpreview.app",
+    "repo": "https://github.com/pluk-inc/markdown-preview",
+    "category": "desktop utility",
+    "verdict": "watching",
+    "note": "Installed via Homebrew cask and verified signed. Not yet made the default or smoke-tested.",
+    "status_date": "2026-07-26"
+  },
+  {
+    "slug": "claudex",
+    "name": "claudex",
+    "url": null,
+    "category": "agent infra",
+    "verdict": "using",
+    "note": "Claude Code's harness running on GPT-5.6 Sol through a local proxy. My delegation lane for big well-specified diffs.",
+    "status_date": "2026-08-26"
   }
 ]
