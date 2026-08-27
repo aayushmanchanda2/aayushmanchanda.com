@@ -25,6 +25,7 @@ import {
   clip,
   collectionsFrom,
   repoFrom,
+  urlKey,
 } from "./entries.mjs";
 
 /**
@@ -326,6 +327,68 @@ test("a profile is not a repository, so it stays a url", () => {
     date: "2026-08-26",
   });
   assert.equal(entry.url, "https://github.com/block");
+});
+
+/* ---------------------------------------------------------------------------
+   The dedupe key
+   --------------------------------------------------------------------------- */
+
+test("a query parameter that is the link's identity is part of the key", () => {
+  // The reason `urlKey` denylists instead of stripping. A YouTube URL says which
+  // video it is in `?v=` and nowhere else, so a wholesale strip would give every
+  // video the site has ever saved the same key and dedupe them into the first.
+  assert.notEqual(
+    urlKey("https://youtube.com/watch?v=abc123"),
+    urlKey("https://youtube.com/watch?v=xyz789"),
+  );
+});
+
+test("campaign junk on a video does not make it a second video", () => {
+  assert.equal(
+    urlKey("https://youtube.com/watch?v=abc123"),
+    urlKey("https://www.youtube.com/watch?v=abc123&si=Kf9dQ2wR&utm_source=newsletter"),
+  );
+});
+
+test("a link saved twice, once from a campaign, is one entry", () => {
+  // The failure this exists for: the same page saved off a phone and out of a
+  // mailing list, arriving as two bookmarks and publishing as two rows.
+  assert.equal(
+    urlKey("https://otherkind.design/writing"),
+    urlKey("https://otherkind.design/writing?utm_source=twitter&utm_medium=social&utm_campaign=aug"),
+  );
+});
+
+test("every parameter on the denylist goes, however it was capitalised", () => {
+  const bare = urlKey("https://otherkind.design/writing");
+
+  for (const junk of [
+    "utm_source=nl",
+    "utm_medium=email",
+    "utm_campaign=august",
+    "utm_term=design",
+    "utm_content=hero",
+    "UTM_Source=nl",
+    "fbclid=IwAR0abc",
+    "gclid=Cj0KCQ",
+    "ref=producthunt",
+    "ref_src=twsrc%5Etfw",
+    "si=Kf9dQ2wR",
+    "igshid=MzRlODBi",
+  ]) {
+    assert.equal(urlKey(`https://otherkind.design/writing?${junk}`), bare, `${junk} survived`);
+  }
+});
+
+test("a tracked parameter goes and the one beside it stays", () => {
+  assert.equal(
+    urlKey("https://otherkind.design/search?q=archive&utm_source=newsletter"),
+    urlKey("https://otherkind.design/search?q=archive"),
+  );
+  assert.equal(
+    urlKey("https://otherkind.design/search?q=archive&fbclid=IwAR0"),
+    "otherkind.design/search?q=archive",
+  );
 });
 
 test("tools and reading entries carry no collections", () => {

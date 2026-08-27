@@ -70,6 +70,24 @@ export class FirecrawlError extends Error {
   }
 }
 
+/**
+ * The one failure here that will still be true on the next run.
+ *
+ * Everything else this module throws is a bad minute — a timeout, a 5xx, a
+ * screenshot link that expired — and the next run gets a different answer by
+ * doing nothing. A 402 does not: the account is out of credits until a person
+ * tops it up, so every call after it fails identically. That is the whole
+ * reason `status` is carried rather than folded into the message, and
+ * `apply.mjs` is the caller that has to tell the two apart before deciding what
+ * register to report a survivable failure in.
+ *
+ * @param {unknown} error
+ * @returns {boolean}
+ */
+export function isOutOfCredits(error) {
+  return error instanceof FirecrawlError && error.status === 402;
+}
+
 /* ---------------------------------------------------------------------------
    The client
    --------------------------------------------------------------------------- */

@@ -16,7 +16,13 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import { POST_TEXT, postMarkdown } from "./fixtures.mjs";
-import { FirecrawlError, createClient, firecrawlFrom, parsePost } from "./firecrawl.mjs";
+import {
+  FirecrawlError,
+  createClient,
+  firecrawlFrom,
+  isOutOfCredits,
+  parsePost,
+} from "./firecrawl.mjs";
 
 const POST_URL = "https://x.com/ephraimakanmu/status/2081234457588056305";
 
@@ -233,6 +239,22 @@ test("an exhausted account says so in those words", async () => {
   );
 
   await assert.rejects(firecrawl.scrapeMarkdown(POST_URL), /out of credits/);
+});
+
+test("an exhausted account is the one failure a caller can tell apart", async () => {
+  // `apply.mjs` reports a 402 as a standing condition rather than as one more
+  // bad minute, and this is the seam it does it through: an empty credit
+  // balance is still there on the next run, and a timeout is not.
+  const { client: firecrawl } = client(() => json({ error: "Insufficient credits" }, 402));
+
+  await assert.rejects(firecrawl.screenshotFullPage("https://fortress.example"), (error) => {
+    assert.equal(isOutOfCredits(error), true);
+    return true;
+  });
+
+  assert.equal(isOutOfCredits(new FirecrawlError("timed out")), false);
+  assert.equal(isOutOfCredits(new FirecrawlError("rejected the key", 401)), false);
+  assert.equal(isOutOfCredits(new Error("Payment Required")), false, "the status, not the words");
 });
 
 test("a 200 that says it failed is still a failure", async () => {

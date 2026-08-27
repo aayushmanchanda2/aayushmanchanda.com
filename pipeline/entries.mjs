@@ -324,9 +324,45 @@ export function deriveKind(url) {
 }
 
 /**
+ * Query parameters that record where a click came from rather than what it
+ * points at. `utm_*` is matched as a prefix instead of being listed, because
+ * that family is open-ended — a mail tool invents `utm_id` or `utm_term`
+ * whenever it likes — and these six are not.
+ */
+const TRACKING = new Set(["fbclid", "gclid", "ref", "ref_src", "si", "igshid"]);
+
+/**
+ * Lowercased first: a share sheet is as likely to hand over `?UTM_Source=` as
+ * the tidy spelling.
+ *
+ * @param {string} name @returns {boolean}
+ */
+function isTracking(name) {
+  const lower = name.toLowerCase();
+  return lower.startsWith("utm_") || TRACKING.has(lower);
+}
+
+/**
  * The comparison key for "is this the same link". Protocol, `www.`, a trailing
  * slash and the fragment are all noise when the question is whether the gallery
  * already holds this bookmark.
+ *
+ * **The query string stays, minus the parameters `isTracking` names.** That is a
+ * denylist rather than a strip, and the difference is the whole function:
+ * `youtube.com/watch?v=abc123` keeps its identity in `?v=`, so dropping the
+ * query wholesale would fold every video the site has ever saved onto one key
+ * and dedupe them all into whichever one landed first. So a parameter is
+ * assumed to be identity until it is named as campaign junk, and the same link
+ * saved from a newsletter and from the page itself is one entry.
+ *
+ * The whole key is then lowercased — right for the host, and deliberately loose
+ * for the rest. A path and a query are case-sensitive to a server, but two
+ * spellings of one link saved a month apart should still dedupe. The cost is
+ * that two URLs differing *only* in the case of a value would collapse into one,
+ * which for `?v=` means two YouTube IDs that are the same letters in different
+ * case. Accepted rather than overlooked: that needs two genuinely different
+ * links identical apart from capitalisation, and tightening it would lose the
+ * far more common case this is here to catch.
  *
  * @param {string} url
  * @returns {string}
@@ -335,7 +371,18 @@ export function urlKey(url) {
   try {
     const parsed = new URL(url);
     const pathname = parsed.pathname.replace(/\/+$/, "");
-    return `${parsed.hostname.replace(/^www\./, "")}${pathname}${parsed.search}`.toLowerCase();
+
+    // Rebuilt whether or not anything was dropped, so that two spellings of one
+    // parameter cannot survive as two keys: `?q=a%20b` and `?q=a%20b&si=x` have
+    // to come out identical, and `URLSearchParams` re-encodes what it holds.
+    const query = new URLSearchParams(parsed.search);
+    for (const name of [...query.keys()]) {
+      if (isTracking(name)) query.delete(name);
+    }
+    const search = query.toString();
+
+    const host = parsed.hostname.replace(/^www\./, "");
+    return `${host}${pathname}${search === "" ? "" : `?${search}`}`.toLowerCase();
   } catch {
     return url.trim().toLowerCase();
   }

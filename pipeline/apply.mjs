@@ -40,6 +40,7 @@ import {
   uniqueSlug,
   writeEntries,
 } from "./entries.mjs";
+import { isOutOfCredits } from "./firecrawl.mjs";
 import { tagBookmark } from "./raindrop.mjs";
 import { MAX_ATTEMPTS, galleryFor, saveState } from "./state.mjs";
 import { describe, isRecord } from "./util.mjs";
@@ -126,6 +127,37 @@ async function tagQuietly(bookmark, tag, ctx) {
 }
 
 /**
+ * The line for a Firecrawl failure that is not going to fix itself, or null
+ * when it might.
+ *
+ * Both callers below survive either kind identically — the row publishes, the
+ * capture takes its strike — so the only thing left to get right is what the
+ * run log tells the person reading it. A timeout or a 5xx is worth a warning
+ * and no more, because the next run probably gets the page. A 402 is not a
+ * failure of the call at all: the account is out of credits, every call after
+ * this one fails the same way, and it will keep doing so on every scheduled run
+ * until someone tops it up. That is the same standing condition an unset
+ * `FIRECRAWL_API_KEY` is, arriving mid-run instead of at the top of one, and
+ * `publish.mjs` already prints the top-of-run version — so this reads like it,
+ * names the cost, and names the fix.
+ *
+ * The import that makes this possible is the error vocabulary, not the service:
+ * `publish.mjs` still binds both enrichments to plain functions, and this file
+ * still never holds a client.
+ *
+ * @param {string} what   What went unfetched, so the line has a subject.
+ * @param {unknown} error
+ * @returns {string | null}
+ */
+function outOfCreditsLine(what, error) {
+  if (!isOutOfCredits(error)) return null;
+  return (
+    `firecrawl: out of credits (HTTP 402) — ${what} is skipped, ` +
+    "and so is every call after it until the account is topped up"
+  );
+}
+
+/**
  * `rename` first; `copyFile` covers a tmp dir that landed on another device.
  * @param {string} from @param {string} to
  */
@@ -191,7 +223,10 @@ async function postFor(bookmark, ctx) {
     if (post === null) ctx.log(`firecrawl: read ${bookmark.url}, found no post in it`);
     return post;
   } catch (error) {
-    ctx.log(`warn: firecrawl could not read ${bookmark.url} — ${describe(error)}`);
+    ctx.log(
+      outOfCreditsLine(`the post at ${bookmark.url}`, error) ??
+        `warn: firecrawl could not read ${bookmark.url} — ${describe(error)}`,
+    );
     return null;
   }
 }
@@ -232,7 +267,10 @@ async function shootSite(bookmark, slug, outDir, attempts, ctx) {
     try {
       return { ...(await ctx.firecrawlShot(input)), via: "firecrawl" };
     } catch (fallbackError) {
-      ctx.log(`capture: firecrawl could not shoot ${slug} either — ${describe(fallbackError)}`);
+      ctx.log(
+        outOfCreditsLine(`the shot for ${slug}`, fallbackError) ??
+          `capture: firecrawl could not shoot ${slug} either — ${describe(fallbackError)}`,
+      );
       throw error;
     }
   }
