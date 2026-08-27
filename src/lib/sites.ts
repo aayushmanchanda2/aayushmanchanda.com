@@ -43,7 +43,7 @@ export interface Site {
   shot: string;
   /**
    * The colours that capture is mostly made of, dominant first. Read off the
-   * pixels by `pipeline/capture.mjs`, never authored by hand.
+   * pixels by `pipeline/palette.mjs`, never authored by hand.
    */
   palette: string[];
   /**

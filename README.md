@@ -146,7 +146,7 @@ on the next run's `reconcile()`, which makes the state file, the galleries and
 
 A link that answers with a bot wall counts as one that will not screenshot. A
 Vercel checkpoint or a Cloudflare interstitial arrives at HTTP 200 and renders
-fine, so `capture.mjs` checks for one twice: it reads the page's title, headings
+fine, so `challenge.mjs` checks for one twice: it reads the page's title, headings
 and first 1,200 characters against a list of known challenge signatures before
 shooting, and it refuses a finished shot that is both flat and tiny, which is
 what an empty screen encodes to whoever served it. Either check fails the
