@@ -1,0 +1,81 @@
+# The four gates in `design.md` §8 that a machine can hold, held by a machine.
+#
+# Gates 1-3 there — `astro check`, `npm test`, `build` + `validate:schema` — were
+# a list a person was trusted to run before pushing. That is discipline, and
+# discipline is the thing that goes first on the day the change looks too small
+# to bother. Everything below already existed as an npm script; the only new
+# claim this file makes is that they run whether or not anyone remembered.
+#
+# Gates 4-7 (both themes, mobile, reduced motion, live verification) stay
+# manual and stay in design.md, because they are judgements about how a page
+# looks and there is no assertion that stands in for opening it.
+#
+# `publish.yml` is the other half of CI and deliberately separate: it owns a
+# browser, a token and a push, runs on a schedule, and must not be triggered by
+# a source edit. This one owns no secrets and writes nothing.
+
+name: ci
+
+on:
+  push:
+  pull_request:
+
+# A PR from a branch in this repo fires both events, so the two runs would race
+# on the same ref. Keyed on the ref, cancelling the older run: unlike `publish`,
+# nothing here is holding half-written state, so the newest commit is the only
+# one whose answer is still interesting.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+# Reads the tree and reports. It never needs more than this.
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+
+      # Pinned to the major in `package.json`'s `engines` field. `cache: npm`
+      # keys itself on the lockfile, which is the same file `npm ci` installs
+      # from, so the cache can never be newer than the install it serves.
+      - name: Set up Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # design.md §8 gate 1. Ordered first because it is the cheapest failure
+      # available: a type error is found without building anything, and
+      # `checkJs` means a new `.mjs` under `scripts/` or `pipeline/` is checked
+      # here too.
+      #
+      # The contract is 0 errors and 0 warnings. Hints sit at a known baseline
+      # of 13 and `astro check` exits 0 on a hint, so a fourteenth does not fail
+      # this step — it is caught by reading the count in the log, which is why
+      # the number is written down in design.md rather than left to memory.
+      - name: Types
+        run: npx astro check
+
+      # §8 gate 2.
+      - name: Tests
+        run: npm test
+
+      # §8 gate 3, both halves. `validate:schema` reads `dist/`, so it is only
+      # meaningful after a build — and only honest as a separate step, so a
+      # failure names which of the two broke.
+      - name: Build
+        run: npm run build
+
+      - name: Validate structured data
+        run: npm run validate:schema

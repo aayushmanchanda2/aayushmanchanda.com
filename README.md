@@ -3,7 +3,7 @@
 A personal site that fills itself. Tools I actually ran, sites whose craft I keep
 coming back to, notes, and whatever experiment is running.
 
-Astro 5 static build, git as the database, deployed on Vercel. No CMS and no
+Astro 7 static build, git as the database, deployed on Vercel. No CMS and no
 drafts folder: content arrives either from a link I saved on my phone or from a
 file I edited and committed. Everything else is a build step. Zero framework JS
 ships. `PURPOSE.md` is what the site is for; `design.md` is the design contract,
@@ -23,6 +23,11 @@ npm run og               # regenerate public/og.png through Playwright
 
 `npm run build` is the real gate on content: a malformed entry fails it rather
 than rendering half a page, so nothing broken reaches the site.
+
+`check`, `test`, `build` and `validate:schema` also run on every push and pull
+request (`.github/workflows/ci.yml`). That is a backstop, not the loop — the
+four gates it cannot hold (both themes, mobile, reduced motion, pressing the
+thing you changed) are in `design.md` §8.
 
 ## How content publishes
 
