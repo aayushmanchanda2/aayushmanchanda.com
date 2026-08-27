@@ -106,6 +106,23 @@ const ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" st
     ${A_PATHS}
   </svg>`;
 
+/**
+ * The five sections, in the order `src/lib/sections.ts › CATALOGUE` lists them.
+ *
+ * A hand-kept copy, and it has to be: this script runs under plain node, while
+ * `sections.ts` imports `astro:content` and only resolves inside a build. So
+ * the list cannot be derived here the way `astro.config.mjs` derives its
+ * markdown variants from `lib/markdown.ts › PAGES`.
+ *
+ * A copy that cannot be derived gets a test instead — `src/lib/sections.test.mjs`
+ * parses both files and fails when they disagree. That test exists because this
+ * line was wrong: `library` was missing from it from the day Reading was
+ * renamed, so every share of every page advertised four sections instead of
+ * five. The header's "re-run after changing the section list" was the only
+ * thing holding it, and an instruction is not a mechanism.
+ */
+const SECTIONS = ["tools", "sites", "library", "notes", "experiments"];
+
 /** Only the latin subset is needed: the card renders two fixed ASCII strings. */
 const FONTS = {
   sans: "../node_modules/@fontsource-variable/geist/files/geist-latin-wght-normal.woff2",
@@ -199,7 +216,7 @@ async function html() {
   ${MARK_SVG}
   <h1>Aayush Manchanda</h1>
   <div class="rule"></div>
-  <p class="sections">tools &middot; sites &middot; notes &middot; experiments</p>
+  <p class="sections">${SECTIONS.join(" &middot; ")}</p>
 </body>`;
 }
 
