@@ -1,0 +1,194 @@
+---
+/**
+ * EntryNav — the hint row at the foot of an entry page, and the keys it wires.
+ *
+ * The row is the legend and the navigation at once. Written as links rather
+ * than as three lines of static text plus a key handler, because a legend that
+ * only a keyboard can act on is a legend a touchscreen has to read and cannot
+ * use. The script below takes its destinations from these anchors, so there is
+ * one place each key goes: delete a link and the key goes quiet with it.
+ *
+ * Two pages render this — a /sites entry and a digested /library entry — and
+ * it lives here rather than in either of them because the second page is
+ * exactly what proved the point: the row, its CSS and its key handler were one
+ * page's scoped block, and a copy in the second page would have been ninety
+ * lines held in step by nothing. Escape closes to the section index, ← and →
+ * walk the entries in the order the section renders them, wrapping; the caller
+ * decides the ring, this file only reads it.
+ */
+
+/** One destination the row offers, with the full name a screen reader gets. */
+export interface EntryNeighbour {
+  href: string;
+  aria: string;
+}
+
+interface Props {
+  /** Where esc goes. The section index, named: "Close and go back to Sites". */
+  close: EntryNeighbour;
+  /** Null on a one-entry section, where prev and next would point here. */
+  prev?: EntryNeighbour | null;
+  next?: EntryNeighbour | null;
+  /** The nav's accessible name, e.g. "Sites entries". */
+  label: string;
+}
+
+const { close, prev = null, next = null, label } = Astro.props;
+
+interface Hint {
+  /** Which key drives this row. The script reads it back off the markup. */
+  role: "close" | "prev" | "next";
+  key: string;
+  label: string;
+  href: string;
+  rel?: string;
+  aria: string;
+}
+
+const hints: Hint[] = [
+  { role: "close", key: "esc", label: "close", href: close.href, aria: close.aria },
+  ...(prev
+    ? [{ role: "prev" as const, key: "←", label: "prev", href: prev.href, rel: "prev", aria: prev.aria }]
+    : []),
+  ...(next
+    ? [{ role: "next" as const, key: "→", label: "next", href: next.href, rel: "next", aria: next.aria }]
+    : []),
+];
+---
+
+<nav class="hints" aria-label={label} data-entry-nav>
+  <ul class="hints__row">
+    {
+      hints.map((hint) => (
+        <li class="hints__item">
+          <a
+            class="hint press"
+            href={hint.href}
+            rel={hint.rel}
+            data-nav={hint.role}
+            aria-label={hint.aria}
+          >
+            <kbd class="hint__key">{hint.key}</kbd>
+            {hint.label}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .hints {
+    margin-top: clamp(2rem, 6vh, 3rem);
+  }
+
+  .hints__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    /* Matches the gap inside an item, so the separator sits centred between two
+       hints rather than welded to the end of the one before it. */
+    gap: 0 0.75rem;
+    margin: 0;
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+    /* Lowercase, against the site's uppercase mono label voice. These are key
+       caps, and the key is printed `esc` on the keyboard the reader is looking
+       at — shouting it would be naming a different key. */
+    text-transform: lowercase;
+    color: var(--faint);
+  }
+
+  .hints__item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  /* The separator sits in the list item, outside the anchor, so it is never
+     part of the link's text or its target. */
+  .hints__item + .hints__item::before {
+    content: "\00b7";
+    color: var(--hairline-strong);
+  }
+
+  .hint {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    /* Not a 40px block: these are text hints, and padding is what turns them
+       into a target without giving the foot of the page a toolbar's weight. */
+    padding-block: 0.5rem;
+    color: inherit;
+    text-decoration: none;
+    /* `.press` names the transition; a second one here would race it. */
+  }
+
+  .hint:hover {
+    color: var(--accent);
+  }
+
+  .hint__key {
+    font: inherit;
+    color: var(--muted);
+  }
+</style>
+
+<script>
+  /**
+   * The three keys, and which hint each one presses.
+   *
+   * The destinations are not in here on purpose. They are read off the anchors
+   * in the hint row, which means the legend a reader can see and the behaviour
+   * a keyboard gets cannot drift apart: delete a link and the key goes quiet
+   * with it.
+   */
+  const KEYS: Record<string, string> = {
+    Escape: "close",
+    ArrowLeft: "prev",
+    ArrowRight: "next",
+  };
+
+  const nav = document.querySelector<HTMLElement>("[data-entry-nav]");
+
+  if (nav) {
+    document.addEventListener("keydown", (event) => {
+      // Already handled by something closer to the action, or mid-IME.
+      if (event.defaultPrevented || event.isComposing) return;
+      // A modifier means the reader is asking the browser for something —
+      // Cmd+Left is Back, and taking that over would be a hijack.
+      if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
+
+      const role = KEYS[event.key];
+      if (!role) return;
+
+      // Typing beats navigating. There is no field on this page today, but a
+      // bare arrow key belongs to whatever is taking text.
+      const target = event.target;
+      if (
+        target instanceof HTMLElement &&
+        (target.isContentEditable ||
+          target instanceof HTMLInputElement ||
+          target instanceof HTMLTextAreaElement ||
+          target instanceof HTMLSelectElement)
+      ) {
+        return;
+      }
+
+      // Escape belongs to whatever is on top. Two surfaces match this selector
+      // today — the command palette and the mobile nav panel — and both close
+      // on Escape themselves; the order two document-level listeners run in is
+      // a bundling detail rather than a guarantee, so this asks the page
+      // instead of trusting it. See the precedence note in lib/palette.ts.
+      if (document.querySelector('[aria-modal="true"][data-open]')) return;
+
+      const link = nav.querySelector<HTMLAnchorElement>(`[data-nav="${role}"]`);
+      if (!link) return;
+
+      event.preventDefault();
+      window.location.href = link.href;
+    });
+  }
+</script>

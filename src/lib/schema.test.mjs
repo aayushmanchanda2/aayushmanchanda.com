@@ -32,7 +32,10 @@ import {
   anchorUrl,
   contactJsonLd,
   designJsonLd,
+  digestReviewBody,
   homeJsonLd,
+  libraryJsonLd,
+  libraryRowUrl,
   listJsonLd,
   noteJsonLd,
   pageUrl,
@@ -133,6 +136,28 @@ const REPO_TOOL = {
   repo: "https://github.com/treygoff24/papercuts",
 };
 
+/**
+ * A digested library entry with every field filled, note included, because the
+ * note is the one optional piece of the reviewBody.
+ *
+ * @type {import("./library.ts").DigestedEntry}
+ */
+const DIGESTED_ENTRY = {
+  slug: "how-gumclaw-works",
+  title: "How Gumclaw Works",
+  url: "https://gumclaw.github.io/how-i-work/",
+  domain: "gumclaw.github.io",
+  saved_date: "2026-07-20",
+  kind: "article",
+  note: "A whole agent setup written up in public.",
+  digest: {
+    bullets: ["The loop in one line.", "The jobs are real."],
+    verdict: "Read now: it touches the live thing.",
+    why: "Two rules are worth stealing.",
+    digested: "2026-08-27",
+  },
+};
+
 /** @type {import("./sites.ts").Site} */
 const SITE = {
   slug: "save-design",
@@ -178,6 +203,7 @@ const EVERY_GRAPH = () => [
   ["bare tool", toolJsonLd(BARE_TOOL)],
   ["repo-only tool", toolJsonLd(REPO_TOOL)],
   ["site", siteJsonLd(SITE)],
+  ["library entry", libraryJsonLd(DIGESTED_ENTRY)],
   [
     "note",
     noteJsonLd({
@@ -638,6 +664,76 @@ test("a site page is about the site, and owns the screenshot", () => {
   assert.equal(page["primaryImageOfPage"]["@id"], shot["@id"]);
   assert.equal(shot["contentUrl"], `${ORIGIN}/shots/save-design.webp`);
   assert.equal(shot["caption"], "Full page of Save.design", "the frame's own alt text");
+});
+
+// --- library ---------------------------------------------------------------
+
+test("a digested entry is a Review of an external thing, by the Person, dated the digest", () => {
+  const document = libraryJsonLd(DIGESTED_ENTRY);
+  assert.deepEqual(typesIn(document), ["Review", "Person", "BreadcrumbList"]);
+
+  const review = at(document, 0);
+  assert.equal(review["url"], `${ORIGIN}/library/how-gumclaw-works/`);
+  assert.equal(review["author"]["@id"], PERSON_ID);
+  assert.equal(review["datePublished"], "2026-08-27", "the digest's date, not the save's");
+
+  /*
+   * Theirs, nested — the same call `siteJsonLd` makes about its `about`. The
+   * piece is external, so it gets no `@id` on this origin and no property the
+   * page cannot show: a title, its own URL, and the kind translated to a type.
+   */
+  assert.deepEqual(review["itemReviewed"], {
+    "@type": "Article",
+    name: "How Gumclaw Works",
+    url: "https://gumclaw.github.io/how-i-work/",
+  });
+});
+
+test("the kind decides what the reviewed thing is", () => {
+  /** @param {import("./library.ts").Kind} kind */
+  const asKind = (kind) =>
+    at(libraryJsonLd({ ...DIGESTED_ENTRY, kind }), 0)["itemReviewed"]["@type"];
+
+  assert.equal(asKind("article"), "Article");
+  assert.equal(asKind("post"), "SocialMediaPosting");
+  assert.equal(asKind("video"), "VideoObject");
+});
+
+test("digestReviewBody is the page's own sentences, in the order the page stacks them", () => {
+  assert.equal(
+    digestReviewBody(DIGESTED_ENTRY),
+    [
+      DIGESTED_ENTRY.note,
+      ...DIGESTED_ENTRY.digest.bullets,
+      DIGESTED_ENTRY.digest.verdict,
+      DIGESTED_ENTRY.digest.why,
+    ].join("\n\n"),
+  );
+
+  // A null note renders no standfirst, so it contributes nothing here either.
+  const bare = digestReviewBody({ ...DIGESTED_ENTRY, note: null });
+  assert.ok(!bare.startsWith("\n"), "a null note leaves no leading gap");
+  assert.equal(
+    bare,
+    [
+      ...DIGESTED_ENTRY.digest.bullets,
+      DIGESTED_ENTRY.digest.verdict,
+      DIGESTED_ENTRY.digest.why,
+    ].join("\n\n"),
+  );
+});
+
+test("a library row's list URL is wherever the row goes", () => {
+  // Digested: the row links its own page, so the graph claims that page.
+  assert.equal(
+    libraryRowUrl(DIGESTED_ENTRY),
+    `${ORIGIN}/library/how-gumclaw-works/`,
+  );
+  // Undigested: the row leaves the site, and the graph says so.
+  assert.equal(
+    libraryRowUrl({ slug: "a-post", url: "https://x.com/a/status/1", digest: null }),
+    "https://x.com/a/status/1",
+  );
 });
 
 // --- notes -----------------------------------------------------------------

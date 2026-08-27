@@ -6,10 +6,11 @@
  * across several routes (/tools); /library is a table on both sides, so the two
  * renderings are close to the same document.
  *
- * The one thing worth saying out loud here is the absence: an agent that has
- * learned the shape of this site will look for `/library/<slug>` the way it
- * found `/tools/<slug>`, and there is nothing there. So the closing section says
- * so, rather than letting it find out with a 404.
+ * The thing worth saying out loud here is which slugs are URLs: an agent that
+ * has learned the shape of this site will look for `/library/<slug>` the way
+ * it found `/tools/<slug>`, and only the digested entries have one. So the
+ * digest section carries each page's URL and the closing section states the
+ * rule, rather than letting an agent find the other rows out with a 404.
  *
  * Rows come from `lib/library.ts` in the order that boundary already sorted
  * them, newest save first.
@@ -18,6 +19,7 @@ import type { APIRoute } from "astro";
 
 import {
   PAGES,
+  digestSection,
   link,
   list,
   markdownDocument,
@@ -26,7 +28,7 @@ import {
   newest,
 } from "../lib/markdown";
 import type { Kind } from "../lib/library";
-import { KINDS, kindGroups, library, libraryDomains } from "../lib/library";
+import { KINDS, digested, kindGroups, library, libraryDomains } from "../lib/library";
 import { absolute } from "../lib/site";
 
 /**
@@ -48,12 +50,22 @@ export const GET: APIRoute = () => {
     entry.note ?? "",
   ]);
 
+  // Null when nothing has been digested yet, and the document simply has no
+  // such section — the markdown twin of the honest-absence rule the HTML
+  // routes follow.
+  const digests = digestSection(digested);
+
   return markdownDocument({
     page: PAGES.library,
     title: "Library",
     description:
       "Articles, posts and videos Aayush Manchanda saved to read or watch properly, with the date he saved each one.",
-    updated: newest(library.map((entry) => entry.saved_date)),
+    // A digest is the newest thing that can happen to this page, so its date
+    // counts alongside the saves.
+    updated: newest([
+      ...library.map((entry) => entry.saved_date),
+      ...digested.map((entry) => entry.digest.digested),
+    ]),
     blocks: [
       table(["Title", "Domain", "Kind", "Saved", "Note"], rows),
       section(
@@ -78,9 +90,15 @@ export const GET: APIRoute = () => {
           ),
         ),
       ),
+      ...(digests === null ? [] : [digests]),
       section(
-        "No page per entry",
-        "Unlike /tools, /sites and /notes, a library entry has no page of its own. There is nothing at /library/<slug>, and the table above already holds everything the site knows about a row. Follow the title's URL to reach the source.",
+        "Pages per entry",
+        // The pointer at the digest section only exists while that section
+        // does; with nothing digested, the rule is stated without a reference
+        // to a heading that is not there.
+        digests === null
+          ? "A library entry gets a page of its own at /library/<slug> only once it has been digested, and nothing has been yet. No entry has a page: nothing at its slug, no stub. The table above already holds everything the site knows about a row. Follow the title's URL to reach the source."
+          : "A library entry gets a page of its own only once it has been digested: those pages are listed in the Digests section above, at /library/<slug>. Every other entry has no page, nothing at its slug, no stub. The table above already holds everything the site knows about it. Follow the title's URL to reach the source.",
       ),
     ],
   });

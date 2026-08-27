@@ -18,6 +18,11 @@
 // module with no unit tests, which is how the label list below drifted.
 import { absolute } from "./site.ts";
 
+// Type only, erased at build, so this file stays importable under bare node.
+// The shape itself is owned by the library boundary; a second copy here would
+// be the drift `VOICE_FIELDS` exists to prevent.
+import type { Digest } from "./library.ts";
+
 export interface MarkdownPage {
   /** The human page this variant mirrors. */
   html: string;
@@ -220,6 +225,65 @@ export function voiceSection(
     section(
       "In my words",
       "Some entries carry more than the one-line note. Most do not, and an entry missing from this list simply means I have not written it up, not that I had nothing good to say.",
+    ),
+    ...blocks,
+  ].join("\n\n");
+}
+
+/* ---------------------------------------------------------------------------
+   The digest fields
+   --------------------------------------------------------------------------- */
+
+/**
+ * The three labels a digest renders under, for both renderings of one.
+ *
+ * `components/DigestBlocks.astro` draws them as mono labels on a
+ * `/library/<slug>` page and `digestSection` below prints them into
+ * `/library.md`, and the two must not drift for the same reason `VOICE_FIELDS`
+ * exists: the first spelling to disagree is the one nobody reads with their own
+ * eyes. `lib/digest.test.mjs` holds the component to this list.
+ *
+ * "Read it?" is the reader's own question, which is what the field answers —
+ * the same register as "What I don’t" on a tool page, a person talking rather
+ * than a schema naming columns.
+ */
+export const DIGEST_LABELS = {
+  bullets: "Cliff notes",
+  verdict: "Read it?",
+  why: "Why",
+} as const;
+
+/**
+ * The digested entries as one markdown section, or null when there are none.
+ *
+ * Null rather than an empty heading, same rule as `voiceSection`: a section
+ * over nothing reads as a document that broke. Each block ends with the
+ * entry's own page, because the digest is the reason that page exists and an
+ * agent reading this file should not have to guess which slugs are URLs.
+ */
+export function digestSection(
+  entries: readonly { title: string; slug: string; digest: Digest }[],
+): string | null {
+  if (entries.length === 0) return null;
+
+  const blocks = entries.map((entry) =>
+    [
+      `### ${entry.title}`,
+      `${DIGEST_LABELS.bullets}:`,
+      list(entry.digest.bullets),
+      list([
+        `${DIGEST_LABELS.verdict}: ${entry.digest.verdict}`,
+        `${DIGEST_LABELS.why}: ${entry.digest.why}`,
+        `Digested: ${entry.digest.digested}`,
+        `Page: ${absolute(`/library/${entry.slug}`)}`,
+      ]),
+    ].join("\n\n"),
+  );
+
+  return [
+    section(
+      "Digests",
+      "These entries have been read properly, not just saved. Each carries cliff notes, a call on whether it is worth your time, and a page of its own.",
     ),
     ...blocks,
   ].join("\n\n");

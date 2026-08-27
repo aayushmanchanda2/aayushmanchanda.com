@@ -1,0 +1,208 @@
+---
+/**
+ * One digested library entry: the cliff notes, the call, and the way out.
+ *
+ * This page exists only for entries the Hermes digest skill has actually read
+ * — `lib/library.ts › digested` is the whole route table, and an undigested
+ * entry builds nothing here, per the honest-absence rule. A page holding one
+ * line I wrote and a button to leave would be a stop on the way to the thing;
+ * a page holding what the piece says and whether it is worth your time is the
+ * ten seconds the digest was written to buy.
+ *
+ * The anatomy is the /tools entry page, which is the save.design shape: a
+ * strip of metadata whose values are also filter links, the judgement in the
+ * middle, and the source at the foot. The external link lives there — the
+ * Source line — because a reader decides first and leaves second, and the one
+ * decision this page exists to serve is whether to follow that link at all.
+ */
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+
+import Base from "../../layouts/Base.astro";
+import DigestBlocks from "../../components/DigestBlocks.astro";
+import EntryLink from "../../components/EntryLink.astro";
+import EntryNav from "../../components/EntryNav.astro";
+import KindChip from "../../components/KindChip.astro";
+import { linkLabel } from "../../lib/links";
+import { digested } from "../../lib/library";
+import { routeSlug } from "../../lib/parse";
+import { libraryJsonLd } from "../../lib/schema";
+
+/**
+ * Neighbours resolved at build time, the way /sites resolves its gallery: the
+ * ring is `digested`, which is the order the /library list renders those rows,
+ * so pressing → moves the way the eye moved down the list. Wraps, and a
+ * one-entry ring offers no prev and no next rather than two links to here.
+ */
+export const getStaticPaths = (() =>
+  digested.map((entry, index) => {
+    const step = (offset: number) => {
+      const neighbour = digested[(index + offset + digested.length) % digested.length];
+      return neighbour === undefined || neighbour.slug === entry.slug
+        ? null
+        : { href: `/library/${neighbour.slug}`, title: neighbour.title };
+    };
+
+    return {
+      params: { slug: entry.slug },
+      props: { entry, prev: step(-1), next: step(1) },
+    };
+  })) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { entry, prev, next } = Astro.props;
+
+/**
+ * His review of somebody else's piece: the digest as a dated statement by a
+ * named person about a named thing. See `lib/schema.ts › libraryJsonLd`.
+ */
+const jsonLd = libraryJsonLd(entry);
+
+/* The note when there is one, the verdict when there is not: both are his own
+   sentence about the piece, and the verdict is the one a digested entry is
+   guaranteed to have. */
+const description = entry.note ?? entry.digest.verdict;
+---
+
+<Base
+  title={`${entry.title} · Library · Aayush Manchanda`}
+  description={description}
+  jsonLd={jsonLd}
+>
+  <p class="crumb mono"><a href="/library">&larr; Library</a></p>
+
+  <header>
+    <h1 class="page-title page-title--entry">{entry.title}</h1>
+
+    {/*
+      A `ul`, so the facts are separate items to anything reading the page out
+      loud. The dots are separators drawn by CSS between the items, never
+      characters in the content. Every value that can be a way back out into
+      the collection is one — the save.design anatomy, same as /tools.
+
+      Two dates on purpose: `saved` is when the link came in, `digested` is the
+      day the verdict below was last true, and the second is the one PURPOSE.md
+      cares about. An opinion with an old date on it is a warning.
+    */}
+    <ul class="strip mono">
+      <li class="strip__item">
+        <a class="strip__chip" href={`/library/kind/${entry.kind}`}>
+          <KindChip kind={entry.kind} />
+        </a>
+      </li>
+      <li class="strip__item">
+        <a href={`/library/domain/${routeSlug(entry.domain)}`}>{entry.domain}</a>
+      </li>
+      <li class="strip__item">
+        <span class="tabular-nums">saved {entry.saved_date}</span>
+      </li>
+      <li class="strip__item">
+        <span class="tabular-nums">digested {entry.digest.digested}</span>
+      </li>
+    </ul>
+
+    {entry.note && <p class="standfirst">{entry.note}</p>}
+  </header>
+
+  <DigestBlocks digest={entry.digest} />
+
+  {/*
+    The way out, prominent by being the only full link on the page. At the
+    foot rather than in the masthead because the digest is the decision and
+    this is what the decision is about — a reader who got their answer above
+    leaves through here, and one who did not was never going to.
+  */}
+  <p class="source">
+    <span class="source__label mono">Source</span>
+    <EntryLink class="ext" href={entry.url}>{linkLabel(entry.url)}</EntryLink>
+  </p>
+
+  {/*
+    The hint row is the keyboard legend and the links themselves — EntryNav
+    owns the anatomy, the keys and the reasoning. This page only decides the
+    ring: the digested entries, in list order, wrapping.
+  */}
+  <EntryNav
+    label="Library entries"
+    close={{ href: "/library", aria: "Close and go back to Library" }}
+    prev={prev && { href: prev.href, aria: `Previous digest: ${prev.title}` }}
+    next={next && { href: next.href, aria: `Next digest: ${next.title}` }}
+  />
+</Base>
+
+<style>
+  /* --- the metadata strip --------------------------------------------------
+     The /tools strip, verbatim in its reasoning: between the title and the
+     standfirst because the strip is what the title is, quiet furniture rather
+     than prose, separators in the list item and never in a link's text. */
+
+  .strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 0.7rem;
+    margin-top: clamp(1rem, 2.5vw, 1.4rem);
+    color: var(--faint);
+    text-transform: none;
+    letter-spacing: 0.02em;
+  }
+
+  .strip__item {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+  }
+
+  .strip__item + .strip__item::before {
+    content: "\00b7";
+    color: var(--hairline-strong);
+  }
+
+  /* Quiet by default and accent on hover — navigation furniture, deliberately
+     outside the bold-and-underlined treatment prose links get in global.css.
+     `:not(.strip__chip)` because the kind anchor is a box, not a word: an
+     underline under a tinted chip would draw a second line across the row. */
+  .strip a:not(.strip__chip) {
+    color: inherit;
+    text-decoration-line: underline;
+    text-decoration-color: var(--hairline-strong);
+    text-underline-offset: 0.25em;
+    transition-property: color, text-decoration-color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .strip a:not(.strip__chip):hover {
+    color: var(--accent);
+    text-decoration-color: var(--accent);
+  }
+
+  /* the chip does the talking; the anchor only carries the target */
+  .strip__chip {
+    display: inline-flex;
+    text-decoration: none;
+  }
+
+  .strip__chip:hover {
+    opacity: 0.75;
+  }
+
+  /* --- the source line ------------------------------------------------------ */
+
+  .source {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.6rem;
+    margin-top: clamp(2.5rem, 8vh, 4rem);
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--hairline);
+    /* a URL has no spaces to break at, so it must be allowed to break anywhere */
+    overflow-wrap: anywhere;
+  }
+
+  .source__label {
+    color: var(--faint);
+    letter-spacing: 0.1em;
+  }
+</style>

@@ -3,9 +3,9 @@
  * /library — what I read and watch, saved as it comes.
  *
  * The tab row above the list is doing more work here than the equivalent would
- * on /tools. /tools reaches its category and verdict pages from a tool's own
- * details page; /library has no details pages, so without this row the three
- * `/library/kind/<kind>` routes would exist, sit in the sitemap, and be
+ * on /tools. /tools reaches its category and verdict pages from every tool's
+ * own details page; here only the digested entries have one, so without this
+ * row the three `/library/kind/<kind>` routes would sit in the sitemap all but
  * unreachable by anyone using the site with their eyes. The domain routes are
  * already reachable from the mono hostname on every row.
  *
@@ -17,18 +17,19 @@ import Base from "../layouts/Base.astro";
 import KindTabs from "../components/KindTabs.astro";
 import LibraryList from "../components/LibraryList.astro";
 import { kindGroups, library } from "../lib/library";
-import { listJsonLd } from "../lib/schema";
+import { libraryRowUrl, listJsonLd } from "../lib/schema";
 
 /**
- * The only list on the site whose rows point off-site, because that is what the
- * rows do: /library has no details pages, and every visible row goes straight
- * to the source. Minting a local URL per entry for the graph would describe a
- * section that does not exist.
+ * Each row's URL is wherever that row actually goes: off-site for an
+ * undigested entry, its own `/library/<slug>` page for a digested one. The
+ * graph follows the markup rather than either rule — minting a local URL for a
+ * row that leaves, or an off-site one for a row that stays, would describe a
+ * list this page does not render.
  */
 const jsonLd = listJsonLd({
   name: "Library",
   path: "/library",
-  entries: library.map((entry) => ({ name: entry.title, url: entry.url })),
+  entries: library.map((entry) => ({ name: entry.title, url: libraryRowUrl(entry) })),
 });
 ---
 
@@ -41,7 +42,9 @@ const jsonLd = listJsonLd({
     <h1 class="page-title">Library</h1>
     <p class="standfirst">
       Things I saved to read or watch properly. Saved is not read, and neither
-      is a recommendation. Every row goes straight to the source.
+      is a recommendation. Most rows go straight to the source; the ones I have
+      digested get a page first, with the cliff notes and an honest call on
+      whether it is worth your time.
     </p>
   </header>
 

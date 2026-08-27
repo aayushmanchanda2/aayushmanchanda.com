@@ -1,0 +1,106 @@
+---
+/**
+ * DigestBlocks — a library entry's digest, under mono labels.
+ *
+ * The same visual voice as `VoiceBlocks`, and deliberately not the same
+ * component: `VoiceBlocks` renders optional single-paragraph fields and its
+ * `Props` must stay exactly `Voice`, while a digest is all-or-nothing — the
+ * parser refuses a partial one — and its first block is a list, not a
+ * paragraph. Bolting a list into `VoiceBlocks` would put an "everything is
+ * optional prose" contract and an "all four fields, one of them plural"
+ * contract in one file, and the two would fight.
+ *
+ * The order is the order the reading happens in: what the piece says, then
+ * whether to read it, then why. The verdict before the why, because the whole
+ * point of a digest is the call — a reader who trusts it never needs the
+ * paragraph after it.
+ *
+ * The labels come from `lib/markdown.ts › DIGEST_LABELS`, the same list
+ * `/library.md` prints, for the reason `VoiceBlocks` imports `VOICE_FIELDS`:
+ * two renderings of one thing, and the first to disagree is the one nobody
+ * reads with their own eyes. `lib/digest.test.mjs` holds this file to it.
+ */
+import { DIGEST_LABELS } from "../lib/markdown";
+import type { Digest } from "../lib/library";
+
+interface Props {
+  digest: Digest;
+}
+
+const { digest } = Astro.props;
+---
+
+<div class="digest">
+  <section class="digest__block">
+    <h2 class="digest__label mono">{DIGEST_LABELS.bullets}</h2>
+    <ul class="digest__bullets">
+      {digest.bullets.map((bullet) => <li class="digest__bullet">{bullet}</li>)}
+    </ul>
+  </section>
+
+  <section class="digest__block">
+    <h2 class="digest__label mono">{DIGEST_LABELS.verdict}</h2>
+    <p class="digest__body">{digest.verdict}</p>
+  </section>
+
+  <section class="digest__block">
+    <h2 class="digest__label mono">{DIGEST_LABELS.why}</h2>
+    <p class="digest__body">{digest.why}</p>
+  </section>
+</div>
+
+<style>
+  /* Measured against VoiceBlocks, which is the other "mono label over muted
+     prose" surface on an entry page: same gaps, same 62ch, same label voice.
+     Two blocks that read as siblings must not be two typographic systems. */
+  .digest {
+    margin-top: clamp(2.5rem, 8vh, 4rem);
+    display: flex;
+    flex-direction: column;
+    gap: clamp(1.5rem, 4vw, 2rem);
+    max-width: 62ch;
+  }
+
+  .digest__label {
+    color: var(--faint);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    /* the label is metadata; the text under it carries the reading size */
+    line-height: 1.6;
+  }
+
+  .digest__body {
+    margin-top: 0.4rem;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  /* A real list, marked as one: these are claims from the piece, and the
+     bullet is what says "this is what it holds", against the paragraphs below
+     that are him talking. */
+  .digest__bullets {
+    margin-top: 0.4rem;
+    padding-left: 1.1rem;
+    list-style: disc;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .digest__bullet {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .digest__bullet::marker {
+    color: var(--faint);
+  }
+
+  @media (max-width: 599px) {
+    .digest {
+      max-width: none;
+    }
+  }
+</style>

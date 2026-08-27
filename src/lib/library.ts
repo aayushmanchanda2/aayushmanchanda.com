@@ -13,15 +13,23 @@
  *
  * One thing /library does that no other section does. Every other entry on the
  * site gets a page of its own — `/tools/<slug>`, `/sites/<slug>`, `/notes/<slug>`
- * — and a library row does not. A row's destination is the thing itself, so the
- * title links straight out and there is nothing at `/library/<slug>`. A page
- * about a link, holding one line I wrote and a button to leave, would be a stop
- * on the way to the thing rather than the thing.
+ * — and a library row, by default, does not. A row's destination is the thing
+ * itself, so the title links straight out. A page about a link, holding one line
+ * I wrote and a button to leave, would be a stop on the way to the thing rather
+ * than the thing.
  *
- * The slug survives that decision anyway, and is still parsed and still has to
- * be unique. It is the key the publish pipeline writes into `pipeline/state.json`
- * to remember that a bookmark has already been published, so it is a real
- * identifier even though it is not currently a URL.
+ * A digest changes that answer, because it changes what the page would hold.
+ * When the Hermes digest skill has actually read a saved piece and written the
+ * cliff notes and a read-it-or-skip-it call, there is something at
+ * `/library/<slug>` worth stopping for, so that entry gets a detail page and its
+ * row links there instead. Entries without a digest keep the old answer: no
+ * page, no stub, nothing "coming soon" — the same honest-absence rule
+ * `lib/sections.ts` applies to whole sections.
+ *
+ * The slug is therefore a URL only for digested entries. It is still parsed and
+ * still has to be unique for every entry either way: it is the key the publish
+ * pipeline writes into `pipeline/state.json` to remember that a bookmark has
+ * already been published.
  *
  * The pipeline still calls this section `reading`, and that is deliberate: its
  * section key is the name of the Raindrop collection Aayush saves into
@@ -58,8 +66,29 @@ export const KIND_LABELS: Record<Kind, string> = {
   video: "Videos",
 };
 
+/**
+ * The digest a saved link may carry: what the piece says, and whether reading
+ * it is worth your time. Written by the Hermes digest skill after actually
+ * reading the source, never from the title alone, which is why the whole
+ * object is optional: an entry either has a real digest or it has none.
+ *
+ * All four fields are required once the object is there. A digest with bullets
+ * and no verdict is a summary, and a summary was never the point — the verdict
+ * and the why are what earn the entry its page.
+ */
+export interface Digest {
+  /** Three to five load-bearing claims from the piece, one line each. */
+  bullets: string[];
+  /** The read-it-or-skip-it call, one sentence, a real opinion. */
+  verdict: string;
+  /** Why it matters, or doesn't. About the reader's time, not the piece. */
+  why: string;
+  /** ISO calendar date (YYYY-MM-DD) the digest was written. The opinion's date. */
+  digested: string;
+}
+
 export interface LibraryEntry {
-  /** URL-safe id. Not a page — see the note at the top of this file. */
+  /** URL-safe id, and the detail page's URL when the entry is digested. */
   slug: string;
   title: string;
   url: string;
@@ -76,7 +105,15 @@ export interface LibraryEntry {
    * to say should say nothing instead of reserving a blank line to say it in.
    */
   note: string | null;
+  /**
+   * The digest, or null. Null is the ordinary case: most saves have not been
+   * read yet, and an undigested entry has no detail page to describe.
+   */
+  digest: Digest | null;
 }
+
+/** An entry that has earned its page. What `/library/[slug]` builds from. */
+export type DigestedEntry = LibraryEntry & { digest: Digest };
 
 /**
  * Both groups are `type` rather than `interface` for the reason spelled out in
@@ -166,6 +203,47 @@ function readNote(entry: Record<string, unknown>, where: string): string | null 
   return value;
 }
 
+/**
+ * Absent, explicitly null, or the whole thing. A digest is one judgement, so a
+ * partial one — bullets with no verdict, a verdict with no date — is a
+ * half-finished edit and stops the build the way every other half-finished
+ * edit here does.
+ *
+ * Bullets are held to one line each. The detail page renders them as list
+ * items and the markdown variant renders them as `- ` lines, and a newline
+ * inside one would quietly become a second, unmarked bullet in the second
+ * rendering only.
+ */
+function readDigest(entry: Record<string, unknown>, where: string): Digest | null {
+  const value = entry["digest"];
+  if (value === undefined || value === null) return null;
+
+  if (!isRecord(value)) {
+    fail(where, `needs "digest" to be an object, null, or absent (got ${JSON.stringify(value)})`);
+  }
+
+  const raw = value["bullets"];
+  if (!Array.isArray(raw) || raw.length === 0) {
+    fail(where, `needs "digest.bullets" to be a non-empty array of one-line strings`);
+  }
+  const bullets = raw.map((bullet: unknown, index): string => {
+    if (typeof bullet !== "string" || bullet.trim() === "" || bullet.includes("\n")) {
+      fail(
+        where,
+        `needs "digest.bullets" entry ${index} to be one non-empty line (got ${JSON.stringify(bullet)})`,
+      );
+    }
+    return bullet;
+  });
+
+  return {
+    bullets,
+    verdict: readString(value, "verdict", `${where} digest`),
+    why: readString(value, "why", `${where} digest`),
+    digested: readDate(value, "digested", `${where} digest`),
+  };
+}
+
 export function parseLibrary(value: unknown): LibraryEntry[] {
   if (!Array.isArray(value)) fail("root", "must be a JSON array of library entries");
   if (value.length === 0) fail("root", "must hold at least one library entry");
@@ -202,6 +280,7 @@ export function parseLibrary(value: unknown): LibraryEntry[] {
       saved_date: readDate(item, "saved_date", where),
       kind,
       note: readNote(item, where),
+      digest: readDigest(item, where),
     };
   });
 
@@ -239,6 +318,19 @@ export const library: LibraryEntry[] = parseLibrary(rawLibrary)
       : b.entry.saved_date.localeCompare(a.entry.saved_date),
   )
   .map(({ entry }) => entry);
+
+/**
+ * The entries with detail pages, in the order the /library list renders them.
+ *
+ * This is the whole route table for `/library/[slug]`, and it is also the ring
+ * the keyboard nav walks — one order, so pressing → on a detail page moves the
+ * way the eye moved down the list. The filter narrows `digest` from
+ * `Digest | null` to `Digest`, which is what lets the page read
+ * `entry.digest.bullets` without a runtime check it has already done here.
+ */
+export const digested: DigestedEntry[] = library.filter(
+  (entry): entry is DigestedEntry => entry.digest !== null,
+);
 
 /** Kinds in vocabulary order, empty ones dropped: no page without entries. */
 export const kindGroups: KindGroup[] = KINDS.map((kind) => ({

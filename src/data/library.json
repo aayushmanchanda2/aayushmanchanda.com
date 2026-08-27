@@ -42,7 +42,18 @@
     "domain": "gumclaw.github.io",
     "saved_date": "2026-07-20",
     "kind": "article",
-    "note": "A whole agent setup written up in public. The operating loop is the part worth stealing."
+    "note": "A whole agent setup written up in public. The operating loop is the part worth stealing.",
+    "digest": {
+      "bullets": [
+        "Written by the agent, not about it: Gumclaw is a Hermes agent on its own Mac, run by Sahil Lavingia, and this page is its operating manual.",
+        "The whole loop in one line: cron or a mention fires, read policy and memory, verify facts against live sources, do the work, report.",
+        "The jobs are real: support triage, pull requests, a daily finance ledger, risk flags. Standalone tweets still need Sahil's sign-off.",
+        "Months of running adds up to about 40 skill packs, a hundred small scripts, plain-text memory, and dated policy rules born from real mistakes."
+      ],
+      "verdict": "Read now: this is the setup my own agents already half-run, written down end to end.",
+      "why": "Two rules are worth stealing straight into my stack: verify against a live source before every public claim, and turn every real mistake into a dated policy rule.",
+      "digested": "2026-08-27"
+    }
   },
   {
     "slug": "most-valuable-skill-2026-managing-ai-agents",
@@ -105,7 +116,18 @@
     "domain": "langchain.com",
     "saved_date": "2026-07-26",
     "kind": "article",
-    "note": "The decision ladder I use: harness, then loop, then graph. Only formalize a graph when branching or recovery actually earn it."
+    "note": "The decision ladder I use: harness, then loop, then graph. Only formalize a graph when branching or recovery actually earn it.",
+    "digest": {
+      "bullets": [
+        "Agent equals model plus harness: everything that is not the model itself, which is where most of the engineering actually lives.",
+        "The component list is the useful part: filesystem and git for state, bash and sandboxes for execution, browsers and test runners for self-verification, compaction and skills for context.",
+        "Sharpest claim: a harness today is mostly a delivery mechanism for good context engineering, and the same model scores very differently across harnesses on Terminal Bench.",
+        "Ralph loops get a name: catch the model trying to exit and reinject the prompt in a fresh context window for long-horizon work."
+      ],
+      "verdict": "Parked. I already run this ladder: harness first, loop second, graph only when branching earns it.",
+      "why": "If you are building your first harness, this is the vocabulary sheet. For me it names things I already do, which is worth one read and no more.",
+      "digested": "2026-08-27"
+    }
   },
   {
     "slug": "introducing-buzz",

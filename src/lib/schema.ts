@@ -52,6 +52,7 @@
  * every builder with plain objects under bare `node --test`.
  */
 
+import type { DigestedEntry, Kind, LibraryEntry } from "./library";
 import type { Site } from "./sites";
 import type { Tool } from "./tools";
 /*
@@ -503,6 +504,83 @@ export function siteJsonLd(site: Site): JsonLd {
       dateCreated: site.saved_date,
     },
     breadcrumb({ name: "Sites", path: "/sites" }, { name: site.title, path: `/sites/${site.slug}` }),
+  );
+}
+
+/**
+ * Where a /library row sends a reader, which is what its `ItemList` entry must
+ * claim. The parity rule, one property wide: a digested row links its own
+ * detail page and an undigested one links straight out, so the graph on every
+ * list page says exactly that and nothing tidier. Three pages render the list
+ * and all three call this, because three copies of a one-line branch is how
+ * one of them ends up describing the row the other two stopped drawing.
+ */
+export function libraryRowUrl(
+  entry: Pick<LibraryEntry, "slug" | "url" | "digest">,
+): string {
+  return entry.digest === null ? entry.url : pageUrl(`/library/${entry.slug}`);
+}
+
+/**
+ * What kind of thing a digested entry reviews, in schema.org's vocabulary.
+ *
+ * The same three words the kind chip prints, translated once: a `post` is a
+ * thing on a social timeline and a `video` is a recording, and schema.org has
+ * a type for each. Exhaustive by `Kind`, so a fourth kind will not compile
+ * until it has a type here too.
+ */
+const KIND_TYPES: Record<Kind, string> = {
+  article: "Article",
+  post: "SocialMediaPosting",
+  video: "VideoObject",
+};
+
+/**
+ * The digest as one body of prose: the page's own sentences, in the order the
+ * page stacks them — the note as standfirst, then the cliff notes, then the
+ * verdict and the why. Same contract as `reviewBody` for a tool: a null note
+ * contributes nothing because it renders nothing.
+ */
+export function digestReviewBody(entry: DigestedEntry): string {
+  return [entry.note, ...entry.digest.bullets, entry.digest.verdict, entry.digest.why]
+    .filter((field): field is string => typeof field === "string" && field !== "")
+    .join("\n\n");
+}
+
+/**
+ * One digested library entry: his review of somebody else's piece.
+ *
+ * The shape follows `toolJsonLd` — a `Review` by the `Person`, dated the day
+ * the digest was written, which is the `digested` date the page prints — with
+ * one deliberate difference. The thing reviewed is external, so it is a nested
+ * node carrying only what the page shows about it (title, URL, and the kind
+ * translated to a type), the way `siteJsonLd` nests its `about`. Lifting it to
+ * a top-level node would mean minting an `@id` on this origin for a document
+ * that lives on someone else's, and claiming properties — an author, a date —
+ * the page does not show.
+ */
+export function libraryJsonLd(entry: DigestedEntry): JsonLd {
+  const url = pageUrl(`/library/${entry.slug}`);
+
+  return graph(
+    {
+      "@type": "Review",
+      "@id": `${url}#review`,
+      url,
+      itemReviewed: {
+        "@type": KIND_TYPES[entry.kind],
+        name: entry.title,
+        url: entry.url,
+      },
+      author: ref(PERSON_ID),
+      reviewBody: digestReviewBody(entry),
+      datePublished: entry.digest.digested,
+    },
+    person(),
+    breadcrumb(
+      { name: "Library", path: "/library" },
+      { name: entry.title, path: `/library/${entry.slug}` },
+    ),
   );
 }
 

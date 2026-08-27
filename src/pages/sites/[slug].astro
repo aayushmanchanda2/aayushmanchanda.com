@@ -18,6 +18,7 @@ import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 
 import Base from "../../layouts/Base.astro";
 import CollectionChips from "../../components/CollectionChips.astro";
+import EntryNav from "../../components/EntryNav.astro";
 import PaletteRow from "../../components/PaletteRow.astro";
 import ShotActions from "../../components/ShotActions.astro";
 import ShotFrame from "../../components/ShotFrame.astro";
@@ -56,58 +57,6 @@ export const getStaticPaths = (() =>
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { site, prev, next } = Astro.props;
-
-interface Hint {
-  /** Which key drives this row. The script reads it back off the markup. */
-  role: "close" | "prev" | "next";
-  key: string;
-  label: string;
-  href: string;
-  rel?: string;
-  aria: string;
-}
-
-/**
- * The hint row is the legend and the navigation at once.
- *
- * Written as links rather than as three lines of static text plus a key
- * handler, because a legend that only a keyboard can act on is a legend a
- * touchscreen has to read and cannot use. The script below takes its
- * destinations from these anchors, so there is one place each key goes.
- */
-const hints: Hint[] = [
-  {
-    role: "close",
-    key: "esc",
-    label: "close",
-    href: "/sites",
-    aria: "Close and go back to Sites",
-  },
-  ...(prev
-    ? [
-        {
-          role: "prev" as const,
-          key: "←",
-          label: "prev",
-          href: prev.href,
-          rel: "prev",
-          aria: `Previous site: ${prev.title}`,
-        },
-      ]
-    : []),
-  ...(next
-    ? [
-        {
-          role: "next" as const,
-          key: "→",
-          label: "next",
-          href: next.href,
-          rel: "next",
-          aria: `Next site: ${next.title}`,
-        },
-      ]
-    : []),
-];
 
 /**
  * This page, the site it is about, and the screenshot — three things kept
@@ -199,26 +148,17 @@ const jsonLd = siteJsonLd(site);
     </div>
   </dl>
 
-  <nav class="hints" aria-label="Sites entries" data-entry-nav>
-    <ul class="hints__row">
-      {
-        hints.map((hint) => (
-          <li class="hints__item">
-            <a
-              class="hint press"
-              href={hint.href}
-              rel={hint.rel}
-              data-nav={hint.role}
-              aria-label={hint.aria}
-            >
-              <kbd class="hint__key">{hint.key}</kbd>
-              {hint.label}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-  </nav>
+  {/*
+    The hint row is the keyboard legend and the links themselves — EntryNav
+    owns the anatomy, the keys and the reasoning. This page only decides the
+    ring: `sites`, in gallery order, wrapping.
+  */}
+  <EntryNav
+    label="Sites entries"
+    close={{ href: "/sites", aria: "Close and go back to Sites" }}
+    prev={prev && { href: prev.href, aria: `Previous site: ${prev.title}` }}
+    next={next && { href: next.href, aria: `Next site: ${next.title}` }}
+  />
 </Base>
 
 <style>
@@ -257,119 +197,5 @@ const jsonLd = siteJsonLd(site);
     align-self: start;
   }
 
-  /* --- the hint row ------------------------------------------------------- */
-
-  .hints {
-    margin-top: clamp(2rem, 6vh, 3rem);
-  }
-
-  .hints__row {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    /* Matches the gap inside an item, so the separator sits centred between two
-       hints rather than welded to the end of the one before it. */
-    gap: 0 0.75rem;
-    margin: 0;
-    font-family: var(--font-mono);
-    font-weight: 500;
-    font-size: 0.6875rem;
-    letter-spacing: 0.06em;
-    /* Lowercase, against the site's uppercase mono label voice. These are key
-       caps, and the key is printed `esc` on the keyboard the reader is looking
-       at — shouting it would be naming a different key. */
-    text-transform: lowercase;
-    color: var(--faint);
-  }
-
-  .hints__item {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  /* The separator sits in the list item, outside the anchor, so it is never
-     part of the link's text or its target. */
-  .hints__item + .hints__item::before {
-    content: "\00b7";
-    color: var(--hairline-strong);
-  }
-
-  .hint {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    /* Not a 40px block: these are text hints, and padding is what turns them
-       into a target without giving the foot of the page a toolbar's weight. */
-    padding-block: 0.5rem;
-    color: inherit;
-    text-decoration: none;
-    /* `.press` names the transition; a second one here would race it. */
-  }
-
-  .hint:hover {
-    color: var(--accent);
-  }
-
-  .hint__key {
-    font: inherit;
-    color: var(--muted);
-  }
+  /* The hint row at the foot — markup, CSS and keys — is EntryNav.astro. */
 </style>
-
-<script>
-  /**
-   * The three keys, and which hint each one presses.
-   *
-   * The destinations are not in here on purpose. They are read off the anchors
-   * in the hint row, which means the legend a reader can see and the behaviour
-   * a keyboard gets cannot drift apart: delete a link and the key goes quiet
-   * with it.
-   */
-  const KEYS: Record<string, string> = {
-    Escape: "close",
-    ArrowLeft: "prev",
-    ArrowRight: "next",
-  };
-
-  const nav = document.querySelector<HTMLElement>("[data-entry-nav]");
-
-  if (nav) {
-    document.addEventListener("keydown", (event) => {
-      // Already handled by something closer to the action, or mid-IME.
-      if (event.defaultPrevented || event.isComposing) return;
-      // A modifier means the reader is asking the browser for something —
-      // Cmd+Left is Back, and taking that over would be a hijack.
-      if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;
-
-      const role = KEYS[event.key];
-      if (!role) return;
-
-      // Typing beats navigating. There is no field on this page today, but a
-      // bare arrow key belongs to whatever is taking text.
-      const target = event.target;
-      if (
-        target instanceof HTMLElement &&
-        (target.isContentEditable ||
-          target instanceof HTMLInputElement ||
-          target instanceof HTMLTextAreaElement ||
-          target instanceof HTMLSelectElement)
-      ) {
-        return;
-      }
-
-      // Escape belongs to whatever is on top. Two surfaces match this selector
-      // today — the command palette and the mobile nav panel — and both close
-      // on Escape themselves; the order two document-level listeners run in is
-      // a bundling detail rather than a guarantee, so this asks the page
-      // instead of trusting it. See the precedence note in lib/palette.ts.
-      if (document.querySelector('[aria-modal="true"][data-open]')) return;
-
-      const link = nav.querySelector<HTMLAnchorElement>(`[data-nav="${role}"]`);
-      if (!link) return;
-
-      event.preventDefault();
-      window.location.href = link.href;
-    });
-  }
-</script>

@@ -131,11 +131,13 @@ function hostOf(url: string): string {
  * Async for one reason: /notes comes from the content layer. Everything else is
  * a module-level constant that was parsed when its file was imported.
  *
- * Entry hrefs point at the site, never off it, including for the two sections
- * that have no per-entry page. A library row and an experiment row each carry
- * an `id`, so `/library#slug` lands on the row in context — with its note, its
+ * Entry hrefs point at the site, never off it, including for the rows that
+ * have no per-entry page. A library row and an experiment row each carry an
+ * `id`, so `/library#slug` lands on the row in context — with its note, its
  * date and its neighbours — instead of ejecting the reader to a third-party
- * article they did not ask to open from a nav control. The one place the
+ * article they did not ask to open from a nav control. A digested library
+ * entry has a real page, so it gets the real page: an anchor into a list is
+ * the fallback for a row with nowhere better to land. The one place the
  * palette will leave the site is a row that says so.
  */
 async function build(): Promise<SearchEntry[]> {
@@ -175,7 +177,7 @@ async function build(): Promise<SearchEntry[]> {
       (entry): SearchEntry => ({
         title: entry.title,
         section: SECTION.library,
-        href: `/library#${entry.slug}`,
+        href: entry.digest ? `/library/${entry.slug}` : `/library#${entry.slug}`,
         terms: `${entry.domain} ${entry.kind}`,
       }),
     ),

@@ -184,6 +184,21 @@ const EXPECTED = [
     types: ["Article", "Person", "BreadcrumbList"],
   },
   {
+    /*
+     * Only digested entries build a page here, so coverage of this group is
+     * also the check that at least one digest survived the build. The thing
+     * reviewed is external and rides inside the Review as a nested node — see
+     * `lib/schema.ts › libraryJsonLd` — so the top level is the review, the
+     * person, and the trail, and nothing else.
+     *
+     * The one-segment pattern cannot collide with the filter group below:
+     * /library/kind/<kind> and /library/domain/<host> are two segments deep.
+     */
+    name: "library details",
+    match: (page) => /^library\/[^/]+\/index\.html$/.test(page),
+    types: ["Review", "Person", "BreadcrumbList"],
+  },
+  {
     name: "filter",
     match: (page) =>
       /^(tools\/(category|verdict)|sites\/(collection|domain)|library\/(kind|domain))\/[^/]+\/index\.html$/.test(

@@ -14,9 +14,14 @@
  * identical YouTube marks stacked down the page, plus a third-party request per
  * row to fetch them. The domain in mono does that job here and does it in text.
  *
- * The title is the only link out. There is no `/library/<slug>` to offer as a
- * "details" affordance the way /tools does, which is the point of the section:
- * the row's destination is the thing itself.
+ * The title is the row's one link, and where it goes depends on whether the
+ * entry has been digested. An undigested row's destination is the thing itself
+ * — there is no `/library/<slug>` for it, which is the point of the section —
+ * while a digested row goes to its own page first, because that page holds the
+ * ten-second answer to "is this worth my time" and the source link is
+ * prominent on it. Same treatment, different direction, and that is fine: the
+ * softer of the two actions is the one that stays on this site, and a new tab
+ * only opens where the row actually leaves.
  */
 import KindChip from "./KindChip.astro";
 import { routeSlug } from "../lib/parse";
@@ -37,26 +42,38 @@ const { entries, showDomain = true } = Astro.props;
       /*
        * The slug as an id, so the row is a destination.
        *
-       * /library has no per-entry page — the row's own link goes to the source
-       * — which left the command palette with nowhere on this site to send
-       * someone who searched for one. `/library#slug` is that somewhere,
-       * and it lands them on the entry in context, with its note and its
-       * neighbours, rather than ejecting them to a third-party page from what
-       * is meant to be a navigation control.
+       * An undigested entry has no page of its own — its row links straight to
+       * the source — which left the command palette with nowhere on this site
+       * to send someone who searched for one. `/library#slug` is that
+       * somewhere, and it lands them on the entry in context, with its note
+       * and its neighbours, rather than ejecting them to a third-party page
+       * from what is meant to be a navigation control. Digested entries keep
+       * the id too, harmlessly: the palette sends those to their real page.
        *
        * Unique per page: the two filter routes render subsets of the same
        * list, and a slug appears at most once in any of them.
        */
       <li class="row" id={entry.slug}>
         <span class="row__name">
-          <a
-            class="row__link"
-            href={entry.url}
-            rel="noopener nofollow"
-            target="_blank"
-          >
-            {entry.title}
-          </a>
+          {/*
+            A digested row points at its own page, so the outbound attributes
+            drop with the outbound destination: no `rel`, no new tab. See the
+            note at the top of this file.
+          */}
+          {entry.digest ? (
+            <a class="row__link" href={`/library/${entry.slug}`}>
+              {entry.title}
+            </a>
+          ) : (
+            <a
+              class="row__link"
+              href={entry.url}
+              rel="noopener nofollow"
+              target="_blank"
+            >
+              {entry.title}
+            </a>
+          )}
           <KindChip kind={entry.kind} />
         </span>
 

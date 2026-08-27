@@ -19,7 +19,7 @@
 import type { APIRoute } from "astro";
 
 import { PAGES } from "../lib/markdown";
-import { kindGroups, library } from "../lib/library";
+import { digested, kindGroups, library } from "../lib/library";
 import { getSections } from "../lib/sections";
 import { sites } from "../lib/sites";
 import { categories, tools, verdictGroups } from "../lib/tools";
@@ -112,10 +112,13 @@ from the same source, so the two cannot drift.
 
 Filter pages exist under /tools/category/<name>, /tools/verdict/<name>,
 /sites/domain/<host>, /library/kind/<kind> and /library/domain/<host>. Every
-tool, site, and note has its own page. A library entry does not: there is
-nothing at /library/<slug>, because a saved link's destination is the source
-itself, and /library.md already carries everything the site knows about a row.
-The sitemap lists every URL that does exist.
+tool, site, and note has its own page. A library entry has one only once it
+has been digested (${digested.length} of ${library.length} right now): those
+live at /library/<slug> and hold cliff notes from the piece plus a call on
+whether it is worth reading. An undigested entry has nothing at its slug,
+because a saved link's destination is the source itself, and /library.md
+carries everything the site knows about every row, digests included. The
+sitemap lists every URL that does exist.
 
 ## Pages
 

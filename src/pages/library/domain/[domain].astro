@@ -11,7 +11,7 @@ import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import Base from "../../../layouts/Base.astro";
 import LibraryList from "../../../components/LibraryList.astro";
 import { libraryDomains } from "../../../lib/library";
-import { listJsonLd } from "../../../lib/schema";
+import { libraryRowUrl, listJsonLd } from "../../../lib/schema";
 
 export const getStaticPaths = (() =>
   libraryDomains.map((group) => ({
@@ -25,12 +25,12 @@ const { domain, slug, entries } = Astro.props;
 const count = entries.length;
 const lead = `${count} ${count === 1 ? "link" : "links"} I saved from`;
 
-/** Off-site rows, same as /library, plus the crumb this page draws. */
+/** Rows point where they go, same as /library, plus the crumb this page draws. */
 const jsonLd = listJsonLd({
   name: domain,
   path: `/library/domain/${slug}`,
   parent: { name: "Library", path: "/library" },
-  entries: entries.map((entry) => ({ name: entry.title, url: entry.url })),
+  entries: entries.map((entry) => ({ name: entry.title, url: libraryRowUrl(entry) })),
 });
 ---
 
