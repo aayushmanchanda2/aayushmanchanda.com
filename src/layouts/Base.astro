@@ -19,6 +19,8 @@ import SiteMark from "../components/SiteMark.astro";
 import ThemeToggle from "../components/ThemeToggle.astro";
 import { normalize } from "../lib/links";
 import { markdownVariantFor } from "../lib/markdown";
+import type { JsonLd } from "../lib/schema";
+import { serialize } from "../lib/schema";
 import type { NavItem } from "../lib/sections";
 import { getSections } from "../lib/sections";
 import { absolute } from "../lib/site";
@@ -33,8 +35,15 @@ interface Props {
    * A prop rather than a `<slot name="head">` because the value is data, not
    * markup: the layout keeps sole ownership of how it gets serialised, and a
    * page cannot push arbitrary script into the head through it.
+   *
+   * Typed as `JsonLd` rather than a bare object, so the only thing a page can
+   * pass is something a builder in `lib/schema.ts` returned. That is what keeps
+   * the parity rule enforceable in one file instead of on twelve pages: there is
+   * no route by which a page hand-writes a node with a rating on it. Multiple
+   * entities travel in that document's `@graph`, which is why one block per page
+   * is still enough.
    */
-  jsonLd?: Record<string, unknown>;
+  jsonLd?: JsonLd;
 }
 
 const {
@@ -179,7 +188,7 @@ const markdownVariant = variant === null ? null : absolute(variant);
         <script
           type="application/ld+json"
           is:inline
-          set:html={JSON.stringify(jsonLd)}
+          set:html={serialize(jsonLd)}
         />
       )
     }

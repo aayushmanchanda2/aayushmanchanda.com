@@ -1,7 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
+import { homeJsonLd } from "../lib/schema";
 import { getSections } from "../lib/sections";
-import { SITE_URL } from "../lib/site";
 
 // Sections with no entries do not come back, so the index never offers a row
 // that leads to an empty page.
@@ -11,22 +11,11 @@ const sections = await getSections();
  * Who this site is about, in a form a machine can resolve.
  *
  * `Person` rather than `Organization`: this is one person's log, not a company
- * site, and claiming otherwise would be a lie that happens to score well. Kept
- * as a single flat node rather than an `@graph` so that even a naive parser
- * still gets the identity out of it.
+ * site, and claiming otherwise would be a lie that happens to score well. The
+ * node itself, and the `WebSite` that names him as its author, are built in
+ * `lib/schema.ts`, which is the only place on the site that writes JSON-LD.
  */
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Person",
-  name: "Aayush Manchanda",
-  url: SITE_URL,
-  description:
-    "Aayush Manchanda is part entrepreneur, part marketer, part operator. He co-founded Orbis, runs Vetted, and uses AI to build things on the internet from Canada. There is a lot of noise in AI, so he reads it, tests it on his own companies and his clients, and what survives shows up on this site with a date on it.",
-  sameAs: [
-    "https://github.com/aayushmanchanda2",
-    "https://x.com/amanchanda7",
-  ],
-};
+const jsonLd = homeJsonLd();
 ---
 
 <Base jsonLd={jsonLd}>

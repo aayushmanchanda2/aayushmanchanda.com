@@ -1,12 +1,24 @@
 ---
 import Base from "../layouts/Base.astro";
 import ToolList from "../components/ToolList.astro";
+import { listJsonLd, pageUrl } from "../lib/schema";
 import { tools } from "../lib/tools";
+
+/** Every row on the page, pointing where the row points: its details page. */
+const jsonLd = listJsonLd({
+  name: "Tools",
+  path: "/tools",
+  entries: tools.map((tool) => ({
+    name: tool.name,
+    url: pageUrl(`/tools/${tool.slug}`),
+  })),
+});
 ---
 
 <Base
   title="Tools · Aayush Manchanda"
   description="Software Aayush Manchanda installed, ran, and formed an opinion about, with a dated verdict on each one."
+  jsonLd={jsonLd}
 >
   <header>
     <h1 class="page-title">Tools</h1>

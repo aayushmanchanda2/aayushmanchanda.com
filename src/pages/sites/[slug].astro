@@ -22,6 +22,7 @@ import PaletteRow from "../../components/PaletteRow.astro";
 import ShotActions from "../../components/ShotActions.astro";
 import ShotFrame from "../../components/ShotFrame.astro";
 import VoiceBlocks from "../../components/VoiceBlocks.astro";
+import { siteJsonLd } from "../../lib/schema";
 import { domainSlug, sites } from "../../lib/sites";
 
 /**
@@ -107,11 +108,19 @@ const hints: Hint[] = [
       ]
     : []),
 ];
+
+/**
+ * This page, the site it is about, and the screenshot — three things kept
+ * apart, so the picture and the palette stay ours and the name and the URL stay
+ * theirs. See `lib/schema.ts`.
+ */
+const jsonLd = siteJsonLd(site);
 ---
 
 <Base
   title={`${site.title} · Sites · Aayush Manchanda`}
   description={`Full-page screenshot of ${site.title} (${site.domain}), saved ${site.saved_date}.`}
+  jsonLd={jsonLd}
 >
   <p class="crumb mono"><a href="/sites">&larr; Sites</a></p>
 

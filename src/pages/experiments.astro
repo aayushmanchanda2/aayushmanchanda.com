@@ -11,11 +11,31 @@ import Base from "../layouts/Base.astro";
 import EntryLink from "../components/EntryLink.astro";
 import StatusChip from "../components/StatusChip.astro";
 import { experiments } from "../lib/experiments";
+import { anchorUrl, listJsonLd } from "../lib/schema";
+
+/**
+ * Rows point at themselves.
+ *
+ * An experiment has no details page, and its `links` may be empty, so the only
+ * address it reliably has is the `id` on its own row — the same anchor the
+ * command palette sends someone to. Pointing the list at `links[0]` instead
+ * would send half of them nowhere and the rest somewhere they were not asked
+ * about.
+ */
+const jsonLd = listJsonLd({
+  name: "Experiments",
+  path: "/experiments",
+  entries: experiments.map((experiment) => ({
+    name: experiment.name,
+    url: anchorUrl("/experiments", experiment.slug),
+  })),
+});
 ---
 
 <Base
   title="Experiments · Aayush Manchanda"
   description="What Aayush Manchanda is running right now, with a status and a start date on each one. The dead ones stay listed."
+  jsonLd={jsonLd}
 >
   <header>
     <h1 class="page-title">Experiments</h1>

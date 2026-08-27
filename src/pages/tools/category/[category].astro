@@ -7,6 +7,7 @@ import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 
 import Base from "../../../layouts/Base.astro";
 import ToolList from "../../../components/ToolList.astro";
+import { listJsonLd, pageUrl } from "../../../lib/schema";
 import { categories } from "../../../lib/tools";
 
 export const getStaticPaths = (() =>
@@ -17,14 +18,26 @@ export const getStaticPaths = (() =>
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-const { category, tools } = Astro.props;
+const { category, slug, tools } = Astro.props;
 const count = tools.length;
 const lead = `${count} ${count === 1 ? "tool" : "tools"} I filed under`;
+
+/** The filtered list, plus the crumb this page actually draws. */
+const jsonLd = listJsonLd({
+  name: category,
+  path: `/tools/category/${slug}`,
+  parent: { name: "Tools", path: "/tools" },
+  entries: tools.map((tool) => ({
+    name: tool.name,
+    url: pageUrl(`/tools/${tool.slug}`),
+  })),
+});
 ---
 
 <Base
   title={`${category} · Tools · Aayush Manchanda`}
   description={`${lead} ${category}.`}
+  jsonLd={jsonLd}
 >
   <p class="crumb mono"><a href="/tools">&larr; Tools</a></p>
 

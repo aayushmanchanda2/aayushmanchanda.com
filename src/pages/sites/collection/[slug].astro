@@ -15,6 +15,7 @@ import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 
 import Base from "../../../layouts/Base.astro";
 import SiteGrid from "../../../components/SiteGrid.astro";
+import { listJsonLd, pageUrl } from "../../../lib/schema";
 import { collectionGroups } from "../../../lib/sites";
 
 export const getStaticPaths = (() =>
@@ -25,14 +26,26 @@ export const getStaticPaths = (() =>
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-const { label, sites } = Astro.props;
+const { label, slug, sites } = Astro.props;
 const count = sites.length;
 const lead = `${count} ${count === 1 ? "site" : "sites"} I filed under`;
+
+/** The filtered grid, plus the crumb this page actually draws. */
+const jsonLd = listJsonLd({
+  name: label,
+  path: `/sites/collection/${slug}`,
+  parent: { name: "Sites", path: "/sites" },
+  entries: sites.map((site) => ({
+    name: site.title,
+    url: pageUrl(`/sites/${site.slug}`),
+  })),
+});
 ---
 
 <Base
   title={`${label} · Sites · Aayush Manchanda`}
   description={`${lead} ${label}.`}
+  jsonLd={jsonLd}
 >
   <p class="crumb mono"><a href="/sites">&larr; Sites</a></p>
 

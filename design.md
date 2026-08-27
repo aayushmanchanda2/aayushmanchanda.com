@@ -178,13 +178,39 @@ Applies to everything a reader sees: data notes, standfirsts, blurbs, labels, al
 
 ---
 
-## 7. Before you ship UI
+## 7. Structured data
+
+Every page carries one `application/ld+json` block, and every node in it is built by `lib/schema.ts`. Nothing else on the site writes JSON-LD. `layouts/Base.astro › jsonLd` types the prop as `JsonLd`, so the only thing a page can hand the layout is something a builder returned — there is no route by which a page hand-writes a node.
+
+**The parity rule is the whole contract: every property maps to something a reader can see on that page.** It is §6 applied to the machine-readable copy, and it is enforced in three places — the builders, `lib/schema.test.mjs`, and `scripts/validate-schema.mjs`, which reads the built HTML rather than the source that produced it.
+
+**No ratings. Not one, not anywhere.** No `reviewRating`, no `aggregateRating`, no `ratingValue`. A verdict here is a sentence someone can disagree with, and there is no number on the page to carry into one. The cost is stated rather than discovered: Google's Review rich result *requires* `reviewRating`, so these reviews will never draw stars. That is the trade — a citable, honest claim instead of a decorated, invented one. Also absent for the same reason: `keywords` (nothing here is a keyword list) and `SearchAction` (the palette is a client-side filter, not a query endpoint, and advertising a search URL that 404s is a lie a crawler finds out about).
+
+| Page | `@graph` |
+|---|---|
+| `/` | `WebSite` + `Person`, the site naming the person as both `author` and `publisher` |
+| `/tools` `/sites` `/reading` `/experiments` `/notes` | `ItemList` |
+| `/tools/<slug>` | `SoftwareApplication` + `Review` + `Person` + `BreadcrumbList` |
+| `/sites/<slug>` | `WebPage` (`about` the external site) + `ImageObject` + `BreadcrumbList` |
+| `/notes/<slug>` | `Article` + `Person` + `BreadcrumbList` |
+| filter pages | `ItemList` + `BreadcrumbList` |
+| `/privacy`, 404 | none, on purpose |
+
+Five things are worth not re-deriving.
+
+**Every document is an `@graph`, even a one-node one**, so the validator and anything reading the built HTML walk one shape. **A `{"@id": …}` reference must resolve inside its own graph** — a parser reading one page cannot follow a reference to a node that only exists on another — which is why the `Person` is repeated on every page that attributes something to him, and absent from every page that does not. **That `Person` is compact off the home page**: `name`, `url`, `sameAs` and nothing else, because those are the three things the site mark and the two `rel="me"` footer rows make visible *everywhere*, while the biography is only visible on the home page. **The opinion never leaks onto the thing being reviewed** — a `SoftwareApplication` gets name, url, category; every judgement lives in the `Review`, attributed and dated. **`lib/schema.ts › pageUrl` must agree with the canonical link**, because Astro builds directory-format routes and `/tools/paperclip` vs `/tools/paperclip/` is two URLs for one document; the validator compares the two on every built page.
+
+`serialize()` escapes `<`, `>`, `&` and both line separators. The block goes out through `set:html`, so a note containing `</script>` would otherwise end it early and put the rest of the graph into the document as markup.
+
+---
+
+## 8. Before you ship UI
 
 **Gates, all of them, every time.**
 
-1. `npx astro check` → **0 errors, 0 warnings.** Hints have a known baseline of 13 (eleven `z is deprecated` from `content.config.ts`, one unused `Props`, one unreachable-code hint); do not add to it.
-2. `npm test` → all pass (169 at the time of writing).
-3. `npm run build` → clean.
+1. `npx astro check` → **0 errors, 0 warnings.** Hints have a known baseline of 13 (eleven `z is deprecated` from `content.config.ts`, one unused `Props`, one unreachable-code hint); do not add to it. Note that `checkJs` is on, so a new `.mjs` under `scripts/` or `pipeline/` is type-checked too and needs its JSDoc.
+2. `npm test` → all pass (191 at the time of writing).
+3. `npm run build` → clean, then `npm run validate:schema` → clean. The second reads `dist/`, so it is only meaningful after the first.
 4. **Both themes, and both forced states.** Four looks, not two: OS light, OS dark, and then a pinned theme fighting each of them — `data-theme="dark"` on a light OS is the one that catches a token declared in only one of the two dark blocks. Every colour is a token; a hex outside `styles/` is the bug.
 5. **Mobile.** At 375px: the MENU rail and panel, the row reflows at 599/639, the palette as a full-screen sheet.
 6. **Reduced motion.** Turn it on and look again. Nothing resting on a transform may be left displaced; nothing may sit invisible waiting out a stagger delay.

@@ -18,6 +18,7 @@ import { getCollection, render } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import EntryLink from "../../components/EntryLink.astro";
 import ImageFrame from "../../components/ImageFrame.astro";
+import { noteJsonLd } from "../../lib/schema";
 
 export const getStaticPaths = (async () => {
   const notes = await getCollection("notes");
@@ -31,11 +32,24 @@ const { Content } = await render(note);
 
 const day = note.data.date.toISOString().slice(0, 10);
 const links = note.data.links ?? [];
+
+/**
+ * The same three things the page shows: the title, the date under it, and the
+ * picture when there is one. `day` rather than the `Date`, so the graph and the
+ * `<time datetime>` carry one string.
+ */
+const jsonLd = noteJsonLd({
+  slug: note.id,
+  title: note.data.title,
+  date: day,
+  image: note.data.image ?? null,
+});
 ---
 
 <Base
   title={`${note.data.title} · Notes · Aayush Manchanda`}
   description={`A note by Aayush Manchanda, written ${day}: ${note.data.title}.`}
+  jsonLd={jsonLd}
 >
   <p class="crumb mono"><a href="/notes">&larr; Notes</a></p>
 

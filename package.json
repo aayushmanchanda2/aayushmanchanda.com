@@ -12,7 +12,8 @@
     "astro": "astro",
     "check": "astro check",
     "og": "node scripts/og.mjs",
-    "test": "node --experimental-strip-types --disable-warning=ExperimentalWarning --test pipeline/*.test.mjs src/lib/*.test.mjs"
+    "test": "node --experimental-strip-types --disable-warning=ExperimentalWarning --test pipeline/*.test.mjs src/lib/*.test.mjs",
+    "validate:schema": "node scripts/validate-schema.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",

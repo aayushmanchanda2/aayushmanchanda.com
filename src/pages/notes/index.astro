@@ -9,6 +9,7 @@
 import { getCollection } from "astro:content";
 
 import Base from "../../layouts/Base.astro";
+import { listJsonLd, pageUrl } from "../../lib/schema";
 
 const notes = (await getCollection("notes")).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime(),
@@ -16,11 +17,26 @@ const notes = (await getCollection("notes")).sort(
 
 /** Dates are stored as dates and shown as `YYYY-MM-DD`, same as /tools. */
 const day = (date: Date) => date.toISOString().slice(0, 10);
+
+/**
+ * `Notes`, not the `notes.` the masthead prints. The lowercase word with a full
+ * stop is a typographic treatment of this section's name, and the name itself
+ * is the one the nav, the page title and every note's crumb all use.
+ */
+const jsonLd = listJsonLd({
+  name: "Notes",
+  path: "/notes",
+  entries: notes.map((note) => ({
+    name: note.data.title,
+    url: pageUrl(`/notes/${note.id}`),
+  })),
+});
 ---
 
 <Base
   title="Notes · Aayush Manchanda"
   description="Short notes from Aayush Manchanda: musings written out, and whiteboard scratches with a line underneath."
+  jsonLd={jsonLd}
 >
   <header>
     <h1 class="page-title page-title--mono">notes.</h1>

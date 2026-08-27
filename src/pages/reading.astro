@@ -13,11 +13,25 @@ import Base from "../layouts/Base.astro";
 import KindChip from "../components/KindChip.astro";
 import ReadingList from "../components/ReadingList.astro";
 import { kindGroups, reading } from "../lib/reading";
+import { listJsonLd } from "../lib/schema";
+
+/**
+ * The only list on the site whose rows point off-site, because that is what the
+ * rows do: /reading has no details pages, and every visible row goes straight
+ * to the source. Minting a local URL per entry for the graph would describe a
+ * section that does not exist.
+ */
+const jsonLd = listJsonLd({
+  name: "Reading",
+  path: "/reading",
+  entries: reading.map((entry) => ({ name: entry.title, url: entry.url })),
+});
 ---
 
 <Base
   title="Reading · Aayush Manchanda"
   description="Articles, posts and talks Aayush Manchanda saved to read properly, with the date he saved each one."
+  jsonLd={jsonLd}
 >
   <header>
     <h1 class="page-title">Reading</h1>

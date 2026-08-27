@@ -7,6 +7,7 @@ import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 
 import Base from "../../../layouts/Base.astro";
 import ToolList from "../../../components/ToolList.astro";
+import { listJsonLd, pageUrl } from "../../../lib/schema";
 import type { Verdict } from "../../../lib/tools";
 import { verdictGroups } from "../../../lib/tools";
 
@@ -35,11 +36,23 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { verdict, tools } = Astro.props;
 const heading = HEADING[verdict];
 const standfirst = STANDFIRST[verdict];
+
+/** The filtered list, plus the crumb this page actually draws. */
+const jsonLd = listJsonLd({
+  name: heading,
+  path: `/tools/verdict/${verdict}`,
+  parent: { name: "Tools", path: "/tools" },
+  entries: tools.map((tool) => ({
+    name: tool.name,
+    url: pageUrl(`/tools/${tool.slug}`),
+  })),
+});
 ---
 
 <Base
   title={`${heading} · Tools · Aayush Manchanda`}
   description={standfirst}
+  jsonLd={jsonLd}
 >
   <p class="crumb mono"><a href="/tools">&larr; Tools</a></p>
 

@@ -1,6 +1,7 @@
 ---
 import Base from "../layouts/Base.astro";
 import SiteGrid from "../components/SiteGrid.astro";
+import { listJsonLd, pageUrl } from "../lib/schema";
 import { collectionGroups, sites } from "../lib/sites";
 
 /**
@@ -14,11 +15,26 @@ import { collectionGroups, sites } from "../lib/sites";
  * empty section: no scaffolding for content that is not there yet.
  */
 const showCollections = collectionGroups.length >= 2;
+
+/**
+ * The gallery, in the order the grid renders it — which is the order
+ * `sites/[slug].astro` walks with the arrow keys, so the list a machine reads
+ * and the ring a keyboard walks are the same sequence.
+ */
+const jsonLd = listJsonLd({
+  name: "Sites",
+  path: "/sites",
+  entries: sites.map((site) => ({
+    name: site.title,
+    url: pageUrl(`/sites/${site.slug}`),
+  })),
+});
 ---
 
 <Base
   title="Sites · Aayush Manchanda"
   description="Websites Aayush Manchanda saved for how they look, each one captured as a full-page screenshot on the day it was saved."
+  jsonLd={jsonLd}
 >
   <header>
     <h1 class="page-title">Sites</h1>

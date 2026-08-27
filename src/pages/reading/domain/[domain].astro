@@ -11,6 +11,7 @@ import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import Base from "../../../layouts/Base.astro";
 import ReadingList from "../../../components/ReadingList.astro";
 import { readingDomains } from "../../../lib/reading";
+import { listJsonLd } from "../../../lib/schema";
 
 export const getStaticPaths = (() =>
   readingDomains.map((group) => ({
@@ -20,14 +21,23 @@ export const getStaticPaths = (() =>
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-const { domain, entries } = Astro.props;
+const { domain, slug, entries } = Astro.props;
 const count = entries.length;
 const lead = `${count} ${count === 1 ? "link" : "links"} I saved from`;
+
+/** Off-site rows, same as /reading, plus the crumb this page draws. */
+const jsonLd = listJsonLd({
+  name: domain,
+  path: `/reading/domain/${slug}`,
+  parent: { name: "Reading", path: "/reading" },
+  entries: entries.map((entry) => ({ name: entry.title, url: entry.url })),
+});
 ---
 
 <Base
   title={`${domain} · Reading · Aayush Manchanda`}
   description={`${lead} ${domain}.`}
+  jsonLd={jsonLd}
 >
   <p class="crumb mono"><a href="/reading">&larr; Reading</a></p>
 

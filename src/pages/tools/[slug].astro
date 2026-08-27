@@ -24,6 +24,7 @@ import Base from "../../layouts/Base.astro";
 import VerdictBadge from "../../components/VerdictBadge.astro";
 import VoiceBlocks from "../../components/VoiceBlocks.astro";
 import { faviconUrl, linkLabel } from "../../lib/links";
+import { toolJsonLd } from "../../lib/schema";
 import { categorySlug, tools } from "../../lib/tools";
 
 export const getStaticPaths = (() =>
@@ -35,9 +36,20 @@ export const getStaticPaths = (() =>
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
 const { tool } = Astro.props;
+
+/**
+ * The software, and his review of it, as two linked nodes. Every sentence in
+ * the `reviewBody` is a sentence rendered below, and there is no rating in it
+ * because there is no number on this page. See `lib/schema.ts`.
+ */
+const jsonLd = toolJsonLd(tool);
 ---
 
-<Base title={`${tool.name} · Tools · Aayush Manchanda`} description={tool.note}>
+<Base
+  title={`${tool.name} · Tools · Aayush Manchanda`}
+  description={tool.note}
+  jsonLd={jsonLd}
+>
   <p class="crumb mono"><a href="/tools">&larr; Tools</a></p>
 
   <header>
