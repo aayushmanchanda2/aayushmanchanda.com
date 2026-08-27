@@ -1,28 +1,48 @@
 ---
 /**
- * SiteMark — the "A", and the way home from anywhere.
+ * SiteMark — the initials, and the way home from anywhere.
  *
- * A constructed geometric A on a 16-unit grid, drawn in one stroke weight:
- * two diagonals mitered to a sharp apex, and a crossbar that does not touch
- * them. The detached bar is the whole idea. The rail down the left edge of
- * every page is a stack of free-floating 1px dashes, and the crossbar is one
- * more of them, parked inside the letter.
+ * **AM** on the same 16-unit grid as the rest of the icon system, in one stroke
+ * weight (1.5), butt caps, miter joins, `currentColor`.
  *
- * The gap is 0.5 units, measured at the bar's top corner where the leg leans
- * furthest inboard, which is the tightest point. That is wide enough to read as
- * deliberate from about 24px up and narrow enough that when it does close — a
- * 16px favicon on a low-density screen — the mark degrades into an ordinary
- * solid A rather than into a smudge. A mark whose failure mode is "still a
- * letter" is the only kind worth shipping at favicon size.
+ * The A is the drawing that shipped before this, unchanged to the decimal. The
+ * M is built to that A's *ink* metrics rather than its centreline ones, which
+ * is the only way two letters drawn with a stroke can share a cap line:
  *
- * One weight throughout, 1.5 units, because `design.md` says the hairline scale
- * has two steps and no third. A lighter crossbar was drawn and rejected for
- * introducing one.
+ * - stems flat at 1.7, so the A's mitred apex tip (1.492) stands above them by
+ *   1.7% of cap height — the overshoot a point takes over a flat cap in any
+ *   real face;
+ * - stems flat on 14.1, which is where the A's foot centreline lands;
+ * - the valley is the A's apex reflected — the same 55.6° included angle, the
+ *   same 2.144 miter ratio — with its tip on 14.4498, the A's own lowest ink.
  *
- * `currentColor`, so it themes for free: the anchor sets the ink and the glyph
- * follows, in either theme and in either forced state. `public/favicon.svg` is
- * the same geometry with real colours pinned, because a favicon renders with no
- * inherited colour to pick up.
+ * Every diagonal in the mark runs at the A's leg angle, 27.8° off vertical.
+ *
+ * **Nothing in the mark touches anything.** The crossbar is 0.5 units off the
+ * legs and the M is 0.5 units off the A, both measured at the tightest point —
+ * for the letterfit that is the outer corner of the A's right foot, the one
+ * place the A reaches furthest right. That is the rail's own grammar carried
+ * into the glyph: the left edge of every page is a stack of free-floating
+ * dashes, and this is a monogram held together by proximity rather than by
+ * contact.
+ *
+ * `stroke-miterlimit="2.4"` on the M is the one attribute doing work. The A's
+ * apex and the M's valley are 2.144 ratios and stay points; the M's two top
+ * corners are 4.163 — a 3.1-unit spike out of the top of the box — and are cut
+ * flat, which is what a geometric sans does at that junction.
+ *
+ * **`public/favicon.svg` is the A alone, and that is a measurement rather than
+ * a preference.** Rasterised into 16x16, this lockup has *no fully inked pixel
+ * at all*: its strokes land at 0.81 device pixels, peak ink 87%, against the A
+ * alone's eighteen solid pixels at 100%. Every AM construction tried failed the
+ * same way, and the only one that kept solid ink at 16px bought it by being
+ * square and stopped reading as two letters. So the letters live at 20px and up
+ * and the favicon keeps the A — which it can, because nothing in here touches:
+ * the A is a component of the lockup, not a fragment of it.
+ *
+ * The same geometry is copied into `public/favicon.svg` (the A's two paths) and
+ * `scripts/og.mjs` (all three). `lib/mark.test.mjs` compares them and fails if
+ * any of them drifts.
  */
 ---
 
@@ -33,7 +53,7 @@
 <a class="mark press" href="/" aria-label="Home">
   <svg
     class="mark__glyph"
-    viewBox="0 0 16 16"
+    viewBox="0 0 29.75 16"
     aria-hidden="true"
     focusable="false"
   >
@@ -50,6 +70,14 @@
       stroke="currentColor"
       stroke-width="1.5"
       stroke-linecap="butt"></path>
+    <path
+      d="M15.713 14.1 L15.713 1.7 L21.588 12.842 L27.463 1.7 L27.463 14.1"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      stroke-linejoin="miter"
+      stroke-linecap="butt"
+      stroke-miterlimit="2.4"></path>
   </svg>
 </a>
 
@@ -57,13 +85,18 @@
   /* Above the rail (40), below the mobile trigger (60) and everything modal:
      an open nav panel or palette should cover the mark, not fight it. */
   .mark {
-    --mark-size: 24px;
+    /* 20px below 900px, 24px above. The lockup is 2.06 ink widths where the A
+       was one, and below 900px the mark has to stay inside the strip the shell
+       clears for the vertical MENU label. At 375px that strip is 40px wide and
+       the ink is 33.3px of it. */
+    --mark-size: 20px;
 
     /* Optical, and the same correction the masthead makes with its -0.04em:
-       line up the ink, not the box. The glyph carries its own left bearing —
-       on the 16-unit grid its leftmost point is the outer corner of the left
-       foot, 1.537 units in, or 9.6% of the size — so a box flush with the rail
-       would put the letter 2px inboard of the dashes under it. */
+       line up the ink, not the box. The leftmost ink is still the outer corner
+       of the A's left foot, 1.5366 units of 16 = 9.6% of the mark's height, so
+       a box flush with the rail would put the letter 2px inboard of the dashes
+       under it. Adding the M did not move this: it is measured off the A, and
+       the A did not move. */
     margin-left: calc(var(--mark-size) * -0.096);
 
     position: fixed;
@@ -81,6 +114,7 @@
 
   @media (min-width: 900px) {
     .mark {
+      --mark-size: 24px;
       /* The rail's own left edge. Mark and dashes share a column. */
       left: clamp(1.5rem, 3vw, 2.75rem);
     }
@@ -90,19 +124,21 @@
     color: var(--accent);
   }
 
+  /* Height, not width: the box is 29.75 units wide against 16 tall, so the
+     size token has to name the one of the two that has to match the rail. */
   .mark__glyph {
-    width: var(--mark-size);
+    display: block;
     height: var(--mark-size);
+    width: auto;
   }
 
-  /* 40x40 hit area without a 40px layout box, the same `::before` trick the
-     rail dashes use — the glyph stays exactly where `left` puts it. */
+  /* A 40px hit area without a 40px layout box, the same `::before` trick the
+     rail dashes use — the glyph stays exactly where `left` puts it. The
+     vertical padding is derived rather than typed, so the 40px floor holds at
+     both mark sizes. */
   .mark::before {
     content: "";
     position: absolute;
-    left: -8px;
-    top: -8px;
-    width: 40px;
-    height: 40px;
+    inset: calc((40px - var(--mark-size)) / -2) -8px;
   }
 </style>

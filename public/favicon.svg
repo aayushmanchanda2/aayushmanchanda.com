@@ -1,7 +1,15 @@
 <!--
-  The site mark, at favicon size. Same geometry as
-  `src/components/SiteMark.astro`, which is the drawing this file is a copy of;
-  change one and change both.
+  The site mark at favicon size, which is the A on its own rather than the AM
+  lockup in `src/components/SiteMark.astro`. That is a measurement, not a
+  preference: rasterised into 16x16 the lockup has no fully inked pixel at all
+  — 0.81 device pixels of stroke, 87% peak ink — where this A has eighteen
+  pixels at 100%. A monogram that arrives as a grey smudge in a tab strip is
+  worse than one letter that arrives sharp.
+
+  The two paths below are byte-for-byte the A inside the lockup, and `lib/
+  mark.test.mjs` fails if they stop being. Nothing in the lockup touches
+  anything, so the A lifts out of it whole: this file holds a component of that
+  drawing, not a fragment of it.
 
   Colours are pinned rather than left to `currentColor` because a favicon
   renders with nothing to inherit from, and they answer to the browser's own
