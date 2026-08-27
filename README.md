@@ -63,6 +63,15 @@ gh workflow run publish.yml                             # run it now
 RAINDROP_TOKEN=... node pipeline/publish.mjs --dry-run   # see what a run would do
 ```
 
+**Telegram is the other way in.** I send a link to my Hermes bot and it does the
+reading: it fetches the page, writes the real title and a one line note in my
+voice, and saves it to the right collection. A bare URL goes to Reading. Adding
+`tools`, `sites` or `library` picks the section, and any other words become tags.
+When it cannot fetch the page it says so and saves the link bare instead of
+inventing a summary. Links I drop into **Publish/Inbox** get classified and moved
+out on the next sweep. The skill lives in the Hermes config on my Mac
+(`~/.hermes/skills/productivity/publish-link/`), not in this repo.
+
 ### Tagging is curation
 
 A tag on a **Publish/Sites** bookmark becomes a collection: a page at
