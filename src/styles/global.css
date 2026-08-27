@@ -63,6 +63,14 @@
   /* layout */
   --page-max: 44rem;
   --page-pad: clamp(1.5rem, 5vw, 3rem);
+
+  /* The gap under a masthead, before whatever the page is actually about.
+     Every section index, every filter page, /design, the 404 and the three
+     prose pages take it, which is fourteen surfaces — and it was written out
+     fourteen times, once per page, in fourteen scoped style blocks. A value
+     copied that widely is one nobody can retune: changing it means finding all
+     fourteen, and the page that gets missed is the one nobody had open. */
+  --gap-masthead: clamp(3.5rem, 12vh, 6rem);
 }
 
 /* --------------------------------------------------------------------------
@@ -343,10 +351,25 @@ ol {
   margin-left: -0.04em;
 }
 
-/* Entry pages title a tool, not a section — same voice, two steps quieter. */
+/* Entry pages title a tool, not a section — same voice, two steps quieter.
+
+   Also the filter pages, whose titles are not authored at all: a domain is a
+   long dot-heavy hostname and a collection name runs to three words, and both
+   arrive from data rather than from someone choosing a heading that fits. The
+   three of them each carried a private copy of these two declarations plus the
+   `overflow-wrap` below, which is three chances to change the entry scale and
+   have three pages quietly keep the old one.
+
+   `anywhere` rather than `break-word`: a hostname has no spaces in it, so
+   there is no soft break to prefer and the only question is whether the column
+   holds it or the page scrolls sideways. It is on the shared class rather than
+   only on the filter pages because a tool with a long single-token name is the
+   same problem, and it costs an authored title nothing — a heading that fits
+   never reaches for it. */
 .page-title--entry {
   font-size: clamp(2rem, 6vw, 3.25rem);
   letter-spacing: -0.035em;
+  overflow-wrap: anywhere;
 }
 
 /* Lowercase mono, for a masthead that is a terse statement rather than a
@@ -386,7 +409,7 @@ ol {
    scoped, so giving these three the same class would have left two rule sets
    fighting over one name and winning on specificity rather than on intent. */
 .doc {
-  margin-top: clamp(3.5rem, 12vh, 6rem);
+  margin-top: var(--gap-masthead);
   max-width: 62ch;
   border-top: 1px solid var(--hairline);
 }

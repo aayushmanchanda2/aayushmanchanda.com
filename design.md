@@ -60,7 +60,9 @@ Tint `0.09` light / `0.14` dark; hairline `0.2` / `0.26`. A `.chip--link` deepen
 
 **Dotted grid.** `styles/global.css › .dotted-grid`: `radial-gradient(var(--dot) 1px, transparent 1px)` at 16px, `--fine` at 10px. It is the backdrop for framed imagery only (`ShotFrame.astro`, `ImageFrame.astro`), never a page texture.
 
-**Motion + layout.** `--ease` `cubic-bezier(.22,1,.36,1)`, `--ease-out` `cubic-bezier(.16,1,.3,1)`; `--dur-fast` 120ms, `--dur` 220ms, `--dur-slow` 420ms. `--page-max` 44rem, `--page-pad` `clamp(1.5rem, 5vw, 3rem)`. Radii: `--r-sm` 4px, and that is the whole scale (see §3).
+**Motion + layout.** `--ease` `cubic-bezier(.22,1,.36,1)`, `--ease-out` `cubic-bezier(.16,1,.3,1)`; `--dur-fast` 120ms, `--dur` 220ms, `--dur-slow` 420ms. `--page-max` 44rem, `--page-pad` `clamp(1.5rem, 5vw, 3rem)`, `--gap-masthead` `clamp(3.5rem, 12vh, 6rem)`. Radii: `--r-sm` 4px, and that is the whole scale (see §3).
+
+**`--gap-masthead` is the space under a masthead**, before whatever the page is about — every section index, every filter page, `/design`, the 404 and the three `.doc` pages, fourteen surfaces in all. It was the same `clamp()` written out fourteen times in fourteen scoped style blocks, which is a number nobody can retune: changing it meant finding all fourteen, and the one that got missed would be the page nobody had open. Note that these layout tokens are not on `/design` — that page's table reads colour tokens through `getComputedStyle`, and a length has no swatch to paint.
 
 ---
 
@@ -79,7 +81,7 @@ Four places deliberately undo the uppercase, and each says why in place: a file 
 | | Size | Where |
 |---|---|---|
 | `.page-title` | `clamp(2.75rem, 10vw, 5.25rem)`, `-0.045em`, lh `0.98` | every section masthead, home included |
-| `.page-title--entry` | `clamp(2rem, 6vw, 3.25rem)`, `-0.035em` | entry pages: a tool, not a section |
+| `.page-title--entry` | `clamp(2rem, 6vw, 3.25rem)`, `-0.035em`, `overflow-wrap: anywhere` | entry pages: a tool, not a section — **and every filter page**, whose title is a hostname or a collection name that arrived from data rather than from someone choosing a heading that fits |
 | `.page-title--mono` | `clamp(2.25rem, 8vw, 4.25rem)`, lowercase, `-0.02em` | `/notes` and the 404 |
 | `.standfirst` | `clamp(1.0625rem, 1.6vw, 1.1875rem)` / 1.65, `--muted` | one line under every title |
 | prose | `1.0625rem` / 1.7 | note bodies, `/privacy` |

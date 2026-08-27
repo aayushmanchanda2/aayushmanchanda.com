@@ -43,7 +43,7 @@ const jsonLd = listJsonLd({
   <p class="crumb mono"><a href="/sites">&larr; Sites</a></p>
 
   <header>
-    <h1 class="page-title domain">{domain}</h1>
+    <h1 class="page-title page-title--entry">{domain}</h1>
     <p class="standfirst">{lead} {domain}.</p>
   </header>
 
@@ -53,15 +53,7 @@ const jsonLd = listJsonLd({
 </Base>
 
 <style>
-  /* A domain is a long, dot-heavy string; the section scale would overflow
-     the column on anything longer than a short hostname. */
-  .domain {
-    font-size: clamp(2rem, 6vw, 3.25rem);
-    letter-spacing: -0.035em;
-    overflow-wrap: anywhere;
-  }
-
   .body {
-    margin-top: clamp(3.5rem, 12vh, 6rem);
+    margin-top: var(--gap-masthead);
   }
 </style>
