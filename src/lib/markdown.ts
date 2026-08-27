@@ -12,7 +12,11 @@
  * first one to fall behind would be the one nobody reads with their own eyes.
  */
 
-import { absolute } from "./site";
+// Extension spelled out, like `links.ts` and `schema.ts` do for this same
+// import: the bundler resolves either form, but a test running under plain node
+// resolves only this one. A module nothing can import outside a build is a
+// module with no unit tests, which is how the label list below drifted.
+import { absolute } from "./site.ts";
 
 export interface MarkdownPage {
   /** The human page this variant mirrors. */
@@ -144,32 +148,52 @@ export interface Voice {
   try?: string | null;
 }
 
-/**
- * Labels and order, matching `components/VoiceBlocks.astro` exactly.
- *
- * Here rather than in each endpoint because the markdown variant of a page and
- * the page itself are two renderings of one thing, and the first one to
- * disagree about what a field is called would be the one nobody reads with
- * their own eyes.
- */
-const VOICE_FIELDS: readonly (readonly [keyof Voice, string])[] = [
-  ["why", "Why"],
-  ["like", "What I like"],
-  ["dislike", "What I don't"],
-  ["try", "Try"],
-];
+/** One voice field: what it is called, and whether its value is machine text. */
+export interface VoiceField {
+  key: keyof Voice;
+  /** Title case. `.mono` does the shouting in CSS; markdown prints it as-is. */
+  label: string;
+  /**
+   * The value is a command to paste or a bare URL, not prose. The HTML sets it
+   * in mono (`VoiceBlocks.astro › .voice__body--code`) and the markdown fences
+   * it in backticks, so an agent can tell it from the prose around it. Two
+   * renderings of one fact about the field, which is why the fact lives here
+   * rather than as a `key === "try"` test in each of them.
+   */
+  code?: boolean;
+}
 
 /**
- * One entry's voice fields as a `###` block, or null when it has none.
+ * Labels and order, for both renderings of an entry's voice.
  *
- * `try` is fenced in backticks: it is a command to paste or a bare URL, and an
- * agent reading this should be able to tell that from the prose around it.
+ * A markdown variant and its page are two renderings of one thing, so the first
+ * one to disagree about what a field is called is the one nobody reads with
+ * their own eyes. This comment used to say "matching
+ * `components/VoiceBlocks.astro` exactly" while the component held a second
+ * copy of the list — which is a comment asking two files to stay in step, not a
+ * mechanism. They did not stay in step: the label here read `What I don't` with
+ * a typewriter apostrophe and the component rendered `What I don’t` with a real
+ * one, so every /tools entry with a dislike shipped a page and a markdown twin
+ * that disagreed.
+ *
+ * So the component imports this. The order is fixed here rather than at either
+ * call site: why (when to reach for it) orients, like and dislike are the
+ * judgement, and try is the way out into actually using the thing, so it is
+ * last. `lib/voice.test.mjs` holds the component to it.
  */
+export const VOICE_FIELDS: readonly VoiceField[] = [
+  { key: "why", label: "Why" },
+  { key: "like", label: "What I like" },
+  { key: "dislike", label: "What I don’t" },
+  { key: "try", label: "Try", code: true },
+];
+
+/** One entry's voice fields as a `###` block, or null when it has none. */
 function voiceEntry(name: string, voice: Voice): string | null {
-  const lines = VOICE_FIELDS.flatMap(([key, label]) => {
+  const lines = VOICE_FIELDS.flatMap(({ key, label, code }) => {
     const value = voice[key];
     if (value === undefined || value === null) return [];
-    return [`${label}: ${key === "try" ? `\`${value}\`` : value}`];
+    return [`${label}: ${code ? `\`${value}\`` : value}`];
   });
 
   return lines.length === 0 ? null : [`### ${name}`, list(lines)].join("\n\n");

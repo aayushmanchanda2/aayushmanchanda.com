@@ -17,25 +17,32 @@
  * optional: an empty labelled box is worse than silence, because it reads as a
  * page that failed rather than a tool he has not written up yet.
  *
- * The order is fixed here rather than at the call sites: why (when to reach for
- * it) orients, like and dislike are the judgement, and try is the way out into
- * actually using the thing, so it goes last.
+ * The labels, their order, and which field is machine text all come from
+ * `lib/markdown.ts › VOICE_FIELDS` — the same list the markdown variants render
+ * from. They used to be a second copy written out here, under a comment in that
+ * file claiming the two matched exactly, and they drifted: this file's
+ * `What I don’t` carried a typographic apostrophe and the markdown's carried a
+ * typewriter one, so a /tools entry and its own `.md` twin disagreed about the
+ * label on every dislike he had written. A comment asking two lists to stay in
+ * step is not a mechanism. There is one list now, and `lib/voice.test.mjs`
+ * fails if this file stops reading it.
+ *
+ * The order that list fixes: why (when to reach for it) orients, like and
+ * dislike are the judgement, and try is the way out into actually using the
+ * thing, so it goes last.
  */
 
-interface Props {
-  why?: string | null;
-  like?: string | null;
-  dislike?: string | null;
-  /** Quoted, because `try` is a reserved word and reads as one otherwise. */
-  try?: string | null;
-}
+import { VOICE_FIELDS, type Voice } from "../lib/markdown";
 
-const {
-  why = null,
-  like = null,
-  dislike = null,
-  try: command = null,
-} = Astro.props;
+/**
+ * Exactly `Voice`, which is what the markdown side reads. Named `Props` because
+ * that is the interface Astro types the component from, but it must not grow a
+ * field of its own: a fifth block belongs in `VOICE_FIELDS`, where both
+ * renderings can see it.
+ */
+interface Props extends Voice {}
+
+const voice: Voice = Astro.props;
 
 interface Block {
   /** Title case here; `.mono` does the shouting in CSS. */
@@ -49,12 +56,13 @@ interface Block {
   code?: boolean;
 }
 
-const blocks: Block[] = [
-  ...(why === null ? [] : [{ label: "Why", body: why }]),
-  ...(like === null ? [] : [{ label: "What I like", body: like }]),
-  ...(dislike === null ? [] : [{ label: "What I don’t", body: dislike }]),
-  ...(command === null ? [] : [{ label: "Try", body: command, code: true }]),
-];
+const blocks: Block[] = VOICE_FIELDS.flatMap(({ key, label, code }) => {
+  const body = voice[key];
+  // Absent means absent, and both kinds of absent mean it: /sites passes
+  // neither `why` nor `try` at all, /tools passes null for a field he has not
+  // written up. Neither contributes a block.
+  return body === undefined || body === null ? [] : [{ label, body, code }];
+});
 ---
 
 {
