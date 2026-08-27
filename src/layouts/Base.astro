@@ -155,7 +155,9 @@ const markdownVariant = variant === null ? null : absolute(variant);
       Blocking and inline on purpose: a deferred module runs after the browser
       has already painted, so a reader who pinned dark would get a white flash
       on every navigation. It sits after the metas because it re-points them,
-      and it is the only script on this site that is not bundled.
+      and it is the only script on this site that blocks the parse. The
+      analytics tag at the foot of this head is the one other script Astro does
+      not bundle, and it defers.
     */}
     <script is:inline set:html={PREPAINT} />
 
@@ -190,6 +192,38 @@ const markdownVariant = variant === null ? null : absolute(variant);
           is:inline
           set:html={serialize(jsonLd)}
         />
+      )
+    }
+
+    {/*
+      Vercel Web Analytics: a count of page views, and nothing that identifies
+      a reader. Cookieless, and it writes nothing to storage, so the theme key
+      stays the only entry /privacy has to name.
+
+      A plain tag rather than `@vercel/analytics/astro`. The component exists to
+      register a custom element and re-fire a pageview on client-side route
+      changes; this site is static HTML with no client router, so every
+      navigation is a real document load and the bare script already counts it.
+      That is a dependency and a bundled module bought for nothing.
+
+      **Both URLs here are same-origin and that is load-bearing.** The script is
+      `/_vercel/insights/script.js` and the beacon posts to
+      `/_vercel/insights/event`, two routes Vercel's edge adds to the deployment
+      once Web Analytics is on for the project. No request leaves this domain,
+      which is why /privacy's "one outside request" is still true with analytics
+      shipped: this added a script, not a second host. The package only reaches
+      a Vercel domain in debug mode (`va.vercel-scripts.com`), which is
+      development-only and not what this tag loads. **If that ever stops being
+      true, /privacy is edited in the same commit** — the same rule `faviconUrl`
+      already carries.
+
+      Gated on `PROD` because the route only exists on a Vercel deployment.
+      Under `astro dev` it would 404 on every page load, which trains you to
+      ignore the console on the one workflow design.md §8 tells you to verify in.
+    */}
+    {
+      import.meta.env.PROD && (
+        <script is:inline defer src="/_vercel/insights/script.js" />
       )
     }
   </head>

@@ -29,7 +29,20 @@
  * survives someone turning the newsletter on months from now without reading
  * this comment.
  *
- * Underneath all four is one rule: **every claim here is a claim about today's
+ * The analytics section is the fifth, and it is the one that came due. This
+ * page used to say there was no analytics here, and promised that anything
+ * which counted pages would rewrite it in the same commit. That commit is this
+ * one: Vercel Web Analytics now ships from `layouts/Base.astro`.
+ *
+ * The claim that had to be re-checked rather than assumed was the one directly
+ * below it. Both of the analytics URLs are same-origin paths on this domain
+ * (`/_vercel/insights/script.js` and `/_vercel/insights/event`), so **"the one
+ * outside request" survived intact** and still means what it says. Had the
+ * script loaded from a Vercel host instead, that section would have had to name
+ * a second one in this same commit. Check that pair again before changing how
+ * analytics is loaded.
+ *
+ * Underneath all five is one rule: **every claim here is a claim about today's
  * build, and it says so.** A never-ever about analytics or third parties is a
  * promise a future commit can turn into a lie, and a privacy page that has gone
  * false is worse than none. So the page states what is true now and names the
@@ -54,8 +67,8 @@ import { NEWSLETTER_ACTION } from "../lib/site";
   <header>
     <h1 class="page-title">Privacy</h1>
     <p class="standfirst">
-      Short version: this site is a pile of static files. It does not know who
-      you are and it is not set up to find out.
+      Short version: this site is a pile of static files. It counts how many
+      people open a page, and it has no idea who any of them are.
     </p>
   </header>
 
@@ -65,27 +78,24 @@ import { NEWSLETTER_ACTION } from "../lib/site";
       {
         NEWSLETTER_ACTION ? (
           <p>
-            Almost nothing, and the one exception is a box you have to fill in
-            yourself. There are no accounts, no comments and no tracking. The
+            Almost nothing you hand over, and the one exception is a box you
+            have to fill in yourself. There are no accounts and no comments. The
             only form on the site is the newsletter signup on the front page,
-            and what happens to what you type into it is written out below.
+            and what happens to what you type into it is written out below. The
+            site also counts page views, which is the next section.
           </p>
         ) : (
           <p>
-            Nothing. There are no accounts, no forms, no comments, no newsletter
-            box. There is nothing here for you to fill in, and nowhere for it to
-            go if there were.
+            Nothing you hand over. There are no accounts, no forms, no comments,
+            no newsletter box. There is nothing here for you to fill in, and
+            nowhere for it to go if there were. The site does count page views,
+            and that is the next section.
           </p>
         )
       }
       <p>
-        As this page is written, there is no analytics on this site. No Google
-        Analytics, no Plausible, no Vercel Analytics, no tracking pixel, no
-        beacon, and no cookies. If I ever add something that counts pages, this
-        page changes in the same commit and names it, the way it names the one
-        outside request below. The fonts are bundled into the build and served
-        from this domain, so reading a page here does not tell a font CDN that
-        you were reading it.
+        The fonts are bundled into the build and served from this domain, so
+        reading a page here does not tell a font CDN that you were reading it.
       </p>
       <p>
         It writes one thing to local storage, and only after you ask it to: the
@@ -94,6 +104,40 @@ import { NEWSLETTER_ACTION } from "../lib/site";
         you open is the colour you picked. That is the whole entry. It never
         leaves your browser, nothing reads it but this site, and clearing your
         site data forgets it. Until you press it, nothing is stored at all.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="doc__head mono">Counting page views</h2>
+      <p>
+        Since 26 August 2026 this site counts page views with <a
+          href="https://vercel.com/docs/analytics/privacy-policy"
+          rel="noopener nofollow"
+        >Vercel Web Analytics</a>. I wanted to know which pages people actually
+        read, because that is most of what tells me whether any of this was
+        worth someone&rsquo;s time.
+      </p>
+      <p>
+        There are no cookies, and nothing is written to your browser. You are
+        not given an ID, and nothing recorded here can be joined up with your
+        visit to any other site. Vercel counts a visit by hashing the request it
+        already received, and that hash is discarded after 24 hours.
+      </p>
+      <p>
+        What gets recorded is the page you opened, the site that sent you, your
+        browser and operating system, whether you are on a phone, a tablet or a
+        desktop, and the country, region and city the request came from. That is
+        the whole list. It reaches me as totals: this page got this many views
+        this week, most of them from that referrer. There is no view of it that
+        is one person, and I could not build one.
+      </p>
+      <p>
+        The script is served from this domain rather than from an analytics
+        company, and the counts it sends go to the same place. So the section
+        below still says one outside request and means it: this added a script,
+        not a second host. Vercel holds the numbers, which is the company
+        already serving you these pages. If that ever moves to someone else,
+        the new name lands here on the commit that moves it.
       </p>
     </section>
 
@@ -151,7 +195,9 @@ import { NEWSLETTER_ACTION } from "../lib/site";
         The site is hosted on Vercel, and Vercel keeps its own standard request
         logs, same as any host. I do not read them, I do not analyse them, and I
         have not wired anything to them. They are a side effect of being on the
-        internet, not something I set up to learn about you.
+        internet, not something I set up to learn about you. They are also
+        separate from the page counting above, which is a script running in the
+        page and not something read back out of a log.
       </p>
     </section>
 
