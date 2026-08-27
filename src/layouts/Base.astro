@@ -44,12 +44,31 @@ interface Props {
    * is still enough.
    */
   jsonLd?: JsonLd;
+  /**
+   * This response is not a document at a URL, so it claims none.
+   *
+   * The 404 is the only caller and the only page that can be. It is served at
+   * whatever address the reader actually typed, so `/404/` — the path it
+   * happens to be built at — is not its URL, is not a canonical form of the
+   * URL it was served at, and is not a page anyone should be sent back to. So
+   * `rel=canonical` and `og:url` are omitted rather than pointed somewhere
+   * plausible: aiming them at `/` would claim the error page is a duplicate of
+   * the home page, which is a different false statement, not a fix.
+   *
+   * `noindex` says the same thing to a crawler that the missing canonical says
+   * by omission. `robots.txt` cannot: it allows everything on purpose, because
+   * there are no private routes here, and disallowing `/404` there would only
+   * stop the page being *fetched*, which is not the same as stopping it being
+   * *indexed*.
+   */
+  noindex?: boolean;
 }
 
 const {
   title = "Aayush Manchanda",
   description = "Part entrepreneur, part marketer, part operator. Aayush Manchanda co-founded Orbis, runs Vetted, and uses AI to build things on the internet from Canada. What survives his testing shows up here with a date on it.",
   jsonLd,
+  noindex = false,
 } = Astro.props;
 
 /**
@@ -163,13 +182,14 @@ const markdownVariant = variant === null ? null : absolute(variant);
 
     <title>{title}</title>
     <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    {!noindex && <link rel="canonical" href={canonical} />}
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Aayush Manchanda" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
+    {!noindex && <meta property="og:url" content={canonical} />}
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />

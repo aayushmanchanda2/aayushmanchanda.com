@@ -10,6 +10,10 @@
  *
  * Deliberately lighter than the home index: no numbers, no blurbs, no arrows.
  * This is a detour sign, not a table of contents.
+ *
+ * `noindex` is the one prop it passes, and it is doing two jobs — see the
+ * layout. This page is served at whatever URL the reader mistyped, so the
+ * `/404/` it is built at is not its address and must not be claimed as one.
  */
 import Base from "../layouts/Base.astro";
 import { getSections } from "../lib/sections";
@@ -20,6 +24,7 @@ const sections = await getSections();
 <Base
   title="Not found · Aayush Manchanda"
   description="That page does not exist. Links to everything this site actually has."
+  noindex
 >
   <header>
     {/*
