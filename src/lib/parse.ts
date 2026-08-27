@@ -1,20 +1,20 @@
 /**
- * The shared floor under the three JSON data boundaries.
+ * The shared floor under the four JSON data boundaries.
  *
- * `lib/tools.ts`, `lib/sites.ts` and `lib/experiments.ts` each parse an
- * untrusted file at build time and throw on the first bad entry. Three quarters
- * of that work was the same three quarters in all three files: the slug shape,
- * the date shape, "is this an object", "is this a non-empty string", "is this
- * an optional string that is either absent or real", and the one-line `fail()`
- * that puts the filename in front of the message.
+ * `lib/tools.ts`, `lib/sites.ts`, `lib/library.ts` and `lib/experiments.ts` each
+ * parse an untrusted file at build time and throw on the first bad entry. Three
+ * quarters of that work was the same three quarters in all four files: the slug
+ * shape, the date shape, "is this an object", "is this a non-empty string", "is
+ * this an optional string that is either absent or real", and the one-line
+ * `fail()` that puts the filename in front of the message.
  *
- * Only that floor moved here. Everything each boundary knows that the other two
- * do not — `readUrl` in /tools, `readShots` in /sites, `readLinks` in
- * /experiments — stayed where it is, along with every hand-written error
- * message. The messages are the reason these parsers are worth having: a
- * generic "invalid entry 3" would send a person to the file to guess, and the
- * whole point is that they should not have to. So this file deliberately does
- * not own them.
+ * Only that floor moved here. Everything each boundary knows that the other
+ * three do not — `readUrl` in /tools, `readShot` and `readPalette` in /sites,
+ * `readNote` in /library, `readLinks` in /experiments — stayed where it is,
+ * along with every hand-written error message. The messages are the reason
+ * these parsers are worth having: a generic "invalid entry 3" would send a
+ * person to the file to guess, and the whole point is that they should not have
+ * to. So this file deliberately does not own them.
  *
  * No schema library. A dependency here would have to earn its way into a build
  * that currently pulls in nothing to read four JSON files, and it would trade

@@ -23,6 +23,7 @@ import { experiments } from "./experiments";
 import { repoOwner } from "./links";
 import { library } from "./library";
 import type { SearchEntry } from "./search";
+import { getSections } from "./sections";
 import { collectionLabel, sites } from "./sites";
 import type { Tool } from "./tools";
 import { tools } from "./tools";
@@ -199,16 +200,8 @@ async function build(): Promise<SearchEntry[]> {
   ];
 }
 
-/**
- * The five section indexes as palette rows.
- *
- * Imported lazily inside the function rather than at the top of the file to
- * keep the import graph honest: `lib/sections.ts` imports every data module
- * this file already imports, and a cycle between the two would be the kind of
- * bug that shows up as an empty array at build time with no error.
- */
+/** The five section indexes as palette rows. */
 async function sectionPages(): Promise<SearchEntry[]> {
-  const { getSections } = await import("./sections");
   return (await getSections()).map((section) => ({
     title: section.name,
     section: SECTION.pages,

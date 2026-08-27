@@ -21,7 +21,7 @@ is done and verified against a real build.
       `markdownVariantFor()`. No `${href}.md` guessing anywhere.
 - [x] **4. `src/lib/parse.ts`.** `SLUG`, `ISO_DATE`, and a `readers(filename)`
       factory. All three data boundaries use it; each keeps its own per-entry
-      messages and its section-specific readers (`readUrl`, `readShots`,
+      messages and its section-specific readers (`readUrl`, `readShot`,
       `readLinks`). No schema library added.
 - [x] **5. `src/lib/links.ts` + `EntryLink.astro`.** `INTERNAL_PATH`,
       `isInternal()`, `absolutize()`, and one component that sets `rel`/`target`

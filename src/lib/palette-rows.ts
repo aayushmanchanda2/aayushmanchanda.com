@@ -19,18 +19,6 @@
 
 import type { SearchEntry, SearchGroup } from "./search";
 
-/**
- * The muted right-hand column of a row.
- *
- * Every row goes to a page on this site — see `lib/search-index.ts`, which is
- * where that is decided and why — so this is simply the path. There is no
- * external case to handle: no `target`, no `rel`, and no second navigation path
- * to keep working.
- */
-function destination(entry: SearchEntry): string {
-  return entry.href;
-}
-
 function rowNode(entry: SearchEntry): HTMLAnchorElement {
   const row = document.createElement("a");
   row.className = "palette__row";
@@ -47,7 +35,11 @@ function rowNode(entry: SearchEntry): HTMLAnchorElement {
 
   const where = document.createElement("span");
   where.className = "palette__row-where mono";
-  where.textContent = destination(entry);
+  // Every row goes to a page on this site — see `lib/search-index.ts`, which is
+  // where that is decided and why — so the muted column is simply the path.
+  // There is no external case to handle: no `target`, no `rel`, and no second
+  // navigation path to keep working.
+  where.textContent = entry.href;
 
   row.append(title, where);
   return row;
