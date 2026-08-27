@@ -1,0 +1,935 @@
+---
+/**
+ * /design — the colophon for the design itself.
+ *
+ * The fourth page that is about the site rather than in it, and it sits in the
+ * footer row beside /about, /contact and /privacy rather than in the nav.
+ *
+ * **Nothing on this page is a picture of a component.** Every chip is the chip,
+ * rendered by `VerdictBadge`, `StatusChip` and `KindChip` over the same exported
+ * vocabularies the sections iterate, so a fifth verdict appears here the day it
+ * is added and not a commit later. The mark is `MarkGlyph.astro`, the one
+ * drawing of it. The favicon is `public/favicon.svg`, the file the browser
+ * fetches. The palette row is `PaletteRow.astro` over a real capture. The type
+ * specimens are the real classes on specimen words. The token swatches are
+ * painted from the tokens and their values are read back out of the live
+ * stylesheet at runtime, so they follow the theme toggle rather than describing
+ * one theme and lying about the other. That is the whole design of the page: it
+ * cannot drift, because there is nothing on it to drift from.
+ *
+ * **It does not use `styles/global.css › .doc`, and that is deliberate.** The
+ * other three colophon pages are paragraphs from top to bottom, and `.doc a`
+ * gives every link inside one the prose treatment, correctly. This page's
+ * sections are mostly not paragraphs: they are chips, swatches, specimen words
+ * and buttons, and §5 says those surfaces are exempt from the prose treatment
+ * *structurally, not by an override*. Sharing `.doc` would have meant bolding
+ * and underlining a chip and then writing a rule to un-bold it, which is the
+ * exact move that rule exists to forbid. So the shell is `.sheet`, scoped here
+ * at `.doc`'s proportions, and its paragraphs opt into the prose-link rule by
+ * being paragraphs — `.sheet p a` sits in that selector list in `global.css`
+ * rather than being restated here.
+ *
+ * The one thing here that is a demonstration rather than the shipped code is the
+ * quiet furniture link in §Links, and it says so in place: that pattern is a
+ * rule rather than a class, and the three surfaces that implement it each keep
+ * their own colour and alignment.
+ */
+import CollectionChips from "../components/CollectionChips.astro";
+import KindChip from "../components/KindChip.astro";
+import MarkGlyph from "../components/MarkGlyph.astro";
+import PaletteRow from "../components/PaletteRow.astro";
+import StatusChip from "../components/StatusChip.astro";
+import VerdictBadge from "../components/VerdictBadge.astro";
+import Base from "../layouts/Base.astro";
+import { STATUSES } from "../lib/experiments";
+import { KINDS } from "../lib/library";
+import { designJsonLd } from "../lib/schema";
+import { collectionGroups, sites } from "../lib/sites";
+import { tools } from "../lib/tools";
+import { VERDICTS } from "../lib/tools";
+
+/**
+ * The surface tokens, by name only.
+ *
+ * No values here. A value typed into this file would be the copy the page
+ * exists to not have: the swatch is painted `var(--name)` and the string beside
+ * it is read out of the live stylesheet on load, so both halves answer to
+ * `styles/global.css` and to whichever theme the reader is in.
+ */
+const SURFACES = [
+  { name: "--bg", note: "the page" },
+  { name: "--fg", note: "body ink, and the mark" },
+  { name: "--muted", note: "prose, and every paragraph on this page" },
+  { name: "--faint", note: "metadata: dates, counts, labels" },
+  { name: "--hairline", note: "every border on the site" },
+  { name: "--hairline-strong", note: "a hovered row border, a swatch edge" },
+  { name: "--outline", note: "the 1px inset on imagery" },
+  { name: "--dot", note: "the dotted grid behind a framed screenshot" },
+];
+
+/** The accent, and the pair that exists because white on it fails AA. */
+const ACCENTS = [
+  { name: "--accent", note: "ink only: links, hover, aria-current, focus" },
+  { name: "--accent-panel", note: "the accent as a background with text on it" },
+  { name: "--accent-panel-ink", note: "that text" },
+];
+
+/**
+ * The three press scales, and where each one is in force.
+ *
+ * Typed once here and interpolated into the buttons, rather than three rules in
+ * the stylesheet below, so the section's copy and the buttons cannot disagree
+ * about which number is which.
+ */
+const PRESSES = [
+  { scale: "0.96", where: "the default: a chip, a button, the mark" },
+  { scale: "0.985", where: "a gallery card on /sites" },
+  { scale: "0.995", where: "a full-bleed row on the index and /notes" },
+];
+
+/** The three sizes a browser asks the favicon for, largest first. */
+const ICONS = [64, 32, 16];
+
+/** The newest capture in the gallery, so the palette row below is a real one. */
+const capture = sites[0]!;
+
+/** A real tool name, so the entry-title specimen is set in a word that ships. */
+const entryTitle = tools[0]?.name ?? "Tools";
+
+/** Three real collections, for the chip in its filter-link form. */
+const collections = collectionGroups.slice(0, 3).map((group) => group.slug);
+
+const CONTRACT =
+  "https://github.com/aayushmanchanda2/aayushmanchanda.com/blob/main/design.md";
+
+const jsonLd = designJsonLd();
+---
+
+<Base
+  title="Design · Aayush Manchanda"
+  description="The design language of this site: the mark, the colour tokens, the type scale, the chip palette and the interaction rules, rendered by the components themselves."
+  jsonLd={jsonLd}
+>
+  <header>
+    <h1 class="page-title page-title--mono">design.</h1>
+    <p class="standfirst">
+      I keep the rules for this site in one file and the site in another, and
+      this page is the second one showing its work. Everything below is drawn by
+      the code that draws the rest of the site.
+    </p>
+  </header>
+
+  <div class="sheet">
+    <!-- ------------------------------------------------------------------ -->
+
+    <section>
+      <h2 class="sheet__head mono">The mark</h2>
+      <p>
+        My initials on a 16-unit grid, one stroke weight, every diagonal at the
+        same angle. Nothing in it touches anything: the crossbar sits half a unit
+        off the legs and the M sits half a unit off the A. That is the left rail
+        of every page carried into a glyph, a monogram held together by
+        proximity rather than by contact.
+      </p>
+
+      <div class="lockup">
+        <MarkGlyph label="The AM lockup, drawn large" />
+      </div>
+
+      <p>
+        It is also what makes the A separable, which is what the tab strip needs.
+        At 16 by 16 the lockup has no fully inked pixel in it at all. Its strokes
+        land at 0.81 device pixels and peak at 87% ink, against eighteen solid
+        pixels for the A on its own. So the page and the social card get both
+        letters and the favicon gets one, and the A lifts out whole rather than
+        as a fragment.
+      </p>
+
+      <ul class="icons">
+        {
+          ICONS.map((size, index) => (
+            <li class="icon" style={`--icon: ${size}px`}>
+              {/*
+                One number per icon, spent three times: the two attributes that
+                reserve the box before the file lands, and the custom property
+                the scoped rule below sizes it with. The rule is needed because
+                `global.css` sets `height: auto` on every image, which beats an
+                HTML `height` attribute and leaves a viewBox-only SVG at whatever
+                default height the browser picks.
+
+                Only the first one is described. All three are the same picture,
+                and a screen reader being told about the A three times learns
+                nothing on the second and third.
+              */}
+              <img
+                src="/favicon.svg"
+                width={size}
+                height={size}
+                alt={
+                  index === 0
+                    ? "The favicon: the A from the lockup, on its own"
+                    : ""
+                }
+              />
+              <span class="code tabular-nums">{size}</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p>
+        Those three are the real file, at the three sizes a browser asks for it.
+        Its colours are pinned rather than inherited, and they answer to your
+        browser's own light or dark setting rather than to the theme button in
+        the footer: this glyph sits in the tab strip, not on the page, so it
+        should match the chrome around it.
+      </p>
+    </section>
+
+    <!-- ------------------------------------------------------------------ -->
+
+    <section>
+      <h2 class="sheet__head mono">Tokens</h2>
+      <p>
+        Every colour on the site is one of these. If I typed a hex outside the
+        stylesheets, I broke something. Light is the base, so it is what a page
+        is with no attribute, no media query and no scripting; dark is written
+        out twice, once for a reader following their OS and once for a reader who
+        pinned it, and a test parses both blocks and fails if they drift apart.
+      </p>
+      <p>
+        The swatches are painted from the tokens and the values beside them are
+        read back out of the live stylesheet. Press the theme button in the
+        footer and both halves move, because neither half is written down here.
+      </p>
+
+      <ul class="tokens">
+        {
+          SURFACES.map((token) => (
+            <li class="tok">
+              <span
+                class="tok__chip"
+                style={`background: var(${token.name})`}
+                aria-hidden="true"
+              />
+              <span class="tok__head">
+                <span class="code">{token.name}</span>
+                <span class="code tok__value" data-token={token.name}>
+                  ----
+                </span>
+              </span>
+              <span class="tok__note">{token.note}</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p>
+        The accent is one hue at two lightnesses. The hue is identical in both
+        themes and lightness is the only difference, because no single lightness
+        clears 4.5:1 against both a white page and a near-black one.
+      </p>
+
+      <ul class="tokens">
+        {
+          ACCENTS.map((token) => (
+            <li class="tok">
+              <span
+                class="tok__chip"
+                style={`background: var(${token.name})`}
+                aria-hidden="true"
+              />
+              <span class="tok__head">
+                <span class="code">{token.name}</span>
+                <span class="code tok__value" data-token={token.name}>
+                  ----
+                </span>
+              </span>
+              <span class="tok__note">{token.note}</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p class="panel">
+        The moment the accent becomes a background with text on it, it switches
+        to the panel pair. White on the dark theme's accent is 3.89:1 and fails
+        AA; white on this blue is 5.91:1 in either theme, which is why this block
+        is the same blue whichever theme you are reading it in.
+      </p>
+
+      <p>
+        And a real palette row, the component that sits under every screenshot in
+        the gallery. Every swatch is a button, because the point of the row is
+        that you can take the colour out of it. These six were read off the <a
+        href={`/sites/${capture.slug}`}>{capture.title}</a> capture by the
+        pipeline, so they are a fact about the screenshot rather than an opinion
+        about the site.
+      </p>
+
+      <div class="capture">
+        <PaletteRow palette={capture.palette} title={capture.title} />
+      </div>
+    </section>
+
+    <!-- ------------------------------------------------------------------ -->
+
+    <section>
+      <h2 class="sheet__head mono">Type</h2>
+      <p>
+        Geist Sans for prose, Geist Mono for labels, display and metadata. Both
+        are variable fonts bundled into the build and served from this domain, so
+        reading a page here does not tell a font CDN that you were reading it.
+      </p>
+
+      {/*
+        Every specimen is a `div` and not a `p`, which is the difference between
+        showing the class and showing this page's prose rule. `.sheet p` sets a
+        reading size, and Astro scopes it with the page's own class, so it
+        outranks `.page-title` and every specimen would have come out at 1rem
+        wearing the right letter-spacing. A specimen of a heading treatment is
+        not a paragraph anyway.
+      */}
+      <dl class="spec">
+        <div class="spec__row">
+          <dt class="code">page-title</dt>
+          <dd><div class="page-title">Aa</div></dd>
+        </div>
+        <div class="spec__row">
+          <dt class="code">page-title--entry</dt>
+          <dd><div class="page-title page-title--entry">{entryTitle}</div></dd>
+        </div>
+        <div class="spec__row">
+          <dt class="code">page-title--mono</dt>
+          <dd><div class="page-title page-title--mono">design.</div></dd>
+        </div>
+        <div class="spec__row">
+          <dt class="code">standfirst</dt>
+          <dd>
+            <div class="standfirst">One line under every title, and never two.</div>
+          </dd>
+        </div>
+        <div class="spec__row">
+          <dt class="code">mono</dt>
+          <dd><div class="mono">Section head</div></dd>
+        </div>
+      </dl>
+
+      <p>
+        The masthead at the top of this page is the mono variant and the line
+        under it is the standfirst, so two of those five are already in front of
+        you at full size, in the elements they normally ship as. The mono voice
+        is 11px, weight 500, wide tracking, uppercase, and it is the site's label
+        voice: section heads, field labels, dates, footer items, key caps.
+      </p>
+      <p>
+        Two rules are global and are not in the table because nothing sets them:
+        every heading balances its line breaks and every paragraph gets the
+        prettier ones. Both are declared once, for the elements, and no component
+        redeclares them.
+      </p>
+      <p>
+        Four places undo the uppercase and each says why in place. A file path is
+        not a label. A hex is a value you are about to paste, so it has to read
+        exactly as it will arrive. A key cap is printed <span class="code"
+        >esc</span> on the keyboard you are looking at, so shouting it would name
+        a different key. And a token name on this page is code for the same
+        reason a hex is.
+      </p>
+
+      <p>
+        Tabular numbers are not optional. Any digit that changes in place, or
+        sits in a column, gets them. Here is the same clock twice, the second one
+        without.
+      </p>
+
+      <dl class="spec">
+        <div class="spec__row">
+          <dt class="code">tabular-nums</dt>
+          <dd><span class="figures tabular-nums" data-tick>--:--:--</span></dd>
+        </div>
+        <div class="spec__row">
+          <dt class="code">default</dt>
+          <dd><span class="figures" data-tick>--:--:--</span></dd>
+        </div>
+      </dl>
+
+      <p>
+        Watch the right edge of the second one. Every time a digit changes width
+        the whole string re-lays-out, which is a twitch in the corner of your eye
+        on a page with forty dated rows on it.
+      </p>
+    </section>
+
+    <!-- ------------------------------------------------------------------ -->
+
+    <section>
+      <h2 class="sheet__head mono">Chips</h2>
+      <p>
+        A soft tint, never a solid fill, so twenty rows read as one page rather
+        than as a traffic light. A tone sets three numbers and the tint, the
+        hairline and the ink all derive from them, which is how light and dark
+        stay in step without a second palette.
+      </p>
+      <p>
+        Every ink clears 6:1 over its own tint. Not over the page behind it: over
+        the colour the tint actually composites to, which is the lower of the two
+        numbers and the one you are subject to. Measuring against the page
+        flatters every tone by about eight tenths of a point, and four of these
+        were set that way and quietly did not hold until they were remeasured.
+      </p>
+
+      <dl class="spec">
+        <div class="spec__row">
+          <dt class="code">verdict</dt>
+          <dd>
+            <ul class="chips">
+              {VERDICTS.map((verdict) => (
+                <li>
+                  <VerdictBadge verdict={verdict} />
+                </li>
+              ))}
+            </ul>
+          </dd>
+        </div>
+        <div class="spec__row">
+          <dt class="code">status</dt>
+          <dd>
+            <ul class="chips">
+              {STATUSES.map((status) => (
+                <li>
+                  <StatusChip status={status} />
+                </li>
+              ))}
+            </ul>
+          </dd>
+        </div>
+        <div class="spec__row">
+          <dt class="code">kind</dt>
+          <dd>
+            <ul class="chips">
+              {KINDS.map((kind) => (
+                <li>
+                  <KindChip kind={kind} />
+                </li>
+              ))}
+            </ul>
+          </dd>
+        </div>
+        <div class="spec__row">
+          <dt class="code">chip--link</dt>
+          <dd><CollectionChips collections={collections} /></dd>
+        </div>
+      </dl>
+
+      <p>
+        Those are every verdict on <a href="/tools">/tools</a>, every status on <a
+        href="/experiments">/experiments</a> and every kind on <a
+        href="/library">/library</a>, iterated from the same lists those pages
+        read. A fifth verdict will show up here on the commit that adds it, and
+        it will not compile until it has a tone.
+      </p>
+      <p>
+        The last row is the filter form. Same tone, same size, and the only
+        things added are the affordances a label has no use for: a pointer
+        cursor, and a tint that deepens on hover instead of changing colour. Hover
+        one. That state holds AA rather than 6:1, which is the one place the
+        vocabulary spends contrast on purpose.
+      </p>
+      <p>
+        Blue is the accent hue held back from the accent lightness, because an
+        inline link and a shipped chip must not be the same blue on the same
+        page. It is held back by two dials in the light theme and by lightness
+        alone in the dark one, where nothing darker survives the tint.
+      </p>
+    </section>
+
+    <!-- ------------------------------------------------------------------ -->
+
+    <section>
+      <h2 class="sheet__head mono">Links</h2>
+      <p>
+        A link inside a sentence is bold and underlined, like <a href="/about"
+        >this one</a>. Body text here is set at 75% ink, so a blue word at weight
+        400 in a muted paragraph is a colour difference and nothing else, and
+        that is the one signal that goes missing on a bad screen, in bright sun,
+        or for a reader who cannot separate those two hues at all. Weight and a
+        line are two more, and neither depends on seeing colour.
+      </p>
+      <p>
+        A link that leaves the site takes an arrow, and the arrow comes from CSS
+        rather than from markup: <a class="ext" href="https://rareui.com"
+        rel="noopener nofollow" target="_blank">rareui.com</a>. Typing the
+        character by hand is how a convention ends up on nine links and missing
+        from the tenth, and how the arrow ends up inside the text a screen reader
+        has to read out. The generated one has an empty accessible name, so it
+        announces the link and not "north east arrow" after it.
+      </p>
+      <p>
+        Everything else is exempt, and exempt structurally rather than by an
+        override. Nav dashes, chips, footer items, index rows, tool and library
+        rows, tabs, crumbs and metadata strips are simply not in that rule, and
+        each sets its own <span class="code">text-decoration: none</span>.
+        Bolding and underlining them would turn navigation into a paragraph of
+        shouting.
+      </p>
+      <p>
+        Furniture that still has to read as a link uses the quiet pattern
+        instead: it keeps the ink it already had and carries an underline in the
+        hairline colour, going accent on hover. <span class="quiet"
+        >It looks like this.</span> It carries the underline permanently rather
+        than revealing one, because on a touchscreen there is no hover to reveal
+        it with. This is the one specimen on the page that is drawn rather than
+        rendered: the pattern is a rule, not a shared class, and the three
+        surfaces that implement it each keep their own colour and alignment.
+      </p>
+    </section>
+
+    <!-- ------------------------------------------------------------------ -->
+
+    <section>
+      <h2 class="sheet__head mono">Interactions</h2>
+      <p>
+        Everything presses. The default is a 4% squeeze over 120ms, and wide
+        elements dial it back rather than shrinking by 4%, because a full-width
+        row losing 4% of its width reads as a glitch and not as a press. Hold
+        each of these down.
+      </p>
+
+      <ul class="presses">
+        {
+          PRESSES.map((press) => (
+            <li>
+              <button
+                class="pressbox press"
+                type="button"
+                style={`--press-scale: ${press.scale}`}
+              >
+                <span class="code tabular-nums">{press.scale}</span>
+                <span class="pressbox__note">{press.where}</span>
+              </button>
+            </li>
+          ))
+        }
+      </ul>
+
+      <p>
+        They do nothing else. A control that cannot work is not shown at all on
+        this site, so these three exist to be pressed and say so.
+      </p>
+      <p>
+        Every transition names its properties. There is no <span class="code"
+        >transition: all</span> anywhere, without exception, and an element that
+        already presses does not get a second transition declaration, because
+        the two race depending on stylesheet order.
+      </p>
+      <p>
+        Reduced motion flattens every animation and transition to almost nothing,
+        zeroes delays, kills smooth scrolling and disables the press scale.
+        Turning it on is the first thing I do before shipping any of this. What
+        the global brake cannot do is two things, so components handle both:
+        anything that rests on a transform restates that transform under reduced
+        motion, and a staggered entrance is gated on the preference rather than
+        shortened, because a shortened delay still leaves a card sitting
+        invisible and then popping in.
+      </p>
+      <p>
+        The command palette opens on Cmd or Ctrl K from anywhere. Arrows move
+        with wrap, Home and End jump, Enter follows, Escape closes, and Tab is
+        swallowed: the field is the only focusable control in an open palette, so
+        swallowing Tab is the focus trap. Focus never leaves the input, and the
+        highlighted row is a virtual cursor rather than a focused element. Three
+        surfaces listen for keys on the document and none of them may depend on
+        running first, so every other one asks the document whether a palette is
+        open before acting.
+      </p>
+      <p>
+        Scroll chaining is contained in modals and nowhere else. Containing it on
+        a page whose main content is itself a scroller is a trap: you reach the
+        bottom of the picture, keep scrolling to read the notes under it, and
+        nothing happens until you physically move the pointer off the frame.
+      </p>
+      <p>
+        Focus is a 2px accent ring at a 3px offset. It flips to white on the blue
+        panel, widens to a 12px offset on a 1px nav dash, and on the screenshot
+        scroller the frame itself is the ring. Every hit area clears 40px, most
+        of them through a pseudo-element, so a control with a toolbar's target
+        does not put a toolbar's height into the row it sits in.
+      </p>
+    </section>
+
+    <!-- ------------------------------------------------------------------ -->
+
+    <section>
+      <h2 class="sheet__head mono">The rule</h2>
+      <p class="rule">
+        If the code and the contract disagree, fix whichever is wrong, in the
+        same commit.
+      </p>
+      <p>
+        The contract is <a class="ext" href={CONTRACT} rel="noopener"
+        target="_blank">design.md</a>, in the repository. Every claim in it names
+        the file and the selector that enforces it, so any of it can be checked
+        with one grep, and this page is the half of it you can press.
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  /* --- the shell -------------------------------------------------------- */
+
+  /* `styles/global.css › .doc` at the same proportions, scoped here rather than
+     shared. See the header of this file: `.doc p a` is the prose-link rule, and
+     the chips, buttons and specimen links below have to be outside it
+     structurally rather than by an override. */
+  .sheet {
+    margin-top: clamp(3.5rem, 12vh, 6rem);
+    max-width: 62ch;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .sheet section {
+    padding-block: clamp(1.75rem, 4vw, 2.25rem);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .sheet__head {
+    color: var(--faint);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    /* the head is the label; the paragraph under it carries the reading size */
+    line-height: 1.6;
+  }
+
+  .sheet p {
+    margin-top: 0.85rem;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  /* The prose-link treatment is not restated here. `.sheet p a` is in the
+     selector list in `styles/global.css` beside `.doc a` and `.prose a`, so a
+     paragraph on this page opts into it by being a paragraph, and a chip or a
+     button below is exempt by being outside one. Copying the two declarations
+     into this file would have made /design the one page that could quietly keep
+     drawing a link the way the rest of the site had stopped drawing it. */
+
+  @media (max-width: 599px) {
+    .sheet {
+      /* narrower column, so the measure is already short enough */
+      max-width: none;
+    }
+  }
+
+  /* Code, not a label. The mono voice is uppercase with wide tracking, which is
+     right for a field label and wrong for a token name, a property or a key cap
+     — those read exactly as they are written or they name a different thing.
+     The same call `palette.css › .palette__row-where` and `PaletteRow.astro ›
+     .swatch__hex` already make. */
+  .code {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    font-size: 0.8125rem;
+    letter-spacing: 0;
+    line-height: 1.4;
+    color: var(--faint);
+  }
+
+  /* --- the specimen table ----------------------------------------------- */
+
+  /* The label-and-value anatomy of `global.css › .fact`, at this page's own
+     spacing. A specimen sheet is a field table where the value is a rendering. */
+  .spec {
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .spec__row {
+    display: grid;
+    grid-template-columns: 9.5rem minmax(0, 1fr);
+    gap: 0.5rem 1rem;
+    align-items: center;
+    padding-block: 0.95rem;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .spec dd {
+    margin: 0;
+    min-width: 0;
+  }
+
+  /* The specimens bring their own type with them. The one thing they must not
+     bring is the margin that positions them on a real page: `.standfirst` sets a
+     top margin because it sits under a masthead, and in a table row that is a
+     gap rather than a relationship. This is the only respect in which a specimen
+     here is not the shipped element. */
+  .spec dd > * {
+    margin: 0;
+  }
+
+  @media (max-width: 599px) {
+    .spec__row {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* --- chips ------------------------------------------------------------ */
+
+  /* The same row `CollectionChips.astro › .collections` uses, at the same gap,
+     because the chip in its label form and the chip in its link form are one
+     vocabulary and a row of them should not be two spacings. A list, so four
+     verdicts are four items to anything reading the page out loud. */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0;
+  }
+
+  /* --- the mark --------------------------------------------------------- */
+
+  .lockup {
+    /* The one size on this page that is not a shipped one: the mark ships at
+       20px and 24px, and neither is large enough to see a miter at. */
+    --mark-size: clamp(3rem, 13vw, 4.5rem);
+    margin-top: 1.75rem;
+    color: var(--fg);
+  }
+
+  .icons {
+    display: flex;
+    align-items: flex-end;
+    gap: 1.5rem;
+    margin-top: 1.75rem;
+  }
+
+  .icon {
+    display: grid;
+    justify-items: center;
+    gap: 0.6rem;
+  }
+
+  /* `global.css` sets `height: auto` on every image, which outranks an HTML
+     `height` attribute — and `favicon.svg` carries a viewBox and no intrinsic
+     size, so `auto` leaves the browser to invent one. Both dimensions come off
+     the same custom property, so the box the attributes reserve and the box the
+     icon paints in are one number. */
+  .icon img {
+    width: var(--icon);
+    height: var(--icon);
+  }
+
+  /* --- tokens ----------------------------------------------------------- */
+
+  .tokens {
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .tok {
+    display: grid;
+    grid-template-columns: 2.75rem minmax(0, 1fr);
+    gap: 0.15rem 0.9rem;
+    align-items: center;
+    padding-block: 0.7rem;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .tok__chip {
+    grid-row: span 2;
+    align-self: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    /* Sharp, like every other swatch on the site: a 4px corner marks a token you
+       could pick up, and this is a surface you look at. Inset, so a --bg swatch
+       on a light page is a chip rather than a hole, and so the eight-percent
+       tokens below are visible at all. */
+    border-radius: 0;
+    box-shadow: inset 0 0 0 1px var(--hairline-strong);
+  }
+
+  .tok__head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+  }
+
+  .tok__head .code:first-child {
+    color: var(--fg);
+  }
+
+  .tok__note {
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--faint);
+  }
+
+  /* Held at the vivid blue in both themes, which is the point it is making. */
+  .panel {
+    margin-top: 1.75rem;
+    padding: 1rem 1.15rem;
+    background: var(--accent-panel);
+  }
+
+  /* `.sheet p` sets the prose colour; this one is on the panel, so it takes the
+     panel's ink instead. Not an override of a link rule, an ink colour for a
+     paragraph that is not on the page background. */
+  .sheet p.panel {
+    color: var(--accent-panel-ink);
+  }
+
+  .capture {
+    margin-top: 1.5rem;
+  }
+
+  /* --- type ------------------------------------------------------------- */
+
+  /* The figures specimen is set in the sans at reading size, because Geist Mono
+     is monospaced and would make the comparison meaningless: both rows would
+     hold still and the point would be invisible. This is where the site actually
+     spends the feature, on sans digits in a column. */
+  .figures {
+    font-size: 1.25rem;
+    line-height: 1.3;
+    color: var(--fg);
+  }
+
+  /* --- interactions ----------------------------------------------------- */
+
+  .presses {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .pressbox {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem 0.85rem;
+    width: 100%;
+    /* 40px floor without a pseudo-element: this box is already taller. */
+    min-height: 40px;
+    padding: 0.7rem 0.9rem;
+    text-align: left;
+    cursor: pointer;
+    box-shadow: inset 0 0 0 1px var(--hairline);
+    /* No `transition-property` here: `.press` already declares one, and a second
+       would race it depending on stylesheet order. */
+  }
+
+  .pressbox:hover {
+    box-shadow: inset 0 0 0 1px var(--hairline-strong);
+  }
+
+  .pressbox__note {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--muted);
+  }
+
+  /* --- links ------------------------------------------------------------ */
+
+  /* The quiet pattern, as a specimen. It is a `span` rather than an anchor on
+     purpose: it demonstrates a treatment and has nowhere to go, and a link that
+     goes nowhere is worse than a drawing of one. */
+  .quiet {
+    color: inherit;
+    text-decoration-line: underline;
+    text-decoration-color: var(--hairline-strong);
+    text-underline-offset: 0.18em;
+  }
+
+  /* --- the rule --------------------------------------------------------- */
+
+  .sheet p.rule {
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    color: var(--fg);
+  }
+</style>
+
+<script>
+  /*
+   * The token values, read out of the live stylesheet.
+   *
+   * The swatches beside them are painted `var(--name)` and need no help; this is
+   * only the string. It is read rather than written down because the page has to
+   * be true in whichever of the four states a reader is in — OS light, OS dark,
+   * and a pinned theme fighting each of them — and a value typed into the
+   * template can only ever be true in one of them.
+   *
+   * Two things can change the answer, so both are listened to: `data-theme` on
+   * the root, which is what either theme toggle writes, and the OS preference,
+   * which is what `system` defers to. The markup ships a placeholder in the shape
+   * of a missing value, the same way the footer clocks ship `--:--:--`.
+   */
+  const root = document.documentElement;
+  const slots = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-token]"),
+  );
+
+  if (slots.length) {
+    const readTokens = () => {
+      // Re-read per pass: a computed style object is live for the element it
+      // came from, but taking it fresh is what forces the recalculation after
+      // the attribute the observer just saw.
+      const style = getComputedStyle(root);
+      for (const slot of slots) {
+        const name = slot.dataset.token;
+        if (!name) continue;
+        const value = style.getPropertyValue(name).trim();
+        // An empty string means the custom property is not declared at all,
+        // which is a real answer and a more useful one than a stale value.
+        slot.textContent = value === "" ? "not declared" : value;
+      }
+    };
+
+    readTokens();
+
+    // Either toggle, and the pre-paint script, write this attribute.
+    new MutationObserver(readTokens).observe(root, {
+      attributeFilter: ["data-theme"],
+    });
+
+    // And in `system`, the OS is what decides.
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", readTokens);
+  }
+
+  /*
+   * The figures specimen.
+   *
+   * The same shape as the footer clocks in `layouts/Base.astro`: format with
+   * Intl, align to the next whole second, then tick on the beat. Both spans get
+   * the same string, so the only difference between the two rows is the one
+   * class on the first of them.
+   */
+  const ticks = Array.from(document.querySelectorAll<HTMLElement>("[data-tick]"));
+
+  if (ticks.length) {
+    const format = new Intl.DateTimeFormat("en-GB", {
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    });
+
+    const tick = () => {
+      const now = format.format(new Date());
+      for (const el of ticks) {
+        if (el.textContent !== now) el.textContent = now;
+      }
+    };
+
+    tick();
+    setTimeout(() => {
+      tick();
+      setInterval(tick, 1000);
+    }, 1000 - (Date.now() % 1000));
+  }
+</script>

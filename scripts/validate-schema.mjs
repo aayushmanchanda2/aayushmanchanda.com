@@ -53,6 +53,13 @@ import path from "node:path";
  * @property {string} name
  * @property {(page: string) => boolean} match
  * @property {string[]} types
+ * @property {Record<string, string[]>} [requires]
+ *   Extra properties a node of a given `@type` must carry *on this page type*.
+ *   `REQUIRED` below is what is true of a type everywhere; this is what is true
+ *   of it here. The two `WebPage`s on the site are the reason the distinction
+ *   exists: a /sites entry is a page about an external site and owns a
+ *   screenshot, and /design is a page about this site's own stylesheet and owns
+ *   neither.
  */
 
 const DIST = path.join(process.cwd(), "dist");
@@ -101,7 +108,15 @@ const REQUIRED = {
   ListItem: ["position", "name"],
   SoftwareApplication: ["name", "applicationCategory"],
   Review: ["url", "itemReviewed", "author", "reviewBody", "datePublished"],
-  WebPage: ["name", "url", "about", "primaryImageOfPage", "dateCreated"],
+  /*
+   * A `WebPage` is held to a name and a URL and no more, because the site has
+   * two of them and they are different documents. A /sites entry is a page about
+   * an external site, and everything else it must carry — the subject, the
+   * screenshot, the date — is asserted on that page type in `EXPECTED`. /design
+   * is a page about this site's own stylesheet: no subject that is not the site
+   * itself, no image, no date it was last true.
+   */
+  WebPage: ["name", "url"],
   ImageObject: ["contentUrl", "caption"],
   Article: ["headline", "name", "url", "datePublished", "author", "publisher"],
   BreadcrumbList: ["itemListElement"],
@@ -149,9 +164,19 @@ const EXPECTED = [
     types: ["SoftwareApplication", "Review", "Person", "BreadcrumbList"],
   },
   {
+    name: "design",
+    match: (page) => page === "design/index.html",
+    types: ["WebPage"],
+  },
+  {
     name: "site details",
     match: (page) => /^sites\/[^/]+\/index\.html$/.test(page),
     types: ["WebPage", "ImageObject", "BreadcrumbList"],
+    // What a page *about another website* has to say, over and above being a
+    // page. /design is a `WebPage` too and owns none of it.
+    requires: {
+      WebPage: ["about", "primaryImageOfPage", "dateCreated"],
+    },
   },
   {
     name: "note",
@@ -426,6 +451,20 @@ for (const page of pages) {
           page,
           `is a ${group.name} page but emits no ${type} (got ${types.join(", ")})`,
         );
+      }
+    }
+
+    // The properties a type owes on *this* page type. See `PageType.requires`.
+    for (const [type, properties] of Object.entries(group.requires ?? {})) {
+      for (const node of graph.filter((one) => one["@type"] === type)) {
+        for (const property of properties) {
+          if (!(property in node)) {
+            fail(
+              page,
+              `is a ${group.name} page, so its ${type} is missing ${property}`,
+            );
+          }
+        }
       }
     }
   }

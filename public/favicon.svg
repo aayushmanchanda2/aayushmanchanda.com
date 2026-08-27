@@ -15,8 +15,17 @@
   renders with nothing to inherit from, and they answer to the browser's own
   `prefers-color-scheme` rather than to the site's `data-theme`: this glyph sits
   in the tab strip, not on the page, so it should match the chrome around it and
-  not a theme a reader pinned for the document. The two values are `--fg` in
-  each theme (`src/styles/global.css`).
+  not a theme a reader pinned for the document. The two values are the
+  foreground ink token in each theme (`src/styles/global.css`).
+
+  **Never spell a CSS custom property out in this comment.** XML forbids a
+  double hyphen anywhere inside a comment, so writing that token with its two
+  leading hyphens makes the whole file fail to parse and the browser draws a
+  broken image instead of the mark. That is not hypothetical: the line above
+  named it directly, this file stopped being valid XML, and nothing caught it,
+  because a tab strip with no icon in it looks like a tab strip. It surfaced the
+  first time /design rendered this file at 64px beside two smaller copies.
+  `lib/mark.test.mjs` fails on it now.
 
   The crossbar's 0.5-unit gaps are sub-pixel at 16px. That is expected and it is
   why the gap is only 0.5: when it closes, the mark degrades into an ordinary

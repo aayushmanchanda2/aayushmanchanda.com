@@ -194,10 +194,19 @@ a:hover {
    matched here. `:not(.chip)` keeps a collection chip in a facts row out of it
    for the same reason.
 
+   `.sheet p a` is the specimen sheet on /design, and it is the one entry scoped
+   to the paragraph rather than to the container. That page's shell holds chips,
+   swatches, specimen words and buttons as well as prose, and those surfaces have
+   to be exempt structurally — being outside a `p` — rather than by a rule on the
+   page overriding this one, which is the move the paragraph above forbids. It
+   lives here rather than in the page's own styles so /design cannot end up
+   showing a prose link that the rest of the site has stopped drawing that way.
+
    Both themes: --accent already swaps, and weight and underline are identical
    in either one. */
 .prose a,
 .doc a,
+.sheet p a,
 .standfirst a,
 .voice__body a,
 .source a,

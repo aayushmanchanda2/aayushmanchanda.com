@@ -31,6 +31,7 @@ import {
   aboutJsonLd,
   anchorUrl,
   contactJsonLd,
+  designJsonLd,
   homeJsonLd,
   listJsonLd,
   noteJsonLd,
@@ -155,6 +156,7 @@ const EVERY_GRAPH = () => [
   ["home", homeJsonLd()],
   ["about", aboutJsonLd()],
   ["contact", contactJsonLd()],
+  ["design", designJsonLd()],
   [
     "list",
     listJsonLd({
@@ -437,6 +439,32 @@ test("contact is a ContactPage, and it never carries the address", () => {
     !serialize(document).includes(address),
     "the address is not in the contact graph, under any key",
   );
+});
+
+test("design is one WebPage and claims nothing the page cannot show", () => {
+  const document = designJsonLd();
+  assert.deepEqual(typesIn(document), ["WebPage"]);
+
+  const page = at(document, 0);
+  assert.equal(page["name"], "Design");
+  assert.equal(page["url"], `${ORIGIN}/design/`);
+  assert.equal(page["@id"], `${ORIGIN}/design/#webpage`);
+
+  /*
+   * The parity rule, at its shortest. The page is a specimen sheet: its content
+   * is CSS and components rather than text, it carries no byline, no date and no
+   * image, so the graph carries none of those either. It is also the one page
+   * whose `WebPage` is not a /sites entry, which is why the validator holds the
+   * type itself to `name` and `url` and asks a site page for the rest.
+   */
+  assert.deepEqual(Object.keys(page).sort(), ["@id", "@type", "name", "url"]);
+});
+
+test("design emits no Person, because it attributes nothing to one", () => {
+  // Every `{"@id"}` reference has to resolve inside its own graph, so a page
+  // that carries no Person may not name one — and this page has no byline to
+  // name it with.
+  assert.ok(!serialize(designJsonLd()).includes(PERSON_ID));
 });
 
 test("what the reader sees on /contact is what the Person node claims", () => {

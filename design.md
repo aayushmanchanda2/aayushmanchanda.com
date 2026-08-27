@@ -4,11 +4,13 @@ The design contract for this site, written from the shipped code. Read it before
 
 Paths are relative to `src/`. `file › thing` means "grep for `thing` in that file".
 
+**`/design` is the public half of this file**, and it is the half you can press. It renders the mark, the tokens, the type scale, the chips, the link styles and the press states using the shipped components and the live stylesheet, so it cannot describe a system the site does not have. When a rule below changes, open that page: if it still shows the old thing, the rule did not actually land.
+
 ---
 
 ## 1. Tokens
 
-All of them live in `styles/global.css › :root`. If you typed a hex outside `styles/`, you broke something.
+All of them live in `styles/global.css › :root`. If you typed a hex outside `styles/`, you broke something. `/design` prints this table at runtime, painting each swatch `var(--token)` and reading the value back with `getComputedStyle`, so it follows the theme toggle instead of describing one theme and lying about the other. A token added below appears there the moment it is declared.
 
 | | Light | Dark |
 |---|---|---|
@@ -68,7 +70,7 @@ Geist Sans for prose, Geist Mono for labels, display and metadata. Both are vari
 
 **The mono-label convention.** `styles/global.css › .mono` is 11px, weight 500, `letter-spacing: 0.08em`, **uppercase**. That is the site's label voice: section heads, field labels, dates, footer items, key caps. Section heads open it up to `0.1em` (`index.astro › .index__title`, `ToolList.astro › .group__head`, `VoiceBlocks.astro › .voice__label`).
 
-Three places deliberately undo the uppercase, and each says why in place: a file path is not a label (`styles/palette.css › .palette__row-where`), a hex is a value you are about to paste so it must read exactly as it will arrive (`PaletteRow.astro › .swatch__hex`), and a key cap is printed `esc` on the keyboard the reader is looking at, so shouting it would name a different key (`sites/[slug].astro › .hints__row`).
+Four places deliberately undo the uppercase, and each says why in place: a file path is not a label (`styles/palette.css › .palette__row-where`), a hex is a value you are about to paste so it must read exactly as it will arrive (`PaletteRow.astro › .swatch__hex`), a key cap is printed `esc` on the keyboard the reader is looking at, so shouting it would name a different key (`sites/[slug].astro › .hints__row`), and a token name, a property or a class on `/design` is code for the same reason a hex is (`design.astro › .code`). The rule under all four: **the label voice shouts a category, and a value that will be retyped somewhere has to survive being read.**
 
 **Tabular numbers are not optional.** Any digit that changes in place, or sits in a column, gets `.tabular-nums`: the footer clocks, every `as of` / `saved` / `since` date, group counts, the index row numbers, the copyright year.
 
@@ -96,7 +98,7 @@ Optical corrections in force: the masthead pulls `-0.04em` left so the first ste
 
 **The shell** (`layouts/Base.astro › .shell`) is a flex column at `min-height: 100svh` — main, then footer, both capped at `--page-max`. Left padding is what clears whichever nav is showing: `calc(var(--page-pad) + 2.5rem)` for the fixed vertical MENU label, and `clamp(17rem, 24vw, 21rem)` above 900px for the dash rail.
 
-**The site mark** (`components/SiteMark.astro`) is his initials, **AM**, drawn on the same 16-unit grid as the icon system, fixed at the top left of every page, `currentColor`, `aria-label="Home"`, 40px hit area via a `::before`. One stroke weight throughout (1.5), and every diagonal in it runs at one angle, 27.8° off vertical.
+**The site mark** is his initials, **AM**, drawn on the same 16-unit grid as the icon system, `currentColor`. One stroke weight throughout (1.5), and every diagonal in it runs at one angle, 27.8° off vertical. It is **two files**: `components/MarkGlyph.astro` is the drawing and nothing else, and `components/SiteMark.astro` is where it sits — fixed at the top left of every page, `aria-label="Home"`, 40px hit area via a `::before`. They split when `/design` needed to render the same lockup as an inline specimen; a second surface that pasted the paths in would have been a fourth copy of a glyph the test below exists to hold at three. **A page that wants the mark imports `MarkGlyph`**, and `lib/mark.test.mjs` fails on any other file in `src/` drawing a `<path>` of its own.
 
 **The A is the drawing that shipped before it, unchanged to the decimal.** The M is built to that A's *ink* metrics rather than its centreline ones, which is the only way two stroked letters can be made to share a cap line: stems flat at 1.7, so the A's mitred apex tip (1.492) stands above them by 1.7% of cap height, the overshoot a point takes over a flat cap in any real face; stems flat on 14.1, which is where the A's foot centreline lands; and a valley that is the A's apex reflected, same 55.6° included angle and same 2.144 miter ratio, with its tip on 14.4498, the A's own lowest ink.
 
@@ -110,9 +112,15 @@ Optical corrections in force: the masthead pulls `-0.04em` left so the first ste
 
 **The left bearing is 0.096 of the mark's height, and adding the M did not move it.** The leftmost ink is still the outer corner of the A's left foot, 1.5366 of 16 units, so `margin-left: calc(var(--mark-size) * -0.096)` still lines the *ink* up with the rail instead of the box; measured delta 0.008px. `scripts/og.mjs` takes the same pull plus the `h1`'s own `-0.04em` where the two share a column, and the card's mark needs `align-self: flex-start` now that it is no longer a square box — a column flex default of `stretch` on an `auto`-width SVG centres the glyph across the whole card.
 
-The A's two paths live in three files (the component, `public/favicon.svg`, `scripts/og.mjs`) and the M's path in two. `lib/mark.test.mjs` compares every copy and fails on a moved point, on a second stroke weight anywhere in the mark, or on an M appearing in the favicon, naming the reason in the message. `npm run og` regenerates the card and the raster icon from the copy in that script.
+The A's two paths live in three files (`MarkGlyph.astro`, `public/favicon.svg`, `scripts/og.mjs`) and the M's path in two. `lib/mark.test.mjs` compares every copy and fails on a moved point, on a second stroke weight anywhere in the mark, or on an M appearing in the favicon, naming the reason in the message. `npm run og` regenerates the card and the raster icon from the copy in that script.
 
-**The colophon is the footer, not the nav.** `/about`, `/contact` and `/privacy` are the three pages about the site rather than in it, and all three live in `layouts/Base.astro › .foot__meta` at the copyright's weight. The nav — both surfaces — stays the five content sections, which is what `lib/sections.ts` enumerates and what the empty-section rule governs; none of the three appears there, in `getSections`, or in a markdown variant. They share one prose shell, `styles/global.css › .doc`, because three pages that read as siblings must not each keep their own copy of the measure. `.foot__meta` wraps: five items plus the copyright is wider than a 375px column, and an unwrapped flex row pushes the year off the side rather than dropping it to a second line.
+> **Never spell a CSS custom property inside `public/favicon.svg`'s comment.** XML forbids a double hyphen anywhere in a comment, so a token written with its two leading hyphens makes the file fail to parse and the browser draws a broken image instead of the mark. **This shipped, and nothing caught it**: a tab strip with no icon in it looks like a tab strip, and every other surface draws the mark from the component. It surfaced the first time `/design` rendered the real file on a page at 64px. `lib/mark.test.mjs` now fails on a `--` inside any comment in that file. The general shape of the lesson is the reason `/design` exists at all: **an asset nothing renders on a page is an asset nobody is checking.**
+
+**The colophon is the footer, not the nav.** `/about`, `/contact`, `/design` and `/privacy` are the four pages about the site rather than in it, and all four live in `layouts/Base.astro › .foot__meta` at the copyright's weight, in that order: the two about the person first, because that is what most readers are looking for down there, then the two about the machinery, with `/privacy` last because nobody comes looking for it until they need it. The nav — both surfaces — stays the five content sections, which is what `lib/sections.ts` enumerates and what the empty-section rule governs; none of the four appears there, in `getSections`, or in a markdown variant. `.foot__meta` wraps: six items plus the copyright is wider than a 375px column, and an unwrapped flex row pushes the year off the side rather than dropping it to a second line.
+
+Three of the four share one prose shell, `styles/global.css › .doc`, because pages that read as siblings must not each keep their own copy of the measure. **`/design` is the one that does not, and the reason is §5.** `.doc a` gives every link inside the shell the prose treatment, which is right for three pages that are paragraphs from top to bottom and wrong for a page whose sections are chips, swatches, specimen words and buttons. Sharing the class would have meant bolding and underlining a chip and then writing a rule to un-bold it, which is exactly the override §5 forbids. So `design.astro › .sheet` is scoped at `.doc`'s proportions, and its paragraphs opt into the prose-link rule **by being paragraphs** — `.sheet p a` is in the selector list in `global.css` rather than restated on the page, so /design cannot end up drawing a prose link the rest of the site has stopped drawing.
+
+**`/design` has no markdown variant, and that is a judgement rather than an omission.** The `PAGES` machinery would make one cheap to add, but the document it produced would be a lie: the page's content is CSS and live components, and markdown can render neither a chip nor a swatch, so the variant would have to be prose transcribed by hand — the one thing `lib/markdown.ts` exists to prevent. The markdown version of this page already exists and is the file you are reading; `/design` links to it in the repository, and `/llms.txt` names both and says which is the source.
 
 **900px is the only structural breakpoint.** Above it: the rail. Below it: the MENU panel, and the palette becomes a full-screen sheet. 599px and 639px exist only to reflow list rows from three columns to a stack.
 
@@ -187,7 +195,7 @@ Nothing is written to storage until a press. `/privacy` names the one key that t
 
 ## 5. Links
 
-**Prose links are bold and underlined.** Weight 600 plus `text-decoration-line: underline`, scoped to where prose actually lives: `.prose a, .doc a, .standfirst a, .voice__body a, .source a, .fact dd a:not(.chip)` (`styles/global.css`). The reason is that body text is set at `--muted`, so a blue word at weight 400 is a colour difference and nothing else — the one signal that goes missing on a bad screen, in bright sun, or for a reader who cannot separate those two hues at all. Weight and a line are two more, and neither depends on seeing colour.
+**Prose links are bold and underlined.** Weight 600 plus `text-decoration-line: underline`, scoped to where prose actually lives: `.prose a, .doc a, .sheet p a, .standfirst a, .voice__body a, .source a, .fact dd a:not(.chip)` (`styles/global.css`). `.sheet p a` is the one entry keyed to the paragraph rather than the container, because /design's shell holds specimens as well as prose and those have to be exempt structurally — see §3. The reason is that body text is set at `--muted`, so a blue word at weight 400 is a colour difference and nothing else — the one signal that goes missing on a bad screen, in bright sun, or for a reader who cannot separate those two hues at all. Weight and a line are two more, and neither depends on seeing colour.
 
 **Exempt surfaces are exempt structurally, not by an override.** Nav dashes, chips, footer items, index rows, tool and library rows, tab links, crumbs, hint rows and metadata strips are simply **not in that selector list**, and each sets its own `text-decoration: none`. Bolding and underlining them would turn navigation into a paragraph of shouting. Do not extend that selector unless the link sits inside a sentence, and do not "fix" a nav link for missing an underline.
 
@@ -236,12 +244,15 @@ Every page carries one `application/ld+json` block, and every node in it is buil
 | `/` | `WebSite` + `Person`, the site naming the person as both `author` and `publisher` |
 | `/about` | `AboutPage` + `Person`, the page naming the person as its `mainEntity` |
 | `/contact` | `ContactPage` + `Person`, same shape, compact `Person`, and **no `email`** |
+| `/design` | `WebPage`, one node, `name` and `url` and nothing else |
 | `/tools` `/sites` `/library` `/experiments` `/notes` | `ItemList` |
 | `/tools/<slug>` | `SoftwareApplication` + `Review` + `Person` + `BreadcrumbList` |
 | `/sites/<slug>` | `WebPage` (`about` the external site) + `ImageObject` + `BreadcrumbList` |
 | `/notes/<slug>` | `Article` + `Person` + `BreadcrumbList` |
 | filter pages | `ItemList` + `BreadcrumbList` |
 | `/privacy`, 404 | none, on purpose |
+
+**`/design` is the parity rule at its shortest, and the reason the validator grew a second axis.** The page is a specimen sheet: its content is CSS and components rather than text, it has no byline, no date and no image, so its graph is one `WebPage` carrying a name and a URL. That collided with `scripts/validate-schema.mjs › REQUIRED`, which held every `WebPage` to the five properties a `/sites` entry has. So `REQUIRED` is now what is true of a type **everywhere** (`WebPage`: `name`, `url`) and `EXPECTED[].requires` is what is true of it **on one page type** (a site details page's `WebPage` still owes `about`, `primaryImageOfPage` and `dateCreated`). A shared type held to one page's shape is a rule that fails the second page to use it.
 
 Five things are worth not re-deriving.
 
@@ -256,7 +267,7 @@ Five things are worth not re-deriving.
 **Gates, all of them, every time.**
 
 1. `npx astro check` → **0 errors, 0 warnings.** Hints have a known baseline of 13 (eleven `z is deprecated` from `content.config.ts`, one unused `Props`, one unreachable-code hint); do not add to it. Note that `checkJs` is on, so a new `.mjs` under `scripts/` or `pipeline/` is type-checked too and needs its JSDoc.
-2. `npm test` → all pass (241 at the time of writing).
+2. `npm test` → all pass (245 at the time of writing).
 3. `npm run build` → clean, then `npm run validate:schema` → clean. The second reads `dist/`, so it is only meaningful after the first.
 4. **Both themes, and both forced states.** Four looks, not two: OS light, OS dark, and then a pinned theme fighting each of them — `data-theme="dark"` on a light OS is the one that catches a token declared in only one of the two dark blocks. Every colour is a token; a hex outside `styles/` is the bug.
 5. **Mobile.** At 375px: the MENU rail and panel, the row reflows at 599/639, the palette as a full-screen sheet.

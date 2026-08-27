@@ -128,6 +128,11 @@ ${sectionList}
 - [Contact](${absolute("/contact")}): how to reach him, and what he does and
   does not answer. The address is entity-encoded in the page rather than
   printed, so read the \`mailto:\` href rather than the visible text.
+- [Design](${absolute("/design")}): the design language of the site, rendered by
+  the components themselves. The mark, the colour tokens, the type scale, the
+  chip palette, the link rules and the interaction rules. Note that the token
+  values on it are read out of the stylesheet by script at runtime, so they are
+  not in the served HTML; the stylesheets in the repository are the source.
 - [Privacy](${absolute("/privacy")}): what this site does and does not collect,
   and how to get a screenshot of your own site removed.
 

@@ -1,12 +1,18 @@
 /**
  * The site mark, under test.
  *
- * The mark is drawn three times: once in `components/SiteMark.astro` for the
+ * The mark is drawn three times: once in `components/MarkGlyph.astro` for the
  * page, once in `public/favicon.svg` for the tab strip, and once in
  * `scripts/og.mjs` for the social card and the raster icon. It cannot be drawn
  * once — the favicon has to ship as a standalone file with its colours pinned,
  * and the card is rendered by a hand-run script in a throwaway browser that has
  * no Astro build to import a component from.
+ *
+ * Three, and only three. Two surfaces in the build now render the lockup —
+ * `SiteMark.astro`, which is the fixed link home, and `/design`, which shows it
+ * as a specimen — and both import `MarkGlyph.astro` rather than drawing it. The
+ * last test in this file is what keeps that true: a fourth copy pasted into a
+ * page is a copy nobody looks at, which is the one that drifts.
  *
  * So the copies are compared here instead. Two failures are worth catching and
  * neither is visible from any one file:
@@ -33,9 +39,15 @@ import { fileURLToPath } from "node:url";
 const read = (relative) =>
   readFileSync(fileURLToPath(new URL(relative, import.meta.url)), "utf8");
 
-const COMPONENT = read("../components/SiteMark.astro");
+const COMPONENT = read("../components/MarkGlyph.astro");
 const FAVICON = read("../../public/favicon.svg");
 const OG = read("../../scripts/og.mjs");
+
+/** Every file that renders the lockup without being allowed to draw it. */
+const CONSUMERS = [
+  ["SiteMark.astro", read("../components/SiteMark.astro")],
+  ["design.astro", read("../pages/design.astro")],
+];
 
 /**
  * The `<path>` elements in a file, in source order.
@@ -95,7 +107,7 @@ test("the favicon does not carry the M, on purpose", () => {
 
 test("the mark is monoline, in every copy of it", () => {
   for (const [name, source] of [
-    ["SiteMark.astro", COMPONENT],
+    ["MarkGlyph.astro", COMPONENT],
     ["favicon.svg", FAVICON],
     ["og.mjs", OG],
   ]) {
@@ -125,7 +137,7 @@ test("the M's top corners are cut and its valley is not", () => {
   // there: points stay points up to the A's own sharpness, and anything
   // sharper is cut flat the way a geometric sans cuts an M.
   for (const [name, source] of [
-    ["SiteMark.astro", COMPONENT],
+    ["MarkGlyph.astro", COMPONENT],
     ["og.mjs", OG],
   ]) {
     assert.deepEqual(
@@ -135,5 +147,46 @@ test("the M's top corners are cut and its valley is not", () => {
     );
     // and it is on the M, not on one of the A's two paths
     assert.match(pathTags(source)[2], /stroke-miterlimit="2\.4"/);
+  }
+});
+
+test("the favicon is well-formed XML, which its own comment can break", () => {
+  /*
+   * XML forbids a double hyphen anywhere inside a comment, and this file opens
+   * with a long one. Writing a CSS custom property in it — the two leading
+   * hyphens are the whole hazard — makes the document fail to parse, and a
+   * browser draws a broken image rather than the mark.
+   *
+   * This shipped. The comment named the foreground token directly, `favicon.svg`
+   * stopped being valid XML, and nobody saw it: a tab with no icon reads as a
+   * tab, and every other surface draws the mark from the component instead. It
+   * only surfaced when /design put the real file on a page at 64px.
+   *
+   * The prose in this file is worth keeping, so the rule is enforced rather than
+   * the comment removed.
+   */
+  for (const comment of FAVICON.matchAll(/<!--([\s\S]*?)-->/g)) {
+    assert.ok(
+      !comment[1].includes("--"),
+      "favicon.svg has a `--` inside an XML comment, so the file does not parse and the icon does not render. Spell the token without its hyphens.",
+    );
+  }
+});
+
+test("nothing else in the build draws the mark; the callers import it", () => {
+  // The whole reason `MarkGlyph.astro` exists. A page that wants the lockup
+  // renders the component; a page that pastes the paths in gets a fourth copy
+  // that this file cannot see and that nobody re-reads.
+  for (const [name, source] of CONSUMERS) {
+    assert.deepEqual(
+      paths(source),
+      [],
+      `${name} draws the mark itself instead of importing MarkGlyph.astro`,
+    );
+    assert.match(
+      source,
+      /import MarkGlyph from/,
+      `${name} renders the mark without importing the one drawing of it`,
+    );
   }
 });

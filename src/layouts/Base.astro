@@ -267,13 +267,21 @@ const markdownVariant = variant === null ? null : absolute(variant);
             Search <kbd data-palette-hint>&#8984;K</kbd>
           </button>
           <span aria-hidden="true">&middot;</span>
-          {/* The colophon: the three pages that are about the site rather than
+          {/* The colophon: the four pages that are about the site rather than
               in it. They live here and not in the nav on purpose — the nav is
               the five content sections, and a reader looking for who wrote this
-              or how to reach him looks at the bottom of the page. */}
+              or how to reach him looks at the bottom of the page.
+
+              Ordered by what a reader is answering. About and Contact are about
+              the person, and they come first because that is what most people
+              are looking for down here. Design and Privacy are about the
+              machinery of the site, and Privacy is last because it is the one
+              nobody comes looking for until they need it. */}
           <a class="foot__quiet press" href="/about">About</a>
           <span aria-hidden="true">&middot;</span>
           <a class="foot__quiet press" href="/contact">Contact</a>
+          <span aria-hidden="true">&middot;</span>
+          <a class="foot__quiet press" href="/design">Design</a>
           <span aria-hidden="true">&middot;</span>
           <a class="foot__quiet press" href="/privacy">Privacy</a>
           <span aria-hidden="true">&middot;</span>
@@ -420,7 +428,7 @@ const markdownVariant = variant === null ? null : absolute(variant);
         margin: 0;
         display: flex;
         align-items: baseline;
-        /* Wraps because the row grew: search, then the three colophon pages,
+        /* Wraps because the row grew: search, then the four colophon pages,
            then the copyright. That is wider than a 375px column can hold, and
            an unwrapped flex row would push the copyright off the side rather
            than drop it to a second line. The row gap is tighter than the

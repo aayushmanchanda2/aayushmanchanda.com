@@ -44,7 +44,7 @@ const SECTION = {
 } as const;
 
 /**
- * The pages that are not a section index and not an entry: home, plus the three
+ * The pages that are not a section index and not an entry: home, plus the four
  * colophon pages the footer links.
  *
  * The `terms` on each row are the words someone would actually type looking for
@@ -76,6 +76,18 @@ const STATIC_PAGES: readonly SearchEntry[] = [
     section: SECTION.pages,
     href: "/contact",
     terms: "contact email reach hire get in touch x twitter github",
+  },
+  {
+    /*
+     * Nobody types "design" looking for a colophon, so the terms are the things
+     * that are actually on the page: the wordmark, the tag colours, the type.
+     * "colophon" is in there for the one reader who does know the word.
+     */
+    title: "Design",
+    section: SECTION.pages,
+    href: "/design",
+    terms:
+      "design colophon logo wordmark mark favicon colour color tokens palette typography type fonts chips tags accent theme",
   },
   {
     title: "Privacy",

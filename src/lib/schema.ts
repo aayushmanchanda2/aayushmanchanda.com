@@ -280,6 +280,36 @@ export function contactJsonLd(): JsonLd {
   );
 }
 
+/**
+ * /design: the colophon for the design language, and nothing else.
+ *
+ * One node, and the shortest one on the site, because the parity rule leaves
+ * almost nothing to claim. The page is a specimen sheet — chips that render
+ * themselves, swatches that read the live stylesheet, the mark at three sizes —
+ * so its content is CSS rather than text a graph can restate. It has no author
+ * byline, no date, and no image, so it emits no `Person`, no `datePublished`
+ * and no `primaryImageOfPage`.
+ *
+ * A plain `WebPage`, not `AboutPage` or `CreativeWork`. schema.org has no type
+ * for "the design of this website", and reaching for the nearest
+ * official-sounding one would be the same move `applicationCategory` refuses on
+ * a tool page: a tidier claim than the true one.
+ *
+ * No `BreadcrumbList`, for the reason /about and /privacy have none: the page is
+ * reached from the colophon row in the footer of every page, and a persistent
+ * navigation row is not a trail.
+ */
+export function designJsonLd(): JsonLd {
+  const url = pageUrl("/design");
+
+  return graph({
+    "@type": "WebPage",
+    "@id": `${url}#webpage`,
+    name: "Design",
+    url,
+  });
+}
+
 /** `ListItem`s, numbered from 1 the way `BreadcrumbList` and `ItemList` both want. */
 function listItems(entries: readonly ListEntry[]): JsonLdNode[] {
   return entries.map((entry, index) =>
