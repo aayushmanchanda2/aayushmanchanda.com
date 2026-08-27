@@ -21,10 +21,17 @@
  * is worth it for inert CSS, but a reader grepping the build should find this
  * paragraph before they find the mystery.
  *
- * No script. The form is a plain POST straight to Buttondown, which is what
- * their docs ask for, so it works with scripting off and the confirmation, the
- * CAPTCHA and every error message are pages on Buttondown rather than states
- * this component would have to invent and then keep honest.
+ * One script, and it only acts when the reader presses Subscribe. The plain
+ * POST is still the substrate: the form works with scripting off, and every
+ * path the script cannot vouch for falls back to submitting it natively, which
+ * lands on Buttondown's own pages. Their docs warn the response is sometimes a
+ * CAPTCHA or a validation error the subscriber has to see, and those pages are
+ * theirs to show, not this component's to reinvent. What the script adds is the
+ * happy path staying here: the address goes out through `fetch` (the endpoint
+ * answers cross-origin; `access-control-allow-origin: *`, checked live against
+ * the account), the form swaps for the confirmation line, and the reader never
+ * leaves the page. Like the styles above, the script ships while the newsletter
+ * is off; it finds no form and does nothing.
  *
  * Placement is the home page, under the section index: the quietest spot that a
  * reader who got to the bottom of the page has chosen to reach. It is not in the
@@ -41,12 +48,19 @@ const form = newsletterForm(NEWSLETTER_ACTION);
   form && (
     <section class="news" aria-labelledby="news-heading">
       <h2 class="news__title mono" id="news-heading">
-        Occasional issues
+        The short list
       </h2>
 
       <p class="news__line">
-        Every so often I write up what survived: what I kept, what I dropped, and
-        why. No schedule, and nothing in it I have not run myself.
+        New tools ship faster than anyone can test them. I test them anyway, on
+        real work at my own companies, and send you the short list: what
+        survived, what didn't, and why. Plain language, only when there's
+        something worth sending.
+      </p>
+
+      <p class="news__done" role="status" tabindex="-1" hidden>
+        You're in. Buttondown just emailed you a confirmation link. One click
+        there and it's done.
       </p>
 
       <form class="news__form" action={form.action} method={form.method}>
@@ -69,12 +83,45 @@ const form = newsletterForm(NEWSLETTER_ACTION);
       </form>
 
       <p class="news__fine">
-        Buttondown sends the issues and keeps the list. Every issue has an
-        unsubscribe link at the bottom.
+        Unsubscribe at the bottom of every issue. Buttondown runs the list;
+        nobody else sees it.
       </p>
     </section>
   )
 }
+
+<script>
+  // The happy path stays on this page; everything else falls back to the
+  // native POST, so Buttondown's CAPTCHA and validation pages are still
+  // reachable and nothing is lost with scripting off. `form.submit()` does not
+  // fire the submit event, so the fallback cannot re-enter this handler.
+  const form = document.querySelector(".news__form");
+  const done = document.querySelector(".news__done");
+
+  if (form instanceof HTMLFormElement && done instanceof HTMLElement) {
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const button = form.querySelector("button");
+      if (button) button.disabled = true;
+
+      const body = new URLSearchParams();
+      for (const [name, value] of new FormData(form)) {
+        if (typeof value === "string") body.append(name, value);
+      }
+
+      try {
+        const response = await fetch(form.action, { method: "POST", body });
+        if (!response.ok) throw new Error(String(response.status));
+        form.hidden = true;
+        done.hidden = false;
+        done.focus();
+      } catch {
+        if (button) button.disabled = false;
+        form.submit();
+      }
+    });
+  }
+</script>
 
 <style>
   /* Sits at the distance the index itself sits from the hero, so the page ends
@@ -98,6 +145,22 @@ const form = newsletterForm(NEWSLETTER_ACTION);
     font-size: 0.9375rem;
     line-height: 1.55;
     color: var(--muted);
+  }
+
+  /* The line the form becomes once the address is in. Full-ink `--fg`, not
+     `--muted`: it is the one moment this section is the point of the page.
+     Focus lands here programmatically for screen readers; the ring is for
+     controls, and a paragraph that cannot be operated should not wear one. */
+  .news__done {
+    margin-top: 1.25rem;
+    max-width: 52ch;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--fg);
+  }
+
+  .news__done:focus {
+    outline: none;
   }
 
   /* Wraps rather than reflowing at a breakpoint. 900px is the only structural

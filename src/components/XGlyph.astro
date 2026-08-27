@@ -1,0 +1,87 @@
+---
+/**
+ * XGlyph — the X mark, drawn by hand on the icon system's 16-unit grid.
+ *
+ * It replaces the literal letter "X" that used to sit in the footer's social
+ * row, which is the one label on this site that could not do its job: a lone
+ * "X" in 11px mono reads as a close button, a multiplication sign or a
+ * placeholder before it reads as the name of a company. "GitHub" beside it has
+ * no such problem, which is why that one is still a word — a logo earns its
+ * place when the word cannot be read, not because its neighbour has one.
+ *
+ * Nothing here is fetched. The site loads no third-party asset (`/privacy` is
+ * built around that claim), so the mark is drawn in `currentColor` and inherits
+ * the row's own ink, hover and theme.
+ *
+ * ---------------------------------------------------------------------------
+ * The construction, which is not the X you would guess at.
+ *
+ * The mark is a **double-struck X**, the descendant of its Unicode namesake
+ * (MATHEMATICAL DOUBLE-STRUCK CAPITAL X). It is three strokes, not two:
+ *
+ * 1. the "\" is a *ribbon* — two parallel walls closed by a flat cap at each
+ *    end, with a counter running between them;
+ * 2. the "/" is a single stroke of the same weight crossing both walls;
+ * 3. the counter punches through the "/" as well, so the "/" breaks where it
+ *    passes the ribbon and reads as running behind it.
+ *
+ * **Every end is cut horizontally**, parallel to the baseline rather than
+ * square to its own stroke. That is the detail that makes it this mark instead
+ * of a dismiss icon, and it is also why this cannot be a stroked path like the
+ * rest of the icon set: `stroke-linecap` can give a butt cut or a round one,
+ * never a horizontal one on a diagonal. So it is drawn as ink — one filled
+ * path, the outline and its counter — and the weight is what carries it back
+ * into the set.
+ *
+ * **Weight: 1.25 units, perpendicular, on all three strokes.** That is the
+ * number `ShotActions.astro` and `ThemeToggle.astro` set as `stroke-width`, now
+ * spelled as ink instead of as a stroke, so the glyph sits at the weight of the
+ * moon two items along instead of shouting over it. The real mark is lighter
+ * than this against its own box (about 0.87 units at this scale) and looked
+ * spindly next to a 1.25 stroke; 1.35 and up closed the counter at 14px. Both
+ * were rasterised at 1x before this one was picked.
+ *
+ * **The angles fall out of the geometry rather than being chosen.** Both
+ * strokes run corner to corner of a 13-unit ink box, so the ribbon — which is
+ * two walls plus a counter wide — has to lie shallower than the single "/" to
+ * fit: 32.1 degrees off vertical against 41.1. The real mark is 34.5 against
+ * 40.7 for exactly the same reason, and the small difference is our heavier
+ * stroke widening the ribbon. An X drawn symmetrically here would be a
+ * different letter.
+ *
+ * Ink box 1.5 to 14.5 on both axes, centred in the 16-unit box, which is the
+ * density `ThemeToggle.astro`'s sun already sits at.
+ *
+ * The counter's flat caps are inset from the ends by one stroke weight, 1.25,
+ * measured vertically — the proportion the real mark uses, where the inset and
+ * the stroke are the same number to three significant figures.
+ */
+---
+
+{/*
+  Hidden from the accessibility tree on purpose: the anchor around it carries
+  `aria-label="X"`, and a name here would announce the destination twice.
+*/}
+<svg class="xglyph" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+  {/*
+    One path, two subpaths: the outline, then the counter. `evenodd` rather
+    than the default, so the counter stays a hole whichever way its points end
+    up ordered — the alternative is an invariant about winding direction that
+    nothing in the file would catch.
+  */}
+  <path
+    d="M9.755 6.939 L14.5 1.5 L12.841 1.5 L9.061 5.834 L6.341 1.5 L1.5 1.5 L6.245 9.061 L1.5 14.5 L3.159 14.5 L6.939 10.166 L9.659 14.5 L14.5 14.5 Z M3.76 2.75 L5.649 2.75 L12.24 13.25 L10.351 13.25 Z"
+    fill="currentColor"
+    fill-rule="evenodd"></path>
+</svg>
+
+<style>
+  /* A 16-unit icon set at 14px sits at the weight of the 11px mono beside it
+     instead of shouting over it. Same call as `ShotActions.astro` and
+     `ThemeToggle.astro`, and the size the weight above was tuned against. */
+  .xglyph {
+    display: block;
+    width: 14px;
+    height: 14px;
+  }
+</style>

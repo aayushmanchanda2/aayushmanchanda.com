@@ -114,7 +114,11 @@ test("whatever the switch is set to, it is a shape Buttondown answers", () => {
 
 /**
  * Everything an `.astro` file can put on the page: the markup after the
- * frontmatter fence, with the scoped `style` block taken out.
+ * frontmatter fence, with the scoped `style` and `script` blocks taken out.
+ * Both ship whether or not the newsletter exists — Astro collects them from the
+ * page's imports, not from what rendered — so they sit outside the guard the
+ * template tests reason about, and the component's header comment owns that
+ * trade-off.
  *
  * @param {string} source
  * @returns {string}
@@ -125,6 +129,7 @@ function template(source) {
   return source
     .slice(fence + 4)
     .replace(/<style>[\s\S]*<\/style>/, "")
+    .replace(/<script>[\s\S]*<\/script>/, "")
     .trim();
 }
 
@@ -234,11 +239,30 @@ test("the component renders from the model rather than a second copy of it", () 
   assert.doesNotMatch(COMPONENT, /name="(email|embed)"/);
 });
 
-test("the form needs no JavaScript, because Buttondown asks for none", () => {
-  // Their docs are explicit that the request must not go out through `fetch`:
-  // the response is sometimes a CAPTCHA or a validation error the subscriber
-  // has to see. A plain POST also means the box works with scripting off.
-  assert.doesNotMatch(COMPONENT, /<script/);
+test("the script is an enhancement over the POST, never a replacement for it", () => {
+  // Buttondown's docs warn the response is sometimes a CAPTCHA or a validation
+  // error the subscriber has to see, so the native submit must remain the
+  // fallback for every path the script cannot vouch for — and the plain POST
+  // keeps the box working with scripting off.
+  const script = COMPONENT.match(/<script>([\s\S]*)<\/script>/)?.[1] ?? "";
+  assert.ok(script.length > 0, "expected the progressive-enhancement script");
+
+  assert.ok(script.includes("event.preventDefault()"), "the script must intercept the submit");
+  assert.ok(script.includes("form.submit()"), "the fallback to the native POST is the contract");
+  assert.ok(
+    /catch\s*\{[\s\S]*form\.submit\(\)/.test(script),
+    "the native submit must be the failure path, not the success path",
+  );
+});
+
+test("the confirmation line exists, announces itself, and starts hidden", () => {
+  const markup = template(COMPONENT);
+  const done = markup.match(/<p class="news__done"[^>]*>/)?.[0] ?? "";
+
+  assert.ok(done.length > 0, "expected the news__done confirmation line");
+  assert.ok(done.includes('role="status"'), "screen readers must hear the confirmation");
+  assert.ok(done.includes("hidden"), "the confirmation must not show before subscribing");
+  assert.ok(done.includes('tabindex="-1"'), "focus must be able to land on it");
 });
 
 test("the home page places it unconditionally, so activation is one line", () => {
