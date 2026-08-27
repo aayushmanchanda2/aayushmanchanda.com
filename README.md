@@ -139,6 +139,16 @@ x.com and twitter.com fail on sight, deliberately. A crash mid-run repairs itsel
 on the next run's `reconcile()`, which makes the state file, the galleries and
 `public/shots` agree again.
 
+A link that answers with a bot wall counts as one that will not screenshot. A
+Vercel checkpoint or a Cloudflare interstitial arrives at HTTP 200 and renders
+fine, so `capture.mjs` checks for one twice: it reads the page's title, headings
+and first 1,200 characters against a list of known challenge signatures before
+shooting, and it refuses a finished shot that is both flat and tiny, which is
+what an empty screen encodes to whoever served it. Either check fails the
+attempt, which is what puts the link in front of the Firecrawl second chance.
+That second chance is judged on its picture too: a wall photographed by another
+service is still a wall.
+
 Infrastructure failure goes red instead: a missing token, a renamed collection,
 data that will not build. GitHub's email on a failed run is the only alerting
 there is. To stop the automation, comment out the `schedule:` block in the

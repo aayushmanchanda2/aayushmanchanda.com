@@ -275,7 +275,7 @@ Five things are worth not re-deriving.
 **Gates, all of them, every time.**
 
 1. `npx astro check` → **0 errors, 0 warnings.** Hints have a known baseline of 13 (eleven `z is deprecated` from `content.config.ts`, one unused `Props`, one unreachable-code hint); do not add to it. Note that `checkJs` is on, so a new `.mjs` under `scripts/` or `pipeline/` is type-checked too and needs its JSDoc.
-2. `npm test` → all pass (245 at the time of writing).
+2. `npm test` → all pass (264 at the time of writing).
 3. `npm run build` → clean, then `npm run validate:schema` → clean. The second reads `dist/`, so it is only meaningful after the first.
 4. **Both themes, and both forced states.** Four looks, not two: OS light, OS dark, and then a pinned theme fighting each of them — `data-theme="dark"` on a light OS is the one that catches a token declared in only one of the two dark blocks. Every colour is a token; a hex outside `styles/` is the bug.
 5. **Mobile.** At 375px: the MENU rail and panel, the row reflows at 599/639, the palette as a full-screen sheet.
