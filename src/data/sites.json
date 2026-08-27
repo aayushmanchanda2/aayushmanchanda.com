@@ -117,5 +117,62 @@
       "personal-sites",
       "portfolios"
     ]
+  },
+  {
+    "slug": "atishay-tuli-creative-frontend-developer",
+    "title": "Atishay Tuli · Creative Frontend Developer",
+    "url": "https://www.creativeatishay.in/",
+    "domain": "creativeatishay.in",
+    "saved_date": "2026-08-27",
+    "shot": "/shots/atishay-tuli-creative-frontend-developer.webp",
+    "palette": [
+      "#ffffff",
+      "#ede5cf",
+      "#5b6b3c",
+      "#8c6c6d",
+      "#97d0f2",
+      "#f0cf95"
+    ],
+    "collections": [
+      "portfolios"
+    ]
+  },
+  {
+    "slug": "inspora",
+    "title": "Inspora",
+    "url": "https://www.inspora.design/",
+    "domain": "inspora.design",
+    "saved_date": "2026-08-27",
+    "shot": "/shots/inspora.webp",
+    "palette": [
+      "#ffffff",
+      "#8b7b8f",
+      "#8abae5",
+      "#17336f",
+      "#2f171b",
+      "#f5cc98"
+    ],
+    "collections": [
+      "reference-libraries"
+    ]
+  },
+  {
+    "slug": "brian-lovin",
+    "title": "Brian Lovin",
+    "url": "https://brianlovin.com/",
+    "domain": "brianlovin.com",
+    "saved_date": "2026-08-27",
+    "shot": "/shots/brian-lovin.webp",
+    "palette": [
+      "#ffffff",
+      "#a7a4a6",
+      "#535253",
+      "#181717",
+      "#ebceb3",
+      "#b6d5ef"
+    ],
+    "collections": [
+      "personal-sites"
+    ]
   }
 ]

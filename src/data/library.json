@@ -124,5 +124,32 @@
     "saved_date": "2026-07-26",
     "kind": "article",
     "note": "Frame-aware video analysis. Indexed as a capability gap; deliberately not installed."
+  },
+  {
+    "slug": "one-of-the-best-write-ups-i-have-seen-on-getting-hermes-agen",
+    "title": "one of the best write-ups I have seen on getting hermes agent to build your life OS and second brain",
+    "url": "https://x.com/shannholmberg/status/2086920236079681607",
+    "domain": "x.com",
+    "saved_date": "2026-08-27",
+    "kind": "post",
+    "note": "EP released a single prompt that creates 4 connected layers:\n\n1. a markdown knowledge base that is your source of truth\n2. a persistent memory pointer so every future session"
+  },
+  {
+    "slug": "termius-tailscale-tmux",
+    "title": "Termius + Tailscale + tmux You don't need your laptop to build with Claude…",
+    "url": "https://x.com/termiushq/status/2082616764605874207",
+    "domain": "x.com",
+    "saved_date": "2026-08-27",
+    "kind": "post",
+    "note": "@TermiusHQ: Termius + Tailscale + tmux You don't need your laptop to build with Claude Code, Codex, or any other AI coding agent: → Run your agent inside tmux to keep the session alive → Use @Tailscale for secure access to your laptop → Connect with Termius over SSH from iPhone, iPad, or…"
+  },
+  {
+    "slug": "built-a-little-agent-automation-where-i-paste-a-link-to-a-co",
+    "title": "Built a little agent automation where I paste a link to a cool website I want…",
+    "url": "https://x.com/brian_lovin/status/2091209219609628826",
+    "domain": "x.com",
+    "saved_date": "2026-08-27",
+    "kind": "post",
+    "note": "@brian: Built a little agent automation where I paste a link to a cool website I want to save: → checks for duplicates in my notion db → extracts metadata (favicon, x handle, title) → ai classifies as personal site or company/product → pings a small endpoint to capture light and dark…"
   }
 ]
