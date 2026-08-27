@@ -292,6 +292,20 @@
     box-shadow: none;
     /* A sheet arrives from the bottom edge, not from above. */
     transform: translateY(8px);
+
+    /* The field is the first thing in a sheet pinned to `top: 0`, so on a
+       notched phone it is the thing the notch lands on. `box-sizing` is
+       border-box globally, so this insets the field without making the sheet
+       taller than the viewport it is filling.
+
+       Inert today, deliberately: `env()` resolves to `0px` until the viewport
+       meta says `viewport-fit=cover`, and `layouts/Base.astro` does not — iOS
+       letterboxes the page inside the safe area instead, which is why there is
+       no bug on screen right now. It is written here so this surface is already
+       correct on the day that meta changes, because the change that flips it is
+       one attribute and the surface it would break first is a search field
+       under a notch. design.md §3 carries the rest of that note. */
+    padding-top: env(safe-area-inset-top);
   }
 
   .palette__results {
