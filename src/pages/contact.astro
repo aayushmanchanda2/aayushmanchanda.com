@@ -1,0 +1,231 @@
+---
+/**
+ * /contact — one address, two profiles, and what is worth writing about.
+ *
+ * No form, for the same reason /privacy can say the site collects nothing: a
+ * form needs an endpoint, an endpoint needs a service, and a service is a third
+ * party reading everything anyone types into this site. A `mailto:` needs none
+ * of that, and it is the only contact affordance here.
+ *
+ * ---------------------------------------------------------------------------
+ * THE ADDRESS IS ENTITY-ENCODED, AND IT HAS TO STAY THAT WAY.
+ *
+ * Every character of it is a decimal character reference in the `href` below,
+ * so the literal string is not in the served HTML and a scraper grepping for
+ * `something@something` finds nothing on this page. The visible text is
+ * "Email me"; the address is never printed as text anywhere on the site, and
+ * `lib/schema.ts › contactJsonLd` deliberately emits no `email` property for
+ * the same reason — the graph would hand back in plain text exactly what the
+ * markup is holding back.
+ *
+ * Entities rather than a script that assembles the address on load, because the
+ * site's own rule is that a control which cannot work is not shown, and a
+ * JS-assembled `mailto:` is a dead link to anyone reading with scripting off.
+ * The browser decodes character references in the HTML parser, long before the
+ * URL reaches the mail handler, so this link is a completely ordinary
+ * `mailto:` by the time anything acts on it. It is not encryption. It stops the
+ * lazy harvesters and costs a reader nothing, which is the whole trade.
+ *
+ * **Do not "tidy" the href back into readable text, and do not build it from a
+ * template expression** — Astro escapes the `&` in an expression result, and the
+ * entities would ship to the page as literal `&amp;#97;`. It has to be static
+ * attribute text.
+ * ---------------------------------------------------------------------------
+ *
+ * Not in the nav or the section manifest on purpose: it is a footer page, and
+ * it sits in the colophon row beside /about and /privacy. The screenshot
+ * takedown route is not repeated here; /privacy owns it and this page points at
+ * it, because two copies of a promise is one copy that can go stale.
+ */
+import Base from "../layouts/Base.astro";
+import { contactJsonLd } from "../lib/schema";
+
+const jsonLd = contactJsonLd();
+---
+
+<Base
+  title="Contact · Aayush Manchanda"
+  description="How to reach Aayush Manchanda: one email address, two profiles, and an honest note about what is worth writing about and what is not."
+  jsonLd={jsonLd}
+>
+  <header>
+    <h1 class="page-title">Contact</h1>
+    <p class="standfirst">
+      No form, no calendar link, no chat widget. One address, two profiles, and
+      an honest note about what I answer.
+    </p>
+  </header>
+
+  {/*
+    Outside `.doc` on purpose. `.doc a` is the prose-link treatment, bold and
+    underlined, which is right for a link inside a sentence and wrong for the
+    one thing this page exists to let you press. This is the index-row idiom
+    instead: full-bleed, hairline top and bottom, arrow on hover.
+
+    The href is static attribute text and every character of the address is a
+    decimal character reference. See the file header before touching it.
+  */}
+  <a
+    class="mailto press"
+    href="mailto:&#97;&#97;&#121;&#117;&#115;&#104;&#109;&#97;&#110;&#99;&#104;&#97;&#110;&#100;&#97;&#50;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;?subject=Hello%20from%20aayushmanchanda.com&amp;body=Who%20I%20am%3A%0A%0AWhat%20this%20is%20about%3A%0A%0A"
+  >
+    <span class="mailto__label mono">Email me</span>
+    <svg
+      class="mailto__arrow"
+      viewBox="0 0 16 16"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d="M2.5 8h11M9 3.5 13.5 8 9 12.5"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.25"
+      />
+    </svg>
+  </a>
+
+  <div class="doc">
+    <section>
+      <h2 class="doc__head mono">What that link does</h2>
+      <p>
+        It opens your mail app with the subject filled in and a two-line
+        template in the body: who you are, and what you are writing about. Fill
+        those in and send it. You can delete the template, it is a prompt rather
+        than a requirement.
+      </p>
+      <p>
+        The address itself is not printed on this page as text. It is encoded in
+        the link, which keeps the lazier scrapers off it and costs you nothing.
+        If your browser has no mail app set up, copy the link target instead of
+        clicking it.
+      </p>
+      <p>
+        I read everything that arrives. I do not reply to everything, and I
+        would rather say so here than leave you watching an inbox.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="doc__head mono">Worth writing about</h2>
+      <p>
+        A tool I should be running, especially if you built it. Tell me what it
+        is for and what it replaces. I test things on real work rather than on a
+        demo, so I will say honestly whether it fits what I do, and if it does
+        not fit, that is a fast no rather than a slow silence.
+      </p>
+      <p>
+        Something wrong on this site. A dead link, a verdict that has gone
+        stale, a screenshot that stopped looking like that site a year ago.
+        Corrections get the quickest reply out of me, and you do not need to be
+        polite about it.
+      </p>
+      <p>
+        Work that is actually interesting. Vetted takes a small number of
+        clients, so a real problem with a real budget is a conversation worth
+        having. Put the problem in the first paragraph.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="doc__head mono">Not worth writing about</h2>
+      <p>
+        Link exchanges, guest posts, and sponsored placements. A paid row in <a
+          href="/tools">/tools</a> would break the only thing that makes /tools
+        worth reading, so the answer is no before you ask it, and it is still no
+        the second time.
+      </p>
+      <p>
+        Cold pitches for services I did not ask about. Anything that opens by
+        telling me it noticed my website. Requests to add a link to a page you
+        have written on the same topic. None of these get a reply, and I am
+        saying that here so you can spend the email somewhere better.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="doc__head mono">Elsewhere</h2>
+      {/*
+        Written tight against the surrounding words on purpose. A line break
+        between a word and a tag is not a space to Astro, it is nothing, and the
+        readable version of this block shipped as "I am@amanchanda7on X and".
+        See the note in `design.md` §6.
+      */}
+      <p>
+        I am <a class="ext" rel="me noopener" target="_blank"
+          href="https://x.com/amanchanda7">@amanchanda7</a> on X and <a
+          class="ext" rel="me noopener" target="_blank"
+          href="https://github.com/aayushmanchanda2">aayushmanchanda2</a> on
+        GitHub. Both are in the footer of every page here too. X is the faster
+        route for a short question; email is better for anything that needs more
+        than a sentence.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="doc__head mono">A screenshot of your site</h2>
+      <p>
+        If one of the screenshots in <a href="/sites">/sites</a> is yours and
+        you want it gone, you do not need to email me about it. <a
+          href="/privacy">/privacy</a> has the route, it is a GitHub issue, and
+        you do not have to explain why. That page is also where I say what this
+        site collects, which is nothing.
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  /* The index-row idiom from the home page, at one row.
+
+     `--press-scale` is dialled back for the same reason it is there: a
+     full-bleed row shrinking by 4% reads as a glitch rather than a press. No
+     `transition-property` on the anchor itself, because `.press` already
+     declares one and a second would race it depending on stylesheet order. */
+  .mailto {
+    --press-scale: 0.995;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    /* the gap a standfirst gets before the body of a footer page; `.doc` below
+       gives its own margin back so the two do not stack into a chasm */
+    margin-top: clamp(3rem, 10vh, 5rem);
+    padding-block: clamp(1.1rem, 2.5vw, 1.4rem);
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .mailto:hover {
+    border-color: var(--hairline-strong);
+    color: var(--accent);
+  }
+
+  .mailto__label {
+    /* a step up from the 11px label voice: this is the page's one action, not a
+       field name beside a value */
+    font-size: 0.8125rem;
+  }
+
+  .mailto__arrow {
+    width: 16px;
+    height: 16px;
+    color: var(--faint);
+    transition-property: transform, color;
+    transition-duration: var(--dur);
+    transition-timing-function: var(--ease-out);
+  }
+
+  .mailto:hover .mailto__arrow {
+    color: var(--accent);
+    transform: translateX(4px);
+  }
+
+  /* The row above already carries the distance from the masthead, so the
+     document does not need the full `.doc` gap on top of it. */
+  .doc {
+    margin-top: clamp(2.5rem, 8vh, 4rem);
+  }
+</style>

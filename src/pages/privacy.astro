@@ -15,7 +15,17 @@
  * the moment the theme toggle shipped, so it now names the one key instead.
  * Anything that reaches for `localStorage` has to come back and edit this.
  *
- * Not in the nav or the section manifest on purpose: it is a footer page.
+ * The takedown paragraph is the third. It used to end "That is the only contact
+ * route on this site", which stopped being true the moment /contact shipped, so
+ * it now says why an issue is still the route it asks for rather than claiming
+ * there is no other one.
+ *
+ * Not in the nav or the section manifest on purpose: it is a footer page, and
+ * it sits in the colophon row beside /about and /contact.
+ *
+ * The prose shell is `styles/global.css › .doc`, shared with those two. It
+ * lived here as a scoped block until there were three pages that had to look
+ * like siblings.
  */
 import Base from "../layouts/Base.astro";
 ---
@@ -32,9 +42,9 @@ import Base from "../layouts/Base.astro";
     </p>
   </header>
 
-  <div class="prose">
+  <div class="doc">
     <section>
-      <h2 class="prose__head mono">What I collect</h2>
+      <h2 class="doc__head mono">What I collect</h2>
       <p>
         Nothing. There are no accounts, no forms, no comments, no newsletter
         box. There is nothing here for you to fill in, and nowhere for it to go
@@ -57,13 +67,13 @@ import Base from "../layouts/Base.astro";
     </section>
 
     <section>
-      <h2 class="prose__head mono">The one outside request</h2>
+      <h2 class="doc__head mono">The one outside request</h2>
       <p>
         The tool pages are the exception and I would rather name it than claim a
         clean sweep. Each tool row shows the logo of that tool&rsquo;s own
         website, and those come from <a href="https://logo.dev" rel="noopener"
-        >logo.dev</a>, a logo API, instead of my server. So loading
-        <a href="/tools">/tools</a> or any tool page makes a request to logo.dev
+        >logo.dev</a>, a logo API, instead of my server. So loading <a
+          href="/tools">/tools</a> or any tool page makes a request to logo.dev
         with the tool&rsquo;s domain in the URL, and logo.dev sees your IP
         address the way any host does when your browser fetches an image. The
         request is sent with no referrer, so it does not carry which page you
@@ -74,7 +84,7 @@ import Base from "../layouts/Base.astro";
     </section>
 
     <section>
-      <h2 class="prose__head mono">Server logs</h2>
+      <h2 class="doc__head mono">Server logs</h2>
       <p>
         The site is hosted on Vercel, and Vercel keeps its own standard request
         logs, same as any host. I do not read them, I do not analyse them, and I
@@ -84,23 +94,24 @@ import Base from "../layouts/Base.astro";
     </section>
 
     <section>
-      <h2 class="prose__head mono">Screenshots of other people&rsquo;s sites</h2>
+      <h2 class="doc__head mono">Screenshots of other people&rsquo;s sites</h2>
       <p>
         The <a href="/sites">/sites</a> gallery is screenshots of other
         people&rsquo;s websites. A pipeline takes them automatically when I save
         a link, and
         every one of them gets a page that links out to the site it came from.
-        If one of them is yours and you want it gone, open an issue at
-        <a href="https://github.com/aayushmanchanda2" rel="noopener">
-          github.com/aayushmanchanda2
-        </a>
-        and I will take it down. You do not have to explain why. That is the only
-        contact route on this site.
+        If one of them is yours and you want it gone, open an issue at <a
+          href="https://github.com/aayushmanchanda2"
+          rel="noopener">github.com/aayushmanchanda2</a> and I will take it
+        down. You do not have to explain why. An issue is the route I would
+        rather you used for this, because it leaves a record that the request
+        was made and answered. If you would rather not open one, <a
+          href="/contact">/contact</a> has my address.
       </p>
     </section>
 
     <section>
-      <h2 class="prose__head mono">Who owns what</h2>
+      <h2 class="doc__head mono">Who owns what</h2>
       <p>
         My writing and my notes are mine. The screenshots and anything I quote
         belong to whoever made the thing they are of. If you want to reuse
@@ -109,38 +120,3 @@ import Base from "../layouts/Base.astro";
     </section>
   </div>
 </Base>
-
-<style>
-  .prose {
-    margin-top: clamp(3.5rem, 12vh, 6rem);
-    max-width: 62ch;
-    border-top: 1px solid var(--hairline);
-  }
-
-  .prose section {
-    padding-block: clamp(1.75rem, 4vw, 2.25rem);
-    border-bottom: 1px solid var(--hairline);
-  }
-
-  .prose__head {
-    color: var(--faint);
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    /* the head is the label; the paragraph under it carries the reading size */
-    line-height: 1.6;
-  }
-
-  .prose p {
-    margin-top: 0.85rem;
-    font-size: 1rem;
-    line-height: 1.7;
-    color: var(--muted);
-  }
-
-  @media (max-width: 599px) {
-    .prose {
-      /* narrower column, so the measure is already short enough */
-      max-width: none;
-    }
-  }
-</style>

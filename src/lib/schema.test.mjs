@@ -28,7 +28,9 @@ import assert from "node:assert/strict";
 import {
   PERSON_ID,
   WEBSITE_ID,
+  aboutJsonLd,
   anchorUrl,
+  contactJsonLd,
   homeJsonLd,
   listJsonLd,
   noteJsonLd,
@@ -132,6 +134,8 @@ const SITE = {
  */
 const EVERY_GRAPH = () => [
   ["home", homeJsonLd()],
+  ["about", aboutJsonLd()],
+  ["contact", contactJsonLd()],
   [
     "list",
     listJsonLd({
@@ -228,7 +232,7 @@ test("every node in every graph carries an @type and an @id on this origin", () 
 
 // --- the parity rule -------------------------------------------------------
 
-test("no builder emits a rating, a review count or a keyword list", () => {
+test("no builder emits a rating, a review count, a keyword list or an address", () => {
   const forbidden = [
     "aggregateRating",
     "ratingValue",
@@ -238,6 +242,9 @@ test("no builder emits a rating, a review count or a keyword list", () => {
     "bestRating",
     "worstRating",
     "keywords",
+    // /contact encodes the address in its href so the plain string is not in
+    // the HTML; a graph property would hand it back. See `contactJsonLd`.
+    "email",
   ];
 
   for (const [name, document] of EVERY_GRAPH()) {
@@ -357,6 +364,68 @@ test("the Person is long-form on home and compact everywhere else", () => {
   );
   // What stays is what the footer and the site mark make visible on every page.
   assert.deepEqual(Object.keys(person()), ["@type", "@id", "name", "url", "sameAs"]);
+});
+
+// --- about and contact -----------------------------------------------------
+
+test("about is an AboutPage whose subject is the Person it carries", () => {
+  const document = aboutJsonLd();
+  assert.deepEqual(typesIn(document), ["AboutPage", "Person"]);
+
+  const page = at(document, 0);
+  assert.equal(page["name"], "About");
+  assert.equal(page["url"], `${ORIGIN}/about/`);
+  assert.equal(page["mainEntity"]["@id"], PERSON_ID);
+
+  // No crumb, because the page draws none: it is reached from the footer.
+  assert.ok(
+    !typesIn(document).includes("BreadcrumbList"),
+    "a footer page has no crumb trail to describe",
+  );
+});
+
+test("about is the only page besides home that repeats the biography", () => {
+  assert.equal(
+    at(aboutJsonLd(), 1)["description"],
+    at(homeJsonLd(), 1)["description"],
+    "the long version of the hero says what the hero says",
+  );
+  assert.ok(
+    !("description" in at(contactJsonLd(), 1)),
+    "/contact shows no biography, so it claims none",
+  );
+});
+
+test("contact is a ContactPage, and it never carries the address", () => {
+  const document = contactJsonLd();
+  assert.deepEqual(typesIn(document), ["ContactPage", "Person"]);
+
+  const page = at(document, 0);
+  assert.equal(page["name"], "Contact");
+  assert.equal(page["url"], `${ORIGIN}/contact/`);
+  assert.equal(page["mainEntity"]["@id"], PERSON_ID);
+
+  /*
+   * The point of the page's entity-encoded `mailto:` is that the plain address
+   * is not in the served HTML. A graph property would put it back somewhere
+   * easier to scrape than the markup, so nothing here may hold it at any depth,
+   * under any key. `EVERY_GRAPH` already bans the `email` key; this bans the
+   * value, which is the thing that actually matters.
+   */
+  const address = ["aayushmanchanda2", "gmail.com"].join("@");
+  assert.ok(
+    !serialize(document).includes(address),
+    "the address is not in the contact graph, under any key",
+  );
+});
+
+test("what the reader sees on /contact is what the Person node claims", () => {
+  // The page prints both profiles as links; those two, and no third, are the
+  // `sameAs` the footer already makes true on every page.
+  assert.deepEqual(at(contactJsonLd(), 1)["sameAs"], [
+    "https://github.com/aayushmanchanda2",
+    "https://x.com/amanchanda7",
+  ]);
 });
 
 // --- lists -----------------------------------------------------------------

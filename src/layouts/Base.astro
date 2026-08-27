@@ -267,6 +267,14 @@ const markdownVariant = variant === null ? null : absolute(variant);
             Search <kbd data-palette-hint>&#8984;K</kbd>
           </button>
           <span aria-hidden="true">&middot;</span>
+          {/* The colophon: the three pages that are about the site rather than
+              in it. They live here and not in the nav on purpose — the nav is
+              the five content sections, and a reader looking for who wrote this
+              or how to reach him looks at the bottom of the page. */}
+          <a class="foot__quiet press" href="/about">About</a>
+          <span aria-hidden="true">&middot;</span>
+          <a class="foot__quiet press" href="/contact">Contact</a>
+          <span aria-hidden="true">&middot;</span>
           <a class="foot__quiet press" href="/privacy">Privacy</a>
           <span aria-hidden="true">&middot;</span>
           <span class="tabular-nums">&copy; {year}</span>
@@ -412,7 +420,13 @@ const markdownVariant = variant === null ? null : absolute(variant);
         margin: 0;
         display: flex;
         align-items: baseline;
-        gap: 0.5rem;
+        /* Wraps because the row grew: search, then the three colophon pages,
+           then the copyright. That is wider than a 375px column can hold, and
+           an unwrapped flex row would push the copyright off the side rather
+           than drop it to a second line. The row gap is tighter than the
+           column gap so a wrapped row still reads as one block. */
+        flex-wrap: wrap;
+        gap: 0.4rem 0.5rem;
       }
 
       /* Sits at the copyright's weight, not the social links': /privacy is

@@ -197,6 +197,7 @@ a:hover {
    Both themes: --accent already swaps, and weight and underline are identical
    in either one. */
 .prose a,
+.doc a,
 .standfirst a,
 .voice__body a,
 .source a,
@@ -353,6 +354,53 @@ ol {
   font-size: clamp(1.0625rem, 1.6vw, 1.1875rem);
   line-height: 1.65;
   color: var(--muted);
+}
+
+/* The footer pages — /privacy, /about, /contact — which are prose under mono
+   labels rather than a list of data. One hairline per section, so the page
+   reads as a short document with parts instead of an essay.
+
+   Global rather than scoped to each page, because there are three of them now
+   and they have to look like siblings. It started as a block inside
+   privacy.astro and the second copy would have been the moment it began to
+   drift: a retuned measure on one page and not the other two is the kind of
+   difference nobody sees until they open two tabs.
+
+   Named `.doc` rather than `.prose` on purpose. `notes/[slug].astro › .prose`
+   is a different measure at a different size for a long-form note, and it is
+   scoped, so giving these three the same class would have left two rule sets
+   fighting over one name and winning on specificity rather than on intent. */
+.doc {
+  margin-top: clamp(3.5rem, 12vh, 6rem);
+  max-width: 62ch;
+  border-top: 1px solid var(--hairline);
+}
+
+.doc section {
+  padding-block: clamp(1.75rem, 4vw, 2.25rem);
+  border-bottom: 1px solid var(--hairline);
+}
+
+.doc__head {
+  color: var(--faint);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  /* the head is the label; the paragraph under it carries the reading size */
+  line-height: 1.6;
+}
+
+.doc p {
+  margin-top: 0.85rem;
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+@media (max-width: 599px) {
+  .doc {
+    /* narrower column, so the measure is already short enough */
+    max-width: none;
+  }
 }
 
 /* The field table on an entry page — a label column and a value column, one

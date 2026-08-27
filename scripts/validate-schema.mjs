@@ -23,6 +23,11 @@
  *     stops emitting its graph fails here instead of going unnoticed until
  *     something tries to cite it.
  *
+ * Two checks at the foot are not about JSON-LD at all, and live here because
+ * this is the only gate that reads the built HTML: the email address on
+ * /contact may not appear in plain text anywhere in `dist/`, and no link
+ * anywhere may be glued to the word beside it.
+ *
  * Exits 0 with a per-page-type summary, or 1 with every problem listed.
  *
  * Annotated with JSDoc rather than left loose because `tsconfig.json` turns on
@@ -60,8 +65,15 @@ const ISO_DATE = /^\d{4}-\d{2}-\d{2}$/;
 /**
  * Properties that must never appear, at any depth.
  *
- * Every one of them is a number or a keyword list this site does not have. See
+ * The first eight are a number or a keyword list this site does not have. See
  * the parity rule in `src/lib/schema.ts`.
+ *
+ * `email` is there for a different reason and it is the one worth stating. The
+ * address on /contact is entity-encoded in the `mailto:` href specifically so
+ * the literal string is not in the served HTML; an `email` property would put
+ * it back, in plain text, somewhere far easier to find than the markup. The
+ * parity rule agrees from the other side: the page does not print the address
+ * as text, so nothing on it may claim the address as text.
  */
 const FORBIDDEN = [
   "aggregateRating",
@@ -72,6 +84,7 @@ const FORBIDDEN = [
   "bestRating",
   "worstRating",
   "keywords",
+  "email",
 ];
 
 /**
@@ -82,6 +95,8 @@ const FORBIDDEN = [
 const REQUIRED = {
   WebSite: ["name", "url", "author", "publisher"],
   Person: ["name", "url", "sameAs"],
+  AboutPage: ["name", "url", "mainEntity"],
+  ContactPage: ["name", "url", "mainEntity"],
   ItemList: ["name", "url", "numberOfItems", "itemListElement"],
   ListItem: ["position", "name"],
   SoftwareApplication: ["name", "applicationCategory"],
@@ -109,6 +124,16 @@ const EXPECTED = [
     name: "home",
     match: (page) => page === "index.html",
     types: ["WebSite", "Person"],
+  },
+  {
+    name: "about",
+    match: (page) => page === "about/index.html",
+    types: ["AboutPage", "Person"],
+  },
+  {
+    name: "contact",
+    match: (page) => page === "contact/index.html",
+    types: ["ContactPage", "Person"],
   },
   {
     name: "section index",
@@ -433,6 +458,68 @@ for (const page of pages) {
 
 for (const [name, count] of seen) {
   if (count === 0) fail("coverage", `no page matched the "${name}" page type`);
+}
+
+/*
+ * The address may not appear in plain text anywhere in the build.
+ *
+ * /contact entity-encodes every character of it in the `mailto:` href, and the
+ * whole value of doing that evaporates the moment one page prints it straight.
+ * The ways it could: someone "tidies" the href back into readable text, someone
+ * builds it from a template expression (Astro would escape the ampersands and
+ * ship literal `&amp;#97;`, which is a different bug that this check will not
+ * see — the live gate is for that one), or someone adds an `email` to the graph
+ * and FORBIDDEN above misses a spelling of it.
+ *
+ * Assembled from parts rather than written out, so this file is not itself the
+ * plain-text copy the check exists to prevent. This repository is public.
+ */
+const ADDRESS = ["aayushmanchanda2", "gmail.com"].join("@");
+
+/*
+ * A link glued to the word beside it.
+ *
+ * **A line break between a word and a tag is not whitespace in an `.astro`
+ * template. It is nothing.** Astro drops the whitespace at a text/tag boundary
+ * when it contains a newline, so this, which looks completely ordinary:
+ *
+ *     you do not need to email me about it.
+ *     <a href="/privacy">/privacy</a> has the route
+ *
+ * ships as "about it./privacy has the route". Inside the tag it is harmless,
+ * and a newline between two plain words collapses to a space as normal — it is
+ * only the boundary that bites. So the space next to an anchor has to be a real
+ * space on the same line as the tag.
+ *
+ * This is here because two of these were live on /privacy for months and nobody
+ * saw them, including on the read-through that shipped the page. It is not a
+ * subtle rendering difference, it is a missing space in a sentence, and it is
+ * invisible in the source precisely because the source looks right.
+ *
+ * Both patterns are clean across the whole site, so a hit is a real defect
+ * rather than a case to add an exception for: `</a>` followed by a letter, and
+ * a word or sentence punctuation followed by `<a`. Markup boundaries do not
+ * match (`</a></li>`, `><a`), and neither does correct punctuation (`</a>,`).
+ */
+/** @type {[RegExp, string][]} */
+const GLUED = [
+  [/<\/a>[A-Za-z0-9]/g, "a link is glued to the word after it (missing space)"],
+  [/[A-Za-z0-9.,;:!?]<a[ >]/g, "a link is glued to the word before it (missing space)"],
+];
+
+for (const page of pages) {
+  const html = readFileSync(path.join(DIST, page), "utf8");
+
+  if (html.includes(ADDRESS)) {
+    fail(page, "prints the email address in plain text; it must stay encoded");
+  }
+
+  for (const [pattern, message] of GLUED) {
+    for (const match of html.matchAll(pattern)) {
+      const near = html.slice(Math.max(0, match.index - 40), match.index + 40);
+      fail(page, `${message}: ...${near.replace(/\s+/g, " ")}...`);
+    }
+  }
 }
 
 if (errors.length > 0) {

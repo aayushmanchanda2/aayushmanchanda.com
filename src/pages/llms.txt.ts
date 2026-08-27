@@ -123,6 +123,11 @@ The sitemap lists every URL that does exist.
 - [Home](${absolute(PAGES.home.html)}) (markdown: ${absolute(PAGES.home.md)}): who he is and
   an index of the five sections.
 ${sectionList}
+- [About](${absolute("/about")}): who Aayush is, what the five sections hold,
+  and where the verdicts on this site come from.
+- [Contact](${absolute("/contact")}): how to reach him, and what he does and
+  does not answer. The address is entity-encoded in the page rather than
+  printed, so read the \`mailto:\` href rather than the visible text.
 - [Privacy](${absolute("/privacy")}): what this site does and does not collect,
   and how to get a screenshot of your own site removed.
 

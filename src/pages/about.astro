@@ -1,0 +1,115 @@
+---
+/**
+ * /about — the long version of the home page's hero.
+ *
+ * The hero is two sentences because a masthead cannot carry more than that.
+ * This page is the same claims with the qualifications restored: which company
+ * he runs and which one he only co-founded, what the five sections actually
+ * hold, and where a verdict on this site comes from before anyone decides how
+ * much to trust one.
+ *
+ * It is the only page other than the home page that emits the long-form
+ * `Person`, because it is the only other page whose visible copy makes those
+ * claims. See `lib/schema.ts › person`.
+ *
+ * Not in the nav or the section manifest on purpose: it is a footer page, and
+ * the main nav is the five content sections. It sits in the colophon row beside
+ * /contact and /privacy.
+ */
+import Base from "../layouts/Base.astro";
+import { aboutJsonLd } from "../lib/schema";
+
+const jsonLd = aboutJsonLd();
+---
+
+<Base
+  title="About · Aayush Manchanda"
+  description="Who Aayush Manchanda is, what this site is, and where everything on it comes from. The long version of the two lines on the front page."
+  jsonLd={jsonLd}
+>
+  <header>
+    <h1 class="page-title">About</h1>
+    <p class="standfirst">
+      The long version of the two lines on the front page: who I am, what this
+      site is, and where the things on it come from.
+    </p>
+  </header>
+
+  <div class="doc">
+    <section>
+      <h2 class="doc__head mono">Who I am</h2>
+      <p>
+        I co-founded Orbis, an AI healthcare company. I am not the one running
+        it. The thing I run is Vetted, my AI consulting practice, and that is
+        where most of my working hours go.
+      </p>
+      <p>
+        Part entrepreneur, part marketer, part operator is the closest I get to
+        an honest job title. I build things on the internet with AI, from
+        Canada. I stopped trying to pick one of those three words a while ago.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="doc__head mono">What this site is</h2>
+      <p>
+        My mindscape, in public. Five sections, each holding a kind of thing I
+        would otherwise lose track of.
+      </p>
+      {/*
+        Every anchor keeps its neighbouring space on its own line. A line break
+        between a word and a tag is not whitespace to Astro, it is nothing at
+        all, and the sentence ships as "last true.Sites is other people's".
+        See the note in `design.md` §6.
+      */}
+      <p>
+        <a href="/tools">Tools</a> is software I installed and actually ran, with
+        a verdict and the date that verdict was last true. <a
+          href="/sites">Sites</a> is other people&rsquo;s websites, saved for how
+        they look, each with a full-page screenshot of the day I saved it. <a
+          href="/reading">Reading</a> is what I read and watch, kept as a library
+        rather than a list of recommendations. <a href="/notes">Notes</a> is
+        short writing. <a href="/experiments">Experiments</a> is what is running
+        right now, with the ones I killed still on the page.
+      </p>
+      <p>
+        A section only exists here if it has something in it. There are no
+        coming-soon pages, and nothing is waiting in a drafts folder, because
+        there is no drafts folder.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="doc__head mono">Where the data comes from</h2>
+      <p>
+        Me, on my own work. I test this software on my companies and on client
+        projects, so a verdict here is one I formed while trying to ship
+        something, not one I formed while reading a launch post. That is also
+        the limit of it. My use case is agent tooling and small-team software,
+        and a tool that lost a head-to-head on my work might win on yours.
+      </p>
+      <p>
+        Every opinion carries the date it was last true. An old date is a
+        warning, not a badge, and I would rather you saw it than not.
+      </p>
+      <p>
+        The site publishes itself. I save a link on my phone and a run a few
+        hours later puts it here with a screenshot beside it. That is why some
+        rows say nothing more than that I saved the thing and have not tested it
+        yet. It is the truth on that date, and better than a verdict I have not
+        earned.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="doc__head mono">Elsewhere</h2>
+      <p>
+        GitHub and X are in the footer of every page. If you want to write to
+        me, <a href="/contact">/contact</a> has the address and an honest note
+        about what I answer. <a href="/privacy">/privacy</a> covers what this
+        site collects, which is nothing, and how to get a screenshot of your own
+        site taken down.
+      </p>
+    </section>
+  </div>
+</Base>

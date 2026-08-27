@@ -42,10 +42,8 @@ const SECTION = {
 } as const;
 
 /**
- * The pages that are not a section index and not an entry.
- *
- * There is no /about today. When there is one, it goes here, and it is the only
- * edit required — the palette picks it up on the next build.
+ * The pages that are not a section index and not an entry: home, plus the three
+ * colophon pages the footer links.
  *
  * The `terms` on each row are the words someone would actually type looking for
  * it, which are rarely the words in the title: nobody searches "home", they
@@ -57,13 +55,31 @@ const STATIC_PAGES: readonly SearchEntry[] = [
     title: "Home",
     section: SECTION.pages,
     href: "/",
-    terms: "about aayush manchanda index start",
+    terms: "aayush manchanda index start",
+  },
+  {
+    /*
+     * "about" used to be a term on the Home row, back when there was no /about
+     * to type it into. It moved here rather than being left in both places: two
+     * rows answering the same word is a coin toss over which one the reader
+     * gets, and the one they meant is this one.
+     */
+    title: "About",
+    section: SECTION.pages,
+    href: "/about",
+    terms: "about aayush manchanda who bio orbis vetted",
+  },
+  {
+    title: "Contact",
+    section: SECTION.pages,
+    href: "/contact",
+    terms: "contact email reach hire get in touch x twitter github",
   },
   {
     title: "Privacy",
     section: SECTION.pages,
     href: "/privacy",
-    terms: "cookies tracking analytics data logo.dev",
+    terms: "cookies tracking analytics data logo.dev takedown",
   },
 ];
 

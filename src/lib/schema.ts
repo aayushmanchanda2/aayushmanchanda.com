@@ -120,8 +120,9 @@ const SAME_AS = [
 
 /**
  * The long-form identity, which is the home page's hero restated in the third
- * person. It is emitted *only* on the home page, because that is the only page
- * whose visible copy makes these claims.
+ * person. It is emitted on the two pages whose visible copy makes these claims
+ * and nowhere else: the home page, whose hero it restates, and /about, which is
+ * the long version of that same hero.
  */
 const PERSON_DESCRIPTION =
   "Aayush Manchanda is part entrepreneur, part marketer, part operator. He co-founded Orbis, runs Vetted, and uses AI to build things on the internet from Canada. There is a lot of noise in AI, so he reads it, tests it on his own companies and his clients, and what survives shows up on this site with a date on it.";
@@ -179,7 +180,8 @@ function ref(id: string): JsonLdNode {
 /**
  * The `Person`, at one of two weights.
  *
- * `full` is the home page: the description is that page's hero, restated.
+ * `full` is for the two pages that print the biography: the home page, whose
+ * hero the description restates, and /about, which is that hero at length.
  * Everywhere else the node is compact — `name`, `url`, `sameAs` — because those
  * are the three things the site mark and the two footer identity rows make
  * visible on *every* page. Shipping the long description onto a tool page would
@@ -215,6 +217,66 @@ export function homeJsonLd(): JsonLd {
       publisher: ref(PERSON_ID),
     },
     person(true),
+  );
+}
+
+/**
+ * /about: the page whose subject is the person, and the person.
+ *
+ * `AboutPage` rather than a plain `WebPage`, because schema.org has a type for
+ * exactly this and using it says something a generic `WebPage` cannot: that the
+ * biography on it is the point of the document rather than incidental to it.
+ *
+ * `person(true)` here and on the home page, and nowhere else. This is the one
+ * other page whose visible copy actually makes the claims in the description,
+ * at more length than the hero does, so it is the one other page allowed to
+ * repeat them to a machine.
+ *
+ * No `BreadcrumbList`: /about draws no crumb, the same way /privacy does not.
+ * It is reached from the footer on every page, and a persistent colophon row is
+ * navigation rather than a trail.
+ */
+export function aboutJsonLd(): JsonLd {
+  const url = pageUrl("/about");
+
+  return graph(
+    {
+      "@type": "AboutPage",
+      "@id": `${url}#webpage`,
+      name: "About",
+      url,
+      mainEntity: ref(PERSON_ID),
+    },
+    person(true),
+  );
+}
+
+/**
+ * /contact: how to reach him, and who he is.
+ *
+ * **No `email` property, and that is the whole design of the page.** The
+ * address is entity-encoded in the `mailto:` href precisely so the literal
+ * string never appears in the served HTML, and putting it in the graph would
+ * hand it straight back, in plain text, to anything reading the page — which is
+ * a shorter and better-signposted route than the markup ever was. The parity
+ * rule points the same way from the other direction: the page does not print
+ * the address as text, so the graph may not claim it either.
+ *
+ * The `Person` is compact. /contact shows his name and the two profiles the
+ * footer already carries; it shows no biography, so it emits none.
+ */
+export function contactJsonLd(): JsonLd {
+  const url = pageUrl("/contact");
+
+  return graph(
+    {
+      "@type": "ContactPage",
+      "@id": `${url}#webpage`,
+      name: "Contact",
+      url,
+      mainEntity: ref(PERSON_ID),
+    },
+    person(),
   );
 }
 
