@@ -293,7 +293,7 @@ Five things are worth not re-deriving.
 **The first three run on every push and every pull request** (`.github/workflows/ci.yml`). They were a list a person was trusted to run, which is discipline, and discipline is what goes first on the day a change looks too small to bother — so they are a machine's job now. Run them locally anyway: CI is the backstop, not the loop. The last four cannot be automated and are still yours.
 
 1. `npx astro check` → **0 errors, 0 warnings.** Hints have a known baseline of 13 (eleven `z is deprecated` from `content.config.ts`, one unused `Props`, one unreachable-code hint); do not add to it. Note that `checkJs` is on, so a new `.mjs` under `scripts/` or `pipeline/` is type-checked too and needs its JSDoc. **CI cannot hold the hint baseline for you** — `astro check` exits 0 on a hint, so a fourteenth passes the step and only the count in the log says otherwise.
-2. `npm test` → all pass (264 at the time of writing).
+2. `npm test` → all pass (283 at the time of writing).
 3. `npm run build` → clean, then `npm run validate:schema` → clean. The second reads `dist/`, so it is only meaningful after the first, and it is a separate CI step for the same reason: a failure should name which of the two broke.
 4. **Both themes, and both forced states.** Four looks, not two: OS light, OS dark, and then a pinned theme fighting each of them — `data-theme="dark"` on a light OS is the one that catches a token declared in only one of the two dark blocks. Every colour is a token; a hex outside `styles/` is the bug.
 5. **Mobile.** At 375px: the MENU rail and panel, the row reflows at 599/639, the palette as a full-screen sheet.
