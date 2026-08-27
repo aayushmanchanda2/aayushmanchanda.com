@@ -269,7 +269,15 @@ const { variant = "quiet" } = Astro.props;
       if (live) live.textContent = statusFor(theme);
 
       void document.body.offsetHeight;
-      requestAnimationFrame(() => requestAnimationFrame(() => still.remove()));
+      // Two frames is the honest removal point: after the paint that commits
+      // the new colours. The timeout is the backstop for a tab that is not
+      // painting — rAF does not fire in a hidden tab, and a suppression that
+      // waits for one would leave every transition on the page dead until the
+      // reader came back. Removing an already-removed node is a no-op, so the
+      // two paths do not need to coordinate.
+      const drop = () => still.remove();
+      requestAnimationFrame(() => requestAnimationFrame(drop));
+      setTimeout(drop, 150);
     };
 
     // Correct the names the server rendered. Deliberately not a `choose()`:
