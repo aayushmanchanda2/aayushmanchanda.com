@@ -20,6 +20,15 @@
  * it now says why an issue is still the route it asks for rather than claiming
  * there is no other one.
  *
+ * The newsletter is the fourth, and it is the first one written before the thing
+ * it describes exists. Both the paragraph about it and the sentence it would
+ * falsify are gated on `NEWSLETTER_ACTION`, the same string the signup block
+ * itself is gated on, so the page cannot describe a form the site does not have
+ * and cannot claim there are no forms once it does. One line in `lib/site.ts`
+ * moves the control and this page together, which is the only arrangement that
+ * survives someone turning the newsletter on months from now without reading
+ * this comment.
+ *
  * Not in the nav or the section manifest on purpose: it is a footer page, and
  * it sits in the colophon row beside /about and /contact.
  *
@@ -28,6 +37,7 @@
  * like siblings.
  */
 import Base from "../layouts/Base.astro";
+import { NEWSLETTER_ACTION } from "../lib/site";
 ---
 
 <Base
@@ -45,11 +55,22 @@ import Base from "../layouts/Base.astro";
   <div class="doc">
     <section>
       <h2 class="doc__head mono">What I collect</h2>
-      <p>
-        Nothing. There are no accounts, no forms, no comments, no newsletter
-        box. There is nothing here for you to fill in, and nowhere for it to go
-        if there were.
-      </p>
+      {
+        NEWSLETTER_ACTION ? (
+          <p>
+            Almost nothing, and the one exception is a box you have to fill in
+            yourself. There are no accounts, no comments and no tracking. The
+            only form on the site is the newsletter signup on the front page,
+            and what happens to what you type into it is written out below.
+          </p>
+        ) : (
+          <p>
+            Nothing. There are no accounts, no forms, no comments, no newsletter
+            box. There is nothing here for you to fill in, and nowhere for it to
+            go if there were.
+          </p>
+        )
+      }
       <p>
         There is no analytics on this site. No Google Analytics, no Plausible,
         no Vercel Analytics, no tracking pixel, no beacon. It sets no cookies.
@@ -82,6 +103,36 @@ import Base from "../layouts/Base.astro";
         else.
       </p>
     </section>
+
+    {
+      NEWSLETTER_ACTION && (
+        <section>
+          <h2 class="doc__head mono">The newsletter</h2>
+          <p>
+            The signup box on the front page is the one thing here you can type
+            into. Nothing loads from Buttondown to draw it: it is plain HTML
+            served from this domain with no script behind it, so the section
+            above still stands. Nothing goes anywhere until you press Subscribe.
+          </p>
+          <p>
+            When you do, the form posts your address to <a
+              href="https://buttondown.com"
+              rel="noopener nofollow"
+            >Buttondown</a>, which runs the list and sends the issues, and your
+            browser follows it there to confirm. So Buttondown gets your address,
+            and sees your IP the way any host does when you land on one of its
+            pages. This site never receives either. There is no server here to
+            receive them with.
+          </p>
+          <p>
+            Your address is for sending you the newsletter and nothing else. I do
+            not sell it, and I do not upload it anywhere. Every issue has an
+            unsubscribe link at the bottom, and pressing it takes you off the
+            list without going through me.
+          </p>
+        </section>
+      )
+    }
 
     <section>
       <h2 class="doc__head mono">Server logs</h2>

@@ -1,0 +1,176 @@
+---
+/**
+ * NewsletterSignup — the whole newsletter, and nothing at all when there is not
+ * one yet.
+ *
+ * The entire template is a single guarded expression. When `newsletterForm`
+ * returns null the component emits no markup: not a hidden box, not a disabled
+ * field, nothing a reader or a crawler can find. `design.md` §8 is the rule
+ * being kept, and it is the same one the copy button on a screenshot keeps: a
+ * control that looks live and cannot work is worse than an absent one. This
+ * control cannot work until `NEWSLETTER_ACTION` in `lib/site.ts` names an
+ * account to post to, so until then it is absent.
+ *
+ * One thing does ship while it is off, and it is named here rather than left to
+ * be discovered: Astro collects a component's scoped styles from the page's
+ * imports, not from what actually rendered, so the rules below are inlined into
+ * the home page even in the null state. They are about 700 bytes matching no
+ * element. Removing them would mean either a conditional dynamic import, which
+ * moves the switch out of this file and makes activation two edits instead of
+ * one, or an `is:inline` style inside the guard, which gives up scoping. Neither
+ * is worth it for inert CSS, but a reader grepping the build should find this
+ * paragraph before they find the mystery.
+ *
+ * No script. The form is a plain POST straight to Buttondown, which is what
+ * their docs ask for, so it works with scripting off and the confirmation, the
+ * CAPTCHA and every error message are pages on Buttondown rather than states
+ * this component would have to invent and then keep honest.
+ *
+ * Placement is the home page, under the section index: the quietest spot that a
+ * reader who got to the bottom of the page has chosen to reach. It is not in the
+ * footer, because the colophon row is full and this is not a colophon item, and
+ * it is not a popup, because nothing on this site interrupts a reader.
+ */
+import { newsletterForm } from "../lib/newsletter";
+import { NEWSLETTER_ACTION } from "../lib/site";
+
+const form = newsletterForm(NEWSLETTER_ACTION);
+---
+
+{
+  form && (
+    <section class="news" aria-labelledby="news-heading">
+      <h2 class="news__title mono" id="news-heading">
+        Occasional issues
+      </h2>
+
+      <p class="news__line">
+        Every so often I write up what survived: what I kept, what I dropped, and
+        why. No schedule, and nothing in it I have not run myself.
+      </p>
+
+      <form class="news__form" action={form.action} method={form.method}>
+        <label class="visually-hidden" for="news-email">
+          Email address
+        </label>
+        <input
+          class="news__input"
+          id="news-email"
+          type="email"
+          name={form.emailField}
+          placeholder="you@example.com"
+          autocomplete="email"
+          required
+        />
+        <input type="hidden" name={form.embedField} value={form.embedValue} />
+        <button class="news__submit mono press" type="submit">
+          Subscribe
+        </button>
+      </form>
+
+      <p class="news__fine">
+        Buttondown sends the issues and keeps the list. Every issue has an
+        unsubscribe link at the bottom.
+      </p>
+    </section>
+  )
+}
+
+<style>
+  /* Sits at the distance the index itself sits from the hero, so the page ends
+     on a third block rather than on a footnote to the second. No rule above it:
+     the mono label is the separator, the same way `.index__title` is. */
+  .news {
+    margin-top: clamp(4.5rem, 14vh, 7rem);
+  }
+
+  /* The section-head voice: `.mono` opened up to 0.1em, matching
+     `index.astro › .index__title` and `ToolList.astro › .group__head`. */
+  .news__title {
+    color: var(--faint);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+  }
+
+  .news__line {
+    margin-top: 1.25rem;
+    max-width: 52ch;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  /* Wraps rather than reflowing at a breakpoint. 900px is the only structural
+     breakpoint on this site and 599/639 exist only to restack list rows, so a
+     fourth one for two controls would be a rule nobody could state. The input's
+     14rem basis is what drops the button to its own line on a narrow phone. */
+  .news__form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+    max-width: 32rem;
+  }
+
+  .news__input {
+    flex: 1 1 14rem;
+    /* a flex item's min-width is auto, which would let a long address push the
+       row wider than the column instead of wrapping the button */
+    min-width: 0;
+    /* the 40px hit-area floor */
+    min-height: 40px;
+    padding-inline: 0.75rem;
+    font: inherit;
+    font-size: 0.9375rem;
+    color: var(--fg);
+    background: none;
+    border: 1px solid var(--hairline);
+    /* Stated, not inherited, and stated twice over: the site rounds one thing
+       and it is not this, and iOS Safari rounds an email input and paints an
+       inner shadow into it unless `appearance` is cleared. */
+    appearance: none;
+    border-radius: 0;
+    transition-property: border-color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .news__input::placeholder {
+    color: var(--faint);
+  }
+
+  /* The hover weight of a border, the same step a list row takes. There is no
+     third hairline. Focus is the global 2px ring; this is only the edge under
+     it, and leaving it at rest weight would make a focused field look untouched
+     in a screenshot with the ring cropped off. */
+  .news__input:hover,
+  .news__input:focus {
+    border-color: var(--hairline-strong);
+  }
+
+  .news__submit {
+    min-height: 40px;
+    padding-inline: 1rem;
+    /* The primary control of the pair, so it starts at the weight the input
+       reaches on hover. Hover moves the ink rather than the edge, because the
+       edge has nowhere left to go. */
+    border: 1px solid var(--hairline-strong);
+    border-radius: 0;
+    color: var(--fg);
+    cursor: pointer;
+    /* `.press` already names transform, colour, background and border; a second
+       transition-property here would race it depending on stylesheet order. */
+  }
+
+  .news__submit:hover {
+    color: var(--accent);
+  }
+
+  .news__fine {
+    margin-top: 0.85rem;
+    max-width: 52ch;
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+</style>

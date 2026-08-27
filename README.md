@@ -132,6 +132,37 @@ Empty sections hide themselves. `src/lib/sections.ts` counts entries and drops
 any section at zero from the nav and the home index, so there are no "coming
 soon" pages. Delete every note and /notes stops existing.
 
+## Turning the newsletter on
+
+There is no newsletter yet, and while there is not, nothing on the site says
+there is. `NEWSLETTER_ACTION` in `src/lib/site.ts` is `null`, and that one value
+is the whole switch: the signup block is absent from the home page HTML, and the
+paragraph describing it is absent from /privacy. Not hidden with CSS, not
+rendered and disabled. Absent. A control that cannot work is not shown, and a
+privacy page must not describe a form the site does not have.
+
+To turn it on: make a free account at [buttondown.com](https://buttondown.com),
+take the username off it, and set the const to
+`https://buttondown.com/api/emails/embed-subscribe/USERNAME`. Commit. That is the
+entire activation, and there is deliberately nothing else to remember. The box
+appears under the section index on the home page, the newsletter paragraph
+appears on /privacy, and the sentence on /privacy saying there is no newsletter
+box leaves with the same switch that brings the box.
+
+The form is a plain HTML POST, so it needs no JavaScript and works with scripting
+off, and there is no third-party script on the page either way. Buttondown's own
+pages handle the confirmation, the CAPTCHA and every error, which is why this
+component has no success or failure state of its own to keep honest. Do not
+"improve" it into a `fetch`: Buttondown documents that the subscriber sometimes
+has to see and follow that response, and a fetch swallows it.
+
+`src/lib/newsletter.ts` holds the field names the endpoint expects (`email`, plus
+a hidden `embed` of `1`). They are data rather than markup because getting one
+wrong is invisible: the form still renders, still submits, still looks like it
+worked, and the subscriber is dropped. `src/lib/newsletter.test.mjs` asserts
+those names, asserts the component renders nothing while the const is null, and
+asserts /privacy cannot describe the newsletter outside that same switch.
+
 ## When something fails
 
 The pipeline treats a link that will not screenshot as data, not as an error. The
@@ -262,7 +293,7 @@ than ignoring the key, so the reasoning lives here instead.
 | `pipeline/state.json` | What has been published, what failed, how many attempts. Committed. |
 | `src/data/` | `tools.json`, `sites.json`, `experiments.json`. Parsed at build time by `src/lib/`. |
 | `src/content/notes/` | Notes, as markdown. Schema in `src/content.config.ts`. |
-| `src/lib/site.ts` | `SITE_URL`. The one place the origin is written down. |
+| `src/lib/site.ts` | `SITE_URL` and `NEWSLETTER_ACTION`. The origin, and the newsletter switch. |
 | `public/shots/` | Screenshots, written by the pipeline. Orphans are deleted on the next run. |
 | `scripts/` | `og.mjs` (social card), `dns-cutover-wizard.sh`. |
 | `qa/` | QA passes, one file per batch. |

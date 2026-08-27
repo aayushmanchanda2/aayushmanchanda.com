@@ -1,4 +1,5 @@
 ---
+import NewsletterSignup from "../components/NewsletterSignup.astro";
 import Base from "../layouts/Base.astro";
 import { homeJsonLd } from "../lib/schema";
 import { getSections } from "../lib/sections";
@@ -65,6 +66,15 @@ const jsonLd = homeJsonLd();
       }
     </ul>
   </section>
+
+  {/*
+    Renders nothing until `NEWSLETTER_ACTION` in `lib/site.ts` is set, which is
+    why it is placed unconditionally: the component owns the switch, so turning
+    the newsletter on is that one line and nothing here. Below the index on
+    purpose. It is the last thing on the page a reader reaches by choosing to,
+    which is the quietest way to ask, and the opposite of a popup.
+  */}
+  <NewsletterSignup />
 </Base>
 
 <style>
