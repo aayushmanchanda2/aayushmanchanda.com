@@ -38,17 +38,21 @@ Everything else derives. `palette.css` has no theme-conditional declaration at a
 
 **`--accent` vs `--accent-panel`.** `--accent` is for ink: links, hover, `aria-current`, focus rings. The moment the accent becomes a *background with text on it*, switch to `--accent-panel` (`#2b4bff`, held at the vivid blue in **both** themes) with `--accent-panel-ink` (`#ffffff`). White on the dark theme's `--accent` is **3.89:1 and fails AA**; white on `--accent-panel` is 5.91:1 either way. In force at `MobileNav.astro › .mnav__panel`, `styles/palette.css › .palette__row[data-active]`, `layouts/Base.astro › .skip`, `styles/global.css › ::selection`.
 
-**Chip tones** (`styles/chip.css`). A tone sets three numbers and the tint, the hairline and the ink all derive from them, so light and dark stay in step without a second palette. Soft tint, never a solid fill: twenty rows should read as one page, not a traffic light. Every ink clears 6:1 over its own tint.
+**Chip tones** (`styles/chip.css`). A tone sets three numbers and the tint, the hairline and the ink all derive from them, so light and dark stay in step without a second palette. Soft tint, never a solid fill: twenty rows should read as one page, not a traffic light.
 
-| Tone | Light `h s l` | Dark `h s l` |
-|---|---|---|
-| green | `148 65% 26%` | `148 55% 64%` |
-| amber | `32 90% 30%` | `38 90% 64%` |
-| gray | `0 0% 38%` | `0 0% 62%` |
-| red | `0 70% 38%` | `0 80% 70%` |
-| blue | `231 80% 45%` | `231 100% 74%` |
+**Every ink clears 6:1 over its own tint** — over the colour the tint composites to, not over the bare page background. That distinction is the measurement. The tint lightens the ground in the light theme and darkens it in the dark one, so ink-over-tint is always the lower of the two numbers and it is the one a reader is actually subject to; measuring against the page flatters every tone by roughly 0.8 of a point. Four values were set from the page-background reading and did not in fact hold over their own tint — light green 5.59, light amber 5.44, light gray 5.48, dark blue 5.73 — and are corrected below. The tint alphas did not move, so the fills are unchanged; only the ink deepened, by two or three points of lightness.
 
-Tint `0.09` light / `0.14` dark; hairline `0.2` / `0.26`. A `.chip--link` deepens both on hover instead of changing colour. Blue is the accent hue held back from the accent lightness on purpose: an inline link and a shipped chip must not be the same blue on the same page. Which word earns which tone is the only thing the components decide — `VerdictBadge.astro › TONES`, `StatusChip.astro › TONES` — and both are `Record<T, string>`, so a new verdict or status will not compile until it has a tone.
+| Tone | Light `h s l` | ink/tint | Dark `h s l` | ink/tint |
+|---|---|---|---|---|
+| green | `148 65% 24%` | 6.19 | `148 55% 64%` | 8.85 |
+| amber | `32 90% 27%` | 6.29 | `38 90% 64%` | 8.95 |
+| gray | `0 0% 35%` | 6.15 | `0 0% 62%` | 6.21 |
+| red | `0 70% 38%` | 6.46 | `0 80% 70%` | 6.05 |
+| blue | `231 80% 45%` | 7.52 | `231 100% 75%` | 6.04 |
+
+The `.chip--link` hover deepens the tint to 20% / 26%, which costs about a point: that state holds **AA (4.5:1)**, not 6:1. The floor there is dark blue at 4.63. The `.chip` block's own fallback lightness is kept identical to the gray tone so an untoned chip and a gray one cannot drift apart.
+
+Tint `0.09` light / `0.14` dark; hairline `0.2` / `0.26`. A `.chip--link` deepens both on hover instead of changing colour. Blue is the accent hue held back from the accent lightness on purpose: an inline link and a shipped chip must not be the same blue on the same page. Held back by two dials in the light theme (saturation 80 against the accent's 100, lightness 45 against 58.4) and by lightness alone in the dark one, where nothing darker than the link blue survives the tint. Measured separation, CIE76: 14.7 light, 22.2 dark — the dark pair is the wider of the two, so the tighter-looking lightness gap there is not the problem it reads as on paper. Which word earns which tone is the only thing the components decide — `VerdictBadge.astro › TONES`, `StatusChip.astro › TONES` — and both are `Record<T, string>`, so a new verdict or status will not compile until it has a tone.
 
 **Hairlines.** `--hairline` rules every border on the site. `--hairline-strong` is the hover state of a row border and the inset edge of a swatch. There is no third weight.
 
@@ -116,9 +120,15 @@ Every transition here is a **CSS transition, never a keyframe animation**, so an
 
 > **Never write a bare `<` in that file's frontmatter, comments included.** It makes the Astro compiler lose the `Props` interface when it generates TSX, and every prop silently stops being typed. Write "below 900px". `npx astro check` is what caught it.
 
+**Command palette panel** (`styles/palette.css`). The proportions are beui.dev's command-palette block, measured off its shadcn registry entry (`beui.dev/r/command-palette.json`) and its live DOM rather than copied by eye, then translated into house tokens. Adopted: the **36rem** panel (their `max-w-xl`, 576px) at **18vh**, `shadow-2xl` as `0 25px 50px -12px rgb(0 0 0 / 0.25)`, a **3rem** field whose height sits on the input and not on the wrapper, a 16px leading search glyph, the `esc` cap as a filled key rather than an outlined word, **0.5rem** of padding on the results list, rows at **0.5rem** padding with a `0.75rem` gap and `--r-sm`, section headings at `0.375rem 0.5rem`, `0.25rem` between groups, and a centred empty state in a `2rem` box.
+
+The 0.5rem on the list is the change that does the work: it is what turns the highlighted row from a band running edge to edge into an inset block with panel showing either side of it. Rows align to **centre**, not baseline, because baseline-aligned content sits low in a block with a radius and reads bottom-heavy.
+
+Three of their choices are rejected, each for a rule already in this file. `rounded-2xl` on the panel stays **0** (the sharp-corners rule above). Their `bg-background/5` + `backdrop-filter: blur(12px) saturate(140%)` glass scrim stays a **flat 40% black**, because a frosted texture is a register this site does not use anywhere else. And their active row — a 5% wash, with every *inactive* row dimmed to the muted foreground so one row can stand out — stays the solid `--accent-panel` pair: focus never leaves the input (§4), so that block is the only cursor a reader has, and the half of their trick that does the real work costs twenty unselected results their contrast. The loudness came out of the geometry instead.
+
 **The empty-section rule.** `lib/sections.ts › getSections` filters to `count > 0`, and both nav surfaces plus the home index read it. A section with no entries is not linked, not listed, and has no page. There are no "coming soon" pages. Delete every note and `/notes` stops existing.
 
-**Sharp corners.** The site rounds exactly one thing, the chip, plus the focus ring that has to sit around it. Frames, swatches and panels state `border-radius: 0` rather than inheriting it. Concentrically that leaves three radii on the whole site: **4px** (`--r-sm`), **3px** (16px favicon marks, `ToolList.astro › .row__mark`), and **0**. A fourth needs a reason you can write down.
+**Sharp corners.** The site rounds exactly one **value**, `--r-sm`, and the things that carry it are all small, filled and interactive: the chip, the focus ring that has to sit around it, the palette's highlighted row and its `esc` key cap. Everything structural — frames, swatches, panels, the palette panel itself — states `border-radius: 0` rather than inheriting it. That is the line: a 4px corner marks a token you could pick up, never a surface you look through. Concentrically it leaves three radii on the whole site: **4px** (`--r-sm`), **3px** (16px favicon marks, `ToolList.astro › .row__mark`), and **0**. A fourth needs a reason you can write down — which is why the palette's row takes `--r-sm` and not the 6px its reference used.
 
 ---
 

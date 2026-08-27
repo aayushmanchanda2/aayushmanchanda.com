@@ -11,18 +11,27 @@
    (hue, saturation, lightness) and the tint, the hairline, and the ink are all
    derived from them, so light and dark stay in step without a second palette.
 
-   Measured against the page background (#FFFFFF / #09090B): every ink value
-   below clears 6:1, which holds up over its own 9-14% tint.
+   Every ink below clears 6:1 **over its own tint** — that is, over the colour
+   the tint actually composites to on the page background, not over the bare
+   page. The distinction is the whole measurement: the tint lightens the ground
+   in the light theme and darkens it in the dark one, so ink-over-tint is always
+   the lower of the two numbers and it is the one a reader is subject to. An
+   earlier version of this file measured against the page and asserted the
+   result "holds up over its own tint", which was not true of three light tones
+   and one dark one; they were between 5.4 and 5.7. The lightnesses below are
+   the corrected ones. The `.chip--link` hover deepens the tint to 20-26% and
+   costs roughly a point of contrast; that state holds AA (4.5:1), not 6:1.
 
    Loaded after global.css in layouts/Base.astro; every token it uses
    (--r-sm, --font-mono) is defined there.
    ========================================================================== */
 
 .chip {
-  /* neutral fallback; every tone below overrides all three */
+  /* neutral fallback; every tone below overrides all three. Kept identical to
+     the gray tone so an untoned chip and a gray one cannot drift apart. */
   --chip-h: 0;
   --chip-s: 0%;
-  --chip-l: 38%;
+  --chip-l: 35%;
   --chip-tint: 0.09;
   --chip-line: 0.2;
 
@@ -45,19 +54,19 @@
 .chip[data-tone="green"] {
   --chip-h: 148;
   --chip-s: 65%;
-  --chip-l: 26%;
+  --chip-l: 24%;
 }
 
 .chip[data-tone="amber"] {
   --chip-h: 32;
   --chip-s: 90%;
-  --chip-l: 30%;
+  --chip-l: 27%;
 }
 
 .chip[data-tone="gray"] {
   --chip-h: 0;
   --chip-s: 0%;
-  --chip-l: 38%;
+  --chip-l: 35%;
 }
 
 .chip[data-tone="red"] {
@@ -146,7 +155,7 @@
   :root:not([data-theme="light"]) .chip[data-tone="blue"] {
     --chip-h: 231;
     --chip-s: 100%;
-    --chip-l: 74%;
+    --chip-l: 75%;
   }
 }
 
@@ -189,5 +198,5 @@
 :root[data-theme="dark"] .chip[data-tone="blue"] {
   --chip-h: 231;
   --chip-s: 100%;
-  --chip-l: 74%;
+  --chip-l: 75%;
 }

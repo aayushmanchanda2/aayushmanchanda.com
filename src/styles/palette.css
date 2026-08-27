@@ -60,9 +60,19 @@
 
 /* --- panel ---------------------------------------------------------------- */
 
+/* Proportions are beui.dev's command-palette block, translated into house
+   tokens: `max-w-xl` (576px = 36rem), `top-[18vh]`, and `shadow-2xl`. The
+   measurements came off their shadcn registry entry
+   (`beui.dev/r/command-palette.json`) and the live DOM, not from eyeballing.
+
+   Two of their choices are deliberately not adopted. `rounded-2xl` stays 0
+   here, because §3 of design.md rounds exactly one thing on this site and it is
+   the chip; and their `bg-background/5` + `backdrop-filter: blur(12px)` glass
+   scrim stays a flat 40% black, because a frosted texture is a register this
+   site does not otherwise use — §3 keeps texture for framed imagery only. */
 .palette__panel {
   position: absolute;
-  top: 12vh;
+  top: 18vh;
 
   /* Centred with auto margins, not with `left: 50%` and a `translate`. That was
      the first version and it shipped off-centre: the build's CSS minifier folds
@@ -73,14 +83,14 @@
   inset-inline: 0;
   margin-inline: auto;
 
-  width: min(92vw, 34rem);
+  width: min(92vw, 36rem);
   max-height: 70vh;
   display: flex;
   flex-direction: column;
   background: var(--bg);
   /* Square, and a hairline. The site rounds one thing, the chip. */
   border: 1px solid var(--hairline-strong);
-  box-shadow: 0 24px 60px rgb(0 0 0 / 0.18);
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
 
   opacity: 0;
   transform: translateY(-6px);
@@ -96,17 +106,34 @@
 
 /* --- field ---------------------------------------------------------------- */
 
+/* The row has no vertical padding of its own: the field's height is the input's
+   3rem, which is beui's `h-12`. Putting the height on the control rather than on
+   the wrapper means the 40px hit-area floor (§4) is cleared by the thing you
+   actually click. */
 .palette__field {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  padding: 0.9rem 1rem;
+  padding: 0 1rem;
   border-bottom: 1px solid var(--hairline);
+}
+
+/* The leading glyph, 16px, at the same 1rem left edge the result rows start at
+   (0.5rem of list padding + 0.5rem of row padding), so the field and the list
+   share a column even though the input itself is indented past the icon. It is
+   decorative — the input already carries `aria-label="Search this site"` — so
+   the markup marks it `aria-hidden`. */
+.palette__search {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  color: var(--faint);
 }
 
 .palette__input {
   flex: 1 1 auto;
   min-width: 0;
+  height: 3rem;
   font: inherit;
   font-size: 1.0625rem;
   letter-spacing: -0.01em;
@@ -127,36 +154,54 @@
   color: var(--faint);
 }
 
+/* The kbd chip, beui's: a filled cap rather than an outline, so it reads as a
+   key and not as a bordered word. `--r-sm` is the chip's radius, which is the
+   one radius this site has — no fourth value enters the scale for this. */
 .palette__esc {
   flex: none;
   color: var(--faint);
+  background: var(--bg);
   border: 1px solid var(--hairline);
-  padding: 0.15rem 0.4rem;
+  border-radius: var(--r-sm);
+  padding: 0.125rem 0.375rem;
 }
 
 /* --- results -------------------------------------------------------------- */
 
+/* The 0.5rem of padding here is the whole point of the restyle: it is what
+   turns the highlighted row from a full-bleed band running edge to edge into an
+   inset block with the panel showing either side of it. beui's `p-2`. */
 .palette__results {
   overflow-y: auto;
   overscroll-behavior: contain;
-  padding: 0.4rem 0;
+  padding: 0.5rem;
 }
 
 .palette__results[hidden] {
   display: none;
 }
 
-.palette__heading {
-  color: var(--faint);
-  padding: 0.5rem 1rem 0.3rem;
+/* `role="group"` is set by `lib/palette-rows.ts › groupNode`; styling off it
+   rather than off a class keeps the restyle out of the JS entirely. */
+.palette__results > [role="group"]:not(:last-child) {
+  margin-bottom: 0.25rem;
 }
 
+/* Left padding matches the row's, so heading and title share a left edge. */
+.palette__heading {
+  color: var(--faint);
+  padding: 0.375rem 0.5rem;
+}
+
+/* `center`, not `baseline`. Once the highlight is an inset block with a radius
+   rather than a full-width band, baseline-aligned content sits low in it and the
+   block reads bottom-heavy; beui aligns to centre for the same reason. */
 .palette__row {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.5rem 1rem;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  border-radius: var(--r-sm);
   color: var(--fg);
   text-decoration: none;
   /* Never `transition: all` — the two that change are named. */
@@ -168,13 +213,29 @@
 /* The selected row, in the one token pair that stays legible in both themes.
    `--accent` lifts to #5C74FF in the dark theme, where white on it is 3.9:1 and
    fails AA; `--accent-panel` is deliberately held at the vivid blue in both, so
-   `--accent-panel-ink` clears AA either way. Same pair the mobile nav uses. */
+   `--accent-panel-ink` clears AA either way. Same pair the mobile nav uses.
+
+   beui fills this with `bg-primary/[0.05]` — a 5% wash — and carries the rest
+   of the signal by setting every *inactive* row to the muted foreground and
+   lifting only the active one to full strength. Not adopted, for two reasons.
+   Focus never leaves the input here (§4), so this block is the only cursor the
+   reader has, and a 5% wash is a weak cursor to hand a keyboard-only surface.
+   And the half of their trick that does the real work — dimming twenty rows so
+   one can stand out — costs every unselected result its contrast. Keeping the
+   solid fill means the list reads at full strength and the cursor is still
+   unmissable; the restyle takes the loudness out by insetting the block
+   instead, which is a geometry change rather than a contrast one. */
 .palette__row[data-active] {
   background: var(--accent-panel);
   color: var(--accent-panel-ink);
 }
 
+/* Grows and truncates. `min-width: 0` is what actually lets the ellipsis fire:
+   a flex item's automatic minimum size is its content, so without it a long
+   title pushes the path column off the row instead of clipping. */
 .palette__row-title {
+  flex: 1 1 auto;
+  min-width: 0;
   font-size: 0.9375rem;
   line-height: 1.4;
   overflow: hidden;
@@ -200,8 +261,12 @@
   color: var(--faint);
 }
 
+/* beui's `p-8 text-center`: a miss is the one moment the panel has nothing to
+   show, and centring the line in a generous box reads as a considered answer
+   rather than as a list that came up one item short. */
 .palette__empty {
-  padding: 1.25rem 1rem;
+  padding: 2rem 1rem;
+  text-align: center;
 }
 
 .palette__empty[hidden] {

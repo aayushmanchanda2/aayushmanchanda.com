@@ -57,6 +57,26 @@ const payload = JSON.stringify(index).replace(/</g, "\\u003c");
 
   <div class="palette__panel">
     <div class="palette__field">
+      {/*
+        The leading search glyph, drawn rather than imported: one circle and one
+        handle on a 16-unit grid, `currentColor`, the same construction the site
+        mark uses. It is decorative — the input below it already carries
+        `aria-label="Search this site"`, and a second name for the same control
+        would be read out twice — so it is `aria-hidden` and adds nothing to the
+        accessibility tree.
+      */}
+      <svg
+        class="palette__search"
+        viewBox="0 0 16 16"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.5"
+        aria-hidden="true"
+      >
+        <circle cx="7" cy="7" r="4.5"></circle>
+        <path d="M10.5 10.5 L14 14" stroke-linecap="round"></path>
+      </svg>
+
       <input
         class="palette__input"
         data-palette-input
