@@ -476,10 +476,12 @@ ol {
   }
 }
 
-/* Back link above a page title. */
+/* Back link above a page title. --muted, not --faint: the crumb is a control,
+   and interactive ink never sits below --muted (§4 of design.md — --faint is
+   2.94:1 on the light theme, which fails AA for the 11px label voice). */
 .crumb {
   margin-bottom: clamp(1.25rem, 3vw, 2rem);
-  color: var(--faint);
+  color: var(--muted);
 }
 
 .crumb a {

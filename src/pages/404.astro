@@ -115,7 +115,9 @@ const sections = await getSections();
 
   .agents {
     margin-top: clamp(2rem, 6vh, 3rem);
-    color: var(--faint);
+    /* --muted, not --faint: half this sentence is links (design.md §4, the
+       ink floor). */
+    color: var(--muted);
     /* the label voice is uppercase; a sentence with paths in it is not */
     text-transform: none;
     letter-spacing: 0.02em;

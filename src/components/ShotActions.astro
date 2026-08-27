@@ -95,8 +95,10 @@ const { src, title, slug } = Astro.props;
     min-height: 40px;
     padding-inline: 0.5rem;
     /* Beats the global `a { color: var(--accent) }` — these are utilities, not
-       links into the collection, and should read as housekeeping until hovered. */
-    color: var(--faint);
+       links into the collection, and should read as housekeeping until hovered.
+       --muted, not --faint: still housekeeping, but a control clears AA on its
+       own (design.md §4, the ink floor). */
+    color: var(--muted);
     text-decoration: none;
     cursor: pointer;
     /* `.press` already names `color` and `transform`; adding a second

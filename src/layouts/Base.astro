@@ -591,11 +591,13 @@ const markdownVariant = variant === null ? null : absolute(variant);
         color: var(--faint);
       }
 
-      /* Sits at the copyright's weight, not the social links': /privacy is
-         housekeeping, and it should read as housekeeping until hovered. */
+      /* Quieter than the social links, but at --muted, never the row's --faint:
+         these are controls, and a control has to clear AA on its own (§4's ink
+         floor — --faint is 2.94:1 on the light theme). The separators and the
+         copyright are the metadata here and keep the faint. */
       .foot__quiet {
         display: inline-block;
-        color: inherit;
+        color: var(--muted);
         text-decoration: none;
       }
 

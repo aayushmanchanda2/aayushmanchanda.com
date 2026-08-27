@@ -163,7 +163,9 @@ const description = entry.note ?? entry.digest.verdict;
      `:not(.strip__chip)` because the kind anchor is a box, not a word: an
      underline under a tinted chip would draw a second line across the row. */
   .strip a:not(.strip__chip) {
-    color: inherit;
+    /* --muted, never the strip's --faint: a quiet anchor inside a metadata
+       container states its own ink (design.md §4, the ink floor). */
+    color: var(--muted);
     text-decoration-line: underline;
     text-decoration-color: var(--hairline-strong);
     text-underline-offset: 0.25em;

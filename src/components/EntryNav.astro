@@ -98,7 +98,9 @@ const hints: Hint[] = [
        caps, and the key is printed `esc` on the keyboard the reader is looking
        at — shouting it would be naming a different key. */
     text-transform: lowercase;
-    color: var(--faint);
+    /* --muted, not --faint: every word in this row is a link a reader is meant
+       to press (design.md §4, the ink floor). */
+    color: var(--muted);
   }
 
   .hints__item {

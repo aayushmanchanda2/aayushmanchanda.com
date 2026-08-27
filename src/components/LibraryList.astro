@@ -174,7 +174,9 @@ const { entries, showDomain = true } = Astro.props;
      so letting the domain take its natural width costs the title a little room
      and costs the row nothing. */
   .row__domain {
-    color: var(--faint);
+    /* --muted, not the date's --faint: this is a control (design.md §4, the
+       ink floor). */
+    color: var(--muted);
     text-decoration-line: underline;
     text-decoration-color: var(--hairline-strong);
     white-space: nowrap;

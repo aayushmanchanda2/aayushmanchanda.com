@@ -190,7 +190,9 @@ const logo = mark.kind === "logo" ? mark.src : null;
      cid. Same idiom as `experiments.astro`. */
   .strip a:not(.strip__chip),
   .source :global(.source__repo) {
-    color: inherit;
+    /* --muted, never the strip's --faint: a quiet anchor inside a metadata
+       container states its own ink (design.md §4, the ink floor). */
+    color: var(--muted);
     text-decoration-line: underline;
     text-decoration-color: var(--hairline-strong);
     text-underline-offset: 0.25em;

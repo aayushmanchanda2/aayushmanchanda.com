@@ -256,9 +256,15 @@
   opacity: 0.72;
 }
 
-.palette__empty,
 .palette__legend {
   color: var(--faint);
+}
+
+/* --muted, not the legend's --faint: this line is the panel's whole answer to
+   a failed search, and the reader is actively reading it (design.md §4, the
+   ink floor keeps anything a reader is sent to read at --muted or above). */
+.palette__empty {
+  color: var(--muted);
 }
 
 /* beui's `p-8 text-center`: a miss is the one moment the panel has nothing to

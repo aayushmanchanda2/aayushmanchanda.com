@@ -229,9 +229,10 @@ const groups = grouped
   }
 
   /* Carries its own underline: on touch there is no hover to reveal one, and
-     a bare mono word next to the date would read as a second label. */
+     a bare mono word next to the date would read as a second label. --muted,
+     not the date's --faint: this is a control (design.md §4, the ink floor). */
   .row__more {
-    color: var(--faint);
+    color: var(--muted);
     text-decoration-line: underline;
     text-decoration-color: var(--hairline-strong);
   }
