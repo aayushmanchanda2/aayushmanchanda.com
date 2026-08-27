@@ -55,4 +55,5 @@ export function absolute(path: string): string {
  * The field names that go with the endpoint live in `lib/newsletter.ts`, which
  * is the only thing that builds the form, so activation stays one line here.
  */
-export const NEWSLETTER_ACTION: string | null = null;
+export const NEWSLETTER_ACTION: string | null =
+  "https://buttondown.com/api/emails/embed-subscribe/vetted";

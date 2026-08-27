@@ -216,5 +216,15 @@
     "verdict": "using",
     "note": "Claude Code's harness running on GPT-5.6 Sol through a local proxy. My delegation lane for big well-specified diffs.",
     "status_date": "2026-08-26"
+  },
+  {
+    "slug": "orca",
+    "name": "Orca",
+    "url": null,
+    "repo": "https://github.com/stablyai/orca",
+    "category": "agent workspaces",
+    "verdict": "watching",
+    "note": "Came out of my orchestrator comparison as the one to try next if mobile coding starts mattering. Watching until it does.",
+    "status_date": "2026-08-27"
   }
 ]
