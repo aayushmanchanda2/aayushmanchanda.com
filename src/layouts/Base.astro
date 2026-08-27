@@ -325,40 +325,11 @@ const markdownVariant = variant === null ? null : absolute(variant);
     </div>
 
     <script>
-      // Dual-city clocks. Formatting is delegated to Intl, so DST for both
-      // Winnipeg and New Delhi is handled by the platform, not by us.
-      const nodes = Array.from(
-        document.querySelectorAll<HTMLElement>("[data-clock]"),
-      );
+      // The dual-city footer clocks. Each `data-clock` carries its own IANA
+      // zone, so DST for Winnipeg and New Delhi is the platform's problem.
+      import { startTicker } from "../lib/clock";
 
-      if (nodes.length) {
-        const clocks = nodes.map((el) => ({
-          el,
-          format: new Intl.DateTimeFormat("en-GB", {
-            timeZone: el.dataset.clock,
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-            hour12: false,
-          }),
-        }));
-
-        const tick = () => {
-          const now = new Date();
-          for (const clock of clocks) {
-            const next = clock.format.format(now);
-            // avoid a pointless DOM write 59 times out of 60 per minute
-            if (clock.el.textContent !== next) clock.el.textContent = next;
-          }
-        };
-
-        tick();
-        // align to the next whole second, then tick on the beat
-        setTimeout(() => {
-          tick();
-          setInterval(tick, 1000);
-        }, 1000 - (Date.now() % 1000));
-      }
+      startTicker("data-clock");
     </script>
 
     <style>

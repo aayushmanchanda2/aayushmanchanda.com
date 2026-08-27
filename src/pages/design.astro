@@ -853,6 +853,8 @@ const jsonLd = designJsonLd();
 </style>
 
 <script>
+  import { startTicker } from "../lib/clock";
+
   /*
    * The token values, read out of the live stylesheet.
    *
@@ -904,32 +906,14 @@ const jsonLd = designJsonLd();
   /*
    * The figures specimen.
    *
-   * The same shape as the footer clocks in `layouts/Base.astro`: format with
-   * Intl, align to the next whole second, then tick on the beat. Both spans get
-   * the same string, so the only difference between the two rows is the one
-   * class on the first of them.
+   * `data-tick` is bare rather than carrying a zone, which is what puts these
+   * two rows on the reader's own clock — a specimen showing a city they are not
+   * in would be demonstrating the wrong thing. Both spans get the same string,
+   * so the only difference between the rows is the one class on the first.
+   *
+   * This is the page that has the footer clocks on it as well, so it is the one
+   * that used to run two timers a millisecond apart doing identical work. The
+   * shared module keeps one.
    */
-  const ticks = Array.from(document.querySelectorAll<HTMLElement>("[data-tick]"));
-
-  if (ticks.length) {
-    const format = new Intl.DateTimeFormat("en-GB", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-      hour12: false,
-    });
-
-    const tick = () => {
-      const now = format.format(new Date());
-      for (const el of ticks) {
-        if (el.textContent !== now) el.textContent = now;
-      }
-    };
-
-    tick();
-    setTimeout(() => {
-      tick();
-      setInterval(tick, 1000);
-    }, 1000 - (Date.now() % 1000));
-  }
+  startTicker("data-tick");
 </script>
