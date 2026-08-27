@@ -26,7 +26,9 @@ Sites get one full-page screenshot, taken in whatever colour scheme the site
 renders by default and cut off after 12,000px, plus the dominant colours read
 off it. Tools do not get a picture, only an entry, and it lands as category
 `unsorted` with verdict `watching` and the note "Saved from Raindrop. Not tested
-yet." Fix it later by hand, see below.
+yet." A GitHub link lands in `repo` rather than `url`, because a repository is
+not a product's website and the runner has no way to find out whether there is
+one. Fix it later by hand, see below.
 
 Two things in the run are done by [Firecrawl](https://firecrawl.dev) rather than
 by the runner, and both are optional: they happen when the `FIRECRAWL_API_KEY`
@@ -101,6 +103,16 @@ nothing broken reaches the site.
 
 Worth fixing `category` at the same time. Categories become routes, so two
 spellings of one idea land on two pages.
+
+**A tool has two link fields and they are not interchangeable.** `url` is the
+product's own website; `repo` is `https://github.com/{owner}/{name}`, written
+exactly that way — no trailing slash, no `.git`, no branch or file on the end.
+Either may be left out, and about half the list has no product site at all. A
+repository written into `url` fails the build with a message saying so, because
+that is the mistake worth catching: it puts the GitHub logo next to the row and
+hides the real site of every tool that has one. A tool saved from GitHub arrives
+with `repo` filled in and `url` null, so finding the product's site and filling
+`url` in is the second thing worth doing by hand after the verdict.
 
 **Site collections** live on each entry in `src/data/sites.json`, as
 `"collections": ["portfolios", "personal-sites"]`. Leave the field out for a site

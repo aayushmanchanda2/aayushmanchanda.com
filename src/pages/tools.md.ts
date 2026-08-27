@@ -12,8 +12,10 @@
  */
 import type { APIRoute } from "astro";
 
+import { linkLabel } from "../lib/links";
 import {
   PAGES,
+  link,
   linkOrText,
   list,
   markdownDocument,
@@ -40,8 +42,16 @@ const MEANING: Record<Verdict, string> = {
 };
 
 export const GET: APIRoute = () => {
+  /*
+   * Two link columns, because a tool has two places to go and an agent asking
+   * for markdown is the reader least able to guess the missing one. `Tool`
+   * links what the HTML row links — the product when there is one, the
+   * repository when there is not — and `Repo` is filled only when it is a
+   * second destination, so the same URL never appears twice in one row.
+   */
   const rows = tools.map((tool) => [
-    linkOrText(tool.name, tool.url),
+    linkOrText(tool.name, tool.url ?? tool.repo),
+    tool.url === null || tool.repo === null ? "" : link(linkLabel(tool.repo), tool.repo),
     tool.verdict,
     tool.category,
     tool.status_date,
@@ -65,7 +75,7 @@ export const GET: APIRoute = () => {
       "Software Aayush Manchanda installed, ran, and formed an opinion about, with a dated verdict on each one.",
     updated: newest(tools.map((tool) => tool.status_date)),
     blocks: [
-      table(["Tool", "Verdict", "Category", "Updated", "Note"], rows),
+      table(["Tool", "Repo", "Verdict", "Category", "Updated", "Note"], rows),
       ...(words === null ? [] : [words]),
       section(
         "Verdicts",

@@ -16,6 +16,11 @@
  *   - `tools.ts` requires a non-empty `note` and a non-empty `category`.
  *     Raindrop supplies neither reliably, so both have honest fallbacks below
  *     rather than an empty string that would fail `astro build`.
+ *   - a /tools entry has two link fields and they are not interchangeable.
+ *     `url` is the product's own site and `repo` is its GitHub repository, and
+ *     `tools.ts` fails the build on a repository written into `url`. A saved
+ *     GitHub link therefore becomes `repo` with `url` left null. See
+ *     `repoFrom` and `buildToolEntry` below.
  *   - `reading.ts` takes `note` as `string | null`, so a bookmark with no
  *     excerpt gets null rather than a stand-in sentence. /tools needs the
  *     fallback because a verdict with no note is a row that says nothing; a
@@ -255,6 +260,52 @@ export const POST_HOSTS = ["x.com", "twitter.com"];
 export const VIDEO_HOSTS = ["youtube.com", "youtu.be"];
 
 /**
+ * The canonical `https://github.com/{owner}/{name}` a saved link belongs to, or
+ * null when it is not a repository link at all.
+ *
+ * The second copy of a rule `src/lib/links.ts › githubRepo` owns, and the
+ * duplication is the same one this module's header describes: the pipeline runs
+ * as plain `.mjs` outside the bundler, so it cannot import the parser's half.
+ * What keeps them from drifting is a test rather than an import —
+ * `src/lib/links.test.mjs` feeds this function a table of saved links and
+ * asserts that `githubRepo` accepts every repo it produces, unchanged. That is
+ * the contract that actually matters: whatever this writes, that must accept.
+ *
+ * It is deliberately *more* forgiving than the parser in one direction. A
+ * person saving a bookmark on a phone saves whatever page they were looking at
+ * — a file, a branch, the issues tab — so a deep link is folded back to the
+ * repository it is inside rather than rejected. The parser refuses the same
+ * link, because a hand-edited file is an edit somebody chose to make.
+ *
+ * A profile is still not a repository: `github.com/block` has one segment and
+ * comes back null, which leaves it in `url` where it belongs.
+ *
+ * @param {string} url @returns {string | null}
+ */
+export function repoFrom(url) {
+  /** @type {URL} */
+  let parsed;
+  try {
+    parsed = new URL(url);
+  } catch {
+    return null;
+  }
+
+  if (parsed.protocol !== "https:" && parsed.protocol !== "http:") return null;
+  if (parsed.hostname.toLowerCase().replace(/^www\./, "") !== "github.com") return null;
+
+  const segments = parsed.pathname.split("/").filter((segment) => segment !== "");
+  if (segments.length < 2) return null;
+
+  const owner = segments[0] ?? "";
+  const name = (segments[1] ?? "").replace(/\.git$/i, "");
+  const NAME = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
+  if (!NAME.test(owner) || !NAME.test(name)) return null;
+
+  return `https://github.com/${owner}/${name}`;
+}
+
+/**
  * What a saved link is, from its host alone.
  *
  * Host-based rather than clever, and `article` is the fallback, because the two
@@ -352,16 +403,35 @@ export function buildSiteEntry({ bookmark, slug, date, palette }) {
 }
 
 /**
+ * A /tools entry, with the saved link filed as whichever kind of link it is.
+ *
+ * **A repository is not a product site, and the two do not share a field.** A
+ * GitHub save lands in `repo` and leaves `url` null; everything else lands in
+ * `url`. The pipeline cannot know whether the project also has a homepage — it
+ * has one bookmark and no way to ask — so it writes down only what it was
+ * given, and `url` stays null until a human finds the site and fills it in.
+ *
+ * That null is the honest state rather than a gap to paper over. Filing the
+ * repository as the product's URL is what put a row of identical GitHub logos
+ * on /tools and hid the real site of every tool that had one, and a `url` the
+ * pipeline guessed at would put them straight back.
+ *
  * @param {object} input
  * @param {Bookmark} input.bookmark
  * @param {string} input.slug
  * @param {string} input.date ISO calendar date; the run date, per contract.
  */
 export function buildToolEntry({ bookmark, slug, date }) {
+  const repo = repoFrom(bookmark.url);
+
   return {
     slug,
     name: bookmark.title === "" ? hostnameOf(bookmark.url) : bookmark.title,
-    url: bookmark.url,
+    url: repo === null ? bookmark.url : null,
+    // Left out entirely rather than written as null, the way every other
+    // optional field in these files is left out. `tools.ts` reads absent and
+    // null the same; the file stays readable.
+    ...(repo === null ? {} : { repo }),
     category: NEW_TOOL_CATEGORY,
     verdict: NEW_TOOL_VERDICT,
     note: bookmark.excerpt === "" ? NEW_TOOL_NOTE : bookmark.excerpt,

@@ -23,7 +23,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { applyItem } from "./apply.mjs";
 import { captureSite, captureWithFirecrawl } from "./capture.mjs";
-import { POST_HOSTS, hostIsOneOf, readEntries, urlKey } from "./entries.mjs";
+import { POST_HOSTS, hostIsOneOf, readEntries, repoFrom, urlKey } from "./entries.mjs";
 import { firecrawlFrom, parsePost } from "./firecrawl.mjs";
 import { RaindropError, createClient, fetchBookmarks, resolveCollections } from "./raindrop.mjs";
 import { MAX_ATTEMPTS, SECTIONS, reconcile, resolvePaths } from "./state.mjs";
@@ -84,10 +84,23 @@ export function plan({ bookmarks, state, gallery }) {
   /** @type {Record<Section, Map<string, string>>} */
   const byUrl = { sites: new Map(), tools: new Map(), reading: new Map() };
 
+  /*
+   * Both link fields, because a /tools entry has two and either one of them is
+   * the link a bookmark might arrive as.
+   *
+   * A tool saved from GitHub is written with `url: null` and the repository in
+   * `repo` (`entries.mjs › buildToolEntry`), so an index built from `url` alone
+   * would not contain it — and the next time that same link was saved, the
+   * gallery-holds-it check below would miss and publish a second copy of the
+   * entry. /sites and /reading carry no `repo`, so for them this loop is the
+   * one it always was.
+   */
   for (const section of SECTIONS) {
     for (const entry of gallery[section]) {
-      const url = entry["url"];
-      if (typeof url === "string") byUrl[section].set(urlKey(url), String(entry["slug"]));
+      for (const field of ["url", "repo"]) {
+        const value = entry[field];
+        if (typeof value === "string") byUrl[section].set(urlKey(value), String(entry["slug"]));
+      }
     }
   }
 
@@ -108,7 +121,17 @@ export function plan({ bookmarks, state, gallery }) {
     // The gallery already holds this link — a hand-seeded entry, or a run that
     // crashed after the append and before the state row. Either way the work is
     // done and only the bookkeeping is missing.
-    const existing = byUrl[bookmark.collection].get(urlKey(bookmark.url));
+    /*
+     * A /tools bookmark is compared as the repository it is inside, when it is
+     * inside one, because that is what the gallery stored. Somebody saving a
+     * project from its README on a phone saves `.../blob/main/README.md`, and
+     * that is the same tool as the one already on the page. Only /tools folds:
+     * two files in one repository really are two different pages to save to
+     * /reading.
+     */
+    const saved =
+      bookmark.collection === "tools" ? (repoFrom(bookmark.url) ?? bookmark.url) : bookmark.url;
+    const existing = byUrl[bookmark.collection].get(urlKey(saved));
     if (existing !== undefined) {
       work.push({ kind: "adopt", bookmark, slug: existing });
       continue;

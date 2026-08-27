@@ -173,6 +173,63 @@ test("plan: the same URL in the other gallery is not a match", () => {
   assert.equal(work[0].kind, "capture", "a site and a tool are different pages");
 });
 
+test("plan: a tool already on the page as a repo is adopted, not published twice", () => {
+  /*
+   * A /tools entry saved from GitHub stores the link in `repo` and leaves `url`
+   * null, so an index built from `url` alone would not contain it — and saving
+   * the same project again would quietly publish a second copy of the row. Both
+   * fields go into the index for exactly this.
+   */
+  const gallery = {
+    sites: [],
+    tools: [{ slug: "buzz", url: null, repo: "https://github.com/block/buzz" }],
+    reading: [],
+  };
+
+  const { work } = plan({
+    bookmarks: [mark("9", "https://github.com/block/buzz", "tools")],
+    state: {},
+    gallery,
+  });
+
+  assert.equal(work[0].kind, "adopt");
+  assert.equal(work[0].slug, "buzz");
+});
+
+test("plan: a deep link into a repo already on the page is the same tool", () => {
+  const gallery = {
+    sites: [],
+    tools: [{ slug: "buzz", url: null, repo: "https://github.com/block/buzz" }],
+    reading: [],
+  };
+
+  const { work } = plan({
+    bookmarks: [mark("9", "https://github.com/block/buzz/blob/main/README.md", "tools")],
+    state: {},
+    gallery,
+  });
+
+  assert.equal(work[0].kind, "adopt", "the README of a tool is that tool");
+  assert.equal(work[0].slug, "buzz");
+});
+
+test("plan: /reading does not fold two files in one repo into one entry", () => {
+  // The fold is a /tools rule. Two pages in a repository are two things to read.
+  const gallery = {
+    sites: [],
+    tools: [],
+    reading: [{ slug: "buzz-readme", url: "https://github.com/block/buzz/blob/main/README.md" }],
+  };
+
+  const { work } = plan({
+    bookmarks: [mark("9", "https://github.com/block/buzz/blob/main/VISION.md", "reading")],
+    state: {},
+    gallery,
+  });
+
+  assert.equal(work[0].kind, "capture");
+});
+
 /* ---------------------------------------------------------------------------
    Collections, resolved by name
    --------------------------------------------------------------------------- */

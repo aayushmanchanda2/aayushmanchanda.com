@@ -77,13 +77,15 @@ const typesIn = (document) => document["@graph"].map((node) => node["@type"]);
 
 /**
  * A tool with every optional field filled, so nothing is missed by absence.
+ * Both link fields, which is the case that emits a `sameAs`.
  *
  * @type {import("./tools.ts").Tool}
  */
 const FULL_TOOL = {
   slug: "paperclip",
   name: "Paperclip",
-  url: "https://github.com/paperclipai/paperclip",
+  url: "https://paperclip.ing",
+  repo: "https://github.com/paperclipai/paperclip",
   category: "agent infra",
   verdict: "using",
   note: "Agent org control plane.",
@@ -95,7 +97,8 @@ const FULL_TOOL = {
 };
 
 /**
- * The common case: a verdict, a date, and nothing else.
+ * The common case: a verdict, a date, and nothing else. No link of either kind,
+ * so the software node carries no `url` at all.
  *
  * @type {import("./tools.ts").Tool}
  */
@@ -103,6 +106,7 @@ const BARE_TOOL = {
   slug: "dinky",
   name: "Dinky",
   url: null,
+  repo: null,
   category: "cli",
   verdict: "watching",
   note: "Saved from Raindrop. Not tested yet.",
@@ -111,6 +115,21 @@ const BARE_TOOL = {
   like: null,
   dislike: null,
   try: null,
+};
+
+/**
+ * Software whose only home is its repository, which is half of /tools.
+ *
+ * The page links the repo as its Source, so the graph names it as the software's
+ * `url` — and emits no `sameAs`, because there is no second page to point at.
+ *
+ * @type {import("./tools.ts").Tool}
+ */
+const REPO_TOOL = {
+  ...BARE_TOOL,
+  slug: "papercuts",
+  name: "Papercuts",
+  repo: "https://github.com/treygoff24/papercuts",
 };
 
 /** @type {import("./sites.ts").Site} */
@@ -155,6 +174,7 @@ const EVERY_GRAPH = () => [
   ],
   ["tool", toolJsonLd(FULL_TOOL)],
   ["bare tool", toolJsonLd(BARE_TOOL)],
+  ["repo-only tool", toolJsonLd(REPO_TOOL)],
   ["site", siteJsonLd(SITE)],
   [
     "note",
@@ -509,12 +529,41 @@ test("a tool is a SoftwareApplication reviewed by the Person", () => {
   assert.equal(software["name"], "Paperclip");
   assert.equal(software["url"], FULL_TOOL.url);
   assert.equal(software["applicationCategory"], "agent infra");
+  assert.deepEqual(software["sameAs"], [FULL_TOOL.repo]);
 
   const review = at(document, 1);
   assert.equal(review["itemReviewed"]["@id"], software["@id"]);
   assert.equal(review["author"]["@id"], PERSON_ID);
   assert.equal(review["datePublished"], "2026-08-17");
   assert.equal(review["url"], `${ORIGIN}/tools/paperclip/`);
+});
+
+test("the software's url is the link the page's Source line actually offers", () => {
+  /*
+   * The parity rule pointed at the one line at the foot of a tool page. That
+   * line sends a reader to the product when there is one and to the repository
+   * when there is not, and `url` has to be the same destination — anything else
+   * describes a page that is not there.
+   */
+  const repoOnly = at(toolJsonLd(REPO_TOOL), 0);
+  assert.equal(repoOnly["url"], REPO_TOOL.repo);
+});
+
+test("sameAs is a second page about the software, never the same one twice", () => {
+  /*
+   * `sameAs` means "here is another authoritative page for this thing". A
+   * repository-only tool has one page, so claiming a second — by repeating the
+   * URL already in `url` — would invent a source that does not exist. The
+   * property is absent rather than a one-item array echoing `url`.
+   */
+  assert.ok(
+    !("sameAs" in at(toolJsonLd(REPO_TOOL), 0)),
+    "a tool whose only home is its repo emits no sameAs",
+  );
+  assert.ok(
+    !("sameAs" in at(toolJsonLd(BARE_TOOL), 0)),
+    "a tool with no links at all emits no sameAs",
+  );
 });
 
 test("the opinion lives on the review, never on the software", () => {

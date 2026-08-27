@@ -21,9 +21,10 @@
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 
 import Base from "../../layouts/Base.astro";
+import EntryLink from "../../components/EntryLink.astro";
 import VerdictBadge from "../../components/VerdictBadge.astro";
 import VoiceBlocks from "../../components/VoiceBlocks.astro";
-import { faviconUrl, linkLabel } from "../../lib/links";
+import { linkLabel, markFor } from "../../lib/links";
 import { toolJsonLd } from "../../lib/schema";
 import { categorySlug, tools } from "../../lib/tools";
 
@@ -43,6 +44,23 @@ const { tool } = Astro.props;
  * because there is no number on this page. See `lib/schema.ts`.
  */
 const jsonLd = toolJsonLd(tool);
+
+/**
+ * The Source line: the product first, then the source it is built from.
+ *
+ * `source` is what the reader is sent to — the product's own site when it has
+ * one, the repository when it does not — and `alsoRepo` is the repository only
+ * when it is a *second* place to go. A tool with no product site links its repo
+ * once, not twice under two labels.
+ */
+const source = tool.url ?? tool.repo;
+const alsoRepo = tool.url === null ? null : tool.repo;
+
+/* Only the logo, never the initial. The initial is how a 16px row tells twenty
+   tools apart; here the name is already set at 3rem directly above it, so a
+   letter in a box would be furniture repeating what the masthead just said. */
+const mark = markFor(tool);
+const logo = mark.kind === "logo" ? mark.src : null;
 ---
 
 <Base
@@ -93,21 +111,32 @@ const jsonLd = toolJsonLd(tool);
       site page: most of the reason a field is optional is so that its absence
       costs the reader nothing.
     */
-    tool.url && (
+    source && (
       <p class="source">
         <span class="source__label mono">Source</span>
-        <img
-          class="source__favicon outlined"
-          src={faviconUrl(tool.url)}
-          alt=""
-          width="16"
-          height="16"
-          decoding="async"
-          referrerpolicy="no-referrer"
-        />
-        <a class="ext" href={tool.url} rel="noopener nofollow" target="_blank">
-          {linkLabel(tool.url)}
-        </a>
+        {logo && (
+          <img
+            class="source__favicon outlined"
+            src={logo}
+            alt=""
+            width="16"
+            height="16"
+            decoding="async"
+            referrerpolicy="no-referrer"
+          />
+        )}
+        <EntryLink class="ext" href={source}>{linkLabel(source)}</EntryLink>
+
+        {/*
+          The repository, as a word rather than a second URL. Two full link
+          labels side by side read as a choice a reader has to make; "repo" is
+          the one of the two whose destination nobody needs spelled out.
+        */}
+        {alsoRepo && (
+          <span class="source__also">
+            <EntryLink class="source__repo mono" href={alsoRepo}>repo</EntryLink>
+          </span>
+        )}
       </p>
     )
   }
@@ -151,8 +180,16 @@ const jsonLd = toolJsonLd(tool);
      underline is the compromise: enough to say "this is a link" at a glance,
      not enough to make a metadata strip look like a paragraph. */
   /* `:not(.strip__chip)` because the verdict anchor is a box, not a word: an
-     underline under a tinted chip would draw a second line across the row. */
-  .strip a:not(.strip__chip) {
+     underline under a tinted chip would draw a second line across the row.
+
+     The repo link at the foot joins the same rule rather than restating it:
+     both are quiet furniture pointing away from the page, and two copies of one
+     treatment is one copy too many. `:global()` is how it reaches an anchor
+     that `EntryLink` rendered — Astro's scoping stops at a component boundary,
+     and the rule still cannot leave this page because `.source` carries the
+     cid. Same idiom as `experiments.astro`. */
+  .strip a:not(.strip__chip),
+  .source :global(.source__repo) {
     color: inherit;
     text-decoration-line: underline;
     text-decoration-color: var(--hairline-strong);
@@ -162,7 +199,8 @@ const jsonLd = toolJsonLd(tool);
     transition-timing-function: var(--ease);
   }
 
-  .strip a:not(.strip__chip):hover {
+  .strip a:not(.strip__chip):hover,
+  .source :global(.source__repo:hover) {
     color: var(--accent);
     text-decoration-color: var(--accent);
   }
@@ -200,5 +238,20 @@ const jsonLd = toolJsonLd(tool);
     /* baseline alignment moves the box, so nudge it back onto the text */
     align-self: center;
     border-radius: 3px;
+  }
+
+  /* The wrapper exists for the separator and nothing else. The `·` is a
+     `::before` on the span rather than on the anchor, so it is never part of
+     the link's text or its target — the same rule the metadata strip states
+     above, and the reason neither of them is typed into the content. */
+  .source__also {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+
+  .source__also::before {
+    content: "\00b7";
+    color: var(--hairline-strong);
   }
 </style>

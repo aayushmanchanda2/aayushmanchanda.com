@@ -24,6 +24,7 @@ import {
   buildToolEntry,
   clip,
   collectionsFrom,
+  repoFrom,
 } from "./entries.mjs";
 
 /**
@@ -257,6 +258,74 @@ test("no post is exactly the entry the pipeline built before", () => {
     kind: "post",
     note: null,
   });
+});
+
+/* ---------------------------------------------------------------------------
+   A saved link is a product site or a repository, never both at once
+   --------------------------------------------------------------------------- */
+
+test("a tool saved from GitHub is filed as a repo, with no url", () => {
+  const entry = buildToolEntry({
+    bookmark: bookmark({ title: "Buzz", url: "https://github.com/block/buzz" }),
+    slug: "buzz",
+    date: "2026-08-26",
+  });
+
+  assert.equal(entry.url, null, "a repository is not the product's own site");
+  assert.equal(entry.repo, "https://github.com/block/buzz");
+});
+
+test("a tool saved from anywhere else keeps its url and gets no repo", () => {
+  const entry = buildToolEntry({
+    bookmark: bookmark({ title: "Eve", url: "https://eve.dev" }),
+    slug: "eve",
+    date: "2026-08-26",
+  });
+
+  assert.equal(entry.url, "https://eve.dev");
+  assert.equal("repo" in entry, false, "absent, not null, like every other optional field");
+});
+
+test("the pipeline never invents a product site it was not given", () => {
+  /*
+   * The failure this guards against is the tidy-looking one: filling `url` in
+   * with the repository so the field is not empty. That is exactly what put a
+   * column of identical GitHub logos on /tools and hid the real site of every
+   * tool that had one. A null here is a question for a human, not a gap.
+   */
+  const entry = buildToolEntry({
+    bookmark: bookmark({ title: "Papercuts", url: "https://github.com/treygoff24/papercuts" }),
+    slug: "papercuts",
+    date: "2026-08-26",
+  });
+
+  assert.equal(entry.url, null);
+  assert.notEqual(entry.repo, entry.url);
+});
+
+test("a deep link is folded back to the repository it is inside", () => {
+  // Somebody saving a project from its README on a phone saves the README.
+  assert.equal(
+    repoFrom("https://github.com/block/buzz/blob/main/README.md"),
+    "https://github.com/block/buzz",
+  );
+  assert.equal(repoFrom("https://github.com/block/buzz/issues/7"), "https://github.com/block/buzz");
+  assert.equal(repoFrom("https://github.com/block/buzz.git"), "https://github.com/block/buzz");
+  assert.equal(repoFrom("https://www.github.com/block/buzz/"), "https://github.com/block/buzz");
+});
+
+test("a profile is not a repository, so it stays a url", () => {
+  assert.equal(repoFrom("https://github.com/block"), null);
+  assert.equal(repoFrom("https://gist.github.com/block/abc123"), null);
+  assert.equal(repoFrom("https://eve.dev"), null);
+  assert.equal(repoFrom("not a url"), null, "survives anything a person typed");
+
+  const entry = buildToolEntry({
+    bookmark: bookmark({ title: "block", url: "https://github.com/block" }),
+    slug: "block",
+    date: "2026-08-26",
+  });
+  assert.equal(entry.url, "https://github.com/block");
 });
 
 test("tools and reading entries carry no collections", () => {

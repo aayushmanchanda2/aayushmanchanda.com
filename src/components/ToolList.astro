@@ -7,7 +7,7 @@
  * verdict pages pass a subset and keep the headers; the category pages turn
  * them off, because there the h1 already says the category.
  */
-import { faviconUrl } from "../lib/links";
+import { markFor } from "../lib/links";
 import type { Tool } from "../lib/tools";
 import { groupByCategory } from "../lib/tools";
 import VerdictBadge from "./VerdictBadge.astro";
@@ -39,12 +39,22 @@ const groups = grouped
         )}
 
         <ul class="group__rows">
-          {group.tools.map((tool) => (
+          {group.tools.map((tool) => {
+            const mark = markFor(tool);
+            /*
+              The product when there is one, the repository when there is not.
+              A row is one link, and the one it should be is the place a reader
+              would rather land: a page about the thing beats the source of it.
+              Both are on the details page.
+            */
+            const href = tool.url ?? tool.repo;
+
+            return (
             <li class="row">
-              {tool.url ? (
+              {mark.kind === "logo" ? (
                 <img
                   class="row__mark outlined"
-                  src={faviconUrl(tool.url)}
+                  src={mark.src}
                   alt=""
                   width="16"
                   height="16"
@@ -53,14 +63,21 @@ const groups = grouped
                   referrerpolicy="no-referrer"
                 />
               ) : (
-                <span class="row__mark row__mark--blank outlined" />
+                /*
+                  Decorative, so `aria-hidden`: the letter is the first letter
+                  of the name sitting immediately beside it, and reading it out
+                  would announce that letter twice.
+                */
+                <span class="row__mark row__mark--initial outlined mono" aria-hidden="true">
+                  {mark.letter}
+                </span>
               )}
 
               <span class="row__name">
-                {tool.url ? (
+                {href ? (
                   <a
                     class="row__link"
-                    href={tool.url}
+                    href={href}
                     rel="noopener nofollow"
                     target="_blank"
                   >
@@ -83,7 +100,8 @@ const groups = grouped
 
               <p class="row__note">{tool.note}</p>
             </li>
-          ))}
+            );
+          })}
         </ul>
       </section>
     ))
@@ -145,9 +163,24 @@ const groups = grouped
     border-radius: 3px;
   }
 
-  .row__mark--blank {
-    display: block;
+  /* The mark for a tool with no product site: its own initial, not a borrowed
+     logo. A repository-only row could show its GitHub owner's avatar instead,
+     and deliberately does not — `lib/links.ts › markFor` has the reasoning and
+     /privacy is the reason.
+
+     `letter-spacing: 0` undoes the `.mono` label tracking, which on a single
+     centred glyph is not tracking at all: it is 0.08em of padding on the right
+     only, and it lands the letter visibly left of centre in a 16px box. */
+  .row__mark--initial {
+    display: grid;
+    place-items: center;
     background: var(--dot);
+    color: var(--muted);
+    /* 9px, not the label's 11px: the box is 16px and the name beside it is
+       17px, so a mark set at label size shouts over both. */
+    font-size: 0.5625rem;
+    line-height: 1;
+    letter-spacing: 0;
   }
 
   .row__name {

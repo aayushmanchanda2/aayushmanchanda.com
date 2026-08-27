@@ -372,6 +372,13 @@ export function reviewBody(tool: Tool): string {
  * (`DeveloperApplication` and friends) and the property accepts free text; a
  * bench of agent tooling does not fit that vocabulary, and picking the nearest
  * official-sounding term would be a tidier claim than the true one.
+ *
+ * `url` and `sameAs` are the parity rule reading the Source line at the foot of
+ * the page. `url` is where that line sends a reader — the product's own site,
+ * or the repository when there is no site — and `sameAs` is the *other* page
+ * about the same software, which only exists when both do. A repository-only
+ * tool therefore gets a `url` and no `sameAs`, rather than the same URL twice
+ * under two properties, which would claim a second source that is not there.
  */
 export function toolJsonLd(tool: Tool): JsonLd {
   const url = pageUrl(`/tools/${tool.slug}`);
@@ -382,8 +389,9 @@ export function toolJsonLd(tool: Tool): JsonLd {
       "@type": "SoftwareApplication",
       "@id": softwareId,
       name: tool.name,
-      url: tool.url,
+      url: tool.url ?? tool.repo,
       applicationCategory: tool.category,
+      sameAs: tool.url !== null && tool.repo !== null ? [tool.repo] : null,
     },
     {
       "@type": "Review",

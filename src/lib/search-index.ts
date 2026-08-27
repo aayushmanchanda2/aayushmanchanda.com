@@ -20,9 +20,11 @@
 import { getCollection } from "astro:content";
 
 import { experiments } from "./experiments";
+import { repoOwner } from "./links";
 import { reading } from "./reading";
 import type { SearchEntry } from "./search";
 import { collectionLabel, sites } from "./sites";
+import type { Tool } from "./tools";
 import { tools } from "./tools";
 
 /**
@@ -87,10 +89,17 @@ const STATIC_PAGES: readonly SearchEntry[] = [
  * A tool's searchable extras: what it is for, what I decided, and where it
  * lives. The host comes off the URL rather than being typed again, so a tool
  * whose homepage moves cannot keep answering to the old domain.
+ *
+ * The repository contributes its **owner** and not its host. Every repository
+ * on the site is on github.com, so indexing the host would score twenty rows
+ * identically for one word that separates none of them, while the owner is the
+ * word somebody would actually type: "vercel" should find Eve and "block"
+ * should find Buzz, and neither name is anywhere else in the row.
  */
-function toolTerms(category: string, verdict: string, url: string | null): string {
-  const host = url === null ? "" : hostOf(url);
-  return [category, verdict, host].filter(Boolean).join(" ");
+function toolTerms(tool: Tool): string {
+  const host = tool.url === null ? "" : hostOf(tool.url);
+  const owner = tool.repo === null ? "" : repoOwner(tool.repo);
+  return [tool.category, tool.verdict, host, owner].filter(Boolean).join(" ");
 }
 
 /** `rareui.com` — the host, without the `www.` that nobody types. */
@@ -134,7 +143,7 @@ async function build(): Promise<SearchEntry[]> {
         title: tool.name,
         section: SECTION.tools,
         href: `/tools/${tool.slug}`,
-        terms: toolTerms(tool.category, tool.verdict, tool.url),
+        terms: toolTerms(tool),
       }),
     ),
 

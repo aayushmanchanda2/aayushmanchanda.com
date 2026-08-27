@@ -12,11 +12,16 @@
  * The generic half of the parse — the slug shape, the date check, "is this a
  * non-empty string" — comes from `lib/parse.ts`, which all three data
  * boundaries share. What stayed here is what only /tools knows: the verdict
- * vocabulary, the http(s) URL rule, the category-collision check, and every
- * error message, which are written for the person who has to go and fix the
- * file.
+ * vocabulary, the http(s) URL rule, the product-versus-repository split, the
+ * category-collision check, and every error message, which are written for the
+ * person who has to go and fix the file.
+ *
+ * The shape of a repository URL is not one of those. It is a fact about a URL,
+ * so it lives in `lib/links.ts › githubRepo` alongside `linkLabel`, and the
+ * publish pipeline is held to the same rule from the other side.
  */
 
+import { githubRepo } from "./links";
 import type { Fail } from "./parse";
 import { SLUG, readers, routeSlug } from "./parse";
 
@@ -30,8 +35,25 @@ export interface Tool {
   /** URL-safe id; also the details page path (`/tools/<slug>`). */
   slug: string;
   name: string;
-  /** null when the tool has no public URL worth linking. Renders unlinked. */
+  /**
+   * The product's own site, and only that.
+   *
+   * null is the ordinary answer for half this list, because half of it is
+   * software whose only home is a repository. A repository goes in `repo`; a
+   * repository written here fails the build, which is the whole point of the
+   * split — a row whose `url` was `github.com/owner/name` showed the GitHub
+   * logo, said "github.com" where the product's name should be, and hid the
+   * real site of every tool that had one.
+   */
   url: string | null;
+  /**
+   * `https://github.com/{owner}/{name}`, canonically spelled, or null.
+   *
+   * Independent of `url` in both directions: a tool can have a product site and
+   * no public source, source and no site, both, or neither. The pages render
+   * whichever it has.
+   */
+  repo: string | null;
   category: string;
   verdict: Verdict;
   /** One line, in Aayush's voice. Rendered as-is; never editorialised. */
@@ -117,8 +139,53 @@ function readUrl(entry: Record<string, unknown>, where: string): string | null {
     fail(where, `has a "url" that is not http(s): ${JSON.stringify(value)}`);
   }
 
+  if (githubRepo(value) !== null) {
+    fail(
+      where,
+      `has a GitHub repository in "url": ${JSON.stringify(value)}. A repository ` +
+        `goes in "repo"; "url" is the product's own site, or null when there is not one.`,
+    );
+  }
+
   // Returned as authored, not as `parsed.toString()`, which would rewrite bare
   // origins with a trailing slash and change what the page shows.
+  return value;
+}
+
+/**
+ * The repository, or null.
+ *
+ * Stricter than `url` on purpose, in the one way that matters: the value has to
+ * already be canonical. `githubRepo` will happily fold `.../buzz.git` and
+ * `.../buzz/` down to the same repository, and accepting either here would let
+ * three spellings of one repo sit in the file and render three different link
+ * labels. So a non-canonical spelling stops the build and the message says what
+ * to write instead, which is a five-second fix rather than a hunt.
+ */
+function readRepo(entry: Record<string, unknown>, where: string): string | null {
+  const value = entry["repo"];
+  if (value === undefined || value === null) return null;
+
+  if (typeof value !== "string") {
+    fail(where, `needs "repo" to be a string or null (got ${JSON.stringify(value)})`);
+  }
+
+  const canonical = githubRepo(value);
+  if (canonical === null) {
+    fail(
+      where,
+      `has a "repo" that is not a github.com/{owner}/{name} URL: ${JSON.stringify(value)}. ` +
+        `A profile, a branch, a file and a gist are none of them a repository.`,
+    );
+  }
+  if (canonical !== value) {
+    fail(
+      where,
+      `has a "repo" that is not written canonically: ${JSON.stringify(value)}. ` +
+        `Write it as ${JSON.stringify(canonical)}.`,
+    );
+  }
+
   return value;
 }
 
@@ -153,6 +220,7 @@ export function parseTools(value: unknown): Tool[] {
       slug,
       name: readString(item, "name", where),
       url: readUrl(item, where),
+      repo: readRepo(item, where),
       category: readString(item, "category", where),
       verdict,
       note: readString(item, "note", where),
