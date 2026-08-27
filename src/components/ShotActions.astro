@@ -111,8 +111,13 @@ const { src, title, slug } = Astro.props;
     display: none;
   }
 
-  .act:hover {
-    color: var(--fg);
+  /* Gated: Copy keeps the reader on the page, and on touch a tapped control's
+     `:hover` latches — the button would hold the full-ink state after the
+     "Copied" flash had already said everything (design.md §4). */
+  @media (hover: hover) {
+    .act:hover {
+      color: var(--fg);
+    }
   }
 
   .act__icon {

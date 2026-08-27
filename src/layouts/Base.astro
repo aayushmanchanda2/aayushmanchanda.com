@@ -517,8 +517,24 @@ const markdownVariant = variant === null ? null : absolute(variant);
         text-decoration: none;
       }
 
-      .foot__link:hover {
-        color: var(--accent);
+      /* Footer hovers are gated: the profile links open a new tab and Search
+         opens the palette, so this page stays on screen, and on touch a tap
+         latches `:hover` — the pressed item would sit accent-blue until the
+         reader tapped elsewhere (design.md §4). The colophon links share the
+         gate because they share the selector; on touch they navigate before a
+         hover could show, so the gate costs them nothing. */
+      @media (hover: hover) {
+        .foot__link:hover {
+          color: var(--accent);
+        }
+
+        .foot__quiet:hover {
+          color: var(--accent);
+        }
+
+        .foot__search:hover kbd {
+          border-color: currentColor;
+        }
       }
 
       /* The glyph row is a 14px target, so it takes the 40px hit area the rail
@@ -611,10 +627,6 @@ const markdownVariant = variant === null ? null : absolute(variant);
         text-decoration: none;
       }
 
-      .foot__quiet:hover {
-        color: var(--accent);
-      }
-
       .foot__search {
         cursor: pointer;
       }
@@ -624,10 +636,6 @@ const markdownVariant = variant === null ? null : absolute(variant);
         margin-left: 0.35rem;
         padding: 0.1rem 0.35rem;
         border: 1px solid var(--hairline);
-      }
-
-      .foot__search:hover kbd {
-        border-color: currentColor;
       }
 
       @media (max-width: 599px) {

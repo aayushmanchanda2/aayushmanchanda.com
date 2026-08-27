@@ -152,7 +152,16 @@ const current = normalize(pathname);
     transition-timing-function: var(--ease);
   }
 
-  .mnav__trigger:hover,
+  /* The hover half is gated: closing the panel puts this control back on
+     screen, and on touch the tap that opened it latches `:hover` — the label
+     would sit accent-blue after the panel had gone, reading as stuck
+     (design.md §4). The expanded state is real state and stays ungated. */
+  @media (hover: hover) {
+    .mnav__trigger:hover {
+      color: var(--accent);
+    }
+  }
+
   .mnav__trigger[aria-expanded="true"] {
     color: var(--accent);
   }
