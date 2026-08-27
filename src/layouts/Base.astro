@@ -7,6 +7,12 @@
  */
 import "@fontsource-variable/geist/wght.css";
 import "@fontsource-variable/geist-mono/wght.css";
+// `?url` imports so the preload links below carry the same hashed filenames
+// the bundled CSS references. A hand-written path would break silently on the
+// next @fontsource update: the preload would 404, the CSS would still work,
+// and every page would quietly pay for a file it never uses.
+import geistLatinWoff2 from "@fontsource-variable/geist/files/geist-latin-wght-normal.woff2?url";
+import geistMonoLatinWoff2 from "@fontsource-variable/geist-mono/files/geist-mono-latin-wght-normal.woff2?url";
 import "../styles/global.css";
 // after global.css: both of these read tokens defined there
 import "../styles/chip.css";
@@ -161,6 +167,31 @@ const markdownVariant = variant === null ? null : absolute(variant);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+    {/*
+      The two latin font files, preloaded. Both faces are on every page — the
+      prose is Geist, every label is Geist Mono — but without these the browser
+      cannot start either fetch until the stylesheet has arrived and been
+      parsed, so the fonts sit a round trip behind text they are already late
+      for and arrive as a visible swap. Latin only: it is the subset every page
+      uses, and the others stay behind their `unicode-range` until a glyph asks.
+      `crossorigin` is load-bearing — fonts fetch in CORS mode even from our own
+      origin, and a preload whose mode does not match the real request is spent
+      on a file the browser then fetches a second time.
+    */}
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href={geistLatinWoff2}
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href={geistMonoLatinWoff2}
+      crossorigin
+    />
     {/*
       One meta per scheme, carrying the `prefers-color-scheme` queries a
       browser resolves without help — which is what keeps the mobile status bar

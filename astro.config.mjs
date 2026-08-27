@@ -18,6 +18,14 @@ import { SITE_URL, absolute } from './src/lib/site.ts';
  * Read from `src/lib/markdown.ts`, the one list of variants the site has. This
  * file used to keep its own copy, and a copy goes stale quietly: /library's
  * variant would have shipped, worked, and stayed invisible to the sitemap.
+ *
+ * A search engine reads the same sitemap, and to it each variant is a duplicate
+ * of the HTML page it mirrors. So every `.md` response carries a
+ * `Link: rel="canonical"` header naming its HTML page (`vercel.json`): the
+ * variant stays discoverable here, and the HTML page is the one that gets
+ * indexed. Dropping the variants from the sitemap instead would have kept
+ * search engines tidy by hiding the markdown from every agent that starts at
+ * the sitemap, which is backwards for this site.
  */
 const MARKDOWN_VARIANTS = Object.values(PAGES).map((page) => absolute(page.md));
 

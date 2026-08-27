@@ -182,7 +182,9 @@ git either way.
 Every section page has a markdown variant generated from the same parsed data the
 HTML renders, so the two cannot drift (`src/lib/markdown.ts`, `src/pages/*.md.ts`).
 Send `Accept: text/markdown` to a page's own URL, or fetch the `.md` URL
-directly. `/llms.txt` is the front door. `vercel.json` holds the negotiation
+directly. `/llms.txt` is the front door. Each `.md` response carries a
+`Link: rel="canonical"` header naming its HTML page, so a search engine that
+finds both indexes one. `vercel.json` holds the negotiation
 rules and **no comments**: Vercel validates it against a strict schema and fails
 the deployment on any key it does not recognise, `_comment` included.
 

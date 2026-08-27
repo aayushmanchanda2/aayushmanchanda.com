@@ -84,10 +84,20 @@
       "continue": true
     },
     {
-      "src": "^/(index|tools|sites|library|experiments|notes)\\.md$",
+      "src": "^/index\\.md$",
       "headers": {
         "Content-Type": "text/markdown; charset=utf-8",
-        "Vary": "Accept, Accept-Encoding"
+        "Vary": "Accept, Accept-Encoding",
+        "Link": "<https://aayushmanchanda.com/>; rel=\"canonical\""
+      },
+      "continue": true
+    },
+    {
+      "src": "^/(tools|sites|library|experiments|notes)\\.md$",
+      "headers": {
+        "Content-Type": "text/markdown; charset=utf-8",
+        "Vary": "Accept, Accept-Encoding",
+        "Link": "<https://aayushmanchanda.com/$1/>; rel=\"canonical\""
       },
       "continue": true
     },
