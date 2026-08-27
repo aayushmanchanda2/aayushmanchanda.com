@@ -55,6 +55,34 @@ const RED = /** @type {[number, number, number]} */ ([220, 40, 40]);
 const BLUE = /** @type {[number, number, number]} */ ([40, 70, 220]);
 
 /**
+ * A PNG whose top is content and whose bottom is a scroll-distance tail.
+ *
+ * The content rows alternate colour by COLUMN, because the trim judges a row
+ * by its horizontal deviation: a `bandedPng` row is one flat colour from edge
+ * to edge, which is exactly what a tail looks like. Stripes are what make the
+ * top of this picture a page.
+ *
+ * @param {number} contentRows @param {number} blankRows
+ * @returns {Promise<Buffer>}
+ */
+async function tailedPng(contentRows, blankRows, width = 400) {
+  const height = contentRows + blankRows;
+  const pixels = Buffer.alloc(width * height * 3);
+
+  for (let y = 0; y < height; y += 1) {
+    for (let x = 0; x < width; x += 1) {
+      const colour = y < contentRows && x % 16 < 8 ? RED : BLUE;
+      const at = (y * width + x) * 3;
+      pixels[at] = colour[0];
+      pixels[at + 1] = colour[1];
+      pixels[at + 2] = colour[2];
+    }
+  }
+
+  return sharp(pixels, { raw: { width, height, channels: 3 } }).png().toBuffer();
+}
+
+/**
  * A near-white viewport with a small block of dark pixels in the middle of it,
  * which is what a challenge page is: one sentence on an empty screen.
  *
@@ -158,6 +186,29 @@ test("a Firecrawl shot too tall to keep is clipped to the same ceiling", async (
   const written = await sharp(path.join(outDir, "endless.webp")).metadata();
   assert.equal(written.height, MAX_SHOT_PX, "the ceiling is the ceiling whoever took the picture");
   assert.deepEqual(lines, [`capture: endless is ${MAX_SHOT_PX + 500}px tall, clipped to the first ${MAX_SHOT_PX}px`]);
+});
+
+test("a shot with a scroll-distance tail is trimmed before it is encoded", async (t) => {
+  // The whole path in one pass: trim, encode, judge, palette, disk. 1,200 rows
+  // of page, then 2,000 of flat background — the shape a GSAP-pinned site
+  // hands back when its measured height includes scroll distance the content
+  // never painted. What lands on disk is the page plus the 120px of bottom
+  // padding the trim keeps, and the run log says what happened to the rest.
+  const outDir = await scratch(t);
+  /** @type {string[]} */
+  const lines = [];
+
+  await captureWithFirecrawl({
+    url: "https://pinned.example",
+    slug: "pinned",
+    client: clientReturning(await tailedPng(1_200, 2_000)),
+    outDir,
+    log: (line) => lines.push(line),
+  });
+
+  const written = await sharp(path.join(outDir, "pinned.webp")).metadata();
+  assert.equal(written.height, 1_320, "1,200 of content plus the kept padding");
+  assert.deepEqual(lines, ["capture: pinned trails off into blank, trimmed 3200px to 1320px"]);
 });
 
 test("a slug that is not URL-safe is refused before anything is asked of Firecrawl", async (t) => {

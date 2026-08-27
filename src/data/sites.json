@@ -27,11 +27,11 @@
     "saved_date": "2026-08-26",
     "shot": "/shots/save-design.webp",
     "palette": [
-      "#09090b",
-      "#29292e",
+      "#090a0b",
+      "#2a2a30",
       "#b190ba",
       "#716f71",
-      "#4e4e50",
+      "#4f4f50",
       "#53578a"
     ],
     "collections": [
@@ -127,11 +127,11 @@
     "shot": "/shots/atishay-tuli-creative-frontend-developer.webp",
     "palette": [
       "#ffffff",
-      "#ede5cf",
       "#5b6b3c",
-      "#8c6c6d",
-      "#97d0f2",
-      "#f0cf95"
+      "#e9e2cf",
+      "#90928c",
+      "#6e6e6e",
+      "#afb0ae"
     ],
     "collections": [
       "portfolios"

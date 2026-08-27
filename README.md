@@ -49,7 +49,15 @@ because it is the folder I actually tap; `galleryFor` in `pipeline/state.mjs`
 translates, and `vercel.json` 308s `/reading` and everything under it.
 
 Sites get one full-page screenshot in whatever colour scheme the site renders by
-default, cut off after 12,000px, plus the dominant colours read off it. Tools get
+default, cut off after 12,000px, plus the dominant colours read off it. A
+scroll-driven site (GSAP pins, Lenis) reports a document height that includes
+its animations' scroll distance, which arrives as a long run of flat background
+after the last painted section — `pipeline/trim.mjs` measures the rows and cuts
+that tail before the encode, keeping 120px of bottom padding, with thresholds
+calibrated so real quiet footers survive (the numbers and their anchors are in
+that file's comments). Firecrawl's fullPage screenshot renders the same
+document height, so it inherits the same tail and is not a way around this;
+the trim runs on both paths. Tools get
 an entry and no picture: category `unsorted`, verdict `watching`, note "Saved
 from Raindrop. Not tested yet." A GitHub link lands in `repo`, never `url`. Each
 run also commits `pipeline/state.json`: what published, what failed, how many

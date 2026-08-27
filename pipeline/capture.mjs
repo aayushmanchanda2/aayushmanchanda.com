@@ -53,6 +53,7 @@ import {
   shotLooksBlank,
 } from "./challenge.mjs";
 import { extractPalette } from "./palette.mjs";
+import { trimTrailingBlank } from "./trim.mjs";
 import { describe } from "./util.mjs";
 
 /** Desktop width, 1x. Retina would quadruple the bytes for no gallery gain. */
@@ -390,15 +391,31 @@ function checkArgs(who, url, slug) {
  * a challenge page": the second chance has no DOM to sniff, so this is the only
  * check standing between it and publishing the wall the browser just refused.
  *
- * The order is deliberate. Encode, judge, and only then extract a palette and
- * touch the disk: the VET-27 symptom was a palette faithfully read off a white
- * checkpoint, and there is no point computing one for a file that is not going
- * to exist. Nothing is written before the shot has earned it.
+ * The order is deliberate. Trim, encode, judge, and only then extract a
+ * palette and touch the disk: the VET-27 symptom was a palette faithfully read
+ * off a white checkpoint, and there is no point computing one for a file that
+ * is not going to exist. Nothing is written before the shot has earned it.
+ *
+ * The trim comes first so everything after it describes the file that ships.
+ * A scroll-driven page (GSAP pins, Lenis) reports a document height that
+ * includes its animations' scroll DISTANCE, and the tail of that height
+ * arrives as thousands of rows of flat background — see `trim.mjs` for the
+ * measurements. Cutting it before the encode means the WebP is encoded once,
+ * the blank-shot backstop measures the committed artifact, and the palette is
+ * read off pixels the gallery will actually show instead of letting a band of
+ * background outvote the page.
  *
  * @param {Buffer} png @param {string} slug @param {string} outDir
+ * @param {(line: string) => void} log
  * @returns {Promise<{ shot: string, palette: string[] }>}
  */
-async function finish(png, slug, outDir) {
+async function finish(png, slug, outDir, log) {
+  const trimmed = await trimTrailingBlank(png);
+  if (trimmed !== null) {
+    log(`capture: ${slug} trails off into blank, trimmed ${trimmed.from}px to ${trimmed.to}px`);
+    png = trimmed.png;
+  }
+
   const webp = await encodeWebp(png);
 
   const measurement = await measureShot(webp);
@@ -450,7 +467,7 @@ export async function captureSite({
 
   try {
     const png = await shoot(browser, url, log, slug);
-    return await finish(png, slug, outDir);
+    return await finish(png, slug, outDir, log);
   } finally {
     await browser.close();
   }
@@ -497,7 +514,7 @@ export async function captureWithFirecrawl({
   await mkdir(outDir, { recursive: true });
 
   const png = await client.screenshotFullPage(url);
-  return await finish(await clipTall(png, slug, log), slug, outDir);
+  return await finish(await clipTall(png, slug, log), slug, outDir, log);
 }
 
 /**
