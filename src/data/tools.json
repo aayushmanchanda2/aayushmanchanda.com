@@ -244,5 +244,24 @@
     "verdict": "watching",
     "note": "A self-hosted control room for running coding agents in isolated worktrees, sharing live sessions, and taking each run through diff review to a pull request.",
     "status_date": "2026-08-28"
+  },
+  {
+    "slug": "swiped-the-best-content-in-the-design-space",
+    "name": "swiped. | The Best Content in the Design Space",
+    "url": "https://swiped.design/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A weekly, hand-curated swipe file of high-performing design content from X and LinkedIn, useful for seeing what formats and ideas are working.",
+    "status_date": "2026-08-28"
+  },
+  {
+    "slug": "openinstinct-imessage-personal-assistant-password-vault",
+    "name": "OpenInstinct — iMessage personal assistant + password vault",
+    "url": null,
+    "repo": "https://github.com/Merit-Systems/OpenInstinct",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A self-hostable iMessage assistant that can browse and act for you while keeping credentials encrypted in your own stack; promising, but explicitly not production-ready.",
+    "status_date": "2026-08-28"
   }
 ]

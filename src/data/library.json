@@ -173,5 +173,140 @@
     "saved_date": "2026-08-26",
     "kind": "post",
     "note": "The post this site's publish pipeline copies. His saves into Notion; mine commits to git and takes the screenshot in CI."
+  },
+  {
+    "slug": "tell-your-agent-to-mine-your-conversations",
+    "title": "Tell your agent: \"mine all my conversations on disk and tell me how I work…",
+    "url": "https://x.com/aarondfrancis/status/2093028643261792292?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-08-28",
+    "kind": "post",
+    "note": "@aarondfrancis: Tell your agent: \"mine all my conversations on disk and tell me how I work, what I'm good at, what I'm bad at, and how I can use AI better\" You might (not) like the results!"
+  },
+  {
+    "slug": "orwell-s-rules-for-writing-with-llms",
+    "title": "If you want people to read your stuff please follow Orwell's rules. These LLMs…",
+    "url": "https://x.com/josephfwyer/status/2092819538505273544?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-08-28",
+    "kind": "post",
+    "note": "@josephfwyer: If you want people to read your stuff please follow Orwell's rules. These LLMs are not your friends. They write with so much damn passive voice, incoherent figures of speech, and unnecessary -ly words. Orwell's rules: 1. Never use a metaphor, simile, or other figure of speech…"
+  },
+  {
+    "slug": "introducing-ocr-in-anydoc",
+    "title": "introducing ocr in anydoc now your agents can read scanned docs for free →…",
+    "url": "https://x.com/nickscamara_/status/2093080092201386195?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-08-28",
+    "kind": "post",
+    "note": "@nickscamara: introducing ocr in anydoc now your agents can read scanned docs for free → sub-5ms for non ocr → 190ms median per ocr page → layout detection, tables, formulas → ocr hosted option via @firecrawl → free, no api key needed https://github.com/firecrawl/anydoc"
+  },
+  {
+    "slug": "double-your-productivity-without-more-work-or-stress",
+    "title": "Double your productivity without more work or stress",
+    "url": "https://longform.asmartbear.com/double-your-productivity/?utm_source=twitter&utm_campaign=asmartbear_twitter&utm_medium=social",
+    "domain": "longform.asmartbear.com",
+    "saved_date": "2026-08-28",
+    "kind": "article",
+    "note": "Jason Cohen argues that doubling productivity is possible without longer hours or more stress, cutting through the fake math of getting 1% better every day."
+  },
+  {
+    "slug": "why-some-people-become-successful-while-others-stay-average",
+    "title": "This guy literally explained why some people become successful while other stay…",
+    "url": "https://x.com/dhruvkumar16797/status/2091792678157725711?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-08-28",
+    "kind": "post",
+    "note": "@Dhruvkumar16797: This guy literally explained why some people become successful while other stay average. The reason is uncomfortable. Game Theory Watch this:"
+  },
+  {
+    "slug": "how-to-fix-your-entire-life-in-1-day",
+    "title": "How to fix your entire life in 1 day",
+    "url": "https://x.com/thedankoe/status/2010751592346030461?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-08-28",
+    "kind": "post",
+    "note": "Dan Koe's one-day reflection protocol treats lasting change as an identity and lifestyle problem, not another burst of discipline."
+  },
+  {
+    "slug": "we-are-in-the-middle-of-the-digital-renaissance-please-take",
+    "title": "There will be 3 types of people in the future. And the divide between them is…",
+    "url": "https://x.com/thedankoe/status/2093051293078261973?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-08-28",
+    "kind": "post",
+    "note": "@thedankoe: There will be 3 types of people in the future. And the divide between them is growing larger every day. If you want to win in the next 5-10 years, it is critical that you avoid becoming number 1 or 2. 1) The Purists “We’re the ones who stayed clean.” The ones who rejected AI and…"
+  },
+  {
+    "slug": "there-s-no-speed-limit",
+    "title": "There’s no speed limit",
+    "url": "https://sive.rs/kimo",
+    "domain": "sive.rs",
+    "saved_date": "2026-08-28",
+    "kind": "article",
+    "note": "Derek Sivers' story of a teacher who compressed years of music theory into a few intense lessons, a sharp reminder that the default pace isn't a law."
+  },
+  {
+    "slug": "arxiv-quickarxiv",
+    "title": "arXiv -&gt; quickarXiv Papers are often written in convoluted language that is…",
+    "url": "https://x.com/askalphaxiv/status/2092623602034073689?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-08-28",
+    "kind": "post",
+    "note": "@askalphaxiv: arXiv -&gt; quickarXiv Papers are often written in convoluted language that is hard to understand Swap arXiv -&gt; quickarXiv on any paper URL to get an instant blog with figures, insights, and explanations. Now extracted with @Zai_org's GLM OCR 🚀 Also includes code + author…"
+  },
+  {
+    "slug": "herdr-crash-course-a-beginner-s-guide",
+    "title": "Just recorded a @herdrdev Crash Course. I tried it first 2 months ago -- didn't…",
+    "url": "https://x.com/_alejandroao/status/2092880566055993358?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-08-28",
+    "kind": "post",
+    "note": "@_alejandroao: Just recorded a @herdrdev Crash Course. I tried it first 2 months ago -- didn't like it. Tried it again 10 days ago -- i love it and can't stop using it. Here's a full beginner's guide. 0:00 - Intro 1:20 - Demo: installing Herdr and quick tour 6:19 - What a terminal multiplexer…"
+  },
+  {
+    "slug": "cua-computer-history-open-source-local-memory-for-agents",
+    "title": "1/ Today, we're releasing the first open-source Computer History - now in early…",
+    "url": "https://x.com/trycua/status/2089770780053643397?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-08-28",
+    "kind": "post",
+    "note": "@trycua: 1/ Today, we're releasing the first open-source Computer History - now in early preview for Cua Driver on macOS, Windows, and Linux. It gives agents an encrypted, local record of actions they took through Cua Driver, so new sessions can recover useful context from earlier work…"
+  },
+  {
+    "slug": "every-hermes-agent-concept-explained-for-normal-people",
+    "title": "one of the best video to start with when you are new to Hermes Agent, highly…",
+    "url": "https://x.com/witcheer/status/2092899115814228038?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-08-28",
+    "kind": "post",
+    "note": "@witcheer: one of the best video to start with when you are new to Hermes Agent, highly recommend watching it! https://www.youtube.com/watch?si=XPxuwOAIH6QdfMh2&amp;v=lGtBPrSrnjY&amp;feature=youtu.be"
+  },
+  {
+    "slug": "webmcp-by-microsoft-and-google-is-here",
+    "title": "WebMCP by Microsoft and Google is HERE and I'm surprised more people aren't…",
+    "url": "https://x.com/gregisenberg/status/2092699140803211682?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-08-28",
+    "kind": "post",
+    "note": "@gregisenberg: WebMCP by Microsoft and Google is HERE and I'm surprised more people aren't talking about it. Why does it matter? BILLIONS of dollars are about to move through agents, and the internet isn't built for them yet. 1. SEO was about Google understanding your page. 2. AEO was about AI…"
+  },
+  {
+    "slug": "how-to-train-your-agency-starting-today",
+    "title": "How to train your agency, starting today? 1. Make one \"uncomfortable ask\" per…",
+    "url": "https://x.com/kpaxs/status/2093186259325694127?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-08-28",
+    "kind": "post",
+    "note": "@Kpaxs: How to train your agency, starting today? 1. Make one \"uncomfortable ask\" per week 2. When you catch yourself saying \"I can't because…\" finish the sentence, then challenge every word 3. Solve one problem you'd normally outsource to fate 4. Reach out to one person \"above your…"
+  },
+  {
+    "slug": "grok-bot-guides",
+    "title": "Grok Bot Guides",
+    "url": "https://x.ai/bot/guides",
+    "domain": "x.ai",
+    "saved_date": "2026-08-28",
+    "kind": "article",
+    "note": "A collection of practical case studies on running Grok Bot teams across engineering, design, product, and GTM."
   }
 ]
