@@ -226,5 +226,23 @@
     "verdict": "watching",
     "note": "Came out of my orchestrator comparison as the one to try next if mobile coding starts mattering. Watching until it does.",
     "status_date": "2026-08-27"
+  },
+  {
+    "slug": "vgpu",
+    "name": "vgpu",
+    "url": "https://vgpu.sh/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A small WebGPU library from Vercel Labs with one API for browser canvases, headless Node.js and serverless runtimes, plus CLI and MCP discovery for agents.",
+    "status_date": "2026-08-28"
+  },
+  {
+    "slug": "open-session",
+    "name": "Open Session",
+    "url": "https://www.opensession.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A self-hosted control room for running coding agents in isolated worktrees, sharing live sessions, and taking each run through diff review to a pull request.",
+    "status_date": "2026-08-28"
   }
 ]
