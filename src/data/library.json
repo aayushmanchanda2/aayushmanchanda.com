@@ -344,5 +344,23 @@
     "saved_date": "2026-08-29",
     "kind": "video",
     "note": "Bailey Schildbach wrestles with the gap between creative ambition and economic reality, asking how to protect the work you love while still paying rent."
+  },
+  {
+    "slug": "the-accidental-cto",
+    "title": "The Accidental CTO",
+    "url": "https://github.com/subhashchy/The-Accidental-CTO",
+    "domain": "github.com",
+    "saved_date": "2026-08-29",
+    "kind": "article",
+    "note": "Subhash Choudhary's system design handbook explains how he scaled Dukaan from zero to a million stores without a CS degree, grounded in production lessons rather than textbook patterns."
+  },
+  {
+    "slug": "services-the-new-software-6-months-later",
+    "title": "The next $1T company will be a software company masquerading as a services…",
+    "url": "https://x.com/yamanzdh/status/2093504999158600161?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-08-29",
+    "kind": "post",
+    "note": "@yamanzdh: The next $1T company will be a software company masquerading as a services firm. We've been building, selling, and running an AI-native services startup in the life sciences industry for the past 6 months. When we raised our latest round, the story investors wanted to hear was…"
   }
 ]
