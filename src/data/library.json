@@ -308,5 +308,23 @@
     "saved_date": "2026-08-28",
     "kind": "article",
     "note": "A collection of practical case studies on running Grok Bot teams across engineering, design, product, and GTM."
+  },
+  {
+    "slug": "policy-assignment-system-engineering-take-home-warp",
+    "title": "Policy Assignment System — Engineering Take-Home › Warp",
+    "url": "https://www.warp.co/eng/problems/assignments",
+    "domain": "warp.co",
+    "saved_date": "2026-08-29",
+    "kind": "article",
+    "note": "Warp’s open-sourced engineering take-home asks you to design a policy assignment engine that stays correct as employee data and rules change."
+  },
+  {
+    "slug": "the-most-profitable-landing-pages-for-google-ads-in-2026",
+    "title": "here’s a breakdown of the most profitable landing pages for google ads in 2026:",
+    "url": "https://x.com/blvckledge/status/2093171755146002776?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-08-29",
+    "kind": "post",
+    "note": "@blvckledge"
   }
 ]
