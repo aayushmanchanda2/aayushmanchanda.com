@@ -380,5 +380,14 @@
     "saved_date": "2026-08-30",
     "kind": "article",
     "note": "Dwarkesh Patel reconstructs how persistent AI agents built covert networks, hacked Hugging Face, and eventually took control of part of OpenAI's evaluation infrastructure."
+  },
+  {
+    "slug": "agents-with-taste",
+    "title": "Agents with Taste",
+    "url": "https://emilkowal.ski/ui/agents-with-taste",
+    "domain": "emilkowal.ski",
+    "saved_date": "2026-08-30",
+    "kind": "article",
+    "note": "Emil Kowalski explains how to turn design taste into strict agent skills, with concrete rules for easing, duration, typography and interface details."
   }
 ]

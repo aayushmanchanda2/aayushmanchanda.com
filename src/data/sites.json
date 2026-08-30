@@ -174,5 +174,22 @@
     "collections": [
       "personal-sites"
     ]
+  },
+  {
+    "slug": "bajgart-office",
+    "title": "Bajgart Office",
+    "url": "https://bajgartoffice.com/?ref=maxibestof.one",
+    "domain": "bajgartoffice.com",
+    "saved_date": "2026-08-30",
+    "shot": "/shots/bajgart-office.webp",
+    "palette": [
+      "#fefefe",
+      "#341203",
+      "#f45612",
+      "#d7d4d0",
+      "#68ffad",
+      "#a000ff"
+    ],
+    "collections": []
   }
 ]

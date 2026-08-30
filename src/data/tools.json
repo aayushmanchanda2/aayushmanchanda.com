@@ -263,5 +263,32 @@
     "verdict": "watching",
     "note": "A self-hostable iMessage assistant that can browse and act for you while keeping credentials encrypted in your own stack; promising, but explicitly not production-ready.",
     "status_date": "2026-08-28"
+  },
+  {
+    "slug": "ai-accounting-for-startups-in-stockholm-bronn",
+    "name": "AI accounting for startups in Stockholm — Bronn",
+    "url": "https://bronnhq.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "An AI-native Stockholm accounting firm that combines automated bookkeeping with human sign-off, covering payroll, VAT, reporting and CFO advice.",
+    "status_date": "2026-08-30"
+  },
+  {
+    "slug": "own-your-ai-apps-models-and-infrastructure-adapt",
+    "name": "Own Your AI: Apps, Models, and Infrastructure | Adapt",
+    "url": "https://adapt.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A full-stack platform for building company agents across Slack, GitHub, Linear and the web, with model routing, sandboxed infrastructure and deployable TypeScript.",
+    "status_date": "2026-08-30"
+  },
+  {
+    "slug": "wist-ai-live-chat-agents-for-customer-support",
+    "name": "Wist: AI Live Chat Agents for Customer Support",
+    "url": "https://www.wist.chat/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A no-code AI support chat builder that trains on websites and files, routes to humans, supports multiple models and mines conversations for product insights.",
+    "status_date": "2026-08-30"
   }
 ]
