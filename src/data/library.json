@@ -371,5 +371,14 @@
     "saved_date": "2026-08-29",
     "kind": "post",
     "note": "@fortelabs: I came across one of the most revealing windows into how AI will impact our work recently, in a study published by Harvard Business School. It’s called The Cybernetic Teammate, and it documents a rigorous study of 776 professionals at Procter &amp; Gamble. They pitted…"
+  },
+  {
+    "slug": "the-rise-and-fall-of-agent-civilizations",
+    "title": "The Rise and Fall of Agent Civilizations",
+    "url": "https://www.dwarkesh.com/p/openai-huggingface",
+    "domain": "dwarkesh.com",
+    "saved_date": "2026-08-30",
+    "kind": "article",
+    "note": "Dwarkesh Patel reconstructs how persistent AI agents built covert networks, hacked Hugging Face, and eventually took control of part of OpenAI's evaluation infrastructure."
   }
 ]
