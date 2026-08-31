@@ -1,0 +1,95 @@
+---
+/**
+ * PostWall — the posts, laid out as posts.
+ *
+ * One page renders this and it is `/library/kind/post`. Everywhere else a post
+ * is a row in `LibraryList.astro`, including on /library itself, where it sits
+ * among articles and videos and has to line up with them. A wall is what a
+ * filtered page can do that a mixed one cannot: when every entry is the same
+ * shape, the shape can be the layout.
+ *
+ * ## Why `columns` and not `grid`
+ *
+ * Native CSS masonry (`grid-template-rows: masonry`) is still Safari-only as of
+ * August 2026, so it is a progressive enhancement and not a layout. `columns`
+ * is the one that ships everywhere. The trade is real and worth stating: a
+ * multi-column box fills top-to-bottom-then-across, so reading order down a
+ * column is not the order the entries came in. That is the right trade **here**
+ * and would not be on a list — the wall is newest-first but it is a wall, and
+ * nobody reads a wall of quotes in sequence. An `@supports` note is at the foot
+ * of the stylesheet below for the day native masonry is safe: it would fix the
+ * ordering, not the look.
+ *
+ * ## The column width is a measurement
+ *
+ * `column-width` is a minimum, not a count: the browser fits as many columns of
+ * at least that width as it can. So `24rem` is the statement "a card narrower
+ * than 384px is not worth a second column", and everything else falls out of
+ * it. On this page — /library is the one route that takes `wide`, so the
+ * content column caps at `--page-wide`, 832px — that resolves to exactly two
+ * columns of 404px on a large screen, one column below about 1112px of
+ * viewport, and one column of 287px on a 375px phone. Three columns are
+ * arithmetically unreachable at 832px, which is the point: 260px is too narrow
+ * for a paragraph.
+ *
+ * The single-column case is why the card carries a measure. A lone column is
+ * whatever the page is wide, and a 704px card is a line of text nobody wants to
+ * track; 34.375rem is 550px, which is react-tweet's own card cap and lands in
+ * the same band as this site's prose measures (design.md §2). So the wall goes
+ * full width and the cards inside it stop, flush left, which is where
+ * everything above the footer on this site already sits.
+ */
+import type { LibraryEntry, Post } from "../lib/library";
+import TweetCard from "./TweetCard.astro";
+
+interface Props {
+  /** Post-kind entries, in the list's own newest-first order. */
+  entries: LibraryEntry[];
+}
+
+const { entries } = Astro.props;
+
+/**
+ * Only an entry the pipeline could actually read gets a card.
+ *
+ * A post behind a login wall, a deleted one, or one saved before the field
+ * existed has `post: null` — no author, no date, nothing a card is made of.
+ * `lib/library.ts › Post` calls that "a card with a hole in it" and refuses to
+ * half-fill the object; this is the same refusal one layer up. Such an entry
+ * keeps its row on /library and on its tag and domain pages, which is where a
+ * link with nothing but a title still says something.
+ */
+const cards = entries.filter(
+  (entry): entry is LibraryEntry & { post: Post } => entry.post !== null,
+);
+---
+
+<ul class="wall">
+  {cards.map((entry) => <TweetCard entry={entry} />)}
+</ul>
+
+<style>
+  .wall {
+    /* 384px: see the note at the top of this file. Two columns at 832px, one
+       below that, never three. */
+    column-width: 24rem;
+    column-gap: 1.5rem;
+    margin: 0;
+  }
+
+  /* The card's measure, applied to the child rather than to the box, because a
+     cap on the box would cap the two-column case as well and there is nothing
+     wrong with 832px of wall. 550px is react-tweet's own card width. */
+  .wall :global(.card) {
+    max-width: 34.375rem;
+  }
+
+  /* Native masonry, when it is safe to want.
+     `grid-template-rows: masonry` fills across-then-down, which would put the
+     entries back in the order they were saved — the one thing `columns` gives
+     up. Safari has shipped it since 2024 and nothing else had as of August
+     2026, so this is written as a note rather than as an `@supports` block:
+     turning it on means the two layouts have to agree about the gap, the card
+     measure and the column count, and that is a change to make deliberately
+     with both in front of you rather than one a browser update makes for us. */
+</style>

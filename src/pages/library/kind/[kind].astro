@@ -9,12 +9,22 @@
  * anyway. It is not the same control as the `All` tab: §7's parity rule needs
  * the `BreadcrumbList` node's parent to be something a reader can see named,
  * and `All` is a scope, not a name.
+ *
+ * **`post` is the one kind that is not a list, and this is the only branch.**
+ * A filtered page knows every entry on it is the same shape, so the shape can
+ * be the layout: `PostWall.astro` lays the posts out as cards. The other two
+ * kinds keep the list, and so does /library itself, where posts sit among
+ * articles and videos and have to line up with them. Keyed on the route rather
+ * than on the data — "every entry here happens to be a post" is true of
+ * `/library/domain/x-com` too, and a page that changed shape because of what
+ * was filed into it would be a page nobody could predict.
  */
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 
 import Base from "../../../layouts/Base.astro";
 import KindTabs from "../../../components/KindTabs.astro";
 import LibraryList from "../../../components/LibraryList.astro";
+import PostWall from "../../../components/PostWall.astro";
 import type { Kind } from "../../../lib/library";
 import { KIND_LABELS, kindGroups, library } from "../../../lib/library";
 import { libraryRowUrl, listJsonLd } from "../../../lib/schema";
@@ -63,7 +73,13 @@ const jsonLd = listJsonLd({
     <KindTabs groups={kindGroups} total={library.length} current={kind} />
 
     <div class="rows">
-      <LibraryList entries={entries} />
+      {
+        kind === "post" ? (
+          <PostWall entries={entries} />
+        ) : (
+          <LibraryList entries={entries} />
+        )
+      }
     </div>
   </div>
 </Base>

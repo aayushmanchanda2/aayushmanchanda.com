@@ -514,6 +514,15 @@ export function siteJsonLd(site: Site): JsonLd {
  * list page says exactly that and nothing tidier. Three pages render the list
  * and all three call this, because three copies of a one-line branch is how
  * one of them ends up describing the row the other two stopped drawing.
+ *
+ * **The markup's copy of that branch is `lib/library.ts › entryHref`**, and the
+ * two are held to each other by `lib/card.test.mjs` rather than folded into
+ * one. The reason is the paragraph at the top of this file: nothing here
+ * imports a data module's runtime values, so every builder can be called with
+ * plain objects under bare `node --test`. Importing the seam would make this
+ * module parse `library.json` on load. Same call `lib/links.ts › githubRepo`
+ * and `pipeline/entries.mjs › repoFrom` make, for the same reason, and the test
+ * is the thing that makes two copies safe.
  */
 export function libraryRowUrl(
   entry: Pick<LibraryEntry, "slug" | "url" | "digest">,

@@ -671,6 +671,37 @@ export function parseLibrary(value: unknown): LibraryEntry[] {
   return parsed;
 }
 
+/**
+ * Where an entry sends a reader, and whether that leaves the site.
+ *
+ * **This is the one branch, and it is the seam.** A digested entry has a page
+ * of its own and links there; an undigested one has no page, so its
+ * destination is the thing itself. Three surfaces need that answer and they
+ * have to agree: the row on every list page (`components/LibraryList.astro`),
+ * the card on the posts wall (`components/TweetCard.astro`), and the
+ * `ItemList` node describing both (`lib/schema.ts › libraryRowUrl`). The
+ * markup and the graph saying different things about one row is exactly the
+ * failure design.md §7's parity rule exists to catch, and three copies of a
+ * one-line ternary is how it would happen.
+ *
+ * `external` travels with the href rather than being re-derived from it,
+ * because it decides three attributes at once: `rel="noopener nofollow"`,
+ * `target="_blank"` and the `.ext` arrow (design.md §5). A caller that had to
+ * work out "is this off-site" from a string is a caller that can get it wrong.
+ *
+ * **When every entry gets a page (VET-63, the detail-page slice), this
+ * function is the whole edit.** Return the local page for all of them, and
+ * every row, card and graph node on the site follows in one commit — including
+ * dropping the arrow and the new tab, which drop with `external`.
+ */
+export function entryHref(
+  entry: Pick<LibraryEntry, "slug" | "url" | "digest">,
+): { href: string; external: boolean } {
+  return entry.digest === null
+    ? { href: entry.url, external: true }
+    : { href: `/library/${entry.slug}`, external: false };
+}
+
 /* ---------------------------------------------------------------------------
    Derived views — computed once, at build time
    --------------------------------------------------------------------------- */

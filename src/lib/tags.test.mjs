@@ -4,7 +4,7 @@
  * Three properties, and the first is the only one a reader would ever notice
  * breaking.
  *
- * **A tag keeps its colour.** `tagHue` is a hash, so nothing but an edit to the
+ * **A tag keeps its colour.** `hueSlot` is a hash, so nothing but an edit to the
  * function can move a word from one dot to another — but a hash is also the
  * kind of code someone "improves" (a different multiplier, a `charCodeAt` swap,
  * a modulo moved outside the loop), and every one of those quietly recolours
@@ -33,7 +33,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 import { library, libraryTags } from "./library.ts";
-import { TAG_HUES, tagHue, tagLabel } from "./tags.ts";
+import { TAG_HUES, hueSlot, tagLabel } from "./tags.ts";
 
 /**
  * Every tag in `src/data/library.json` today, and the dot it wears.
@@ -59,16 +59,16 @@ const SHIPPED = {
 test("every shipped tag still wears the dot it shipped with", () => {
   for (const [slug, hue] of Object.entries(SHIPPED)) {
     assert.equal(
-      tagHue(slug),
+      hueSlot(slug),
       hue,
-      `${slug} moved from dot ${hue} to dot ${tagHue(slug)}. Every tag on the site just changed colour: if that was the intention, this table moves with it.`,
+      `${slug} moved from dot ${hue} to dot ${hueSlot(slug)}. Every tag on the site just changed colour: if that was the intention, this table moves with it.`,
     );
   }
 });
 
 test("the same word answers the same twice, and a different one need not", () => {
-  assert.equal(tagHue("agents"), tagHue("agents"));
-  assert.notEqual(tagHue("agents"), tagHue("agency"));
+  assert.equal(hueSlot("agents"), hueSlot("agents"));
+  assert.notEqual(hueSlot("agents"), hueSlot("agency"));
 });
 
 test("no word can land outside the palette", () => {
@@ -84,10 +84,10 @@ test("no word can land outside the palette", () => {
     "--",
   ];
   for (const word of [...words, ...Object.keys(SHIPPED)]) {
-    const hue = tagHue(word);
+    const hue = hueSlot(word);
     assert.ok(
       Number.isInteger(hue) && hue >= 0 && hue < TAG_HUES,
-      `tagHue(${JSON.stringify(word)}) returned ${hue}, which is not a slot`,
+      `hueSlot(${JSON.stringify(word)}) returned ${hue}, which is not a slot`,
     );
   }
 });
@@ -101,8 +101,11 @@ test("the label is the slug with the hyphens taken out", () => {
 test("the stylesheet paints exactly as many dots as the module hands out", () => {
   const css = readFileSync(fileURLToPath(new URL("../styles/chip.css", import.meta.url)), "utf8");
 
+  // Keyed on the bare attribute rather than on `.tag`, because the monogram on
+  // a post card reads the same table now. A sweep for the one class that used
+  // to be the only consumer would pass while the shared table was half painted.
   const slots = new Set(
-    [...css.matchAll(/\.tag\[data-hue="(\d+)"\]/g)].map((match) => Number(match[1])),
+    [...css.matchAll(/^\[data-hue="(\d+)"\]/gm)].map((match) => Number(match[1])),
   );
 
   assert.deepEqual(

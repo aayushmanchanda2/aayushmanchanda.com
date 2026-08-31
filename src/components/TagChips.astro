@@ -15,7 +15,7 @@
  * The label drops the hyphens (`tagLabel`), the href keeps them. The slug is
  * the route and the join key; the reader only ever needs the words.
  */
-import { tagHue, tagLabel } from "../lib/tags";
+import { hueSlot, tagLabel } from "../lib/tags";
 
 interface Props {
   /** Tag slugs, as stored on the entry. */
@@ -29,7 +29,7 @@ const { tags } = Astro.props;
   {
     tags.map((slug) => (
       <li>
-        <a class="tag" data-hue={tagHue(slug)} href={`/library/tag/${slug}`}>
+        <a class="tag" data-hue={hueSlot(slug)} href={`/library/tag/${slug}`}>
           {tagLabel(slug)}
         </a>
       </li>

@@ -18,7 +18,20 @@
  * The takedown paragraph is the third. It used to end "That is the only contact
  * route on this site", which stopped being true the moment /contact shipped, so
  * it now says why an issue is still the route it asks for rather than claiming
- * there is no other one.
+ * there is no other one. It grew a second half when /library started rehosting
+ * the pictures attached to a saved post: the same rule that made the /sites
+ * gallery need a takedown route makes a post card need one, and the route is
+ * the same route rather than a second one.
+ *
+ * That paragraph names three things and no more, because three things are what
+ * the data carries: who posted it (`Post.author` and `Post.handle`), the
+ * original post (the entry's `url`), and the day the link was saved
+ * (`saved_date`). **It deliberately does not claim a retrieval date for a
+ * picture.** `saved_date` is the day the pipeline first published the entry,
+ * and the four pictures on the site today were fetched by a later backfill, so
+ * "the day I fetched this file" is a fact nothing here stores. Storing it would
+ * be the honest way to make that claim; claiming it from a field that means
+ * something else would not.
  *
  * The newsletter is the fourth, and it is the first one written before the thing
  * it describes exists. Both the paragraph about it and the sentence it would
@@ -205,7 +218,7 @@ import { NEWSLETTER_ACTION } from "../lib/site";
     </section>
 
     <section>
-      <h2 class="doc__head mono">Screenshots of other people&rsquo;s sites</h2>
+      <h2 class="doc__head mono">Screenshots and saved posts</h2>
       <p>
         The <a href="/sites">/sites</a> gallery is screenshots of other
         people&rsquo;s websites. A pipeline takes them automatically when I save
@@ -218,6 +231,18 @@ import { NEWSLETTER_ACTION } from "../lib/site";
         rather you used for this, because it leaves a record that the request
         was made and answered. If you would rather not open one, <a
           href="/contact">/contact</a> has my address.
+      </p>
+      <p>
+        The <a href="/library/kind/post">post cards in the library</a> work the
+        same way. When I save something from x.com, the pipeline copies the
+        words and any pictures into this repository, and the card you see is
+        drawn from those files. A copy rather than an embed, on purpose: an
+        embed makes your browser ask x.com for the picture, which tells x.com
+        you were reading my page, and this site would have a second outside host
+        in it. The post is still the poster&rsquo;s. Every card names who wrote
+        it and links back to the original, and its row on <a href="/library"
+        >/library</a> carries the date I saved it. If one of them is yours, the
+        same issue link works and the same answer applies.
       </p>
     </section>
 

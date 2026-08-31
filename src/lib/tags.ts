@@ -17,11 +17,20 @@
  * fill — twenty filled rows would read as a traffic light making claims about
  * links that are all in the same state, which is saved.
  *
- * **The hue lives in CSS and the slot lives here.** `tagHue` returns a number
+ * **The hue lives in CSS and the slot lives here.** `hueSlot` returns a number
  * in `[0, TAG_HUES)` and `styles/chip.css` decides what each of those seven
  * numbers is worth in each theme, because a colour value typed outside
  * `styles/` is the bug design.md §1 opens with. So this module never names a
  * colour, and the stylesheet never needs to know a tag exists.
+ *
+ * **The hash is the site's identity palette and it has two consumers.** A tag
+ * dot was the first; the monogram on a /library post card is the second, keyed
+ * on the poster's handle instead of on a slug (`components/TweetCard.astro`).
+ * That is why the function is named for what it returns rather than for the
+ * first thing that wanted one — a `tagHue` called with `@benln` would be a name
+ * that lies. The palette stays one palette: seven hues, one table in
+ * `chip.css`, and a handle and a tag that land on the same slot wear the same
+ * colour, which is a coincidence and not a claim.
  *
  * **The assignment is a hash, not a table.** Tags arrive from Raindrop through
  * the publish pipeline, so a table here would mean a hand edit to this repo
@@ -63,17 +72,23 @@ export function tagLabel(slug: string): string {
 }
 
 /**
- * Which of the palette's slots this tag wears, deterministically, for ever.
+ * Which of the palette's slots a word wears, deterministically, for ever.
  *
  * djb2: `h = h * 33 + c`, the loop Dan Bernstein posted to comp.lang.c, held to
  * 32 bits by `Math.imul` and an unsigned shift so it cannot drift into
- * floating-point territory on a long slug. Pure, so the only way a tag's dot
- * changes colour is if someone edits this function or renames the tag.
+ * floating-point territory on a long key. Pure, so the only way a tag's dot or
+ * a poster's monogram changes colour is if someone edits this function or
+ * renames the thing.
+ *
+ * The key is a tag slug or an x.com handle, and it is used raw either way: a
+ * handle is spelled the way its owner spells it, so `TermiusHQ` and `termiushq`
+ * are two strings here. Nothing folds them, because nothing on the site has two
+ * spellings of one handle to reconcile.
  */
-export function tagHue(slug: string): number {
+export function hueSlot(key: string): number {
   let hash = 5381;
-  for (let index = 0; index < slug.length; index += 1) {
-    hash = (Math.imul(hash, 33) + slug.charCodeAt(index)) >>> 0;
+  for (let index = 0; index < key.length; index += 1) {
+    hash = (Math.imul(hash, 33) + key.charCodeAt(index)) >>> 0;
   }
   return hash % TAG_HUES;
 }

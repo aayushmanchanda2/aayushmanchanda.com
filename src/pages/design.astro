@@ -43,10 +43,11 @@ import TagChips from "../components/TagChips.astro";
 import VerdictBadge from "../components/VerdictBadge.astro";
 import Base from "../layouts/Base.astro";
 import { STATUSES } from "../lib/experiments";
-import { KINDS, libraryTags } from "../lib/library";
+import { KINDS, library, libraryTags } from "../lib/library";
+import { monogram } from "../lib/post";
 import { designJsonLd } from "../lib/schema";
 import { collectionGroups, sites } from "../lib/sites";
-import { TAG_HUES, tagHue } from "../lib/tags";
+import { TAG_HUES, hueSlot } from "../lib/tags";
 import { tools } from "../lib/tools";
 import { VERDICTS } from "../lib/tools";
 
@@ -107,10 +108,28 @@ const collections = collectionGroups.slice(0, 3).map((group) => group.slug);
  * is the honest thing for a page that renders shipped data.
  */
 const tagSpecimen = Array.from({ length: TAG_HUES }, (_, hue) =>
-  libraryTags.find((group) => tagHue(group.slug) === hue),
+  libraryTags.find((group) => hueSlot(group.slug) === hue),
 )
   .filter((group) => group !== undefined)
   .map((group) => group.slug);
+
+/**
+ * The same seven slots in the other shape they take, off real posters.
+ *
+ * The tag row above is the palette as a dot and this is the palette as a
+ * 48px circle, and they have to be on one page because they are one table —
+ * `styles/chip.css › [data-hue]`. A slot no saved post lands on has no
+ * specimen, the same honest absence the tag row makes.
+ */
+const posts = library.flatMap((entry) => (entry.post === null ? [] : [entry.post]));
+
+const monogramSpecimen = Array.from({ length: TAG_HUES }, (_, hue) =>
+  posts.find((post) => hueSlot(post.handle) === hue),
+).flatMap((post) =>
+  post === undefined
+    ? []
+    : [{ hue: hueSlot(post.handle), initial: monogram(post.author), author: post.author }],
+);
 
 const CONTRACT =
   "https://github.com/aayushmanchanda2/aayushmanchanda.com/blob/main/design.md";
@@ -438,6 +457,20 @@ const jsonLd = designJsonLd();
           <dt class="code">tag</dt>
           <dd><TagChips tags={tagSpecimen} /></dd>
         </div>
+        <div class="spec__row">
+          <dt class="code">monogram</dt>
+          <dd>
+            <ul class="chips chips--monogram">
+              {monogramSpecimen.map((one) => (
+                <li>
+                  <span class="monogram" data-hue={one.hue} title={one.author}>
+                    {one.initial}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </dd>
+        </div>
       </dl>
 
       <p>
@@ -448,6 +481,14 @@ const jsonLd = designJsonLd();
         recognisable a row before it is readable. Seven dots, handed out by a
         hash of the word, so a new tag has a colour the day it arrives and keeps
         it. Two tags can share one, and the word beside it is the name.
+      </p>
+
+      <p>
+        The last row is the same seven, forty times the size. A saved post on <a
+          href="/library/kind/post">/library</a> is drawn as a card, and a card
+        like that opens with a face. This site does not fetch faces, so the
+        circle holds the poster&rsquo;s initial and takes its colour from their
+        handle. One table, two shapes: change a hue and both rows above move.
       </p>
 
       <p>
@@ -713,6 +754,12 @@ const jsonLd = designJsonLd();
     flex-wrap: wrap;
     gap: 0.4rem;
     margin: 0;
+  }
+
+  /* Seven 48px circles need more air between them than seven pills do, and
+     they need it in both directions once the row wraps. */
+  .chips--monogram {
+    gap: 0.6rem;
   }
 
   /* --- the mark --------------------------------------------------------- */

@@ -22,11 +22,20 @@
  * prominent on it. Same treatment, different direction, and that is fine: the
  * softer of the two actions is the one that stays on this site, and a new tab
  * only opens where the row actually leaves.
+ *
+ * That branch is not written here. `lib/library.ts › entryHref` owns it, and
+ * the post card on the posts wall reads the same function, so the day every
+ * entry earns a page the row and the card turn together.
+ *
+ * One page renders posts as cards instead of rows: `/library/kind/post`, which
+ * hands the same entries to `PostWall.astro`. Everything else on /library is
+ * this list, including the posts on the index.
  */
 import KindChip from "./KindChip.astro";
 import TagChips from "./TagChips.astro";
 import { routeSlug } from "../lib/parse";
 import type { LibraryEntry } from "../lib/library";
+import { entryHref } from "../lib/library";
 
 interface Props {
   entries: LibraryEntry[];
@@ -52,11 +61,14 @@ const { entries, showDomain = true } = Astro.props;
  * only thing on that page pointing anywhere the reader has not already been.
  */
 const anyTags = entries.some((entry) => entry.tags.length > 0);
+
+/** Resolved once per row: the same answer is wanted by three attributes. */
+const rows = entries.map((entry) => ({ entry, dest: entryHref(entry) }));
 ---
 
 <ul class:list={["list", anyTags && "list--tags"]}>
   {
-    entries.map((entry) => (
+    rows.map(({ entry, dest }) => (
       /*
        * The slug as an id, so the row is a destination.
        *
@@ -75,23 +87,19 @@ const anyTags = entries.some((entry) => entry.tags.length > 0);
         <span class="row__name">
           {/*
             A digested row points at its own page, so the outbound attributes
-            drop with the outbound destination: no `rel`, no new tab. See the
-            note at the top of this file.
+            drop with the outbound destination: no `rel`, no new tab. Which of
+            the two it is comes from `lib/library.ts › entryHref`, the one
+            branch the card on the posts wall reads too. See the note at the
+            top of this file.
           */}
-          {entry.digest ? (
-            <a class="row__link" href={`/library/${entry.slug}`}>
-              {entry.title}
-            </a>
-          ) : (
-            <a
-              class="row__link"
-              href={entry.url}
-              rel="noopener nofollow"
-              target="_blank"
-            >
-              {entry.title}
-            </a>
-          )}
+          <a
+            class="row__link"
+            href={dest.href}
+            rel={dest.external ? "noopener nofollow" : undefined}
+            target={dest.external ? "_blank" : undefined}
+          >
+            {entry.title}
+          </a>
           <KindChip kind={entry.kind} />
         </span>
 

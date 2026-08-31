@@ -1,0 +1,314 @@
+/**
+ * The post card and the wall it sits in, under test.
+ *
+ * Three of these are drift tests, in the sense `lib/wide.test.mjs` and
+ * `lib/overscroll.test.mjs` are: they parse shipped files as text, because
+ * there is no runtime to ask what an `.astro` component drew. What they hold is
+ * the three things about this slice that would go wrong quietly.
+ *
+ *   - **A field the card stops rendering.** `Post` has five fields and all five
+ *     are required once the object exists, which is the parser's way of saying
+ *     a card with no author or no date is a card with a hole in it. A card that
+ *     drew four of them would still build, still validate, and still look
+ *     fine to whoever wrote it.
+ *   - **The wall spreading.** `columns` on a list is a list you cannot read in
+ *     order. It belongs to one route, `/library/kind/post`, where every entry
+ *     is the same shape, and nowhere else.
+ *   - **The two copies.** `lib/post.ts › clipText` is a copy of
+ *     `pipeline/entries.mjs › clip`, and `lib/library.ts › entryHref` is the
+ *     markup's half of `lib/schema.ts › libraryRowUrl`. Both pairs are
+ *     deliberate and both are only safe while something checks them.
+ *
+ * The clamp itself is tested as a property rather than as a count. "Eleven of
+ * twenty-four posts are cut today" is true and would be a test that fails the
+ * next time Aayush saves a long post, which is a build broken by the pipeline
+ * doing its job.
+ */
+import test from "node:test";
+import assert from "node:assert/strict";
+import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
+import { clip } from "../../pipeline/entries.mjs";
+import { entryHref, library } from "./library.ts";
+import { libraryRowUrl } from "./schema.ts";
+import { POST_CARD_MAX, clipText, isClipped, monogram } from "./post.ts";
+
+const SRC = fileURLToPath(new URL("..", import.meta.url));
+
+/** @param {string} name @returns {string} */
+function read(name) {
+  return readFileSync(path.join(SRC, name), "utf8");
+}
+
+/**
+ * A file with its comments taken out, so a sweep reads what shipped and not
+ * what was written about it. Both spellings: `.astro` frontmatter and its
+ * scoped CSS use `/* *​/`, and the template uses `{/* *​/}`.
+ *
+ * @param {string} source
+ * @returns {string}
+ */
+function code(source) {
+  return source.replace(/\{?\/\*[\s\S]*?\*\/\}?/g, "");
+}
+
+/**
+ * Every shipped file under `src/`, tests skipped. Same walk `wide.test.mjs`
+ * uses, and the return annotation is load-bearing for the same reason: `checkJs`
+ * is on and a recursive function inferring its own return type is ts7023.
+ *
+ * @param {string} dir
+ * @returns {string[]} paths relative to `src/`, forward-slashed
+ */
+function walk(dir) {
+  return readdirSync(path.join(SRC, dir)).flatMap((entry) => {
+    const rel = dir === "" ? entry : `${dir}/${entry}`;
+    if (statSync(path.join(SRC, rel)).isDirectory()) return walk(rel);
+    return entry.endsWith(".test.mjs") ? [] : [rel];
+  });
+}
+
+/* ---------------------------------------------------------------------------
+   The card draws the whole post and nothing else
+   --------------------------------------------------------------------------- */
+
+test("the card renders every field a Post carries, and no field it does not", () => {
+  const boundary = read("lib/library.ts");
+  const open = boundary.indexOf("export interface Post {");
+  assert.ok(open !== -1, "lib/library.ts no longer declares `export interface Post`");
+  const block = boundary.slice(open, boundary.indexOf("\n}", open));
+
+  const declared = [...block.matchAll(/^ {2}(\w+):/gm)].map((match) => match[1]).sort();
+  assert.deepEqual(
+    declared,
+    ["author", "date", "handle", "media", "text"],
+    "the Post interface changed shape; this list and the card both move with it",
+  );
+
+  const drawn = [
+    ...new Set(
+      [...code(read("components/TweetCard.astro")).matchAll(/\bpost\.(\w+)\b/g)].map(
+        (match) => match[1],
+      ),
+    ),
+  ].sort();
+
+  assert.deepEqual(
+    drawn,
+    declared,
+    "TweetCard.astro and the Post interface disagree about what a post is. A field the parser requires and the card ignores is a field nothing on the site shows; a field the card reads and the parser does not carry is a build error waiting for the first entry without it.",
+  );
+});
+
+test("the card reaches for nothing outside this origin", () => {
+  // The parser already refuses a remote media path (`readShotPath`), so this is
+  // the other half: the component itself must not hard-code a host either.
+  for (const name of ["components/TweetCard.astro", "components/PostWall.astro"]) {
+    assert.ok(
+      !/https?:\/\//.test(code(read(name))),
+      `${name} names an outside host. /privacy is built on there being one, and it is logo.dev.`,
+    );
+  }
+});
+
+test("every picture a post card would draw is a file in this repository", () => {
+  const media = library.flatMap((entry) => entry.post?.media ?? []);
+  assert.ok(media.length > 0, "no post carries media, so this test is checking nothing");
+
+  for (const src of media) {
+    assert.ok(
+      existsSync(path.join(SRC, "..", "public", src)),
+      `${src} is on an entry but there is no such file under public/. The card would draw a broken image and the sweep in pipeline/state.mjs would not know to fetch it.`,
+    );
+  }
+});
+
+/* ---------------------------------------------------------------------------
+   The wall is one route's layout
+   --------------------------------------------------------------------------- */
+
+test("only the wall lays anything out in columns", () => {
+  /** @type {Record<string, string[]>} */
+  const found = { "column-width": [], "break-inside": [], "column-count": [] };
+
+  for (const file of walk("")) {
+    const source = code(read(file));
+    for (const property of Object.keys(found)) {
+      if (new RegExp(`(^|[;{\\s])${property}\\s*:`).test(source)) found[property].push(file);
+    }
+    assert.ok(
+      !/(^|[;{\s])columns\s*:/.test(source),
+      `${file} uses the \`columns\` shorthand. Spell the width and the gap separately: the shorthand's second value is a count, and a count is the one thing this layout must not fix.`,
+    );
+  }
+
+  assert.deepEqual(
+    found["column-width"],
+    ["components/PostWall.astro"],
+    "something other than the posts wall is laying content out in columns. A multi-column box reads top-to-bottom-then-across, so a list in one is a list in the wrong order.",
+  );
+  assert.deepEqual(found["break-inside"], ["components/TweetCard.astro"]);
+  assert.deepEqual(found["column-count"], []);
+});
+
+test("the wall is reached from the post kind and from nowhere else", () => {
+  // The component does not name itself outside its own comments, so the sweep
+  // finds callers and nothing else. One caller is the whole point.
+  const callers = walk("").filter((file) => code(read(file)).includes("PostWall"));
+  assert.deepEqual(callers, ["pages/library/kind/[kind].astro"]);
+
+  const route = code(read("pages/library/kind/[kind].astro"));
+  assert.match(
+    route,
+    /kind === "post" \? \(\s*<PostWall/,
+    "the kind route no longer gates the wall on the post kind. Keyed on the route rather than on the data: `/library/domain/x-com` is all posts too, and a page that changed shape because of what was filed into it is a page nobody can predict.",
+  );
+
+  // /library itself renders every kind at once, so it must stay a list.
+  assert.ok(!code(read("pages/library.astro")).includes("PostWall"));
+});
+
+/* ---------------------------------------------------------------------------
+   The clamp
+   --------------------------------------------------------------------------- */
+
+test("the two clips answer the same, so the second copy is a copy", () => {
+  const cases = [
+    "",
+    "short",
+    "a".repeat(40),
+    "word ".repeat(300),
+    "x".repeat(900),
+    "  padded  ",
+    "ends on a comma, and then some more words to push it over the line",
+    `${"a".repeat(60)} tail`,
+    "🙂".repeat(500),
+    ...library.flatMap((entry) => (entry.post === null ? [] : [entry.post.text])),
+  ];
+
+  for (const max of [1, 12, 80, 280, POST_CARD_MAX]) {
+    for (const text of cases) {
+      assert.equal(
+        clipText(text, max),
+        clip(text, max),
+        `lib/post.ts and pipeline/entries.mjs cut differently at ${max}. They are two copies of one rule and this is the thing that makes that safe.`,
+      );
+    }
+  }
+});
+
+test("the cut happens at the budget and not before it", () => {
+  const exact = "a ".repeat(POST_CARD_MAX / 2).trim();
+  assert.equal([...exact].length, POST_CARD_MAX - 1);
+  assert.equal(clipText(exact, POST_CARD_MAX), exact, "a post at the budget is shown whole");
+  assert.equal(isClipped(exact), false);
+
+  const over = `${exact} bb`;
+  assert.equal([...over].length, POST_CARD_MAX + 2);
+  assert.equal(isClipped(over), true);
+  assert.ok(clipText(over, POST_CARD_MAX).endsWith("…"), "a cut post says it was cut");
+  assert.ok([...clipText(over, POST_CARD_MAX)].length <= POST_CARD_MAX + 1);
+});
+
+test("the card is worth opening over the row it replaces", () => {
+  // 280 is what a row's note carries (`pipeline/entries.mjs › POST_NOTE_MAX`),
+  // and a card showing the same words as the row is a card doing no work.
+  assert.ok(POST_CARD_MAX > 280 * 2);
+});
+
+test("no card runs past the budget, and no short post is touched", () => {
+  const posts = library.flatMap((entry) => (entry.post === null ? [] : [entry.post]));
+  assert.ok(posts.length > 0, "no post carries a `post` object, so this test is checking nothing");
+
+  for (const post of posts) {
+    const body = clipText(post.text, POST_CARD_MAX);
+    assert.ok(
+      [...body].length <= POST_CARD_MAX + 1,
+      `the card for @${post.handle} would run to ${[...body].length} characters`,
+    );
+    assert.equal(
+      body === post.text.trim(),
+      !isClipped(post.text),
+      `@${post.handle}: the card and \`isClipped\` disagree about whether the post was cut`,
+    );
+  }
+
+  // The two long-form posts are the reason the budget exists. Named by length
+  // rather than by slug, so this keeps meaning something as the library grows.
+  const longest = posts.reduce((a, b) => ([...a.text].length > [...b.text].length ? a : b));
+  assert.ok(
+    [...longest.text].length > 10_000,
+    "the long-form posts have gone; check the budget still earns itself",
+  );
+  assert.ok(isClipped(longest.text));
+});
+
+/* ---------------------------------------------------------------------------
+   The monogram
+   --------------------------------------------------------------------------- */
+
+test("the monogram is the first letter of the name, and never a mystery glyph", () => {
+  assert.equal(monogram("Ben Lang"), "B");
+  assert.equal(monogram("  alphaXiv "), "A");
+  assert.equal(monogram("_alejandro"), "A");
+  assert.equal(monogram("🤗 Alejandro"), "A");
+  assert.equal(monogram("第二"), "第");
+  assert.equal(monogram("3Blue1Brown"), "3");
+  assert.equal(monogram("🤗"), "", "a name with no letter in it draws no circle at all");
+  assert.equal(monogram("  "), "");
+
+  for (const entry of library) {
+    if (entry.post === null) continue;
+    assert.match(
+      monogram(entry.post.author),
+      /^[\p{L}\p{N}]$/u,
+      `"${entry.post.author}" would put something other than one letter in a coloured circle`,
+    );
+  }
+});
+
+/* ---------------------------------------------------------------------------
+   The seam
+   --------------------------------------------------------------------------- */
+
+test("the row, the card and the graph send a reader to the same place", () => {
+  for (const entry of library) {
+    const dest = entryHref(entry);
+    const claimed = libraryRowUrl(entry);
+
+    if (dest.external) {
+      assert.equal(dest.href, entry.url);
+      assert.equal(claimed, dest.href, `${entry.slug}: the graph and the markup disagree`);
+    } else {
+      assert.equal(dest.href, `/library/${entry.slug}`);
+      assert.ok(
+        claimed.endsWith(`${dest.href}/`),
+        `${entry.slug}: the graph claims ${claimed} where the markup points at ${dest.href}`,
+      );
+    }
+  }
+});
+
+test("only a destination off this site takes the outbound attributes", () => {
+  // `external` travels with the href so no caller has to work it out from a
+  // string. The day every entry earns a page, `entryHref` returns a local URL
+  // for all of them and the `rel`, the `target` and the new tab go with it.
+  const digested = library.find((entry) => entry.digest !== null);
+  const raw = library.find((entry) => entry.digest === null);
+  assert.ok(digested !== undefined && raw !== undefined, "the library has only one kind of entry");
+
+  assert.equal(entryHref(digested).external, false);
+  assert.equal(entryHref(raw).external, true);
+
+  for (const name of ["components/TweetCard.astro", "components/LibraryList.astro"]) {
+    const source = code(read(name));
+    assert.match(source, /rel=\{[^}]*external \? "noopener nofollow" : undefined\}/, name);
+    assert.match(source, /target=\{[^}]*external \? "_blank" : undefined\}/, name);
+    assert.ok(
+      !/href=\{`\/library\/\$\{/.test(source),
+      `${name} builds a /library URL of its own instead of asking entryHref for one`,
+    );
+  }
+});

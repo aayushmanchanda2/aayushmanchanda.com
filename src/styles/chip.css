@@ -1,5 +1,10 @@
 /* ==========================================================================
-   aayushmanchanda.com — status chip
+   aayushmanchanda.com — the small coloured things
+
+   Three vocabularies, in the order they arrived: the status chip, which says
+   where a word sits on a scale; the tag dot and the post monogram, which say
+   nothing on any scale and carry identity instead. They share a file because
+   they share a page and have to read as one weight of colour on it.
 
    Two sections need the same chip: /tools verdicts (VerdictBadge) and
    /experiments statuses (StatusChip). The colour system lives here so those
@@ -107,27 +112,24 @@
 }
 
 /* --------------------------------------------------------------------------
-   The tag chip: a dot, and words that stay ink.
+   The identity palette: seven hues, one table, two shapes.
 
-   The second thing in this file that is chip-shaped and the first that is not
-   a chip. A /library tag says what a link is about, which is not a position on
-   any scale — `agents` is not better or worse than `design` — so it may not
-   take a tone: the fills above mean something, and twenty rows of them would
-   read as a page making claims about links that are all in the same state,
-   which is saved. Colour still has a job here, and it is identity: it is what
-   lets a reader who has seen `agents` twice recognise it a third time before
-   reading the word. So the Linear label shape — a small dot carrying the
-   colour, the words left at the page's own ink — rather than a filled pill.
+   `lib/tags.ts › hueSlot` folds a string through djb2 into `[0, 7)` and this
+   table decides what those seven numbers are worth in each theme, because a
+   colour typed outside `styles/` is the bug design.md §1 opens with. The module
+   owns the assignment and never names a colour; the stylesheet owns every
+   colour and never needs to know what a tag or a handle is.
 
-   Which dot a tag wears is `lib/tags.ts › tagHue`, a hash of the slug into
-   `[0, 7)`. The stylesheet owns every colour and the module owns the
-   assignment, because a colour typed outside `styles/` is the bug design.md §1
-   opens with. `lib/tags.test.mjs` fails if the number of slots below and the
-   number the module hands out ever disagree.
+   Two shapes read it. A `.tag` puts the hue in a 6px dot and leaves its words
+   at the page's ink; a `.monogram` puts it in a 48px circle and in the initial
+   inside it. Both are identity rather than judgement — the colour is what lets
+   a reader who has seen `agents`, or @thedankoe, twice recognise it a third
+   time before reading the word. Neither may take the filled `.chip` treatment
+   above, which means something on a scale.
 
    **Hue is identical across themes and lightness is the only difference**, the
    same shape the accent takes in `global.css`, so the dark blocks below carry
-   one number each. Every dot clears **7:1 against its own page background** in
+   one number each. Every hue clears **7:1 against its own page background** in
    both themes, which is the band the chip inks above already sit in (6.98 to
    8.76 light, 7.11 to 11.36 dark) rather than the 3:1 a non-text graphic owes:
    a dot and a chip on one row have to read as one weight of colour, and 3:1
@@ -144,14 +146,74 @@
 
    The gap between 192 and 285 is the accent's, and it is deliberate: a dot in
    the 231 band would read as a link marker on a page whose links are that
-   blue. -------------------------------------------------------------------- */
+   blue.
+
+   The bare `[data-hue]` rule below is the fallback, kept identical to slot 0 so
+   an element that lost its attribute value and a slot-0 element cannot drift
+   apart. It is written before the seven so source order settles the tie: the
+   two selectors have the same specificity.
+   -------------------------------------------------------------------------- */
+
+[data-hue] {
+  --hue-h: 8;
+  --hue-s: 62%;
+  --hue-l: 38.5%;
+}
+
+[data-hue="0"] {
+  --hue-h: 8;
+  --hue-l: 38.5%;
+}
+
+[data-hue="1"] {
+  --hue-h: 45;
+  --hue-l: 26%;
+}
+
+[data-hue="2"] {
+  --hue-h: 80;
+  --hue-l: 23.5%;
+}
+
+[data-hue="3"] {
+  --hue-h: 152;
+  --hue-l: 24.5%;
+}
+
+[data-hue="4"] {
+  --hue-h: 192;
+  --hue-l: 27.5%;
+}
+
+[data-hue="5"] {
+  --hue-h: 285;
+  --hue-l: 41.5%;
+}
+
+[data-hue="6"] {
+  --hue-h: 322;
+  --hue-l: 38.5%;
+}
+
+/* --------------------------------------------------------------------------
+   The tag chip: a dot, and words that stay ink.
+
+   The second thing in this file that is chip-shaped and the first that is not
+   a chip. A /library tag says what a link is about, which is not a position on
+   any scale — `agents` is not better or worse than `design` — so it may not
+   take a tone: the fills above mean something, and twenty rows of them would
+   read as a page making claims about links that are all in the same state,
+   which is saved. Colour still has a job here, and it is identity: it is what
+   lets a reader who has seen `agents` twice recognise it a third time before
+   reading the word. So the Linear label shape — a small dot carrying the
+   colour, the words left at the page's own ink — rather than a filled pill.
+
+   Which dot a tag wears is the table above, keyed by `lib/tags.ts › hueSlot`.
+   `lib/tags.test.mjs` fails if the number of slots painted there and the number
+   the module hands out ever disagree.
+   -------------------------------------------------------------------------- */
 
 .tag {
-  /* Fallback, kept identical to slot 0 so a chip that lost its `data-hue` and
-     a slot-0 chip cannot drift apart. */
-  --tag-h: 8;
-  --tag-s: 62%;
-  --tag-l: 38.5%;
   --tag-tint: 0.1;
 
   position: relative;
@@ -182,7 +244,7 @@
   width: 0.375rem;
   height: 0.375rem;
   border-radius: 50%;
-  background: hsl(var(--tag-h) var(--tag-s) var(--tag-l));
+  background: hsl(var(--hue-h) var(--hue-s) var(--hue-l));
 }
 
 /* 40px hit floor on a 20.3px chip: 0.62rem of dead space above and below,
@@ -204,42 +266,51 @@
 .tag:hover,
 .tag:focus-visible {
   color: var(--fg);
-  background: hsl(var(--tag-h) var(--tag-s) var(--tag-l) / var(--tag-tint));
+  background: hsl(var(--hue-h) var(--hue-s) var(--hue-l) / var(--tag-tint));
 }
 
-.tag[data-hue="0"] {
-  --tag-h: 8;
-  --tag-l: 38.5%;
-}
+/* --------------------------------------------------------------------------
+   The monogram: the avatar slot, with no avatar in it.
 
-.tag[data-hue="1"] {
-  --tag-h: 45;
-  --tag-l: 26%;
-}
+   A /library post card has the shape of a tweet, and the first thing in a tweet
+   is a face. This site will not fetch one: `github.com/{owner}.png` was already
+   refused on /tools for being two new third-party hosts, and x.com's avatar CDN
+   is the same refusal on a page where twenty-four cards would make twenty-four
+   requests. `/privacy`'s "one outside request" is the claim that decides it.
 
-.tag[data-hue="2"] {
-  --tag-h: 80;
-  --tag-l: 23.5%;
-}
+   So the slot holds an initial instead, and the colour is what does the avatar's
+   actual job: recognising who posted before reading the name. It reads the same
+   seven-hue table a tag dot does, keyed on the handle rather than on a slug, so
+   the site has one identity palette and not two.
 
-.tag[data-hue="3"] {
-  --tag-h: 152;
-  --tag-l: 24.5%;
-}
+   **The tint is 0.09 in both themes, and that is the departure from `.chip`.**
+   A chip deepens to 0.14 in the dark because its ink lightens and a 9% wash
+   disappears under a light ink on near-black at pill size. A monogram is a 48px
+   circle, roughly forty times the area, so the same wash reads without the extra
+   alpha — and holding it there is what keeps the initial above the house 6:1
+   bar in both themes. Measured over its own tint, worst slot: 6.04 light, 6.34
+   dark. At 0.14 the dark floor falls to 5.90.
+   -------------------------------------------------------------------------- */
 
-.tag[data-hue="4"] {
-  --tag-h: 192;
-  --tag-l: 27.5%;
-}
+.monogram {
+  --monogram-size: 48px;
+  --monogram-tint: 0.09;
 
-.tag[data-hue="5"] {
-  --tag-h: 285;
-  --tag-l: 41.5%;
-}
-
-.tag[data-hue="6"] {
-  --tag-h: 322;
-  --tag-l: 38.5%;
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: var(--monogram-size);
+  height: var(--monogram-size);
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-size: 1.125rem;
+  font-weight: 500;
+  /* A single centred glyph: label tracking here is padding on one side only,
+     the same correction `ToolList.astro › .row__mark--initial` makes. */
+  letter-spacing: 0;
+  line-height: 1;
+  color: hsl(var(--hue-h) var(--hue-s) var(--hue-l));
+  background: hsl(var(--hue-h) var(--hue-s) var(--hue-l) / var(--monogram-tint));
 }
 
 /* The dark tones, twice, for the reason written out at the top of the dark
@@ -292,37 +363,42 @@
 
   /* Hue and saturation are the light theme's; only the lightness moves, and it
      moves to whatever holds 7:1 against #09090b. */
+  :root:not([data-theme="light"]) [data-hue] {
+    --hue-l: 65.5%;
+  }
+
+  :root:not([data-theme="light"]) [data-hue="0"] {
+    --hue-l: 65.5%;
+  }
+
+  :root:not([data-theme="light"]) [data-hue="1"] {
+    --hue-l: 44.5%;
+  }
+
+  :root:not([data-theme="light"]) [data-hue="2"] {
+    --hue-l: 40.5%;
+  }
+
+  :root:not([data-theme="light"]) [data-hue="3"] {
+    --hue-l: 42%;
+  }
+
+  :root:not([data-theme="light"]) [data-hue="4"] {
+    --hue-l: 47.5%;
+  }
+
+  :root:not([data-theme="light"]) [data-hue="5"] {
+    --hue-l: 68.5%;
+  }
+
+  :root:not([data-theme="light"]) [data-hue="6"] {
+    --hue-l: 66.5%;
+  }
+
+  /* The hover wash has to work a little harder under a lighter ink. The
+     monogram's does not: see the note above `.monogram`. */
   :root:not([data-theme="light"]) .tag {
-    --tag-l: 65.5%;
     --tag-tint: 0.16;
-  }
-
-  :root:not([data-theme="light"]) .tag[data-hue="0"] {
-    --tag-l: 65.5%;
-  }
-
-  :root:not([data-theme="light"]) .tag[data-hue="1"] {
-    --tag-l: 44.5%;
-  }
-
-  :root:not([data-theme="light"]) .tag[data-hue="2"] {
-    --tag-l: 40.5%;
-  }
-
-  :root:not([data-theme="light"]) .tag[data-hue="3"] {
-    --tag-l: 42%;
-  }
-
-  :root:not([data-theme="light"]) .tag[data-hue="4"] {
-    --tag-l: 47.5%;
-  }
-
-  :root:not([data-theme="light"]) .tag[data-hue="5"] {
-    --tag-l: 68.5%;
-  }
-
-  :root:not([data-theme="light"]) .tag[data-hue="6"] {
-    --tag-l: 66.5%;
   }
 }
 
@@ -370,35 +446,40 @@
 
 /* Hue and saturation are the light theme's; only the lightness moves, and it
    moves to whatever holds 7:1 against #09090b. */
+:root[data-theme="dark"] [data-hue] {
+  --hue-l: 65.5%;
+}
+
+:root[data-theme="dark"] [data-hue="0"] {
+  --hue-l: 65.5%;
+}
+
+:root[data-theme="dark"] [data-hue="1"] {
+  --hue-l: 44.5%;
+}
+
+:root[data-theme="dark"] [data-hue="2"] {
+  --hue-l: 40.5%;
+}
+
+:root[data-theme="dark"] [data-hue="3"] {
+  --hue-l: 42%;
+}
+
+:root[data-theme="dark"] [data-hue="4"] {
+  --hue-l: 47.5%;
+}
+
+:root[data-theme="dark"] [data-hue="5"] {
+  --hue-l: 68.5%;
+}
+
+:root[data-theme="dark"] [data-hue="6"] {
+  --hue-l: 66.5%;
+}
+
+/* The hover wash has to work a little harder under a lighter ink. The
+   monogram's does not: see the note above `.monogram`. */
 :root[data-theme="dark"] .tag {
-  --tag-l: 65.5%;
   --tag-tint: 0.16;
-}
-
-:root[data-theme="dark"] .tag[data-hue="0"] {
-  --tag-l: 65.5%;
-}
-
-:root[data-theme="dark"] .tag[data-hue="1"] {
-  --tag-l: 44.5%;
-}
-
-:root[data-theme="dark"] .tag[data-hue="2"] {
-  --tag-l: 40.5%;
-}
-
-:root[data-theme="dark"] .tag[data-hue="3"] {
-  --tag-l: 42%;
-}
-
-:root[data-theme="dark"] .tag[data-hue="4"] {
-  --tag-l: 47.5%;
-}
-
-:root[data-theme="dark"] .tag[data-hue="5"] {
-  --tag-l: 68.5%;
-}
-
-:root[data-theme="dark"] .tag[data-hue="6"] {
-  --tag-l: 66.5%;
 }

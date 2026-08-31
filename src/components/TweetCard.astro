@@ -1,0 +1,284 @@
+---
+/**
+ * TweetCard — a saved x.com post, rendered here, fetching nothing.
+ *
+ * The anatomy is react-tweet's, read off its own module CSS rather than copied
+ * by eye: a bordered card, a 48px circle then the display name, the @handle and
+ * the date, the post's words, then a media grid of 2-up columns at a 2px gap
+ * with the three-picture case turned into an L. What changes is everything that
+ * would have made a request. There is no avatar, no brand mark, no embed
+ * script, and no `pbs.twimg.com`: the pictures are files in this repo and
+ * `lib/library.ts › readShotPath` is what makes that structural rather than
+ * careful — the parser will not carry a remote URL, so no card can render one.
+ *
+ * ## What the card does not show, and why each one is missing
+ *
+ * **No tags, no domain, no kind chip.** The whole card is one link, which is
+ * the /sites call and made for the same reason: a press anywhere on a card
+ * should never be a coin toss between two destinations. A tag chip and a
+ * hostname are both links on the row form of this entry, so putting either here
+ * means a second target inside a single-target card, or a dead label wearing a
+ * link's clothes. The row on /library keeps both, and that is the page for
+ * scanning by subject or by host.
+ *
+ * **No note.** For a post the note is `@handle` plus a 280-character copy of
+ * the same words the card is already showing at length
+ * (`pipeline/entries.mjs › postNote`). It exists so a row can say something; a
+ * card has the post itself.
+ *
+ * **No arrow.** design.md §5 gives the `.ext` arrow to prose links and to the
+ * Source line at the foot of a details page. No list row or card on this site
+ * carries one — not /tools, not /experiments, not the /library row this card
+ * replaces — and one card idiom breaking that would be the tenth link in §5's
+ * own story about conventions. `rel` and `target` still ship, from the seam.
+ *
+ * **No entity links.** react-tweet turns @mentions, #hashtags and URLs in the
+ * body into anchors. Two reasons not to. The first is the one above: they would
+ * be a dozen more destinations inside a card that is one. The second is that we
+ * could not describe them honestly — attached media and typed links both arrive
+ * from x.com as opaque `t.co` shortlinks (`lib/library.ts › Post.media` says so
+ * at length), so linkifying the body would offer a reader somewhere to go
+ * without being able to say where.
+ *
+ * The text is one paragraph because that is the shape it arrives in: the
+ * pipeline flattens a post's markdown, so `Post.text` carries no newline to
+ * preserve.
+ */
+import type { LibraryEntry, Post } from "../lib/library";
+import { entryHref } from "../lib/library";
+import { hueSlot } from "../lib/tags";
+import { POST_CARD_MAX, clipText, monogram } from "../lib/post";
+
+interface Props {
+  /** The entry the card links to. Its `post` is what the card draws. */
+  entry: LibraryEntry & { post: Post };
+}
+
+const { entry } = Astro.props;
+const { post } = entry;
+
+/**
+ * The one branch about where a /library thing sends a reader, shared with the
+ * row. When every entry earns a page, this card follows without being edited.
+ */
+const dest = entryHref(entry);
+
+const initial = monogram(post.author);
+const body = clipText(post.text, POST_CARD_MAX);
+---
+
+<li class="card">
+  <a
+    class="card__link press"
+    href={dest.href}
+    rel={dest.external ? "noopener nofollow" : undefined}
+    target={dest.external ? "_blank" : undefined}
+  >
+    <span class="card__head">
+      {
+        /*
+         * Hidden from the accessibility tree: the letter is a recognition aid
+         * for the name sitting beside it, and announcing "B" before "Ben Lang"
+         * is a stutter, not a fact. Same call `XGlyph.astro` makes.
+         *
+         * Absent entirely when the display name has no letter or digit in it,
+         * because an empty coloured circle claims an identity it is not
+         * carrying (`lib/post.ts › monogram`).
+         */
+        initial !== "" && (
+          <span class="monogram" data-hue={hueSlot(post.handle)} aria-hidden="true">
+            {initial}
+          </span>
+        )
+      }
+
+      <span class="card__who">
+        <span class="card__author">{post.author}</span>
+        <span class="card__meta mono">
+          <span class="card__handle">@{post.handle}</span>
+          <span class="card__date tabular-nums">{post.date}</span>
+        </span>
+      </span>
+    </span>
+
+    <p class="card__text">{body}</p>
+
+    {
+      post.media.length > 0 && (
+        <span class="card__media" data-count={post.media.length}>
+          {post.media.map((src, index) => (
+            <img
+              class="outlined"
+              src={src}
+              alt={
+                post.media.length === 1
+                  ? `Picture attached to the post by ${post.author}`
+                  : `Picture ${index + 1} of ${post.media.length} attached to the post by ${post.author}`
+              }
+              loading="lazy"
+              decoding="async"
+            />
+          ))}
+        </span>
+      )
+    }
+  </a>
+</li>
+
+<style>
+  /* The item in the wall. `PostWall.astro` owns the columns; what belongs to a
+     card is that it must not be split across one, and the air under it. */
+  .card {
+    break-inside: avoid;
+    margin-bottom: 1.5rem;
+  }
+
+  .card__link {
+    /* A card is a wide target; 0.96 would visibly shove it sideways. The same
+       number `SiteGrid.astro › .card__link` settled on, because this is the
+       same kind of thing at the same kind of size. */
+    --press-scale: 0.985;
+
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    color: inherit;
+    text-decoration: none;
+    border: 1px solid var(--hairline);
+    /* Structural, so sharp: design.md §3. A radius here would make the card a
+       token you could pick up rather than a surface holding a quote. */
+    border-radius: 0;
+    /* `.press` already names border-color, so the hover below rides the
+       transition it brings. A second transition-property here would race it. */
+  }
+
+  .card__link:hover {
+    border-color: var(--hairline-strong);
+  }
+
+  .card__link:hover .card__author {
+    color: var(--accent);
+  }
+
+  .card__head {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-width: 0;
+  }
+
+  .card__who {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+  }
+
+  .card__author {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+    transition-property: color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 0.4rem;
+    color: var(--faint);
+  }
+
+  /* Drawn, never typed into the content: design.md §6. Keyed to the item after
+     it, the same way the footer's colophon does it, so a wrapped line starts
+     with the separator instead of the line above ending on a dangling one. The
+     `margin-right` matches the flex gap on its other side, and the colour is
+     the one every separator on the site takes. */
+  .card__handle + .card__date::before {
+    content: "\00b7" / "";
+    margin-right: 0.4rem;
+    color: var(--hairline-strong);
+  }
+
+  .card__date {
+    white-space: nowrap;
+  }
+
+  .card__text {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--muted);
+    /* A post arrives flattened to one paragraph, so nothing here has to survive
+       a newline. `overflow-wrap` is for the other thing a post is full of: a
+       t.co shortlink with no word boundary in it, which would otherwise run out
+       past the card's own border. */
+    overflow-wrap: anywhere;
+  }
+
+  /* The media grid, react-tweet's proportions.
+
+     2px is their gap and it is the right number: any more and four pictures
+     read as four pictures rather than as one attachment. The box is reserved by
+     `aspect-ratio` rather than by width/height attributes, because nothing here
+     knows a picture's size at build time (design.md §8).
+
+     **8:5 is not a new number.** It is what `ShotFrame.astro › .preview__shot`
+     already crops an unknown-sized picture to on a card, and a second answer to
+     one question is how a site ends up with two crops that nearly match. It
+     also happens to be the ratio that makes a 2x2 read as four landscape cells
+     rather than four slots.
+
+     Four is as many pictures as x.com lets a post carry, so 1, 2, 3 and 4 are
+     the whole vocabulary. A fifth would take a third row and squeeze all of
+     them inside the reserved box, which is the honest failure: it shows
+     everything, badly, instead of hiding one. */
+  .card__media {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 1fr;
+    gap: 2px;
+    aspect-ratio: 8 / 5;
+    /* The card is a column flex container, so this box's automatic minimum
+       height is its content — which is the reserved box's own contents, so the
+       ratio above would compute a height and then be overruled by it. Zeroing
+       the minimum is what lets `aspect-ratio` be the answer. The `min-height`
+       on the pictures below is the same rule one level in, for the rows. */
+    min-height: 0;
+  }
+
+  .card__media[data-count="1"] {
+    grid-template-columns: 1fr;
+  }
+
+  /* The L: the first picture holds the left column at full height and the other
+     two stack beside it. One rule, because the grid places the rest itself. */
+  .card__media[data-count="3"] > :first-child {
+    grid-row: span 2;
+  }
+
+  .card__media img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    /* A grid item's automatic minimum size is its content, so a portrait
+       screenshot in a `1fr` row pushes the row past the reserved box and the
+       `aspect-ratio` above quietly stops meaning anything. **This shipped
+       first**: four 1200px-tall shots came out 484px deep in a box asked for
+       208. Zeroing both minimums is what lets `1fr` be a fraction. */
+    min-width: 0;
+    min-height: 0;
+    object-fit: cover;
+    /* Anchored to the top, the same call and the same reason as
+       `ShotFrame.astro › .preview__shot`: what gets attached to a post is
+       usually a screenshot or a chart, and the top of one is the half that
+       says what it is. */
+    object-position: top center;
+    /* Sharp, like every other frame on the site. */
+    border-radius: 0;
+  }
+</style>
