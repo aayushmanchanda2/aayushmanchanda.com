@@ -1,0 +1,57 @@
+---
+/**
+ * TagChips — what a saved link is about, as links out to everything else
+ * filed the same way.
+ *
+ * The sibling of `CollectionChips.astro`, one section over and one vocabulary
+ * apart. A collection is gray because a collection name means nothing on a
+ * scale and a row of them belongs under a palette; a tag is the same kind of
+ * word but it lives in a *column*, twenty rows deep, and there the job changes:
+ * the reader is scanning for the two or three rows about one thing. So the tag
+ * carries a dot, which is recognisable before it is readable, and leaves the
+ * words at the page's ink. `styles/chip.css › .tag` is the whole paint;
+ * `lib/tags.ts` decides which of the seven dots each word wears.
+ *
+ * The label drops the hyphens (`tagLabel`), the href keeps them. The slug is
+ * the route and the join key; the reader only ever needs the words.
+ */
+import { tagHue, tagLabel } from "../lib/tags";
+
+interface Props {
+  /** Tag slugs, as stored on the entry. */
+  tags: string[];
+}
+
+const { tags } = Astro.props;
+---
+
+<ul class="tags">
+  {
+    tags.map((slug) => (
+      <li>
+        <a class="tag" data-hue={tagHue(slug)} href={`/library/tag/${slug}`}>
+          {tagLabel(slug)}
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  /* A `ul`, so a link about two things is two items to anything reading the
+     page out loud. `global.css` already takes the bullets and the padding off
+     every list on the site.
+
+     The row gap is the one number here worth explaining: each chip claims a
+     40px hit area through an `::after` that reaches 0.62rem above and below it,
+     so two wrapped lines closer than 1.25rem would have overlapping targets and
+     the upper chip would eat presses meant for the lower one. Same arithmetic
+     the rail dashes settle at a 41px pitch, and the same conclusion: adjacent
+     targets may touch, never overlap. */
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem 0.4rem;
+    margin: 0;
+  }
+</style>

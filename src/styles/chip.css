@@ -106,6 +106,142 @@
   --chip-line: 0.45;
 }
 
+/* --------------------------------------------------------------------------
+   The tag chip: a dot, and words that stay ink.
+
+   The second thing in this file that is chip-shaped and the first that is not
+   a chip. A /library tag says what a link is about, which is not a position on
+   any scale — `agents` is not better or worse than `design` — so it may not
+   take a tone: the fills above mean something, and twenty rows of them would
+   read as a page making claims about links that are all in the same state,
+   which is saved. Colour still has a job here, and it is identity: it is what
+   lets a reader who has seen `agents` twice recognise it a third time before
+   reading the word. So the Linear label shape — a small dot carrying the
+   colour, the words left at the page's own ink — rather than a filled pill.
+
+   Which dot a tag wears is `lib/tags.ts › tagHue`, a hash of the slug into
+   `[0, 7)`. The stylesheet owns every colour and the module owns the
+   assignment, because a colour typed outside `styles/` is the bug design.md §1
+   opens with. `lib/tags.test.mjs` fails if the number of slots below and the
+   number the module hands out ever disagree.
+
+   **Hue is identical across themes and lightness is the only difference**, the
+   same shape the accent takes in `global.css`, so the dark blocks below carry
+   one number each. Every dot clears **7:1 against its own page background** in
+   both themes, which is the band the chip inks above already sit in (6.98 to
+   8.76 light, 7.11 to 11.36 dark) rather than the 3:1 a non-text graphic owes:
+   a dot and a chip on one row have to read as one weight of colour, and 3:1
+   would have put a pastel next to them.
+
+     slot  hue  light l  ratio   dark l  ratio
+     0       8    38.5%   6.95    65.5%   6.98
+     1      45      26%   6.99    44.5%   6.96
+     2      80    23.5%   6.99    40.5%   7.05
+     3     152    24.5%   7.04      42%   6.95
+     4     192    27.5%   7.08    47.5%   6.99
+     5     285    41.5%   7.03    68.5%   7.06
+     6     322    38.5%   7.03    66.5%   6.95
+
+   The gap between 192 and 285 is the accent's, and it is deliberate: a dot in
+   the 231 band would read as a link marker on a page whose links are that
+   blue. -------------------------------------------------------------------- */
+
+.tag {
+  /* Fallback, kept identical to slot 0 so a chip that lost its `data-hue` and
+     a slot-0 chip cannot drift apart. */
+  --tag-h: 8;
+  --tag-s: 62%;
+  --tag-l: 38.5%;
+  --tag-tint: 0.1;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  /* The chip's own box, so the two vocabularies sit at one height. */
+  padding: 0.3rem 0.45rem 0.28rem;
+  border-radius: var(--r-sm);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: lowercase;
+  white-space: nowrap;
+  /* --muted, never below: this is a control, and design.md §4 is the floor. */
+  color: var(--muted);
+  text-decoration: none;
+  transition-property: background-color, color;
+  transition-duration: var(--dur-fast);
+  transition-timing-function: var(--ease);
+}
+
+.tag::before {
+  content: "";
+  flex: none;
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
+  background: hsl(var(--tag-h) var(--tag-s) var(--tag-l));
+}
+
+/* 40px hit floor on a 20.3px chip: 0.62rem of dead space above and below,
+   offsets rather than a centring transform so nothing rests on one and reduced
+   motion has nothing to undo. Horizontal only where the chip already is — a
+   wider box would swallow the row note beside it. `TagChips.astro` keeps
+   wrapped lines 1.25rem apart so two of these touch instead of overlapping. */
+.tag::after {
+  content: "";
+  position: absolute;
+  inset: -0.62rem 0;
+}
+
+/* The tint arrives on hover rather than sitting under every row, and it is the
+   chip's own hue: the colour is the identity, so the state that says "this is a
+   target" should be more of it and not a different one. The words go from
+   --muted to full ink at the same time, which is the half of the signal that
+   does not need colour vision. */
+.tag:hover,
+.tag:focus-visible {
+  color: var(--fg);
+  background: hsl(var(--tag-h) var(--tag-s) var(--tag-l) / var(--tag-tint));
+}
+
+.tag[data-hue="0"] {
+  --tag-h: 8;
+  --tag-l: 38.5%;
+}
+
+.tag[data-hue="1"] {
+  --tag-h: 45;
+  --tag-l: 26%;
+}
+
+.tag[data-hue="2"] {
+  --tag-h: 80;
+  --tag-l: 23.5%;
+}
+
+.tag[data-hue="3"] {
+  --tag-h: 152;
+  --tag-l: 24.5%;
+}
+
+.tag[data-hue="4"] {
+  --tag-h: 192;
+  --tag-l: 27.5%;
+}
+
+.tag[data-hue="5"] {
+  --tag-h: 285;
+  --tag-l: 41.5%;
+}
+
+.tag[data-hue="6"] {
+  --tag-h: 322;
+  --tag-l: 38.5%;
+}
+
 /* The dark tones, twice, for the reason written out at the top of the dark
    section in `global.css`: once for the OS preference (guarded so a pinned
    light theme wins over it) and once for a pinned dark theme. `theme.test.mjs`
@@ -153,6 +289,41 @@
     --chip-s: 100%;
     --chip-l: 75%;
   }
+
+  /* Hue and saturation are the light theme's; only the lightness moves, and it
+     moves to whatever holds 7:1 against #09090b. */
+  :root:not([data-theme="light"]) .tag {
+    --tag-l: 65.5%;
+    --tag-tint: 0.16;
+  }
+
+  :root:not([data-theme="light"]) .tag[data-hue="0"] {
+    --tag-l: 65.5%;
+  }
+
+  :root:not([data-theme="light"]) .tag[data-hue="1"] {
+    --tag-l: 44.5%;
+  }
+
+  :root:not([data-theme="light"]) .tag[data-hue="2"] {
+    --tag-l: 40.5%;
+  }
+
+  :root:not([data-theme="light"]) .tag[data-hue="3"] {
+    --tag-l: 42%;
+  }
+
+  :root:not([data-theme="light"]) .tag[data-hue="4"] {
+    --tag-l: 47.5%;
+  }
+
+  :root:not([data-theme="light"]) .tag[data-hue="5"] {
+    --tag-l: 68.5%;
+  }
+
+  :root:not([data-theme="light"]) .tag[data-hue="6"] {
+    --tag-l: 66.5%;
+  }
 }
 
 :root[data-theme="dark"] .chip {
@@ -195,4 +366,39 @@
   --chip-h: 231;
   --chip-s: 100%;
   --chip-l: 75%;
+}
+
+/* Hue and saturation are the light theme's; only the lightness moves, and it
+   moves to whatever holds 7:1 against #09090b. */
+:root[data-theme="dark"] .tag {
+  --tag-l: 65.5%;
+  --tag-tint: 0.16;
+}
+
+:root[data-theme="dark"] .tag[data-hue="0"] {
+  --tag-l: 65.5%;
+}
+
+:root[data-theme="dark"] .tag[data-hue="1"] {
+  --tag-l: 44.5%;
+}
+
+:root[data-theme="dark"] .tag[data-hue="2"] {
+  --tag-l: 40.5%;
+}
+
+:root[data-theme="dark"] .tag[data-hue="3"] {
+  --tag-l: 42%;
+}
+
+:root[data-theme="dark"] .tag[data-hue="4"] {
+  --tag-l: 47.5%;
+}
+
+:root[data-theme="dark"] .tag[data-hue="5"] {
+  --tag-l: 68.5%;
+}
+
+:root[data-theme="dark"] .tag[data-hue="6"] {
+  --tag-l: 66.5%;
 }

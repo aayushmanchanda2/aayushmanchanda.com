@@ -24,6 +24,7 @@
  * only opens where the row actually leaves.
  */
 import KindChip from "./KindChip.astro";
+import TagChips from "./TagChips.astro";
 import { routeSlug } from "../lib/parse";
 import type { LibraryEntry } from "../lib/library";
 
@@ -34,9 +35,26 @@ interface Props {
 }
 
 const { entries, showDomain = true } = Astro.props;
+
+/**
+ * The tags column is drawn only where something fills it.
+ *
+ * Most saves arrive tagged, but tagging happens in Raindrop and not in the
+ * parser, so a filtered page can hold nothing but untagged rows — and a column
+ * of empty cells is furniture claiming a third of the row's width for a value
+ * the page does not have. Same honest-absence rule the section index runs on,
+ * one grain smaller.
+ *
+ * Note that this is deliberately not the call `showDomain` makes. The domain
+ * column goes off on the domain page because the h1 already says the one value
+ * every row would repeat; the tag page keeps its column, because a tag cell is
+ * a set and dropping it would take the *other* tags with it — and those are the
+ * only thing on that page pointing anywhere the reader has not already been.
+ */
+const anyTags = entries.some((entry) => entry.tags.length > 0);
 ---
 
-<ul class="list">
+<ul class:list={["list", anyTags && "list--tags"]}>
   {
     entries.map((entry) => (
       /*
@@ -76,6 +94,12 @@ const { entries, showDomain = true } = Astro.props;
           )}
           <KindChip kind={entry.kind} />
         </span>
+
+        {entry.tags.length > 0 && (
+          <div class="row__tags">
+            <TagChips tags={entry.tags} />
+          </div>
+        )}
 
         <span class="row__meta">
           {showDomain && (
@@ -121,6 +145,41 @@ const { entries, showDomain = true } = Astro.props;
 
   .row:hover {
     border-bottom-color: var(--hairline-strong);
+  }
+
+  /* The tags line sits directly under the title, above the note: it is part of
+     what the row *is*, the way the kind chip on the title line is, while the
+     note is a sentence about it and the meta column is metadata. */
+  .list--tags .row {
+    grid-template-areas:
+      "name meta"
+      "tags meta"
+      "note meta";
+  }
+
+  /* The database column, and the reason /library is a wide page.
+     Above 900px — the site's one structural breakpoint, where the rail arrives
+     and the shell has room — the tags stop being a third line and become a
+     column, which is what makes twenty rows scannable by subject instead of
+     readable one at a time. 13rem is the widest pair in the list measured, 201px
+     for `founders` and `go to market`, plus a little air. A fixed width rather
+     than `auto` because every row is its own grid: an `auto` column would start
+     at a different x on every row, and a column with a ragged left edge is a
+     column you cannot run your eye down. A pair too wide for it wraps to a
+     second line, which `TagChips.astro` has already spaced for. */
+  @media (min-width: 900px) {
+    .list--tags .row {
+      grid-template-columns: minmax(0, 1fr) 13rem auto;
+      grid-template-areas:
+        "name tags meta"
+        "note tags meta";
+    }
+  }
+
+  .row__tags {
+    grid-area: tags;
+    /* optical: line the first chip up with the title, not the row box */
+    padding-top: 0.15rem;
   }
 
   .row__name {
@@ -205,6 +264,17 @@ const { entries, showDomain = true } = Astro.props;
         "note"
         "meta";
       row-gap: 0.45rem;
+    }
+
+    /* Same order the two-column form uses, stacked: title, what it is about,
+       what I said about it, when it arrived. */
+    .list--tags .row {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas:
+        "name"
+        "tags"
+        "note"
+        "meta";
     }
 
     .row__meta {

@@ -1,0 +1,70 @@
+---
+/**
+ * One tag: everything I filed under it.
+ *
+ * Third of the /library filter routes and the one built like /sites'
+ * collections rather than like its own two siblings, because it is the same
+ * kind of grouping: a kind is a fact about the file, a domain is a fact about
+ * the URL, and a tag is a judgement about the subject. So this is
+ * `sites/collection/[slug].astro` with a list where the grid was.
+ *
+ * Reached from the chips on every row, which is why there is no tag row under
+ * the standfirst on /library the way there is on /sites: a /sites entry hides
+ * its collections behind a details page, so the index has to offer them
+ * somewhere; a library row wears its tags in the list itself.
+ */
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+
+import Base from "../../../layouts/Base.astro";
+import LibraryList from "../../../components/LibraryList.astro";
+import { libraryTags } from "../../../lib/library";
+import { libraryRowUrl, listJsonLd } from "../../../lib/schema";
+import { tagLabel } from "../../../lib/tags";
+
+export const getStaticPaths = (() =>
+  libraryTags.map((group) => ({
+    params: { slug: group.slug },
+    props: group,
+  }))) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { slug, entries } = Astro.props;
+const label = tagLabel(slug);
+const count = entries.length;
+const lead = `${count} ${count === 1 ? "link" : "links"} I filed under`;
+
+/** Rows point where they go, same as /library, plus the crumb this page draws. */
+const jsonLd = listJsonLd({
+  name: label,
+  path: `/library/tag/${slug}`,
+  parent: { name: "Library", path: "/library" },
+  entries: entries.map((entry) => ({ name: entry.title, url: libraryRowUrl(entry) })),
+});
+---
+
+<Base
+  title={`${label} · Library · Aayush Manchanda`}
+  description={`${lead} ${label}.`}
+  jsonLd={jsonLd}
+  wide
+>
+  <p class="crumb mono"><a href="/library">&larr; Library</a></p>
+
+  <header>
+    <h1 class="page-title page-title--entry">{label}</h1>
+    <p class="standfirst">
+      {lead} {label}. Tags overlap: a link can carry a couple, or none at all.
+    </p>
+  </header>
+
+  <div class="body">
+    <LibraryList entries={entries} />
+  </div>
+</Base>
+
+<style>
+  .body {
+    margin-top: var(--gap-masthead);
+  }
+</style>

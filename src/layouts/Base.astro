@@ -69,6 +69,17 @@ interface Props {
    * *indexed*.
    */
   noindex?: boolean;
+  /**
+   * Widen the content column to `--page-wide`, above 900px only.
+   *
+   * The four /library list routes are the callers, and the concession is
+   * theirs: the tags column earns its keep by being a column, and a column
+   * needs the room. It is scoped to `.shell__main` and deliberately not to
+   * `.shell` — widening the shell would take the footer with it, and the
+   * colophon is the same three centred groups on every page of this site
+   * whatever the page above it is doing. `lib/wide.test.mjs` holds that scope.
+   */
+  wide?: boolean;
 }
 
 const {
@@ -76,6 +87,7 @@ const {
   description = "Part entrepreneur, part marketer, part operator. Aayush Manchanda co-founded Orbis, runs Vetted, and uses AI to build things on the internet from Canada. What survives his testing shows up here with a date on it.",
   jsonLd,
   noindex = false,
+  wide = false,
 } = Astro.props;
 
 /**
@@ -319,7 +331,7 @@ const markdownVariant = variant === null ? null : absolute(variant);
     <CommandPalette />
 
     <div class="shell" data-mnav-inert>
-      <main class="shell__main" id="main">
+      <main class:list={["shell__main", wide && "shell__main--wide"]} id="main">
         <slot />
       </main>
 
@@ -479,6 +491,19 @@ const markdownVariant = variant === null ? null : absolute(variant);
         flex: 1 0 auto;
         width: 100%;
         max-width: var(--page-max);
+      }
+
+      /* The one page-width concession on the site, and it stops here.
+         `.foot` below keeps `--page-max` on purpose: the colophon closes every
+         page the same way, and a footer that changed width with the content
+         above it would read as two different sites. Above 900px only, because
+         below it the shell's own padding already keeps the column under 44rem
+         and the row this width exists for is not a three-column row yet
+         (`LibraryList.astro`). */
+      @media (min-width: 900px) {
+        .shell__main--wide {
+          max-width: var(--page-wide);
+        }
       }
 
       /* --- footer ---------------------------------------------------------- */

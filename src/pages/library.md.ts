@@ -28,7 +28,14 @@ import {
   newest,
 } from "../lib/markdown";
 import type { Kind } from "../lib/library";
-import { KINDS, digested, kindGroups, library, libraryDomains } from "../lib/library";
+import {
+  KINDS,
+  digested,
+  kindGroups,
+  library,
+  libraryDomains,
+  libraryTags,
+} from "../lib/library";
 import { absolute } from "../lib/site";
 
 /**
@@ -42,8 +49,12 @@ const MEANING: Record<Kind, string> = {
 };
 
 export const GET: APIRoute = () => {
+  // Tags as the slugs rather than as the words the chips read, because a slug
+  // is what `/library/tag/<slug>` is built from and an agent reading this table
+  // is being handed the route, not the prose.
   const rows = library.map((entry) => [
     link(entry.title, entry.url),
+    entry.tags.join(", "),
     entry.domain,
     entry.kind,
     entry.saved_date,
@@ -67,7 +78,7 @@ export const GET: APIRoute = () => {
       ...digested.map((entry) => entry.digest.digested),
     ]),
     blocks: [
-      table(["Title", "Domain", "Kind", "Saved", "Note"], rows),
+      table(["Title", "Tags", "Domain", "Kind", "Saved", "Note"], rows),
       section(
         "Kinds",
         list(KINDS.map((kind) => `\`${kind}\`: ${MEANING[kind]}`)),
@@ -87,6 +98,13 @@ export const GET: APIRoute = () => {
           libraryDomains.map(
             (group) =>
               `${group.domain} (${group.entries.length}): ${absolute(`/library/domain/${group.slug}`)}`,
+          ),
+        ),
+        "By tag:",
+        list(
+          libraryTags.map(
+            (group) =>
+              `${group.slug} (${group.entries.length}): ${absolute(`/library/tag/${group.slug}`)}`,
           ),
         ),
       ),

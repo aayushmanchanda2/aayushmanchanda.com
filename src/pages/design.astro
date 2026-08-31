@@ -39,12 +39,14 @@ import KindChip from "../components/KindChip.astro";
 import MarkGlyph from "../components/MarkGlyph.astro";
 import PaletteRow from "../components/PaletteRow.astro";
 import StatusChip from "../components/StatusChip.astro";
+import TagChips from "../components/TagChips.astro";
 import VerdictBadge from "../components/VerdictBadge.astro";
 import Base from "../layouts/Base.astro";
 import { STATUSES } from "../lib/experiments";
-import { KINDS } from "../lib/library";
+import { KINDS, libraryTags } from "../lib/library";
 import { designJsonLd } from "../lib/schema";
 import { collectionGroups, sites } from "../lib/sites";
+import { TAG_HUES, tagHue } from "../lib/tags";
 import { tools } from "../lib/tools";
 import { VERDICTS } from "../lib/tools";
 
@@ -98,6 +100,17 @@ const entryTitle = tools[0]?.name ?? "Tools";
 
 /** Three real collections, for the chip in its filter-link form. */
 const collections = collectionGroups.slice(0, 3).map((group) => group.slug);
+
+/**
+ * One real tag per dot, so the whole palette is on the page and not a sample
+ * of it. A slot with nothing filed under it yet simply has no specimen, which
+ * is the honest thing for a page that renders shipped data.
+ */
+const tagSpecimen = Array.from({ length: TAG_HUES }, (_, hue) =>
+  libraryTags.find((group) => tagHue(group.slug) === hue),
+)
+  .filter((group) => group !== undefined)
+  .map((group) => group.slug);
 
 const CONTRACT =
   "https://github.com/aayushmanchanda2/aayushmanchanda.com/blob/main/design.md";
@@ -421,7 +434,21 @@ const jsonLd = designJsonLd();
           <dt class="code">chip--link</dt>
           <dd><CollectionChips collections={collections} /></dd>
         </div>
+        <div class="spec__row">
+          <dt class="code">tag</dt>
+          <dd><TagChips tags={tagSpecimen} /></dd>
+        </div>
       </dl>
+
+      <p>
+        The tag is the one chip that is not a tint. A verdict and a status sit
+        somewhere on a scale, and the fill is what says so; a library tag names
+        a subject, and one subject is not better than another. So the colour
+        moves to a dot, where it can do the only job it has here, which is to be
+        recognisable a row before it is readable. Seven dots, handed out by a
+        hash of the word, so a new tag has a colour the day it arrives and keeps
+        it. Two tags can share one, and the word beside it is the name.
+      </p>
 
       <p>
         Those are every verdict on <a href="/tools">/tools</a>, every status on <a
