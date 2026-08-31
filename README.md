@@ -92,7 +92,9 @@ on /sites once there are two of them. Nothing else to maintain.
   Raindrop itself (`RESERVED_TAGS` in `pipeline/entries.mjs`).
 - Collections are read once, at first write. Tag before the run picks the link
   up, and edit `src/data/sites.json` afterwards.
-- /tools and /library ignore tags. They have `category` and `kind`.
+- /tools ignores tags; it files by `category`. A tag on a **Publish/Reading**
+  bookmark does the same job one section over: a page at `/library/tag/<slug>`,
+  and a coloured dot beside the word in the tags column on every row.
 
 ## Editing content by hand
 

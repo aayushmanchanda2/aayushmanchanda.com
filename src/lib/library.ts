@@ -20,25 +20,25 @@
  * does — so most entries are missing most of this most of the time, and a parser
  * that could not say "nothing yet" would have nothing true to say about them.
  *
- * One thing /library does that no other section does. Every other entry on the
- * site gets a page of its own — `/tools/<slug>`, `/sites/<slug>`, `/notes/<slug>`
- * — and a library row, by default, does not. A row's destination is the thing
- * itself, so the title links straight out. A page about a link, holding one line
- * I wrote and a button to leave, would be a stop on the way to the thing rather
- * than the thing.
+ * Every entry has a page, and that is a reversal. /library used to be the one
+ * section where a row's destination was the thing itself: a page holding one
+ * line I wrote and a button to leave would be a stop on the way to the thing,
+ * so only a digested entry earned `/library/<slug>` and everything else linked
+ * straight out.
  *
- * A digest changes that answer, because it changes what the page would hold.
- * When the Hermes digest skill has actually read a saved piece and written the
- * cliff notes and a read-it-or-skip-it call, there is something at
- * `/library/<slug>` worth stopping for, so that entry gets a detail page and its
- * row links there instead. Entries without a digest keep the old answer: no
- * page, no stub, nothing "coming soon" — the same honest-absence rule
- * `lib/sections.ts` applies to whole sections.
+ * What changed is not the argument, it is the entry. A saved link now arrives
+ * carrying tags, and a post or a video arrives carrying the thing itself — the
+ * whole post the row can only quote 280 characters of, the poster frame a
+ * reader can press. That is a page with something on it before anyone has read
+ * a word, so the old refusal was refusing a stub that no longer exists.
+ * `digested` below is still the gate on the *digest*, which is what a detail
+ * page holds when there is one and what `Review` in the graph is still keyed
+ * on; it is no longer the gate on the page.
  *
- * The slug is therefore a URL only for digested entries. It is still parsed and
- * still has to be unique for every entry either way: it is the key the publish
- * pipeline writes into `pipeline/state.json` to remember that a bookmark has
- * already been published.
+ * The slug is therefore a URL for every entry. It is also still the key the
+ * publish pipeline writes into `pipeline/state.json` to remember that a
+ * bookmark has already been published, which is why it is parsed and held
+ * unique whatever the routes do with it.
  *
  * The pipeline still calls this section `reading`, and that is deliberate: its
  * section key is the name of the Raindrop collection Aayush saves into
@@ -206,7 +206,7 @@ export interface Draft {
 }
 
 export interface LibraryEntry {
-  /** URL-safe id, and the detail page's URL when the entry is digested. */
+  /** URL-safe id, and the detail page's URL. Every entry has one. */
   slug: string;
   title: string;
   url: string;
@@ -225,7 +225,8 @@ export interface LibraryEntry {
   note: string | null;
   /**
    * The digest, or null. Null is the ordinary case: most saves have not been
-   * read yet, and an undigested entry has no detail page to describe.
+   * read yet. Its page renders what the entry does have and says nothing where
+   * this is null, which is the honest-absence rule one grain below a section.
    */
   digest: Digest | null;
   /**
@@ -263,7 +264,7 @@ export interface LibraryEntry {
   why: string | null;
 }
 
-/** An entry that has earned its page. What `/library/[slug]` builds from. */
+/** An entry somebody has actually read. What the `Review` node is built from. */
 export type DigestedEntry = LibraryEntry & { digest: Digest };
 
 /**
@@ -672,34 +673,30 @@ export function parseLibrary(value: unknown): LibraryEntry[] {
 }
 
 /**
- * Where an entry sends a reader, and whether that leaves the site.
+ * Where an entry sends a reader. Its own page, always.
  *
- * **This is the one branch, and it is the seam.** A digested entry has a page
- * of its own and links there; an undigested one has no page, so its
- * destination is the thing itself. Three surfaces need that answer and they
- * have to agree: the row on every list page (`components/LibraryList.astro`),
- * the card on the posts wall (`components/TweetCard.astro`), and the
- * `ItemList` node describing both (`lib/schema.ts › libraryRowUrl`). The
- * markup and the graph saying different things about one row is exactly the
- * failure design.md §7's parity rule exists to catch, and three copies of a
- * one-line ternary is how it would happen.
+ * **This is the seam, and it no longer branches.** It used to: a digested
+ * entry linked its page and an undigested one linked straight out, and the
+ * branch lived here so the four surfaces that need the answer could not
+ * disagree — the row on every list page (`components/LibraryList.astro`), the
+ * card on the posts wall (`components/TweetCard.astro`), the title on a video
+ * tile (`components/VideoFacade.astro`), and the `ItemList` node describing
+ * all three (`lib/schema.ts › libraryRowUrl`). Every entry has a page now, so
+ * there is one answer, and it is still spelled once here rather than four
+ * times — a `/library/<slug>` template copied into a component is how one
+ * surface ends up pointing somewhere the other three stopped.
  *
- * `external` travels with the href rather than being re-derived from it,
- * because it decides three attributes at once: `rel="noopener nofollow"`,
- * `target="_blank"` and the `.ext` arrow (design.md §5). A caller that had to
- * work out "is this off-site" from a string is a caller that can get it wrong.
- *
- * **When every entry gets a page (VET-63, the detail-page slice), this
- * function is the whole edit.** Return the local page for all of them, and
- * every row, card and graph node on the site follows in one commit — including
- * dropping the arrow and the new tab, which drop with `external`.
+ * **It returned `{ href, external }` and now returns a string**, which is the
+ * other half of the same reversal. `external` earned its place by deciding
+ * `rel="noopener nofollow"`, `target="_blank"` and the `.ext` arrow together
+ * (design.md §5) while half the answers were off-site; a flag that is false
+ * for every entry on every page is a ternary in three components that can
+ * only ever take one branch. The one outbound control a row still carries is
+ * its Source link, and that one is off-site unconditionally, so it names its
+ * own attributes the way `VideoFacade.astro`'s play control already does.
  */
-export function entryHref(
-  entry: Pick<LibraryEntry, "slug" | "url" | "digest">,
-): { href: string; external: boolean } {
-  return entry.digest === null
-    ? { href: entry.url, external: true }
-    : { href: `/library/${entry.slug}`, external: false };
+export function entryHref(entry: Pick<LibraryEntry, "slug">): string {
+  return `/library/${entry.slug}`;
 }
 
 /* ---------------------------------------------------------------------------
@@ -717,13 +714,14 @@ export const library: LibraryEntry[] = parseLibrary(rawLibrary)
   .map(({ entry }) => entry);
 
 /**
- * The entries with detail pages, in the order the /library list renders them.
+ * The entries somebody has actually read, in the order the list renders them.
  *
- * This is the whole route table for `/library/[slug]`, and it is also the ring
- * the keyboard nav walks — one order, so pressing → on a detail page moves the
- * way the eye moved down the list. The filter narrows `digest` from
- * `Digest | null` to `Digest`, which is what lets the page read
- * `entry.digest.bullets` without a runtime check it has already done here.
+ * This was the route table for `/library/[slug]` and is not any more: `library`
+ * is, and the ring the keyboard nav walks is the same list. What survives here
+ * is the narrowing — `digest` from `Digest | null` to `Digest` — which is what
+ * lets `libraryJsonLd` and `/library.md` read `entry.digest.bullets` without a
+ * runtime check, and it is still the gate on the `Review` node in the graph
+ * (design.md §7): a page exists for every entry, an opinion does not.
  */
 export const digested: DigestedEntry[] = library.filter(
   (entry): entry is DigestedEntry => entry.digest !== null,

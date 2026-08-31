@@ -6,11 +6,12 @@
  * across several routes (/tools); /library is a table on both sides, so the two
  * renderings are close to the same document.
  *
- * The thing worth saying out loud here is which slugs are URLs: an agent that
- * has learned the shape of this site will look for `/library/<slug>` the way
- * it found `/tools/<slug>`, and only the digested entries have one. So the
- * digest section carries each page's URL and the closing section states the
- * rule, rather than letting an agent find the other rows out with a 404.
+ * The thing worth saying out loud here used to be which slugs are URLs, because
+ * only digested entries had a page and an agent that had learned the shape of
+ * this site would look for `/library/<slug>` the way it found `/tools/<slug>`
+ * and get a 404. Every entry has one now, so the table names both: `Title`
+ * links the page and `Source` is the thing itself, which is the same pair of
+ * offers the HTML row makes and in the same order.
  *
  * Rows come from `lib/library.ts` in the order that boundary already sorted
  * them, newest save first.
@@ -53,7 +54,8 @@ export const GET: APIRoute = () => {
   // is what `/library/tag/<slug>` is built from and an agent reading this table
   // is being handed the route, not the prose.
   const rows = library.map((entry) => [
-    link(entry.title, entry.url),
+    link(entry.title, absolute(`/library/${entry.slug}`)),
+    entry.url,
     entry.tags.join(", "),
     entry.domain,
     entry.kind,
@@ -78,7 +80,7 @@ export const GET: APIRoute = () => {
       ...digested.map((entry) => entry.digest.digested),
     ]),
     blocks: [
-      table(["Title", "Tags", "Domain", "Kind", "Saved", "Note"], rows),
+      table(["Title", "Source", "Tags", "Domain", "Kind", "Saved", "Note"], rows),
       section(
         "Kinds",
         list(KINDS.map((kind) => `\`${kind}\`: ${MEANING[kind]}`)),
@@ -111,12 +113,15 @@ export const GET: APIRoute = () => {
       ...(digests === null ? [] : [digests]),
       section(
         "Pages per entry",
-        // The pointer at the digest section only exists while that section
-        // does; with nothing digested, the rule is stated without a reference
-        // to a heading that is not there.
-        digests === null
-          ? "A library entry gets a page of its own at /library/<slug> only once it has been digested, and nothing has been yet. No entry has a page: nothing at its slug, no stub. The table above already holds everything the site knows about a row. Follow the title's URL to reach the source."
-          : "A library entry gets a page of its own only once it has been digested: those pages are listed in the Digests section above, at /library/<slug>. Every other entry has no page, nothing at its slug, no stub. The table above already holds everything the site knows about it. Follow the title's URL to reach the source.",
+        // The rule reversed with VET-63 and this is where an agent finds out.
+        // The second sentence exists because the shape of a page is no longer
+        // one thing: an article nobody has read yet is a catalogue card, and a
+        // post carries the whole post.
+        `Every entry has a page of its own at /library/<slug>, and the Title column above links it. A page holds the kind, the host, the tags, the saved date and the note in the table, plus whatever else that entry carries: a saved post's full text, a saved video's poster, a digest where one has been written, and a draft where the pipeline has written one and Aayush has not read the piece yet. A drafted block is labelled as a draft on the page and is not his verdict. ${
+          digests === null
+            ? "Nothing has been digested yet."
+            : "The digested entries are listed in the Digests section above."
+        } The Source column is the thing itself, which is off this site.`,
       ),
     ],
   });

@@ -1,42 +1,65 @@
 ---
 /**
- * One digested library entry: the cliff notes, the call, and the way out.
+ * One saved link: what it is, what he has on it, and the way to it.
  *
- * This page exists only for entries the Hermes digest skill has actually read
- * — `lib/library.ts › digested` is the whole route table, and an undigested
- * entry builds nothing here, per the honest-absence rule. A page holding one
- * line I wrote and a button to leave would be a stop on the way to the thing;
- * a page holding what the piece says and whether it is worth your time is the
- * ten seconds the digest was written to buy.
+ * **Every entry builds one, and that is a reversal.** The section's rule used
+ * to be that a row's destination was the thing itself, and only a digested
+ * entry earned a page — a page holding one line he wrote and a button to leave
+ * would be a stop on the way to the thing rather than the thing. design.md §3
+ * carries the argument and the reversal in one paragraph, and this is the
+ * route it governs.
  *
- * The anatomy is the /tools entry page, which is the save.design shape: a
- * strip of metadata whose values are also filter links, the judgement in the
- * middle, and the source at the foot. The external link lives there — the
- * Source line — because a reader decides first and leaves second, and the one
- * decision this page exists to serve is whether to follow that link at all.
+ * What changed is the entry rather than the argument. A saved link now arrives
+ * with tags on it, a saved post arrives with the whole post, and a saved video
+ * arrives with a poster somebody can press. There is no stub left to refuse:
+ * the thinnest page here is an article nobody has read yet, and it holds the
+ * kind, the host, what it is about, the day it arrived, the one line he wrote
+ * about it, and the source. That is a catalogue card, which is a real thing to
+ * be, and every filter on it goes somewhere.
+ *
+ * The anatomy is still the /tools entry page, which is the save.design shape: a
+ * strip of metadata whose values are filter links, whatever the entry actually
+ * carries in the middle, and the source at the foot. The external link lives
+ * down there because a reader decides first and leaves second.
+ *
+ * The middle is four optional blocks and they stack in the order a reader
+ * wants them: the thing itself first when the site has it (the post's own
+ * words, the video's poster), then the digest when somebody has read it, then
+ * the draft when the pipeline has had a go and he has not, then his own `why`.
+ * **The last two are deliberately different components.** `DraftBlock.astro`
+ * is boxed, third person and loudly labelled; `VoiceBlocks.astro` is the same
+ * component /tools and /sites render his sentences through. A drafted opinion
+ * and one of his cannot end up in the same box by accident, because they are
+ * not the same box.
  */
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 
 import Base from "../../layouts/Base.astro";
 import DigestBlocks from "../../components/DigestBlocks.astro";
+import DraftBlock from "../../components/DraftBlock.astro";
 import EntryLink from "../../components/EntryLink.astro";
 import EntryNav from "../../components/EntryNav.astro";
 import KindChip from "../../components/KindChip.astro";
+import PostBody from "../../components/PostBody.astro";
+import TagChips from "../../components/TagChips.astro";
+import VideoFacade from "../../components/VideoFacade.astro";
+import VoiceBlocks from "../../components/VoiceBlocks.astro";
 import { linkLabel } from "../../lib/links";
-import { digested } from "../../lib/library";
+import { library } from "../../lib/library";
 import { routeSlug } from "../../lib/parse";
 import { libraryJsonLd } from "../../lib/schema";
 
 /**
- * Neighbours resolved at build time, the way /sites resolves its gallery: the
- * ring is `digested`, which is the order the /library list renders those rows,
- * so pressing → moves the way the eye moved down the list. Wraps, and a
- * one-entry ring offers no prev and no next rather than two links to here.
+ * Neighbours resolved at build time, the way /sites resolves its gallery. The
+ * ring is `library` itself, which is the order the /library list renders, so
+ * pressing → moves the way the eye moved down the page. It wraps, and it is
+ * every entry now rather than the digested few: a keyboard walk that skipped
+ * forty of forty-two pages would be a ring around a list nobody can see.
  */
 export const getStaticPaths = (() =>
-  digested.map((entry, index) => {
+  library.map((entry, index) => {
     const step = (offset: number) => {
-      const neighbour = digested[(index + offset + digested.length) % digested.length];
+      const neighbour = library[(index + offset + library.length) % library.length];
       return neighbour === undefined || neighbour.slug === entry.slug
         ? null
         : { href: `/library/${neighbour.slug}`, title: neighbour.title };
@@ -53,15 +76,24 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { entry, prev, next } = Astro.props;
 
 /**
- * His review of somebody else's piece: the digest as a dated statement by a
- * named person about a named thing. See `lib/schema.ts › libraryJsonLd`.
+ * A `Review` when there is a digest to review with, a `WebPage` when there is
+ * not. The gate lives in `lib/schema.ts › libraryJsonLd` rather than here,
+ * because which node a page emits is a structured-data decision and design.md
+ * §7 keeps every one of those in that module.
  */
 const jsonLd = libraryJsonLd(entry);
 
-/* The note when there is one, the verdict when there is not: both are his own
-   sentence about the piece, and the verdict is the one a digested entry is
-   guaranteed to have. */
-const description = entry.note ?? entry.digest.verdict;
+/*
+ * The page's own description, in the order the page itself would answer the
+ * question. His note is the standfirst and comes first; the verdict is the one
+ * sentence a digested entry is guaranteed to have; his `why` is next. The
+ * fallback is the plainest true sentence there is, and no entry needs it today.
+ */
+const description =
+  entry.note ??
+  entry.digest?.verdict ??
+  entry.why ??
+  `A ${entry.kind} I saved from ${entry.domain}.`;
 ---
 
 <Base
@@ -78,11 +110,14 @@ const description = entry.note ?? entry.digest.verdict;
       A `ul`, so the facts are separate items to anything reading the page out
       loud. The dots are separators drawn by CSS between the items, never
       characters in the content. Every value that can be a way back out into
-      the collection is one — the save.design anatomy, same as /tools.
+      the collection is one — the save.design anatomy, same as /tools — and
+      since VET-63 that includes the tags, which is what makes the thinnest
+      page here a page with somewhere to go.
 
-      Two dates on purpose: `saved` is when the link came in, `digested` is the
-      day the verdict below was last true, and the second is the one PURPOSE.md
-      cares about. An opinion with an old date on it is a warning.
+      The dates are the honest ones and there are up to three: `saved` is when
+      the link came in, `digested` is the day the verdict below was last true,
+      and `drafted` is the day the pipeline had its go. An opinion with an old
+      date on it is a warning, which is the whole reason they are printed.
     */}
     <ul class="strip mono">
       <li class="strip__item">
@@ -93,23 +128,60 @@ const description = entry.note ?? entry.digest.verdict;
       <li class="strip__item">
         <a href={`/library/domain/${routeSlug(entry.domain)}`}>{entry.domain}</a>
       </li>
+      {
+        entry.tags.length > 0 && (
+          <li class="strip__item strip__item--tags">
+            <TagChips tags={entry.tags} />
+          </li>
+        )
+      }
       <li class="strip__item">
         <span class="tabular-nums">saved {entry.saved_date}</span>
       </li>
-      <li class="strip__item">
-        <span class="tabular-nums">digested {entry.digest.digested}</span>
-      </li>
+      {
+        entry.digest && (
+          <li class="strip__item">
+            <span class="tabular-nums">digested {entry.digest.digested}</span>
+          </li>
+        )
+      }
+      {
+        entry.draft && (
+          <li class="strip__item">
+            <span class="tabular-nums">drafted {entry.draft.drafted}</span>
+          </li>
+        )
+      }
     </ul>
 
     {entry.note && <p class="standfirst">{entry.note}</p>}
   </header>
 
-  <DigestBlocks digest={entry.digest} />
+  {/*
+    The thing itself, when the site has it. A post's own words in full, because
+    the card that pointed here cut them at 700 characters; a video's poster,
+    because pressing it is the whole point of having saved it. An article has
+    neither and renders neither: there is nothing here to embed and a box
+    saying so would be the stub this page exists not to be.
+  */}
+  {entry.post && <PostBody entry={{ ...entry, post: entry.post }} />}
+  {entry.video && <VideoFacade entry={{ ...entry, video: entry.video }} chrome={false} />}
+
+  {entry.digest && <DigestBlocks digest={entry.digest} />}
+  {entry.draft && <DraftBlock draft={entry.draft} />}
+
+  {/*
+    His own `why`, through the component /tools and /sites render his sentences
+    with, under the label that list already fixes. Only the entry's top-level
+    `why` reaches it: a drafted one is somebody else's agent talking and it goes
+    in the box above, in the third person, where it is labelled as such.
+  */}
+  <VoiceBlocks why={entry.why} />
 
   {/*
     The way out, prominent by being the only full link on the page. At the
-    foot rather than in the masthead because the digest is the decision and
-    this is what the decision is about — a reader who got their answer above
+    foot rather than in the masthead because whatever is above is the decision
+    and this is what the decision is about — a reader who got their answer
     leaves through here, and one who did not was never going to.
   */}
   <p class="source">
@@ -120,13 +192,13 @@ const description = entry.note ?? entry.digest.verdict;
   {/*
     The hint row is the keyboard legend and the links themselves — EntryNav
     owns the anatomy, the keys and the reasoning. This page only decides the
-    ring: the digested entries, in list order, wrapping.
+    ring: every entry, in list order, wrapping.
   */}
   <EntryNav
     label="Library entries"
     close={{ href: "/library", aria: "Close and go back to Library" }}
-    prev={prev && { href: prev.href, aria: `Previous digest: ${prev.title}` }}
-    next={next && { href: next.href, aria: `Next digest: ${next.title}` }}
+    prev={prev && { href: prev.href, aria: `Previous entry: ${prev.title}` }}
+    next={next && { href: next.href, aria: `Next entry: ${next.title}` }}
   />
 </Base>
 
@@ -158,11 +230,23 @@ const description = entry.note ?? entry.digest.verdict;
     color: var(--hairline-strong);
   }
 
+  /* The tag chips bring their own 1.25rem row gap, which is the hit-area
+     arithmetic `TagChips.astro` explains and not a rhythm this row chose. It
+     only shows when the chips wrap, and they wrap on a phone, so the item is
+     allowed to be as tall as its own contents rather than being squashed to
+     the strip's line. */
+  .strip__item--tags {
+    align-items: center;
+  }
+
   /* Quiet by default and accent on hover — navigation furniture, deliberately
      outside the bold-and-underlined treatment prose links get in global.css.
      `:not(.strip__chip)` because the kind anchor is a box, not a word: an
-     underline under a tinted chip would draw a second line across the row. */
-  .strip a:not(.strip__chip) {
+     underline under a tinted chip would draw a second line across the row.
+     `:not(.tag)` for the same reason one level along — a tag is a dot and a
+     word, painted by `styles/chip.css`, and an underline would be a third
+     mark on it. */
+  .strip a:not(.strip__chip):not(.tag) {
     /* --muted, never the strip's --faint: a quiet anchor inside a metadata
        container states its own ink (design.md §4, the ink floor). */
     color: var(--muted);
@@ -174,7 +258,7 @@ const description = entry.note ?? entry.digest.verdict;
     transition-timing-function: var(--ease);
   }
 
-  .strip a:not(.strip__chip):hover {
+  .strip a:not(.strip__chip):not(.tag):hover {
     color: var(--accent);
     text-decoration-color: var(--accent);
   }

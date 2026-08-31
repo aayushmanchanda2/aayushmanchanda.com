@@ -168,6 +168,38 @@ const DIGESTED_ENTRY = {
   why: null,
 };
 
+/**
+ * An entry with a page and no opinion on it, which is what forty of the
+ * forty-two are.
+ *
+ * It carries a draft on purpose. Nothing in the graph may come out of one: a
+ * draft is his pipeline's placeholder, labelled as such where a reader can see
+ * it, and schema.org has no register for "somebody's agent wrote this and
+ * nobody has checked it". The fixture is what makes that testable rather than
+ * asserted in a comment.
+ *
+ * @type {import("./library.ts").LibraryEntry}
+ */
+const SAVED_ENTRY = {
+  slug: "a-saved-video",
+  title: "How the harness actually runs",
+  url: "https://www.youtube.com/watch?v=xoE_pE26yDQ",
+  domain: "youtube.com",
+  saved_date: "2026-08-14",
+  kind: "video",
+  note: "An hour on the loop, with the terminal open the whole time.",
+  digest: null,
+  tags: ["agents"],
+  post: null,
+  video: { provider: "youtube", id: "xoE_pE26yDQ", thumb: "/shots/a-saved-video-thumb.webp" },
+  draft: {
+    bullets: ["The harness is three files."],
+    why: "Saved because it shows a real loop end to end.",
+    drafted: "2026-08-15",
+  },
+  why: null,
+};
+
 /** @type {import("./sites.ts").Site} */
 const SITE = {
   slug: "save-design",
@@ -214,6 +246,7 @@ const EVERY_GRAPH = () => [
   ["repo-only tool", toolJsonLd(REPO_TOOL)],
   ["site", siteJsonLd(SITE)],
   ["library entry", libraryJsonLd(DIGESTED_ENTRY)],
+  ["saved library entry", libraryJsonLd(SAVED_ENTRY)],
   [
     "note",
     noteJsonLd({
@@ -733,17 +766,84 @@ test("digestReviewBody is the page's own sentences, in the order the page stacks
   );
 });
 
-test("a library row's list URL is wherever the row goes", () => {
-  // Digested: the row links its own page, so the graph claims that page.
-  assert.equal(
-    libraryRowUrl(DIGESTED_ENTRY),
-    `${ORIGIN}/library/how-gumclaw-works/`,
+/* ---------------------------------------------------------------------------
+   The reversal, and it is written here on purpose
+
+   This test used to assert the opposite and it is rewritten rather than
+   patched, because what changed is a rule and not a value. It read:
+
+       // Undigested: the row leaves the site, and the graph says so.
+       assert.equal(
+         libraryRowUrl({ slug: "a-post", url: "…", digest: null }),
+         "https://x.com/a/status/1",
+       );
+
+   The rule behind it was that a /library entry earned a page by being
+   digested, so an undigested row had no on-site URL to claim and its
+   `ItemList` entry pointed off the site. Aayush reversed that in VET-63: every
+   entry has a page, so every row's `ItemList` entry names it, and the row's
+   way out to the source is a second link that no list node describes.
+
+   The parity rule is what survives unchanged, and it is why the reversal
+   touched this file at all: the graph claims where the row's title actually
+   goes. The answer moved; the rule did not.
+   --------------------------------------------------------------------------- */
+
+test("a library row's list URL is the entry's own page, digested or not", () => {
+  assert.equal(libraryRowUrl(DIGESTED_ENTRY), `${ORIGIN}/library/how-gumclaw-works/`);
+  assert.equal(libraryRowUrl(SAVED_ENTRY), `${ORIGIN}/library/a-saved-video/`);
+});
+
+test("an entry with no digest is a WebPage about the thing, and no Review", () => {
+  const document = libraryJsonLd(SAVED_ENTRY);
+
+  // No `Person`: nothing on this page is attributed to him in the graph, so a
+  // Person node would sit in it referenced by nothing. Same call `siteJsonLd`
+  // makes about a page whose subject is somebody else's work.
+  assert.deepEqual(typesIn(document), ["WebPage", "BreadcrumbList"]);
+
+  const page = at(document, 0);
+  assert.equal(page["name"], "How the harness actually runs");
+  assert.equal(page["url"], `${ORIGIN}/library/a-saved-video/`);
+  assert.equal(page["dateCreated"], "2026-08-14", "the saved date the strip prints");
+  assert.equal(page["description"], SAVED_ENTRY.note, "the standfirst, and only when there is one");
+
+  // Theirs, nested, typed by the kind — the same shape the digested branch
+  // gives `itemReviewed`.
+  assert.deepEqual(page["about"], {
+    "@type": "VideoObject",
+    name: "How the harness actually runs",
+    url: "https://www.youtube.com/watch?v=xoE_pE26yDQ",
+  });
+});
+
+test("a draft never reaches the graph, in any property, at any depth", () => {
+  const document = libraryJsonLd(SAVED_ENTRY);
+  const serialised = serialize(document);
+
+  assert.ok(SAVED_ENTRY.draft, "the fixture stopped carrying a draft");
+  // `?? ""` then a truthiness filter, so an absent half of the draft drops out
+  // rather than turning into a `.includes("")` that is true of every string.
+  const drafted = [...(SAVED_ENTRY.draft.bullets ?? []), SAVED_ENTRY.draft.why ?? ""].filter(
+    Boolean,
   );
-  // Undigested: the row leaves the site, and the graph says so.
-  assert.equal(
-    libraryRowUrl({ slug: "a-post", url: "https://x.com/a/status/1", digest: null }),
-    "https://x.com/a/status/1",
+  assert.ok(drafted.length > 0, "the fixture's draft has no sentences left to look for");
+
+  for (const line of drafted) {
+    assert.ok(
+      !serialised.includes(line),
+      `the drafted sentence ${JSON.stringify(line)} reached the graph. A draft is labelled as one on the page; a graph has no way to label it, so it carries none of it.`,
+    );
+  }
+  assert.ok(
+    !serialised.includes(SAVED_ENTRY.draft.drafted),
+    "the drafted date reached the graph, which would date the page to an opinion nobody has made",
   );
+});
+
+test("a page with no note claims no description rather than an empty one", () => {
+  const page = at(libraryJsonLd({ ...SAVED_ENTRY, note: null }), 0);
+  assert.ok(!("description" in page), "an absent note must drop the key, not ship a null");
 });
 
 // --- notes -----------------------------------------------------------------

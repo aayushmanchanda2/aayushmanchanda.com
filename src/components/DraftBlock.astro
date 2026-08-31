@@ -1,0 +1,143 @@
+---
+/**
+ * DraftBlock — what his pipeline wrote about a saved piece before he read it.
+ *
+ * **This is the one block on the site that is not him**, and every decision in
+ * it follows from that. `lib/library.ts › Draft` is a separate type from
+ * `Digest` for the same reason: a digest is a judgement somebody committed to
+ * and a draft is a placeholder holding the page open, and folding the two
+ * together would let the site render an unearned opinion in his voice.
+ *
+ * Three things keep the two apart where a reader can see it.
+ *
+ *   - **It is boxed.** Everything else down a `/library/<slug>` page is prose
+ *     under a mono label, flush left on the page background. This is the only
+ *     thing inside a border, which is what says it is quoted rather than said.
+ *   - **The label is at full ink**, against the `--faint` every other label on
+ *     an entry page takes. A label whose whole job is to stop a reader taking
+ *     the paragraph under it as his verdict cannot be the quietest thing in the
+ *     box.
+ *   - **The body is third person and stays third person.** The pipeline writes
+ *     about the piece, never as him. The moment he writes his own, it moves to
+ *     the entry's top-level `why` and renders through `VoiceBlocks` with every
+ *     other sentence he has written on this site. That is a field move, not a
+ *     relabel, so no rendering bug can turn one register into the other.
+ *
+ * The labels are spelled here rather than in `lib/markdown.ts › DIGEST_LABELS`.
+ * That list exists because a digest is rendered twice — as blocks here and as
+ * `###` sections in `/library.md` — and a label with two renderings is a label
+ * that can drift. A draft has one rendering, so a shared const would be
+ * indirection bought for nothing. It moves the day `/library.md` grows a
+ * drafted section, and `lib/detail.test.mjs` is what holds the words in place
+ * until then.
+ */
+import type { Draft } from "../lib/library";
+
+interface Props {
+  draft: Draft;
+}
+
+const { draft } = Astro.props;
+---
+
+<section class="draft">
+  <h2 class="draft__label mono">Drafted, not read</h2>
+
+  {/*
+    His sentence about somebody else's words, which is the one bit of this box
+    in his voice. It says who wrote the thing and what to do with it, and then
+    it stops: a paragraph explaining how the pipeline works would be the page
+    showing its work (design.md §6).
+  */}
+  <p class="draft__frame">
+    My pipeline wrote this from the piece itself. I haven’t read it yet, so take
+    it as a summary and not a call.
+  </p>
+
+  {
+    draft.bullets && (
+      <ul class="draft__bullets">
+        {draft.bullets.map((bullet) => (
+          <li class="draft__bullet">{bullet}</li>
+        ))}
+      </ul>
+    )
+  }
+
+  {draft.why && <p class="draft__body">{draft.why}</p>}
+
+  <p class="draft__date mono tabular-nums">Drafted {draft.drafted}</p>
+</section>
+
+<style>
+  /* Structural, so sharp: design.md §3. A radius here would make the box a
+     token you could pick up rather than a surface holding somebody else's
+     words. `--hairline-strong` rather than `--hairline`, because every other
+     border on a page of prose is the quiet one and this box exists to be
+     noticed. */
+  .draft {
+    margin-top: clamp(2.5rem, 8vh, 4rem);
+    padding: clamp(1rem, 3vw, 1.35rem);
+    border: 1px solid var(--hairline-strong);
+    border-radius: 0;
+    max-width: 62ch;
+  }
+
+  /* Full ink, against the `--faint` a digest label takes. The whole job of this
+     word is to stop a reader taking the box as his verdict. */
+  .draft__label {
+    color: var(--fg);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    line-height: 1.6;
+  }
+
+  .draft__frame {
+    margin-top: 0.5rem;
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--muted);
+  }
+
+  /* A real list, marked as one, the same shape `DigestBlocks.astro` gives the
+     cliff notes: these are claims pulled out of the piece. */
+  .draft__bullets {
+    margin-top: 0.9rem;
+    padding-left: 1.1rem;
+    list-style: disc;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .draft__bullet,
+  .draft__body {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+
+  .draft__bullet::marker {
+    color: var(--faint);
+  }
+
+  .draft__body {
+    margin-top: 0.9rem;
+  }
+
+  /* The label's own date, at the foot rather than beside the heading: it is the
+     day this was written and not part of the warning. `--faint` is right here,
+     which is the layer static metadata sits on everywhere else (design.md §4). */
+  .draft__date {
+    margin-top: 1rem;
+    color: var(--faint);
+    text-transform: none;
+    letter-spacing: 0.02em;
+  }
+
+  @media (max-width: 599px) {
+    .draft {
+      max-width: none;
+    }
+  }
+</style>

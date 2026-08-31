@@ -18,6 +18,9 @@
  *     `pipeline/entries.mjs › clip`, and `lib/library.ts › entryHref` is the
  *     markup's half of `lib/schema.ts › libraryRowUrl`. Both pairs are
  *     deliberate and both are only safe while something checks them.
+ *   - **The one door off the site.** Every /library title points at a page here
+ *     since VET-63, so the row's `source` link is the only outbound anchor left
+ *     in the list, and the sweep at the foot is what keeps it at exactly one.
  *
  * The clamp itself is tested as a property rather than as a count. "Eleven of
  * twenty-four posts are cut today" is true and would be a test that fails the
@@ -105,7 +108,11 @@ test("the card renders every field a Post carries, and no field it does not", ()
 test("the card reaches for nothing outside this origin", () => {
   // The parser already refuses a remote media path (`readShotPath`), so this is
   // the other half: the component itself must not hard-code a host either.
-  for (const name of ["components/TweetCard.astro", "components/PostWall.astro"]) {
+  for (const name of [
+    "components/TweetCard.astro",
+    "components/PostWall.astro",
+    "components/PostBody.astro",
+  ]) {
     assert.ok(
       !/https?:\/\//.test(code(read(name))),
       `${name} names an outside host. /privacy is built on there being one, and it is logo.dev.`,
@@ -273,42 +280,65 @@ test("the monogram is the first letter of the name, and never a mystery glyph", 
    The seam
    --------------------------------------------------------------------------- */
 
-test("the row, the card and the graph send a reader to the same place", () => {
+test("the row, the card, the tile and the graph send a reader to the same place", () => {
   for (const entry of library) {
-    const dest = entryHref(entry);
+    const href = entryHref(entry);
     const claimed = libraryRowUrl(entry);
 
-    if (dest.external) {
-      assert.equal(dest.href, entry.url);
-      assert.equal(claimed, dest.href, `${entry.slug}: the graph and the markup disagree`);
-    } else {
-      assert.equal(dest.href, `/library/${entry.slug}`);
-      assert.ok(
-        claimed.endsWith(`${dest.href}/`),
-        `${entry.slug}: the graph claims ${claimed} where the markup points at ${dest.href}`,
-      );
-    }
+    assert.equal(href, `/library/${entry.slug}`);
+    assert.ok(
+      claimed.endsWith(`${href}/`),
+      `${entry.slug}: the graph claims ${claimed} where the markup points at ${href}`,
+    );
   }
 });
 
-test("only a destination off this site takes the outbound attributes", () => {
-  // `external` travels with the href so no caller has to work it out from a
-  // string. The day every entry earns a page, `entryHref` returns a local URL
-  // for all of them and the `rel`, the `target` and the new tab go with it.
-  const digested = library.find((entry) => entry.digest !== null);
-  const raw = library.find((entry) => entry.digest === null);
-  assert.ok(digested !== undefined && raw !== undefined, "the library has only one kind of entry");
-
-  assert.equal(entryHref(digested).external, false);
-  assert.equal(entryHref(raw).external, true);
-
-  for (const name of ["components/TweetCard.astro", "components/LibraryList.astro"]) {
+test("nothing builds a /library URL of its own", () => {
+  // The seam is one function so three surfaces cannot drift. A template
+  // literal in a component is how one of them ends up pointing somewhere the
+  // other two stopped.
+  for (const name of [
+    "components/TweetCard.astro",
+    "components/LibraryList.astro",
+    "components/VideoFacade.astro",
+  ]) {
     const source = code(read(name));
-    assert.match(source, /rel=\{[^}]*external \? "noopener nofollow" : undefined\}/, name);
-    assert.match(source, /target=\{[^}]*external \? "_blank" : undefined\}/, name);
+    assert.match(source, /import \{ entryHref \}/, `${name} no longer reads the seam`);
     assert.ok(
       !/href=\{`\/library\/\$\{/.test(source),
       `${name} builds a /library URL of its own instead of asking entryHref for one`,
     );
   }
+});
+
+test("the card stays on this site, and the row keeps exactly one door off it", () => {
+  /*
+   * The rewrite VET-63 made, held as a test. `entryHref` used to return
+   * `{ href, external }` and three components spent that flag on a `rel`, a
+   * `target` and an arrow; every entry has a page now, the flag would be false
+   * everywhere, and a ternary that can only take one branch is not a decision.
+   *
+   * What replaces it is one unconditional outbound anchor per row. The row is
+   * a directory entry and scanning a directory and pressing straight through
+   * to the thing is how one is read, so `source` is that press, and it names
+   * its own attributes because it is off-site for every entry rather than for
+   * some of them.
+   */
+  const card = code(read("components/TweetCard.astro"));
+  assert.ok(
+    !/\brel=/.test(card) && !/\btarget=/.test(card),
+    "the post card carries outbound attributes on a link that does not leave the site",
+  );
+  assert.ok(!/\bext\b/.test(card), "the card wears the ↗ arrow, which means it leaves. It does not.");
+
+  const row = code(read("components/LibraryList.astro"));
+  const outbound = [...row.matchAll(/rel="noopener nofollow"/g)];
+  assert.equal(
+    outbound.length,
+    1,
+    "a /library row has one way off the site and it is the `source` link. Two would make the row a coin toss; none would make the detail page a toll gate.",
+  );
+  assert.match(row, /class="row__source mono ext"/, "the one link that leaves wears the arrow");
+  assert.match(row, /href=\{entry\.url\}/, "the source link points at the thing itself");
+  assert.match(row, /target="_blank"/);
 });

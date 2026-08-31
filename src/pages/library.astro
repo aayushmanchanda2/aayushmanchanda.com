@@ -2,16 +2,16 @@
 /**
  * /library — what I read and watch, saved as it comes.
  *
- * The tab row above the list is doing more work here than the equivalent would
- * on /tools. /tools reaches its category and verdict pages from every tool's
- * own details page; here only the digested entries have one, so without this
- * row the three `/library/kind/<kind>` routes would sit in the sitemap all but
- * unreachable by anyone using the site with their eyes. The domain routes are
- * already reachable from the mono hostname on every row.
+ * The tab row above the list is `KindTabs`, the same component in the same slot
+ * on this page and on all three kind pages. See the note in that file for why
+ * it is a tab row and not the chip bar it replaced.
  *
- * The row is `KindTabs`, and it is the same component, in the same slot, on
- * this page and on all three kind pages. See the note in that file for why it
- * is a tab row and not the chip bar it replaced.
+ * It was carrying more weight than that when it shipped: only digested entries
+ * had a page, so the three `/library/kind/<kind>` routes had no other entrance
+ * anyone using the site with their eyes could find. Every entry has a page now
+ * and every page names its kind, its host and its tags, so all three filter
+ * routes are reachable from any row in two presses. The row keeps its own
+ * hostname link anyway, because two presses is not the same offer as one.
  */
 import Base from "../layouts/Base.astro";
 import KindTabs from "../components/KindTabs.astro";
@@ -20,11 +20,10 @@ import { kindGroups, library } from "../lib/library";
 import { libraryRowUrl, listJsonLd } from "../lib/schema";
 
 /**
- * Each row's URL is wherever that row actually goes: off-site for an
- * undigested entry, its own `/library/<slug>` page for a digested one. The
- * graph follows the markup rather than either rule — minting a local URL for a
- * row that leaves, or an off-site one for a row that stays, would describe a
- * list this page does not render.
+ * Each row's URL is wherever that row's title goes, which is its own page for
+ * every entry. The `source` link beside it is not in the graph and should not
+ * be: an `ItemList` names the things on a page, and the thing on this row is
+ * the entry rather than the second door out of it.
  */
 const jsonLd = listJsonLd({
   name: "Library",
@@ -43,9 +42,8 @@ const jsonLd = listJsonLd({
     <h1 class="page-title">Library</h1>
     <p class="standfirst">
       Things I saved to read or watch properly. Saved is not read, and neither
-      is a recommendation. Most rows go straight to the source; the ones I have
-      digested get a page first, with the cliff notes and an honest call on
-      whether it is worth your time.
+      is a recommendation. Every row has a page now, and the ones I have read
+      carry cliff notes and an honest call on whether it is worth your time.
     </p>
   </header>
 

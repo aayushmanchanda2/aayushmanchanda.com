@@ -26,11 +26,13 @@
  * (`pipeline/entries.mjs › postNote`). It exists so a row can say something; a
  * card has the post itself.
  *
- * **No arrow.** design.md §5 gives the `.ext` arrow to prose links and to the
- * Source line at the foot of a details page. No list row or card on this site
- * carries one — not /tools, not /experiments, not the /library row this card
- * replaces — and one card idiom breaking that would be the tenth link in §5's
- * own story about conventions. `rel` and `target` still ship, from the seam.
+ * **No arrow, and now for the plainest reason there is: the card does not
+ * leave.** It points at the post's own page on this site, the same as the row
+ * it replaces (`lib/library.ts › entryHref`). The `.ext` arrow means "this
+ * ends the visit", the /library row spends its one arrow on the `source` link
+ * in its meta column, and a card with a single destination that stays here has
+ * nothing to spend one on. `rel` and `target` went the same way for the same
+ * reason: there is no outbound anchor here to put them on.
  *
  * **No entity links.** react-tweet turns @mentions, #hashtags and URLs in the
  * body into anchors. Two reasons not to. The first is the one above: they would
@@ -57,23 +59,15 @@ interface Props {
 const { entry } = Astro.props;
 const { post } = entry;
 
-/**
- * The one branch about where a /library thing sends a reader, shared with the
- * row. When every entry earns a page, this card follows without being edited.
- */
-const dest = entryHref(entry);
+/** Where a /library thing sends a reader, shared with the row and the tile. */
+const href = entryHref(entry);
 
 const initial = monogram(post.author);
 const body = clipText(post.text, POST_CARD_MAX);
 ---
 
 <li class="card">
-  <a
-    class="card__link press"
-    href={dest.href}
-    rel={dest.external ? "noopener nofollow" : undefined}
-    target={dest.external ? "_blank" : undefined}
-  >
+  <a class="card__link press" href={href}>
     <span class="card__head">
       {
         /*

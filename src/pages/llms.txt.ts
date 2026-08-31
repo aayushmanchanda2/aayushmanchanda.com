@@ -111,14 +111,17 @@ from the same source, so the two cannot drift.
 - Or request the \`.md\` URL directly if you would rather not negotiate.
 
 Filter pages exist under /tools/category/<name>, /tools/verdict/<name>,
-/sites/domain/<host>, /library/kind/<kind> and /library/domain/<host>. Every
-tool, site, and note has its own page. A library entry has one only once it
-has been digested (${digested.length} of ${library.length} right now): those
-live at /library/<slug> and hold cliff notes from the piece plus a call on
-whether it is worth reading. An undigested entry has nothing at its slug,
-because a saved link's destination is the source itself, and /library.md
-carries everything the site knows about every row, digests included. The
-sitemap lists every URL that does exist.
+/sites/domain/<host>, /library/kind/<kind>, /library/domain/<host> and
+/library/tag/<tag>. Every tool, site, note and library entry has its own page.
+A library entry's page lives at /library/<slug> and holds what the site
+actually has on it: the kind, the host, the tags, the date it was saved, the
+one line he wrote, and the source. ${digested.length} of ${library.length} have
+been digested, which adds cliff notes and a call on whether it is worth
+reading. A saved post's page carries the post in full, where the card that
+points at it cuts off at 700 characters. Some pages carry a block drafted by
+his pipeline: it is labelled as a draft where a reader can see it, it is not
+his verdict, and only a digest is. /library.md carries every row, and the
+sitemap lists every URL.
 
 ## Pages
 

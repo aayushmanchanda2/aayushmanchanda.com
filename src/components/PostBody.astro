@@ -1,0 +1,194 @@
+---
+/**
+ * PostBody — a saved post, whole, on its own page.
+ *
+ * `TweetCard.astro` shows a post the way a wall shows one: boxed, pressable,
+ * and cut at 700 code points because a card holding 31,007 of them is a
+ * fifteen-thousand-pixel column (`lib/post.ts`). **This is the other end of
+ * that decision.** The card's ellipsis says there is more and the card's own
+ * link is the way to it, and since VET-63 that link lands here rather than on
+ * x.com, so this is where the rest has to actually be. No budget, no clamp, no
+ * "show more": the whole post, set to be read.
+ *
+ * What that means in practice is the measure and the leading, because there is
+ * nothing else to give it. **A post arrives flattened.** The pipeline reduces
+ * the markdown Firecrawl returns to one run of text, so `Post.text` carries no
+ * newline and the paragraph breaks the poster typed did not survive the trip.
+ * Inventing them back — splitting on sentence endings, or on a length — would
+ * be this page deciding where somebody else's thoughts stop, which is worse
+ * than a long column. So it is one paragraph at the prose measure, and the day
+ * the pipeline stops flattening, this is the page that shows the difference.
+ *
+ * The head is the card's head at the card's proportions: the monogram, the
+ * name, the handle and the date the thing was posted. It is not furniture
+ * repeated from the masthead above it — the `h1` is the post's title, which is
+ * a clipped copy of these words, and the strip's date is the day the link was
+ * saved. Who wrote it and when they wrote it are only here.
+ *
+ * Nothing outside this origin is named, the same claim `TweetCard.astro`
+ * makes: the monogram is a letter rather than an avatar, and the pictures are
+ * files in this repository because `lib/library.ts › readShotPath` will not
+ * carry anything else.
+ */
+import type { LibraryEntry, Post } from "../lib/library";
+import { hueSlot } from "../lib/tags";
+import { monogram } from "../lib/post";
+
+interface Props {
+  /** A post entry the pipeline could actually read. */
+  entry: LibraryEntry & { post: Post };
+}
+
+const { entry } = Astro.props;
+const { post } = entry;
+
+const initial = monogram(post.author);
+---
+
+<section class="post">
+  <div class="post__head">
+    {
+      /*
+       * Hidden from the accessibility tree, and absent entirely when the name
+       * has no letter in it, for the two reasons `TweetCard.astro` gives: "B"
+       * before "Ben Lang" is a stutter, and an empty coloured circle claims an
+       * identity it is not carrying.
+       */
+      initial !== "" && (
+        <span class="monogram" data-hue={hueSlot(post.handle)} aria-hidden="true">
+          {initial}
+        </span>
+      )
+    }
+
+    <span class="post__who">
+      <span class="post__author">{post.author}</span>
+      <span class="post__meta mono">
+        <span class="post__handle">@{post.handle}</span>
+        <span class="post__posted tabular-nums">{post.date}</span>
+      </span>
+    </span>
+  </div>
+
+  <p class="post__text">{post.text}</p>
+
+  {
+    post.media.length > 0 && (
+      <div class="post__media">
+        {post.media.map((src, index) => (
+          <img
+            class="post__picture outlined"
+            src={src}
+            alt={
+              post.media.length === 1
+                ? `Picture attached to the post by ${post.author}`
+                : `Picture ${index + 1} of ${post.media.length} attached to the post by ${post.author}`
+            }
+            loading="lazy"
+            decoding="async"
+          />
+        ))}
+      </div>
+    )
+  }
+</section>
+
+<style>
+  .post {
+    margin-top: clamp(2.5rem, 8vh, 4rem);
+  }
+
+  .post__head {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    min-width: 0;
+  }
+
+  .post__who {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+  }
+
+  .post__author {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+
+  .post__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0 0.4rem;
+    color: var(--faint);
+  }
+
+  /* Drawn, never typed into the content: design.md §6. Keyed to the item after
+     it, so a wrapped line starts with the separator instead of the line above
+     ending on a dangling one. */
+  .post__handle + .post__posted::before {
+    content: "\00b7" / "";
+    margin-right: 0.4rem;
+    color: var(--hairline-strong);
+  }
+
+  .post__posted {
+    white-space: nowrap;
+  }
+
+  /* The reading measure, which is the note page's and not the card's: 65ch at
+     the site's prose size (design.md §2). The card sets a post at 0.9375rem
+     inside a 550px box because it is a quote in a wall; a page holding
+     thirty-one thousand characters of it is somebody reading, and the two want
+     different type.
+
+     `overflow-wrap` is for what a post is full of and a note page is not: a
+     t.co shortlink has no word boundary in it, so without this one runs out
+     past the column. */
+  .post__text {
+    margin-top: 1.25rem;
+    max-width: 65ch;
+    font-size: 1.0625rem;
+    line-height: 1.7;
+    color: var(--muted);
+    overflow-wrap: anywhere;
+  }
+
+  /* Stacked at the reading measure rather than in the card's 2-up grid. The
+     grid is what fits four pictures inside a 550px card; here there is a whole
+     column, and a picture given the width of the text is a picture you can see.
+     One crop, 8:5, anchored to the top, which is the site's only answer for an
+     image whose size nothing knows at build time (design.md §8). */
+  .post__media {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    max-width: 65ch;
+  }
+
+  .post__picture {
+    display: block;
+    width: 100%;
+    aspect-ratio: 8 / 5;
+    /* A flex item's automatic minimum height is its content, which overrules a
+       ratio silently and has shipped here once already (design.md §8). */
+    min-height: 0;
+    object-fit: cover;
+    object-position: top center;
+    /* Sharp, like every other frame on the site. */
+    border-radius: 0;
+  }
+
+  @media (max-width: 599px) {
+    .post__text,
+    .post__media {
+      max-width: none;
+    }
+  }
+</style>

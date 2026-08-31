@@ -21,7 +21,7 @@ import { getCollection } from "astro:content";
 
 import { experiments } from "./experiments";
 import { repoOwner } from "./links";
-import { library } from "./library";
+import { entryHref, library } from "./library";
 import type { SearchEntry } from "./search";
 import { getSections } from "./sections";
 import { collectionLabel, sites } from "./sites";
@@ -131,14 +131,13 @@ function hostOf(url: string): string {
  * Async for one reason: /notes comes from the content layer. Everything else is
  * a module-level constant that was parsed when its file was imported.
  *
- * Entry hrefs point at the site, never off it, including for the rows that
- * have no per-entry page. A library row and an experiment row each carry an
- * `id`, so `/library#slug` lands on the row in context — with its note, its
- * date and its neighbours — instead of ejecting the reader to a third-party
- * article they did not ask to open from a nav control. A digested library
- * entry has a real page, so it gets the real page: an anchor into a list is
- * the fallback for a row with nowhere better to land. The one place the
- * palette will leave the site is a row that says so.
+ * Entry hrefs point at the site, never off it. That used to cost /library
+ * something: an undigested entry had no page, so its row landed on
+ * `/library#slug` — the row in context, with its note and its neighbours —
+ * because ejecting a reader to a third-party article from a nav control is not
+ * something a palette should do. Every entry has a page now, so every library
+ * row goes to it and the anchor fallback is gone. `/experiments#slug` is the
+ * last one, and that section genuinely has no per-entry page.
  */
 async function build(): Promise<SearchEntry[]> {
   const notes = await getCollection("notes");
@@ -177,7 +176,7 @@ async function build(): Promise<SearchEntry[]> {
       (entry): SearchEntry => ({
         title: entry.title,
         section: SECTION.library,
-        href: entry.digest ? `/library/${entry.slug}` : `/library#${entry.slug}`,
+        href: entryHref(entry),
         terms: `${entry.domain} ${entry.kind}`,
       }),
     ),

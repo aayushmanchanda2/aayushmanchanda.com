@@ -6,10 +6,11 @@
  * what an `.astro` component drew. What they hold is the handful of things
  * about this slice that would go wrong quietly.
  *
- *   - **The facade spreading, or vanishing.** It is one route's layout,
- *     `/library/kind/video`, keyed on the route rather than on the data. A
- *     video is a row everywhere else, /library included, because there it lines
- *     up beside articles.
+ *   - **The facade spreading, or vanishing.** Two surfaces render it and both
+ *     are named: the shelf on `/library/kind/video`, keyed on the route rather
+ *     than on the data, and the video's own `/library/<slug>` page, where it
+ *     arrives without the tile's chrome. A video is a row on every list,
+ *     /library included, because there it lines up beside articles.
  *   - **The markup growing a YouTube host.** This is the one that matters, and
  *     it is the `markFor` refusal in `lib/links.test.mjs` pointed at a second
  *     page: an `<iframe src="…youtube…">` in a template is an always-live embed
@@ -33,6 +34,7 @@ const SRC = fileURLToPath(new URL("..", import.meta.url));
 
 const FACADE = "components/VideoFacade.astro";
 const ROUTE = "pages/library/kind/[kind].astro";
+const DETAIL = "pages/library/[slug].astro";
 
 /** @param {string} name @returns {string} */
 function read(name) {
@@ -81,14 +83,14 @@ const EMBED_URL =
    The facade is one route's layout
    --------------------------------------------------------------------------- */
 
-test("the facade is reached from the video kind and from nowhere else", () => {
+test("the facade is reached from the video kind and the entry's own page, and nowhere else", () => {
   const callers = walk("").filter(
     (file) => file !== FACADE && code(read(file)).includes("VideoFacade"),
   );
   assert.deepEqual(
-    callers,
-    [ROUTE],
-    "something other than the video kind page renders the facade. A video is a row everywhere else, /library included, where it has to line up beside articles.",
+    callers.sort(),
+    [DETAIL, ROUTE].sort(),
+    "something other than the video kind page and a video's own page renders the facade. A video is a row on every list, /library included, where it has to line up beside articles.",
   );
 
   assert.match(
@@ -100,6 +102,33 @@ test("the facade is reached from the video kind and from nowhere else", () => {
   assert.ok(
     !code(read("pages/library.astro")).includes("VideoFacade"),
     "/library renders every kind at once, so it must stay a list",
+  );
+});
+
+test("a detail page takes the poster and leaves the tile's chrome behind", () => {
+  /*
+   * The second caller is the reason `chrome` exists. A `/library/<slug>` page
+   * has the title as its `h1`, the note as its standfirst and the saved date in
+   * its strip, so a tile there would say all three a second time and one of
+   * them as a link to the page the reader is already on.
+   */
+  assert.match(
+    code(read(DETAIL)),
+    /<VideoFacade entry=\{\{ \.\.\.entry, video: entry\.video \}\} chrome=\{false\} \/>/,
+    "the entry page renders the whole tile, so its title, note and date land on the page twice",
+  );
+  assert.match(
+    code(read(ROUTE)),
+    /<VideoFacade entry=\{entry\} \/>/,
+    "the shelf stopped rendering the tile's title, note and date, which are the only things on a poster shelf that say what a video is",
+  );
+
+  // The wrapper moves with the chrome: an `<li>` outside a list is markup a
+  // parser has to guess at.
+  assert.match(
+    code(read(FACADE)),
+    /const Wrapper = chrome \? "li" : "div";/,
+    "the facade's root element no longer follows `chrome`",
   );
 });
 
@@ -188,7 +217,7 @@ test("the play control is a link to the video, named for the video", () => {
   assert.match(
     source,
     /href=\{entry\.url\}/,
-    "the play control no longer points at the video itself. It is an anchor so that pressing it works with scripting off, and `entryHref` is the wrong answer here: that is where the *row* goes, which becomes a detail page the day a video is digested.",
+    "the play control no longer points at the video itself. It is an anchor so that pressing it works with scripting off, and `entryHref` is the wrong answer here: that is where the tile's *title* goes, which is the entry's own page.",
   );
   assert.match(source, /rel="noopener nofollow"/);
   assert.match(source, /target="_blank"/);
@@ -198,14 +227,25 @@ test("the play control is a link to the video, named for the video", () => {
   );
 });
 
-test("the tile's title reads the same seam the row and the card do", () => {
+test("the tile's title reads the same seam the row and the card do, and stays here", () => {
   const source = code(read(FACADE));
 
   assert.match(source, /import \{ entryHref \}/);
-  assert.match(source, /rel=\{[^}]*external \? "noopener nofollow" : undefined\}/);
-  assert.match(source, /target=\{[^}]*external \? "_blank" : undefined\}/);
   assert.ok(
     !/href=\{`\/library\/\$\{/.test(source),
     "the facade builds a /library URL of its own instead of asking entryHref for one",
   );
+
+  /*
+   * The title link carries no `rel` and no `target`, because since VET-63 it
+   * does not leave: it goes to the entry's own page. The two outbound
+   * attributes in this file both belong to the play control above it, which is
+   * off-site for every video there has ever been.
+   */
+  assert.equal(
+    [...source.matchAll(/rel="noopener nofollow"/g)].length,
+    1,
+    "the tile has grown a second outbound anchor. The play control leaves; the title does not.",
+  );
+  assert.match(source, /<a class="tile__link" href=\{href\}>/, "the title link took on attributes");
 });

@@ -14,18 +14,22 @@
  * identical YouTube marks stacked down the page, plus a third-party request per
  * row to fetch them. The domain in mono does that job here and does it in text.
  *
- * The title is the row's one link, and where it goes depends on whether the
- * entry has been digested. An undigested row's destination is the thing itself
- * — there is no `/library/<slug>` for it, which is the point of the section —
- * while a digested row goes to its own page first, because that page holds the
- * ten-second answer to "is this worth my time" and the source link is
- * prominent on it. Same treatment, different direction, and that is fine: the
- * softer of the two actions is the one that stays on this site, and a new tab
- * only opens where the row actually leaves.
+ * **The title goes to the entry's own page, and the row keeps a way out.**
+ * Every entry has a page since VET-63, so the title stops leaving — but a
+ * library index is a directory, and scanning one and pressing straight through
+ * to the thing is how it is actually read. Taking that away would have made
+ * the detail page a toll rather than a destination. So the meta column carries
+ * a `source` link, off-site, wearing the `.ext` arrow because it is now the one
+ * control on the row that leaves and the arrow is the thing that says so
+ * (design.md §5). Detail primacy, not exclusivity.
  *
- * That branch is not written here. `lib/library.ts › entryHref` owns it, and
- * the post card on the posts wall reads the same function, so the day every
- * entry earns a page the row and the card turn together.
+ * The hostname above it keeps pointing at `/library/domain/<host>`. It is the
+ * only entrance to those pages from a list, and a filter and a destination are
+ * two different offers: one narrows this page, the other ends it.
+ *
+ * Where the title goes is not written here. `lib/library.ts › entryHref` owns
+ * it, and the post card and the video tile read the same function, so the three
+ * cannot drift.
  *
  * One page renders posts as cards instead of rows: `/library/kind/post`, which
  * hands the same entries to `PostWall.astro`. Everything else on /library is
@@ -61,43 +65,32 @@ const { entries, showDomain = true } = Astro.props;
  * only thing on that page pointing anywhere the reader has not already been.
  */
 const anyTags = entries.some((entry) => entry.tags.length > 0);
-
-/** Resolved once per row: the same answer is wanted by three attributes. */
-const rows = entries.map((entry) => ({ entry, dest: entryHref(entry) }));
 ---
 
 <ul class:list={["list", anyTags && "list--tags"]}>
   {
-    rows.map(({ entry, dest }) => (
+    entries.map((entry) => (
       /*
-       * The slug as an id, so the row is a destination.
+       * The slug as an id, kept now that it is no longer load-bearing.
        *
-       * An undigested entry has no page of its own — its row links straight to
-       * the source — which left the command palette with nowhere on this site
-       * to send someone who searched for one. `/library#slug` is that
-       * somewhere, and it lands them on the entry in context, with its note
-       * and its neighbours, rather than ejecting them to a third-party page
-       * from what is meant to be a navigation control. Digested entries keep
-       * the id too, harmlessly: the palette sends those to their real page.
+       * It was the command palette's answer for a row with no page: the
+       * palette would not eject a reader to a third-party site from a
+       * navigation control, so it sent them to `/library#slug` and the row in
+       * context. Every entry has a real page now and the palette sends them
+       * there (`lib/search-index.ts`), which leaves the id doing what an id on
+       * a list row does anywhere: it is somewhere a link can point.
        *
-       * Unique per page: the two filter routes render subsets of the same
+       * Unique per page: the three filter routes render subsets of the same
        * list, and a slug appears at most once in any of them.
        */
       <li class="row" id={entry.slug}>
         <span class="row__name">
           {/*
-            A digested row points at its own page, so the outbound attributes
-            drop with the outbound destination: no `rel`, no new tab. Which of
-            the two it is comes from `lib/library.ts › entryHref`, the one
-            branch the card on the posts wall reads too. See the note at the
-            top of this file.
+            The entry's own page, on every row, with no `rel` and no new tab
+            because it does not leave. `lib/library.ts › entryHref` is where
+            that is decided, and the post card and the video tile read it too.
           */}
-          <a
-            class="row__link"
-            href={dest.href}
-            rel={dest.external ? "noopener nofollow" : undefined}
-            target={dest.external ? "_blank" : undefined}
-          >
+          <a class="row__link" href={entryHref(entry)}>
             {entry.title}
           </a>
           <KindChip kind={entry.kind} />
@@ -118,6 +111,20 @@ const rows = entries.map((entry) => ({ entry, dest: entryHref(entry) }));
               {entry.domain}
             </a>
           )}
+          {/*
+            The way out, and the only thing on the row that leaves. The visible
+            word is `source` on every row, which is the right label for a
+            control and the wrong accessible name in a list of forty of them, so
+            the title rides along where only a screen reader hears it.
+          */}
+          <a
+            class="row__source mono ext"
+            href={entry.url}
+            rel="noopener nofollow"
+            target="_blank"
+          >
+            source<span class="visually-hidden">: {entry.title}</span>
+          </a>
           <span class="row__date mono tabular-nums">{entry.saved_date}</span>
         </span>
 
@@ -218,6 +225,14 @@ const rows = entries.map((entry) => ({ entry, dest: entryHref(entry) }));
     font-size: 0.9375rem;
     line-height: 1.55;
     color: var(--muted);
+    /* A note about a post is the post's own first 280 characters, and a post is
+       full of links with no word boundary in them. One of them — a YouTube
+       watch URL with three query parameters — is 178px wider than a 375px
+       column on its own, and an unbreakable token does not overflow its
+       paragraph quietly: it widens the **document**, and then the palette sheet
+       and the MENU panel lay out at that width too. Same declaration
+       `TweetCard.astro › .card__text` carries, for the same reason. */
+    overflow-wrap: anywhere;
   }
 
   .row__meta {
@@ -259,6 +274,32 @@ const rows = entries.map((entry) => ({ entry, dest: entryHref(entry) }));
     text-decoration-color: currentColor;
   }
 
+  /* The quiet pattern, same as the domain above it: `--muted` because it is a
+     control (design.md §4, the ink floor), and its own underline because on
+     touch there is no hover to reveal one.
+
+     Deliberately outside the `.row:hover` accent the domain takes. Two things
+     lighting up when a pointer crosses the row would say the row has two
+     primary destinations, and it has one: the title. This one is the door, and
+     it colours when you are actually on it.
+
+     No 40px block, which is design.md §4's stated exception for text: this is a
+     word in a column of words, sitting the same distance from its neighbours as
+     the domain and the date already sit from each other, and a toolbar-sized
+     box around it would put a toolbar into every row. */
+  .row__source {
+    color: var(--muted);
+    text-decoration-line: underline;
+    text-decoration-color: var(--hairline-strong);
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  .row__source:hover {
+    color: var(--accent);
+    text-decoration-color: currentColor;
+  }
+
   .row__date {
     color: var(--faint);
     white-space: nowrap;
@@ -285,15 +326,25 @@ const rows = entries.map((entry) => ({ entry, dest: entryHref(entry) }));
         "meta";
     }
 
+    /* The column becomes a line, and the line has to be allowed to break.
+       Three items now — the host, the way out, and the date — and a long
+       hostname puts them past a 287px phone column: `thealgorithmicbridge.com`
+       alone is over half of it. An unwrapped flex row does not overflow its
+       own box quietly, it widens the **document**, and then every fixed
+       surface on the page (the palette sheet, the MENU panel) lays out at that
+       width too. Same call `.foot__meta` and the tab row make, for the same
+       reason. */
     .row__meta {
       flex-direction: row;
+      flex-wrap: wrap;
       align-items: baseline;
       justify-content: flex-start;
-      gap: 0.9rem;
+      gap: 0.35rem 0.9rem;
       padding-top: 0.1rem;
     }
 
-    .row__domain {
+    .row__domain,
+    .row__source {
       text-align: left;
     }
   }

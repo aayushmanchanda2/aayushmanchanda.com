@@ -139,10 +139,11 @@ const FLOORS = [
   ["components/ShotActions.astro", ".act {"],
   ["components/ToolList.astro", ".row__more {"],
   ["components/LibraryList.astro", ".row__domain {"],
+  ["components/LibraryList.astro", ".row__source {"],
   ["pages/experiments.astro", ".row__links :global(.row__link) {"],
   ["components/EntryNav.astro", ".hints__row {"],
   ["pages/tools/[slug].astro", ".source :global(.source__repo) {"],
-  ["pages/library/[slug].astro", ".strip a:not(.strip__chip) {"],
+  ["pages/library/[slug].astro", ".strip a:not(.strip__chip):not(.tag) {"],
   ["pages/404.astro", ".agents {"],
   ["styles/palette.css", ".palette__empty {"],
 ];

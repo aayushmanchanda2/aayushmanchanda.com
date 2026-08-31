@@ -28,20 +28,33 @@
  * JavaScript, on a tile whose entire subject is a video.
  *
  * Its `href` is the entry's own `url` and deliberately not `entryHref`. The
- * seam answers "where does this row send a reader", and the day a video is
- * digested that answer becomes its detail page — but the play control is the
- * thing itself, and the thing itself is at YouTube whatever the row decides.
+ * seam answers "where does this tile's title send a reader", which is the
+ * entry's own page — but the play control is the thing itself, and the thing
+ * itself is at YouTube whatever the title decides.
+ *
+ * ## Two surfaces, and `chrome` is the difference
+ *
+ * The shelf on `/library/kind/video` wants the whole tile: the poster, then the
+ * title, the note and the date hanging under it. A `/library/<slug>` page wants
+ * the facade and nothing else, because its `h1` is that title, its standfirst
+ * is that note and its metadata strip carries that date — three things a tile
+ * would say a second time, one of them as a link to the page you are already
+ * on. So `chrome` turns the hanging half off, and the poster is what is left.
+ *
+ * The wrapper element moves with it. On the shelf this is a list item, because
+ * the shelf is a list; on a detail page it is a section of the page, and an
+ * `<li>` outside a list is markup a parser has to guess at.
  *
  * ## What the tile does not show
  *
  * No tags, no hostname, no kind chip, for the reason `TweetCard.astro` gives at
  * length: each is a link on the row form of the same entry, and a tile does not
  * need six targets. The two it has are distinct regions with distinct
- * affordances — press the poster and it plays here, press the title and you
- * leave — which is the ordinary anatomy of a video listing rather than the coin
- * toss that rule is about. Every video saved here is on youtube.com, so a
- * hostname would be the same word down every tile, which is the column
- * `LibraryList.astro` already dropped for the same reason.
+ * affordances — press the poster and it plays here, press the title and you go
+ * to the page about it — which is the ordinary anatomy of a video listing
+ * rather than the coin toss that rule is about. Every video saved here is on
+ * youtube.com, so a hostname would be the same word down every tile, which is
+ * the column `LibraryList.astro` already dropped for the same reason.
  */
 import type { LibraryEntry, Video } from "../lib/library";
 import { entryHref } from "../lib/library";
@@ -49,16 +62,24 @@ import { entryHref } from "../lib/library";
 interface Props {
   /** A video entry the pipeline could fetch a poster for. */
   entry: LibraryEntry & { video: Video };
+  /**
+   * The title, note and date under the poster. Off on the entry's own page,
+   * where all three are already the masthead.
+   */
+  chrome?: boolean;
 }
 
-const { entry } = Astro.props;
+const { entry, chrome = true } = Astro.props;
 const { video } = entry;
 
-/** Where the title goes. The one branch, shared with the row and the card. */
-const dest = entryHref(entry);
+/** Where the title goes. The one seam, shared with the row and the card. */
+const href = entryHref(entry);
+
+/** A list item on the shelf, a plain block on a page that is not a list. */
+const Wrapper = chrome ? "li" : "div";
 ---
 
-<li class="tile">
+<Wrapper class="tile">
   <div class="tile__frame">
     {/*
       `alt=""`, which is design.md §6's decorative case rather than an exception
@@ -99,21 +120,22 @@ const dest = entryHref(entry);
     </a>
   </div>
 
-  <span class="tile__name">
-    <a
-      class="tile__link"
-      href={dest.href}
-      rel={dest.external ? "noopener nofollow" : undefined}
-      target={dest.external ? "_blank" : undefined}
-    >
-      {entry.title}
-    </a>
-  </span>
+  {
+    chrome && (
+      <Fragment>
+        <span class="tile__name">
+          <a class="tile__link" href={href}>
+            {entry.title}
+          </a>
+        </span>
 
-  {entry.note && <p class="tile__note">{entry.note}</p>}
+        {entry.note && <p class="tile__note">{entry.note}</p>}
 
-  <span class="tile__date mono tabular-nums">{entry.saved_date}</span>
-</li>
+        <span class="tile__date mono tabular-nums">{entry.saved_date}</span>
+      </Fragment>
+    )
+  }
+</Wrapper>
 
 <style>
   .tile {

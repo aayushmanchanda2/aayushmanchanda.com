@@ -509,25 +509,21 @@ export function siteJsonLd(site: Site): JsonLd {
 
 /**
  * Where a /library row sends a reader, which is what its `ItemList` entry must
- * claim. The parity rule, one property wide: a digested row links its own
- * detail page and an undigested one links straight out, so the graph on every
- * list page says exactly that and nothing tidier. Three pages render the list
- * and all three call this, because three copies of a one-line branch is how
- * one of them ends up describing the row the other two stopped drawing.
+ * claim. Every entry has a page now, so every row points at one and the graph
+ * on every list page says so — the parity rule, one property wide.
  *
- * **The markup's copy of that branch is `lib/library.ts › entryHref`**, and the
- * two are held to each other by `lib/card.test.mjs` rather than folded into
- * one. The reason is the paragraph at the top of this file: nothing here
+ * It used to branch on the digest, and the branch is gone from both halves in
+ * the same commit: **the markup's copy is `lib/library.ts › entryHref`**, held
+ * to this one by `lib/card.test.mjs` rather than folded into it. The reason
+ * for two copies is the paragraph at the top of this file — nothing here
  * imports a data module's runtime values, so every builder can be called with
- * plain objects under bare `node --test`. Importing the seam would make this
- * module parse `library.json` on load. Same call `lib/links.ts › githubRepo`
- * and `pipeline/entries.mjs › repoFrom` make, for the same reason, and the test
- * is the thing that makes two copies safe.
+ * plain objects under bare `node --test`, and importing the seam would make
+ * this module parse `library.json` on load. Same call `lib/links.ts ›
+ * githubRepo` and `pipeline/entries.mjs › repoFrom` make, for the same reason,
+ * and the test is the thing that makes two copies safe.
  */
-export function libraryRowUrl(
-  entry: Pick<LibraryEntry, "slug" | "url" | "digest">,
-): string {
-  return entry.digest === null ? entry.url : pageUrl(`/library/${entry.slug}`);
+export function libraryRowUrl(entry: Pick<LibraryEntry, "slug">): string {
+  return pageUrl(`/library/${entry.slug}`);
 }
 
 /**
@@ -557,39 +553,74 @@ export function digestReviewBody(entry: DigestedEntry): string {
 }
 
 /**
- * One digested library entry: his review of somebody else's piece.
+ * One library entry's page, at one of two weights, and the digest is the whole
+ * difference.
  *
- * The shape follows `toolJsonLd` — a `Review` by the `Person`, dated the day
- * the digest was written, which is the `digested` date the page prints — with
- * one deliberate difference. The thing reviewed is external, so it is a nested
- * node carrying only what the page shows about it (title, URL, and the kind
- * translated to a type), the way `siteJsonLd` nests its `about`. Lifting it to
- * a top-level node would mean minting an `@id` on this origin for a document
- * that lives on someone else's, and claiming properties — an author, a date —
- * the page does not show.
+ * **A `Review` is an opinion, so it is gated on there being one.** Every entry
+ * has a page since VET-63, and most of those pages hold no judgement at all:
+ * what a saved link is, where it came from, what it is about, the day it
+ * arrived, one line he wrote, and the way to the thing. That is a page about
+ * something, which is a `WebPage`, and typing it as a `Review` because the
+ * route it sits on used to only build reviews would put an unearned
+ * machine-readable verdict on forty pages. **A drafted entry is a `WebPage`
+ * too**: the draft is his pipeline's placeholder, loudly labelled as one where
+ * a reader can see it, and a graph has no register in which to say "somebody's
+ * agent wrote this and nobody has checked it".
+ *
+ * The digested shape follows `toolJsonLd` — a `Review` by the `Person`, dated
+ * the day the digest was written, which is the `digested` date the page prints.
+ * The undigested shape follows `siteJsonLd`: a `WebPage` whose subject is
+ * external, `dateCreated` the visible saved date, `description` the note when
+ * there is one and absent when there is not. Neither lifts the external thing
+ * to a top-level node, because that would mean minting an `@id` on this origin
+ * for a document that lives on someone else's.
+ *
+ * No `Person` on the undigested branch, which is the same call `siteJsonLd`
+ * makes and for the same reason: nothing on that page is attributed to him in
+ * the graph, so a `Person` node would sit there referenced by nothing.
  */
-export function libraryJsonLd(entry: DigestedEntry): JsonLd {
-  const url = pageUrl(`/library/${entry.slug}`);
+export function libraryJsonLd(entry: LibraryEntry): JsonLd {
+  const path = `/library/${entry.slug}`;
+  const url = pageUrl(path);
+  const trail = breadcrumb(
+    { name: "Library", path: "/library" },
+    { name: entry.title, path },
+  );
+
+  /** The saved thing itself, carrying only what the page shows about it. */
+  const subject = {
+    "@type": KIND_TYPES[entry.kind],
+    name: entry.title,
+    url: entry.url,
+  };
+
+  if (entry.digest === null) {
+    return graph(
+      {
+        "@type": "WebPage",
+        "@id": `${url}#webpage`,
+        name: entry.title,
+        url,
+        dateCreated: entry.saved_date,
+        about: subject,
+        description: entry.note,
+      },
+      trail,
+    );
+  }
 
   return graph(
     {
       "@type": "Review",
       "@id": `${url}#review`,
       url,
-      itemReviewed: {
-        "@type": KIND_TYPES[entry.kind],
-        name: entry.title,
-        url: entry.url,
-      },
+      itemReviewed: subject,
       author: ref(PERSON_ID),
-      reviewBody: digestReviewBody(entry),
+      reviewBody: digestReviewBody({ ...entry, digest: entry.digest }),
       datePublished: entry.digest.digested,
     },
     person(),
-    breadcrumb(
-      { name: "Library", path: "/library" },
-      { name: entry.title, path: `/library/${entry.slug}` },
-    ),
+    trail,
   );
 }
 

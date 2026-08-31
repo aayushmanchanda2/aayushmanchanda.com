@@ -257,9 +257,11 @@ export const DIGEST_LABELS = {
  * The digested entries as one markdown section, or null when there are none.
  *
  * Null rather than an empty heading, same rule as `voiceSection`: a section
- * over nothing reads as a document that broke. Each block ends with the
- * entry's own page, because the digest is the reason that page exists and an
- * agent reading this file should not have to guess which slugs are URLs.
+ * over nothing reads as a document that broke. Each block still ends with the
+ * entry's own page even though every entry has one now: this section is where
+ * an agent that only wants the read ones is looking, and making it walk back
+ * up to the table for the URL would be a worse document for the sake of a
+ * removed line.
  */
 export function digestSection(
   entries: readonly { title: string; slug: string; digest: Digest }[],
@@ -283,7 +285,7 @@ export function digestSection(
   return [
     section(
       "Digests",
-      "These entries have been read properly, not just saved. Each carries cliff notes, a call on whether it is worth your time, and a page of its own.",
+      "These entries have been read properly, not just saved. Each carries cliff notes and a call on whether it is worth your time.",
     ),
     ...blocks,
   ].join("\n\n");

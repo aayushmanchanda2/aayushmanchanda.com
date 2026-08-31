@@ -53,6 +53,12 @@ import path from "node:path";
  * @typedef {object} PageType
  * @property {string} name
  * @property {(page: string) => boolean} match
+ * @property {(types: string[]) => boolean} [when]
+ *   A second gate, on the graph rather than on the path. One route can build
+ *   two page types when the data decides the shape: `/library/<slug>` is a
+ *   `Review` for an entry somebody has read and a `WebPage` for one nobody has,
+ *   and no pattern over the URL can tell those apart. Groups are tried in
+ *   order, so the gated one goes first and the ungated one is the fallback.
  * @property {string[]} types
  * @property {Record<string, string[]>} [requires]
  *   Extra properties a node of a given `@type` must carry *on this page type*.
@@ -186,23 +192,41 @@ const EXPECTED = [
   },
   {
     /*
-     * Only digested entries build a page here, so coverage of this group is
-     * also the check that at least one digest survived the build. The thing
-     * reviewed is external and rides inside the Review as a nested node — see
-     * `lib/schema.ts › libraryJsonLd` — so the top level is the review, the
-     * person, and the trail, and nothing else.
+     * Every library entry builds a page here since VET-63, and the two groups
+     * are the digest and the absence of one. A `Review` is an opinion, so a
+     * page with no digest on it emits a `WebPage` instead — see the parity
+     * argument at `lib/schema.ts › libraryJsonLd`. The thing saved is external
+     * either way and rides inside as a nested node, so neither top level names
+     * anything but this site.
+     *
+     * Coverage of the digested group is also the check that at least one digest
+     * survived the build, which is what it was before the split.
      *
      * The one-segment pattern cannot collide with the filter group below:
-     * /library/kind/<kind> and /library/domain/<host> are two segments deep.
+     * /library/kind/<kind>, /library/domain/<host> and /library/tag/<tag> are
+     * all two segments deep.
      */
+    name: "library details (digested)",
+    match: (page) => /^library\/[^/]+\/index\.html$/.test(page),
+    when: (types) => types.includes("Review"),
+    types: ["Review", "Person", "BreadcrumbList"],
+  },
+  {
     name: "library details",
     match: (page) => /^library\/[^/]+\/index\.html$/.test(page),
-    types: ["Review", "Person", "BreadcrumbList"],
+    types: ["WebPage", "BreadcrumbList"],
+    // What a page *about something saved from elsewhere* owes over and above
+    // being a page: the thing, and the day it arrived. Both are on the page —
+    // the Source line and the strip — and /design, the site's other bare
+    // `WebPage`, owns neither.
+    requires: {
+      WebPage: ["about", "dateCreated"],
+    },
   },
   {
     name: "filter",
     match: (page) =>
-      /^(tools\/(category|verdict)|sites\/(collection|domain)|library\/(kind|domain))\/[^/]+\/index\.html$/.test(
+      /^(tools\/(category|verdict)|sites\/(collection|domain)|library\/(kind|domain|tag))\/[^/]+\/index\.html$/.test(
         page,
       ),
     types: ["ItemList", "BreadcrumbList"],
@@ -458,7 +482,9 @@ for (const page of pages) {
   });
 
   const types = graph.map((node) => node["@type"]);
-  const group = EXPECTED.find((candidate) => candidate.match(page));
+  const group = EXPECTED.find(
+    (candidate) => candidate.match(page) && (candidate.when?.(types) ?? true),
+  );
   if (group) {
     seen.set(group.name, (seen.get(group.name) ?? 0) + 1);
     for (const type of group.types) {
