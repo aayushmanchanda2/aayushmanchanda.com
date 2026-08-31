@@ -196,19 +196,28 @@
 }
 
 /* --------------------------------------------------------------------------
-   The tag chip: a dot, and words that stay ink.
+   The tag chip: a dotted outline in the tag's hue, a mark inside it, and words
+   at the page's ink.
 
-   The second thing in this file that is chip-shaped and the first that is not
-   a chip. A /library tag says what a link is about, which is not a position on
-   any scale — `agents` is not better or worse than `design` — so it may not
-   take a tone: the fills above mean something, and twenty rows of them would
-   read as a page making claims about links that are all in the same state,
-   which is saved. Colour still has a job here, and it is identity: it is what
-   lets a reader who has seen `agents` twice recognise it a third time before
-   reading the word. So the Linear label shape — a small dot carrying the
-   colour, the words left at the page's own ink — rather than a filled pill.
+   **This is a reversal, and design.md §1 carries the argument it replaces.**
+   The tag used to be a 6px dot with `--muted` words beside it — the Linear
+   label shape — on the reasoning that a subject is not a position on a scale
+   and so may not take the filled `.chip` treatment above. That reasoning still
+   holds and nothing here breaks it: there is still no fill, the ground under a
+   tag is the page itself, and the colour still says identity rather than
+   judgement. What changed is how much of the chip the identity gets to paint.
+   Aayush's call, reviewing the shipped column: the dot was too quiet to find a
+   subject by, which is the one job it had.
 
-   Which dot a tag wears is the table above, keyed by `lib/tags.ts › hueSlot`.
+   So the hue now draws two things instead of one — a **dotted** 1px border
+   around the whole chip and the mark inside it (`components/TagGlyph.astro`) —
+   and the words move up from `--muted` to full ink, because a word inside a
+   drawn box is furniture rather than a floating label and has to hold its own.
+   Dotted rather than solid is what keeps it out of the `.chip` vocabulary: a
+   solid outline at this size is a pill with the fill taken out, and the two
+   would read as one system saying two things.
+
+   Which hue a tag wears is the table above, keyed by `lib/tags.ts › hueSlot`.
    `lib/tags.test.mjs` fails if the number of slots painted there and the number
    the module hands out ever disagree.
    -------------------------------------------------------------------------- */
@@ -219,10 +228,25 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  /* The chip's own box, so the two vocabularies sit at one height. */
-  padding: 0.3rem 0.45rem 0.28rem;
+  gap: 0.35rem;
+  /* **20.28px, which is exactly what a `.chip` is**, because on an entry page's
+     strip a kind chip and a tag sit on one line and a two-pixel difference
+     between them reads as a mistake. The arithmetic changed even though the
+     answer did not: a chip is 11px of text plus 0.3rem and 0.28rem of padding,
+     and this is an 11px glyph plus two 1px borders, so the padding is what is
+     left over. Written as the numbers rather than as a `calc` off the chip's,
+     because the two boxes are the same height by measurement and not by
+     derivation — the day one of them grows an icon the other does not, a
+     `calc` would silently move the wrong box. */
+  padding: 0.225rem 0.45rem 0.23rem;
+  border: 1px dotted hsl(var(--hue-h) var(--hue-s) var(--hue-l));
   border-radius: var(--r-sm);
+  /* The page, stated rather than left transparent. Everywhere a tag sits today
+     the two are the same thing, and saying it is what makes the chip an object
+     with a ground instead of a hole cut in whatever is behind it — which is
+     Aayush's spec, and the thing that stops a tag reading differently the first
+     time one lands on a tinted surface. */
+  background: var(--bg);
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   font-weight: 500;
@@ -230,21 +254,24 @@
   line-height: 1;
   text-transform: lowercase;
   white-space: nowrap;
-  /* --muted, never below: this is a control, and design.md §4 is the floor. */
-  color: var(--muted);
+  /* Full ink now, not `--muted`. Well clear of design.md §4's floor for a
+     control, and the reason it moved is the border: a washed word inside a
+     drawn box reads as a box someone forgot to fill in. */
+  color: var(--fg);
   text-decoration: none;
-  transition-property: background-color, color;
+  transition-property: background-color, border-color;
   transition-duration: var(--dur-fast);
   transition-timing-function: var(--ease);
 }
 
-.tag::before {
-  content: "";
+/* The mark, at the label's own 11px and in the label's own hue.
+   `components/TagGlyph.astro` draws it and sets neither of those, the same
+   split `MarkGlyph` and `SiteMark` make. */
+.tag__icon {
   flex: none;
-  width: 0.375rem;
-  height: 0.375rem;
-  border-radius: 50%;
-  background: hsl(var(--hue-h) var(--hue-s) var(--hue-l));
+  width: 11px;
+  height: 11px;
+  stroke: hsl(var(--hue-h) var(--hue-s) var(--hue-l));
 }
 
 /* 40px hit floor on a 20.3px chip: 0.62rem of dead space above and below,
@@ -258,14 +285,24 @@
   inset: -0.62rem 0;
 }
 
-/* The tint arrives on hover rather than sitting under every row, and it is the
-   chip's own hue: the colour is the identity, so the state that says "this is a
-   target" should be more of it and not a different one. The words go from
-   --muted to full ink at the same time, which is the half of the signal that
-   does not need colour vision. */
+/* The tint arrives on hover and it is the chip's own hue: the colour is the
+   identity, so the state that says "this is a target" is more of it rather than
+   a different one. The words are already at full ink and stay there, so the
+   ground is what moves. */
 .tag:hover,
 .tag:focus-visible {
-  color: var(--fg);
+  background: hsl(var(--hue-h) var(--hue-s) var(--hue-l) / var(--tag-tint));
+}
+
+/* The tag you are standing on, and the reason the border is dotted at rest.
+   A filter row needs a selected state, and `aria-current` closes the outline
+   instead of reaching for the accent — which §1 keeps for links, hover, focus
+   and exactly this attribute on a *tab*, where the word is not already wearing
+   a colour of its own. A solid border and the tint together read as "this one",
+   and neither of them is a colour a reader has to be able to tell apart from a
+   neighbouring hue to understand. */
+.tag[aria-current="page"] {
+  border-style: solid;
   background: hsl(var(--hue-h) var(--hue-s) var(--hue-l) / var(--tag-tint));
 }
 

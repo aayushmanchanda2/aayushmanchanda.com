@@ -254,7 +254,13 @@ const description =
     text-decoration-color: var(--hairline-strong);
     text-underline-offset: 0.25em;
     transition-property: color, text-decoration-color;
-    transition-duration: var(--dur-fast);
+    /* `--dur`, not the `--dur-fast` a list row takes. The one thing the
+       thebridge reference transfers to this page whole: its hovers are 150 to
+       300ms fades, long enough to read as a state settling rather than a light
+       switching, and 220ms is the house token inside that band. A row in a list
+       of forty wants the fast one — the pointer is crossing it, not resting on
+       it — and a metadata strip on the page you have stopped on does not. */
+    transition-duration: var(--dur);
     transition-timing-function: var(--ease);
   }
 
@@ -267,6 +273,11 @@ const description =
   .strip__chip {
     display: inline-flex;
     text-decoration: none;
+    /* The same band as its neighbours above, which it was outside: the opacity
+       step used to snap while the two links either side of it faded. */
+    transition-property: opacity;
+    transition-duration: var(--dur);
+    transition-timing-function: var(--ease);
   }
 
   .strip__chip:hover {

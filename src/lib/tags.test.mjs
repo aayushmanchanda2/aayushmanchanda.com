@@ -128,6 +128,75 @@ test("every tag a row wears has a page to send it to", () => {
   }
 });
 
+test("every tag a row wears is drawn, and the ring is what says one is not", () => {
+  const glyph = readFileSync(
+    fileURLToPath(new URL("../components/TagGlyph.astro", import.meta.url)),
+    "utf8",
+  );
+
+  const open = glyph.indexOf("const GLYPHS: Record<string, string> = {");
+  assert.ok(open !== -1, "TagGlyph.astro no longer declares GLYPHS");
+  const block = glyph.slice(open, glyph.indexOf("\n};", open));
+
+  // Both spellings a key takes: a bare identifier and a quoted hyphenated slug.
+  const drawn = new Set([...block.matchAll(/^ {2}"?([a-z-]+)"?:/gm)].map((match) => match[1]));
+
+  // A drawn tag nothing is filed under is a row in a table nobody can see.
+  for (const slug of drawn) {
+    assert.ok(
+      libraryTags.some((group) => group.slug === slug),
+      `TagGlyph.astro draws "${slug}" and nothing on the site is filed under it. Delete the row, or file something under the word.`,
+    );
+  }
+
+  const undrawn = libraryTags.map((group) => group.slug).filter((slug) => !drawn.has(slug));
+  assert.deepEqual(
+    undrawn,
+    [],
+    `these tags fall back to the ring: ${undrawn.join(", ")}. That is a working state rather than a bug — a tag arrives from Raindrop and a drawing does not, so the ring is what an unmapped word is meant to wear. The assertion is here so the day it happens is a decision, taken by drawing the word or by moving this line, instead of something nobody noticed.`,
+  );
+});
+
+test("the mark is drawn on the same grid as every other icon on the site", () => {
+  const glyph = readFileSync(
+    fileURLToPath(new URL("../components/TagGlyph.astro", import.meta.url)),
+    "utf8",
+  );
+
+  assert.match(glyph, /viewBox="0 0 16 16"/, "the icon set is one 16-unit grid");
+  assert.match(glyph, /fill="none"/);
+  assert.match(glyph, /stroke="currentColor"/);
+  assert.ok(
+    !/#[0-9a-fA-F]{3,8}|hsl\(|rgb\(/.test(glyph),
+    "TagGlyph.astro names a colour. The hue table lives in styles/chip.css, and a colour typed outside styles/ is the bug design.md §1 opens with.",
+  );
+  assert.ok(
+    !/\bwidth:|\bheight:/.test(glyph),
+    "TagGlyph.astro sizes itself. The icon's size is part of the chip's own height arithmetic, so styles/chip.css owns it.",
+  );
+});
+
+test("the chip is painted rather than described: the dot is gone and the outline is dotted", () => {
+  const css = readFileSync(
+    fileURLToPath(new URL("../styles/chip.css", import.meta.url)),
+    "utf8",
+  );
+
+  const open = css.indexOf("\n.tag {");
+  assert.ok(open !== -1, "styles/chip.css no longer declares `.tag`");
+  const block = css.slice(open, css.indexOf("\n}", open));
+
+  assert.match(
+    block,
+    /border: 1px dotted hsl\(var\(--hue-h\) var\(--hue-s\) var\(--hue-l\)\)/,
+    "the tag's outline is a dotted 1px in its own hue. Solid would be the `.chip` pill with the fill taken out, and the two vocabularies would read as one system saying two things.",
+  );
+  assert.ok(
+    !css.includes(".tag::before"),
+    "the 6px dot is back. It was replaced by the outline and the mark inside it — design.md §1 carries the reversal, and both cannot be true at once.",
+  );
+});
+
 test("every tag page has something on it, and everything on it is tagged", () => {
   for (const group of libraryTags) {
     assert.ok(group.entries.length > 0, `/library/tag/${group.slug} would be an empty page`);

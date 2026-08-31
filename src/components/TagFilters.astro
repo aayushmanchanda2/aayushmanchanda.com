@@ -1,0 +1,114 @@
+---
+/**
+ * TagFilters — the whole tag vocabulary, at the top of a library list.
+ *
+ * **The page used to have nothing at the top you could press.** `KindTabs`
+ * partitions the section four ways and that was the only filter a reader could
+ * see without first finding a row about the right subject and pressing the chip
+ * on it. Aayush's review named it: the tags were reachable only from inside the
+ * list, so finding everything about `agents` meant already having found one.
+ *
+ * design.md §3 said the absence was deliberate — "a /sites entry hides its
+ * collections behind a details page, so the index has to offer them somewhere,
+ * while a library row wears its tags in the list itself" — and that paragraph
+ * is now written up as the reversal it is. Wearing a tag on a row tells you
+ * what *that* row is about. It does not tell you the vocabulary, and it cannot
+ * offer a subject that is not on the screen.
+ *
+ * ## Why this is chips and `KindTabs` is tabs
+ *
+ * A kind is a partition: every entry has exactly one, the four tabs add up to
+ * the list, and a tab row is the idiom for "where you are". Tags overlap and do
+ * not add up to anything — a link can carry three or none — so a row of them is
+ * a set of doors rather than a set of positions, which is what a chip already
+ * is everywhere else on this page. Reusing `.tag` is the point: the chip a
+ * reader presses at the top and the chip they press on a row are visibly one
+ * control, and pressing either lands on the same page.
+ *
+ * Every tag, on every one of these pages, not just the ones present in what is
+ * being shown. Same call `KindTabs` makes and for the same reason: a filter row
+ * that changes between the page you filtered from and the page you landed on is
+ * two controls that happen to resemble each other. `lib/library.ts ›
+ * libraryTags` is the vocabulary and it is alphabetical, so nothing here
+ * reorders under a reader between visits.
+ *
+ * The selected state is `aria-current="page"`, which is the honest way for a
+ * link to say the reader is already there, and `styles/chip.css` closes the
+ * dotted border to say it in ink. There is no `All` chip: `All` is what the tab
+ * row already offers one line above, and on a tag page the crumb is the way
+ * back. A second one here would be a third control saying the same thing.
+ */
+import TagGlyph from "./TagGlyph.astro";
+import type { LibraryTagGroup } from "../lib/library";
+import { hueSlot, tagLabel } from "../lib/tags";
+
+interface Props {
+  /** Every tag with a page, alphabetically: `lib/library.ts › libraryTags`. */
+  groups: LibraryTagGroup[];
+  /** The tag this page is showing, or null anywhere else. */
+  current: string | null;
+}
+
+const { groups, current } = Astro.props;
+---
+
+{/*
+  Links with `aria-current`, never `role="tab"` — the call `KindTabs.astro`
+  makes at length. These navigate to real pages, and a tablist role promises
+  arrow-key movement inside the row that a static site does not implement.
+*/}
+<nav class="filters" aria-label="Filter the library by tag">
+  <ul class="filters__row">
+    {
+      groups.map((group) => (
+        <li>
+          <a
+            class="tag"
+            data-hue={hueSlot(group.slug)}
+            href={`/library/tag/${group.slug}`}
+            aria-current={current === group.slug ? "page" : undefined}
+          >
+            <TagGlyph slug={group.slug} />
+            {tagLabel(group.slug)}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  /* The gap to the tab row above, owned here rather than by the pages that
+     render this. `--gap-masthead` is the lesson: one number written out in
+     three scoped blocks is a number nobody can retune. It is tighter than the
+     1.25rem under it because the tabs and these chips are both filters and the
+     list below is the thing being filtered.
+
+     A custom property with a default, because on a tag page there is no tab row
+     to sit under — a tag cuts across all three kinds — and the row is the first
+     thing after the masthead there. That page sets `--filters-gap: 0` so
+     `--gap-masthead` stays exactly the space under a masthead rather than
+     becoming that plus fourteen pixels. A property inherits through Astro's
+     scoping; a `:global` override would be the other way to do it and it is
+     the one design.md §5 keeps telling us not to reach for. */
+  .filters {
+    margin-top: var(--filters-gap, 0.9rem);
+  }
+
+  /* Wraps rather than scrolls, the call `.tabs__row` and `.foot__meta` both
+     make: a flex row that cannot wrap pushes its last item off the side of a
+     375px column instead of dropping it to a second line. Twelve chips are
+     four lines at that width.
+
+     The 1.25rem row gap is `TagChips.astro`'s arithmetic and not a rhythm
+     chosen here: each chip claims a 40px hit area through an `::after` that
+     reaches 0.62rem above and below it, so two lines closer than 1.25rem would
+     have overlapping targets and the upper chip would eat presses meant for the
+     lower one. */
+  .filters__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem 0.4rem;
+    margin: 0;
+  }
+</style>

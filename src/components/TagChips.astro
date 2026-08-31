@@ -7,14 +7,25 @@
  * apart. A collection is gray because a collection name means nothing on a
  * scale and a row of them belongs under a palette; a tag is the same kind of
  * word but it lives in a *column*, twenty rows deep, and there the job changes:
- * the reader is scanning for the two or three rows about one thing. So the tag
- * carries a dot, which is recognisable before it is readable, and leaves the
- * words at the page's ink. `styles/chip.css › .tag` is the whole paint;
- * `lib/tags.ts` decides which of the seven dots each word wears.
+ * the reader is scanning for the two or three rows about one thing.
+ *
+ * So the hue draws the outline and the mark inside it, and the words stay at
+ * the page's ink. It shipped as a 6px dot first and Aayush reversed it on
+ * sight: the dot was too quiet to find a subject by, which is the one thing it
+ * was there to do. `styles/chip.css › .tag` is the whole paint and carries the
+ * reversal; `components/TagGlyph.astro` is the drawing; `lib/tags.ts` decides
+ * which of the seven hues each word wears.
  *
  * The label drops the hyphens (`tagLabel`), the href keeps them. The slug is
  * the route and the join key; the reader only ever needs the words.
+ *
+ * A row of these on an entry says what that entry is about.
+ * `components/TagFilters.astro` is the other shape the same chip takes — the
+ * whole vocabulary at the top of a list, with the one you are standing on
+ * marked — and the two share `.tag` so a chip a reader pressed on a row and a
+ * chip they pressed at the top of the page are visibly the same control.
  */
+import TagGlyph from "./TagGlyph.astro";
 import { hueSlot, tagLabel } from "../lib/tags";
 
 interface Props {
@@ -30,6 +41,7 @@ const { tags } = Astro.props;
     tags.map((slug) => (
       <li>
         <a class="tag" data-hue={hueSlot(slug)} href={`/library/tag/${slug}`}>
+          <TagGlyph slug={slug} />
           {tagLabel(slug)}
         </a>
       </li>

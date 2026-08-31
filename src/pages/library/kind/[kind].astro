@@ -29,9 +29,10 @@ import Base from "../../../layouts/Base.astro";
 import KindTabs from "../../../components/KindTabs.astro";
 import LibraryList from "../../../components/LibraryList.astro";
 import PostWall from "../../../components/PostWall.astro";
+import TagFilters from "../../../components/TagFilters.astro";
 import VideoFacade from "../../../components/VideoFacade.astro";
 import type { Kind, LibraryEntry, Video } from "../../../lib/library";
-import { KIND_LABELS, kindGroups, library } from "../../../lib/library";
+import { KIND_LABELS, kindGroups, library, libraryTags } from "../../../lib/library";
 import { libraryRowUrl, listJsonLd } from "../../../lib/schema";
 
 const STANDFIRST: Record<Kind, string> = {
@@ -90,6 +91,7 @@ const jsonLd = listJsonLd({
 
   <div class="body">
     <KindTabs groups={kindGroups} total={library.length} current={kind} />
+    <TagFilters groups={libraryTags} current={null} />
 
     <div class="rows">
       {

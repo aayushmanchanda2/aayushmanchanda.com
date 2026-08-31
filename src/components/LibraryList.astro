@@ -220,8 +220,33 @@ const anyTags = entries.some((entry) => entry.tags.length > 0);
     text-decoration-color: currentColor;
   }
 
+  /* Two lines, and the rest is on the entry's own page.
+     A row's note runs to 295 characters here, because a saved post's note is
+     the post's own first 280 (`pipeline/entries.mjs › POST_NOTE_MAX`), and at
+     this measure that is five lines under a one-line title. Twenty of those is
+     a page you read rather than a directory you scan, which is Aayush's call
+     on the shipped list and the reason for the clamp.
+
+     **This is not the clamp `lib/post.ts` refuses, and the difference is what
+     is behind it.** That one would have hidden 31,000 characters from the eye
+     while still shipping every one of them inside the card's own anchor, whose
+     accessible name is its text: clamped visually and endless aurally is
+     design.md §7's parity rule pointing the wrong way. This hides at most three
+     lines of a sentence that is already a summary, in a `<p>` that is not
+     inside any link, on a row whose title goes to a page carrying the same note
+     whole as its standfirst. Nobody is being shown less than they can reach.
+
+     Two rather than one: a note here is one sentence about why the thing was
+     saved, and cutting most of them mid-clause would leave a column of
+     fragments. Two lines is where the long ones stop and the short ones are
+     untouched. */
   .row__note {
     grid-area: note;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
     font-size: 0.9375rem;
     line-height: 1.55;
     color: var(--muted);

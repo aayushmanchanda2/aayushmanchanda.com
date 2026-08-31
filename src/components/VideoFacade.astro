@@ -252,7 +252,18 @@ const Wrapper = chrome ? "li" : "div";
     text-decoration-color: currentColor;
   }
 
+  /* Two lines, the cap every listing on the site now takes
+     (`LibraryList.astro`, `ToolList.astro`). A tile is a poster and a caption,
+     and a caption that runs to five lines drags the row of tiles beside it out
+     of alignment — the shelf is a grid, so one long note sets the height of
+     everything on its row. The whole note is the standfirst on the entry's own
+     page, which is where the title already goes. */
   .tile__note {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
     font-size: 0.9375rem;
     line-height: 1.55;
     color: var(--muted);

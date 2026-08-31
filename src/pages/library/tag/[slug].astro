@@ -8,15 +8,17 @@
  * the URL, and a tag is a judgement about the subject. So this is
  * `sites/collection/[slug].astro` with a list where the grid was.
  *
- * Reached from the chips on every row, which is why there is no tag row under
- * the standfirst on /library the way there is on /sites: a /sites entry hides
- * its collections behind a details page, so the index has to offer them
- * somewhere; a library row wears its tags in the list itself.
+ * Reached two ways now, and the second is the point of this ticket. A chip on
+ * any row about the subject was the only entrance, which meant the vocabulary
+ * was invisible until a reader had already found something in it;
+ * `TagFilters.astro` puts the whole of it at the top of every library list,
+ * this page included, with the tag you are standing on marked.
  */
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 
 import Base from "../../../layouts/Base.astro";
 import LibraryList from "../../../components/LibraryList.astro";
+import TagFilters from "../../../components/TagFilters.astro";
 import { libraryTags } from "../../../lib/library";
 import { libraryRowUrl, listJsonLd } from "../../../lib/schema";
 import { tagLabel } from "../../../lib/tags";
@@ -59,12 +61,29 @@ const jsonLd = listJsonLd({
   </header>
 
   <div class="body">
-    <LibraryList entries={entries} />
+    <TagFilters groups={libraryTags} current={slug} />
+
+    <div class="rows">
+      <LibraryList entries={entries} />
+    </div>
   </div>
 </Base>
 
 <style>
+  /* No tab row here, so the chips are the first thing under the masthead and
+     they take the masthead's own gap rather than that plus the 0.9rem they sit
+     under a tab row with. `TagFilters.astro` reads the property. */
   .body {
+    --filters-gap: 0;
+
     margin-top: var(--gap-masthead);
+  }
+
+  /* The same 1.25rem /library and the kind pages put between their filter rows
+     and their list. The row has to hold the same place on all four pages or it
+     stops reading as one persistent control and starts reading as two that
+     happen to match. */
+  .rows {
+    margin-top: 1.25rem;
   }
 </style>

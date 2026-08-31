@@ -12,11 +12,17 @@
  * and every page names its kind, its host and its tags, so all three filter
  * routes are reachable from any row in two presses. The row keeps its own
  * hostname link anyway, because two presses is not the same offer as one.
+ *
+ * `TagFilters` is the second row under it and the newer answer to the same
+ * question one axis over: the tag routes were reachable only from a row that
+ * happened to be about the right subject, so the vocabulary was invisible until
+ * you had already found something in it.
  */
 import Base from "../layouts/Base.astro";
 import KindTabs from "../components/KindTabs.astro";
 import LibraryList from "../components/LibraryList.astro";
-import { kindGroups, library } from "../lib/library";
+import TagFilters from "../components/TagFilters.astro";
+import { kindGroups, library, libraryTags } from "../lib/library";
 import { libraryRowUrl, listJsonLd } from "../lib/schema";
 
 /**
@@ -49,6 +55,7 @@ const jsonLd = listJsonLd({
 
   <div class="body">
     <KindTabs groups={kindGroups} total={library.length} current={null} />
+    <TagFilters groups={libraryTags} current={null} />
 
     <div class="rows">
       <LibraryList entries={library} />

@@ -1,0 +1,136 @@
+---
+/**
+ * TagGlyph — the mark a /library tag wears, drawn here and painted by
+ * `styles/chip.css`.
+ *
+ * It replaces the 6px dot. The dot was identity and nothing else: it made
+ * `agents` recognisable a row before it was readable, and it said nothing about
+ * what the word meant. Aayush asked for the Linear-label shape one step further
+ * on — a dotted border in the tag's own hue, the page showing through it, and a
+ * small mark in that hue inside — so the slot the dot held is now a slot that
+ * can say something, and this is what goes in it.
+ *
+ * ## The split, which is the one `MarkGlyph` and `SiteMark` already make
+ *
+ * This file is geometry. It sets no size and no colour: `styles/chip.css ›
+ * .tag__icon` does both, because the icon's size is part of the chip's own
+ * height arithmetic and its colour is the hue table every tag reads. A colour
+ * typed outside `styles/` is the bug design.md §1 opens with, and a size typed
+ * here would be a second opinion about how tall a chip is.
+ *
+ * ## The grid and the weight
+ *
+ * Same 16-unit grid as `MarkGlyph.astro`, `XGlyph.astro`, `ShotActions.astro`
+ * and `ThemeToggle.astro`, `fill="none"` over `stroke="currentColor"`, square
+ * caps. Ink stays inside 2 to 14 so a square cap at the end of a stroke does
+ * not reach the edge of the box.
+ *
+ * **The weight is 1.6 and not the set's 1.25, which is the optical rule rather
+ * than a break from it.** The rest of the set renders at 14px, where a 1.25
+ * stroke on a 16-unit grid lands at 1.09 device pixels. This renders at 11px,
+ * the label's own size, where 1.25 would land at 0.86 and read as a hairline
+ * beside an 11px mono word and a 1px border. 1.6 at 11px is 1.10, which is the
+ * same ink the moon in the footer is carrying.
+ *
+ * ## The table, and why a table is allowed here when `lib/tags.ts` refuses one
+ *
+ * `hueSlot` is a hash on purpose: tags arrive from Raindrop through the publish
+ * pipeline, so a colour table would mean a hand edit every time Aayush files
+ * something under a new word. That argument holds for colour and does not
+ * transfer to a drawing, because there is no function from a string to a
+ * picture of what it means. So this is a table, and the thing that makes it
+ * safe is that a miss is not a hole: an unmapped tag draws `RING`, which is the
+ * dot this component replaced with its middle taken out. A new word gets a
+ * hue for free and a mark that says "no one has drawn this one yet", which is
+ * honest, and the day it is worth drawing it gets a row here.
+ *
+ * The glyphs are one `d` each, subpaths and all, so a mark is one element and
+ * one attribute however many strokes it is made of.
+ */
+interface Props {
+  /** The tag slug, as stored on the entry. */
+  slug: string;
+}
+
+const { slug } = Astro.props;
+
+/**
+ * The mark for a tag nothing has drawn yet: the dot, hollowed.
+ *
+ * A ring rather than a filled circle, so it sits at the set's stroke weight
+ * instead of being the one solid thing in a monoline row.
+ */
+const RING = "M12.5 8A4.5 4.5 0 1 1 3.5 8A4.5 4.5 0 1 1 12.5 8";
+
+/**
+ * What each tag is drawn as. Twelve today, which is every tag in
+ * `src/data/library.json`; `lib/tags.test.mjs` names the ones that shipped
+ * without a mark so a new word is a decision rather than a silent ring.
+ *
+ * Legibility at 11px is the constraint that picked every one of these, so each
+ * is two or three primitives with nothing inside them smaller than about two
+ * units. A face, a brain and a gear were all drawn first and all three closed
+ * up into a blot at this size.
+ */
+const GLYPHS: Record<string, string> = {
+  /* A node with six sides: the one shape in this set that is neither a circle
+     nor a box, so an agent reads as a thing of its own kind. */
+  agents:
+    "M10.6 3.5L13.2 8L10.6 12.5L5.4 12.5L2.8 8L5.4 3.5Z",
+  /* A square and a circle sharing a corner: the two primitives every drawing
+     starts from, which is as close to "design" as a mark this size gets. */
+  design:
+    "M3 3H9.5V9.5H3Z M13.2 10A3.2 3.2 0 1 1 6.8 10A3.2 3.2 0 1 1 13.2 10",
+  /* Angle brackets. The one glyph here nobody has to be told the meaning of. */
+  engineering: "M6 4L2.5 8L6 12 M10 4L13.5 8L10 12",
+  /* An arrow out of the bottom left, and the two strokes at its tip are the
+     head: a line rising is a market, and where it is pointing is the point. */
+  "go-to-market": "M2.5 12.5L13 3.5 M13 3.5H8.6 M13 3.5V7.9",
+  /* Three bars. Not the arrow above: an industry is a state of things and a
+     go-to-market is a direction, so one is measured and the other is aimed. */
+  "ai-industry": "M4 12.5V8.5 M8 12.5V5.5 M12 12.5V3.5",
+  /* A flag on a pole, planted. */
+  founders: "M4 2.5V13.5 M4 3.5H12.5L10.2 6.5L12.5 9.5H4",
+  /* Steps going up, which is the shape the word is usually drawn as and the
+     one thing here a staircase cannot be confused with. */
+  careers: "M2.5 12.5H6V9H9.5V5.5H13",
+  /* A nib over a line: the pen and the page it is on. */
+  writing: "M3.6 10.6L10.6 3.6L12.4 5.4L5.4 12.4Z M2.6 13.6H13.4",
+  /* A magnifier, and the only glyph in the set with a handle. */
+  research: "M11 7A4 4 0 1 1 3 7A4 4 0 1 1 11 7 M10 10L13.5 13.5",
+  /* Brackets holding something in the middle: a harness is the frame around
+     the model rather than the model. */
+  harnesses:
+    "M5.5 3H3V13H5.5 M10.5 3H13V13H10.5 M9.2 8A1.2 1.2 0 1 1 6.8 8A1.2 1.2 0 1 1 9.2 8",
+  /* Lines with a marker beside the middle one: notes, and the one you can find
+     again, which is the whole claim the phrase makes. */
+  "second-brain":
+    "M5.5 4.5H13.5 M5.5 8H13.5 M5.5 11.5H13.5 M4.2 8A1.15 1.15 0 1 1 1.9 8A1.15 1.15 0 1 1 4.2 8",
+  /* Two circles overlapping: an agency is other people, working on your thing. */
+  agency:
+    "M9.6 6.6A3.6 3.6 0 1 1 2.4 6.6A3.6 3.6 0 1 1 9.6 6.6 M13.6 9.4A3.6 3.6 0 1 1 6.4 9.4A3.6 3.6 0 1 1 13.6 9.4",
+};
+
+const d = GLYPHS[slug] ?? RING;
+---
+
+{/*
+  Hidden from the accessibility tree: the word is right beside it and is the
+  thing being named. Same call `XGlyph.astro` and the post monogram make.
+  `data-glyph` is what `lib/tags.test.mjs` reads to tell a drawn tag from one
+  wearing the ring.
+*/}
+<svg
+  class="tag__icon"
+  viewBox="0 0 16 16"
+  aria-hidden="true"
+  focusable="false"
+  data-glyph={slug in GLYPHS ? slug : "ring"}
+>
+  <path
+    d={d}
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.6"
+    stroke-linecap="square"></path>
+</svg>

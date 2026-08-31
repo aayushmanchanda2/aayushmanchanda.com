@@ -206,8 +206,23 @@ const groups = grouped
     text-decoration-color: currentColor;
   }
 
+  /* Two lines, the same cap `LibraryList.astro › .row__note` takes and for the
+     same reason: a listing row is scanned, and the overflow has a page to live
+     on. `details` at the end of the meta column is that page, and a tool's note
+     renders whole on it.
+
+     It costs this list almost nothing today — the longest note in
+     `data/tools.json` is 169 characters, which is two lines at this measure —
+     and that is the point of putting it here rather than waiting: the cap is
+     what stops the twentieth verdict from being the one that quietly turns the
+     directory into a page of paragraphs. */
   .row__note {
     grid-area: note;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
     font-size: 0.9375rem;
     line-height: 1.55;
     color: var(--muted);
