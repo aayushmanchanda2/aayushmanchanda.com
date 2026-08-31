@@ -19,20 +19,44 @@
  * than a long column. So it is one paragraph at the prose measure, and the day
  * the pipeline stops flattening, this is the page that shows the difference.
  *
- * The head is the card's head at the card's proportions: the monogram, the
- * name, the handle and the date the thing was posted. It is not furniture
- * repeated from the masthead above it — the `h1` is the post's title, which is
- * a clipped copy of these words, and the strip's date is the day the link was
- * saved. Who wrote it and when they wrote it are only here.
+ * The head is the name, the handle and the date the thing was posted. It is not
+ * furniture repeated from the masthead above it — the `h1` is the post's title,
+ * which is a clipped copy of these words, and the strip's date is the day the
+ * link was saved. Who wrote it and when they wrote it are only here.
+ *
+ * ## The monogram left this page, and the reason is that it never belonged here
+ *
+ * **Aayush's review: "the letter instead of the profile photo looks kinda
+ * odd".** It was a 48px hued circle holding one letter, the biggest coloured
+ * object on a page whose other blocks open with an 11px label — standing in for
+ * a face on a page that is not showing a face.
+ *
+ * Two answers were on the table and the ticket asked for a probe before
+ * choosing. **Probed: Firecrawl's x.com post response carries no avatar at
+ * all.** Two live scrapes of saved posts plus a schema-guided extraction came
+ * back with the author's name, handle, date, text and `pbs.twimg.com/media/`
+ * photos and nothing else; only the *profile* page carries `Profile Picture:
+ * …pbs.twimg.com/profile_images/…`, which is a second scrape of a different URL
+ * per author. So a real avatar is obtainable, and what it costs is a new
+ * pipeline fetch for every post ever saved, a committed copy of somebody's face
+ * with no honest date on it (design.md §6) that goes silently wrong the day they
+ * change it, and a new class of rehosted image on /privacy.
+ *
+ * **So the monogram goes instead, and nothing replaces it**, because the slot
+ * it was filling is not this page's slot. `TweetCard.astro` is a fallback
+ * imitating a tweet, and the avatar is part of the thing it imitates; design.md
+ * §3 already says this page is "a different rendering rather than a smaller
+ * one" — the uncut post, set to be read. A reading page's head is a name, a
+ * handle and a date, which is what every other block on this page opens with
+ * and what the three of them already say without help. The identity was never
+ * in the letter: `markFor` made the same call about a GitHub avatar in §5, and
+ * for the same reason — a stranger's face at small size is not identity.
  *
  * Nothing outside this origin is named, the same claim `TweetCard.astro`
- * makes: the monogram is a letter rather than an avatar, and the pictures are
- * files in this repository because `lib/library.ts › readShotPath` will not
- * carry anything else.
+ * makes: the pictures are files in this repository because
+ * `lib/library.ts › readShotPath` will not carry anything else.
  */
 import type { LibraryEntry, Post } from "../lib/library";
-import { hueSlot } from "../lib/tags";
-import { monogram } from "../lib/post";
 
 interface Props {
   /** A post entry the pipeline could actually read. */
@@ -41,32 +65,14 @@ interface Props {
 
 const { entry } = Astro.props;
 const { post } = entry;
-
-const initial = monogram(post.author);
 ---
 
 <section class="post">
   <div class="post__head">
-    {
-      /*
-       * Hidden from the accessibility tree, and absent entirely when the name
-       * has no letter in it, for the two reasons `TweetCard.astro` gives: "B"
-       * before "Ben Lang" is a stutter, and an empty coloured circle claims an
-       * identity it is not carrying.
-       */
-      initial !== "" && (
-        <span class="monogram" data-hue={hueSlot(post.handle)} aria-hidden="true">
-          {initial}
-        </span>
-      )
-    }
-
-    <span class="post__who">
-      <span class="post__author">{post.author}</span>
-      <span class="post__meta mono">
-        <span class="post__handle">@{post.handle}</span>
-        <span class="post__posted tabular-nums">{post.date}</span>
-      </span>
+    <span class="post__author">{post.author}</span>
+    <span class="post__meta mono">
+      <span class="post__handle">@{post.handle}</span>
+      <span class="post__posted tabular-nums">{post.date}</span>
     </span>
   </div>
 
@@ -98,24 +104,31 @@ const initial = monogram(post.author);
     margin-top: clamp(2.5rem, 8vh, 4rem);
   }
 
+  /* **A stack, where it used to be a row with a 48px circle at the head of it.**
+     Nothing sits beside the name any more, so the horizontal flex and the gap
+     that separated the two went with the monogram, and the inner `post__who`
+     wrapper went with them — a column inside a row is one box when the row has
+     one thing in it. This is the compactness the thebridge reference is mostly
+     made of, taken where it was actually available: the head is 42px shorter
+     and the name now starts at the column edge every other block on this page
+     starts at. */
   .post__head {
     display: flex;
-    align-items: center;
-    gap: 0.65rem;
-    min-width: 0;
-  }
-
-  .post__who {
-    display: flex;
     flex-direction: column;
-    gap: 0.2rem;
+    /* 0.2rem before, and the two lines are a name and its own metadata rather
+       than two facts, so they close up. */
+    gap: 0.15rem;
     min-width: 0;
   }
 
   .post__author {
     font-size: 0.9375rem;
     font-weight: 500;
-    letter-spacing: -0.01em;
+    /* -0.01em before. thebridge sets its titles at -0.3px on 14px, which is
+       -0.021em, and design.md §4 adopted that reference's *density* while
+       refusing its sizes: the tracking transfers where the size does not,
+       because a size is a second label voice and a tenth of an em is not. */
+    letter-spacing: -0.02em;
     line-height: 1.3;
     overflow-wrap: anywhere;
   }
@@ -151,7 +164,13 @@ const initial = monogram(post.author);
      t.co shortlink has no word boundary in it, so without this one runs out
      past the column. */
   .post__text {
-    margin-top: 1.25rem;
+    /* 1.25rem before, when the head was a 48px circle and needed the air to
+       clear it. The head is two lines of small type now, and it is this
+       paragraph's byline rather than a block above it, so it closes up towards
+       the 0.4rem every other block on this page puts between its label and its
+       body without going all the way there — those labels are one line of 11px
+       and this is a name over a date. */
+    margin-top: 0.85rem;
     max-width: 65ch;
     font-size: 1.0625rem;
     line-height: 1.7;

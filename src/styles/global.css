@@ -50,8 +50,17 @@
     Consolas, "Liberation Mono", monospace;
 
   /* radii — the site rounds one thing, the chip, and the focus ring that has
-     to sit around it. A scale with unused steps is a scale nobody trusts. */
+     to sit around it. A scale with unused steps is a scale nobody trusts.
+
+     **`--r-pill` is not a fourth step on that scale, and the word doing the
+     work is *corner*.** At 999px there is no corner left to be concentric with
+     anything, only two semicircular ends — which is the argument
+     `chip.css › .monogram` already makes about a circle, one shape over.
+     design.md §3 counts corners, and it still counts three. It belongs to the
+     tag and to nothing else; §1 carries why a tag takes the pill while a chip
+     keeps its 4px box. */
   --r-sm: 4px;
+  --r-pill: 999px;
 
   /* motion */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);

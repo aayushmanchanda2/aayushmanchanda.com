@@ -350,8 +350,80 @@ test("the card has exactly one door out and exactly one door in", () => {
   assert.match(card, /target="_blank"/);
   assert.match(
     card,
-    /class="card__link mono press" href=\{href\}/,
+    /class="card__link mono" href=\{href\}/,
     "the card has no `notes` link outside the embed, which would leave a wall of other people's frames with no way back into this site",
+  );
+});
+
+test("the card is one box, and everything in it but the embed is the way in", () => {
+  /*
+   * **VET-114, and it is a grouping rather than a new destination.** The border
+   * sat on the fallback and the `notes` bar carried a second one of its own, so
+   * a hydrated card was X's rounded frame with an unrelated bordered strip
+   * under it: two objects that happened to be stacked. Aayush's review of the
+   * shipped wall asked for one container, and for a press anywhere in it that
+   * is not the embed to open the entry's page.
+   *
+   * Five things make that true and every one of them fails silently:
+   *
+   *   - the border on `.card`, so the box is a box;
+   *   - `position: relative` on `.card`, because the stretched overlay resolves
+   *     `inset: 0` against the nearest positioned ancestor and would otherwise
+   *     shrink to the bar it lives in;
+   *   - the overlay itself, on the anchor, which is what makes the ring of card
+   *     around the embed pressable at all;
+   *   - `.card__embed`'s own layer, which is the *only* thing keeping X's links
+   *     out from under it. Lose that one and every link in somebody else's post
+   *     quietly becomes a link to /library — the page would look right and be
+   *     wrong, which is why this is a test and not a comment;
+   *   - and the embed's inset being a margin. As a padding it belonged to the
+   *     embed's box, and a press 3px inside the card's own border landed on
+   *     nothing. Measured on the dev server before it changed.
+   */
+  const card = code(read("components/TweetCard.astro"));
+
+  assert.match(
+    card,
+    /\.card \{[^}]*position: relative;/,
+    "`.card` stopped being the positioned ancestor, so the stretched link now measures itself against the notes bar and the rest of the card is dead to a press",
+  );
+  assert.match(
+    card,
+    /\.card \{[^}]*border: 1px solid var\(--card-line\);/,
+    "the card is not one bordered box. VET-114 is the grouping: the embed and the bar under it have to read as one thing.",
+  );
+  assert.match(
+    card,
+    /\.card__link::before \{[^}]*position: absolute;\s*inset: 0;/,
+    "the `notes` anchor no longer stretches, so only the bar itself opens the entry page and the rest of the card does nothing",
+  );
+  assert.match(
+    card,
+    /\.card__embed \{[^}]*position: relative;\s*z-index: 1;/,
+    "the embed lost its layer and is now under the stretched link. Every link inside X's iframe would be swallowed by ours, which is the one thing an embed may not lose.",
+  );
+  assert.match(
+    card,
+    /\.card__embed \{[^}]*margin: /,
+    "the embed's inset became a padding, so the ring of card around X's frame stopped being pressable — which is most of what 'anywhere that is not the embed' means",
+  );
+
+  // The bar is the real anchor and the overlay is a pseudo, so there is one tab
+  // stop for the one destination. A focusable overlay would put the same page
+  // in the tab order twice.
+  assert.equal(
+    [...card.matchAll(/<a\b/g)].length,
+    2,
+    "the card has a number of anchors other than two: the fallback's permalink out, and the `notes` link in",
+  );
+
+  // The wrapper is what puts a box round X's widget as well as round the
+  // blockquote, and `XEmbeds.astro` still finds their widget as the
+  // blockquote's previous sibling because their factory inserts it in place.
+  assert.match(
+    card,
+    /<div class="card__embed">\s*\{?\/?\*?[\s\S]{0,600}?<blockquote class="card__quote twitter-tweet"/,
+    "the blockquote is no longer inside `.card__embed`, so whichever of the fallback and the embed is on screen is no longer the thing being lifted above the stretched link",
   );
 });
 

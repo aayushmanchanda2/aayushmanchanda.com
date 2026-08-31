@@ -36,6 +36,31 @@
  * post's id out of, and it wears the `.ext` arrow for the reason the row's
  * `source` link does: it is the one control here that ends the visit.
  *
+ * ## One box, and the two regions live inside it
+ *
+ * **The bar used to be a second box under a first one, and Aayush's review of
+ * the shipped wall is what closed them up.** The fallback carried the border
+ * and the `notes` bar carried its own, so a hydrated card was X's rounded frame
+ * with an unrelated bordered strip below it — two objects that happened to be
+ * stacked rather than one card with two parts. The border is on `.card` now and
+ * the bar keeps a `border-top` as the rule *between* the regions, which is the
+ * site's one way of separating things (design.md §1) doing the separating from
+ * the inside.
+ *
+ * **And the whole box is the way in, except for the embed.** `.card__link`
+ * stretches an `::before` across `.card`, so the ring of card around X's frame
+ * and the bar under it all open `/library/<slug>`; `.card__embed` sits above it
+ * on `z-index: 1`, so every link inside X's iframe still goes to X and the
+ * fallback's own words are still selectable and its `source` link still
+ * pressable. An `<a>` could not have been wrapped round the blockquote to do
+ * this — nesting the embed inside an anchor would swallow X's own links, which
+ * are the reader's whole reason for looking at an embed rather than a quote.
+ *
+ * The keyboard gets the real anchor and nothing else: the bar is the focusable
+ * control, the stretched pseudo carries no tab stop of its own, and the focus
+ * ring lands on the bar rather than round the whole card, which is where a
+ * reader's eye already is when they arrive by Tab.
+ *
  * ## What the fallback still refuses
  *
  * No avatar, no brand mark, no `pbs.twimg.com`: the pictures are files in this
@@ -71,109 +96,186 @@ const initial = monogram(post.author);
 const body = clipText(post.text, POST_CARD_MAX);
 ---
 
-<li class="card">
+<li class="card press">
   {/*
-    `twitter-tweet` is what X's factory looks for and `data-dnt` is the one
-    thing we can ask it for: do not use this visit to tailor anything. The
-    theme arrives from `XEmbeds.astro` before the factory does, because an
-    iframe on another origin cannot be re-themed once it exists.
-
-    Everything inside is the fallback. It is real content rather than a
-    placeholder — with scripting off it is the whole card, and until the
-    factory lands it is what holds the column open.
+    The embed's own region, and the wrapper is load-bearing twice over. X's
+    factory inserts its rendered widget immediately before the blockquote it
+    consumed, so putting a box round the blockquote is what puts a box round
+    the widget too — one element to lift above the stretched link, whichever
+    of the two is currently on screen. `XEmbeds.astro` reads
+    `previousElementSibling`, which is still their widget, so the height watch
+    is untouched by the extra level.
   */}
-  <blockquote class="card__quote twitter-tweet" data-dnt="true">
-    <span class="card__head">
+  <div class="card__embed">
+    {/*
+      `twitter-tweet` is what X's factory looks for and `data-dnt` is the one
+      thing we can ask it for: do not use this visit to tailor anything. The
+      theme arrives from `XEmbeds.astro` before the factory does, because an
+      iframe on another origin cannot be re-themed once it exists.
+
+      Everything inside is the fallback. It is real content rather than a
+      placeholder — with scripting off it is the whole card, and until the
+      factory lands it is what holds the column open.
+    */}
+    <blockquote class="card__quote twitter-tweet" data-dnt="true">
+      <span class="card__head">
+        {
+          /*
+           * Hidden from the accessibility tree: the letter is a recognition aid
+           * for the name sitting beside it, and announcing "B" before "Ben Lang"
+           * is a stutter, not a fact. Same call `XGlyph.astro` makes.
+           *
+           * Absent entirely when the display name has no letter or digit in it,
+           * because an empty coloured circle claims an identity it is not
+           * carrying (`lib/post.ts › monogram`).
+           *
+           * **It stays here and it left `PostBody.astro`**, which is not an
+           * inconsistency: this is a fallback standing in for a tweet, where the
+           * avatar slot is part of the thing being stood in for, and that page
+           * is somebody reading a post rather than a picture of one.
+           */
+          initial !== "" && (
+            <span class="monogram" data-hue={hueSlot(post.handle)} aria-hidden="true">
+              {initial}
+            </span>
+          )
+        }
+
+        <span class="card__who">
+          <span class="card__author">{post.author}</span>
+          <span class="card__meta mono">
+            <span class="card__handle">@{post.handle}</span>
+            <span class="card__date tabular-nums">{post.date}</span>
+          </span>
+        </span>
+      </span>
+
+      <p class="card__text">{body}</p>
+
       {
-        /*
-         * Hidden from the accessibility tree: the letter is a recognition aid
-         * for the name sitting beside it, and announcing "B" before "Ben Lang"
-         * is a stutter, not a fact. Same call `XGlyph.astro` makes.
-         *
-         * Absent entirely when the display name has no letter or digit in it,
-         * because an empty coloured circle claims an identity it is not
-         * carrying (`lib/post.ts › monogram`).
-         */
-        initial !== "" && (
-          <span class="monogram" data-hue={hueSlot(post.handle)} aria-hidden="true">
-            {initial}
+        post.media.length > 0 && (
+          <span class="card__media" data-count={post.media.length}>
+            {post.media.map((src, index) => (
+              <img
+                class="outlined"
+                src={src}
+                alt={
+                  post.media.length === 1
+                    ? `Picture attached to the post by ${post.author}`
+                    : `Picture ${index + 1} of ${post.media.length} attached to the post by ${post.author}`
+                }
+                loading="lazy"
+                decoding="async"
+              />
+            ))}
           </span>
         )
       }
 
-      <span class="card__who">
-        <span class="card__author">{post.author}</span>
-        <span class="card__meta mono">
-          <span class="card__handle">@{post.handle}</span>
-          <span class="card__date tabular-nums">{post.date}</span>
-        </span>
-      </span>
-    </span>
-
-    <p class="card__text">{body}</p>
-
-    {
-      post.media.length > 0 && (
-        <span class="card__media" data-count={post.media.length}>
-          {post.media.map((src, index) => (
-            <img
-              class="outlined"
-              src={src}
-              alt={
-                post.media.length === 1
-                  ? `Picture attached to the post by ${post.author}`
-                  : `Picture ${index + 1} of ${post.media.length} attached to the post by ${post.author}`
-              }
-              loading="lazy"
-              decoding="async"
-            />
-          ))}
-        </span>
-      )
-    }
-
-    {/*
-      The post itself, and the last anchor in the blockquote on purpose: X's
-      factory reads the id out of it. `source` is the word the /library row
-      uses for the same control, so a reader who has seen one has seen both,
-      and the title rides along where only a screen reader hears it.
-    */}
-    <a
-      class="card__source mono ext"
-      href={entry.url}
-      rel="noopener nofollow"
-      target="_blank"
-    >
-      source<span class="visually-hidden">: the post by {post.author}</span>
-    </a>
-  </blockquote>
+      {/*
+        The post itself, and the last anchor in the blockquote on purpose: X's
+        factory reads the id out of it. `source` is the word the /library row
+        uses for the same control, so a reader who has seen one has seen both,
+        and the title rides along where only a screen reader hears it.
+      */}
+      <a
+        class="card__source mono ext"
+        href={entry.url}
+        rel="noopener nofollow"
+        target="_blank"
+      >
+        source<span class="visually-hidden">: the post by {post.author}</span>
+      </a>
+    </blockquote>
+  </div>
 
   {/*
-    Outside the embed, because everything inside one belongs to X. This is the
-    card's own destination and the only one on it that stays here.
+    Inside the card and outside the embed, which is the whole anatomy. The bar
+    is the card's own destination, the only one on it that stays here, and the
+    anchor in it stretches across every part of the card the embed is not
+    standing on.
   */}
   <p class="card__notes">
-    <a class="card__link mono press" href={href}>
+    <a class="card__link mono" href={href}>
       notes<span class="visually-hidden"> on {entry.title}</span>
     </a>
   </p>
 </li>
 
 <style>
-  /* The item in the wall. `PostWall.astro` owns the columns; what belongs to a
-     card is that it must not be split across one, and the air under it. */
+  /* The item in the wall, and **the card itself is the box now**.
+
+     `PostWall.astro` owns the columns; what belongs to a card is that it must
+     not be split across one, the air under it, and the border that says the
+     embed and the bar under it are one thing. That border used to be on the
+     fallback, which meant a hydrated card was X's rounded frame with a
+     separately-bordered strip below it — the grouping Aayush's review asked
+     for, missing. Sharp corners, design.md §3: a radius marks a token you could
+     pick up, never a surface you look through. X's own frame is rounded and
+     that is theirs, sitting inside ours.
+
+     `--card-line` is one value read by two borders — this one and the bar's
+     rule — so a hover lifts the whole box rather than half of it. It is a
+     custom property rather than two declarations for the reason
+     `--gap-masthead` is one: a number written twice is a number nobody can
+     retune.
+
+     It carries `.press` rather than the bar's anchor doing so, and that is the
+     stretched link's doing. An absolutely-positioned `::before` resolves
+     `inset: 0` against its nearest *positioned or transformed* ancestor, so a
+     transform on the anchor would re-anchor the overlay to the bar mid-press —
+     a target that shrinks under a finger already on it. Pressing the box scales
+     the box, which is also the truer statement now that the box is the target
+     (design.md §4). */
   .card {
+    --press-scale: 0.985;
+    --card-line: var(--hairline);
+
+    position: relative;
     break-inside: avoid;
     margin-bottom: 1.5rem;
+    border: 1px solid var(--card-line);
+    /* Stated rather than left to the initial value, which is what design.md §3
+       asks of everything structural: a 4px corner marks a token you could pick
+       up, never a surface you look through. */
+    border-radius: 0;
+  }
+
+  /* The embed's region, and the one part of the card the stretched link does
+     not cover.
+
+     `z-index` is what says so. The overlay is a positioned pseudo later in the
+     document, so without a layer of its own this box would paint under it and
+     every link inside X's iframe would be swallowed by a link to our page —
+     which is the one thing an embed may not lose. Lifting it also keeps the
+     fallback's words selectable and its `source` link pressable in the seconds
+     before the factory lands.
+
+     The inset is what stops two frames touching: X's rounded border sits inside
+     our sharp one with the page showing between them, rather than the two
+     reading as a double rule. It is also the fallback's inset, which is why the
+     blockquote below has none of its own.
+
+     **A margin and not a padding, and the difference is the whole point.**
+     Padding is part of this element's box, so the ring of card around X's frame
+     would belong to the embed and a press on it would land on nothing — which
+     is exactly the "anywhere that is not the embed" this card is supposed to
+     answer. Measured before the change: a press 3px inside the card's own
+     border hit `.card__embed`. A margin is card, so the ring goes to the
+     stretched link with the rest of the box. */
+  .card__embed {
+    position: relative;
+    z-index: 1;
+    margin: 0.75rem;
   }
 
   /* The fallback, wearing the card the static version was.
 
      X hides this element and puts its own iframe beside it once the factory
      runs, so everything below is what a reader sees before that and instead of
-     it. The border is the site's hairline and the corners are sharp, which is
-     design.md §3: a radius marks a token you could pick up, never a surface you
-     look through. X's own frame is rounded and that is theirs. */
+     it. No border and no padding of its own: both belong to the card and the
+     region above, so the fallback and the embed are inset by the same amount
+     and swapping one for the other moves nothing. */
   .card__quote {
     display: flex;
     flex-direction: column;
@@ -185,8 +287,8 @@ const body = clipText(post.text, POST_CARD_MAX);
        already, so it costs the current data nothing. */
     min-height: 8rem;
     margin: 0;
-    padding: 1rem;
-    border: 1px solid var(--hairline);
+    padding: 0;
+    border: 0;
     border-radius: 0;
   }
 
@@ -301,9 +403,11 @@ const body = clipText(post.text, POST_CARD_MAX);
   }
 
   /* The way back to this site, and the one thing on the card that survives
-     hydration. A box of its own rather than a rule under the embed: after the
-     swap it is sitting under an iframe with its own rounded border, and a bare
-     word there reads as something that fell off the card above it.
+     hydration. **A rule inside the card now, rather than a box under it**: it
+     was a bordered strip with its own margin, which read as a second object
+     stacked on the embed instead of the other half of one card. A `border-top`
+     in the card's own `--card-line` is the site's one way of separating things
+     (design.md §1) doing it from the inside.
 
      40px on the nose, which is design.md §4's floor taken literally rather than
      through an `::before`. The stated text exception is for a word in a row of
@@ -312,22 +416,17 @@ const body = clipText(post.text, POST_CARD_MAX);
      obvious does not get to be a hint. It is also inside the 46px the thebridge
      reference sets its own list rows at. */
   .card__notes {
-    margin-top: 0.5rem;
-    border: 1px solid var(--hairline);
-    /* The anchor inside carries `.press`, which already names `border-color`
-       and `color` — but the border is on this box and not on it, so the box
-       needs its own. One property, named, never `all` (design.md §4). */
+    border-top: 1px solid var(--card-line);
+    /* The card carries `.press`, which already names `border-color` for its own
+       border; this rule is a second border on a different element and needs its
+       own so the two lift together. One property, named, never `all`
+       (design.md §4). */
     transition-property: border-color;
     transition-duration: var(--dur-fast);
     transition-timing-function: var(--ease);
   }
 
   .card__link {
-    /* A card-width target; 0.96 would visibly shove it sideways. The number the
-       card itself used to carry, and `SiteGrid.astro › .card__link` before it,
-       because this is the same kind of thing at the same kind of width. */
-    --press-scale: 0.985;
-
     display: flex;
     align-items: center;
     gap: 0.4rem;
@@ -335,6 +434,32 @@ const body = clipText(post.text, POST_CARD_MAX);
     padding-inline: 1rem;
     color: var(--muted);
     text-decoration: none;
+    /* `.press` used to carry this. It moved to the card, so the ink names its
+       own transition — one property, never `all`. */
+    transition-property: color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  /* **The card is the target, and this is what makes it one.** Everything in
+     the box that the embed is not standing on — the ring of card around X's
+     frame, and the bar itself — opens `/library/<slug>`.
+
+     It is a pseudo on the anchor rather than an `<a>` wrapped round the card
+     for a reason that is not stylistic: the blockquote becomes X's iframe, and
+     an iframe inside an anchor would hand every link in somebody else's post to
+     our own destination. The embed has to stay pressable on its own terms, so
+     the overlay goes *under* it (`.card__embed › z-index`) instead of round it.
+
+     `inset: 0` resolves against `.card`, which is the nearest positioned
+     ancestor: `.card__notes` is deliberately left static so this reaches the
+     whole box rather than the bar it lives in. No `z-index` of its own — a
+     positioned pseudo already paints above the card's own background, and the
+     one thing it must lose to says so explicitly. */
+  .card__link::before {
+    content: "";
+    position: absolute;
+    inset: 0;
   }
 
   /* Drawn rather than typed, and the alt-text form so it has no accessible
@@ -345,13 +470,21 @@ const body = clipText(post.text, POST_CARD_MAX);
     content: "\2192" / "";
   }
 
-  /* The link fills the box, so hovering one is hovering the other: the border
-     is keyed to the box and the ink to the anchor, and nothing needs `:has()`
-     to say so. Not gated behind `@media (hover: hover)` — pressing this unloads
-     the page, so the touch latch design.md §4 gates for is gone before it could
-     be seen. */
-  .card__notes:hover {
-    border-color: var(--hairline-strong);
+  /* The box lifts when the box is the target, which is now a `:has()` and used
+     not to need one. While the border sat on the bar, hovering the bar was the
+     only thing that could reach it. The border is on the card now and the card
+     is bigger than its target — the embed is inside it and goes somewhere else
+     entirely — so a plain `.card:hover` would light the whole box up for a
+     pointer resting on an iframe that will not take it anywhere. Keying it to
+     the anchor is what keeps the lit border a promise about where a press
+     lands, and the anchor's `::before` is most of the box, so nearly all of a
+     hover over the card still lights it.
+
+     Not gated behind `@media (hover: hover)` — pressing this unloads the page,
+     so the touch latch design.md §4 gates for is gone before it could be
+     seen. */
+  .card:has(.card__link:hover) {
+    --card-line: var(--hairline-strong);
   }
 
   .card__link:hover {

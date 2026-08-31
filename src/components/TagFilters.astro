@@ -104,11 +104,37 @@ const { groups, current } = Astro.props;
      chosen here: each chip claims a 40px hit area through an `::after` that
      reaches 0.62rem above and below it, so two lines closer than 1.25rem would
      have overlapping targets and the upper chip would eat presses meant for the
-     lower one. */
+     lower one. `lib/tags.test.mjs` reads the overreach out of `chip.css` and
+     fails if this number stops covering it.
+
+     **The column gap is 0.5rem where it was 0.4rem**, which is Aayush's review
+     of this row: the leading looked weird, and a 6.4px column gap under a 20px
+     row gap is a field packed tighter across than a chip's own side padding and
+     three times looser down. It cannot be made even — the row gap is a hit area
+     and the column gap is not — but it can stop being 3:1, and the other half of
+     that is the line below. */
   .filters__row {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.25rem 0.4rem;
+    gap: 1.25rem 0.5rem;
     margin: 0;
+  }
+
+  /* **The other half of the leading, and it is all subtraction.** An `li` is a
+     block box, so an `inline-flex` chip inside one sits in a *line box* — and a
+     line box is as tall as the inherited strut, which is 16px of Geist at 1.6.
+     Measured on the shipped row: a 20.27px chip inside a 25.59px item, so every
+     wrapped line carried 5.32px of leading nobody chose and the pitch came out
+     at 45.59px for a chip 20.27px tall. Making the item a flex container
+     blockifies the chip and the strut goes with the line box.
+     `TagChips.astro › .tags li` does the same thing for the same reason.
+
+     What is left between two lines is the row gap and nothing else, which is
+     the point: that number is a hit area, it is *why* the row is as open as it
+     is, and it should not have had a second, invisible number added on top of
+     it. Pitch 45.59px to 40.27px, and the targets now touch with a sixth of a
+     pixel to spare instead of hiding five. */
+  .filters__row li {
+    display: flex;
   }
 </style>

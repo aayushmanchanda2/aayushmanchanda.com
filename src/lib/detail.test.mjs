@@ -211,6 +211,61 @@ test("the page holds the whole post, at a measure somebody can read", () => {
   );
 });
 
+test("the post's page names its author and draws no face for them", () => {
+  /*
+   * **VET-114, and the probe is why it landed this way.** Aayush's review of a
+   * post's page: "the letter instead of the profile photo looks kinda odd". The
+   * two answers were to fetch the real avatar or to drop the stand-in, and the
+   * ticket asked for a probe before choosing.
+   *
+   * Probed live against Firecrawl, twice on saved posts plus a schema-guided
+   * extraction: **an x.com post response carries no avatar at all** — author,
+   * handle, date, text and `pbs.twimg.com/media/` photos, and nothing else.
+   * Only the *profile* page carries `Profile Picture: …/profile_images/…`,
+   * which is a second scrape of a different URL for every author, a committed
+   * copy of somebody's face with no honest date on it (design.md §6), and a new
+   * class of rehosted image for /privacy to name.
+   *
+   * So the monogram left this page and nothing replaced it. It stays on
+   * `TweetCard.astro`, and the asymmetry is the point rather than an oversight:
+   * that is a fallback imitating a tweet, where the avatar slot is part of what
+   * is being imitated, and this is the uncut post set to be read (design.md §3,
+   * "a different rendering rather than a smaller one"). A reading page's head
+   * is a name, a handle and a date.
+   *
+   * Both halves are held, because either one drifting alone is the failure: a
+   * monogram coming back here, or the card losing its.
+   */
+  // Comments stripped on both sides: this file says "monogram" a dozen times
+  // explaining why there is not one, and prose has to be free to name the thing
+  // it is arguing about.
+  const body = code(read(POST_BODY));
+  assert.ok(
+    !/monogram/.test(body),
+    "a monogram is back on the post's page. It is the avatar slot with a letter in it, and this page has no avatar slot — the name, the handle and the date carry who wrote it.",
+  );
+  assert.ok(
+    !/hueSlot/.test(body),
+    "the page reads the identity palette again, which is the monogram arriving under another name",
+  );
+  assert.match(
+    body,
+    /<span class="post__author">\{post\.author\}<\/span>/,
+    "the page stopped naming the author, which is the one thing the monogram was standing beside",
+  );
+  assert.match(
+    body,
+    /<span class="post__handle">@\{post\.handle\}<\/span>/,
+    "the page stopped printing the handle",
+  );
+
+  assert.match(
+    code(read("components/TweetCard.astro")),
+    /class="monogram"/,
+    "the card's fallback lost its monogram too. That one is imitating a tweet and a tweet opens with a face — design.md §1 carries the slot and why it holds a letter.",
+  );
+});
+
 /* ---------------------------------------------------------------------------
    The row keeps its way out
    --------------------------------------------------------------------------- */

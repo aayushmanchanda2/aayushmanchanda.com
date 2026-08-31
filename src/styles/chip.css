@@ -241,9 +241,21 @@
      because the two boxes are the same height by measurement and not by
      derivation — the day one of them grows an icon the other does not, a
      `calc` would silently move the wrong box. */
-  padding: 0.225rem 0.45rem 0.23rem;
+  /* The side padding is 0.6rem where the vertical pair is hand-tuned to the
+     height above: a pill's ends are semicircles, so the first and last letter
+     sit under curving edge rather than beside a straight one and need the room
+     a 4px box did not. The vertical numbers did not move, so the height did
+     not either. */
+  padding: 0.225rem 0.6rem 0.23rem;
   border: 1px dotted hsl(var(--hue-h) var(--hue-s) var(--hue-l));
-  border-radius: var(--r-sm);
+  /* **A pill, and it is Aayush's question answered rather than a preference.**
+     Reviewing the filter row he asked whether these should be pills, and the
+     answer is yes for the reason the dotted border is dotted: a tag has to stay
+     out of the `.chip`'s vocabulary, and the two now differ in shape as well as
+     in fill. It is not a fourth corner radius — `global.css › --r-pill` and
+     design.md §3 carry that, and the short version is that a semicircular end
+     is not a corner. */
+  border-radius: var(--r-pill);
   /* The page, stated rather than left transparent. Everywhere a tag sits today
      the two are the same thing, and saying it is what makes the chip an object
      with a ground instead of a hole cut in whatever is behind it — which is
@@ -295,6 +307,14 @@
 .tag:hover,
 .tag:focus-visible {
   background: hsl(var(--hue-h) var(--hue-s) var(--hue-l) / var(--tag-tint));
+}
+
+/* `global.css › :focus-visible` rounds the ring to `--r-sm`, which is the right
+   number for everything else it lands on and the wrong one here — an outline
+   follows the element's own radius, so a 4px ring round a pill would square off
+   two ends that have no corners in them. Same intent, this shape's number. */
+.tag:focus-visible {
+  border-radius: var(--r-pill);
 }
 
 /* The tag you are standing on, and the reason the border is dotted at rest.

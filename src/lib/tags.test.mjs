@@ -254,6 +254,92 @@ test("every row that wraps tag chips is at least as tall as their targets", () =
   }
 });
 
+test("a row of tag chips is as tall as the chips, not as tall as a line of text", () => {
+  /*
+   * **VET-114, and it is the other half of the row gap above.** Aayush's review
+   * of the filter row: the line spacing looks weird. The gap was not the
+   * culprit and could not be — it is a hit area, and design.md §4 will not have
+   * it below `2 × 0.62rem`. The extra air was a *line box*.
+   *
+   * An `li` is a block box and a `.tag` is `inline-flex`, so the chip sat on a
+   * text baseline inside a strut as tall as the inherited line-height: measured
+   * live on `/library`, a 20.27px chip inside a 25.59px item, so every wrapped
+   * line carried 5.32px nobody chose and the pitch came out at 45.59px. Making
+   * the item a flex container blockifies the chip and the strut has nothing to
+   * hold — pitch 40.27px, and what is left between two lines is the row gap and
+   * only the row gap.
+   *
+   * It is worth a test rather than a comment because the symptom is invisible
+   * in the source: every number in the stylesheet looks right, the check above
+   * passes, and the row is simply looser than all of them say. A container that
+   * lays these out has to say so.
+   */
+  // Annotated because `checkJs` is on and a mixed tuple widens to
+  // `(string | RegExp)[]`, which `assert.match` will not take.
+  /** @type {[string, RegExp][]} */
+  const ROWS = [
+    ["components/TagChips.astro", /\.tags li \{[^}]*display: flex;/],
+    ["components/TagFilters.astro", /\.filters__row li \{[^}]*display: flex;/],
+  ];
+
+  for (const [file, pattern] of ROWS) {
+    const source = readFileSync(fileURLToPath(new URL(`../${file}`, import.meta.url)), "utf8");
+    assert.match(
+      source,
+      pattern,
+      `${file} puts its tag chips back in a line box, so every wrapped line is ~5px taller than its row gap says and the chips stop sitting where the arithmetic above puts them`,
+    );
+  }
+});
+
+test("the tag is a pill and the chip is not, which is how they stay two things", () => {
+  /*
+   * Aayush asked whether the filter chips should be pills and the answer is
+   * yes, so the tag takes `--r-pill` and the `.chip` keeps its 4px box. That is
+   * the separation the dotted border already draws — design.md §1 holds the tag
+   * out of the chip's vocabulary on purpose — carried into the shape, and
+   * design.md §3 counts a pill as no corner at all rather than as a fourth
+   * radius.
+   *
+   * Neither half may drift: a `.chip` turning into a pill collapses the
+   * distinction, and a `.tag` going back to `--r-sm` on the one row where the
+   * two sit side by side (`library/[slug].astro › .strip`) makes them one
+   * object saying two things.
+   */
+  const chip = readFileSync(
+    fileURLToPath(new URL("../styles/chip.css", import.meta.url)),
+    "utf8",
+  );
+  const global = readFileSync(
+    fileURLToPath(new URL("../styles/global.css", import.meta.url)),
+    "utf8",
+  );
+
+  assert.match(
+    global,
+    /--r-pill: 999px;/,
+    "the pill radius left the token block, so a shape is stated outside styles/",
+  );
+  assert.match(
+    chip,
+    /\n\.tag \{[^}]*border-radius: var\(--r-pill\);/,
+    "the tag stopped being a pill, which is the question Aayush asked about this chip answered the other way",
+  );
+  assert.match(
+    chip,
+    /\n\.chip \{[^}]*border-radius: var\(--r-sm\);/,
+    "the chip became something other than the 4px box. A pill beside a pill on one strip is two idioms collapsing into one.",
+  );
+  // The focus ring takes the element's own radius, so a focused pill under
+  // `global.css › :focus-visible`'s `--r-sm` would draw corners on two ends
+  // that have none.
+  assert.match(
+    chip,
+    /\.tag:focus-visible \{[^}]*border-radius: var\(--r-pill\);/,
+    "a focused tag draws a 4px ring around a 999px pill",
+  );
+});
+
 test("the kind chip on an entry strip claims the same target its tags do", () => {
   /*
    * They are the same box at the same size on the same line: design.md §1

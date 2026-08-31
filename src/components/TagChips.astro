@@ -63,7 +63,18 @@ const { tags } = Astro.props;
   .tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.25rem 0.4rem;
+    gap: 1.25rem 0.5rem;
     margin: 0;
+  }
+
+  /* A block `li` puts an `inline-flex` chip in a line box, and a line box is as
+     tall as the inherited strut — 25.59px of it round a 20.27px chip, so a
+     wrapped row of tags carried 5.32px of leading nobody asked for and the
+     chips did not sit where the gap said they would. A flex item blockifies its
+     child and the strut has nothing to hold. `TagFilters.astro › .filters__row
+     li` is the same line for the same reason, and it is where Aayush noticed
+     it. */
+  .tags li {
+    display: flex;
   }
 </style>
