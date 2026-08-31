@@ -25,19 +25,23 @@
  *     excerpt gets null rather than a stand-in sentence. /tools needs the
  *     fallback because a verdict with no note is a row that says nothing; a
  *     reading row already says what it is with its title and its kind.
- *   - a site entry's `collections` come from the tags on the bookmark, minus
- *     the two the pipeline writes itself. See `RESERVED_TAGS` below.
+ *   - a site entry's `collections` and a reading entry's `tags` both come from
+ *     the tags on the bookmark, minus the two the pipeline writes itself. See
+ *     `RESERVED_TAGS` below.
  */
 
 import { readFile, rename, writeFile } from "node:fs/promises";
 import path from "node:path";
 
+import { thumbWebPath } from "./thumb.mjs";
 import { isRecord } from "./util.mjs";
 
 /** @typedef {import("./types.js").Bookmark} Bookmark */
+/** @typedef {import("./types.js").Draft} Draft */
 /** @typedef {import("./types.js").Post} Post */
 /** @typedef {import("./types.js").ReadingKind} ReadingKind */
 /** @typedef {import("./types.js").Section} Section */
+/** @typedef {import("./types.js").Video} Video */
 
 /* ---------------------------------------------------------------------------
    Tags the pipeline owns
@@ -403,30 +407,59 @@ export function shotFileName(slug) {
 }
 
 /**
- * The shot filenames an entry points at, for the orphan sweep.
+ * Every file in `public/shots` an entry points at, for the orphan sweep.
  *
- * An array for one filename, because that is what the sweep wants to flatten and
- * because an entry shape is a thing that changes: this returned two names a
- * version ago and the caller never had to know.
+ * An array because an entry shape is a thing that changes, and it has changed
+ * twice now. A /sites entry has one `shot`; a /library entry can have a video's
+ * poster frame and, one day, a post's pictures. All three live in the same
+ * directory, and `state.mjs` deletes anything in there that nothing claims — so
+ * a field that stores a picture and is not read here is a picture the very next
+ * run throws away, leaving an entry pointing at nothing.
+ *
+ * Deliberately shallow, like `readEntries` above: this reads the JSON as records
+ * rather than importing the build-time parsers, so it takes anything shaped like
+ * a path and ignores everything else.
  *
  * @param {Record<string, unknown>} entry @returns {string[]}
  */
 export function shotFilesOf(entry) {
+  /** @type {string[]} */
+  const paths = [];
+
   const shot = entry["shot"];
-  if (typeof shot !== "string" || shot === "") return [];
-  return [path.basename(shot)];
+  if (typeof shot === "string") paths.push(shot);
+
+  const video = entry["video"];
+  if (isRecord(video) && typeof video["thumb"] === "string") paths.push(video["thumb"]);
+
+  const post = entry["post"];
+  if (isRecord(post) && Array.isArray(post["media"])) {
+    for (const item of post["media"]) if (typeof item === "string") paths.push(item);
+  }
+
+  return paths.filter((value) => value !== "").map((value) => path.basename(value));
 }
 
 /**
- * /sites is the only section that carries collections.
+ * /tools is the one section with no tag taxonomy, and that is still deliberate.
  *
- * Not a scoping accident, and not "for now": /tools already has `category` and
- * /library already has `kind`, and both of those are single-valued taxonomies
- * their own pages, routes and filter bars are built around. Writing a second,
- * many-to-many one into those entries would put a field in the JSON that no
- * parser reads and no page renders — data that claims to do something and does
- * not. /sites had no taxonomy at all before this, only the domain, which is a
- * fact about the URL rather than a judgement about the site.
+ * The rule was never "only /sites gets collections" — it was that a field no
+ * parser reads and no page renders is data pretending to do something. /sites
+ * had nothing but the domain, which is a fact about the URL rather than a
+ * judgement about the site, so a curated grouping was the first thing there
+ * that said anything. /library is now in the same position for a different
+ * reason: `kind` sorts a saved link into article, post or video, which says
+ * what it is and nothing about what it is about — so its tags land in `tags`
+ * (see `buildReadingEntry`) and get their own routes.
+ *
+ * /tools keeps `category` and stays out of it. That taxonomy is single-valued
+ * and every page, route and filter bar over there is built around exactly one
+ * answer per tool; a second, many-to-many one would be two things to maintain
+ * and two ways to disagree about where a tool belongs.
+ *
+ * The field names differ across sections on purpose. A /sites `collections`
+ * entry is a grouping Aayush curated; a /library `tags` entry is what he typed
+ * on his phone when he saved the link. Same fold, same slugs, different claim.
  *
  * @param {object} input
  * @param {Bookmark} input.bookmark
@@ -550,15 +583,41 @@ export function clip(text, max) {
  * which the README already names as the better tool for it, and which nothing
  * here ever overwrites.
  *
+ * Everything after `note` is optional and left out entirely when it is empty,
+ * the way `repo` is left out of a tool entry. `library.ts` reads an absent key
+ * and a null one the same, and refuses a present-but-empty one — so writing
+ * `"tags": []` on the fourteen entries that have none would be fourteen lines
+ * of noise per gallery file and a shape the parser turns down anyway.
+ *
  * @param {object} input
  * @param {Bookmark} input.bookmark
  * @param {string} input.slug
  * @param {string} input.date ISO calendar date; the run date, per contract.
  * @param {Post | null} [input.post] What the post said, when it could be read.
+ * @param {Video | null} [input.video]
+ *   The provider and id, when the URL named one video AND its poster frame is
+ *   already on disk. The caller owns that second half: this function turns a
+ *   video into a `thumb` path, and a path to a file nobody fetched is the one
+ *   thing `thumb.mjs` exists to prevent.
+ * @param {Draft | null} [input.draft] Hermes' placeholder opinion, if there is one.
+ * @param {string | null} [input.why]
+ *   Aayush's own why, when `draftFrom` found one and moved it out of the draft.
+ *   A separate parameter from `draft` rather than a flag inside it, which is the
+ *   whole point: no renderer can mistake the two, because they never share a
+ *   field on the way in either.
  */
-export function buildReadingEntry({ bookmark, slug, date, post = null }) {
+export function buildReadingEntry({
+  bookmark,
+  slug,
+  date,
+  post = null,
+  video = null,
+  draft = null,
+  why = null,
+}) {
   const fallbackTitle = bookmark.title === "" ? hostnameOf(bookmark.url) : bookmark.title;
   const headline = post === null ? "" : clip(post.text, POST_TITLE_MAX);
+  const tags = collectionsFrom(bookmark.tags);
 
   return {
     slug,
@@ -577,7 +636,149 @@ export function buildReadingEntry({ bookmark, slug, date, post = null }) {
     // row without a second line, which is the honest shape for a link Raindrop
     // gave us no excerpt for.
     note: post !== null ? postNote(post) : bookmark.excerpt === "" ? null : bookmark.excerpt,
+    ...(tags.length === 0 ? {} : { tags }),
+    ...(post === null ? {} : { post: postFields(post) }),
+    ...(video === null ? {} : { video: { ...video, thumb: thumbWebPath(slug) } }),
+    ...(draft === null ? {} : { draft }),
+    ...(why === null ? {} : { why }),
   };
+}
+
+/**
+ * The post, minus the media array when there is nothing in it.
+ *
+ * `library.ts › readPost` refuses `"media": []` on the same reasoning it
+ * refuses an empty note: a blank means somebody wrote a blank. So the empty
+ * case — which is every case today, because Firecrawl's markdown carries no
+ * media — is the key not being there.
+ *
+ * @param {Post} post @returns {Record<string, unknown>}
+ */
+function postFields({ media, ...rest }) {
+  return media.length === 0 ? rest : { ...rest, media };
+}
+
+/* ---------------------------------------------------------------------------
+   The drafted opinion, out of the bookmark's private note
+   --------------------------------------------------------------------------- */
+
+/**
+ * A private note that claimed to be a draft and was not one. Its own class so
+ * `apply.mjs` reports it as the sweep's bug it is, rather than as a stray
+ * SyntaxError from somewhere in the JSON stack.
+ */
+export class DraftError extends Error {
+  /** @param {string} message */
+  constructor(message) {
+    super(message);
+    this.name = "DraftError";
+  }
+}
+
+/** Who wrote the `why` in the blob. The site renders the two differently. */
+const WHY_AUTHORS = new Set(["hermes", "aayush"]);
+
+/**
+ * The drafted opinion a sweep left in the bookmark's private note, and the why
+ * that is not drafted at all.
+ *
+ * The transport is the private note because it is the one field on a bookmark
+ * that only Aayush can see and only he and his agents write to — so a JSON blob
+ * there is machine-to-machine, and nothing a reader of the Raindrop collection
+ * has to scroll past. The blob is flat:
+ *
+ *   {"bullets": ["…"], "why": "…", "whyAuthor": "hermes", "drafted": "2026-08-31"}
+ *
+ * Two fields are optional and one of them must be there; `whyAuthor` defaults to
+ * `hermes`; `drafted` defaults to the run date, which is the day the draft
+ * reached the site and the only date this end of the pipe can honestly claim.
+ *
+ * **`whyAuthor: "aayush"` is a field move, not a label.** His why leaves the
+ * draft and becomes the entry's own `why`, where the type system and every
+ * renderer treat it as his. If that empties the draft, the draft is null. There
+ * is no state in which one sentence is both drafted and his.
+ *
+ * Anything else throws. A note that is not a blob at all — a sentence he typed —
+ * is not "anything else": it is a person using their own notes field, so it
+ * returns nothing and says nothing. The loud case is a note that opens with `{`,
+ * because only a machine writes that, and a machine writing a broken one is a
+ * bug that must stop the item rather than publish a garbled opinion under a
+ * label that says a person's agent wrote it.
+ *
+ * @param {string} note  The bookmark's private note.
+ * @param {string} date  ISO calendar date; the run date.
+ * @returns {{ draft: Draft | null, why: string | null }}
+ */
+export function draftFrom(note, date) {
+  const text = note.trim();
+  if (!text.startsWith("{")) return { draft: null, why: null };
+
+  /** @type {unknown} */
+  let blob;
+  try {
+    blob = JSON.parse(text);
+  } catch (error) {
+    throw new DraftError(`the private note opens with "{" but is not JSON: ${String(error)}`);
+  }
+  // Unreachable at runtime — text opening with `{` either parses to an object
+  // or throws above — and kept because it is what narrows `unknown` for the
+  // reads below. No test covers it, on purpose: there is no input that gets here.
+  if (!isRecord(blob)) throw new DraftError("the private note's JSON is not an object");
+
+  const bullets = readBullets(blob["bullets"]);
+  const rawWhy = blob["why"];
+  if (rawWhy !== undefined && rawWhy !== null && (typeof rawWhy !== "string" || rawWhy.trim() === "")) {
+    throw new DraftError(`the draft's "why" is not a sentence: ${JSON.stringify(rawWhy)}`);
+  }
+  const why = typeof rawWhy === "string" ? rawWhy : null;
+
+  if (bullets === null && why === null) {
+    throw new DraftError('the draft has neither "bullets" nor a "why"; leave the note empty instead');
+  }
+
+  const author = blob["whyAuthor"] ?? "hermes";
+  if (typeof author !== "string" || !WHY_AUTHORS.has(author)) {
+    throw new DraftError(
+      `the draft's "whyAuthor" must be one of ${[...WHY_AUTHORS].join(", ")} (got ${JSON.stringify(author)})`,
+    );
+  }
+
+  const drafted = blob["drafted"] ?? date;
+  if (typeof drafted !== "string" || !isCalendarDate(drafted)) {
+    throw new DraftError(`the draft's "drafted" is not a YYYY-MM-DD date: ${JSON.stringify(drafted)}`);
+  }
+
+  // His why leaves the draft rather than being flagged inside it.
+  const mine = author === "aayush" ? why : null;
+  const theirs = author === "aayush" ? null : why;
+  if (bullets === null && theirs === null) return { draft: null, why: mine };
+
+  return { draft: { bullets, why: theirs, drafted }, why: mine };
+}
+
+/** @param {unknown} value @returns {string[] | null} */
+function readBullets(value) {
+  if (value === undefined || value === null) return null;
+  if (!Array.isArray(value) || value.length === 0) {
+    throw new DraftError('the draft\'s "bullets" is not a non-empty array');
+  }
+  return value.map((bullet) => {
+    // One line each, the rule `library.ts › readDigest` already holds bullets
+    // to: the markdown rendering turns a newline into a second, unmarked bullet
+    // and the HTML one does not, so the two would disagree about how many
+    // claims the piece made.
+    if (typeof bullet !== "string" || bullet.trim() === "" || bullet.includes("\n")) {
+      throw new DraftError(`a draft bullet is not one non-empty line: ${JSON.stringify(bullet)}`);
+    }
+    return bullet;
+  });
+}
+
+/** Shape AND reality — `2026-02-31` is neither. @param {string} value */
+function isCalendarDate(value) {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const time = Date.parse(`${value}T00:00:00Z`);
+  return !Number.isNaN(time) && new Date(time).toISOString().slice(0, 10) === value;
 }
 
 /**

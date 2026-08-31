@@ -163,6 +163,11 @@ function parseBookmark(value, collection) {
     url: link.trim(),
     title: typeof value["title"] === "string" ? value["title"].trim() : "",
     excerpt: typeof value["excerpt"] === "string" ? value["excerpt"].trim() : "",
+    // Raindrop's private note, which is a different field from `excerpt` and
+    // arrives on the same object. Read as text and nothing more: whether it
+    // holds a JSON blob a sweep left behind is `entries.mjs › draftFrom`'s
+    // question, and this boundary's only job is that the string gets here.
+    note: typeof value["note"] === "string" ? value["note"].trim() : "",
     domain: typeof value["domain"] === "string" ? value["domain"] : "",
     collection,
     tags,

@@ -361,20 +361,46 @@ function checkPng(bytes, url, raw) {
  * Firecrawl post-processes x.com and twitter.com into a small, stable document
  * rather than the app shell a raw scrape would return:
  *
- *   # Post by @handle
- *   **Author:** Some Name (@handle)
- *   **Posted:** 2026-08-24
+ *   # Post by @EphraimAkanmu
+ *   Author: Diadem @EphraimAkanmu
+ *   Posted: 2026\-07\-26T04:25:36\.000Z
+ *   URL: [https://x\.com/…](https://x.com/…)
+ *   Likes: 637 | Retweets: 78
  *   ## Post
  *   the words the person actually wrote
- *   ## Engagement
+ *   ## Thread
+ *   …
+ *   ## Top Comments
  *   …
  *
- * The parse below is deliberately loose about where it finds the handle and
- * strict about where it finds the words. A handle can be recovered from the URL
- * if the heading ever changes shape, but there is no second source for the post
- * text — so `## Post` is required, and its absence is what makes this function
- * return null instead of guessing. Null is a supported answer all the way up:
- * the row publishes with Raindrop's own title, exactly as it did before.
+ * Copied from a real response, backslashes included, because two of them are
+ * load-bearing. The document is markdown, so Firecrawl escapes punctuation on
+ * its way in — which means the date arrives as `2026\-07\-26` and, more
+ * quietly, a handle with an underscore in it arrives as `@brian\_lovin`. A
+ * handle pattern reading that raw stops at the backslash and comes away with
+ * `brian`, which is a real person who did not write the post. Everything below
+ * therefore runs against an unescaped copy.
+ *
+ * Media comes through for photos and not for video, which is a distinction the
+ * probe only found by widening its sample. A post with photos carries them as
+ * ordinary markdown images — `![Image 1](https://pbs.twimg.com/media/….jpg)` —
+ * one per photo, in the order the post shows them. A post whose attachment is a
+ * video carries nothing: the clip arrives as an opaque `t.co` shortlink inside
+ * the text, no different from a link the poster typed, and there is no frame to
+ * be had. So `media` is the photo URLs when there are photos and empty
+ * otherwise, and "empty" is a real answer rather than a missing feature.
+ *
+ * The URLs that leave here are the REMOTE ones the document named. Turning them
+ * into committed local paths is `thumb.mjs`'s job and `apply.mjs`'s ordering
+ * problem, which is the same split `Video` already makes: this boundary reports
+ * what it read, and the write side decides what the repo ends up holding.
+ *
+ * The parse is deliberately loose about where it finds the handle and strict
+ * about everything else. A handle can be recovered from the URL if the heading
+ * changes shape; the words, the author and the date have no second source, so
+ * their absence returns null rather than a guess. Null is a supported answer
+ * all the way up: the row publishes with Raindrop's own title, exactly as it
+ * did before this existed.
  */
 
 /** x.com handles: letters, digits, underscore, 15 at most. */
@@ -385,6 +411,54 @@ const HEADING_HANDLE = new RegExp(`^#{0,3}[ \\t]*Post by @(${HANDLE})\\b`, "im")
 // same run of spaces, and two ways to match one thing is how a linear regex
 // becomes a quadratic one on input this module does not control.
 const AUTHOR_HANDLE = new RegExp(`^\\**Author\\**:?.*?@(${HANDLE})\\b`, "im");
+
+/**
+ * The display name on the author line: everything between the label and the
+ * handle. `Author: Diadem @EphraimAkanmu` gives "Diadem".
+ *
+ * Often nothing — a thread's own posts are labelled `Author: @handle` with no
+ * name at all — and nothing is not a failure. It falls back to the handle,
+ * which is not an invention: it is the same person spelled the other way, and
+ * it is what x itself shows when someone has left their name blank.
+ */
+const AUTHOR_NAME = new RegExp(`^\\**Author\\**:?(.*?)@${HANDLE}\\b`, "im");
+
+/** Greedy to the end of the line, so there is one way to match the value. */
+const POSTED = /^\**Posted\**:?(.+)$/im;
+
+/**
+ * ASCII punctuation, which is the whole set markdown allows a backslash in
+ * front of. Escaping is lossless by definition, so undoing it cannot damage
+ * anything that was not decoration in the first place.
+ */
+const ESCAPED = /\\([!-/:-@[-`{-~])/g;
+
+/** @param {string} markdown @returns {string} */
+function unescape(markdown) {
+  return markdown.replace(ESCAPED, "$1");
+}
+
+/**
+ * The calendar date a post carries, in UTC, or null.
+ *
+ * Two spellings turn up from the same post-processor on the same day —
+ * `2026-07-26T04:25:36.000Z` on one post and `Sat, 22 Aug 2026 17:01:45 GMT` on
+ * another — so this parses the value rather than matching a shape. UTC on
+ * purpose: the alternative is the runner's timezone deciding what day a post
+ * was made, which would move dates around depending on which machine published.
+ *
+ * @param {string} markdown  Already unescaped.
+ * @returns {string | null}
+ */
+function postedDate(markdown) {
+  const line = POSTED.exec(markdown)?.[1]?.trim();
+  if (line === undefined || line === "") return null;
+
+  const time = Date.parse(line);
+  if (Number.isNaN(time)) return null;
+
+  return new Date(time).toISOString().slice(0, 10);
+}
 
 /** The body heading, and whatever heading ends it. */
 const POST_HEADING = /^#{1,3}\s+Post\s*$/im;
@@ -413,16 +487,41 @@ function handleFromUrl(url) {
 }
 
 /**
+ * The five named entities Firecrawl's markdown actually carries, and the order
+ * they have to be undone in.
+ *
+ * `&amp;` is last, and that is the whole reason this is a list rather than one
+ * regex: undoing it first would turn a literal `&amp;lt;` — someone writing
+ * about HTML — into `<`, which is a different string than the one they typed.
+ * Numeric references are left alone; they do not turn up in this document, and
+ * a decoder that handles everything is a dependency for a problem nobody has.
+ */
+/** @type {[RegExp, string][]} */
+const ENTITIES = [
+  [/&lt;/g, "<"],
+  [/&gt;/g, ">"],
+  [/&quot;/g, '"'],
+  [/&#39;/g, "'"],
+  [/&amp;/g, "&"],
+];
+
+/**
  * Markdown decoration out, one line of prose in.
  *
  * Images go entirely (a post's own media is not something a one-line note can
  * show), links keep their text, and the rest collapses to single spaces because
  * the destination is a single row on a page, not a document.
  *
+ * The entity pass at the end is the half that came out of reading real
+ * responses: Firecrawl HTML-escapes the ampersands and angle brackets a person
+ * typed, so `Go & Python` arrives as `Go &amp; Python`. Committed unread, that
+ * renders as those six literal characters on the card — the post quoting itself
+ * wrong, permanently, in a file nobody re-reads.
+ *
  * @param {string} body @returns {string}
  */
 function flatten(body) {
-  return (
+  const flat = (
     body
       .replace(/!\[[^\]]*\]\([^)]*\)/g, " ")
       .replace(/\[([^\]]*)\]\([^)]*\)/g, "$1")
@@ -436,27 +535,64 @@ function flatten(body) {
       .replace(/\s+/g, " ")
       .trim()
   );
+
+  let text = flat;
+  for (const [pattern, character] of ENTITIES) text = text.replace(pattern, character);
+  return text;
 }
 
 /** Something a person could read. Punctuation and decoration alone is not. */
 const HAS_WORDS = /[\p{L}\p{N}]/u;
 
 /**
+ * A markdown image whose target is x.com's own media host.
+ *
+ * Held to that host rather than taking every image in the section, because the
+ * section is not only the poster's: a quoted post, a link card or an emoji
+ * served as an image would all arrive as image syntax too, and each of those is
+ * either somebody else's picture or not a picture at all. `pbs.twimg.com/media/`
+ * is the path x.com serves an attached photo from and nothing else.
+ */
+const MEDIA = /!\[[^\]]*\]\((https:\/\/pbs\.twimg\.com\/media\/[^)\s]+)\)/g;
+
+/**
+ * The photos attached to a post, as the document named them, in order.
+ *
+ * @param {string} body  The post section, before flattening strips the images.
+ * @returns {string[]}
+ */
+function mediaFrom(body) {
+  const seen = new Set();
+  for (const match of body.matchAll(MEDIA)) {
+    const url = match[1];
+    // Deduped: the same photo can appear twice when a document repeats the post
+    // in a thread section, and a card showing it twice would be the parse's
+    // fault rather than the poster's.
+    if (url !== undefined) seen.add(url);
+  }
+  return [...seen];
+}
+
+/**
  * What the post says, or null if this markdown does not contain a post.
  *
- * @param {unknown} markdown  Whatever came back; a non-string is a null answer.
- * @param {string} url        The post's URL, as a second source for the handle.
+ * @param {unknown} rawMarkdown  Whatever came back; a non-string is a null answer.
+ * @param {string} url           The post's URL, as a second source for the handle.
  * @returns {Post | null}
  */
-export function parsePost(markdown, url) {
-  if (typeof markdown !== "string") return null;
+export function parsePost(rawMarkdown, url) {
+  if (typeof rawMarkdown !== "string") return null;
+
+  // Once, at the top, so no pattern below has to know the document is escaped.
+  const markdown = unescape(rawMarkdown);
 
   const heading = POST_HEADING.exec(markdown);
   if (heading === null) return null;
 
   const after = markdown.slice(heading.index + heading[0].length);
   const ends = NEXT_HEADING.exec(after);
-  const text = flatten(ends === null ? after : after.slice(0, ends.index));
+  const body = ends === null ? after : after.slice(0, ends.index);
+  const text = flatten(body);
   // Not just non-empty: a body that survives flattening as `**` or `...` is a
   // parse that found the section and nothing in it, and it would go on to become
   // a /library row whose entire link text is punctuation.
@@ -466,5 +602,14 @@ export function parsePost(markdown, url) {
     HEADING_HANDLE.exec(markdown)?.[1] ?? AUTHOR_HANDLE.exec(markdown)?.[1] ?? handleFromUrl(url);
   if (handle === null || handle === undefined) return null;
 
-  return { handle, text };
+  // Required, and the strictest thing here. A post card shows when the post was
+  // made, and the only other date this repo holds is the day the link was
+  // saved — so a card without this one would either carry a hole or quietly
+  // show the wrong fact. Better to publish the row the way Raindrop saw it.
+  const date = postedDate(markdown);
+  if (date === null) return null;
+
+  const name = AUTHOR_NAME.exec(markdown)?.[1]?.trim() ?? "";
+
+  return { author: name === "" ? handle : name, handle, date, text, media: mediaFrom(body) };
 }

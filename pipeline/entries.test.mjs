@@ -15,6 +15,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  DraftError,
   FAILED_TAG,
   POST_NOTE_MAX,
   POST_TITLE_MAX,
@@ -24,7 +25,9 @@ import {
   buildToolEntry,
   clip,
   collectionsFrom,
+  draftFrom,
   repoFrom,
+  shotFilesOf,
   urlKey,
 } from "./entries.mjs";
 
@@ -36,7 +39,16 @@ import {
  * @returns {import("./types.js").Bookmark}
  */
 function bookmark({ tags = [], title = "Otherkind", url = "https://otherkind.design" } = {}) {
-  return { id: "1", url, title, excerpt: "", domain: "otherkind.design", collection: "sites", tags };
+  return {
+    id: "1",
+    url,
+    title,
+    excerpt: "",
+    note: "",
+    domain: "otherkind.design",
+    collection: "sites",
+    tags,
+  };
 }
 
 test("a tag becomes a collection slug", () => {
@@ -109,16 +121,40 @@ test("a site entry carries its collections", () => {
 const POST_URL = "https://x.com/ephraimakanmu/status/2081234457588056305";
 
 /** @param {string} text @returns {import("./types.js").Post} */
-const post = (text) => ({ handle: "ephraimakanmu", text });
+const post = (text) => ({
+  author: "Diadem",
+  handle: "ephraimakanmu",
+  date: "2026-07-26",
+  text,
+  media: [],
+});
 
 /**
  * @param {object} [extra]
  * @param {string} [extra.title]
  * @param {string} [extra.excerpt]
+ * @param {string} [extra.note]  The bookmark's PRIVATE note — a draft blob lives here.
+ * @param {string[]} [extra.tags]
+ * @param {string} [extra.url]
  * @returns {import("./types.js").Bookmark}
  */
-function saved({ title = "A post from @ephraimakanmu", excerpt = "" } = {}) {
-  return { id: "9", url: POST_URL, title, excerpt, domain: "x.com", collection: "reading", tags: [] };
+function saved({
+  title = "A post from @ephraimakanmu",
+  excerpt = "",
+  note = "",
+  tags = [],
+  url = POST_URL,
+} = {}) {
+  return {
+    id: "9",
+    url,
+    title,
+    excerpt,
+    note,
+    domain: new URL(url).hostname,
+    collection: "reading",
+    tags,
+  };
 }
 
 test("a clip that fits is returned whole, ellipsis and all left off", () => {
@@ -391,15 +427,197 @@ test("a tracked parameter goes and the one beside it stays", () => {
   );
 });
 
-test("tools and reading entries carry no collections", () => {
-  // The scoping call, asserted rather than only commented: /tools has
-  // `category` and /library has `kind`, and a second taxonomy in those files
-  // would be a field no parser reads and no page renders.
-  const tagged = bookmark({ tags: ["Portfolios"] });
-
-  const tool = buildToolEntry({ bookmark: tagged, slug: "otherkind", date: "2026-08-26" });
-  const reading = buildReadingEntry({ bookmark: tagged, slug: "otherkind", date: "2026-08-26" });
+test("a tool entry still carries no taxonomy but its category", () => {
+  // The scoping call, asserted rather than only commented. /tools has
+  // `category`, single-valued, and every page and route over there is built
+  // around exactly one answer per tool; a second, many-to-many one would be two
+  // things to maintain and two ways to disagree about where a tool belongs.
+  const tool = buildToolEntry({
+    bookmark: bookmark({ tags: ["Portfolios"] }),
+    slug: "otherkind",
+    date: "2026-08-26",
+  });
 
   assert.equal("collections" in tool, false);
-  assert.equal("collections" in reading, false);
+  assert.equal("tags" in tool, false);
+});
+
+/* ---------------------------------------------------------------------------
+   What a reading entry carries beyond the bookmark
+   --------------------------------------------------------------------------- */
+
+test("a reading entry carries its tags, under its own field name", () => {
+  // A deliberate reversal of "only /sites gets a tag taxonomy". `kind` sorts a
+  // saved link into article, post or video, which says what it is and nothing
+  // about what it is about — so the tags typed on the phone get their own field
+  // and their own routes, folded by the same rule /sites folds its collections.
+  const entry = buildReadingEntry({
+    bookmark: saved({ tags: ["Go To Market", "published", "go-to-market", "agents"] }),
+    slug: "s",
+    date: "2026-08-26",
+  });
+
+  assert.deepEqual(entry.tags, ["agents", "go-to-market"], "folded, deduped, sorted, reserved out");
+  assert.equal("collections" in entry, false, "that name belongs to /sites");
+});
+
+test("no tags is no key at all", () => {
+  // `library.ts` refuses a present-but-empty array, so writing `"tags": []`
+  // would be a line of noise the parser turns down anyway.
+  const entry = buildReadingEntry({ bookmark: saved(), slug: "s", date: "2026-08-26" });
+
+  assert.equal("tags" in entry, false);
+});
+
+test("the post object is the whole card, minus the media there is none of", () => {
+  const entry = buildReadingEntry({
+    bookmark: saved(),
+    slug: "s",
+    date: "2026-08-26",
+    post: post("Ship it on a Friday."),
+  });
+
+  assert.deepEqual(entry.post, {
+    author: "Diadem",
+    handle: "ephraimakanmu",
+    date: "2026-07-26",
+    text: "Ship it on a Friday.",
+  });
+  assert.equal(
+    "media" in Object(entry.post),
+    false,
+    "an empty media array is the key not being there",
+  );
+});
+
+test("a post that did carry media keeps it", () => {
+  const entry = buildReadingEntry({
+    bookmark: saved(),
+    slug: "s",
+    date: "2026-08-26",
+    post: { ...post("With a picture."), media: ["/shots/s-media-1.webp"] },
+  });
+
+  assert.deepEqual(Object(entry.post).media, ["/shots/s-media-1.webp"]);
+});
+
+test("a video entry names its provider, its id and the thumb path", () => {
+  const entry = buildReadingEntry({
+    bookmark: saved({ url: "https://www.youtube.com/watch?v=vJEy3nP2_C8" }),
+    slug: "managing-agents",
+    date: "2026-08-26",
+    video: { provider: "youtube", id: "vJEy3nP2_C8" },
+  });
+
+  assert.deepEqual(entry.video, {
+    provider: "youtube",
+    id: "vJEy3nP2_C8",
+    thumb: "/shots/managing-agents-thumb.webp",
+  });
+  assert.equal(entry.kind, "video");
+});
+
+test("no video is no key, so an article never grows an empty one", () => {
+  const entry = buildReadingEntry({ bookmark: saved(), slug: "s", date: "2026-08-26" });
+
+  assert.equal("video" in entry, false);
+  assert.equal("post" in entry, false);
+  assert.equal("draft" in entry, false);
+  assert.equal("why" in entry, false);
+});
+
+/* ---------------------------------------------------------------------------
+   The draft, out of the private note
+   --------------------------------------------------------------------------- */
+
+const RUN_DATE = "2026-08-31";
+
+test("a private note that is a person's sentence is not a draft", () => {
+  // The quiet case. The note field is his, and typing in it must not be an
+  // error — it just is not a blob, so there is nothing to read out of it.
+  assert.deepEqual(draftFrom("Read this before the Orbis call.", RUN_DATE), {
+    draft: null,
+    why: null,
+  });
+  assert.deepEqual(draftFrom("", RUN_DATE), { draft: null, why: null });
+});
+
+test("a draft blob becomes bullets, a why and a date", () => {
+  const blob = JSON.stringify({
+    bullets: ["The loop in one line.", "The jobs are real."],
+    why: "Saved because it covers the harness ladder.",
+    drafted: "2026-08-30",
+  });
+
+  assert.deepEqual(draftFrom(blob, RUN_DATE), {
+    draft: {
+      bullets: ["The loop in one line.", "The jobs are real."],
+      why: "Saved because it covers the harness ladder.",
+      drafted: "2026-08-30",
+    },
+    why: null,
+  });
+});
+
+test("a blob with no date of its own is dated the day it reached the site", () => {
+  const blob = JSON.stringify({ why: "Saved because it covers the harness ladder." });
+
+  assert.equal(Object(draftFrom(blob, RUN_DATE).draft).drafted, RUN_DATE);
+});
+
+test("his why is moved out of the draft, not flagged inside it", () => {
+  // The whole register rule in one assertion. Once `whyAuthor` says aayush, the
+  // sentence stops being a draft and becomes the entry's own `why`, where the
+  // field name — not a flag a renderer could drop — is what says whose voice it
+  // is. Bullets are Hermes' either way, so they stay behind.
+  const blob = JSON.stringify({
+    bullets: ["The loop in one line."],
+    why: "This is the setup my own agents already half-run.",
+    whyAuthor: "aayush",
+    drafted: "2026-08-30",
+  });
+
+  assert.deepEqual(draftFrom(blob, RUN_DATE), {
+    draft: { bullets: ["The loop in one line."], why: null, drafted: "2026-08-30" },
+    why: "This is the setup my own agents already half-run.",
+  });
+});
+
+test("promoting the only sentence in a draft leaves no draft behind", () => {
+  const blob = JSON.stringify({ why: "Worth the hour.", whyAuthor: "aayush" });
+
+  assert.deepEqual(draftFrom(blob, RUN_DATE), { draft: null, why: "Worth the hour." });
+});
+
+test("a blob that opens with a brace and is broken stops the item, loudly", () => {
+  // The loud half of the rule, and the reason it is loud. Only a machine writes
+  // `{` into that field, so a broken one is a sweep bug — and the two ways to
+  // survive it are both worse than stopping. Publishing without the draft loses
+  // an opinion nobody will notice is missing; publishing a half-parsed one puts
+  // machine noise on the page under a label saying his agent wrote it.
+  assert.throws(() => draftFrom("{not json", RUN_DATE), DraftError);
+  assert.throws(() => draftFrom("{}", RUN_DATE), /neither "bullets" nor a "why"/);
+  assert.throws(() => draftFrom('{"bullets":[]}', RUN_DATE), /non-empty array/);
+  assert.throws(() => draftFrom('{"bullets":["a\\nb"]}', RUN_DATE), /one non-empty line/);
+  assert.throws(() => draftFrom('{"why":"   "}', RUN_DATE), /not a sentence/);
+  assert.throws(() => draftFrom('{"why":"a","whyAuthor":"claude"}', RUN_DATE), /whyAuthor/);
+  assert.throws(() => draftFrom('{"why":"a","drafted":"2026-02-31"}', RUN_DATE), /YYYY-MM-DD/);
+});
+
+/* ---------------------------------------------------------------------------
+   The orphan sweep's view of an entry
+   --------------------------------------------------------------------------- */
+
+test("every picture an entry points at is one the sweep can see", () => {
+  // `state.mjs` deletes anything in `public/shots` that no entry claims, so a
+  // field holding a picture and not read here is a picture the very next run
+  // throws away — leaving an entry pointing at nothing.
+  assert.deepEqual(shotFilesOf({ shot: "/shots/otherkind.webp" }), ["otherkind.webp"]);
+  assert.deepEqual(shotFilesOf({ video: { thumb: "/shots/a-thumb.webp" } }), ["a-thumb.webp"]);
+  assert.deepEqual(shotFilesOf({ post: { media: ["/shots/a-1.webp", "/shots/a-2.webp"] } }), [
+    "a-1.webp",
+    "a-2.webp",
+  ]);
+  assert.deepEqual(shotFilesOf({ slug: "s" }), [], "an entry with no pictures claims none");
+  assert.deepEqual(shotFilesOf({ shot: "", video: { thumb: 4 }, post: { media: [null] } }), []);
 });

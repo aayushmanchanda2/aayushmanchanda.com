@@ -237,8 +237,14 @@ export async function reconcile({ paths, dryRun = false, log = () => {} }) {
     };
   }
 
-  // Only sites carry shots, so only sites can vouch for a file in the shots dir.
-  const referenced = new Set(sites.flatMap((entry) => shotFilesOf(entry)));
+  // Two galleries can vouch for a file in the shots dir now: a /sites entry has
+  // its screenshot, and a /library video entry has its poster frame. /tools has
+  // no pictures. Missing a gallery here is not a missed cleanup — it is the
+  // sweep deleting a live image, because anything it cannot find an owner for is
+  // an orphan by definition.
+  const referenced = new Set(
+    [...sites, ...libraryEntries].flatMap((entry) => shotFilesOf(entry)),
+  );
 
   /** @type {string[]} */
   let present = [];

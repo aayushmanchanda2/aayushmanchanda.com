@@ -1,9 +1,9 @@
 /**
  * apply.mjs — doing the one thing `plan()` decided, for one bookmark.
  *
- * The whole file is about write ordering, and only /sites has enough writes for
- * the ordering to be interesting. /tools and /library are metadata: an entry and
- * a state row, no files on disk, so their only crash point is the one between
+ * The whole file is about write ordering, and only the two sections that put a
+ * file on disk have enough writes for the ordering to be interesting. /tools is
+ * metadata: an entry and a state row, so its only crash point is the one between
  * those two, which the next `plan()` adopts by URL.
  *
  * For a new site entry the order is:
@@ -21,6 +21,12 @@
  * human scrolling their collection, never for dedupe. The one ordering that
  * would hurt, an entry whose image never arrived, is unreachable.
  *
+ * A /library entry for a video runs the same five steps with a poster frame in
+ * place of the screenshot, and it is the same list for the same reason: the
+ * picture lands in `public/shots` before anything names it. Its other two
+ * enrichments have no files and slot in at step 3, where `readingFor` gathers
+ * them.
+ *
  * Steps 3 and 4 each land through a write-then-rename, so neither file is ever
  * half-written even if the process dies mid-call.
  */
@@ -35,6 +41,7 @@ import {
   buildSiteEntry,
   buildToolEntry,
   deriveKind,
+  draftFrom,
   shotFileName,
   slugBase,
   uniqueSlug,
@@ -43,15 +50,21 @@ import {
 import { isOutOfCredits } from "./firecrawl.mjs";
 import { tagBookmark } from "./raindrop.mjs";
 import { MAX_ATTEMPTS, galleryFor, saveState } from "./state.mjs";
+import { captureMedia, mediaFileName, thumbFileName, videoFrom } from "./thumb.mjs";
 import { describe, isRecord } from "./util.mjs";
 
 /** @typedef {import("./types.js").Bookmark} Bookmark */
 /** @typedef {import("./types.js").CaptureVia} CaptureVia */
+/** @typedef {import("./types.js").Draft} Draft */
 /** @typedef {import("./types.js").Paths} Paths */
 /** @typedef {import("./types.js").PlannedItem} PlannedItem */
 /** @typedef {import("./types.js").Post} Post */
 /** @typedef {import("./types.js").Section} Section */
 /** @typedef {import("./types.js").StateMap} StateMap */
+/** @typedef {import("./types.js").Video} Video */
+
+/** What the reading branch gathered before it could shape an entry. */
+/** @typedef {{ post: Post | null, video: Video | null, draft: Draft | null, why: string | null }} Reading */
 
 /** A thing that turns a URL into a shot on disk. Two of them exist. */
 /** @typedef {typeof import("./capture.mjs").captureSite} Capturer */
@@ -77,6 +90,13 @@ import { describe, isRecord } from "./util.mjs";
  *   already bound the client, so this file never learns there is one.
  * @property {((url: string) => Promise<Post | null>) | null} lookUpPost
  *   Reads an x.com post, or null when Firecrawl is not configured.
+ * @property {(input: { video: Video, slug: string, outDir: string }) => Promise<{ thumb: string }>} captureThumb
+ *   Fetches a video's poster frame into a scratch directory. Never null: unlike
+ *   the two Firecrawl bindings this needs no key and no account, so there is no
+ *   environment in which it is unavailable and a local run gets the same
+ *   pictures CI does.
+ * @property {(input: { media: readonly string[], slug: string, outDir: string }) => Promise<{ files: string[], paths: string[] }>} captureMedia
+ *   The same, for a post's photos. Never null, for the same reason.
  */
 
 /**
@@ -176,17 +196,17 @@ async function moveShot(from, to) {
  * a fourth section has to be handled here or the `never` arm stops compiling.
  *
  * @param {Section} section
- * @param {{ bookmark: Bookmark, slug: string, date: string, palette: string[], post: Post | null }} input
+ * @param {{ bookmark: Bookmark, slug: string, date: string, palette: string[], reading: Reading }} input
  * @returns {Record<string, unknown>}
  */
-function buildEntry(section, { bookmark, slug, date, palette, post }) {
+function buildEntry(section, { bookmark, slug, date, palette, reading }) {
   switch (section) {
     case "sites":
       return buildSiteEntry({ bookmark, slug, date, palette });
     case "tools":
       return buildToolEntry({ bookmark, slug, date });
     case "reading":
-      return buildReadingEntry({ bookmark, slug, date, post });
+      return buildReadingEntry({ bookmark, slug, date, ...reading });
     default: {
       const never = /** @type {never} */ (section);
       throw new Error(`unknown section ${JSON.stringify(never)}`);
@@ -229,6 +249,100 @@ async function postFor(bookmark, ctx) {
     );
     return null;
   }
+}
+
+/**
+ * The video's provider and id, once its poster frame is on disk under
+ * `public/shots`. Null when the link is not one video.
+ *
+ * The two halves are returned together on purpose: `buildReadingEntry` turns a
+ * non-null answer here into a `thumb` path, so returning the id without having
+ * written the file would mint exactly the dangling reference `thumb.mjs` was
+ * written to prevent.
+ *
+ * A failure is NOT swallowed the way `postFor`'s is, and the difference is what
+ * the entry would look like afterwards. A post that could not be read costs a
+ * better title; a poster frame that could not be fetched costs a card that
+ * cannot render. So this throws, `captureAndPublish` catches it into a pending
+ * row, and the next run tries again — the same deal a failed screenshot gets.
+ *
+ * @param {Bookmark} bookmark @param {string} slug @param {string} outDir
+ * @param {ApplyContext} ctx
+ * @returns {Promise<Video | null>}
+ */
+async function thumbFor(bookmark, slug, outDir, ctx) {
+  // `deriveKind` rather than a second host list, for the reason `postFor` gives.
+  if (deriveKind(bookmark.url) !== "video") return null;
+
+  const video = videoFrom(bookmark.url);
+  if (video === null) {
+    // A channel, a playlist, a search. Still a video row by host; just not one
+    // this repo can name a still for.
+    ctx.log(`thumb: ${bookmark.url} is a video host but not one video — no poster frame`);
+    return null;
+  }
+
+  await mkdir(outDir, { recursive: true });
+  const { thumb } = await ctx.captureThumb({ video, slug, outDir });
+
+  await mkdir(ctx.paths.shotsDir, { recursive: true });
+  await moveShot(thumb, path.join(ctx.paths.shotsDir, thumbFileName(slug)));
+  return video;
+}
+
+/**
+ * Everything a /library entry carries beyond what the bookmark already said.
+ *
+ * Three sources with three different failure deals, which is the only reason
+ * this is one function rather than three calls at the call site: they have to
+ * be read in an order, and the order is "cheapest to give up on first".
+ *
+ * `draftFrom` is last and is the one call here that is allowed to throw on its
+ * own account. A malformed blob in the private note means a sweep wrote
+ * something broken, and the two ways to survive that are both worse than
+ * stopping: publishing the entry without the draft loses an opinion nobody will
+ * notice is missing, and publishing a half-parsed one puts machine noise on the
+ * page under a label saying his agent wrote it. So the item goes pending and
+ * says why, and a person fixes the note.
+ *
+ * @param {Bookmark} bookmark @param {string} slug @param {string} outDir
+ * @param {ApplyContext} ctx
+ * @returns {Promise<Reading>}
+ */
+async function readingFor(bookmark, slug, outDir, ctx) {
+  const read = await postFor(bookmark, ctx);
+  const post = read === null ? null : await withMedia(read, slug, outDir, ctx);
+  const video = await thumbFor(bookmark, slug, outDir, ctx);
+  const { draft, why } = draftFrom(bookmark.note, ctx.date);
+
+  return { post, video, draft, why };
+}
+
+/**
+ * The post, with its photos fetched and its remote URLs replaced by the local
+ * paths they were written to.
+ *
+ * The substitution is the point rather than a formatting step. `library.ts`
+ * refuses a `pbs.twimg.com` URL in this field, so a post that reached the
+ * gallery still holding one would fail the build — which is the right failure,
+ * and this is the step that makes sure it never has to happen.
+ *
+ * @param {Post} post @param {string} slug @param {string} outDir
+ * @param {ApplyContext} ctx
+ * @returns {Promise<Post>}
+ */
+async function withMedia(post, slug, outDir, ctx) {
+  if (post.media.length === 0) return post;
+
+  await mkdir(outDir, { recursive: true });
+  const { files, paths } = await ctx.captureMedia({ media: post.media, slug, outDir });
+
+  await mkdir(ctx.paths.shotsDir, { recursive: true });
+  for (const [index, file] of files.entries()) {
+    await moveShot(file, path.join(ctx.paths.shotsDir, mediaFileName(slug, index)));
+  }
+
+  return { ...post, media: paths };
 }
 
 /**
@@ -312,8 +426,11 @@ async function captureAndPublish(bookmark, attempts, ctx) {
       via = capture.via;
     }
 
-    const post = section === "reading" ? await postFor(bookmark, ctx) : null;
-    const entry = buildEntry(section, { bookmark, slug, date: ctx.date, palette, post });
+    const reading =
+      section === "reading"
+        ? await readingFor(bookmark, slug, scratch, ctx)
+        : { post: null, video: null, draft: null, why: null };
+    const entry = buildEntry(section, { bookmark, slug, date: ctx.date, palette, reading });
 
     // The file is written before the in-memory list advances, so a failed write
     // leaves the run's view of the gallery matching what is on disk.

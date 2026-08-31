@@ -287,7 +287,7 @@ test("an unreachable Firecrawl is a FirecrawlError, not a raw fetch failure", as
    Reading the post out of the markdown
    --------------------------------------------------------------------------- */
 
-test("the handle and the words come out of a post document", () => {
+test("the whole card comes out of a post document", () => {
   const post = parsePost(postMarkdown(), POST_URL);
 
   // The heading's spelling, not the URL's. X paths are lowercased and the
@@ -295,6 +295,134 @@ test("the handle and the words come out of a post document", () => {
   // them by the URL would misspell the attribution on every mixed-case handle.
   assert.equal(post?.handle, "EphraimAkanmu");
   assert.equal(post?.text, POST_TEXT);
+  assert.equal(post?.author, "Diadem", "the display name off the Author line");
+  assert.equal(post?.date, "2026-07-26", "the day it was POSTED, not the day it was saved");
+  assert.deepEqual(post?.media, []);
+});
+
+test("a handle with an underscore survives the markdown escaping", () => {
+  // The bug this was written for. The document is markdown, so Firecrawl
+  // escapes punctuation on the way in and `@brian_lovin` arrives as
+  // `@brian\_lovin`. A handle pattern reading that raw matches `brian`, hits a
+  // word boundary at the backslash, and comes away attributing the post to a
+  // different person — silently, and on every handle with an underscore in it.
+  const markdown = [
+    "# Post by @brian\\_lovin",
+    "",
+    "Author: Brian Lovin @brian\\_lovin",
+    "Posted: Sat, 22 Aug 2026 17:01:45 GMT",
+    "",
+    "## Post",
+    "",
+    "Built a little agent automation.",
+    "",
+  ].join("\n");
+
+  const post = parsePost(markdown, "https://x.com/brian_lovin/status/2091209219609628826");
+
+  assert.equal(post?.handle, "brian_lovin");
+  assert.equal(post?.author, "Brian Lovin");
+});
+
+test("both date spellings the post-processor uses come out as one calendar date", () => {
+  // Two shapes turn up from the same processor on the same day, so this parses
+  // the value rather than matching a shape. Both are UTC-anchored, and the
+  // calendar date is read in UTC — otherwise the runner's timezone would decide
+  // what day a post was made.
+  const iso = parsePost(postMarkdown(), POST_URL);
+  assert.equal(iso?.date, "2026-07-26");
+
+  const rfc = parsePost(
+    postMarkdown().replace(
+      "Posted: 2026\\-07\\-26T04:25:36\\.000Z",
+      "Posted: Sat, 22 Aug 2026 17:01:45 GMT",
+    ),
+    POST_URL,
+  );
+  assert.equal(rfc?.date, "2026-08-22");
+});
+
+test("a post with no readable date is no post at all", () => {
+  // Strict on purpose, and the strictest call in this parser. A post card shows
+  // when the post was made, and the only other date this repo holds is the day
+  // the link was saved — so a card without this one either carries a hole or
+  // quietly shows the wrong fact. The fallback is a row with Raindrop's own
+  // title, which is a worse row and an honest one.
+  const undated = postMarkdown().replace(/^Posted:.*$/m, "");
+  assert.equal(parsePost(undated, POST_URL), null);
+
+  const nonsense = postMarkdown().replace(/^Posted:.*$/m, "Posted: sometime last week");
+  assert.equal(parsePost(nonsense, POST_URL), null);
+});
+
+test("an author line with no display name falls back to the handle", () => {
+  // A thread's own posts are labelled `Author: @handle` with no name at all.
+  // The handle is the same person spelled the other way, which is what x itself
+  // shows when someone leaves their name blank — not an invention.
+  const markdown = postMarkdown().replace(
+    "Author: Diadem @EphraimAkanmu",
+    "Author: @EphraimAkanmu",
+  );
+
+  assert.equal(parsePost(markdown, POST_URL)?.author, "EphraimAkanmu");
+});
+
+test("a post's photos come through as the URLs the document named, in order", () => {
+  // The probe's real answer, and it took widening the sample to find. Photos
+  // arrive as ordinary markdown images pointed at pbs.twimg.com, one per photo;
+  // the first three posts sampled happened to have video attachments, which
+  // carry nothing, and that looked like "the markdown has no media at all".
+  const withPhotos = postMarkdown({
+    text: [
+      "here’s a breakdown of the most profitable landing pages:",
+      "",
+      "![Image 1](https://pbs.twimg.com/media/HQxwm3nbMAAeX0W.jpg)",
+      "",
+      "![Image 2](https://pbs.twimg.com/media/HQxwnHsbcAA4YrV.jpg)",
+    ].join("\n"),
+  });
+
+  const post = parsePost(withPhotos, POST_URL);
+
+  assert.deepEqual(post?.media, [
+    "https://pbs.twimg.com/media/HQxwm3nbMAAeX0W.jpg",
+    "https://pbs.twimg.com/media/HQxwnHsbcAA4YrV.jpg",
+  ]);
+  assert.equal(
+    post?.text,
+    "here’s a breakdown of the most profitable landing pages:",
+    "and the images are still out of the text, which is a row and not a card",
+  );
+});
+
+test("a video attachment leaves media empty, which is an answer and not a gap", () => {
+  // The other half of the probe. A post whose attachment is a clip carries a
+  // t.co shortlink inside the text and no frame anywhere, so there is nothing
+  // to fetch and nothing to be clever about.
+  const withVideo = postMarkdown({
+    text: "Termius + Tailscale + tmux. Start at your desk, continue on the go. https://t.co/FJoD3DIiFD",
+  });
+
+  assert.deepEqual(parsePost(withVideo, POST_URL)?.media, []);
+});
+
+test("only x.com's own photo host counts as the post's media", () => {
+  // The section is not only the poster's. A quoted post, a link card or an
+  // emoji served as an image all arrive as image syntax too, and each is either
+  // somebody else's picture or not a picture at all.
+  const mixed = postMarkdown({
+    text: [
+      "Look at this",
+      "![emoji](https://abs.twimg.com/emoji/v2/1f9f5.png)",
+      "![card](https://example.com/og.png)",
+      "![mine](https://pbs.twimg.com/media/HQxwm3nbMAAeX0W.jpg)",
+      "![mine again](https://pbs.twimg.com/media/HQxwm3nbMAAeX0W.jpg)",
+    ].join("\n\n"),
+  });
+
+  assert.deepEqual(parsePost(mixed, POST_URL)?.media, [
+    "https://pbs.twimg.com/media/HQxwm3nbMAAeX0W.jpg",
+  ]);
 });
 
 test("a saved thread stops at the end of the post that was saved", () => {
@@ -307,6 +435,27 @@ test("a saved thread stops at the end of the post that was saved", () => {
   assert.equal(post?.text, "Short one.");
 });
 
+test("the entities Firecrawl escapes on the way in are undone on the way out", () => {
+  // Read off a real response. `Go & Python` arrives as `Go &amp; Python`, and
+  // committed unread that renders as those six literal characters on the card:
+  // the post quoting itself wrong, permanently, in a file nobody re-reads.
+  const markdown = postMarkdown({
+    text: "44,000 stars and contributions merged into Go &amp; Python, with &lt;10 people.",
+  });
+
+  assert.equal(
+    parsePost(markdown, POST_URL)?.text,
+    "44,000 stars and contributions merged into Go & Python, with <10 people.",
+  );
+});
+
+test("an escaped entity stays escaped, because someone was writing about HTML", () => {
+  // Why the entity pass is a list in a fixed order rather than one regex.
+  // Undoing `&amp;` first would turn `&amp;lt;` into `<`, which is a different
+  // string than the one the person typed.
+  assert.equal(parsePost(postMarkdown({ text: "Type &amp;lt; to escape it." }), POST_URL)?.text, "Type &lt; to escape it.");
+});
+
 test("markdown decoration is flattened into one line of prose", () => {
   const markdown = postMarkdown({
     text: "Read this\n\n**properly** and see [the thread](https://x.com/i/1) ![img](https://p.example/a.jpg)",
@@ -316,9 +465,14 @@ test("markdown decoration is flattened into one line of prose", () => {
 });
 
 test("the URL is the second source for a handle the heading did not give", () => {
-  const markdown = ["## Post", "", "No heading, no author line.", ""].join("\n");
+  const markdown = ["Posted: 2026-07-26", "", "## Post", "", "No heading, no author line.", ""].join(
+    "\n",
+  );
 
-  assert.equal(parsePost(markdown, POST_URL)?.handle, "ephraimakanmu");
+  const post = parsePost(markdown, POST_URL);
+
+  assert.equal(post?.handle, "ephraimakanmu");
+  assert.equal(post?.author, "ephraimakanmu", "and the author falls back to it too");
 });
 
 test("markdown with no post section in it is null, not a guess", () => {
@@ -358,7 +512,7 @@ test("a blockquote-heavy document parses in linear time", () => {
   // ordinary path. Written with `\s` it rescanned to end-of-document from every
   // line start: 60k lines took six seconds of blocked event loop, on markdown
   // this module does not control.
-  const markdown = `# Post by @someone\n\n## Post\n\n${"> quoted line\n".repeat(40_000)}`;
+  const markdown = `# Post by @someone\n\nPosted: 2026-07-26\n\n## Post\n\n${"> quoted line\n".repeat(40_000)}`;
 
   const started = Date.now();
   assert.equal(parsePost(markdown, POST_URL)?.handle, "someone");

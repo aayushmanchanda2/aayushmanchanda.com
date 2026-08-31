@@ -23,7 +23,7 @@ import { MAX_ATTEMPTS } from "./state.mjs";
  * @param {string} id
  * @param {string} url
  * @param {import("./types.js").Section} section
- * @param {{ title?: string, excerpt?: string, tags?: string[] }} [extra]
+ * @param {{ title?: string, excerpt?: string, note?: string, tags?: string[] }} [extra]
  * @returns {import("./types.js").Bookmark}
  */
 function mark(id, url, section, extra = {}) {
@@ -32,6 +32,7 @@ function mark(id, url, section, extra = {}) {
     url,
     title: extra.title ?? "",
     excerpt: extra.excerpt ?? "",
+    note: extra.note ?? "",
     domain: "",
     collection: section,
     tags: extra.tags ?? [],

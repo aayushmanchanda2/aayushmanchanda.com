@@ -83,10 +83,11 @@ export function collection(id, title, parentId) {
  * @param {object} [extra]
  * @param {string} [extra.title]
  * @param {string} [extra.excerpt]
+ * @param {string} [extra.note] Raindrop's PRIVATE note — where a draft blob arrives.
  * @param {string[]} [extra.tags]
  */
-export function bookmark(id, link, { title = "", excerpt = "", tags = [] } = {}) {
-  return { _id: id, link, title, excerpt, tags, domain: new URL(link).hostname };
+export function bookmark(id, link, { title = "", excerpt = "", note = "", tags = [] } = {}) {
+  return { _id: id, link, title, excerpt, note, tags, domain: new URL(link).hostname };
 }
 
 /** @param {unknown} payload */
@@ -195,6 +196,66 @@ export function fakeCapture({ palette = FAKE_PALETTE, clipped = false, fail } = 
   }
 
   return { calls, captureSite };
+}
+
+/**
+ * Stand-ins for the two things `thumb.mjs` fetches: a video's poster frame and
+ * a post's photos. Both write a plausible file and record what they were asked
+ * for.
+ *
+ * Here rather than left to the real module for the reason the Raindrop fixture
+ * throws on an unknown host: `thumb.mjs` reaches i.ytimg.com and
+ * pbs.twimg.com, and a suite that quietly hit either would be slow, flaky, and
+ * lying about what it proved. The real fetch, the real magic-byte check and the
+ * real sharp encode are pinned in `thumb.test.mjs`, where a fake `fetch` can
+ * answer with bytes.
+ *
+ * @param {object} [options]
+ * @param {string} [options.fail] Throw with this message instead of writing.
+ */
+export function fakeThumb({ fail } = {}) {
+  /** @type {{ id: string, slug: string, outDir: string }[]} */
+  const calls = [];
+  /** @type {{ media: readonly string[], slug: string }[]} */
+  const mediaCalls = [];
+
+  /** @type {typeof import("./thumb.mjs").captureThumb} */
+  async function captureThumb({ video, slug, outDir }) {
+    calls.push({ id: video.id, slug, outDir: String(outDir) });
+    if (fail !== undefined) throw new Error(fail);
+
+    const dir = String(outDir);
+    await mkdir(dir, { recursive: true });
+
+    const thumb = path.join(dir, `${slug}-thumb.webp`);
+    await writeFile(thumb, `thumb:${video.id}`);
+    return { thumb };
+  }
+
+  /** @type {typeof import("./thumb.mjs").captureMedia} */
+  async function captureMedia({ media, slug, outDir }) {
+    mediaCalls.push({ media, slug });
+    if (fail !== undefined) throw new Error(fail);
+
+    const dir = String(outDir);
+    await mkdir(dir, { recursive: true });
+
+    /** @type {string[]} */
+    const files = [];
+    /** @type {string[]} */
+    const paths = [];
+
+    for (const [index, url] of media.entries()) {
+      const file = path.join(dir, `${slug}-media-${index + 1}.webp`);
+      await writeFile(file, `media:${url}`);
+      files.push(file);
+      paths.push(`/shots/${slug}-media-${index + 1}.webp`);
+    }
+
+    return { files, paths };
+  }
+
+  return { calls, mediaCalls, captureThumb, captureMedia };
 }
 
 /* ---------------------------------------------------------------------------
@@ -366,6 +427,7 @@ export function fakeFirecrawlShot({ palette = FIRECRAWL_PALETTE } = {}) {
  * @param {ReturnType<typeof raindropServer>} wiring.server
  * @param {ReturnType<typeof fakeCapture>} [wiring.capture]
  * @param {ReturnType<typeof fakeFirecrawlShot>} [wiring.fallback] The second-chance shot.
+ * @param {ReturnType<typeof fakeThumb>} [wiring.thumb] The video poster frame.
  * @param {ReturnType<typeof fakeFirecrawl>["client"]} [wiring.firecrawl]
  * @param {ReturnType<typeof recorder>} wiring.out
  */
@@ -374,6 +436,7 @@ export function deps({
   server,
   capture = fakeCapture(),
   fallback = fakeFirecrawlShot(),
+  thumb = fakeThumb(),
   firecrawl,
   out,
 }) {
@@ -381,6 +444,8 @@ export function deps({
     fetch: server.fetch,
     captureSite: capture.captureSite,
     captureWithFirecrawl: fallback.captureWithFirecrawl,
+    captureThumb: thumb.captureThumb,
+    captureMedia: thumb.captureMedia,
     makeFirecrawl: firecrawl === undefined ? firecrawlFrom : () => firecrawl,
     env: { RAINDROP_TOKEN: "test-token" },
     now: () => new Date("2026-08-26T10:00:00.000Z"),

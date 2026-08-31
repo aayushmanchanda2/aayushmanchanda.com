@@ -26,6 +26,7 @@ import {
   fakeCapture,
   fakeFirecrawl,
   fakeFirecrawlShot,
+  fakeThumb,
   makeRepo,
   raindropServer,
   readJson,
@@ -698,4 +699,126 @@ test("an unknown flag is a usage error, not a silent no-op", async (t) => {
 
   assert.equal(code, 2);
   assert.match(out.err[0], /unknown argument "--dryrun"/);
+});
+
+/* ---------------------------------------------------------------------------
+   What a reading entry carries out of a whole run
+   --------------------------------------------------------------------------- */
+
+test("a saved video publishes with a poster frame committed under /shots", async (t) => {
+  const { paths } = await makeRepo(t);
+  const server = raindropServer({
+    ...NESTED,
+    raindrops: {
+      [READING_ID]: [
+        bookmark(900, "https://www.youtube.com/watch?v=vJEy3nP2_C8", {
+          title: "Managing AI Agents",
+          tags: ["Agents", "published"],
+        }),
+      ],
+    },
+  });
+  const thumb = fakeThumb();
+  const out = recorder();
+
+  await run([], deps({ paths, server, thumb, out }));
+
+  const [entry] = await readJson(paths.libraryJson);
+  assert.deepEqual(entry.video, {
+    provider: "youtube",
+    id: "vJEy3nP2_C8",
+    thumb: "/shots/managing-ai-agents-thumb.webp",
+  });
+  assert.deepEqual(entry.tags, ["agents"], "and the tag it was saved with");
+  assert.equal(
+    await exists(path.join(paths.shotsDir, "managing-ai-agents-thumb.webp")),
+    true,
+    "the file is there before anything names it",
+  );
+});
+
+test("a poster frame that will not come back holds the entry instead of dangling", async (t) => {
+  // The one outcome `thumb.mjs` exists to prevent: an entry naming a file that
+  // never arrived. The JSON would parse, the build would pass, and the page
+  // would render a broken image forever.
+  const { paths } = await makeRepo(t);
+  const server = raindropServer({
+    ...NESTED,
+    raindrops: {
+      [READING_ID]: [bookmark(901, "https://www.youtube.com/watch?v=vJEy3nP2_C8", { title: "Gone" })],
+    },
+  });
+  const out = recorder();
+
+  await run([], deps({ paths, server, thumb: fakeThumb({ fail: "no poster frame" }), out }));
+
+  assert.deepEqual(await readJson(paths.libraryJson), [], "nothing published");
+  assert.equal((await loadState(paths))["901"].kind, "pending", "and it will be tried again");
+  assert.equal(out.summary, "published=0 failed=0 skipped=0 pending=1");
+});
+
+test("a post's photos are committed locally, so no remote URL reaches the gallery", async (t) => {
+  // `library.ts` refuses a pbs.twimg.com URL in this field, so an entry holding
+  // one would fail the build. This is the step that means it never has to.
+  const { paths } = await makeRepo(t);
+  const server = raindropServer({
+    ...NESTED,
+    raindrops: {
+      [READING_ID]: [bookmark(902, "https://x.com/blvckledge/status/2093171755146002776")],
+    },
+  });
+  const firecrawl = fakeFirecrawl({
+    markdown: [
+      "# Post by @blvckledge",
+      "",
+      "Author: Jackson Blackledge @blvckledge",
+      "Posted: 2026\\-08\\-28T03:00:10\\.000Z",
+      "",
+      "## Post",
+      "",
+      "here's a breakdown of the most profitable landing pages for google ads in 2026:",
+      "",
+      "![Image 1](https://pbs.twimg.com/media/HQxwm3nbMAAeX0W.jpg)",
+      "",
+      "![Image 2](https://pbs.twimg.com/media/HQxwnHsbcAA4YrV.jpg)",
+      "",
+    ].join("\n"),
+  });
+  const thumb = fakeThumb();
+  const out = recorder();
+
+  await run([], deps({ paths, server, firecrawl: firecrawl.client, thumb, out }));
+
+  const [entry] = await readJson(paths.libraryJson);
+  assert.deepEqual(entry.post.media, [
+    `/shots/${entry.slug}-media-1.webp`,
+    `/shots/${entry.slug}-media-2.webp`,
+  ]);
+  assert.equal(entry.post.author, "Jackson Blackledge");
+  assert.equal(entry.post.date, "2026-08-28", "the day it was posted, not the run date");
+  assert.equal(await exists(path.join(paths.shotsDir, `${entry.slug}-media-1.webp`)), true);
+  assert.deepEqual(thumb.mediaCalls[0].media, [
+    "https://pbs.twimg.com/media/HQxwm3nbMAAeX0W.jpg",
+    "https://pbs.twimg.com/media/HQxwnHsbcAA4YrV.jpg",
+  ]);
+});
+
+test("a broken draft blob in the private note holds the item and says why", async (t) => {
+  const { paths } = await makeRepo(t);
+  const server = raindropServer({
+    ...NESTED,
+    raindrops: {
+      [READING_ID]: [
+        bookmark(903, "https://example.com/a", { title: "A piece", note: '{"bullets": []}' }),
+      ],
+    },
+  });
+  const out = recorder();
+
+  await run([], deps({ paths, server, out }));
+
+  assert.deepEqual(await readJson(paths.libraryJson), []);
+  const row = (await loadState(paths))["903"];
+  assert.equal(row.kind, "pending");
+  assert.match(String(row.lastError), /non-empty array/);
 });

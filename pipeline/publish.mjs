@@ -27,6 +27,7 @@ import { POST_HOSTS, hostIsOneOf, readEntries, repoFrom, urlKey } from "./entrie
 import { firecrawlFrom, parsePost } from "./firecrawl.mjs";
 import { RaindropError, createClient, fetchBookmarks, resolveCollections } from "./raindrop.mjs";
 import { MAX_ATTEMPTS, SECTIONS, reconcile, resolvePaths } from "./state.mjs";
+import { captureMedia, captureThumb } from "./thumb.mjs";
 import { describe } from "./util.mjs";
 
 /** @typedef {import("./types.js").Bookmark} Bookmark */
@@ -227,6 +228,8 @@ function baseDeps() {
     fetch: globalThis.fetch,
     captureSite,
     captureWithFirecrawl,
+    captureThumb,
+    captureMedia,
     /**
      * Firecrawl, or null. A function rather than a client so the decision is
      * made from the run's own `env` — a test that hands in a different
@@ -331,6 +334,11 @@ export async function run(argv = [], overrides = {}) {
         firecrawl === null
           ? null
           : async (url) => parsePost(await firecrawl.scrapeMarkdown(url), url),
+      // Bound to the run's own `fetch` the way every other network call here is,
+      // so a test drives the poster frame through the same seam it drives
+      // Raindrop through, and nothing in `apply.mjs` learns there is a CDN.
+      captureThumb: (input) => deps.captureThumb({ ...input, fetch: deps.fetch }),
+      captureMedia: (input) => deps.captureMedia({ ...input, fetch: deps.fetch }),
     };
 
     /** @type {Summary} */

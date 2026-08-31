@@ -82,6 +82,7 @@ test("fetchBookmarks parses items into our shape and stops when a page is short"
     url: "https://linear.app",
     title: "Linear",
     excerpt: "tracker",
+    note: "",
     domain: "linear.app",
     collection: "tools",
     tags: ["saved"],
@@ -89,12 +90,49 @@ test("fetchBookmarks parses items into our shape and stops when a page is short"
   assert.equal(calls.length, 1, "a short page ends the walk");
 });
 
+test("the private note is a different field from the excerpt, and both come through", async () => {
+  // Raindrop hands back two text fields that look interchangeable and are not.
+  // `excerpt` is the description it scrapes off the page when nobody types one;
+  // `note` is the private field only the account holder sees, which is where a
+  // sweep leaves a draft blob. Reading the wrong one would put machine JSON
+  // where a reader's sentence goes, and a sentence where JSON was expected.
+  const { client: api } = client(() =>
+    json({
+      result: true,
+      items: [
+        {
+          ...bookmark(6, "https://x.com/someone/status/1", { excerpt: "scraped off the page" }),
+          note: '  {"why":"because"}  ',
+        },
+      ],
+    }),
+  );
+
+  const [parsed] = await fetchBookmarks(api, 13, "reading");
+
+  assert.equal(parsed?.excerpt, "scraped off the page");
+  assert.equal(parsed?.note, '{"why":"because"}', "trimmed, and otherwise untouched");
+});
+
+test("a bookmark with no note reads as an empty one, never as undefined", async () => {
+  // Most bookmarks have no private note at all, and `draftFrom` is handed this
+  // string directly — so an undefined here would be a TypeError on the ordinary
+  // path rather than on the rare one.
+  const { client: api } = client(() =>
+    json({ result: true, items: [{ _id: 7, link: "https://a.example" }] }),
+  );
+
+  const [parsed] = await fetchBookmarks(api, 11, "tools");
+
+  assert.equal(parsed?.note, "");
+});
+
 test("tagging merges rather than replacing the user's own tags", async () => {
   const { client: api, calls } = client(() => json({ result: true, item: {} }));
 
   const tags = await tagBookmark(
     api,
-    { id: "9", url: "https://a.example", title: "", excerpt: "", domain: "", collection: "sites", tags: ["design", "read-later"] },
+    { id: "9", url: "https://a.example", title: "", excerpt: "", note: "", domain: "", collection: "sites", tags: ["design", "read-later"] },
     "published",
   );
 
@@ -111,7 +149,7 @@ test("a bookmark already carrying the tag costs no request", async () => {
 
   await tagBookmark(
     api,
-    { id: "9", url: "https://a.example", title: "", excerpt: "", domain: "", collection: "sites", tags: ["published"] },
+    { id: "9", url: "https://a.example", title: "", excerpt: "", note: "", domain: "", collection: "sites", tags: ["published"] },
     "published",
   );
 

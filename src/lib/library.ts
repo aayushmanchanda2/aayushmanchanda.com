@@ -8,8 +8,17 @@
  *
  * The generic half of the parse comes from `lib/parse.ts`, shared with the other
  * three boundaries. What stayed here is what only /library knows: the kind
- * vocabulary, the note that is allowed to be absent, the domain cross-check, and
- * every error message.
+ * vocabulary, the note that is allowed to be absent, the domain cross-check, the
+ * four objects an entry may carry and the kind each one belongs to, and every
+ * error message.
+ *
+ * Six of an entry's twelve fields are optional, and every one of them reads the
+ * same way: absent and `null` both mean nothing, and anything present has to be
+ * whole. That is not a style preference. A saved link starts as a URL and a date
+ * and grows the rest over months — tags when it is filed, a post or a video when
+ * the pipeline can read one, a draft when Hermes writes one, a why when Aayush
+ * does — so most entries are missing most of this most of the time, and a parser
+ * that could not say "nothing yet" would have nothing true to say about them.
  *
  * One thing /library does that no other section does. Every other entry on the
  * site gets a page of its own — `/tools/<slug>`, `/sites/<slug>`, `/notes/<slug>`
@@ -38,10 +47,22 @@
  * file this module reads.
  */
 
-import type { Fail } from "./parse";
-import { SLUG, readers, routeSlug } from "./parse";
+/*
+ * Both imports are spelled the long way — the `.ts` extension, and the JSON one
+ * with its type attribute — so that Node can load this module and not only
+ * Vite. That is what `lib/library.test.mjs` needs: the six readers below are
+ * where every rule about this file's shape actually lives, and until these two
+ * lines were written the only thing exercising them was `astro build` reading a
+ * file that happened to be valid. That proves the happy path and nothing else.
+ *
+ * Both spellings are the standard ones and the bundler takes them unchanged.
+ * `lib/tools.ts` and `lib/sites.ts` still use the short forms and are still
+ * untested; this is the file that had a reason to move first.
+ */
+import type { Fail } from "./parse.ts";
+import { SLUG, readers, routeSlug } from "./parse.ts";
 
-import rawLibrary from "../data/library.json";
+import rawLibrary from "../data/library.json" with { type: "json" };
 
 /**
  * What a saved link is. Ordered as the page and the filter bar order them:
@@ -87,6 +108,103 @@ export interface Digest {
   digested: string;
 }
 
+/**
+ * The video services a `video` entry can carry structured data for.
+ *
+ * One member, and a second one is a decision rather than a string. A provider
+ * on this list means two commitments at once: a URL shape `pipeline/thumb.mjs`
+ * can read an id out of, and a thumbnail host this repo is willing to fetch
+ * from at publish time so the picture ends up committed here instead of hotlinked
+ * from someone else's CDN. Vimeo is both of those plus a branch in that module,
+ * so the vocabulary is written down where the parser can refuse anything else.
+ */
+export const PROVIDERS = ["youtube"] as const;
+
+export type Provider = (typeof PROVIDERS)[number];
+
+/**
+ * An x.com post, as the pipeline read it back off the page.
+ *
+ * Present only on a `post` entry, and only when Firecrawl could actually read
+ * the post: a login wall, a deleted tweet or a document shaped differently than
+ * it was leaves this null, and the row falls back to what Raindrop saw. Null is
+ * the ordinary answer for every post saved before this field existed.
+ *
+ * All five fields are required once the object is there, on the same reasoning
+ * as `Digest`. This is what a post card renders, and a card with no author or
+ * no date is a card with a hole in it — so a half-read post is no post.
+ *
+ * `text` is the whole thing. `title` and `note` hold clipped copies, because
+ * those two are a row and this is a card.
+ */
+export interface Post {
+  /** Display name, spelled as the poster spells it. The handle when they have none. */
+  author: string;
+  /** The @handle, without the @. */
+  handle: string;
+  /**
+   * ISO calendar date (YYYY-MM-DD) the post was POSTED.
+   *
+   * Deliberately not `saved_date`, which is the day the link reached this site.
+   * A post from 2024 saved last week is two different facts, and a card that
+   * showed the second one where the first belongs would misdate the quote.
+   */
+  date: string;
+  /** The post's own words, markdown decoration flattened out, whole. */
+  text: string;
+  /**
+   * Pictures and video stills belonging to the post, as local paths under
+   * `/shots/`. A remote URL is refused rather than stored, which is the privacy
+   * rule made structural: a page that renders this array cannot reach x.com's
+   * CDN, because there is no shape it could hold that would let it.
+   *
+   * Empty on every entry today, and that is a measurement rather than a plan.
+   * Firecrawl's `x-twitter` post-processor was probed against three real posts
+   * that carry media — an image thread, a demo video, a screen recording — and
+   * its markdown holds no image references and no `pbs.twimg.com` links in any
+   * of them. Attached media arrives as an opaque `t.co` shortlink inside the
+   * text, indistinguishable from a link the poster typed. So the field is the
+   * shape a fuller source would fill, and nothing fills it yet.
+   */
+  media: string[];
+}
+
+/** A video entry's provider, its id there, and the still we committed. */
+export interface Video {
+  provider: Provider;
+  /** The id at the provider — `xoE_pE26yDQ`, not the whole watch URL. */
+  id: string;
+  /**
+   * Web path under `/shots` to the poster frame, fetched from the provider at
+   * publish time and re-encoded here. Committed rather than hotlinked so the
+   * page loads a video's picture without asking Google who is looking at it.
+   */
+  thumb: string;
+}
+
+/**
+ * A drafted opinion, written by Hermes from the saved piece and labelled as
+ * such wherever it renders.
+ *
+ * A separate type from `Digest` and not a looser version of one. A digest is
+ * something Aayush's own agent produced after reading the whole piece and
+ * committing to a verdict; a draft is a placeholder holding the page open until
+ * he has read it himself. Folding the two together would let the site render an
+ * unearned opinion in his voice, so they cannot share a field.
+ *
+ * `bullets` and `why` are each optional and one of them must be there. A draft
+ * with neither is not an empty draft — it is no draft, and it is written as
+ * null. `why` here is always third person and always sourced from the piece
+ * itself; the moment Aayush writes his own, it moves to the entry's top-level
+ * `why` and stops being a draft at all.
+ */
+export interface Draft {
+  bullets: string[] | null;
+  why: string | null;
+  /** ISO calendar date (YYYY-MM-DD) the draft was written. The label's date. */
+  drafted: string;
+}
+
 export interface LibraryEntry {
   /** URL-safe id, and the detail page's URL when the entry is digested. */
   slug: string;
@@ -110,6 +228,39 @@ export interface LibraryEntry {
    * read yet, and an undigested entry has no detail page to describe.
    */
   digest: Digest | null;
+  /**
+   * What this link is about, in Aayush's words, as route segments.
+   *
+   * The same curation model /sites runs on and the same rule about spelling:
+   * every member is already the slug, because the value IS the route segment
+   * (`/library/tag/<x>`) and the join key at once. Folding "Go To Market" down
+   * here instead of refusing it would make the file's contents and the site's
+   * routes two different strings.
+   *
+   * Absent reads as none, which is the ordinary case for a link nobody has
+   * filed yet. A present-but-empty array is refused: it means something wrote a
+   * blank where it meant to write nothing, and `note` above already explains
+   * why that is worth hearing about.
+   */
+  tags: string[];
+  /** What the post said, on a `post` entry the pipeline could read. Else null. */
+  post: Post | null;
+  /** The provider, the id and the committed still, on a `video` entry. Else null. */
+  video: Video | null;
+  /** Hermes' placeholder opinion, labelled as one wherever it renders. Or null. */
+  draft: Draft | null;
+  /**
+   * Why this is worth someone's time, in Aayush's own voice, or null.
+   *
+   * The register is fixed by the field name rather than by a flag on a shared
+   * object. `draft.why` is Hermes writing about a piece in the third person and
+   * this is Aayush writing in the first, and no rendering bug that drops a
+   * source enum can turn one into the other, because there is no enum to drop.
+   *
+   * When he writes his own, it lands here and leaves `draft.why` null — a field
+   * move, not a relabel. If that empties the draft, the draft becomes null.
+   */
+  why: string | null;
 }
 
 /** An entry that has earned its page. What `/library/[slug]` builds from. */
@@ -131,20 +282,52 @@ export type LibraryDomainGroup = {
   entries: LibraryEntry[];
 };
 
+/**
+ * A tag, and everything filed under it.
+ *
+ * One field where `LibraryDomainGroup` has two, and the missing one is the
+ * point. A domain has a spelling and a route segment and they are not the same
+ * string, so that group carries both; a tag IS its route segment, enforced by
+ * `readTags`, so a second field would be the first one copied.
+ */
+export type LibraryTagGroup = {
+  slug: string;
+  entries: LibraryEntry[];
+};
+
 /* ---------------------------------------------------------------------------
    Parsing
    --------------------------------------------------------------------------- */
 
 const KIND_NAMES: readonly string[] = KINDS;
 
+const PROVIDER_NAMES: readonly string[] = PROVIDERS;
+
 const READ = readers("library.json");
 /** Annotated, or TypeScript stops treating a call as the end of control flow. */
 const fail: Fail = READ.fail;
-const { readString, readDate, isRecord } = READ;
+const { readString, readDate, readOptional, isRecord } = READ;
 
 function isKind(value: unknown): value is Kind {
   return typeof value === "string" && KIND_NAMES.includes(value);
 }
+
+function isProvider(value: unknown): value is Provider {
+  return typeof value === "string" && PROVIDER_NAMES.includes(value);
+}
+
+/**
+ * A path into `public/shots`, spelled exactly the way the pipeline writes one.
+ *
+ * The same regex `lib/sites.ts` holds for a screenshot, and it is here for a
+ * second reason on top of "is this a real path". `pipeline/state.mjs` sweeps
+ * `public/shots` every run and deletes any file matching this shape that no
+ * entry points at — so a picture stored under a name this pattern does not
+ * recognise would survive forever as litter, and a path this pattern accepts
+ * that no file backs would render as a broken image. Writer and sweeper agree
+ * on one spelling, and this is the parser holding them to it.
+ */
+const SHOT_PATH = /^\/shots\/[a-z0-9][a-z0-9-]*\.webp$/;
 
 /** Returns the parsed URL so the caller can cross-check the domain against it. */
 function readUrl(entry: Record<string, unknown>, where: string): URL {
@@ -244,6 +427,184 @@ function readDigest(entry: Record<string, unknown>, where: string): Digest | nul
   };
 }
 
+/**
+ * Absent, explicitly null, or a list of slugs nothing repeats.
+ *
+ * Held to `SLUG` rather than folded, for the reason the field's own comment
+ * gives: the string is the route. Held to non-empty when present for the reason
+ * `readNote` gives about a blank note. The pipeline leaves the key out when a
+ * bookmark carries no tags, so a `[]` in this file came from a hand-edit that
+ * meant to delete the key and stopped halfway.
+ */
+function readTags(entry: Record<string, unknown>, where: string): string[] {
+  const value = entry["tags"];
+  if (value === undefined || value === null) return [];
+
+  if (!Array.isArray(value)) {
+    fail(where, `needs "tags" to be an array of slugs, or to leave the key out entirely`);
+  }
+  if (value.length === 0) {
+    fail(where, `has an empty "tags" array; leave the key out to say it has no tags`);
+  }
+
+  const seen = new Set<string>();
+
+  return value.map((tag: unknown, index): string => {
+    if (typeof tag !== "string" || !SLUG.test(tag)) {
+      fail(
+        where,
+        `has a "tags" entry at ${index} that is not a URL-safe slug ` +
+          `(lowercase, digits, single hyphens): ${JSON.stringify(tag)}`,
+      );
+    }
+    if (seen.has(tag)) fail(where, `lists the tag "${tag}" twice`);
+    seen.add(tag);
+    return tag;
+  });
+}
+
+/**
+ * The one shape a picture on a /library entry may take.
+ *
+ * Refusing a remote URL is the whole function. A `https://pbs.twimg.com/…` in
+ * this field would render as an `<img>` pointed at x.com's CDN, which hands
+ * every reader of this page to a third party and breaks a promise `/privacy`
+ * makes by name. There is no flag to turn that on: the parser will not carry
+ * the value, so no page can render it.
+ */
+function readShotPath(
+  value: unknown,
+  field: string,
+  where: string,
+): string {
+  if (typeof value !== "string" || !SHOT_PATH.test(value)) {
+    fail(
+      where,
+      `needs "${field}" to be a committed picture under /shots ` +
+        `(\`/shots/<name>.webp\`), never a remote URL (got ${JSON.stringify(value)})`,
+    );
+  }
+  return value;
+}
+
+/**
+ * Absent, explicitly null, or a whole post. Only on a `post` entry.
+ *
+ * The kind cross-check is the same rule `readDomain` applies to the URL: a
+ * field that describes something the entry is not means two edits disagreed,
+ * and the second one to be written is not necessarily the right one — so
+ * neither wins and the build stops.
+ */
+function readPost(
+  entry: Record<string, unknown>,
+  kind: Kind,
+  where: string,
+): Post | null {
+  const value = entry["post"];
+  if (value === undefined || value === null) return null;
+
+  if (kind !== "post") {
+    fail(where, `is a ${kind} carrying a "post" object; only a post entry can have one`);
+  }
+  if (!isRecord(value)) {
+    fail(where, `needs "post" to be an object, null, or absent (got ${JSON.stringify(value)})`);
+  }
+
+  const raw = value["media"];
+  const media =
+    raw === undefined || raw === null
+      ? []
+      : Array.isArray(raw) && raw.length > 0
+        ? raw.map((item: unknown, index) => readShotPath(item, `post.media[${index}]`, where))
+        : fail(
+            where,
+            `needs "post.media" to be a non-empty array of /shots paths, or to leave the key out`,
+          );
+
+  return {
+    author: readString(value, "author", `${where} post`),
+    handle: readString(value, "handle", `${where} post`),
+    date: readDate(value, "date", `${where} post`),
+    text: readString(value, "text", `${where} post`),
+    media,
+  };
+}
+
+/** Absent, explicitly null, or a whole video. Only on a `video` entry. */
+function readVideo(
+  entry: Record<string, unknown>,
+  kind: Kind,
+  where: string,
+): Video | null {
+  const value = entry["video"];
+  if (value === undefined || value === null) return null;
+
+  if (kind !== "video") {
+    fail(where, `is a ${kind} carrying a "video" object; only a video entry can have one`);
+  }
+  if (!isRecord(value)) {
+    fail(where, `needs "video" to be an object, null, or absent (got ${JSON.stringify(value)})`);
+  }
+
+  const provider = value["provider"];
+  if (!isProvider(provider)) {
+    fail(
+      where,
+      `needs "video.provider" to be one of ${PROVIDERS.join(", ")} (got ${JSON.stringify(provider)})`,
+    );
+  }
+
+  return {
+    provider,
+    id: readString(value, "id", `${where} video`),
+    thumb: readShotPath(value["thumb"], "video.thumb", where),
+  };
+}
+
+/**
+ * Absent, explicitly null, or a draft with something in it.
+ *
+ * Looser than `readDigest` in exactly one place and stricter in another. A
+ * draft may carry bullets without a why or a why without bullets, because it is
+ * a placeholder and half of one is still useful; a digest may not, because it
+ * is a judgement and half of one is a summary. But a draft with neither is
+ * refused outright rather than read as an empty object, which is what makes the
+ * why-promotion a field move with no cleanup step: moving the last sentence out
+ * of a draft leaves nothing behind, and nothing is spelled `null`.
+ */
+function readDraft(entry: Record<string, unknown>, where: string): Draft | null {
+  const value = entry["draft"];
+  if (value === undefined || value === null) return null;
+
+  if (!isRecord(value)) {
+    fail(where, `needs "draft" to be an object, null, or absent (got ${JSON.stringify(value)})`);
+  }
+
+  const raw = value["bullets"];
+  let bullets: string[] | null = null;
+  if (raw !== undefined && raw !== null) {
+    if (!Array.isArray(raw) || raw.length === 0) {
+      fail(where, `needs "draft.bullets" to be a non-empty array of one-line strings, or absent`);
+    }
+    bullets = raw.map((bullet: unknown, index): string => {
+      if (typeof bullet !== "string" || bullet.trim() === "" || bullet.includes("\n")) {
+        fail(
+          where,
+          `needs "draft.bullets" entry ${index} to be one non-empty line (got ${JSON.stringify(bullet)})`,
+        );
+      }
+      return bullet;
+    });
+  }
+
+  const why = readOptional(value, "why", `${where} draft`);
+  if (bullets === null && why === null) {
+    fail(where, `has a "draft" with neither bullets nor a why; an empty draft is written as null`);
+  }
+
+  return { bullets, why, drafted: readDate(value, "drafted", `${where} draft`) };
+}
+
 export function parseLibrary(value: unknown): LibraryEntry[] {
   if (!Array.isArray(value)) fail("root", "must be a JSON array of library entries");
   if (value.length === 0) fail("root", "must hold at least one library entry");
@@ -281,6 +642,11 @@ export function parseLibrary(value: unknown): LibraryEntry[] {
       kind,
       note: readNote(item, where),
       digest: readDigest(item, where),
+      tags: readTags(item, where),
+      post: readPost(item, kind, where),
+      video: readVideo(item, kind, where),
+      draft: readDraft(item, where),
+      why: readOptional(item, "why", where),
     };
   });
 
@@ -337,6 +703,33 @@ export const kindGroups: KindGroup[] = KINDS.map((kind) => ({
   kind,
   entries: library.filter((entry) => entry.kind === kind),
 })).filter((group) => group.entries.length > 0);
+
+/**
+ * Every tag at least one entry carries, alphabetically.
+ *
+ * Alphabetical rather than by size, the same call `lib/sites.ts` made about its
+ * collection row and for the same reason: this is a row of links, and a row
+ * that reorders itself whenever something is tagged makes the reader re-find
+ * the one they wanted. A tag exists because something is filed under it, so
+ * there is no registry to keep and no way to end up with an empty one. Entries
+ * inside a group keep the list's own newest-first order.
+ */
+export const libraryTags: LibraryTagGroup[] = (() => {
+  const groups = new Map<string, LibraryTagGroup>();
+
+  for (const entry of library) {
+    for (const slug of entry.tags) {
+      const group = groups.get(slug);
+      if (group) {
+        group.entries.push(entry);
+      } else {
+        groups.set(slug, { slug, entries: [entry] });
+      }
+    }
+  }
+
+  return [...groups.values()].sort((a, b) => a.slug.localeCompare(b.slug));
+})();
 
 export const libraryDomains: LibraryDomainGroup[] = (() => {
   const groups = new Map<string, LibraryDomainGroup>();

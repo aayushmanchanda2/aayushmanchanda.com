@@ -156,6 +156,16 @@ const DIGESTED_ENTRY = {
     why: "Two rules are worth stealing.",
     digested: "2026-08-27",
   },
+  // The four objects an entry may carry and the why that outranks a drafted
+  // one, all at their ordinary value. A digested article has none of them, and
+  // that is the fixture worth holding here: what this file asserts is that the
+  // JSON-LD a digest produces is built out of the digest, so the fields around
+  // it are named to prove they are not feeding it.
+  tags: [],
+  post: null,
+  video: null,
+  draft: null,
+  why: null,
 };
 
 /** @type {import("./sites.ts").Site} */
