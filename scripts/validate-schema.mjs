@@ -23,11 +23,12 @@
  *     stops emitting its graph fails here instead of going unnoticed until
  *     something tries to cite it.
  *
- * Three checks at the foot are not about JSON-LD at all, and live here because
+ * Four checks at the foot are not about JSON-LD at all, and live here because
  * this is the only gate that reads the built HTML: the email address on
  * /contact may not appear in plain text anywhere in `dist/`, no link anywhere
- * may be glued to the word beside it, and no page may carry markup that would
- * load a video from YouTube before the reader asks for one.
+ * may be glued to the word beside it, no page may carry markup that would load
+ * a video from YouTube before the reader asks for one, and exactly one page may
+ * load anything at all from X.
  *
  * Exits 0 with a per-page-type summary, or 1 with every problem listed.
  *
@@ -627,9 +628,69 @@ const EMBEDS = [
   ],
 ];
 
+/*
+ * The pages allowed to talk to X, and it is a list of exactly one.
+ *
+ * `/library/kind/post` renders every saved post as X's own embed
+ * (`components/XEmbeds.astro`), so opening it fetches `widgets.js` and turns
+ * each card into an iframe of theirs. That is the only page on the site that
+ * does, and /privacy says so by name — which is a claim that has to be checked
+ * from both ends, so this is checked from both ends. A page not on this list
+ * that carries a Twitter host has quietly added a third party; the page on it
+ * that carries none has quietly lost the feature while /privacy still confesses
+ * to it, which is the more embarrassing of the two.
+ *
+ * **The scan is of the whole document, scripts included, and that is the
+ * difference from the YouTube check above.** That one deliberately cuts script
+ * bodies out, because the facade's embed origin lives in a string that nothing
+ * runs until a reader presses play, and a URL in an attribute is a request the
+ * browser makes on load. This one is not press-gated: the script runs on load
+ * and fetches the host, so a string here *is* a request. It is the reason
+ * `XEmbeds.astro` ships its script `is:inline` rather than letting Astro lift
+ * it into a hashed module — bundled, the host would not appear in any page's
+ * HTML and there would be nothing here to check.
+ *
+ * The pattern matches a URL rather than a bare word, the same call the YouTube
+ * one makes: /privacy names these hosts in prose on purpose, and a host in a
+ * sentence fetches nothing. The post's own permalink is deliberately not on the
+ * list either — `x.com/<handle>/status/<id>` is a link a reader may choose to
+ * follow, not a request the page makes, exactly as `youtube.com/watch` is.
+ */
+const X_EMBED_PAGES = ["library/kind/post/index.html"];
+
+const X_HOSTS =
+  /(?:https?:)?\/\/[\w.-]*(?:platform\.twitter\.com|syndication\.twitter\.com|platform\.x\.com|syndication\.twimg\.com)/g;
+
 for (const page of pages) {
   const html = readFileSync(path.join(DIST, page), "utf8");
   const markup = html.replace(/<script[\s\S]*?<\/script>/gi, "");
+
+  const declares = X_EMBED_PAGES.includes(page);
+  const widgets = [...html.matchAll(X_HOSTS)];
+
+  if (declares) {
+    if (widgets.length === 0) {
+      fail(
+        page,
+        "declares X embeds but ships no widget host. /privacy names this page as the one that loads from X; either the embeds came out or that page is now confessing to something the site does not do",
+      );
+    }
+    if (!/class="[^"]*twitter-tweet/.test(html)) {
+      fail(
+        page,
+        "loads X's widget factory but ships no `blockquote.twitter-tweet` for it to find, so the request buys the reader nothing",
+      );
+    }
+  } else if (widgets.length > 0) {
+    const near = html.slice(
+      Math.max(0, (widgets[0]?.index ?? 0) - 40),
+      (widgets[0]?.index ?? 0) + 40,
+    );
+    fail(
+      page,
+      `loads from X and is not a page that declares embeds. /privacy says the posts wall is the only one: ...${near.replace(/\s+/g, " ")}...`,
+    );
+  }
 
   if (html.includes(ADDRESS)) {
     fail(page, "prints the email address in plain text; it must stay encoded");

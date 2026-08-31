@@ -64,7 +64,32 @@
  * still makes exactly one outside request of its own, on every page, and a page
  * with no video on it still cannot make a second one however hard you press it.
  *
- * Underneath all six is one rule: **every claim here is a claim about today's
+ * The posts are the seventh, and they are the first one that made this page
+ * worse rather than longer. It used to say the post cards were drawn from files
+ * in this repository specifically so a reader would not be handed to x.com, and
+ * that was true and was the better arrangement for a reader. Aayush reversed it
+ * with the trade in front of him (VET-67): the hand-built cards looked wrong,
+ * and the wall is what people actually look at. So `/library/kind/post` now
+ * loads X's widget factory on page load — not on a press, which is the video's
+ * arrangement and not this one — and every card on it becomes an iframe of
+ * theirs.
+ *
+ * Three sections had to move together for that, which is what "in the same
+ * commit" means in practice. The one outside request became **two pages that
+ * load from somewhere else**, because "one" was the number and it is not any
+ * more. The storage paragraph grew a sentence, because what X puts in a
+ * reader's browser from inside its own frame is filed under X and this page
+ * should not imply the theme key is the whole story. And the takedown section
+ * stopped claiming the cards are a copy, because on that page they are not —
+ * the copy is on the entry's own page, which is exactly what the card now
+ * points at.
+ *
+ * `scripts/validate-schema.mjs` holds the load-bearing half: the Twitter hosts
+ * may appear on `/library/kind/post` and must appear there, and may not appear
+ * on any other page in `dist/`. So the sentence "every other page here loads
+ * nothing from anyone" is a build failure rather than a promise.
+ *
+ * Underneath all seven is one rule: **every claim here is a claim about today's
  * build, and it says so.** A never-ever about analytics or third parties is a
  * promise a future commit can turn into a lie, and a privacy page that has gone
  * false is worse than none. So the page states what is true now and names the
@@ -90,7 +115,8 @@ import { NEWSLETTER_ACTION } from "../lib/site";
     <h1 class="page-title">Privacy</h1>
     <p class="standfirst">
       Short version: this site is a pile of static files. It counts how many
-      people open a page, and it has no idea who any of them are.
+      people open a page, and it has no idea who any of them are. Two pages
+      borrow something from somebody else, and they are named below.
     </p>
   </header>
 
@@ -127,6 +153,12 @@ import { NEWSLETTER_ACTION } from "../lib/site";
         leaves your browser, nothing reads it but this site, and clearing your
         site data forgets it. Until you press it, nothing is stored at all.
       </p>
+      <p>
+        That covers what this site stores. It does not cover what X stores
+        inside its own embeds on <a href="/library/kind/post">the posts page</a>,
+        which is filed under X and not under me. The section below is what that
+        page costs you.
+      </p>
     </section>
 
     <section>
@@ -155,16 +187,16 @@ import { NEWSLETTER_ACTION } from "../lib/site";
       </p>
       <p>
         The script is served from this domain rather than from an analytics
-        company, and the counts it sends go to the same place. So the section
-        below still says one outside request and means it: this added a script,
-        not a second host. Vercel holds the numbers, which is the company
-        already serving you these pages. If that ever moves to someone else,
-        the new name lands here on the commit that moves it.
+        company, and the counts it sends go to the same place. So counting page
+        views did not add a host to the list below: it added a script, and the
+        script is mine. Vercel holds the numbers, which is the company already
+        serving you these pages. If that ever moves to someone else, the new
+        name lands here on the commit that moves it.
       </p>
     </section>
 
     <section>
-      <h2 class="doc__head mono">The one outside request</h2>
+      <h2 class="doc__head mono">The two pages that load from somewhere else</h2>
       <p>
         The tool pages are the exception and I would rather name it than claim a
         clean sweep. Each tool row shows the logo of that tool&rsquo;s own
@@ -175,12 +207,29 @@ import { NEWSLETTER_ACTION } from "../lib/site";
         address the way any host does when your browser fetches an image. The
         request is sent with no referrer, so it does not carry which page you
         were on. The URL carries a publishable key that identifies my logo.dev
-        account for quota, not you. It is the only request this site makes on its
-        own: opening a page here loads nothing else from anyone else, and a
-        second outside host would be named here on the commit that added it.
+        account for quota, not you.
       </p>
       <p>
-        The saved videos are the one outside request you can make yourself, and
+        <a href="/library/kind/post">The posts page</a> is the other one, and it
+        is the heavier of the two. Every post on it is X&rsquo;s own embed, so
+        opening that page loads a script from X and turns each card into a frame
+        of theirs. X sees your IP address, sees that the frame is on this site,
+        and whatever happens inside it is theirs rather than mine. Each embed is
+        marked do-not-track, which asks X not to use the visit to tailor
+        anything, and asking is all I can do from here. If that trade is not one
+        you want, the page for any single post is on this domain and loads
+        nothing from anyone: the words are a copy I saved, and every card has a
+        <em>notes</em> link that goes straight there.
+      </p>
+      <p>
+        I used to draw those cards myself from the saved copy, and this page
+        used to say why that was better. It was better for your privacy and it
+        looked wrong: a hand-built imitation of a post is uncanny in a way the
+        real one is not. So I took the real embed and moved the honest version
+        one press away, which is the trade written out rather than quietly made.
+      </p>
+      <p>
+        The saved videos are the outside request you can make yourself, and
         nothing loads from YouTube until you press play. A video on <a
           href="/library/kind/video">the videos page</a> shows a still I copied
         into this repository when I saved it, the same way the screenshots work,
@@ -193,6 +242,12 @@ import { NEWSLETTER_ACTION } from "../lib/site";
         anything stored after that is stored under their name rather than mine.
         On a page with no video on it there is nothing to press, so there is
         nothing to load.
+      </p>
+      <p>
+        That is the whole list: logo.dev on the tool pages, X on the posts page,
+        YouTube if you press play. Every other page here loads nothing from
+        anyone, and a third host would be named in this section on the commit
+        that added it.
       </p>
     </section>
 
@@ -257,16 +312,16 @@ import { NEWSLETTER_ACTION } from "../lib/site";
           href="/contact">/contact</a> has my address.
       </p>
       <p>
-        The <a href="/library/kind/post">post cards in the library</a> work the
-        same way. When I save something from x.com, the pipeline copies the
-        words and any pictures into this repository, and the card you see is
-        drawn from those files. A copy rather than an embed, on purpose: an
-        embed makes your browser ask x.com for the picture, which tells x.com
-        you were reading my page, and this site would have a second outside host
-        in it. The post is still the poster&rsquo;s. Every card names who wrote
-        it and links back to the original, and its row on <a href="/library"
-        >/library</a> carries the date I saved it. If one of them is yours, the
-        same issue link works and the same answer applies.
+        The saved posts work the same way underneath. When I save something from
+        x.com, the pipeline copies the words and any pictures into this
+        repository, and the page for that post is drawn from those files. What
+        sits on <a href="/library/kind/post">the posts page</a> is X&rsquo;s own
+        embed instead, which is the trade in the section above: their card on
+        the wall, my copy on the page it points at. The post is still the
+        poster&rsquo;s either way. Every one of them names who wrote it and links
+        back to the original, and its row on <a href="/library">/library</a> carries
+        the date I saved it. If one of them is yours, the same issue link works
+        and the same answer applies.
       </p>
       <p>
         A saved video is the same arrangement with one picture in it. What sits

@@ -1,50 +1,55 @@
 ---
 /**
- * TweetCard — a saved x.com post, rendered here, fetching nothing.
+ * TweetCard — a saved x.com post, as X renders it, with a way back to the
+ * notes underneath.
  *
- * The anatomy is react-tweet's, read off its own module CSS rather than copied
- * by eye: a bordered card, a 48px circle then the display name, the @handle and
- * the date, the post's words, then a media grid of 2-up columns at a 2px gap
- * with the three-picture case turned into an L. What changes is everything that
- * would have made a request. There is no avatar, no brand mark, no embed
- * script, and no `pbs.twimg.com`: the pictures are files in this repo and
- * `lib/library.ts › readShotPath` is what makes that structural rather than
- * careful — the parser will not carry a remote URL, so no card can render one.
+ * **This shipped as a static card first and Aayush reversed it.** The card was
+ * react-tweet's anatomy rebuilt from files in this repository — a monogram in
+ * place of the avatar, the words, a media grid, no script, no request. Every
+ * argument for it still holds and it still loads nothing; what it could not do
+ * was look right. His review of the shipped wall: the cards look kind of odd.
+ * A hand-built imitation of a tweet is uncanny in the way an imitation of
+ * anything familiar is, and no amount of matching their CSS closes that,
+ * because what is missing is the avatar and the marks a copy cannot fetch.
  *
- * ## What the card does not show, and why each one is missing
+ * So the card is now the official embed, and the thing that used to be the
+ * whole card is the **fallback inside the blockquote**: what a reader sees
+ * before X's factory arrives, what they see for ever with scripting off, and
+ * the height the masonry column reserves in the meantime.
+ * `components/XEmbeds.astro` carries what that costs and who decided it.
  *
- * **No tags, no domain, no kind chip.** The whole card is one link, which is
- * the /sites call and made for the same reason: a press anywhere on a card
- * should never be a coin toss between two destinations. A tag chip and a
- * hostname are both links on the row form of this entry, so putting either here
- * means a second target inside a single-target card, or a dead label wearing a
- * link's clothes. The row on /library keeps both, and that is the page for
- * scanning by subject or by host.
+ * ## Two anchors now, and that is the rule changing rather than breaking
  *
- * **No note.** For a post the note is `@handle` plus a 280-character copy of
- * the same words the card is already showing at length
- * (`pipeline/entries.mjs › postNote`). It exists so a row can say something; a
- * card has the post itself.
+ * The old card was one link on purpose: a press anywhere on it went to one
+ * place, so it could never be a coin toss. An embed cannot keep that — every
+ * link inside X's iframe goes to X, and none of them is ours to redirect. So
+ * the destination this site cares about moves **outside** the embed, into a bar
+ * under it that says `notes` and goes to `/library/<slug>`.
  *
- * **No arrow, and now for the plainest reason there is: the card does not
- * leave.** It points at the post's own page on this site, the same as the row
- * it replaces (`lib/library.ts › entryHref`). The `.ext` arrow means "this
- * ends the visit", the /library row spends its one arrow on the `source` link
- * in its meta column, and a card with a single destination that stays here has
- * nothing to spend one on. `rel` and `target` went the same way for the same
- * reason: there is no outbound anchor here to put them on.
+ * That is the video tile's arrangement rather than a new one: two regions with
+ * two obvious affordances, press the thing and you get the thing, press the
+ * label and you get the page about it. What the card must never be is one
+ * region with two meanings, and it is not.
  *
- * **No entity links.** react-tweet turns @mentions, #hashtags and URLs in the
- * body into anchors. Two reasons not to. The first is the one above: they would
- * be a dozen more destinations inside a card that is one. The second is that we
- * could not describe them honestly — attached media and typed links both arrive
- * from x.com as opaque `t.co` shortlinks (`lib/library.ts › Post.media` says so
- * at length), so linkifying the body would offer a reader somewhere to go
- * without being able to say where.
+ * The permalink at the foot of the fallback is the third anchor and it is only
+ * ever seen when the embed has not loaded. It is what X's factory reads the
+ * post's id out of, and it wears the `.ext` arrow for the reason the row's
+ * `source` link does: it is the one control here that ends the visit.
+ *
+ * ## What the fallback still refuses
+ *
+ * No avatar, no brand mark, no `pbs.twimg.com`: the pictures are files in this
+ * repository and `lib/library.ts › readShotPath` makes that structural rather
+ * than careful — the parser will not carry a remote URL, so no fallback can
+ * render one. The monogram is still the avatar slot with a letter in it. All of
+ * that is about what *this site* fetches before X's factory runs, and it is
+ * still nothing.
  *
  * The text is one paragraph because that is the shape it arrives in: the
  * pipeline flattens a post's markdown, so `Post.text` carries no newline to
- * preserve.
+ * preserve. It is cut at `POST_CARD_MAX` for the reason `lib/post.ts` gives at
+ * length, which now applies only to the fallback — X's own embed decides where
+ * to cut a long post inside its frame.
  */
 import type { LibraryEntry, Post } from "../lib/library";
 import { entryHref } from "../lib/library";
@@ -67,7 +72,17 @@ const body = clipText(post.text, POST_CARD_MAX);
 ---
 
 <li class="card">
-  <a class="card__link press" href={href}>
+  {/*
+    `twitter-tweet` is what X's factory looks for and `data-dnt` is the one
+    thing we can ask it for: do not use this visit to tailor anything. The
+    theme arrives from `XEmbeds.astro` before the factory does, because an
+    iframe on another origin cannot be re-themed once it exists.
+
+    Everything inside is the fallback. It is real content rather than a
+    placeholder — with scripting off it is the whole card, and until the
+    factory lands it is what holds the column open.
+  */}
+  <blockquote class="card__quote twitter-tweet" data-dnt="true">
     <span class="card__head">
       {
         /*
@@ -116,7 +131,32 @@ const body = clipText(post.text, POST_CARD_MAX);
         </span>
       )
     }
-  </a>
+
+    {/*
+      The post itself, and the last anchor in the blockquote on purpose: X's
+      factory reads the id out of it. `source` is the word the /library row
+      uses for the same control, so a reader who has seen one has seen both,
+      and the title rides along where only a screen reader hears it.
+    */}
+    <a
+      class="card__source mono ext"
+      href={entry.url}
+      rel="noopener nofollow"
+      target="_blank"
+    >
+      source<span class="visually-hidden">: the post by {post.author}</span>
+    </a>
+  </blockquote>
+
+  {/*
+    Outside the embed, because everything inside one belongs to X. This is the
+    card's own destination and the only one on it that stays here.
+  */}
+  <p class="card__notes">
+    <a class="card__link mono press" href={href}>
+      notes<span class="visually-hidden"> on {entry.title}</span>
+    </a>
+  </p>
 </li>
 
 <style>
@@ -127,32 +167,54 @@ const body = clipText(post.text, POST_CARD_MAX);
     margin-bottom: 1.5rem;
   }
 
-  .card__link {
-    /* A card is a wide target; 0.96 would visibly shove it sideways. The same
-       number `SiteGrid.astro › .card__link` settled on, because this is the
-       same kind of thing at the same kind of size. */
-    --press-scale: 0.985;
+  /* The fallback, wearing the card the static version was.
 
+     X hides this element and puts its own iframe beside it once the factory
+     runs, so everything below is what a reader sees before that and instead of
+     it. The border is the site's hairline and the corners are sharp, which is
+     design.md §3: a radius marks a token you could pick up, never a surface you
+     look through. X's own frame is rounded and that is theirs. */
+  .card__quote {
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
+    /* The height the masonry column holds while the factory is in flight.
+       X's shortest rendered card is a little under this, so a very short post
+       reserves roughly what it is about to become instead of collapsing to
+       four lines and then jumping. Every post saved here is taller than it
+       already, so it costs the current data nothing. */
+    min-height: 8rem;
+    margin: 0;
     padding: 1rem;
-    color: inherit;
-    text-decoration: none;
     border: 1px solid var(--hairline);
-    /* Structural, so sharp: design.md §3. A radius here would make the card a
-       token you could pick up rather than a surface holding a quote. */
     border-radius: 0;
-    /* `.press` already names border-color, so the hover below rides the
-       transition it brings. A second transition-property here would race it. */
   }
 
-  .card__link:hover {
-    border-color: var(--hairline-strong);
-  }
+  /* The fallback stands down once the embed is there, and we do it rather than
+     waiting for X to.
 
-  .card__link:hover .card__author {
-    color: var(--accent);
+     Their factory inserts the rendered widget as a sibling and marks the
+     blockquote it consumed with a `data-twitter-extracted-<session id>`
+     attribute — an attribute name nothing can select on, because the id changes
+     per page load — and, measured on the shipped page, leaves it visible. Two
+     copies of the same post, one ours and one theirs, stacked.
+
+     So the swap is keyed on `.twitter-tweet-rendered`, the class their widget
+     has carried for years and the one every site styling an embed already
+     depends on, plus the fact that they insert it immediately before the
+     blockquote they took it from. Two assumptions about somebody else's markup,
+     and both fail the same harmless way: the fallback stays visible under the
+     embed. Visible and wrong beats silent and wrong for a dependency like this.
+
+     `:global` sits in a plain descendant position and deliberately not inside
+     a `:has()`. Astro rewrites the scoped halves of a selector and leaves
+     `:global(...)` in place when it is nested in a functional pseudo-class, so
+     the browser gets a selector it cannot parse and drops the whole rule.
+     **That shipped for one build here**, silently, which is the same failure
+     mode this comment is about. `VideoFacade.astro › .tile__frame
+     :global(iframe)` is the shape that works. */
+  :global(.twitter-tweet-rendered) + .card__quote {
+    display: none;
   }
 
   .card__head {
@@ -175,9 +237,6 @@ const body = clipText(post.text, POST_CARD_MAX);
     letter-spacing: -0.01em;
     line-height: 1.3;
     overflow-wrap: anywhere;
-    transition-property: color;
-    transition-duration: var(--dur-fast);
-    transition-timing-function: var(--ease);
   }
 
   .card__meta {
@@ -214,6 +273,82 @@ const body = clipText(post.text, POST_CARD_MAX);
     overflow-wrap: anywhere;
   }
 
+  /* The quiet pattern, the same one `LibraryList.astro › .row__source` takes:
+     `--muted` because it is a control and design.md §4 is the floor, and its
+     own underline because on touch there is no hover to reveal one. */
+  .card__source {
+    align-self: flex-start;
+    color: var(--muted);
+    text-decoration-line: underline;
+    text-decoration-color: var(--hairline-strong);
+    transition-property: color, text-decoration-color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .card__source:hover {
+    color: var(--accent);
+    text-decoration-color: currentColor;
+  }
+
+  /* The way back to this site, and the one thing on the card that survives
+     hydration. A box of its own rather than a rule under the embed: after the
+     swap it is sitting under an iframe with its own rounded border, and a bare
+     word there reads as something that fell off the card above it.
+
+     40px on the nose, which is design.md §4's floor taken literally rather than
+     through an `::before`. The stated text exception is for a word in a row of
+     words; this is the only affordance on the card that stays on the site, on a
+     page that is a wall of other people's frames, and a control that has to be
+     obvious does not get to be a hint. It is also inside the 46px the thebridge
+     reference sets its own list rows at. */
+  .card__notes {
+    margin-top: 0.5rem;
+    border: 1px solid var(--hairline);
+    /* The anchor inside carries `.press`, which already names `border-color`
+       and `color` — but the border is on this box and not on it, so the box
+       needs its own. One property, named, never `all` (design.md §4). */
+    transition-property: border-color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .card__link {
+    /* A card-width target; 0.96 would visibly shove it sideways. The number the
+       card itself used to carry, and `SiteGrid.astro › .card__link` before it,
+       because this is the same kind of thing at the same kind of width. */
+    --press-scale: 0.985;
+
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 40px;
+    padding-inline: 1rem;
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  /* Drawn rather than typed, and the alt-text form so it has no accessible
+     name of its own: the link is already called `notes on <title>`, and an
+     arrow read out after it is furniture being announced. Not the `.ext` arrow,
+     which means the visit ends — this one goes one page further in. */
+  .card__link::after {
+    content: "\2192" / "";
+  }
+
+  /* The link fills the box, so hovering one is hovering the other: the border
+     is keyed to the box and the ink to the anchor, and nothing needs `:has()`
+     to say so. Not gated behind `@media (hover: hover)` — pressing this unloads
+     the page, so the touch latch design.md §4 gates for is gone before it could
+     be seen. */
+  .card__notes:hover {
+    border-color: var(--hairline-strong);
+  }
+
+  .card__link:hover {
+    color: var(--accent);
+  }
+
   /* The media grid, react-tweet's proportions.
 
      2px is their gap and it is the right number: any more and four pictures
@@ -237,7 +372,7 @@ const body = clipText(post.text, POST_CARD_MAX);
     grid-auto-rows: 1fr;
     gap: 2px;
     aspect-ratio: 8 / 5;
-    /* The card is a column flex container, so this box's automatic minimum
+    /* The fallback is a column flex container, so this box's automatic minimum
        height is its content — which is the reserved box's own contents, so the
        ratio above would compute a height and then be overruled by it. Zeroing
        the minimum is what lets `aspect-ratio` be the answer. The `min-height`

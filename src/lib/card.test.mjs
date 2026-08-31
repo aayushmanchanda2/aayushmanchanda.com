@@ -108,6 +108,13 @@ test("the card renders every field a Post carries, and no field it does not", ()
 test("the card reaches for nothing outside this origin", () => {
   // The parser already refuses a remote media path (`readShotPath`), so this is
   // the other half: the component itself must not hard-code a host either.
+  //
+  // Still true after VET-67, and worth being precise about why. The card is X's
+  // embed now, but nothing in *this* file fetches: the permalink is
+  // `entry.url`, an expression, and the one host in the build is in
+  // `XEmbeds.astro`, which the test below holds to that one file. What these
+  // three may never grow is a host of their own — an avatar CDN, a
+  // `pbs.twimg.com`, a second script.
   for (const name of [
     "components/TweetCard.astro",
     "components/PostWall.astro",
@@ -311,7 +318,78 @@ test("nothing builds a /library URL of its own", () => {
   }
 });
 
-test("the card stays on this site, and the row keeps exactly one door off it", () => {
+test("the card has exactly one door out and exactly one door in", () => {
+  /*
+   * **This is the reverse of the assertion it replaces, and the reversal is
+   * VET-67.** It used to read "the card stays on this site": the card was one
+   * anchor to `/library/<slug>` wearing no `rel`, no `target` and no arrow,
+   * because a press anywhere on it went to one place and so could never be a
+   * coin toss.
+   *
+   * The card is X's own embed now and that argument cannot survive it — every
+   * link inside their iframe goes to X and none of them is ours to point
+   * elsewhere. So the destination this site owns moved *outside* the embed,
+   * into the `notes` bar under it, and the blockquote's permalink, which is
+   * also what X's factory reads the post's id out of, is the one anchor here
+   * that ends the visit and wears the arrow for saying so.
+   *
+   * The shape is what is still held: one way out, one way in, neither of them
+   * ambiguous. Two outbound anchors in the fallback, or none, are both defects
+   * and both would build.
+   */
+  const card = code(read("components/TweetCard.astro"));
+
+  const doors = [...card.matchAll(/rel="noopener nofollow"/g)];
+  assert.equal(
+    doors.length,
+    1,
+    "the post card has one anchor that leaves and it is the post's own permalink. X's factory reads the id out of it, so losing it loses the embed as well as the door.",
+  );
+  assert.match(card, /class="card__source mono ext"/, "the one link that leaves wears the arrow");
+  assert.match(card, /href=\{entry\.url\}/, "the permalink points at the post itself");
+  assert.match(card, /target="_blank"/);
+  assert.match(
+    card,
+    /class="card__link mono press" href=\{href\}/,
+    "the card has no `notes` link outside the embed, which would leave a wall of other people's frames with no way back into this site",
+  );
+});
+
+test("the embed is X's, the loader is ours, and the loader is in one file", () => {
+  // `scripts/validate-schema.mjs` holds the other half of this — which built
+  // pages may carry the host — and this holds the source half, so a second
+  // component cannot start fetching from X without moving both.
+  const loaders = walk("").filter((file) => /platform\.twitter\.com/.test(read(file)));
+  assert.deepEqual(
+    loaders,
+    ["components/XEmbeds.astro"],
+    "something other than XEmbeds.astro names X's widget host. /privacy is written around exactly one page loading it, and the dist guard is scoped to that page.",
+  );
+
+  const callers = walk("").filter((file) => code(read(file)).includes("<XEmbeds"));
+  assert.deepEqual(
+    callers,
+    ["components/PostWall.astro"],
+    "the widget factory is rendered somewhere other than the posts wall",
+  );
+
+  // Once per page and not once per card: twenty-four copies of that script
+  // would be twenty-four appended tags.
+  assert.ok(
+    !code(read("components/TweetCard.astro")).includes("<XEmbeds"),
+    "the card renders the loader, so a wall of them would load the factory once per card",
+  );
+
+  // The fallback is what a reader gets with scripting off and what holds the
+  // masonry column open until the factory lands. A blockquote X cannot find,
+  // or one with nothing in it, is a page that looks broken in both states.
+  const card = code(read("components/TweetCard.astro"));
+  assert.match(card, /class="card__quote twitter-tweet"/, "X's factory finds nothing to swap");
+  assert.match(card, /data-dnt="true"/, "the embed does not ask X to leave the visit alone");
+  assert.match(card, /min-height:/, "the fallback reserves no height, so the wall jumps on load");
+});
+
+test("the row keeps exactly one door off the site", () => {
   /*
    * The rewrite VET-63 made, held as a test. `entryHref` used to return
    * `{ href, external }` and three components spent that flag on a `rel`, a
@@ -324,13 +402,6 @@ test("the card stays on this site, and the row keeps exactly one door off it", (
    * its own attributes because it is off-site for every entry rather than for
    * some of them.
    */
-  const card = code(read("components/TweetCard.astro"));
-  assert.ok(
-    !/\brel=/.test(card) && !/\btarget=/.test(card),
-    "the post card carries outbound attributes on a link that does not leave the site",
-  );
-  assert.ok(!/\bext\b/.test(card), "the card wears the ↗ arrow, which means it leaves. It does not.");
-
   const row = code(read("components/LibraryList.astro"));
   const outbound = [...row.matchAll(/rel="noopener nofollow"/g)];
   assert.equal(

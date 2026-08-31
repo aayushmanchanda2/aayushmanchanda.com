@@ -20,6 +20,16 @@
  * of the stylesheet below for the day native masonry is safe: it would fix the
  * ordering, not the look.
  *
+ * ## The cards are X's embeds now
+ *
+ * Every card is a `blockquote.twitter-tweet` that X's factory swaps for the
+ * real thing on load, so the heights here are not known at build time and the
+ * wall reflows once as they arrive. That is the cost of the reversal written up
+ * in `TweetCard.astro`, and it is why the fallback inside each blockquote
+ * carries a `min-height`: the column reserves roughly what it is about to
+ * become instead of collapsing and then jumping. `XEmbeds.astro` is what loads
+ * the factory, and it is rendered once here rather than once per card.
+ *
  * ## The column width is a measurement
  *
  * `column-width` is a minimum, not a count: the browser fits as many columns of
@@ -41,6 +51,7 @@
  */
 import type { LibraryEntry, Post } from "../lib/library";
 import TweetCard from "./TweetCard.astro";
+import XEmbeds from "./XEmbeds.astro";
 
 interface Props {
   /** Post-kind entries, in the list's own newest-first order. */
@@ -67,6 +78,15 @@ const cards = entries.filter(
 <ul class="wall">
   {cards.map((entry) => <TweetCard entry={entry} />)}
 </ul>
+
+{/*
+  The one thing on this site that talks to X, and it is here rather than in the
+  card so that a page renders it once however many cards are on it.
+  `XEmbeds.astro` carries what it costs, who decided it, and why the theme
+  cannot follow a flip. It draws nothing and does nothing when the wall came out
+  empty.
+*/}
+<XEmbeds />
 
 <style>
   .wall {
