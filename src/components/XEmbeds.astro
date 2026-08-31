@@ -4,8 +4,11 @@
  * that renders it is `/library/kind/post`.
  *
  * It draws nothing. What it ships is a script that stamps the site's theme onto
- * every `blockquote.twitter-tweet` on the page and then fetches X's widget
- * factory, which swaps each of those blockquotes for the real embed.
+ * every `blockquote.twitter-tweet` on the page, fetches X's widget factory,
+ * which swaps each of those blockquotes for the real embed, and then watches
+ * for those embeds to actually stand up before letting the fallback inside each
+ * blockquote go. The last part is the one worth reading: see the note above
+ * `HYDRATE`.
  *
  * ## Why this is a component and not four lines in `PostWall.astro`
  *
@@ -80,8 +83,26 @@ import { ATTRIBUTE } from "../lib/theme";
 const WIDGETS = "https://platform.twitter.com/widgets.js";
 
 /**
- * Stamp the theme, then fetch the factory, and do neither when the page turned
- * out to have no embeds on it.
+ * How tall a rendered widget has to be before the fallback under it stands
+ * down, and how long we keep asking.
+ *
+ * X's shortest real card is a couple of hundred pixels; a container they have
+ * inserted but not yet filled is exactly zero. Forty is nowhere near either, so
+ * it is a threshold rather than a measurement, and it is written as a number
+ * because there is nothing to derive it from.
+ *
+ * Sixty steps of 250ms is fifteen seconds, which is the ceiling and not the
+ * expected cost: the loop stops the moment every embed is up, and on a page
+ * where X never answers it stops on its own with every fallback still on
+ * screen — which is the outcome this whole mechanism exists to guarantee.
+ */
+const MIN_EMBED = 40;
+const STEP_MS = 250;
+const MAX_STEPS = 60;
+
+/**
+ * Stamp the theme, fetch the factory, then watch for the embeds to actually
+ * arrive — and do none of it when the page turned out to have no embeds on it.
  *
  * The empty case is not defensive tidiness: `PostWall.astro` renders no cards
  * at all when every post is one the pipeline could not read, and a page showing
@@ -92,6 +113,21 @@ const WIDGETS = "https://platform.twitter.com/widgets.js";
  * carries no ordering — and any blockquote it reached first would be built in
  * the light theme and stay there. Appending it after the attributes are on is
  * the only version with a defined order.
+ *
+ * ## The watch, and why a class was not enough
+ *
+ * `TweetCard.astro` used to hide its fallback the moment X's container appeared
+ * beside it. Their container appears long before their iframe has a height, so
+ * the wall spent the whole load — and, on a load where X never sizes anything,
+ * the rest of the visit — showing `notes` bars with nothing above them.
+ * Measured on the shipped page: twenty-four widgets at zero height, the
+ * document down from 6311px to 1835px.
+ *
+ * So a class is not evidence and a height is. This marks each blockquote
+ * `data-embedded` only while the element X put in front of it is really
+ * standing up, and unmarks it if it is not, so every failure lands on the
+ * fallback rather than on an empty column. It costs one `getBoundingClientRect`
+ * per card per step, for as few steps as the page needs.
  */
 const HYDRATE = `(function(){
 var q=document.querySelectorAll("blockquote.twitter-tweet");
@@ -103,6 +139,16 @@ var s=document.createElement("script");
 s.src=${JSON.stringify(WIDGETS)};
 s.async=true;
 document.head.appendChild(s);
+var n=0;
+var t=setInterval(function(){
+var pending=0;
+for(var j=0;j<q.length;j++){
+var w=q[j].previousElementSibling;
+if(w&&w.getBoundingClientRect().height>${MIN_EMBED})q[j].setAttribute("data-embedded","");
+else{q[j].removeAttribute("data-embedded");pending++;}
+}
+if(!pending||++n>${MAX_STEPS})clearInterval(t);
+},${STEP_MS});
 })();`;
 ---
 

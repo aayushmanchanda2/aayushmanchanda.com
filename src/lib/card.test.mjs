@@ -413,3 +413,52 @@ test("the row keeps exactly one door off the site", () => {
   assert.match(row, /href=\{entry\.url\}/, "the source link points at the thing itself");
   assert.match(row, /target="_blank"/);
 });
+
+test("the fallback stands down on a height, never on a class name", () => {
+  /*
+   * The failure this exists to stop is the one that shipped. The hide was
+   * `:global(.twitter-tweet-rendered) + .card__quote`, and X inserts that
+   * container long before its iframe has a size — so the readable fallback was
+   * thrown away the moment the class appeared and the wall showed a column of
+   * `notes` bars with nothing above them. Measured live: twenty-four widgets at
+   * zero height, the document down from 6311px to 1835px, and no recovery at
+   * all on a load where X never sizes them.
+   *
+   * design.md §3 is unambiguous about what this dependency owes: visible and
+   * wrong beats silent and wrong. A class is not evidence that an embed
+   * rendered; a height is.
+   */
+  const card = code(read("components/TweetCard.astro"));
+  const embeds = code(read("components/XEmbeds.astro"));
+
+  assert.match(
+    card,
+    /\.card__quote\[data-embedded\]\s*\{\s*display:\s*none;/,
+    "the fallback is hidden by something other than `data-embedded`. Whatever that is, it has to be evidence the embed actually rendered — see design.md §3.",
+  );
+  assert.ok(
+    !/twitter-tweet-rendered/.test(card),
+    "the card is keyed on X's widget class again. That class arrives before their iframe has a height, which is how the wall went blank the first time.",
+  );
+
+  assert.match(
+    embeds,
+    /getBoundingClientRect\(\)\.height>\$\{MIN_EMBED\}/,
+    "the watcher stopped measuring the widget's height, which is the only evidence there is that an embed is really there",
+  );
+  assert.match(
+    embeds,
+    /setAttribute\("data-embedded",""\)/,
+    "nothing marks the blockquote, so the fallback can never stand down and every card would draw twice",
+  );
+  assert.match(
+    embeds,
+    /removeAttribute\("data-embedded"\)/,
+    "the mark is never taken off, so an embed that collapses after it loaded leaves an empty column with no fallback under it",
+  );
+  assert.match(
+    embeds,
+    /clearInterval\(t\)/,
+    "the watch never stops. On a page where X does not answer it would poll for the whole visit.",
+  );
+});

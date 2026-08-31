@@ -79,7 +79,7 @@ const href = entryHref(entry);
 const Wrapper = chrome ? "li" : "div";
 ---
 
-<Wrapper class="tile">
+<Wrapper class:list={["tile", !chrome && "tile--page"]}>
   <div class="tile__frame">
     {/*
       `alt=""`, which is design.md §6's decorative case rather than an exception
@@ -142,6 +142,21 @@ const Wrapper = chrome ? "li" : "div";
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+  }
+
+  /* On an entry page the facade is one of the four optional blocks, and every
+     other one of them opens with this exact clamp — `PostBody.astro › .post`,
+     `DigestBlocks`, `DraftBlock`, and the `.source` line closing the page. This
+     one had nothing, so the player sat welded to the standfirst: measured, a
+     0px gap under a paragraph that everything else on the page stands 64px
+     clear of.
+
+     It belongs to the page form and not to the tile, because on the shelf the
+     grid's own `2rem` row gap already owns the spacing and a margin here would
+     be added to it. `chrome` is the only thing that tells the two apart, which
+     is what it is for. */
+  .tile--page {
+    margin-top: clamp(2.5rem, 8vh, 4rem);
   }
 
   /* The box the poster reserves and the player inherits.

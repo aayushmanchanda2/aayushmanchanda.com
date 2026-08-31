@@ -110,9 +110,14 @@ const hints: Hint[] = [
   }
 
   /* The separator sits in the list item, outside the anchor, so it is never
-     part of the link's text or its target. */
+     part of the link's text or its target — and it is written in the alt-text
+     form, so it has no accessible name either and a screen reader reads the
+     three hints rather than "middle dot" between each of them. That is the
+     technique `layouts/Base.astro › .foot__meta` uses and the one design.md §6
+     says a hand-drawn separator joins on touch. Forty-two library entries
+     render this row now, which is the touch. */
   .hints__item + .hints__item::before {
-    content: "\00b7";
+    content: "\00b7" / "";
     color: var(--hairline-strong);
   }
 

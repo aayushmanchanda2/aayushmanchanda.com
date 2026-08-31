@@ -208,11 +208,25 @@ const description =
      standfirst because the strip is what the title is, quiet furniture rather
      than prose, separators in the list item and never in a link's text. */
 
+  /* **The row gap is 1.25rem and it is a hit area, not a rhythm.** The /tools
+     strip this is otherwise copied from takes `gap: 0 0.7rem`, because nothing
+     on it claims more room than it draws. This one carries tag chips, and a tag
+     claims a 40px target through an `::after` reaching 0.62rem above and below
+     its 20.3px box (`styles/chip.css › .tag::after`). With the lines welded
+     together that overreach lands on whatever is on the line before it:
+     measured at 375px, the first tag's target covered the kind chip by 9.9px
+     and the domain link by 8.6px, and on a digested entry at desktop width it
+     covered the `digested` date on the line below, so pressing a date opened a
+     tag page. design.md §4 states the rule twice — adjacent targets may touch,
+     never overlap — and 1.25rem is the number `TagChips.astro` already derives
+     from the same arithmetic for its own wrapped lines. One number, one reason.
+
+     It costs nothing above 900px, where the strip is one line. */
   .strip {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 0 0.7rem;
+    gap: 1.25rem 0.7rem;
     margin-top: clamp(1rem, 2.5vw, 1.4rem);
     color: var(--faint);
     text-transform: none;
@@ -225,8 +239,12 @@ const description =
     gap: 0.7rem;
   }
 
+  /* The alt-text form, so the separator has no accessible name and a screen
+     reader reads the facts rather than "middle dot" between each of them. It is
+     what `layouts/Base.astro › .foot__meta` already uses and what design.md §6
+     says a strip should join it in on touch. */
   .strip__item + .strip__item::before {
-    content: "\00b7";
+    content: "\00b7" / "";
     color: var(--hairline-strong);
   }
 
@@ -271,6 +289,7 @@ const description =
 
   /* the chip does the talking; the anchor only carries the target */
   .strip__chip {
+    position: relative;
     display: inline-flex;
     text-decoration: none;
     /* The same band as its neighbours above, which it was outside: the opacity
@@ -278,6 +297,24 @@ const description =
     transition-property: opacity;
     transition-duration: var(--dur);
     transition-timing-function: var(--ease);
+  }
+
+  /* design.md §4's 40px floor, taken the way `chip.css › .tag::after` takes it:
+     0.62rem of dead space above and below a 20.3px box, offsets rather than a
+     centring transform so nothing rests on one and reduced motion has nothing
+     to undo, and horizontal only so it cannot swallow the domain link beside
+     it. §4's stated exception is for text — a word in a row of words — and this
+     is a box. It is also the one strip on the site where a 20.3px target sat
+     next to a 40.1px one wearing the same size chip, which is the mismatch
+     design.md §1 spends a paragraph refusing two pixels of.
+
+     The row gap above is what keeps the two hit boxes from meeting: 20px of gap
+     against the 19.84px two of these overreach into it leaves them touching,
+     with a sixth of a pixel to spare. Tight, and touching is the rule. */
+  .strip__chip::after {
+    content: "";
+    position: absolute;
+    inset: -0.62rem 0;
   }
 
   .strip__chip:hover {

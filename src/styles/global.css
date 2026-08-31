@@ -321,9 +321,38 @@ ol {
   background-size: 10px 10px;
 }
 
-/* 1px optical outline for imagery sitting on the page background. */
+/* 1px optical outline for imagery sitting on the page background, so a white
+   screenshot is not a hole in a white page.
+
+   **It has to be a real `outline`, and it shipped as an inset `box-shadow`.**
+   An inner shadow paints above an element's background and below its content,
+   so on an `<img>` — where the content is the picture and there is no padding
+   to leave a gap — the ring is drawn and then covered, every time. Eight of the
+   nine things wearing this class are images, so the declaration was doing
+   nothing on all eight; the ninth is a `<span>` (`ToolList.astro ›
+   .row__mark--initial`), where it worked, which is why a repository tool's
+   initial had an edge in the /tools column and the favicon two rows down did
+   not. Measured on the page rather than reasoned about: a white image on the
+   white theme wearing this class had no edge at all.
+
+   `ShotFrame.astro › .scroller` already knew half of it — it states a real
+   outline because "a shadow is painted under the element's own children" — and
+   what nobody generalised is that a replaced element's picture is that child,
+   one level down. So the scroller is not an exception any more; it is the shape
+   this always wanted.
+
+   `outline` at `-1px` is the same geometry the shadow was asking for: inset by
+   one pixel, no effect on layout, and painted above the content instead of
+   under it.
+
+   **Nothing wearing this class is focusable, and it matters**: this rule sits
+   after `:focus-visible` above and has the same specificity, so an `.outlined`
+   control would silently lose its focus ring. `lib/outline.test.mjs` holds both
+   halves — the property, and the class staying off anything a keyboard can
+   land on. */
 .outlined {
-  box-shadow: inset 0 0 0 1px var(--outline);
+  outline: 1px solid var(--outline);
+  outline-offset: -1px;
 }
 
 /* A link that leaves the site, marked with the arrow rather than with a word.

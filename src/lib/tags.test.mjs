@@ -208,3 +208,72 @@ test("every tag page has something on it, and everything on it is tagged", () =>
     }
   }
 });
+
+test("every row that wraps tag chips is at least as tall as their targets", () => {
+  /*
+   * A tag draws 20.3px and claims 40 through an `::after` reaching `0.62rem`
+   * above and below it (design.md §4's floor). That overreach has to land on
+   * empty line, and whether it does is a property of the *container*, not of
+   * the chip — so it is checkable, and it went wrong the moment a third
+   * container started laying these out.
+   *
+   * `library/[slug].astro › .strip` was that container. It inherited `gap: 0`
+   * from the /tools strip it was copied from, where nothing claims more room
+   * than it draws, and once it wrapped on a phone the first tag's target
+   * covered the kind chip by 9.9px and the domain link by 8.6px. Measured, not
+   * inferred. design.md §4 states the rule twice: adjacent targets may touch,
+   * never overlap.
+   *
+   * So the arithmetic is read out of the stylesheet rather than written down
+   * here, and a fourth container has to come and add itself.
+   */
+  const chip = readFileSync(
+    fileURLToPath(new URL("../styles/chip.css", import.meta.url)),
+    "utf8",
+  );
+
+  const overreach = chip.match(/\.tag::after\s*\{[^}]*inset:\s*-([\d.]+)rem 0;/);
+  assert.ok(overreach, "styles/chip.css no longer extends the tag's hit area, so the 40px floor is gone");
+  const needed = Number(overreach[1]) * 2;
+
+  /** Every container that lays tag chips out in a wrapping row, and its row gap. */
+  const ROWS = [
+    ["components/TagChips.astro", /\.tags\s*\{[^}]*gap:\s*([\d.]+)rem/],
+    ["components/TagFilters.astro", /\.filters__row\s*\{[^}]*gap:\s*([\d.]+)rem/],
+    ["pages/library/[slug].astro", /\n  \.strip\s*\{[^}]*gap:\s*([\d.]+)rem/],
+  ];
+
+  for (const [file, pattern] of ROWS) {
+    const source = readFileSync(fileURLToPath(new URL(`../${file}`, import.meta.url)), "utf8");
+    const gap = source.match(pattern);
+    assert.ok(gap, `${file} no longer states a row gap on the row its tag chips wrap in`);
+    assert.ok(
+      Number(gap[1]) >= needed,
+      `${file} wraps tag chips ${gap[1]}rem apart and their targets need ${needed}rem. The upper line eats presses meant for the lower one — design.md §4, adjacent targets may touch, never overlap.`,
+    );
+  }
+});
+
+test("the kind chip on an entry strip claims the same target its tags do", () => {
+  /*
+   * They are the same box at the same size on the same line: design.md §1
+   * measures both at 20.28px so that two pixels between them cannot read as a
+   * mistake, and 20.3px of target beside 40.1px of target is that mistake at
+   * twice the size. §4's stated hit-area exception is for text — a word in a
+   * row of words — and a chip is not one.
+   */
+  const page = readFileSync(
+    fileURLToPath(new URL("../pages/library/[slug].astro", import.meta.url)),
+    "utf8",
+  );
+  assert.match(
+    page,
+    /\.strip__chip::after\s*\{[^}]*inset:\s*-0\.62rem 0;/,
+    "the kind chip on a /library entry lost its 40px target, leaving a 20.3px box next to the 40.1px tags on its own line",
+  );
+  assert.match(
+    page,
+    /\.strip__chip\s*\{[^}]*position:\s*relative;/,
+    "the kind chip's hit area is absolutely positioned against something other than the chip",
+  );
+});

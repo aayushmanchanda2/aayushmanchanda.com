@@ -2,7 +2,7 @@
    aayushmanchanda.com — the small coloured things
 
    Three vocabularies, in the order they arrived: the status chip, which says
-   where a word sits on a scale; the tag dot and the post monogram, which say
+   where a word sits on a scale; the tag chip and the post monogram, which say
    nothing on any scale and carry identity instead. They share a file because
    they share a page and have to read as one weight of colour on it.
 
@@ -120,20 +120,23 @@
    owns the assignment and never names a colour; the stylesheet owns every
    colour and never needs to know what a tag or a handle is.
 
-   Two shapes read it. A `.tag` puts the hue in a 6px dot and leaves its words
-   at the page's ink; a `.monogram` puts it in a 48px circle and in the initial
-   inside it. Both are identity rather than judgement — the colour is what lets
-   a reader who has seen `agents`, or @thedankoe, twice recognise it a third
-   time before reading the word. Neither may take the filled `.chip` treatment
-   above, which means something on a scale.
+   Two shapes read it. A `.tag` puts the hue in a dotted border and in the mark
+   inside it, and leaves its words at the page's ink; a `.monogram` puts it in a
+   48px circle and in the initial inside it. Both are identity rather than
+   judgement — the colour is what lets a reader who has seen `agents`, or
+   @thedankoe, twice recognise it a third time before reading the word. Neither
+   may take the filled `.chip` treatment above, which means something on a
+   scale.
 
    **Hue is identical across themes and lightness is the only difference**, the
    same shape the accent takes in `global.css`, so the dark blocks below carry
    one number each. Every hue clears **7:1 against its own page background** in
    both themes, which is the band the chip inks above already sit in (6.98 to
    8.76 light, 7.11 to 11.36 dark) rather than the 3:1 a non-text graphic owes:
-   a dot and a chip on one row have to read as one weight of colour, and 3:1
-   would have put a pastel next to them.
+   a tag and a chip on one row have to read as one weight of colour, and 3:1
+   would have put a pastel next to them. It is the other half of why the border
+   and the mark can both be drawn at 1px: a 7:1 hue at hairline weight is what a
+   4.5:1 one would be at three.
 
      slot  hue  light l  ratio   dark l  ratio
      0       8    38.5%   6.95    65.5%   6.98
@@ -144,7 +147,7 @@
      5     285    41.5%   7.03    68.5%   7.06
      6     322    38.5%   7.03    66.5%   6.95
 
-   The gap between 192 and 285 is the accent's, and it is deliberate: a dot in
+   The gap between 192 and 285 is the accent's, and it is deliberate: a tag in
    the 231 band would read as a link marker on a page whose links are that
    blue.
 
@@ -320,8 +323,8 @@
 
    So the slot holds an initial instead, and the colour is what does the avatar's
    actual job: recognising who posted before reading the name. It reads the same
-   seven-hue table a tag dot does, keyed on the handle rather than on a slug, so
-   the site has one identity palette and not two.
+   seven-hue table a tag does, keyed on the handle rather than on a slug, so the
+   site has one identity palette and not two.
 
    **The tint is 0.09 in both themes, and that is the departure from `.chip`.**
    A chip deepens to 0.14 in the dark because its ink lightens and a 9% wash

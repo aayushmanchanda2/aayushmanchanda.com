@@ -190,30 +190,39 @@ const body = clipText(post.text, POST_CARD_MAX);
     border-radius: 0;
   }
 
-  /* The fallback stands down once the embed is there, and we do it rather than
-     waiting for X to.
+  /* The fallback stands down once the embed is **actually there**, and the two
+     words doing the work are "actually there".
 
-     Their factory inserts the rendered widget as a sibling and marks the
+     X's factory inserts the rendered widget as a sibling and marks the
      blockquote it consumed with a `data-twitter-extracted-<session id>`
      attribute — an attribute name nothing can select on, because the id changes
      per page load — and, measured on the shipped page, leaves it visible. Two
-     copies of the same post, one ours and one theirs, stacked.
+     copies of the same post, one ours and one theirs, stacked. So we hide it
+     ourselves.
 
-     So the swap is keyed on `.twitter-tweet-rendered`, the class their widget
-     has carried for years and the one every site styling an embed already
-     depends on, plus the fact that they insert it immediately before the
-     blockquote they took it from. Two assumptions about somebody else's markup,
-     and both fail the same harmless way: the fallback stays visible under the
-     embed. Visible and wrong beats silent and wrong for a dependency like this.
+     **This was keyed on `.twitter-tweet-rendered` and that was wrong, on the
+     live page, for as long as it took their iframes to load.** Their factory
+     inserts the container long before the iframe reports a height, so the
+     moment the class appeared the readable fallback was thrown away and the
+     wall went to nothing: measured on aayushmanchanda.com, twenty-four widgets
+     at zero height and the document collapsing from 6311px to 1835px, which is
+     a page of `notes` bars with no posts above them. On a load where X never
+     sizes them at all — rate limited, blocked, having a bad day — that is the
+     final state.
 
-     `:global` sits in a plain descendant position and deliberately not inside
-     a `:has()`. Astro rewrites the scoped halves of a selector and leaves
-     `:global(...)` in place when it is nested in a functional pseudo-class, so
-     the browser gets a selector it cannot parse and drops the whole rule.
-     **That shipped for one build here**, silently, which is the same failure
-     mode this comment is about. `VideoFacade.astro › .tile__frame
-     :global(iframe)` is the shape that works. */
-  :global(.twitter-tweet-rendered) + .card__quote {
+     design.md §3 says the whole point of this dependency's failure modes is
+     that they stay visible: **visible and wrong beats silent and wrong**. A
+     class name is not evidence that an embed rendered; a height is. So the
+     hide is keyed on `data-embedded`, which `XEmbeds.astro` puts on this
+     blockquote only once the widget beside it has one, and takes off again if
+     it loses it.
+
+     That also drops an assumption rather than adding one. The class name is no
+     longer load-bearing anywhere; the only thing left is that their widget
+     lands immediately before the blockquote it consumed, and that assumption
+     now lives in the script where it can be checked, failing the same harmless
+     way it always did — the fallback stays visible under the embed. */
+  .card__quote[data-embedded] {
     display: none;
   }
 
