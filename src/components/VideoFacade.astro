@@ -1,0 +1,323 @@
+---
+/**
+ * VideoFacade — a saved video that loads nothing from YouTube until you press
+ * play.
+ *
+ * The mechanic is `lite-youtube-embed`'s, hand-rolled rather than installed:
+ * before a press there is no iframe on the page at all, only the poster frame
+ * this repository already committed (`pipeline/thumb.mjs`) and a real control
+ * on top of it. Pressing that control is what builds the player. That is the
+ * whole point — /privacy makes a promise about what opening a page here costs
+ * a reader, and an always-live embed would hand every visitor to Google before
+ * they had decided to watch anything.
+ *
+ * **The embed URL is not in this file's markup, and that is load-bearing.** The
+ * script at the foot builds it from the id in a data attribute, so the built
+ * HTML names no YouTube host that a browser could fetch on load.
+ * `scripts/validate-schema.mjs` reads `dist/` and fails on one, which is what
+ * turns "we chose a facade" into something a later commit cannot quietly undo.
+ *
+ * ## The play control is a link, and that is not a role mistake
+ *
+ * It is an anchor to the video where the video lives, upgraded by the script
+ * into an in-place swap. With scripting off it still does the useful thing:
+ * pressing it opens the video on YouTube. That is the same degradation
+ * `NewsletterSignup.astro` takes to a native POST, and the other half of the
+ * rule `ShotActions.astro` follows by hiding a control that could only fail. A
+ * `<button>` here would be a control that does nothing at all without
+ * JavaScript, on a tile whose entire subject is a video.
+ *
+ * Its `href` is the entry's own `url` and deliberately not `entryHref`. The
+ * seam answers "where does this row send a reader", and the day a video is
+ * digested that answer becomes its detail page — but the play control is the
+ * thing itself, and the thing itself is at YouTube whatever the row decides.
+ *
+ * ## What the tile does not show
+ *
+ * No tags, no hostname, no kind chip, for the reason `TweetCard.astro` gives at
+ * length: each is a link on the row form of the same entry, and a tile does not
+ * need six targets. The two it has are distinct regions with distinct
+ * affordances — press the poster and it plays here, press the title and you
+ * leave — which is the ordinary anatomy of a video listing rather than the coin
+ * toss that rule is about. Every video saved here is on youtube.com, so a
+ * hostname would be the same word down every tile, which is the column
+ * `LibraryList.astro` already dropped for the same reason.
+ */
+import type { LibraryEntry, Video } from "../lib/library";
+import { entryHref } from "../lib/library";
+
+interface Props {
+  /** A video entry the pipeline could fetch a poster for. */
+  entry: LibraryEntry & { video: Video };
+}
+
+const { entry } = Astro.props;
+const { video } = entry;
+
+/** Where the title goes. The one branch, shared with the row and the card. */
+const dest = entryHref(entry);
+---
+
+<li class="tile">
+  <div class="tile__frame">
+    {/*
+      `alt=""`, which is design.md §6's decorative case rather than an exception
+      to it. The play control lying on top of this picture is already named
+      "Play video: <title>" and the title is a line below it, so a description
+      here would be the third time a screen reader heard the same name — and
+      nothing in this build has looked at the frame anyway. It is the video's
+      own still, fetched by id.
+    */}
+    <img
+      class="tile__thumb outlined"
+      src={video.thumb}
+      alt=""
+      loading="lazy"
+      decoding="async"
+    />
+
+    <a
+      class="tile__play press"
+      href={entry.url}
+      rel="noopener nofollow"
+      target="_blank"
+      data-video={video.id}
+      data-video-title={entry.title}
+    >
+      <span class="tile__badge">
+        <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+          {/*
+            Optical, not literal: a triangle's weight sits behind its point, so
+            the shape is drawn 0.875 of a unit right of the box's centre and the
+            badge is what gets centred. Centring the geometry would leave it
+            visibly hanging back.
+          */}
+          <path d="M5.75 3.5 L12 8 L5.75 12.5 Z" fill="currentColor"></path>
+        </svg>
+      </span>
+      <span class="visually-hidden">Play video: {entry.title}</span>
+    </a>
+  </div>
+
+  <span class="tile__name">
+    <a
+      class="tile__link"
+      href={dest.href}
+      rel={dest.external ? "noopener nofollow" : undefined}
+      target={dest.external ? "_blank" : undefined}
+    >
+      {entry.title}
+    </a>
+  </span>
+
+  {entry.note && <p class="tile__note">{entry.note}</p>}
+
+  <span class="tile__date mono tabular-nums">{entry.saved_date}</span>
+</li>
+
+<style>
+  .tile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  /* The box the poster reserves and the player inherits.
+
+     **16:9 is not a second crop.** design.md §8 states one crop, 8:5, and it is
+     for a picture whose shape nothing knows. A video's shape is known, and
+     cropping the frame would cut the picture the video is actually made of. It
+     is also what makes the swap invisible: the player lands in the box the
+     still was already holding, so nothing on the page moves when you press.
+
+     Both stored shapes land right in it. `maxresdefault` arrives at 1280x720
+     and fills it exactly; `hqdefault` — the fallback for a video that never got
+     one (`pipeline/thumb.mjs › YOUTUBE_FRAMES`) — arrives at 480x360 with the
+     same 16:9 frame letterboxed inside it, measured at 45 black rows top and
+     bottom around 270 of picture, which is exactly what `cover` at the centre
+     takes back off. */
+  .tile__frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    /* A flex item's automatic minimum height is its content, which overrules a
+       ratio silently (design.md §8, and it shipped once on the post card).
+       Zeroing it is what lets `aspect-ratio` be the answer, here and on the
+       picture below. */
+    min-height: 0;
+  }
+
+  .tile__thumb {
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    object-fit: cover;
+    /* Centre, not the `top center` a screenshot takes: a poster's bars are
+       symmetric and a frame's subject is in the middle of it. */
+    object-position: center;
+    /* Sharp, like every other frame on the site. */
+    border-radius: 0;
+    transition-property: opacity;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  /* The whole poster is the target, not the badge alone. The badge clears the
+     40px floor on its own, but a poster that cannot be pressed is a poster that
+     looks broken. */
+  .tile__play {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* `.press` keeps its default 0.96 rather than the 0.985 a card dials back
+       to. The rule is about wide elements visibly shrinking, and nothing here
+       is visible: the anchor is a transparent hit area and the only thing a
+       reader watches scale is the badge, which is a compact control. */
+  }
+
+  .tile__badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 36px;
+    /* The accent painted as a background with something on top of it, which is
+       the one pair §1 allows for that: `--accent` lifts in the dark theme and
+       white on it is 3.89:1. This pair is 5.91 either way, over a poster frame
+       of a colour nothing here knows. */
+    background: var(--accent-panel);
+    color: var(--accent-panel-ink);
+    /* Small, filled, interactive — the one thing the site rounds (§3). */
+    border-radius: var(--r-sm);
+  }
+
+  .tile__badge svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Gated, because pressing play keeps the page: on touch `:hover` latches
+     after a tap and the poster would sit dimmed until the reader tapped
+     somewhere else (design.md §4). The poster steps back rather than the badge
+     stepping forward — the badge is already the brightest thing in the box and
+     has nowhere brighter to go. */
+  @media (hover: hover) {
+    .tile__frame:hover .tile__thumb {
+      opacity: 0.82;
+    }
+  }
+
+  .tile__name {
+    font-size: 1.0625rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.35;
+  }
+
+  /* The row's treatment, because it is the row's job: the title of the thing,
+     carrying its own underline so touch gets one without a hover. */
+  .tile__link {
+    color: inherit;
+    text-decoration-line: underline;
+    text-decoration-color: var(--hairline-strong);
+  }
+
+  .tile__link:hover {
+    color: var(--accent);
+    text-decoration-color: currentColor;
+  }
+
+  .tile__note {
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    color: var(--muted);
+  }
+
+  .tile__date {
+    color: var(--faint);
+  }
+
+  /* The player, once there is one. Keyed to the frame and `:global` for the
+     child, the same shape `PostWall.astro` uses on its cards, because the
+     element is made by the script below and never passes through the compiler
+     that would scope a class on it. Absolute against the frame rather than
+     `height: 100%`, so it fills a box whose height came from a ratio. */
+  .tile__frame :global(iframe) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+</style>
+
+<script>
+  /**
+   * The swap. One listener per play control, wired the way
+   * `ShotActions.astro` wires its own, and it is the only script this slice
+   * ships.
+   *
+   * The origin is written here and nowhere else. `lib/library.ts › PROVIDERS`
+   * has one member and `readVideo` refuses anything else, so a second provider
+   * is a branch there and a branch here in the same commit;
+   * `lib/video.test.mjs` fails on the day the first half happens without the
+   * second.
+   *
+   * `youtube-nocookie.com` is YouTube's own host for embeds, and the honest
+   * version of what it buys is on /privacy: it holds off the tracking cookies
+   * until something is actually played, and it is still Google either way.
+   */
+  const EMBED = "https://www.youtube-nocookie.com/embed/";
+
+  /**
+   * What the player is allowed to do, and nothing beyond it. `autoplay` is what
+   * makes a press play rather than land on a second play button; the other two
+   * are what a video needs to run at all on some accounts and some devices.
+   * YouTube's own snippet also asks for the accelerometer, the gyroscope, the
+   * clipboard and web share, none of which playing a video requires.
+   */
+  const ALLOW = "autoplay; encrypted-media; picture-in-picture";
+
+  function play(link: HTMLAnchorElement) {
+    const frame = link.parentElement;
+    const id = link.dataset.video;
+    const title = link.dataset.videoTitle;
+    if (!frame || !id || !title) return;
+
+    const player = document.createElement("iframe");
+    player.src = `${EMBED}${encodeURIComponent(id)}?autoplay=1`;
+    // An iframe with no name is an unlabelled region to a screen reader.
+    player.title = title;
+    player.allow = ALLOW;
+    player.allowFullscreen = true;
+    // Google is told which site the player is on and not which page of it.
+    // This is the modern default; stating it makes it a promise /privacy can
+    // describe instead of a browser setting that could change under us.
+    player.referrerPolicy = "strict-origin-when-cross-origin";
+
+    // The poster and the control go together: the facade has done its job and
+    // a play button behind a running video is a second thing to press.
+    frame.replaceChildren(player);
+    // Focus was on the link that just stopped existing, so it would otherwise
+    // fall back to the top of the document mid-page.
+    player.focus();
+  }
+
+  document
+    .querySelectorAll<HTMLAnchorElement>("a[data-video]")
+    .forEach((link) => {
+      link.addEventListener("click", (event) => {
+        // A modifier is the reader asking the browser for the source instead,
+        // and taking that over is a hijack — the call `EntryNav.astro › KEYS`
+        // makes about Cmd and the arrow keys, on the other kind of control.
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+          return;
+        }
+        event.preventDefault();
+        play(link);
+      });
+    });
+</script>

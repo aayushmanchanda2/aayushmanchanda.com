@@ -23,10 +23,11 @@
  *     stops emitting its graph fails here instead of going unnoticed until
  *     something tries to cite it.
  *
- * Two checks at the foot are not about JSON-LD at all, and live here because
+ * Three checks at the foot are not about JSON-LD at all, and live here because
  * this is the only gate that reads the built HTML: the email address on
- * /contact may not appear in plain text anywhere in `dist/`, and no link
- * anywhere may be glued to the word beside it.
+ * /contact may not appear in plain text anywhere in `dist/`, no link anywhere
+ * may be glued to the word beside it, and no page may carry markup that would
+ * load a video from YouTube before the reader asks for one.
  *
  * Exits 0 with a per-page-type summary, or 1 with every problem listed.
  *
@@ -561,8 +562,48 @@ const GLUED = [
   [/[A-Za-z0-9.,;:!?]<a[ >]/g, "a link is glued to the word before it (missing space)"],
 ];
 
+/*
+ * A page that would fetch a video before anyone asked for one.
+ *
+ * `components/VideoFacade.astro` renders a saved video as the poster frame this
+ * repository committed plus a link, and builds the player only when that link
+ * is pressed. The whole value of that arrangement is a claim /privacy makes by
+ * name — "nothing loads from YouTube until you press play" — and the way it
+ * would be lost is not a decision anyone announces. It is one commit swapping
+ * the facade for the `<iframe>` snippet YouTube hands out, which looks like a
+ * simplification and reads as one in a diff.
+ *
+ * So the check is on the shipped markup rather than on the source: whatever a
+ * template, a component or a future integration does, what reached `dist/` may
+ * not name a host a browser would fetch a video, or a picture of one, from.
+ *
+ * Two things are deliberately outside the patterns. **`youtube.com/watch` is
+ * not on the host list**: a library row has linked there since the section
+ * existed, and a link a reader may choose to follow is not a request the page
+ * makes. And they match a **URL** rather than a word, because /privacy names
+ * youtube-nocookie.com in a sentence on purpose — saying which host a press
+ * reaches is that page's whole job, and a host in prose fetches nothing.
+ *
+ * Script bodies are cut out first, and that is not a loophole. The facade's
+ * embed origin lives in its script because a string in JavaScript is inert
+ * until something runs it, and the press is what runs it; a URL in an attribute
+ * is a request the browser makes on load. This check is about the second kind.
+ */
+/** @type {[RegExp, string][]} */
+const EMBEDS = [
+  [
+    /<iframe/gi,
+    "ships an iframe. The video facade builds one on a press and only on a press; an iframe in the built HTML is a request every reader makes on load",
+  ],
+  [
+    /(?:https?:)?\/\/[\w.-]*(?:youtube-nocookie\.com|youtube\.com\/embed|ytimg\.com|googlevideo\.com)/g,
+    "carries a video URL in its markup, so the page would load from YouTube before anyone pressed play. /privacy says it does not",
+  ],
+];
+
 for (const page of pages) {
   const html = readFileSync(path.join(DIST, page), "utf8");
+  const markup = html.replace(/<script[\s\S]*?<\/script>/gi, "");
 
   if (html.includes(ADDRESS)) {
     fail(page, "prints the email address in plain text; it must stay encoded");
@@ -571,6 +612,13 @@ for (const page of pages) {
   for (const [pattern, message] of GLUED) {
     for (const match of html.matchAll(pattern)) {
       const near = html.slice(Math.max(0, match.index - 40), match.index + 40);
+      fail(page, `${message}: ...${near.replace(/\s+/g, " ")}...`);
+    }
+  }
+
+  for (const [pattern, message] of EMBEDS) {
+    for (const match of markup.matchAll(pattern)) {
+      const near = markup.slice(Math.max(0, match.index - 40), match.index + 40);
       fail(page, `${message}: ...${near.replace(/\s+/g, " ")}...`);
     }
   }

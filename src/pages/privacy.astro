@@ -55,7 +55,16 @@
  * a second one in this same commit. Check that pair again before changing how
  * analytics is loaded.
  *
- * Underneath all five is one rule: **every claim here is a claim about today's
+ * The videos are the sixth, and they are the first thing on this site a reader
+ * can choose to load from someone else. `components/VideoFacade.astro` renders
+ * a saved video as the still this repository committed plus a play control, and
+ * builds the YouTube player only on a press — so the section below had to stop
+ * saying "nothing else loads from anyone else" flat and start saying **when**.
+ * Scoping it to the page load is what keeps both halves true at once: the site
+ * still makes exactly one outside request of its own, on every page, and a page
+ * with no video on it still cannot make a second one however hard you press it.
+ *
+ * Underneath all six is one rule: **every claim here is a claim about today's
  * build, and it says so.** A never-ever about analytics or third parties is a
  * promise a future commit can turn into a lie, and a privacy page that has gone
  * false is worse than none. So the page states what is true now and names the
@@ -166,9 +175,24 @@ import { NEWSLETTER_ACTION } from "../lib/site";
         address the way any host does when your browser fetches an image. The
         request is sent with no referrer, so it does not carry which page you
         were on. The URL carries a publishable key that identifies my logo.dev
-        account for quota, not you. It is the only one: nothing else on the site
-        loads from anyone else, and a second outside host would be named here on
-        the commit that added it.
+        account for quota, not you. It is the only request this site makes on its
+        own: opening a page here loads nothing else from anyone else, and a
+        second outside host would be named here on the commit that added it.
+      </p>
+      <p>
+        The saved videos are the one outside request you can make yourself, and
+        nothing loads from YouTube until you press play. A video on <a
+          href="/library/kind/video">the videos page</a> shows a still I copied
+        into this repository when I saved it, the same way the screenshots work,
+        so the page arrives with a picture from this domain and no player in it.
+        Press play and the still is replaced by one, and that is the moment your
+        browser first talks to Google: the player comes from
+        youtube-nocookie.com, which holds off the usual cookies until something
+        is actually played, and is still Google either way. They get your IP
+        address and the name of this site, not the page you were reading, and
+        anything stored after that is stored under their name rather than mine.
+        On a page with no video on it there is nothing to press, so there is
+        nothing to load.
       </p>
     </section>
 
@@ -218,7 +242,7 @@ import { NEWSLETTER_ACTION } from "../lib/site";
     </section>
 
     <section>
-      <h2 class="doc__head mono">Screenshots and saved posts</h2>
+      <h2 class="doc__head mono">Screenshots, saved posts and video stills</h2>
       <p>
         The <a href="/sites">/sites</a> gallery is screenshots of other
         people&rsquo;s websites. A pipeline takes them automatically when I save
@@ -243,6 +267,14 @@ import { NEWSLETTER_ACTION } from "../lib/site";
         it and links back to the original, and its row on <a href="/library"
         >/library</a> carries the date I saved it. If one of them is yours, the
         same issue link works and the same answer applies.
+      </p>
+      <p>
+        A saved video is the same arrangement with one picture in it. What sits
+        on the page before you press play is YouTube&rsquo;s own poster frame
+        for that video, fetched once when I saved the link and stored here, so
+        that showing you what you are about to watch does not cost you a request
+        to Google. If it is your video and you would rather I did not, the issue
+        link above takes it down too.
       </p>
     </section>
 

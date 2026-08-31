@@ -10,14 +10,18 @@
  * the `BreadcrumbList` node's parent to be something a reader can see named,
  * and `All` is a scope, not a name.
  *
- * **`post` is the one kind that is not a list, and this is the only branch.**
- * A filtered page knows every entry on it is the same shape, so the shape can
- * be the layout: `PostWall.astro` lays the posts out as cards. The other two
- * kinds keep the list, and so does /library itself, where posts sit among
- * articles and videos and have to line up with them. Keyed on the route rather
- * than on the data — "every entry here happens to be a post" is true of
- * `/library/domain/x-com` too, and a page that changed shape because of what
- * was filed into it would be a page nobody could predict.
+ * **`article` is the one kind that is still a list, and the two branches below
+ * are why.** A filtered page knows every entry on it is the same shape, so the
+ * shape can be the layout: `PostWall.astro` lays the posts out as cards, and
+ * `VideoFacade.astro` lays the videos out as posters you can press. An article
+ * is a link and a line about it, which is what a row already is. /library
+ * itself keeps the list whatever is on it, because there posts and videos sit
+ * among articles and have to line up with them.
+ *
+ * Both branches are keyed on the route rather than on the data — "every entry
+ * here happens to be a video" is true of `/library/domain/youtube-com` too, and
+ * a page that changed shape because of what was filed into it would be a page
+ * nobody could predict.
  */
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 
@@ -25,7 +29,8 @@ import Base from "../../../layouts/Base.astro";
 import KindTabs from "../../../components/KindTabs.astro";
 import LibraryList from "../../../components/LibraryList.astro";
 import PostWall from "../../../components/PostWall.astro";
-import type { Kind } from "../../../lib/library";
+import VideoFacade from "../../../components/VideoFacade.astro";
+import type { Kind, LibraryEntry, Video } from "../../../lib/library";
 import { KIND_LABELS, kindGroups, library } from "../../../lib/library";
 import { libraryRowUrl, listJsonLd } from "../../../lib/schema";
 
@@ -46,6 +51,20 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { kind, entries } = Astro.props;
 const heading = KIND_LABELS[kind];
 const standfirst = STANDFIRST[kind];
+
+/**
+ * Only an entry with a poster and an id gets a facade.
+ *
+ * A video saved before the field existed, or one whose id the pipeline could
+ * not read out of a share link (`pipeline/thumb.mjs › YOUTUBE_ID`), has
+ * `video: null` — no still to show and nothing to play. `PostWall.astro` makes
+ * the same refusal about a post it could not read, for the same reason: half a
+ * card is worse than a row, and such an entry keeps its row on /library and on
+ * its tag and domain pages. Every video here carries one today.
+ */
+const playable = entries.filter(
+  (entry): entry is LibraryEntry & { video: Video } => entry.video !== null,
+);
 
 /** Rows point where they go, same as /library, plus the crumb this page draws. */
 const jsonLd = listJsonLd({
@@ -76,6 +95,12 @@ const jsonLd = listJsonLd({
       {
         kind === "post" ? (
           <PostWall entries={entries} />
+        ) : kind === "video" ? (
+          <ul class="shelf">
+            {playable.map((entry) => (
+              <VideoFacade entry={entry} />
+            ))}
+          </ul>
         ) : (
           <LibraryList entries={entries} />
         )
@@ -94,5 +119,30 @@ const jsonLd = listJsonLd({
      persistent control and starts reading as two that happen to match. */
   .rows {
     margin-top: 1.25rem;
+  }
+
+  /* The shelf of posters, and it lives here rather than in a component of its
+     own. `PostWall.astro` earned one: `columns` is a layout with a trade to
+     explain and a test holding it to one route. This is three declarations with
+     nothing to decide, and a second component whose whole body is a `<ul>` and
+     a `map` would be indirection bought for nothing.
+
+     A grid rather than the wall's columns, because a grid fills
+     across-then-down and keeps the entries newest first. The wall gave that
+     order up to get a masonry, which it needed because a card holding 700
+     characters and a card holding 40 are wildly different heights. Here the
+     poster is a fixed ratio and what hangs under it is a title and a line, so
+     the ragged edge a masonry exists to close is a few lines deep and not worth
+     scrambling the order for.
+
+     `minmax(min(20rem, 100%), 1fr)` says the same thing the wall's column width
+     says — a tile narrower than 320px is not worth a second column — and at the
+     832px this page takes, two columns of 404px are what fits. Three would need
+     1008px. The `min()` is not decoration: a bare `20rem` minimum overflows a
+     287px phone column instead of dropping to one track. */
+  .shelf {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(20rem, 100%), 1fr));
+    gap: 2rem 1.5rem;
   }
 </style>
