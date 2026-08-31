@@ -719,5 +719,83 @@
       "date": "2026-08-30",
       "text": "At 24, @jameygannon has already built the kind of AI creative career most people are still trying to figure out. On Episode 80 of @FastHours, she broke down exactly how she did it. We dig into... → How Jamey taught herself design at 15 → Why Gen Z chases money over job titles → 3 AI moments that had her hooked → What top AI creatives do differently → How to build brand mood boards → Real-time demo of Midjourney's new edit model 🎧 Episode 80 Youtube: https://t.co/SaVgM253zC Spotify: https://t.co/hK1AlP3EiO cc: @Ror_Fly"
     }
+  },
+  {
+    "slug": "directionally-correct",
+    "title": "It's easy to go insane in the AI field. Things are changing so fast, startups…",
+    "url": "https://x.com/davidondrej1/status/2093966150124122222?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-08-31",
+    "kind": "post",
+    "note": "@DavidOndrej1: It's easy to go insane in the AI field. Things are changing so fast, startups are going out of business every week, new frontier models are being released every month. The amount of change in such a short period of time is unheard of. Because of this, it's very heard (if not…",
+    "post": {
+      "author": "David Ondrej",
+      "handle": "DavidOndrej1",
+      "date": "2026-08-30",
+      "text": "It's easy to go insane in the AI field. Things are changing so fast, startups are going out of business every week, new frontier models are being released every month. The amount of change in such a short period of time is unheard of. Because of this, it's very heard (if not impossible) to make any meaningful multi-year plans. You simple cannot know what the world will look like in 5+ years. Nobody does. This fact tends to create a feeling of confusion, dread, uncertainty in people. Not having any idea of where we're headed, or how to plan, or what to do, can mess with you A LOT. Directionally correct. This is the answer to all of the chaos, confusion and uncertainty. Stop focusing on a single clear outcome. Stop trying to control the future. Stop attempting to predict what may or may not happen. And focus fully on being directionally correct. What does \"directionally correct\" actually mean? It means doing this that are in the right direction. You might not know for certain if doing X will lead to something, but you feel that doing X is almost certainly beneficial, and will move you closer to your goals. For example, if you want to build a billion-dollar AI company, you should probably become more technical. Becoming more technical (aka better at systems design, codebase architecture, software design...) is not going to hurt you. In fact, it will most likely greatly help you become a founder that can build a company worth billions. If you want to become a professional football player, you probably don't know what your path to being a Pro will look like. Which clubs you will pay for, what people will play a role, and so on. However, there are plenty of things that are obviously directionally correct, such as improving your cardio. You need to look for the AI version of \"improving your cardio\" in order to not go insane. Every day, do the things that are obvious. Do the things that are obviously directionally correct. Stop overthinking and just do them. Oh, a new frontier model comes out? GO FUCKING TRY IT. Credible people in the field are posting about a new paper? GO READ IT. You see people automating tasks with personal agents? GO BUILD ONE. Get very clear about what your goals are, and it will become obvious what things are, and what things aren't, directionally correct. As Steve Jobs said... \"You can't connect the dots looking forward, you can only connect them looking backward.\""
+    }
+  },
+  {
+    "slug": "app-pricing-that-makes-150-per-day",
+    "title": "app pricing that makes $150 per day",
+    "url": "https://x.com/dankulkov/status/2093257679447978298?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-08-31",
+    "kind": "post",
+    "note": "@DanKulkov",
+    "post": {
+      "author": "Dan Kulkov",
+      "handle": "DanKulkov",
+      "date": "2026-08-28",
+      "text": "app pricing that makes $150 per day"
+    }
+  },
+  {
+    "slug": "the-complete-guide-to-pstack-pt-1",
+    "title": "In this series of posts, I'm going to show you how I use pstack, my personal…",
+    "url": "https://x.com/poteto/status/2094457600259842065?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-08-31",
+    "kind": "post",
+    "note": "@poteto: In this series of posts, I'm going to show you how I use pstack, my personal set of skills for doing rigorous engineering work. It's allowed me to ship 2,000 PRs a month to production with high confidence. Personally, I have never put much emphasis into how many lines of code or…",
+    "post": {
+      "author": "lauren",
+      "handle": "poteto",
+      "date": "2026-08-31",
+      "text": "In this series of posts, I'm going to show you how I use pstack, my personal set of skills for doing rigorous engineering work. It's allowed me to ship 2,000 PRs a month to production with high confidence. Personally, I have never put much emphasis into how many lines of code or how many PRs I was landing. Before agents, no one cared, and rightfully so, as raw productivity did not always equate to quality or a visible outcome for users. It was simply a vanity metric. But I've discovered through the course of building pstack that volume does matter, especially when you are able to maintain or even increase the level of quality of the product with agents. For example, I started working on Grok @Bot about 2 months ago, when it was still in its early days and the codebase was fresh but starting to grow. Despite the team growing and now landing hundreds of PRs a day into the Grok @Bot codebase, pstack has allowed me to keep the quality of the code high for everyone as I constantly monitor code, refactor, add new lints and checks, and also work on features. Being Grok @Bot's gardener and maintainer is something I was only able to do through pstack. Our early momentum after building the prototype was very high and many people were joining the team. I had a critical moment of opportunity to refactor the whole codebase, while it was being built and extended and with no downtime, into something with strong foundations. A codebase with high quality that scales no matter how many engineers (and most importantly, non-engineers) contribute to it. All of this work requires me to refactor and improve the foundations of Grok Bot as it's being built, and you can only do that when the foundations can keep up with the number of contributions. The proof is in Grok @Bot itself. Over the next few weeks, I'll tell you everything you need to know to be able to build and maintain a high quality app using pstack."
+    }
+  },
+  {
+    "slug": "i-just-fulfilled-a-real-999-ai-assessment-on-camera",
+    "title": "I just fulfilled a real $999 AI assessment on camera. The client is a business…",
+    "url": "https://x.com/coreyganim/status/2094411499619905646?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-08-31",
+    "kind": "post",
+    "note": "@coreyganim: I just fulfilled a real $999 AI assessment on camera. The client is a business broker who already runs his own Claude Code agent team. It skip traces owners, enriches data with Apollo, and hands him verified cell numbers. He still paid me $999 to look at it. So I broke down the…",
+    "post": {
+      "author": "Corey Ganim",
+      "handle": "coreyganim",
+      "date": "2026-08-31",
+      "text": "I just fulfilled a real $999 AI assessment on camera. The client is a business broker who already runs his own Claude Code agent team. It skip traces owners, enriches data with Apollo, and hands him verified cell numbers. He still paid me $999 to look at it. So I broke down the whole thing: → Why I never prescribe on the first call (and the one thing I do instead) → The contact form message that's produced millions in deals, and the one agent that automates it → How a Claude Code team supervising a Hyperagent team broke, and the two-input fix → What the $999 actually buys: the report I deliver on call two If you've ever wondered how to sell an AI assessment to someone who already knows AI, this one breaks it all down. And you can grab the exact template I used to deliver his full report at https://t.co/lprebgty0u Check it out below:"
+    }
+  },
+  {
+    "slug": "the-modern-app-starter-checklist",
+    "title": "The Modern App Starter Checklist",
+    "url": "https://burcs.dev/starter",
+    "domain": "burcs.dev",
+    "saved_date": "2026-08-31",
+    "kind": "article",
+    "note": "A production-minded checklist for shipping agent-friendly Cloudflare apps, covering scaffolding, data stores, staging, security, deployment, and verification."
+  },
+  {
+    "slug": "the-claude-code-guide-for-startups",
+    "title": "The Claude Code Guide for Startups",
+    "url": "https://claude.com/blog/claude-code-guide-for-startups",
+    "domain": "claude.com",
+    "saved_date": "2026-08-31",
+    "kind": "article",
+    "note": "Anthropic's five operating principles for startups using Claude Code: let everyone ship, automate tedium, verify outputs, build for rebuilding, and productionize prototypes."
   }
 ]

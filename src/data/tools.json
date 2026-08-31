@@ -299,5 +299,72 @@
     "verdict": "watching",
     "note": "A Grok bot template for orchestrating coding agents through Herdr, with explicit pane-layout and blocking-wait guidance.",
     "status_date": "2026-08-31"
+  },
+  {
+    "slug": "email-your-icp-website-visitors-ploy",
+    "name": "Email Your ICP Website Visitors | Ploy",
+    "url": "https://ploy.ai/ploybooks/email-icp-website-visitors",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Ploy ranks identified website visitors by ICP fit, resolves one verified contact per company, and stages Gmail drafts for review without auto-sending.",
+    "status_date": "2026-08-31"
+  },
+  {
+    "slug": "txt-minimalist-text-editor-for-macos",
+    "name": "Txt · Minimalist Text Editor for macOS",
+    "url": "https://adrien.website/txt/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A native, local-first Mac text editor with quick notes, focus mode, Markdown and PDF export, and Apple Intelligence features; it's coming soon.",
+    "status_date": "2026-08-31"
+  },
+  {
+    "slug": "circleback",
+    "name": "Circleback",
+    "url": "https://circleback.ai/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "AI meeting notes that capture transcripts, action items, searchable context, and automations across video calls and in-person conversations.",
+    "status_date": "2026-08-31"
+  },
+  {
+    "slug": "the-agency-ai-specialists-ready-to-transform-your-workflow",
+    "name": "The Agency: AI Specialists Ready to Transform Your Workflow",
+    "url": null,
+    "repo": "https://github.com/msitarzewski/agency-agents",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A large collection of specialized agent personas and workflows, with installers for Claude Code, Codex, Cursor, Hermes, and other coding tools.",
+    "status_date": "2026-08-31"
+  },
+  {
+    "slug": "agent-reach",
+    "name": "Agent Reach",
+    "url": null,
+    "repo": "https://github.com/Panniantong/Agent-Reach",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A CLI capability layer that equips agents to read and search the web, YouTube, X, Reddit, GitHub, RSS, and several Chinese platforms.",
+    "status_date": "2026-08-31"
+  },
+  {
+    "slug": "codebase-memory-mcp",
+    "name": "codebase-memory-mcp",
+    "url": null,
+    "repo": "https://github.com/DeusData/codebase-memory-mcp",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A local MCP server that indexes code into a persistent tree-sitter knowledge graph for fast structural queries, call traces, and impact analysis.",
+    "status_date": "2026-08-31"
+  },
+  {
+    "slug": "diffusion-studio",
+    "name": "Diffusion Studio",
+    "url": null,
+    "repo": "https://github.com/diffusionstudio/editor",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "An open-source desktop video editor and CLI that lets coding agents inspect footage, edit timelines, and leave every output editable in the UI.",
+    "status_date": "2026-08-31"
   }
 ]
