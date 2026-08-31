@@ -290,5 +290,14 @@
     "verdict": "watching",
     "note": "A no-code AI support chat builder that trains on websites and files, routes to humans, supports multiple models and mines conversations for product insights.",
     "status_date": "2026-08-30"
+  },
+  {
+    "slug": "shepherd-by-can",
+    "name": "Shepherd by Can",
+    "url": "https://x.ai/bot/i5YF8f-zdcR76uKPrqg3J",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A Grok bot template for orchestrating coding agents through Herdr, with explicit pane-layout and blocking-wait guidance.",
+    "status_date": "2026-08-31"
   }
 ]
