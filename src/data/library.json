@@ -797,5 +797,23 @@
     "saved_date": "2026-08-31",
     "kind": "article",
     "note": "Anthropic's five operating principles for startups using Claude Code: let everyone ship, automate tedium, verify outputs, build for rebuilding, and productionize prototypes."
+  },
+  {
+    "slug": "what-we-learned-from-15-hours-of-anthropic-certification-tra",
+    "title": "What We Learned From 15 Hours of Anthropic Certification Training",
+    "url": "https://every.to/p/what-we-learned-from-15-hours-of-anthropic-certification-training",
+    "domain": "every.to",
+    "saved_date": "2026-09-01",
+    "kind": "article",
+    "note": "Every's team took Anthropic's four certification courses and found their main value is shared definitions for skills, MCP, APIs, and Claude Code rather than a workflow playbook."
+  },
+  {
+    "slug": "how-our-agents-build-on-brand-pages-with-design-md",
+    "title": "How our agents build on-brand pages with design.md",
+    "url": "https://vercel.com/blog/how-our-agents-build-on-brand-pages-with-design-md",
+    "domain": "vercel.com",
+    "saved_date": "2026-09-01",
+    "kind": "article",
+    "note": "Vercel explains how it built design.md as a public brand file for coding agents, using repeatable visual evals to turn subjective guidance into rules that produce consistent pages."
   }
 ]

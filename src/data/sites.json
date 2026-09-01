@@ -191,5 +191,22 @@
       "#a000ff"
     ],
     "collections": []
+  },
+  {
+    "slug": "tiny-ui",
+    "title": "Tiny UI",
+    "url": "https://tinyui.org/",
+    "domain": "tinyui.org",
+    "saved_date": "2026-09-01",
+    "shot": "/shots/tiny-ui.webp",
+    "palette": [
+      "#f9fafa",
+      "#0d0d0d",
+      "#2b2b2c",
+      "#cfd0d2",
+      "#515050",
+      "#6f6f70"
+    ],
+    "collections": []
   }
 ]
