@@ -375,5 +375,32 @@
     "verdict": "watching",
     "note": "A free ChatGPT skill that searches flexible dates and trip lengths, then checks cabins, connections, seat availability, and stale fares before recommending business-class options.",
     "status_date": "2026-09-01"
+  },
+  {
+    "slug": "astro-themes-tailwind-css-templates-lexington-themes",
+    "name": "Astro Themes & Tailwind CSS Templates | Lexington Themes",
+    "url": "https://lexingtonthemes.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A collection of 133 production-ready Astro 7 themes with Tailwind CSS, including Sanity and EmDash CMS variants.",
+    "status_date": "2026-09-01"
+  },
+  {
+    "slug": "emdash-cms",
+    "name": "EmDash CMS",
+    "url": "https://emdashcms.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "An open source, Astro-native CMS with typed schemas, secure plugins, and MCP APIs that humans and coding agents can both use.",
+    "status_date": "2026-09-01"
+  },
+  {
+    "slug": "voyage-ai-home",
+    "name": "Voyage AI | Home",
+    "url": "https://www.voyageai.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Embedding and reranking APIs for semantic search and RAG, with general, domain-specific, and multimodal models.",
+    "status_date": "2026-09-01"
   }
 ]

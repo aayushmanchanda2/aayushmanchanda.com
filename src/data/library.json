@@ -845,5 +845,14 @@
       "date": "2026-08-31",
       "text": "This is the new bar for PMs: \"I'm able to do now in a day what used to take me a week.\" In this episode of How I AI, Daniel Blum demos how he uses Claude Cowork as an AI system that compounds over time, instead of starting from scratch with every chat. He shows how he - uses @NotionHQ as his persona brain - contextualizes @claudeai with voice memos, links, and updates - how his system \"learns\" company jargon - built a \"workstation\" plugin to bootstrap everyone else onto the same system Finally - we cover the 20% Claude still cant do (for now) As always, a huge ty to our sponsors: @Optimizely - Your AI agent orchestration platform for marketing and digital teams: https://t.co/e3Pb0XAuCA @Jira AI SDLC - Get your tokens’ worth with Jira: https://t.co/lMeieiu2Xe Full ep on YT:"
     }
+  },
+  {
+    "slug": "networking-foundations-course-free-course-flavio-copes",
+    "title": "Networking Foundations Course — Free course | Flavio Copes",
+    "url": "https://flaviocopes.com/courses/networking-foundations/",
+    "domain": "flaviocopes.com",
+    "saved_date": "2026-09-01",
+    "kind": "article",
+    "note": "A free 35-lesson course on how networks move data, from local links and IP routing through TCP, NAT, firewalls, and practical diagnostics."
   }
 ]
