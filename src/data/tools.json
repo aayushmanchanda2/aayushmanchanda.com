@@ -366,5 +366,14 @@
     "verdict": "watching",
     "note": "An open-source desktop video editor and CLI that lets coding agents inspect footage, edit timelines, and leave every output editable in the UI.",
     "status_date": "2026-08-31"
+  },
+  {
+    "slug": "flexible-business-flight-finder-free-chatgpt-skill",
+    "name": "Flexible Business Flight Finder | Free ChatGPT Skill",
+    "url": "https://orenmeetsworld.github.io/business-flight-finder/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A free ChatGPT skill that searches flexible dates and trip lengths, then checks cabins, connections, seat availability, and stale fares before recommending business-class options.",
+    "status_date": "2026-09-01"
   }
 ]

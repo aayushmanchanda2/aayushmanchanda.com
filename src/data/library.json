@@ -815,5 +815,35 @@
     "saved_date": "2026-09-01",
     "kind": "article",
     "note": "Vercel explains how it built design.md as a public brand file for coding agents, using repeatable visual evals to turn subjective guidance into rules that produce consistent pages."
+  },
+  {
+    "slug": "agentic-engineering-crash-course-graphs-workflows-verifiable",
+    "title": "Agentic Engineering Crash Course: Graphs, workflows, verifiable coding agent…",
+    "url": "https://x.com/alexlavaee/status/2094595716115316912?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-09-01",
+    "kind": "post",
+    "note": "@alexlavaee: Agentic Engineering Crash Course: Graphs, workflows, verifiable coding agent runtimes, and staying in control w/ @RayFernando1337. We walk through the foundation for turning your coding agent from a screwdriver into a power drill.",
+    "post": {
+      "author": "Alex Lavaee",
+      "handle": "alexlavaee",
+      "date": "2026-09-01",
+      "text": "Agentic Engineering Crash Course: Graphs, workflows, verifiable coding agent runtimes, and staying in control w/ @RayFernando1337. We walk through the foundation for turning your coding agent from a screwdriver into a power drill."
+    }
+  },
+  {
+    "slug": "this-is-the-new-bar-for-pms-i-m-able-to-do-now-in-a-day-what",
+    "title": "This is the new bar for PMs: \"I'm able to do now in a day what used to take me…",
+    "url": "https://x.com/clairevo/status/2094558546524561505?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-09-01",
+    "kind": "post",
+    "note": "@clairevo: This is the new bar for PMs: \"I'm able to do now in a day what used to take me a week.\" In this episode of How I AI, Daniel Blum demos how he uses Claude Cowork as an AI system that compounds over time, instead of starting from scratch with every chat. He shows how he - uses…",
+    "post": {
+      "author": "claire vo 🖤",
+      "handle": "clairevo",
+      "date": "2026-08-31",
+      "text": "This is the new bar for PMs: \"I'm able to do now in a day what used to take me a week.\" In this episode of How I AI, Daniel Blum demos how he uses Claude Cowork as an AI system that compounds over time, instead of starting from scratch with every chat. He shows how he - uses @NotionHQ as his persona brain - contextualizes @claudeai with voice memos, links, and updates - how his system \"learns\" company jargon - built a \"workstation\" plugin to bootstrap everyone else onto the same system Finally - we cover the 20% Claude still cant do (for now) As always, a huge ty to our sponsors: @Optimizely - Your AI agent orchestration platform for marketing and digital teams: https://t.co/e3Pb0XAuCA @Jira AI SDLC - Get your tokens’ worth with Jira: https://t.co/lMeieiu2Xe Full ep on YT:"
+    }
   }
 ]
