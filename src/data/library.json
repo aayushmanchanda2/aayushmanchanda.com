@@ -854,5 +854,32 @@
     "saved_date": "2026-09-01",
     "kind": "article",
     "note": "A free 35-lesson course on how networks move data, from local links and IP routing through TCP, NAT, firewalls, and practical diagnostics."
+  },
+  {
+    "slug": "build-a-language-model-on-your-mac-free-course",
+    "title": "Build a Language Model on Your Mac — Free course",
+    "url": "https://flaviocopes.com/courses/language-model-builder/",
+    "domain": "flaviocopes.com",
+    "saved_date": "2026-09-02",
+    "kind": "article",
+    "note": "A free 29-lesson course by Flavio Copes on building, training, fine-tuning, evaluating, and documenting a small language model locally on a Mac."
+  },
+  {
+    "slug": "ep-s-signal-knowledgebase",
+    "title": "EP's Signal Knowledgebase",
+    "url": "https://www.eptwts.com/",
+    "domain": "eptwts.com",
+    "saved_date": "2026-09-02",
+    "kind": "article",
+    "note": "EP distills 14,000 posts into a searchable knowledge base on distribution, marketing, offers, content, and making money online."
+  },
+  {
+    "slug": "building-shared-memory-for-ai-agents-in-notion",
+    "title": "Building Shared Memory for AI Agents in Notion",
+    "url": "https://www.notion.com/blog/building-shared-memory-for-ai-agents-in-notion",
+    "domain": "notion.com",
+    "saved_date": "2026-09-02",
+    "kind": "article",
+    "note": "Notion’s engineering team explains Lore, an open-source shared-memory system that stores agent knowledge as structured Notion pages and measures whether retrieval improves performance."
   }
 ]

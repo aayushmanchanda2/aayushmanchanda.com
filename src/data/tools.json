@@ -402,5 +402,14 @@
     "verdict": "watching",
     "note": "Embedding and reranking APIs for semantic search and RAG, with general, domain-specific, and multimodal models.",
     "status_date": "2026-09-01"
+  },
+  {
+    "slug": "foundation",
+    "name": "Foundation",
+    "url": "https://www.trychroma.com/foundation",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Chroma’s Foundation turns agent sessions into a versioned, cited team wiki and connects it to coding agents, Slack, MCP, a CLI, and an API.",
+    "status_date": "2026-09-02"
   }
 ]
