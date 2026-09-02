@@ -411,5 +411,32 @@
     "verdict": "watching",
     "note": "Chroma’s Foundation turns agent sessions into a versioned, cited team wiki and connects it to coding agents, Slack, MCP, a CLI, and an API.",
     "status_date": "2026-09-02"
+  },
+  {
+    "slug": "space-infinite-space-on-your-computer",
+    "name": "Space | Infinite space on your computer.",
+    "url": "https://spacefs.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A cloud filesystem that mounts in Finder, streams only the file ranges an app needs, and syncs edits across Macs without filling local storage.",
+    "status_date": "2026-09-02"
+  },
+  {
+    "slug": "dialkit-tune-interfaces-in-real-time",
+    "name": "DialKit — Tune interfaces in real time",
+    "url": "https://www.dialkit.dev/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A React toolkit for adding live controls beside an interface so you can tune animation, layout, spacing, and visual details in real time.",
+    "status_date": "2026-09-02"
+  },
+  {
+    "slug": "slot-text-tiny-text-roll-animation",
+    "name": "slot-text — tiny text roll animation",
+    "url": "https://textmotion.dev/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A tiny text-roll animation library with reduced-motion handling, screen-reader support, grapheme-aware transitions, and real-browser tests.",
+    "status_date": "2026-09-02"
   }
 ]

@@ -208,5 +208,22 @@
       "#6f6f70"
     ],
     "collections": []
+  },
+  {
+    "slug": "daniel-white",
+    "title": "Daniel White",
+    "url": "https://www.danielwhite.uk/",
+    "domain": "danielwhite.uk",
+    "saved_date": "2026-09-02",
+    "shot": "/shots/daniel-white.webp",
+    "palette": [
+      "#fbfaf9",
+      "#192437",
+      "#afb0b0",
+      "#cfcfce",
+      "#8f908e",
+      "#50504f"
+    ],
+    "collections": []
   }
 ]
