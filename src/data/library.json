@@ -881,5 +881,47 @@
     "saved_date": "2026-09-02",
     "kind": "article",
     "note": "Notion’s engineering team explains Lore, an open-source shared-memory system that stores agent knowledge as structured Notion pages and measures whether retrieval improves performance."
+  },
+  {
+    "slug": "you-cannot-mandate-an-ai-transformation",
+    "title": "You Cannot Mandate an AI Transformation",
+    "url": "https://lg.substack.com/p/you-cannot-mandate-an-ai-transformation",
+    "domain": "lg.substack.com",
+    "saved_date": "2026-09-04",
+    "kind": "article",
+    "note": "Julie Zhuo maps AI adoption from personal relief to shared wins, reliable systems, and organizational redesign without stripping people of agency."
+  },
+  {
+    "slug": "lunagraph-opens-its-visual-react-editor",
+    "title": "it's happening 🥹 @lunagraphHQ is open not just a design canvas, but a visual…",
+    "url": "https://x.com/putrikarunian/status/2094817055476175052?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-09-04",
+    "kind": "post",
+    "note": "@putrikarunian: it's happening 🥹 @lunagraphHQ is open not just a design canvas, but a visual editor for React this means you can design the full experience: from exploration to defining every state, interaction, and flow. and when it feels right, hand devs nicely packaged code, UX and all come…",
+    "post": {
+      "author": "Putri Karunia",
+      "handle": "putrikarunian",
+      "date": "2026-09-01",
+      "text": "it's happening 🥹 @lunagraphHQ is open not just a design canvas, but a visual editor for React this means you can design the full experience: from exploration to defining every state, interaction, and flow. and when it feels right, hand devs nicely packaged code, UX and all come design with code this weekend 🌸 (sound on 🔊)"
+    }
+  },
+  {
+    "slug": "claude-code-codex-for-marketers-q-a",
+    "title": "Claude Code + Codex for Marketers — Q&A",
+    "url": "https://docs.google.com/document/d/17f6aJP0_OliXYrtSkhko64DRH8E_mZBiHnHAbP2KWd4/mobilebasic",
+    "domain": "docs.google.com",
+    "saved_date": "2026-09-04",
+    "kind": "article",
+    "note": "A practical Q&A on building folder-based agent workspaces, choosing Claude Code or Codex, sharing skills, and automating repeatable marketing work."
+  },
+  {
+    "slug": "school-visualize-value",
+    "title": "School | Visualize Value",
+    "url": "https://visualizevalue.com/school",
+    "domain": "visualizevalue.com",
+    "saved_date": "2026-09-04",
+    "kind": "article",
+    "note": "Jack Butcher’s free course library covers visual clarity, positioning, packaging, publishing, service, and turning knowledge into reusable assets."
   }
 ]

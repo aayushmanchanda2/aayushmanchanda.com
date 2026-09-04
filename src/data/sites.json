@@ -225,5 +225,22 @@
       "#50504f"
     ],
     "collections": []
+  },
+  {
+    "slug": "barkas",
+    "title": "Barkas",
+    "url": "https://landdding.com/l/barkas-com-eefda0aa",
+    "domain": "landdding.com",
+    "saved_date": "2026-09-04",
+    "shot": "/shots/barkas.webp",
+    "palette": [
+      "#f7f7f6",
+      "#513019",
+      "#938f6e",
+      "#cfd6cf",
+      "#291b12",
+      "#52514d"
+    ],
+    "collections": []
   }
 ]
