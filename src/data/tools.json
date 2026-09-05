@@ -459,15 +459,6 @@
     "status_date": "2026-09-04"
   },
   {
-    "slug": "lightreel-your-ai-ugc-marketing-researcher",
-    "name": "LightReel: Your AI UGC Marketing Researcher",
-    "url": "https://lightreel.ai/",
-    "category": "unsorted",
-    "verdict": "watching",
-    "note": "An AI research tool that searches TikTok and Instagram to find creators, track trends, study competitors, and improve UGC scripts and videos.",
-    "status_date": "2026-09-04"
-  },
-  {
     "slug": "meta-ads-skill-for-ai-coding-agents",
     "name": "Meta Ads Skill for AI Coding Agents",
     "url": null,
@@ -475,15 +466,6 @@
     "category": "unsorted",
     "verdict": "watching",
     "note": "An open-source agent skill for Meta API setup, campaign publishing, browser-only steps, and conversion-tracking verification drawn from production failures.",
-    "status_date": "2026-09-04"
-  },
-  {
-    "slug": "treg-people-search-for-ai-agents",
-    "name": "treg People Search for AI Agents",
-    "url": "https://treg.to/people-search",
-    "category": "unsorted",
-    "verdict": "watching",
-    "note": "A metered people-search service that routes agents across dozens of providers for company data, contacts, verified work emails, and phone numbers.",
     "status_date": "2026-09-04"
   },
   {
