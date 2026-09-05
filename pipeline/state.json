@@ -383,6 +383,12 @@
     "section": "tools",
     "at": "2026-09-01T23:23:07.893Z"
   },
+  "1840849536": {
+    "kind": "published",
+    "slug": "ref-review-the-plan-before-the-code",
+    "section": "tools",
+    "at": "2026-09-05T04:39:09.938Z"
+  },
   "1840849597": {
     "kind": "published",
     "slug": "voyage-ai-home",
@@ -443,6 +449,18 @@
     "section": "tools",
     "at": "2026-09-02T11:28:58.040Z"
   },
+  "1840851476": {
+    "kind": "published",
+    "slug": "openseo-open-source-seo-software",
+    "section": "tools",
+    "at": "2026-09-05T04:39:09.938Z"
+  },
+  "1840906324": {
+    "kind": "published",
+    "slug": "tangle-visual-ml-pipeline-editor",
+    "section": "tools",
+    "at": "2026-09-05T04:39:09.938Z"
+  },
   "1840907378": {
     "kind": "published",
     "slug": "kami-a-quiet-design-system-for-agent-generated-documents",
@@ -480,10 +498,15 @@
     "at": "2026-09-04T23:05:03.779Z"
   },
   "1840919502": {
+    "kind": "pending",
+    "attempts": 0,
+    "lastError": "entry tools/lightreel-your-ai-ugc-marketing-researcher disappeared from the gallery"
+  },
+  "1840924390": {
     "kind": "published",
-    "slug": "lightreel-your-ai-ugc-marketing-researcher",
+    "slug": "atlas-brain-wearable",
     "section": "tools",
-    "at": "2026-09-04T23:05:03.779Z"
+    "at": "2026-09-05T04:39:09.938Z"
   },
   "1840926875": {
     "kind": "published",
@@ -498,15 +521,110 @@
     "at": "2026-09-04T23:05:03.779Z"
   },
   "1840931063": {
-    "kind": "published",
-    "slug": "treg-people-search-for-ai-agents",
-    "section": "tools",
-    "at": "2026-09-04T23:05:03.779Z"
+    "kind": "pending",
+    "attempts": 0,
+    "lastError": "entry tools/treg-people-search-for-ai-agents disappeared from the gallery"
   },
   "1840935175": {
     "kind": "published",
     "slug": "tailcat",
     "section": "tools",
     "at": "2026-09-04T23:05:03.779Z"
+  },
+  "1841019559": {
+    "kind": "published",
+    "slug": "honkish-what-made-honk-feel-alive",
+    "section": "reading",
+    "at": "2026-09-05T04:39:09.938Z"
+  },
+  "1841019873": {
+    "kind": "published",
+    "slug": "how-we-built-interfere-s-new-website",
+    "section": "reading",
+    "at": "2026-09-05T04:39:09.938Z"
+  },
+  "1841618049": {
+    "kind": "published",
+    "slug": "chatgpt-training",
+    "section": "reading",
+    "at": "2026-09-05T04:39:09.938Z"
+  },
+  "1841770207": {
+    "kind": "published",
+    "slug": "playgrnd-tiny-tools-for-making-weird-beautiful-things",
+    "section": "tools",
+    "at": "2026-09-05T04:39:09.938Z"
+  },
+  "1841770295": {
+    "kind": "published",
+    "slug": "how-to-design-a-brand-system-from-one-reference-image",
+    "section": "reading",
+    "at": "2026-09-05T04:39:09.938Z"
+  },
+  "1842606848": {
+    "kind": "published",
+    "slug": "ui-goodies-daily-goods",
+    "section": "sites",
+    "at": "2026-09-05T04:39:09.938Z"
+  },
+  "1842646165": {
+    "kind": "published",
+    "slug": "chopin",
+    "section": "tools",
+    "at": "2026-09-05T04:39:09.938Z"
+  },
+  "1842646622": {
+    "kind": "published",
+    "slug": "the-art-of-hosting",
+    "section": "reading",
+    "at": "2026-09-05T04:39:09.938Z"
+  },
+  "1843013996": {
+    "kind": "published",
+    "slug": "coding-skills-that-matter-in-the-age-of-ai",
+    "section": "reading",
+    "at": "2026-09-05T04:39:09.938Z"
+  },
+  "1843014775": {
+    "kind": "published",
+    "slug": "aside-the-browser-built-to-do-real-work-for-you",
+    "section": "tools",
+    "at": "2026-09-05T04:39:09.938Z"
+  },
+  "1843030239": {
+    "kind": "published",
+    "slug": "how-to-become-a-hermes-operator-and-automation-architect",
+    "section": "reading",
+    "at": "2026-09-05T04:39:09.938Z"
+  },
+  "1843526060": {
+    "kind": "published",
+    "slug": "kitbitz-2-000-free-hand-drawn-illustrations",
+    "section": "tools",
+    "at": "2026-09-05T04:39:09.938Z"
+  },
+  "1843583803": {
+    "kind": "published",
+    "slug": "butter",
+    "section": "tools",
+    "at": "2026-09-05T04:39:09.938Z"
+  },
+  "1843770328": {
+    "kind": "published",
+    "slug": "how-to-build-a-top-0-1-social-media-team-at-every-budget",
+    "section": "reading",
+    "at": "2026-09-05T04:39:09.938Z"
+  },
+  "1843772367": {
+    "kind": "published",
+    "slug": "serper-google-search-api",
+    "section": "tools",
+    "at": "2026-09-05T04:39:09.938Z"
+  },
+  "1843772992": {
+    "kind": "published",
+    "slug": "scrapingbee-web-scraping-api",
+    "section": "tools",
+    "at": "2026-09-05T04:39:09.938Z"
   }
 }

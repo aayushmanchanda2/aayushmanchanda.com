@@ -476,5 +476,104 @@
     "verdict": "watching",
     "note": "A netcat-style CLI from Tailscale for short-lived encrypted connections between machines without accounts, tailnets, or IP addresses.",
     "status_date": "2026-09-04"
+  },
+  {
+    "slug": "ref-review-the-plan-before-the-code",
+    "name": "Ref — Review the Plan Before the Code",
+    "url": "https://ref.tools/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Shared plan editor where teams review an agent's plan before the diff lands. Multiplayer, visual, hooks into coding agents, free tier.",
+    "status_date": "2026-09-05"
+  },
+  {
+    "slug": "openseo-open-source-seo-software",
+    "name": "OpenSEO — Open-Source SEO Software",
+    "url": "https://openseo.so/open-source-seo",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Self-hostable open-source SEO platform on DataForSEO data, built so you and your agents can extend it instead of renting a closed dashboard.",
+    "status_date": "2026-09-05"
+  },
+  {
+    "slug": "tangle-visual-ml-pipeline-editor",
+    "name": "Tangle — Visual ML Pipeline Editor",
+    "url": "https://tangleml.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Open-source drag-and-drop editor from Shopify engineers for building and running ML pipelines collaboratively, any language, with execution caching so reruns are cheap.",
+    "status_date": "2026-09-05"
+  },
+  {
+    "slug": "atlas-brain-wearable",
+    "name": "Atlas — Brain Wearable",
+    "url": "https://atlasmankind.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "EEG headband that shows you your own brain activity. Waitlist only, six years in the making, pitched as a telescope pointed inward.",
+    "status_date": "2026-09-05"
+  },
+  {
+    "slug": "playgrnd-tiny-tools-for-making-weird-beautiful-things",
+    "name": "playgrnd — Tiny Tools for Making Weird, Beautiful Things",
+    "url": "https://www.playgrnd.tools/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A collection of free single-purpose generative design tools that run locally in the browser without accounts, uploads, or stored data.",
+    "status_date": "2026-09-05"
+  },
+  {
+    "slug": "chopin",
+    "name": "Chopin",
+    "url": "https://githubnext.com/projects/chopin/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A real-time multiplayer planning environment from GitHub Next built for the agentic development loop, where planning and review matter more than implementation.",
+    "status_date": "2026-09-05"
+  },
+  {
+    "slug": "aside-the-browser-built-to-do-real-work-for-you",
+    "name": "Aside — The Browser Built to Do Real Work for You",
+    "url": "https://aside.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "An agent-first browser that works across logged-in sites while keeping memory local and gating sensitive actions for review.",
+    "status_date": "2026-09-05"
+  },
+  {
+    "slug": "kitbitz-2-000-free-hand-drawn-illustrations",
+    "name": "Kitbitz — 2,000+ Free Hand-Drawn Illustrations",
+    "url": "https://kitbitz.art/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A CC0 library of hand-drawn SVG and PNG illustrations with Figma kits, a Figma plugin, and MCP access for AI tools.",
+    "status_date": "2026-09-05"
+  },
+  {
+    "slug": "butter",
+    "name": "Butter",
+    "url": "https://www.butter.video/pricing",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A browser video editor with captions, reusable components, brand kits, remixing, stock assets, and exports across free and team plans.",
+    "status_date": "2026-09-05"
+  },
+  {
+    "slug": "serper-google-search-api",
+    "name": "Serper — Google Search API",
+    "url": "https://serper.dev/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A real-time Google Search API covering web, images, news, maps, places, videos, shopping, scholar, patents, and autocomplete with usage-based pricing.",
+    "status_date": "2026-09-05"
+  },
+  {
+    "slug": "scrapingbee-web-scraping-api",
+    "name": "ScrapingBee — Web Scraping API",
+    "url": "https://www.scrapingbee.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A web scraping API that handles proxies, anti-bot defenses, JavaScript rendering, browser interactions, screenshots, and structured AI extraction.",
+    "status_date": "2026-09-05"
   }
 ]

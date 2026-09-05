@@ -242,5 +242,22 @@
       "#52514d"
     ],
     "collections": []
+  },
+  {
+    "slug": "ui-goodies-daily-goods",
+    "title": "UI Goodies — Daily Goods",
+    "url": "https://uigoodies.com/daily-goods",
+    "domain": "uigoodies.com",
+    "saved_date": "2026-09-05",
+    "shot": "/shots/ui-goodies-daily-goods.webp",
+    "palette": [
+      "#f9f8f8",
+      "#d3d3d2",
+      "#90b8d2",
+      "#243cdd",
+      "#2b2f2b",
+      "#afafaf"
+    ],
+    "collections": []
   }
 ]
