@@ -155,11 +155,29 @@
     "section": "reading",
     "at": "2026-08-28T15:29:47.136Z"
   },
+  "1836528529": {
+    "kind": "published",
+    "slug": "hawthorne-effect",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
   "1836528622": {
     "kind": "published",
     "slug": "how-to-train-your-agency-starting-today",
     "section": "reading",
     "at": "2026-08-28T15:29:47.136Z"
+  },
+  "1836873004": {
+    "kind": "published",
+    "slug": "how-to-build-a-one-person-media-company-with-hermes-bots",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1836873111": {
+    "kind": "published",
+    "slug": "my-llm-cliche-highlighter-is-up-to-38-patterns-now",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
   },
   "1836874424": {
     "kind": "published",
@@ -167,17 +185,59 @@
     "section": "reading",
     "at": "2026-08-28T15:29:47.136Z"
   },
+  "1837020809": {
+    "kind": "published",
+    "slug": "introducing-skill-doctor-v1",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
   "1837022361": {
     "kind": "published",
     "slug": "policy-assignment-system-engineering-take-home-warp",
     "section": "reading",
     "at": "2026-08-29T01:47:37.881Z"
   },
+  "1837022896": {
+    "kind": "published",
+    "slug": "a-detailed-explanation-and-setup-video-for-multica",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1837033818": {
+    "kind": "published",
+    "slug": "automating-x-posts-to-every-other-platform-with-grok-bot",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
   "1837041689": {
     "kind": "published",
     "slug": "the-most-profitable-landing-pages-for-google-ads-in-2026",
     "section": "reading",
     "at": "2026-08-29T01:47:37.881Z"
+  },
+  "1837311550": {
+    "kind": "published",
+    "slug": "pstack-run-create-verification-skill",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1837384908": {
+    "kind": "published",
+    "slug": "mike-barton",
+    "section": "sites",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1837385100": {
+    "kind": "published",
+    "slug": "templates-in-grok-bot",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1837392089": {
+    "kind": "published",
+    "slug": "why-discipline-builds-actual-confidence",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
   },
   "1837392162": {
     "kind": "published",
@@ -208,6 +268,12 @@
     "slug": "one-person-with-ai-outperformed-an-entire-team",
     "section": "reading",
     "at": "2026-08-29T23:25:23.928Z"
+  },
+  "1838032270": {
+    "kind": "published",
+    "slug": "how-to-master-grok-bot-in-16-minutes",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
   },
   "1838694066": {
     "kind": "published",
@@ -323,6 +389,18 @@
     "section": "tools",
     "at": "2026-08-31T20:53:16.272Z"
   },
+  "1839740339": {
+    "kind": "published",
+    "slug": "ex-nasa-dev-reveals-his-agentic-engineering-workflow",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1839791514": {
+    "kind": "published",
+    "slug": "it-s-boring-but-it-let-me-exit-my-agency-for-7-figures",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
   "1839791819": {
     "kind": "published",
     "slug": "the-modern-app-starter-checklist",
@@ -340,6 +418,12 @@
     "slug": "what-we-learned-from-15-hours-of-anthropic-certification-tra",
     "section": "reading",
     "at": "2026-09-01T00:40:45.372Z"
+  },
+  "1839933548": {
+    "kind": "published",
+    "slug": "your-agents-md-is-holding-you-back",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
   },
   "1839936164": {
     "kind": "published",
@@ -359,6 +443,18 @@
     "section": "reading",
     "at": "2026-09-01T18:38:15.834Z"
   },
+  "1840618994": {
+    "kind": "published",
+    "slug": "grok-bot-internal-best-practices-from-6-teams-at-spacexai",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1840621112": {
+    "kind": "published",
+    "slug": "how-to-yap-on-the-internet",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
   "1840622669": {
     "kind": "published",
     "slug": "flexible-business-flight-finder-free-chatgpt-skill",
@@ -370,6 +466,12 @@
     "slug": "this-is-the-new-bar-for-pms-i-m-able-to-do-now-in-a-day-what",
     "section": "reading",
     "at": "2026-09-01T18:38:15.834Z"
+  },
+  "1840626192": {
+    "kind": "published",
+    "slug": "i-just-filmed-6-days-of-cold-calls-and-door-knocks",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
   },
   "1840849237": {
     "kind": "published",
@@ -455,11 +557,29 @@
     "section": "tools",
     "at": "2026-09-05T04:39:09.938Z"
   },
+  "1840851550": {
+    "kind": "published",
+    "slug": "the-bridge",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1840851600": {
+    "kind": "published",
+    "slug": "use-your-code-based-design-system-with-magic-patterns",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
   "1840906324": {
     "kind": "published",
     "slug": "tangle-visual-ml-pipeline-editor",
     "section": "tools",
     "at": "2026-09-05T04:39:09.938Z"
+  },
+  "1840907016": {
+    "kind": "published",
+    "slug": "how-to-turn-your-ai-into-a-world-class-designer",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
   },
   "1840907378": {
     "kind": "published",
@@ -502,6 +622,24 @@
     "attempts": 0,
     "lastError": "entry tools/lightreel-your-ai-ugc-marketing-researcher disappeared from the gallery"
   },
+  "1840920767": {
+    "kind": "published",
+    "slug": "some-tips-for-claude-fable-5-1",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1840921373": {
+    "kind": "published",
+    "slug": "skyline-restaurant-and-cocktail-bar-a-blender-production-bri",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1840921980": {
+    "kind": "published",
+    "slug": "rauno-freiberg-note-4",
+    "section": "sites",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
   "1840924390": {
     "kind": "published",
     "slug": "atlas-brain-wearable",
@@ -530,6 +668,12 @@
     "slug": "tailcat",
     "section": "tools",
     "at": "2026-09-04T23:05:03.779Z"
+  },
+  "1840936147": {
+    "kind": "published",
+    "slug": "how-my-parents-raised-me-to-be-confident",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
   },
   "1841019559": {
     "kind": "published",
@@ -561,6 +705,12 @@
     "section": "reading",
     "at": "2026-09-05T04:39:09.938Z"
   },
+  "1842580070": {
+    "kind": "published",
+    "slug": "how-a-professional-writer-writes-with-ai",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
   "1842606848": {
     "kind": "published",
     "slug": "ui-goodies-daily-goods",
@@ -578,6 +728,30 @@
     "slug": "the-art-of-hosting",
     "section": "reading",
     "at": "2026-09-05T04:39:09.938Z"
+  },
+  "1842647880": {
+    "kind": "published",
+    "slug": "a-great-cold-email-can-change-your-life",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1842752721": {
+    "kind": "published",
+    "slug": "the-incumbents-are-coming",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1842753402": {
+    "kind": "published",
+    "slug": "hermes-agent-masterclass",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1842754825": {
+    "kind": "published",
+    "slug": "the-money-button-v1",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
   },
   "1843013996": {
     "kind": "published",
@@ -626,5 +800,215 @@
     "slug": "scrapingbee-web-scraping-api",
     "section": "tools",
     "at": "2026-09-05T04:39:09.938Z"
+  },
+  "1844521948": {
+    "kind": "published",
+    "slug": "patterns-i-ve-seen-in-every-high-performer-i-know-that-are-r",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1844522131": {
+    "kind": "published",
+    "slug": "applied-ai-doesn-t-work",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1844854317": {
+    "kind": "published",
+    "slug": "nodes-markdown-notes-for-macos",
+    "section": "tools",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1846596931": {
+    "kind": "published",
+    "slug": "celine-nova",
+    "section": "sites",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1847230467": {
+    "kind": "published",
+    "slug": "welcome-to-side-quests",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1847328360": {
+    "kind": "published",
+    "slug": "bucko",
+    "section": "tools",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1847328478": {
+    "kind": "published",
+    "slug": "joel-greenblatt-s-jelly-bean-experiment",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1847328857": {
+    "kind": "published",
+    "slug": "how-an-intern-6x-d-website-traffic-with-blogeo",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1847331875": {
+    "kind": "published",
+    "slug": "ana-howard",
+    "section": "sites",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1847433400": {
+    "kind": "published",
+    "slug": "moving-your-coding-agents-to-the-cloud-railway",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1847443232": {
+    "kind": "published",
+    "slug": "sites-brian-lovin",
+    "section": "sites",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1847443361": {
+    "kind": "published",
+    "slug": "about-brian-lovin",
+    "section": "sites",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1847610188": {
+    "kind": "published",
+    "slug": "how-to-build-a-services-as-software-delivery-stack",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1848228949": {
+    "kind": "published",
+    "slug": "on-device-ai-models-and-sdks",
+    "section": "tools",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1848229603": {
+    "kind": "published",
+    "slug": "the-marketing-philosophy-behind-everything-i-do-free-mini-co",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1848230056": {
+    "kind": "published",
+    "slug": "how-to-break-into-startups-as-a-non-technical-person-full-pl",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1848275443": {
+    "kind": "published",
+    "slug": "what-to-do-when-you-feel-overwhelmed",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1848277885": {
+    "kind": "published",
+    "slug": "how-stripe-built-its-company-brain-kai",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1848995529": {
+    "kind": "published",
+    "slug": "mastra-factory-from-issue-to-production",
+    "section": "tools",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1849000719": {
+    "kind": "published",
+    "slug": "the-golden-snitch",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1849085486": {
+    "kind": "published",
+    "slug": "how-to-design-brand-mascots-with-ai-krea",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1849291917": {
+    "kind": "published",
+    "slug": "the-complete-guide-to-pstack-pt-2",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1849294353": {
+    "kind": "published",
+    "slug": "spell-ui-components",
+    "section": "tools",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1849296092": {
+    "kind": "published",
+    "slug": "spacefast-home-for-what-your-agent-makes",
+    "section": "tools",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1849297324": {
+    "kind": "published",
+    "slug": "scrape-it-free-agentic-crawling-bring-your-proxies",
+    "section": "tools",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1849297405": {
+    "kind": "published",
+    "slug": "how-i-replaced-a-249-month-scrapingbee-plan-with-a-1-month-s",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1849330783": {
+    "kind": "published",
+    "slug": "deals-for-builders-build-in-public",
+    "section": "tools",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1849346591": {
+    "kind": "published",
+    "slug": "pricing-railcode",
+    "section": "tools",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1849347449": {
+    "kind": "published",
+    "slug": "wall-of-portfolios",
+    "section": "sites",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1849382371": {
+    "kind": "published",
+    "slug": "sarah-sarahlevinger-on-x",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1850076417": {
+    "kind": "published",
+    "slug": "the-11-marketing-rules-that-built-the-bryan-johnson-universe",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1850088522": {
+    "kind": "published",
+    "slug": "how-pocket-fm-grew-from-zero-to-500m-arr",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1851804741": {
+    "kind": "published",
+    "slug": "transitions-dev-ui-transitions-for-ai-agents",
+    "section": "tools",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1851848817": {
+    "kind": "published",
+    "slug": "inside-openai-s-forward-deployed-engineer-role",
+    "section": "reading",
+    "at": "2026-09-14T14:32:39.466Z"
+  },
+  "1852881773": {
+    "kind": "published",
+    "slug": "desengs-resources-for-design-engineers",
+    "section": "sites",
+    "at": "2026-09-14T14:32:39.466Z"
   }
 }

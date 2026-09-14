@@ -575,5 +575,95 @@
     "verdict": "watching",
     "note": "A web scraping API that handles proxies, anti-bot defenses, JavaScript rendering, browser interactions, screenshots, and structured AI extraction.",
     "status_date": "2026-09-05"
+  },
+  {
+    "slug": "nodes-markdown-notes-for-macos",
+    "name": "Nodes — Markdown Notes for macOS",
+    "url": "https://nodes-web.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A private macOS writing app that stores notes as plain Markdown, maps their links, and searches them locally by text or meaning.",
+    "status_date": "2026-09-14"
+  },
+  {
+    "slug": "bucko",
+    "name": "Bucko",
+    "url": "https://buckochat.com/?v=2",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A family AI assistant you text — plans, errands, and everyday life. Built by a parent, currently waitlist-only.",
+    "status_date": "2026-09-14"
+  },
+  {
+    "slug": "on-device-ai-models-and-sdks",
+    "name": "On-device AI models and SDKs",
+    "url": "https://desertant.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A native SDK for adding small, task-specific AI models to Apple, Android, and web apps, free for up to 100,000 monthly active devices per platform.",
+    "status_date": "2026-09-14"
+  },
+  {
+    "slug": "mastra-factory-from-issue-to-production",
+    "name": "Mastra Factory: from issue to production",
+    "url": "https://mastra.ai/factory",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "An open-source software delivery environment that moves issues through intake, planning, coding, and pull request review with persistent agents and explicit gates.",
+    "status_date": "2026-09-14"
+  },
+  {
+    "slug": "spell-ui-components",
+    "name": "Spell UI Components",
+    "url": "https://spell.sh/docs/components",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A component library of animated React UI elements, from charts and buttons to WebGL backgrounds and text effects.",
+    "status_date": "2026-09-14"
+  },
+  {
+    "slug": "spacefast-home-for-what-your-agent-makes",
+    "name": "Spacefast: Home for what your agent makes",
+    "url": "https://spacefast.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "An agent-first publishing service for static sites and full-stack apps, with private-by-default sharing, version history, comments, and built-in backend services.",
+    "status_date": "2026-09-14"
+  },
+  {
+    "slug": "scrape-it-free-agentic-crawling-bring-your-proxies",
+    "name": "scrape.it — free agentic crawling, bring your proxies",
+    "url": "https://scrape.it/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A scraping and crawling API that routes requests through proxies you already own, with agent-friendly docs and optional CAPTCHA solving and storage connectors.",
+    "status_date": "2026-09-14"
+  },
+  {
+    "slug": "deals-for-builders-build-in-public",
+    "name": "Deals for builders · Build in Public",
+    "url": "https://buildinpublic.com/deals",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A directory of 600-plus discounts on software, services, and credits for people building in public.",
+    "status_date": "2026-09-14"
+  },
+  {
+    "slug": "pricing-railcode",
+    "name": "Pricing | Railcode",
+    "url": "https://railcode.dev/pricing",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Railcode's pricing starts with a free personal tier, then adds unlimited builders and viewers for teams without per-seat fees.",
+    "status_date": "2026-09-14"
+  },
+  {
+    "slug": "transitions-dev-ui-transitions-for-ai-agents",
+    "name": "Transitions.dev: UI transitions for AI agents",
+    "url": "https://transitions.dev/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A copy-and-paste library of UI transitions for web apps, with a skill that coding agents can use.",
+    "status_date": "2026-09-14"
   }
 ]

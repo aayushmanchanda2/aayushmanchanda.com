@@ -259,5 +259,141 @@
       "#afafaf"
     ],
     "collections": []
+  },
+  {
+    "slug": "mike-barton",
+    "title": "Mike Barton",
+    "url": "https://www.mikes.cv/",
+    "domain": "mikes.cv",
+    "saved_date": "2026-09-14",
+    "shot": "/shots/mike-barton.webp",
+    "palette": [
+      "#faf5f5",
+      "#d2cecc",
+      "#6b6a6c",
+      "#b1adac",
+      "#91caf9",
+      "#929090"
+    ],
+    "collections": []
+  },
+  {
+    "slug": "rauno-freiberg-note-4",
+    "title": "Rauno Freiberg — note 4",
+    "url": "https://rauno.me/notes/4",
+    "domain": "rauno.me",
+    "saved_date": "2026-09-14",
+    "shot": "/shots/rauno-freiberg-note-4.webp",
+    "palette": [
+      "#f9f9f9",
+      "#d2d2d2",
+      "#b0b0b0",
+      "#8e8e8f",
+      "#fc494e",
+      "#fee3b1"
+    ],
+    "collections": []
+  },
+  {
+    "slug": "celine-nova",
+    "title": "Celine Nova",
+    "url": "https://melanilaurents.com/",
+    "domain": "melanilaurents.com",
+    "saved_date": "2026-09-14",
+    "shot": "/shots/celine-nova.webp",
+    "palette": [
+      "#504a35",
+      "#302618",
+      "#706951",
+      "#938971",
+      "#d6d4cb",
+      "#b3b2a8"
+    ],
+    "collections": []
+  },
+  {
+    "slug": "ana-howard",
+    "title": "Ana Howard",
+    "url": "https://ana.sh/",
+    "domain": "ana.sh",
+    "saved_date": "2026-09-14",
+    "shot": "/shots/ana-howard.webp",
+    "palette": [
+      "#fbfcfc",
+      "#8c8987",
+      "#d2cfce",
+      "#aeebfe",
+      "#b5aafd",
+      "#ceae90"
+    ],
+    "collections": []
+  },
+  {
+    "slug": "sites-brian-lovin",
+    "title": "Sites — Brian Lovin",
+    "url": "https://brianlovin.com/sites",
+    "domain": "brianlovin.com",
+    "saved_date": "2026-09-14",
+    "shot": "/shots/sites-brian-lovin.webp",
+    "palette": [
+      "#fefefe",
+      "#737373",
+      "#ababab",
+      "#d2d2d2",
+      "#909090",
+      "#545454"
+    ],
+    "collections": []
+  },
+  {
+    "slug": "about-brian-lovin",
+    "title": "About — Brian Lovin",
+    "url": "https://brianlovin.com/about",
+    "domain": "brianlovin.com",
+    "saved_date": "2026-09-14",
+    "shot": "/shots/about-brian-lovin.webp",
+    "palette": [
+      "#ffffff",
+      "#525253",
+      "#181717",
+      "#aba8aa",
+      "#c57b3a",
+      "#ecd0b1"
+    ],
+    "collections": []
+  },
+  {
+    "slug": "wall-of-portfolios",
+    "title": "Wall of Portfolios",
+    "url": "https://www.wallofportfolios.in/",
+    "domain": "wallofportfolios.in",
+    "saved_date": "2026-09-14",
+    "shot": "/shots/wall-of-portfolios.webp",
+    "palette": [
+      "#fdfdfd",
+      "#dadada",
+      "#303032",
+      "#e5e2a8",
+      "#afd3e7",
+      "#6f7178"
+    ],
+    "collections": []
+  },
+  {
+    "slug": "desengs-resources-for-design-engineers",
+    "title": "DESENGS — Resources for design engineers",
+    "url": "https://api.raindrop.io/v2/raindrop/1852881773/file?type=image/jpeg",
+    "domain": "api.raindrop.io",
+    "saved_date": "2026-09-14",
+    "shot": "/shots/desengs-resources-for-design-engineers.webp",
+    "palette": [
+      "#ffffff",
+      "#1987e1",
+      "#146fb9",
+      "#0db4e2",
+      "#3153ff",
+      "#2cd4ed"
+    ],
+    "collections": []
   }
 ]
