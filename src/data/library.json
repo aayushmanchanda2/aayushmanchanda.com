@@ -1635,5 +1635,14 @@
     "saved_date": "2026-09-14",
     "kind": "article",
     "note": "Gregor Ojstersek’s interview with OpenAI’s FDE lead explains how the team sits between customers, product, and research, and why the job mixes engineering with on-site problem discovery."
+  },
+  {
+    "slug": "build-your-own-company-brain-the-enterprise-ai-playbook-from",
+    "title": "Build your own company brain: the enterprise AI playbook from Stripe’s engineering team",
+    "url": "https://www.lennysnewsletter.com/p/build-your-own-company-brain-the",
+    "domain": "lennysnewsletter.com",
+    "saved_date": "2026-09-14",
+    "kind": "article",
+    "note": "Stripe’s engineering team explains how it built Kai for 10,000 weekly users, including governance, shared skills, secure data access, and safeguards against rogue agents."
   }
 ]

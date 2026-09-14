@@ -665,5 +665,23 @@
     "verdict": "watching",
     "note": "A copy-and-paste library of UI transitions for web apps, with a skill that coding agents can use.",
     "status_date": "2026-09-14"
+  },
+  {
+    "slug": "jakubkrehel-skills-interface-design-skills-for-agents",
+    "name": "jakubkrehel/skills — Interface design skills for agents",
+    "url": "https://www.skills.sh/jakubkrehel/skills",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A set of agent skills for reviewing and improving UI, typography, color, layout, accessibility, and product copy.",
+    "status_date": "2026-09-14"
+  },
+  {
+    "slug": "emilkowalski-skills-design-and-animation-skills-for-agents",
+    "name": "emilkowalski/skills — Design and animation skills for agents",
+    "url": "https://www.skills.sh/emilkowalski/skills",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Emil Kowalski's agent skills encode practical judgment for interface design, animation, prototyping, and modern Swift.",
+    "status_date": "2026-09-14"
   }
 ]
