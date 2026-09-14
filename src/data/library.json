@@ -931,10 +931,7 @@
     "domain": "benji.org",
     "saved_date": "2026-09-05",
     "kind": "article",
-    "note": "Benji's postmortem on Honk, the real-time messaging app with no send button. A catalogue of the micro-interactions that made it playful, and why that wasn't enough.",
-    "tags": [
-      "sweep-hold"
-    ]
+    "note": "Benji's postmortem on Honk, the real-time messaging app with no send button. A catalogue of the micro-interactions that made it playful, and why that wasn't enough."
   },
   {
     "slug": "how-we-built-interfere-s-new-website",

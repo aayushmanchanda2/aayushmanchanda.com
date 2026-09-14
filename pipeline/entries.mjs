@@ -26,7 +26,7 @@
  *     fallback because a verdict with no note is a row that says nothing; a
  *     reading row already says what it is with its title and its kind.
  *   - a site entry's `collections` and a reading entry's `tags` both come from
- *     the tags on the bookmark, minus the two the pipeline writes itself. See
+ *     the tags on the bookmark, minus the ones a machine wrote itself. See
  *     `RESERVED_TAGS` below.
  */
 
@@ -58,13 +58,29 @@ export const PUBLISHED_TAG = "published";
 export const FAILED_TAG = "failed";
 
 /**
- * Tags that are the pipeline talking to itself, never curation.
+ * Written by the Hermes `inbox-sweep` skill, not by this pipeline.
+ *
+ * The sweep tags a bookmark it could not judge and leaves the reason in the
+ * note field, so a human can look later. It is bookkeeping in exactly the way
+ * `published` is — a word about the item's place in a workflow, never a word
+ * about what the item is *about*. It is reserved here because the sweep and
+ * this repo are two codebases: the tag can arrive on anything that later gets
+ * moved into a `Publish/*` collection, and the pipeline cannot ask the skill
+ * what its private vocabulary is. On 2026-09-05 a held bookmark was moved into
+ * Publish/Reading still wearing it, `sweep-hold` was written into
+ * `library.json` as if it were a topic, and `lib/tags.test.mjs` failed every
+ * scheduled run for six days. One word here is the whole fix.
+ */
+export const SWEEP_HOLD_TAG = "sweep-hold";
+
+/**
+ * Tags that are a machine talking to itself, never curation.
  *
  * Compared AFTER slugification, so `Published`, `PUBLISHED` and ` published `
  * are all the same reserved word. Raindrop's tag field is free text a human
  * types on a phone, and case is not a thing they will be careful about.
  */
-export const RESERVED_TAGS = new Set([PUBLISHED_TAG, FAILED_TAG]);
+export const RESERVED_TAGS = new Set([PUBLISHED_TAG, FAILED_TAG, SWEEP_HOLD_TAG]);
 
 /** New tool saves are never a verdict — they are a note to self to look. */
 export const NEW_TOOL_VERDICT = "watching";

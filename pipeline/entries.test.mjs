@@ -20,6 +20,7 @@ import {
   POST_NOTE_MAX,
   POST_TITLE_MAX,
   PUBLISHED_TAG,
+  SWEEP_HOLD_TAG,
   buildReadingEntry,
   buildSiteEntry,
   buildToolEntry,
@@ -75,6 +76,16 @@ test("a reserved tag is reserved however it was capitalised", () => {
   // The exclusion runs after slugification for exactly this reason: Raindrop
   // tags are free text, and nobody types them carefully on a phone.
   assert.deepEqual(collectionsFrom(["Published", "PUBLISHED", " failed "]), []);
+});
+
+test("the sweep's hold tag is bookkeeping, not a topic", () => {
+  // `sweep-hold` is written by the Hermes inbox-sweep skill onto a bookmark it
+  // could not judge. It rode a move into Publish/Reading on 2026-09-05, landed
+  // in library.json as if it were a subject, and broke every scheduled publish
+  // for six days. It is reserved here so a held item can pass through this
+  // pipeline without teaching the site a word that means nothing to a reader.
+  assert.deepEqual(collectionsFrom([SWEEP_HOLD_TAG, "design"]), ["design"]);
+  assert.deepEqual(collectionsFrom(["Sweep-Hold", " sweep hold "]), []);
 });
 
 test("two spellings of one tag are one collection", () => {
