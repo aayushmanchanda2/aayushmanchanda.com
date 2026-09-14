@@ -683,5 +683,14 @@
     "verdict": "watching",
     "note": "Emil Kowalski's agent skills encode practical judgment for interface design, animation, prototyping, and modern Swift.",
     "status_date": "2026-09-14"
+  },
+  {
+    "slug": "obsidianui-react-ui-components",
+    "name": "ObsidianUI — React UI Components",
+    "url": "https://www.obsidianui.dev/components",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A library of polished React components built with Tailwind CSS and Motion, with previews, docs, and code to copy.",
+    "status_date": "2026-09-14"
   }
 ]

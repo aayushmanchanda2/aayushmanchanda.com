@@ -395,5 +395,22 @@
       "#2cd4ed"
     ],
     "collections": []
+  },
+  {
+    "slug": "assistant-benchmark",
+    "title": "Assistant Benchmark",
+    "url": "https://assistantbenchmark.com/",
+    "domain": "assistantbenchmark.com",
+    "saved_date": "2026-09-14",
+    "shot": "/shots/assistant-benchmark.webp",
+    "palette": [
+      "#fefefe",
+      "#b4d9ff",
+      "#77baff",
+      "#0a84ff",
+      "#d1d1d5",
+      "#151516"
+    ],
+    "collections": []
   }
 ]
