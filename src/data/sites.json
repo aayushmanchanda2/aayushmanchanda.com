@@ -412,5 +412,22 @@
       "#151516"
     ],
     "collections": []
+  },
+  {
+    "slug": "built-by-designers-no-explanation-needed",
+    "title": "Built by Designers: No Explanation Needed",
+    "url": "https://builtbydesigners.com/",
+    "domain": "builtbydesigners.com",
+    "saved_date": "2026-09-15",
+    "shot": "/shots/built-by-designers-no-explanation-needed.webp",
+    "palette": [
+      "#f5f5f3",
+      "#9b9c9c",
+      "#151619",
+      "#cdcdcc",
+      "#0c7bf9",
+      "#ee5c2b"
+    ],
+    "collections": []
   }
 ]

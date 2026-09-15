@@ -692,5 +692,14 @@
     "verdict": "watching",
     "note": "A library of polished React components built with Tailwind CSS and Motion, with previews, docs, and code to copy.",
     "status_date": "2026-09-14"
+  },
+  {
+    "slug": "clapper",
+    "name": "Clapper",
+    "url": "https://clapper.archastro.tryintern.dev/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "An open-source React-to-MP4 toolkit with deterministic frame rendering, coded sound, live previews, and agent-ready contact-sheet reviews.",
+    "status_date": "2026-09-15"
   }
 ]
