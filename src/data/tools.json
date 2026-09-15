@@ -701,5 +701,14 @@
     "verdict": "watching",
     "note": "An open-source React-to-MP4 toolkit with deterministic frame rendering, coded sound, live previews, and agent-ready contact-sheet reviews.",
     "status_date": "2026-09-15"
+  },
+  {
+    "slug": "gadget-faster-full-stack-app-development",
+    "name": "Gadget | Faster full-stack app development",
+    "url": "https://gadget.dev/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A hosted JavaScript platform that bundles a database, backend, API, React frontend, IDE, integrations, and deployment for building full-stack web apps.",
+    "status_date": "2026-09-15"
   }
 ]
