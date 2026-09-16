@@ -710,5 +710,15 @@
     "verdict": "watching",
     "note": "A hosted JavaScript platform that bundles a database, backend, API, React frontend, IDE, integrations, and deployment for building full-stack web apps.",
     "status_date": "2026-09-15"
+  },
+  {
+    "slug": "browserskill",
+    "name": "BrowserSkill",
+    "url": null,
+    "repo": "https://github.com/Tencent/BrowserSkill",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Tencent's open-source CLI and browser extension let agents use your real logged-in browser without interrupting your work.",
+    "status_date": "2026-09-16"
   }
 ]
