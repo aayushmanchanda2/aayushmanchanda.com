@@ -1701,5 +1701,14 @@
     "saved_date": "2026-09-15",
     "kind": "article",
     "note": "Tom Orbach collects more than 60 unconventional growth tactics, with concrete examples and a Markdown file for brainstorming with a team or agent."
+  },
+  {
+    "slug": "introducing-system-one-models-jev",
+    "title": "Introducing System One Models & Jev",
+    "url": "https://typesafe.ai/blog/introducing-system-one-models-and-jev",
+    "domain": "typesafe.ai",
+    "saved_date": "2026-09-16",
+    "kind": "article",
+    "note": "TypeSafe AI introduces Jev, a model for fast, type-safe structured decisions with calibrated probabilities instead of generated text."
   }
 ]
