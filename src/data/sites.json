@@ -446,5 +446,22 @@
       "#9da29d"
     ],
     "collections": []
+  },
+  {
+    "slug": "aristotle-ai-tutor",
+    "title": "Aristotle | AI Tutor",
+    "url": "https://www.heyaristotle.com/",
+    "domain": "heyaristotle.com",
+    "saved_date": "2026-09-17",
+    "shot": "/shots/aristotle-ai-tutor.webp",
+    "palette": [
+      "#fcfcfc",
+      "#3c2c1e",
+      "#dbe2b9",
+      "#8c7358",
+      "#a99071",
+      "#b1b1ad"
+    ],
+    "collections": []
   }
 ]

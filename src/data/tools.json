@@ -720,5 +720,14 @@
     "verdict": "watching",
     "note": "Tencent's open-source CLI and browser extension let agents use your real logged-in browser without interrupting your work.",
     "status_date": "2026-09-16"
+  },
+  {
+    "slug": "ultraspeaking-public-speaking-course",
+    "name": "Ultraspeaking | Public Speaking Course",
+    "url": "https://ultraspeaking.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A practice-led public speaking course built around live coaching, peer feedback, and games that train clear thinking under pressure.",
+    "status_date": "2026-09-17"
   }
 ]

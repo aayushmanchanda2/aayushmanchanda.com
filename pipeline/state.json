@@ -1103,7 +1103,7 @@
   },
   "1855903055": {
     "kind": "pending",
-    "attempts": 1,
+    "attempts": 2,
     "lastError": "shot of https://column.com/ exceeded 45000ms"
   },
   "1855903368": {
@@ -1111,5 +1111,17 @@
     "slug": "browserskill",
     "section": "tools",
     "at": "2026-09-16T21:25:22.032Z"
+  },
+  "1856734321": {
+    "kind": "published",
+    "slug": "ultraspeaking-public-speaking-course",
+    "section": "tools",
+    "at": "2026-09-17T05:00:52.312Z"
+  },
+  "1856734831": {
+    "kind": "published",
+    "slug": "aristotle-ai-tutor",
+    "section": "sites",
+    "at": "2026-09-17T05:00:52.312Z"
   }
 }
