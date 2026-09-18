@@ -729,5 +729,14 @@
     "verdict": "watching",
     "note": "A practice-led public speaking course built around live coaching, peer feedback, and games that train clear thinking under pressure.",
     "status_date": "2026-09-17"
+  },
+  {
+    "slug": "moonjar-the-first-agentic-screenshot-app",
+    "name": "Moonjar · The first agentic screenshot app",
+    "url": "https://moonjar.ai/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A Mac MCP server that lets coding agents capture, arrange and style product screenshots without opening an editor.",
+    "status_date": "2026-09-18"
   }
 ]

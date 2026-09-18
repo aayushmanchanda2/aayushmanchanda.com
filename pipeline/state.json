@@ -1124,5 +1124,29 @@
     "slug": "aristotle-ai-tutor",
     "section": "sites",
     "at": "2026-09-17T05:00:52.312Z"
+  },
+  "1858056119": {
+    "kind": "published",
+    "slug": "craft",
+    "section": "reading",
+    "at": "2026-09-18T04:53:16.789Z"
+  },
+  "1858056478": {
+    "kind": "published",
+    "slug": "craft-a-collection-of-design-engineering-concepts",
+    "section": "sites",
+    "at": "2026-09-18T04:53:16.789Z"
+  },
+  "1858060010": {
+    "kind": "published",
+    "slug": "the-boring-marketer-how-to-find-boring-businesses-that-need",
+    "section": "reading",
+    "at": "2026-09-18T04:53:16.789Z"
+  },
+  "1858065962": {
+    "kind": "published",
+    "slug": "moonjar-the-first-agentic-screenshot-app",
+    "section": "tools",
+    "at": "2026-09-18T04:53:16.789Z"
   }
 }

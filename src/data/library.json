@@ -1710,5 +1710,35 @@
     "saved_date": "2026-09-16",
     "kind": "article",
     "note": "TypeSafe AI introduces Jev, a model for fast, type-safe structured decisions with calibrated probabilities instead of generated text."
+  },
+  {
+    "slug": "craft",
+    "title": "Craft",
+    "url": "https://craft.gustavofior.com/",
+    "domain": "craft.gustavofior.com",
+    "saved_date": "2026-09-18",
+    "kind": "article",
+    "note": "Gustavo Fior's concise collection of design-engineering ideas, from reference gathering and novelty budgets to motion, typography, color and interaction details."
+  },
+  {
+    "slug": "the-boring-marketer-how-to-find-boring-businesses-that-need",
+    "title": "yesterday my \"boring\" business did $4,000 in revenue here's how you can find…",
+    "url": "https://x.com/boringmarketer/status/2100607697011831274",
+    "domain": "x.com",
+    "saved_date": "2026-09-18",
+    "kind": "post",
+    "note": "@boringmarketer: yesterday my \"boring\" business did $4,000 in revenue here's how you can find businesses like mine that need your help with AI",
+    "tags": [
+      "ai-services",
+      "boring-business",
+      "lead-generation",
+      "video"
+    ],
+    "post": {
+      "author": "The Boring Marketer",
+      "handle": "boringmarketer",
+      "date": "2026-09-17",
+      "text": "yesterday my \"boring\" business did $4,000 in revenue here's how you can find businesses like mine that need your help with AI"
+    }
   }
 ]

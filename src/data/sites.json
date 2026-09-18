@@ -463,5 +463,28 @@
       "#b1b1ad"
     ],
     "collections": []
+  },
+  {
+    "slug": "craft-a-collection-of-design-engineering-concepts",
+    "title": "Craft — a collection of design engineering concepts",
+    "url": "https://github.com/gustavo-fior/craft",
+    "domain": "github.com",
+    "saved_date": "2026-09-18",
+    "shot": "/shots/craft-a-collection-of-design-engineering-concepts.webp",
+    "palette": [
+      "#fefefe",
+      "#d1d9e0",
+      "#2a292a",
+      "#f3d7ab",
+      "#596470",
+      "#92d0f2"
+    ],
+    "collections": [
+      "design-engineering",
+      "mdx",
+      "nextjs",
+      "reference",
+      "skills"
+    ]
   }
 ]
