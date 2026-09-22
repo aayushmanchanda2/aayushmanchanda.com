@@ -435,14 +435,17 @@ test("the embed is X's, the loader is ours, and the loader is in one file", () =
   assert.deepEqual(
     loaders,
     ["components/XEmbeds.astro"],
-    "something other than XEmbeds.astro names X's widget host. /privacy is written around exactly one page loading it, and the dist guard is scoped to that page.",
+    "something other than XEmbeds.astro names X's widget host. /privacy names the pages that load it, and the dist guard is scoped to those pages.",
   );
 
+  // Two callers since VET-221: the wall, and a post's own page above the
+  // saved copy. /privacy and the dist guard name both, and a third has to
+  // move all three.
   const callers = walk("").filter((file) => code(read(file)).includes("<XEmbeds"));
   assert.deepEqual(
     callers,
-    ["components/PostWall.astro"],
-    "the widget factory is rendered somewhere other than the posts wall",
+    ["components/PostWall.astro", "pages/library/[slug].astro"],
+    "the widget factory is rendered somewhere other than the posts wall and a post's own page",
   );
 
   // Once per page and not once per card: twenty-four copies of that script
@@ -459,6 +462,11 @@ test("the embed is X's, the loader is ours, and the loader is in one file", () =
   assert.match(card, /class="card__quote twitter-tweet"/, "X's factory finds nothing to swap");
   assert.match(card, /data-dnt="true"/, "the embed does not ask X to leave the visit alone");
   assert.match(card, /min-height:/, "the fallback reserves no height, so the wall jumps on load");
+  assert.match(
+    card,
+    /\.card__embed :global\(iframe\) \{\s*color-scheme: normal;/,
+    "X's iframe inherits the page's dark color-scheme again, and the browser paints white corners behind its rounded frame",
+  );
 });
 
 test("the row keeps exactly one door off the site", () => {

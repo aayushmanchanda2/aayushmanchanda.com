@@ -1,7 +1,8 @@
 ---
 /**
- * XEmbeds — the one place this site loads something from X, and the only page
- * that renders it is `/library/kind/post`.
+ * XEmbeds — the one place this site loads something from X. Two routes render
+ * it: the posts wall at `/library/kind/post`, and since VET-221 the page of
+ * every saved post the pipeline could read, `/library/<slug>`.
  *
  * It draws nothing. What it ships is a script that stamps the site's theme onto
  * every `blockquote.twitter-tweet` on the page, fetches X's widget factory,
@@ -24,21 +25,21 @@
  * ## What this costs, stated rather than discovered
  *
  * Everything else on this site is served from this origin. This is not: the
- * posts page fetches `widgets.js` from X on load, without being pressed, and
- * every card it renders becomes an iframe of theirs. X therefore sees the IP of
- * anyone who opens that page, and whatever happens inside their frame is theirs
+ * posts page and each post's own page fetch `widgets.js` from X on load,
+ * without being pressed, and every card they render becomes an iframe of
+ * theirs. X therefore sees the IP of anyone who opens one, and whatever happens inside their frame is theirs
  * rather than ours. `data-dnt="true"` on every blockquote is the one thing we
  * can ask for — it tells X not to use the visit for tailoring — and it is a
  * request rather than a guarantee. /privacy says all of that in his own words.
  *
- * **It is Aayush's call, made with the trade in front of him.** The static
- * cards this replaces fetched nothing and looked, in his words, kind of odd: a
- * hand-built imitation of a tweet is uncanny in the way an imitation of
- * anything familiar is. The page each card points at is the compensation —
- * `/library/<slug>` renders the post's own words from files in this repository
- * and loads nothing from anyone — so the wall is the only place on the site
- * where reading costs a request to X, and the page for reading properly never
- * does.
+ * **It is Aayush's call, made with the trade in front of him, twice.** The
+ * static cards this replaces fetched nothing and looked, in his words, kind of
+ * odd: a hand-built imitation of a tweet is uncanny in the way an imitation of
+ * anything familiar is. The post's own page held out longer, as the one place
+ * to read a post without a request to X. VET-221 gave it the embed too, because
+ * he wanted a post to look the way it does anywhere it is pasted. What that
+ * page keeps is the saved copy under the embed, so the words survive the
+ * original being deleted, and with scripting off it still loads nothing.
  *
  * ## The theme, and the flip we do not chase
  *

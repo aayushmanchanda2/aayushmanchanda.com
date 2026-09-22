@@ -84,10 +84,18 @@
  * the copy is on the entry's own page, which is exactly what the card now
  * points at.
  *
+ * VET-221 moved it again. The page for a single post used to be the escape
+ * hatch this page offered, the place to read a post with nothing loaded from
+ * X. Aayush wanted a post to look the way it does anywhere it is pasted, so
+ * that page embeds it too, above the saved copy. The escape hatch it offers now
+ * is the one that is actually true: with scripting off or X's script blocked,
+ * both pages show the copy from this repository and load nothing from X.
+ *
  * `scripts/validate-schema.mjs` holds the load-bearing half: the Twitter hosts
- * may appear on `/library/kind/post` and must appear there, and may not appear
- * on any other page in `dist/`. So the sentence "every other page here loads
- * nothing from anyone" is a build failure rather than a promise.
+ * may appear on `/library/kind/post` and on the page of every saved post the
+ * pipeline could read, must appear there, and may not appear on any other page
+ * in `dist/`. So the sentence "every other page here loads nothing from anyone"
+ * is a build failure rather than a promise.
  *
  * Underneath all seven is one rule: **every claim here is a claim about today's
  * build, and it says so.** A never-ever about analytics or third parties is a
@@ -155,9 +163,9 @@ import { NEWSLETTER_ACTION } from "../lib/site";
       </p>
       <p>
         That covers what this site stores. It does not cover what X stores
-        inside its own embeds on <a href="/library/kind/post">the posts page</a>,
-        which is filed under X and not under me. The section below is what that
-        page costs you.
+        inside its own embeds on each saved post&rsquo;s own page and on <a
+          href="/library/kind/post">the posts page</a>, which is filed under X and not
+        under me. The section below is what those pages cost you.
       </p>
     </section>
 
@@ -196,7 +204,7 @@ import { NEWSLETTER_ACTION } from "../lib/site";
     </section>
 
     <section>
-      <h2 class="doc__head mono">The two pages that load from somewhere else</h2>
+      <h2 class="doc__head mono">The pages that load from somewhere else</h2>
       <p>
         The tool pages are the exception and I would rather name it than claim a
         clean sweep. Each tool row shows the logo of that tool&rsquo;s own
@@ -210,23 +218,25 @@ import { NEWSLETTER_ACTION } from "../lib/site";
         account for quota, not you.
       </p>
       <p>
-        <a href="/library/kind/post">The posts page</a> is the other one, and it
-        is the heavier of the two. Every post on it is X&rsquo;s own embed, so
-        opening that page loads a script from X and turns each card into a frame
-        of theirs. X sees your IP address, sees that the frame is on this site,
-        and whatever happens inside it is theirs rather than mine. Each embed is
-        marked do-not-track, which asks X not to use the visit to tailor
-        anything, and asking is all I can do from here. If that trade is not one
-        you want, the page for any single post is on this domain and loads
-        nothing from anyone: the words are a copy I saved, and every card has a
-        <em>notes</em> link that goes straight there.
+        The saved posts are the other exception, and the heavier one. Every post
+        on <a href="/library/kind/post">the posts page</a> is X&rsquo;s own
+        embed, and so is the post at the top of each saved post&rsquo;s own
+        page. Opening either loads a script from X and turns each post into a
+        frame of theirs. X sees your IP address, sees that the frame is on this
+        site, and whatever happens inside it is theirs rather than mine. Each
+        embed is marked do-not-track, which asks X not to use the visit to
+        tailor anything, and asking is all I can do from here. If that trade is
+        not one you want, turn off JavaScript or block X&rsquo;s widget script:
+        both pages then load nothing from X, and each post&rsquo;s page still
+        has the whole text under the embed, as a copy I saved.
       </p>
       <p>
         I used to draw those cards myself from the saved copy, and this page
         used to say why that was better. It was better for your privacy and it
         looked wrong: a hand-built imitation of a post is uncanny in a way the
-        real one is not. So I took the real embed and moved the honest version
-        one press away, which is the trade written out rather than quietly made.
+        real one is not. So I took the real embed, first on the posts page and
+        then on each post&rsquo;s own page, and kept the saved copy under it.
+        That is the trade written out rather than quietly made.
       </p>
       <p>
         The saved videos are the outside request you can make yourself, and
@@ -244,8 +254,8 @@ import { NEWSLETTER_ACTION } from "../lib/site";
         nothing to load.
       </p>
       <p>
-        That is the whole list: logo.dev on the tool pages, X on the posts page,
-        YouTube if you press play. Every other page here loads nothing from
+        That is the whole list: logo.dev on the tool pages, X on the posts page
+        and each saved post&rsquo;s page, YouTube if you press play. Every other page here loads nothing from
         anyone, and a third host would be named in this section on the commit
         that added it.
       </p>
@@ -314,10 +324,9 @@ import { NEWSLETTER_ACTION } from "../lib/site";
       <p>
         The saved posts work the same way underneath. When I save something from
         x.com, the pipeline copies the words and any pictures into this
-        repository, and the page for that post is drawn from those files. What
-        sits on <a href="/library/kind/post">the posts page</a> is X&rsquo;s own
-        embed instead, which is the trade in the section above: their card on
-        the wall, my copy on the page it points at. The post is still the
+        repository, and the page for that post shows that copy under X&rsquo;s
+        own embed. The embed is the trade in the section above; the copy is what
+        stays if the original is deleted. The post is still the
         poster&rsquo;s either way. Every one of them names who wrote it and links
         back to the original, and its row on <a href="/library">/library</a> carries
         the date I saved it. If one of them is yours, the same issue link works
