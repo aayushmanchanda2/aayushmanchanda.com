@@ -63,7 +63,7 @@ const { slug } = Astro.props;
 const RING = "M12.5 8A4.5 4.5 0 1 1 3.5 8A4.5 4.5 0 1 1 12.5 8";
 
 /**
- * What each tag is drawn as. Twelve today, which is every tag in
+ * What each tag is drawn as. Sixteen today, which is every tag in
  * `src/data/library.json`; `lib/tags.test.mjs` names the ones that shipped
  * without a mark so a new word is a decision rather than a silent ring.
  *
@@ -109,6 +109,16 @@ const GLYPHS: Record<string, string> = {
   /* Two circles overlapping: an agency is other people, working on your thing. */
   agency:
     "M9.6 6.6A3.6 3.6 0 1 1 2.4 6.6A3.6 3.6 0 1 1 9.6 6.6 M13.6 9.4A3.6 3.6 0 1 1 6.4 9.4A3.6 3.6 0 1 1 13.6 9.4",
+  /* A four-point spark: the mark every AI product already wears, so the word
+     next to it only has to say what kind. */
+  "ai-services":
+    "M8 2.5L9.4 6.6L13.5 8L9.4 9.4L8 13.5L6.6 9.4L2.5 8L6.6 6.6Z",
+  /* A briefcase: the least exciting object in the set, which is the point. */
+  "boring-business": "M2.5 5.5H13.5V12.5H2.5Z M6 5.5V3.5H10V5.5",
+  /* A funnel: wide at the top where the leads come in, narrow where they leave. */
+  "lead-generation": "M2.5 3.5H13.5L9.5 8.5V12.5L6.5 13.5V8.5Z",
+  /* A frame with a play button in it. */
+  video: "M2.5 3.5H13.5V12.5H2.5Z M6.8 5.9V10.1L10.4 8Z",
 };
 
 const d = GLYPHS[slug] ?? RING;
