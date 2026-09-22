@@ -83,10 +83,13 @@ export function linkLabel(url: string): string {
  * against a nonsense domain). The `pk_` half of a logo.dev key pair is meant
  * to ship in public HTML, so it belongs here rather than in an env var that
  * would buy no secrecy.
+ *
+ * `size=128`: the /tools grid draws the mark at 40px, which is 80 device
+ * pixels at 2x, and 64 was being upscaled.
  */
 export function faviconUrl(url: string): string {
   const host = new URL(url).hostname.replace(/^www\./, "");
-  return `https://img.logo.dev/${encodeURIComponent(host)}?token=pk_YsFOVGNeRx6b1C0u0e0yTw&size=64&format=webp`;
+  return `https://img.logo.dev/${encodeURIComponent(host)}?token=pk_YsFOVGNeRx6b1C0u0e0yTw&size=128&format=webp`;
 }
 
 /* ---------------------------------------------------------------------------

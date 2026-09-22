@@ -3,6 +3,7 @@ import Base from "../layouts/Base.astro";
 import ToolList from "../components/ToolList.astro";
 import { listJsonLd, pageUrl } from "../lib/schema";
 import { tools } from "../lib/tools";
+import { PREPAINT, VIEWS } from "../lib/tools-view";
 
 /** Every row on the page, pointing where the row points: its details page. */
 const jsonLd = listJsonLd({
@@ -29,6 +30,29 @@ const jsonLd = listJsonLd({
   </header>
 
   <div class="body">
+    {/*
+      List or grid: one markup, and `ToolList.astro` switches its layout off
+      `data-tools-view` on `<html>`. Buttons with `aria-pressed` rather than a
+      radio group or tabs: two states, one press each, no panel swapped in.
+      The pre-paint script sits between the toggle and the list, so both are
+      already right on the first paint of a reload.
+    */}
+    <div class="views" role="group" aria-label="Tools layout">
+      {
+        VIEWS.map((view) => (
+          <button
+            class="views__btn mono"
+            type="button"
+            data-tools-view-set={view}
+            aria-pressed={view === "list" ? "true" : "false"}
+          >
+            {view}
+          </button>
+        ))
+      }
+    </div>
+    <script is:inline set:html={PREPAINT} />
+
     <ToolList tools={tools} />
   </div>
 </Base>
@@ -37,4 +61,66 @@ const jsonLd = listJsonLd({
   .body {
     margin-top: var(--gap-masthead);
   }
+
+  /* Right-aligned above the first category head, at every width. */
+  .views {
+    display: flex;
+    width: fit-content;
+    margin: 0 0 1rem auto;
+    padding: 2px;
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-md);
+  }
+
+  /* 30px drawn, 40px pressed: the `::after` reaches 5px past each edge, the
+     same offset trick `.tag::after` uses for its hit floor. Inner corners are
+     --r-sm inside the --r-md frame, 4 + 2px padding + 1px border ≈ 8. */
+  .views__btn {
+    position: relative;
+    min-height: 30px;
+    padding-inline: 0.75rem;
+    border-radius: var(--r-sm);
+    color: var(--muted);
+    transition-property: color, background-color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .views__btn::after {
+    content: "";
+    position: absolute;
+    inset: -5px 0;
+  }
+
+  .views__btn:hover {
+    color: var(--fg);
+  }
+
+  .views__btn[aria-pressed="true"] {
+    background: var(--hairline);
+    color: var(--fg);
+  }
 </style>
+
+<script>
+  import { ATTRIBUTE, BUTTON_ATTRIBUTE, STORAGE_KEY, toView } from "../lib/tools-view";
+
+  const buttons = document.querySelectorAll<HTMLButtonElement>(`[${BUTTON_ATTRIBUTE}]`);
+
+  for (const button of buttons) {
+    button.addEventListener("click", () => {
+      const view = toView(button.getAttribute(BUTTON_ATTRIBUTE));
+      document.documentElement.setAttribute(ATTRIBUTE, view);
+      for (const other of buttons) {
+        other.setAttribute("aria-pressed", String(other === button));
+      }
+      // Same guard as the pre-paint read: blocked storage still gets the
+      // layout for the length of the page, just not across a reload.
+      try {
+        localStorage.setItem(STORAGE_KEY, view);
+      } catch {
+        /* not persisted, still applied */
+      }
+    });
+  }
+</script>
