@@ -61,13 +61,6 @@ jobs:
       # and a run whose decision logic is broken should stop at the cheapest
       # point available rather than after forty screenshots.
       - name: Test the pipeline
-        # Skips the one content tripwire in lib/tags.test.mjs: a Raindrop tag
-        # with no drawing yet wears the ring, which is a working state. Gating
-        # here let one new tag (Sep 18) stop every publish for four days. The
-        # `ci` workflow still runs it, so the undrawn word surfaces on the next
-        # human push instead of halting the pipeline.
-        env:
-          NODE_OPTIONS: --test-skip-pattern=drawn,.and.the.ring
         run: npm test
 
       - name: Resolve Playwright version

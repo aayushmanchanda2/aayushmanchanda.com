@@ -102,24 +102,13 @@ const entryTitle = tools[0]?.name ?? "Tools";
 /** Three real collections, for the chip in its filter-link form. */
 const collections = collectionGroups.slice(0, 3).map((group) => group.slug);
 
-/**
- * One real tag per dot, so the whole palette is on the page and not a sample
- * of it. A slot with nothing filed under it yet simply has no specimen, which
- * is the honest thing for a page that renders shipped data.
- */
-const tagSpecimen = Array.from({ length: TAG_HUES }, (_, hue) =>
-  libraryTags.find((group) => hueSlot(group.slug) === hue),
-)
-  .filter((group) => group !== undefined)
-  .map((group) => group.slug);
+/** Five real tags. Tags are plain grey, so any five show the whole chip. */
+const tagSpecimen = libraryTags.slice(0, 5).map((group) => group.slug);
 
 /**
- * The same seven slots in the other shape they take, off real posters.
- *
- * The tag row above is the palette as a dot and this is the palette as a
- * 48px circle, and they have to be on one page because they are one table —
- * `styles/chip.css › [data-hue]`. A slot no saved post lands on has no
- * specimen, the same honest absence the tag row makes.
+ * The identity palette's seven slots, as the monogram wears them, off real
+ * posters (`styles/chip.css › [data-hue]`). A slot no saved post lands on has
+ * no specimen, which is the honest thing for a page that renders shipped data.
  */
 const posts = library.flatMap((entry) => (entry.post === null ? [] : [entry.post]));
 
@@ -476,19 +465,16 @@ const jsonLd = designJsonLd();
       <p>
         The tag is the one chip that is not a tint. A verdict and a status sit
         somewhere on a scale, and the fill is what says so; a library tag names
-        a subject, and one subject is not better than another. So the colour
-        moves to a dot, where it can do the only job it has here, which is to be
-        recognisable a row before it is readable. Seven dots, handed out by a
-        hash of the word, so a new tag has a colour the day it arrives and keeps
-        it. Two tags can share one, and the word beside it is the name.
+        a subject, and one subject is not better than another. So it takes no
+        colour at all: a grey outlined box with the word in it.
       </p>
 
       <p>
-        The last row is the same seven, forty times the size. A saved post on <a
+        The last row is the site&rsquo;s seven identity hues. A saved post on <a
           href="/library/kind/post">/library</a> is drawn as a card, and a card
         like that opens with a face. This site does not fetch faces, so the
         circle holds the poster&rsquo;s initial and takes its colour from their
-        handle. One table, two shapes: change a hue and both rows above move.
+        handle, hashed into one of seven slots.
       </p>
 
       <p>
@@ -756,8 +742,8 @@ const jsonLd = designJsonLd();
     margin: 0;
   }
 
-  /* Seven 48px circles need more air between them than seven pills do, and
-     they need it in both directions once the row wraps. */
+  /* Seven 48px circles need more air between them than a row of chips does,
+     and they need it in both directions once the row wraps. */
   .chips--monogram {
     gap: 0.6rem;
   }
