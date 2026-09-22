@@ -302,3 +302,23 @@ test("the kind chip on an entry strip claims the same target its tags do", () =>
     "the kind chip's hit area is absolutely positioned against something other than the chip",
   );
 });
+
+test("the filter row caps at twelve and never hides the tag you are on", () => {
+  /*
+   * VET-220. Thirty-two chips were eight lines on a phone before the list, so
+   * `TagFilters` shows the twelve busiest and a "Show all N" chip. Two things a
+   * later edit could quietly break: the number, and the exemption that keeps a
+   * tag page's `aria-current` chip visible when its tag ranks past the cap.
+   */
+  const source = readFileSync(
+    fileURLToPath(new URL("../components/TagFilters.astro", import.meta.url)),
+    "utf8",
+  );
+  assert.match(source, /const TAG_CAP = 12;/);
+  assert.match(
+    source,
+    /index >= TAG_CAP && slug !== current/,
+    "the current tag can fall into the collapsed tail, so a tag page can hide its own selected chip",
+  );
+  assert.match(source, /<li data-more hidden>/, "the button shows without scripting, where it does nothing");
+});
