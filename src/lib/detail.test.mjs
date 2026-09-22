@@ -240,8 +240,17 @@ test("the post's page shows X's embed first and the saved copy under it", () => 
   );
   assert.match(
     code(read(POST_BODY)),
-    /<h2 class="post__label mono">Saved copy<\/h2>/,
-    "the copy under the embed is unlabelled, so the page reads as printing the post twice",
+    /<details class="post">\s*<summary class="post__label mono">Saved copy<\/summary>/,
+    "the copy under the embed is not a closed `<details>` labelled Saved copy, so the page prints the post twice",
+  );
+  assert.ok(
+    !/<details[^>]*\bopen\b/.test(code(read(POST_BODY))),
+    "the saved copy opens by default, which puts the post on the page twice",
+  );
+  assert.match(
+    route,
+    /\{entry\.note && !entry\.post && <p class="standfirst">/,
+    "a readable post shows its note as the standfirst again. For a post the note is a copy of the words the embed already shows.",
   );
 });
 

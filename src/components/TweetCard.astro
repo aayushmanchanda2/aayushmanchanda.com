@@ -286,6 +286,17 @@ const body = clipText(post.text, POST_CARD_MAX);
     margin: 0.75rem;
   }
 
+  /* X's iframe, reset to the colour scheme its own document declares. The
+     page is `color-scheme: dark` in the dark theme and the iframe inherits
+     it; X's document declares none. When the two disagree the browser paints
+     an opaque light backdrop behind the frame, which showed as white corners
+     outside X's rounded border. Measured at 375px dark before and after
+     (VET-221). `normal` matches their document in both themes, so the
+     backdrop stays transparent. */
+  .card__embed :global(iframe) {
+    color-scheme: normal;
+  }
+
   /* The standalone card on `/library/<slug>` (VET-221). 550px is X's own
      maximum embed width, so the fallback and the frame that replaces it take
      the same width. The top margin is the one every block on that page opens

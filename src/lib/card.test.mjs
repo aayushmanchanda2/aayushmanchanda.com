@@ -462,6 +462,11 @@ test("the embed is X's, the loader is ours, and the loader is in one file", () =
   assert.match(card, /class="card__quote twitter-tweet"/, "X's factory finds nothing to swap");
   assert.match(card, /data-dnt="true"/, "the embed does not ask X to leave the visit alone");
   assert.match(card, /min-height:/, "the fallback reserves no height, so the wall jumps on load");
+  assert.match(
+    card,
+    /\.card__embed :global\(iframe\) \{\s*color-scheme: normal;/,
+    "X's iframe inherits the page's dark color-scheme again, and the browser paints white corners behind its rounded frame",
+  );
 });
 
 test("the row keeps exactly one door off the site", () => {

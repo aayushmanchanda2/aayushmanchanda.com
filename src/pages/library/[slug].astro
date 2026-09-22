@@ -156,7 +156,12 @@ const description =
       }
     </ul>
 
-    {entry.note && <p class="standfirst">{entry.note}</p>}
+    {/*
+      Not on a post the pipeline could read: there the note is a copy of the
+      post's words, which the embed below already shows (VET-221). A post it
+      could not read keeps the note, because then it is the only text there is.
+    */}
+    {entry.note && !entry.post && <p class="standfirst">{entry.note}</p>}
   </header>
 
   {/*
