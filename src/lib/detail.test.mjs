@@ -117,6 +117,8 @@ test("every optional block is gated on the field it draws", () => {
   const route = code(read(ROUTE));
 
   for (const [field, block] of [
+    ["entry.post", "<TweetCard"],
+    ["entry.post", "<XEmbeds"],
     ["entry.post", "<PostBody"],
     ["entry.video", "<VideoFacade"],
     ["entry.digest", "<DigestBlocks"],
@@ -208,6 +210,38 @@ test("the page holds the whole post, at a measure somebody can read", () => {
   assert.ok(
     [...longest].length > 10_000,
     "the long-form posts have gone; check the detail page still earns its long-form treatment",
+  );
+});
+
+test("the post's page shows X's embed first and the saved copy under it", () => {
+  /*
+   * VET-221. The embed is how the post looks anywhere it is pasted; the copy is
+   * what survives the original being deleted. Order is the contract: embed,
+   * loader, copy. The card is `standalone` because its `notes` bar would link
+   * to the page the reader is on, and a list item outside a list is invalid.
+   */
+  const route = code(read(ROUTE));
+  const card = code(read("components/TweetCard.astro"));
+
+  assert.match(
+    route,
+    /<TweetCard entry=\{\{ \.\.\.entry, post: entry\.post \}\} standalone \/>\}\s*\{entry\.post && <XEmbeds \/>\}\s*\{entry\.post && <PostBody/,
+    "the post's page lost the embed, or the embed is no longer above the saved copy",
+  );
+  assert.match(
+    card,
+    /!standalone && \(\s*<p class="card__notes">/,
+    "a standalone card still draws the `notes` bar, which on a post's own page links to itself",
+  );
+  assert.match(
+    card,
+    /const Root = standalone \? "div" : "li";/,
+    "a standalone card is still a list item, and on a post's page there is no list round it",
+  );
+  assert.match(
+    code(read(POST_BODY)),
+    /<h2 class="post__label mono">Saved copy<\/h2>/,
+    "the copy under the embed is unlabelled, so the page reads as printing the post twice",
   );
 });
 

@@ -629,13 +629,17 @@ const EMBEDS = [
 ];
 
 /*
- * The pages allowed to talk to X, and it is a list of exactly one.
+ * The pages allowed to talk to X: the posts wall, plus the page of every
+ * saved post the pipeline could read.
  *
  * `/library/kind/post` renders every saved post as X's own embed
  * (`components/XEmbeds.astro`), so opening it fetches `widgets.js` and turns
- * each card into an iframe of theirs. That is the only page on the site that
- * does, and /privacy says so by name — which is a claim that has to be checked
- * from both ends, so this is checked from both ends. A page not on this list
+ * each card into an iframe of theirs. Since VET-221 each post's own page does
+ * the same for its one post, above the saved copy. /privacy names both, which
+ * is a claim that has to be checked from both ends, so this is checked from
+ * both ends. The post pages come from `src/data/library.json` rather than from
+ * a pattern, because `/library/<slug>` is also every article and video, and
+ * those must stay clean. A page not on this list
  * that carries a Twitter host has quietly added a third party; the page on it
  * that carries none has quietly lost the feature while /privacy still confesses
  * to it, which is the more embarrassing of the two.
@@ -656,7 +660,12 @@ const EMBEDS = [
  * list either — `x.com/<handle>/status/<id>` is a link a reader may choose to
  * follow, not a request the page makes, exactly as `youtube.com/watch` is.
  */
-const X_EMBED_PAGES = ["library/kind/post/index.html"];
+const X_EMBED_PAGES = [
+  "library/kind/post/index.html",
+  ...JSON.parse(readFileSync(path.join(process.cwd(), "src/data/library.json"), "utf8"))
+    .filter((/** @type {{ post?: unknown }} */ entry) => entry.post)
+    .map((/** @type {{ slug: string }} */ entry) => `library/${entry.slug}/index.html`),
+];
 
 const X_HOSTS =
   /(?:https?:)?\/\/[\w.-]*(?:platform\.twitter\.com|syndication\.twitter\.com|platform\.x\.com|syndication\.twimg\.com)/g;
@@ -688,7 +697,7 @@ for (const page of pages) {
     );
     fail(
       page,
-      `loads from X and is not a page that declares embeds. /privacy says the posts wall is the only one: ...${near.replace(/\s+/g, " ")}...`,
+      `loads from X and is not a page that declares embeds. /privacy says only the posts wall and the post pages do: ...${near.replace(/\s+/g, " ")}...`,
     );
   }
 

@@ -42,8 +42,10 @@ import EntryNav from "../../components/EntryNav.astro";
 import KindChip from "../../components/KindChip.astro";
 import PostBody from "../../components/PostBody.astro";
 import TagChips from "../../components/TagChips.astro";
+import TweetCard from "../../components/TweetCard.astro";
 import VideoFacade from "../../components/VideoFacade.astro";
 import VoiceBlocks from "../../components/VoiceBlocks.astro";
+import XEmbeds from "../../components/XEmbeds.astro";
 import { linkLabel } from "../../lib/links";
 import { library } from "../../lib/library";
 import { routeSlug } from "../../lib/parse";
@@ -163,7 +165,16 @@ const description =
     because pressing it is the whole point of having saved it. An article has
     neither and renders neither: there is nothing here to embed and a box
     saying so would be the stub this page exists not to be.
+
+    A post is X's own embed first, the same one the posts wall shows, and the
+    saved copy under it (VET-221). The embed is how the post looks anywhere it
+    is pasted; the copy is the whole text from this repository, still here if
+    the post is deleted or X does not answer. `XEmbeds` is gated on the same
+    field because it is what puts X's host on the page, and
+    `scripts/validate-schema.mjs` fails a page that carries it without a post.
   */}
+  {entry.post && <TweetCard entry={{ ...entry, post: entry.post }} standalone />}
+  {entry.post && <XEmbeds />}
   {entry.post && <PostBody entry={{ ...entry, post: entry.post }} />}
   {entry.video && <VideoFacade entry={{ ...entry, video: entry.video }} chrome={false} />}
 

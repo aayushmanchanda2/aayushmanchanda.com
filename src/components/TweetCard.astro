@@ -75,6 +75,16 @@
  * preserve. It is cut at `POST_CARD_MAX` for the reason `lib/post.ts` gives at
  * length, which now applies only to the fallback — X's own embed decides where
  * to cut a long post inside its frame.
+ *
+ * ## `standalone`: the same embed on the post's own page (VET-221)
+ *
+ * `/library/<slug>` renders this above `PostBody.astro`, so the post looks
+ * the way it looks anywhere it is pasted and the saved copy sits under it.
+ * It is `VideoFacade`'s `chrome={false}` arrangement: a plain block instead of
+ * a list item, and no `notes` bar, because that bar would link to the page the
+ * reader is already on. With no bar there is no second region, so the box
+ * that groups the two moves from the card onto the fallback. Once X's frame is
+ * up it stands alone, as it does when pasted anywhere else.
  */
 import type { LibraryEntry, Post } from "../lib/library";
 import { entryHref } from "../lib/library";
@@ -84,10 +94,13 @@ import { POST_CARD_MAX, clipText, monogram } from "../lib/post";
 interface Props {
   /** The entry the card links to. Its `post` is what the card draws. */
   entry: LibraryEntry & { post: Post };
+  /** On the entry's own page: no list item, no `notes` bar, no press. */
+  standalone?: boolean;
 }
 
-const { entry } = Astro.props;
+const { entry, standalone = false } = Astro.props;
 const { post } = entry;
+const Root = standalone ? "div" : "li";
 
 /** Where a /library thing sends a reader, shared with the row and the tile. */
 const href = entryHref(entry);
@@ -96,7 +109,7 @@ const initial = monogram(post.author);
 const body = clipText(post.text, POST_CARD_MAX);
 ---
 
-<li class="card press">
+<Root class:list={["card", standalone ? "card--solo" : "press"]}>
   {/*
     The embed's own region, and the wrapper is load-bearing twice over. X's
     factory inserts its rendered widget immediately before the blockquote it
@@ -195,12 +208,16 @@ const body = clipText(post.text, POST_CARD_MAX);
     anchor in it stretches across every part of the card the embed is not
     standing on.
   */}
-  <p class="card__notes">
-    <a class="card__link mono" href={href}>
-      notes<span class="visually-hidden"> on {entry.title}</span>
-    </a>
-  </p>
-</li>
+  {
+    !standalone && (
+      <p class="card__notes">
+        <a class="card__link mono" href={href}>
+          notes<span class="visually-hidden"> on {entry.title}</span>
+        </a>
+      </p>
+    )
+  }
+</Root>
 
 <style>
   /* The item in the wall, and **the card itself is the box now**.
@@ -267,6 +284,27 @@ const body = clipText(post.text, POST_CARD_MAX);
     position: relative;
     z-index: 1;
     margin: 0.75rem;
+  }
+
+  /* The standalone card on `/library/<slug>` (VET-221). 550px is X's own
+     maximum embed width, so the fallback and the frame that replaces it take
+     the same width. The top margin is the one every block on that page opens
+     with (`PostBody.astro › .post`). The box and its inset move onto the
+     fallback, because there is no bar here for a box to group it with; once
+     the embed is up, X's frame is the only frame. */
+  .card--solo {
+    max-width: 550px;
+    margin: clamp(2.5rem, 8vh, 4rem) 0 0;
+    border: 0;
+  }
+
+  .card--solo .card__embed {
+    margin: 0;
+  }
+
+  .card--solo .card__quote {
+    padding: 0.75rem;
+    border: 1px solid var(--hairline);
   }
 
   /* The fallback, wearing the card the static version was.

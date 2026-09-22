@@ -55,6 +55,12 @@
  * Nothing outside this origin is named, the same claim `TweetCard.astro`
  * makes: the pictures are files in this repository because
  * `lib/library.ts › readShotPath` will not carry anything else.
+ *
+ * ## Labelled "Saved copy" since the embed went above it (VET-221)
+ *
+ * X's embed now sits above this block and shows the same words, so without a
+ * label this reads as the page printing the post twice. The label says what
+ * the second one is for: the copy that stays if the original is deleted.
  */
 import type { LibraryEntry, Post } from "../lib/library";
 
@@ -68,6 +74,7 @@ const { post } = entry;
 ---
 
 <section class="post">
+  <h2 class="post__label mono">Saved copy</h2>
   <div class="post__head">
     <span class="post__author">{post.author}</span>
     <span class="post__meta mono">
@@ -102,6 +109,16 @@ const { post } = entry;
 <style>
   .post {
     margin-top: clamp(2.5rem, 8vh, 4rem);
+  }
+
+  /* The digest's label, verbatim (`DigestBlocks.astro › .digest__label`), with
+     the same 0.4rem to what it labels. */
+  .post__label {
+    margin-bottom: 0.4rem;
+    color: var(--faint);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    line-height: 1.6;
   }
 
   /* **A stack, where it used to be a row with a 48px circle at the head of it.**
