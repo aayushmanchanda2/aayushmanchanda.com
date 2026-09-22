@@ -486,5 +486,73 @@
       "reference",
       "skills"
     ]
+  },
+  {
+    "slug": "shawn",
+    "title": "shawn.",
+    "url": "https://www.shwn.design/",
+    "domain": "shwn.design",
+    "saved_date": "2026-09-22",
+    "shot": "/shots/shawn.webp",
+    "palette": [
+      "#fafafa",
+      "#304f36",
+      "#4b7150",
+      "#ced3ce",
+      "#6a936d",
+      "#121613"
+    ],
+    "collections": []
+  },
+  {
+    "slug": "ai-native-payroll-compliance-benefits-warp",
+    "title": "AI-Native Payroll, Compliance & Benefits › Warp",
+    "url": "https://www.warp.co/",
+    "domain": "warp.co",
+    "saved_date": "2026-09-22",
+    "shot": "/shots/ai-native-payroll-compliance-benefits-warp.webp",
+    "palette": [
+      "#fefefe",
+      "#282828",
+      "#908e8a",
+      "#b3b0aa",
+      "#d3d1cd",
+      "#ff3d00"
+    ],
+    "collections": []
+  },
+  {
+    "slug": "ian-nuttall",
+    "title": "Ian Nuttall",
+    "url": "https://ian.is/",
+    "domain": "ian.is",
+    "saved_date": "2026-09-22",
+    "shot": "/shots/ian-nuttall.webp",
+    "palette": [
+      "#fafafa",
+      "#5a5a5b",
+      "#c8c8c8",
+      "#18181b",
+      "#929294",
+      "#3e3e41"
+    ],
+    "collections": []
+  },
+  {
+    "slug": "the-horowitz-andreessen-academy",
+    "title": "The Horowitz Andreessen Academy",
+    "url": "https://www.theacademysf.com/#top",
+    "domain": "theacademysf.com",
+    "saved_date": "2026-09-22",
+    "shot": "/shots/the-horowitz-andreessen-academy.webp",
+    "palette": [
+      "#f7f6f4",
+      "#060404",
+      "#2c3030",
+      "#b3b3b3",
+      "#d1d2d1",
+      "#4d4d4e"
+    ],
+    "collections": []
   }
 ]

@@ -738,5 +738,59 @@
     "verdict": "watching",
     "note": "A Mac MCP server that lets coding agents capture, arrange and style product screenshots without opening an editor.",
     "status_date": "2026-09-18"
+  },
+  {
+    "slug": "atonomi-ai-automation-for-businesses",
+    "name": "Atonomi — AI automation for businesses",
+    "url": "https://atonomi.ai/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Custom AI agents for lead generation, outreach, follow-ups, and sales operations, with a dashboard for reviewing work and triggering workflows.",
+    "status_date": "2026-09-22"
+  },
+  {
+    "slug": "pool",
+    "name": "Pool",
+    "url": "https://pool.day/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A screenshot organizer that reads what's inside, files captures into pools automatically, and brings them back when needed.",
+    "status_date": "2026-09-22"
+  },
+  {
+    "slug": "haus-ai-powered-causal-marketing",
+    "name": "Haus | AI-Powered Causal Marketing",
+    "url": "https://www.haus.io/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "An incrementality platform for designing geo experiments, measuring causal lift, and allocating marketing spend from the results.",
+    "status_date": "2026-09-22"
+  },
+  {
+    "slug": "akai-by-deel-the-agent-platform-built-for-operations",
+    "name": "Akai by Deel — The agent platform built for operations",
+    "url": "https://www.akai.run/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Deel's enterprise agent platform learns operational workflows from a demonstration, then runs them across systems with shared context, audit trails, and human approval gates.",
+    "status_date": "2026-09-22"
+  },
+  {
+    "slug": "alexandria-a-knowledge-library-for-ai-agents",
+    "name": "Alexandria — a knowledge library for AI agents",
+    "url": "https://www.firecrawl.dev/alexandria",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A single MCP and CLI connection to 82 providers and 471 capabilities across research, finance, code, government data, and more.",
+    "status_date": "2026-09-22"
+  },
+  {
+    "slug": "monaco-the-first-revenue-engine-for-startups",
+    "name": "Monaco — The first revenue engine for startups",
+    "url": "https://www.monaco.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "An AI-native revenue platform that combines TAM building, outbound, interaction capture, and pipeline management, with agents handling follow-ups and record updates.",
+    "status_date": "2026-09-22"
   }
 ]
