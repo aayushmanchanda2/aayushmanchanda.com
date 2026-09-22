@@ -29,8 +29,19 @@
  * being shown. Same call `KindTabs` makes and for the same reason: a filter row
  * that changes between the page you filtered from and the page you landed on is
  * two controls that happen to resemble each other. `lib/library.ts ›
- * libraryTags` is the vocabulary and it is alphabetical, so nothing here
- * reorders under a reader between visits.
+ * libraryTags` is the vocabulary; this row ranks it by entry count (ties
+ * alphabetical), which is fixed per build, so nothing reorders between pages.
+ *
+ * ## Twelve, then "Show all N" (VET-220)
+ *
+ * Thirty-two chips were eight lines at 375px before the list started. The row
+ * now shows the `TAG_CAP` busiest tags and a ghost chip, "Show all 32", that
+ * reveals the rest in place; ui-skills' `design-md-foundations.astro` toggle,
+ * cut down. Every chip is still in the HTML: with scripting off the row is the
+ * whole vocabulary and the button never appears, because the inline script
+ * below is what hides the tail and unhides the button, before first paint.
+ * The tag a page is showing is never in the tail, so `aria-current` is always
+ * on screen even when that tag ranks thirty-second.
  *
  * The selected state is `aria-current="page"`, which is the honest way for a
  * link to say the reader is already there, and `styles/chip.css` inks the
@@ -52,6 +63,15 @@ interface Props {
 }
 
 const { groups, current } = Astro.props;
+
+/** How many chips show before "Show all N". `lib/tags.test.mjs` pins it. */
+const TAG_CAP = 12;
+const ranked = [...groups].sort(
+  (a, b) => b.entries.length - a.entries.length || a.slug.localeCompare(b.slug),
+);
+// The current tag is exempt from the cap so the selected chip is always visible.
+const tail = (slug: string, index: number) => index >= TAG_CAP && slug !== current;
+const showAll = `Show all ${groups.length}`;
 ---
 
 {/*
@@ -60,10 +80,10 @@ const { groups, current } = Astro.props;
   arrow-key movement inside the row that a static site does not implement.
 */}
 <nav class="filters" aria-label="Filter the library by tag">
-  <ul class="filters__row">
+  <ul class="filters__row" id="tag-filters">
     {
-      groups.map((group) => (
-        <li>
+      ranked.map((group, index) => (
+        <li data-tail={tail(group.slug, index) ? "" : undefined}>
           <a
             class="tag"
             href={`/library/tag/${group.slug}`}
@@ -75,8 +95,47 @@ const { groups, current } = Astro.props;
         </li>
       ))
     }
+    {
+      groups.length > TAG_CAP && (
+        <li data-more hidden>
+          <button
+            class="tag tag--more"
+            type="button"
+            aria-expanded="false"
+            aria-controls="tag-filters"
+            data-label={showAll}
+          >
+            {showAll}
+          </button>
+        </li>
+      )
+    }
   </ul>
 </nav>
+
+{/*
+  Inline and right after the row, so it runs while the page is still parsing
+  and the tail is hidden before the first paint. No `.js` class exists on this
+  site to hang a CSS rule on, and one would be a second prepaint for one row.
+*/}
+<script is:inline>
+  (() => {
+    const row = document.getElementById("tag-filters");
+    const more = row && row.querySelector("li[data-more]");
+    const button = more && more.querySelector("button");
+    if (!row || !more || !button) return;
+    const tail = row.querySelectorAll("li[data-tail]");
+    /** @param {boolean} open */
+    const set = (open) => {
+      tail.forEach((li) => li.toggleAttribute("hidden", !open));
+      button.setAttribute("aria-expanded", String(open));
+      button.textContent = open ? "Show fewer" : button.dataset.label || "Show all";
+    };
+    set(false);
+    more.removeAttribute("hidden");
+    button.addEventListener("click", () => set(button.getAttribute("aria-expanded") !== "true"));
+  })();
+</script>
 
 <style>
   /* The gap to the tab row above, owned here rather than by the pages that
@@ -130,5 +189,11 @@ const { groups, current } = Astro.props;
      pixel to spare instead of hiding five. */
   .filters__row li {
     display: flex;
+  }
+
+  /* The rule above outranks the UA's `[hidden] { display: none }`, so the
+     collapsed tail and the pre-script button have to say it again. */
+  .filters__row li[hidden] {
+    display: none;
   }
 </style>

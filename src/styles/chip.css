@@ -271,6 +271,16 @@
   color: var(--accent);
 }
 
+/* "Show all N" on the filter row (`TagFilters.astro`): a tag's box with the
+   border dropped and the word at `--muted`, so it reads as a control on the row
+   rather than one more subject. Same 28px, same hit area, same hover fill. */
+.tag--more {
+  border-color: transparent;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+}
+
 /* --------------------------------------------------------------------------
    The monogram: the avatar slot, with no avatar in it.
 
