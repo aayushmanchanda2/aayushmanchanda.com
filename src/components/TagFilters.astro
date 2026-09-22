@@ -33,14 +33,16 @@
  * reorders under a reader between visits.
  *
  * The selected state is `aria-current="page"`, which is the honest way for a
- * link to say the reader is already there, and `styles/chip.css` closes the
- * dotted border to say it in ink. There is no `All` chip: `All` is what the tab
+ * link to say the reader is already there, and `styles/chip.css` inks the
+ * border and puts the word in the accent to say it.
+ *
+ * Each chip carries its entry count, ui-skills' TopicTag shape: label, then the
+ * number in `--faint` (`chip.css › .tag__count`). There is no `All` chip: `All` is what the tab
  * row already offers one line above, and on a tag page the crumb is the way
  * back. A second one here would be a third control saying the same thing.
  */
-import TagGlyph from "./TagGlyph.astro";
 import type { LibraryTagGroup } from "../lib/library";
-import { hueSlot, tagLabel } from "../lib/tags";
+import { tagLabel } from "../lib/tags";
 
 interface Props {
   /** Every tag with a page, alphabetically: `lib/library.ts › libraryTags`. */
@@ -64,12 +66,11 @@ const { groups, current } = Astro.props;
         <li>
           <a
             class="tag"
-            data-hue={hueSlot(group.slug)}
             href={`/library/tag/${group.slug}`}
             aria-current={current === group.slug ? "page" : undefined}
           >
-            <TagGlyph slug={group.slug} />
-            {tagLabel(group.slug)}
+            <span>{tagLabel(group.slug)}</span>
+            <span class="tag__count">{group.entries.length}</span>
           </a>
         </li>
       ))
@@ -100,30 +101,23 @@ const { groups, current } = Astro.props;
      375px column instead of dropping it to a second line. Twelve chips are
      four lines at that width.
 
-     The 1.25rem row gap is `TagChips.astro`'s arithmetic and not a rhythm
-     chosen here: each chip claims a 40px hit area through an `::after` that
-     reaches 0.62rem above and below it, so two lines closer than 1.25rem would
-     have overlapping targets and the upper chip would eat presses meant for the
-     lower one. `lib/tags.test.mjs` reads the overreach out of `chip.css` and
-     fails if this number stops covering it.
-
-     **The column gap is 0.5rem where it was 0.4rem**, which is Aayush's review
-     of this row: the leading looked weird, and a 6.4px column gap under a 20px
-     row gap is a field packed tighter across than a chip's own side padding and
-     three times looser down. It cannot be made even — the row gap is a hit area
-     and the column gap is not — but it can stop being 3:1, and the other half of
-     that is the line below. */
+     The 0.75rem row gap is `TagChips.astro`'s arithmetic and not a rhythm
+     chosen here: each 28px chip claims a 40px hit area through an `::after`
+     that reaches 0.375rem above and below it, so two lines closer than 0.75rem
+     would have overlapping targets. `lib/tags.test.mjs` reads the overreach out
+     of `chip.css` and fails if this number stops covering it. The 0.5rem column
+     gap is ui-skills' `gap-2`. */
   .filters__row {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.25rem 0.5rem;
+    gap: 0.75rem 0.5rem;
     margin: 0;
   }
 
   /* **The other half of the leading, and it is all subtraction.** An `li` is a
      block box, so an `inline-flex` chip inside one sits in a *line box* — and a
      line box is as tall as the inherited strut, which is 16px of Geist at 1.6.
-     Measured on the shipped row: a 20.27px chip inside a 25.59px item, so every
+     Measured at VET-114, on the old chip: a 20.27px chip in a 25.59px item, so every
      wrapped line carried 5.32px of leading nobody chose and the pitch came out
      at 45.59px for a chip 20.27px tall. Making the item a flex container
      blockifies the chip and the strut goes with the line box.

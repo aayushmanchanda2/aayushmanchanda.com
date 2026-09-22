@@ -210,23 +210,23 @@ const description =
 
   /* **The row gap is 1.25rem and it is a hit area, not a rhythm.** The /tools
      strip this is otherwise copied from takes `gap: 0 0.7rem`, because nothing
-     on it claims more room than it draws. This one carries tag chips, and a tag
-     claims a 40px target through an `::after` reaching 0.62rem above and below
-     its 20.3px box (`styles/chip.css › .tag::after`). With the lines welded
-     together that overreach lands on whatever is on the line before it:
-     measured at 375px, the first tag's target covered the kind chip by 9.9px
-     and the domain link by 8.6px, and on a digested entry at desktop width it
-     covered the `digested` date on the line below, so pressing a date opened a
-     tag page. design.md §4 states the rule twice — adjacent targets may touch,
-     never overlap — and 1.25rem is the number `TagChips.astro` already derives
-     from the same arithmetic for its own wrapped lines. One number, one reason.
+     on it claims more room than it draws. This one carries chips that do: a tag
+     reaches 0.375rem above and below its 28px box (`styles/chip.css ›
+     .tag::after`) and the kind chip 0.62rem above and below its 20.3px one
+     (`.strip__chip::after` below). With the lines welded together that
+     overreach lands on whatever is on the line before it — measured at 375px
+     before this gap existed, a tag's target covered the kind chip by 9.9px.
+     design.md §4: adjacent targets may touch, never overlap. The kind chip's
+     overreach is the larger, so it sets the number: 2 × 0.62rem.
 
-     It costs nothing above 900px, where the strip is one line. */
+     The column gap is 0.5rem, ui-skills' `gap-2`, and `.strip__item` takes the
+     same so the separator dot stays centred. It costs nothing above 900px,
+     where the strip is one line. */
   .strip {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 1.25rem 0.7rem;
+    gap: 1.25rem 0.5rem;
     margin-top: clamp(1rem, 2.5vw, 1.4rem);
     color: var(--faint);
     text-transform: none;
@@ -236,7 +236,7 @@ const description =
   .strip__item {
     display: flex;
     align-items: center;
-    gap: 0.7rem;
+    gap: 0.5rem;
   }
 
   /* The alt-text form, so the separator has no accessible name and a screen
@@ -248,7 +248,7 @@ const description =
     color: var(--hairline-strong);
   }
 
-  /* The tag chips bring their own 1.25rem row gap, which is the hit-area
+  /* The tag chips bring their own 0.75rem row gap, which is the hit-area
      arithmetic `TagChips.astro` explains and not a rhythm this row chose. It
      only shows when the chips wrap, and they wrap on a phone, so the item is
      allowed to be as tall as its own contents rather than being squashed to
@@ -261,9 +261,9 @@ const description =
      outside the bold-and-underlined treatment prose links get in global.css.
      `:not(.strip__chip)` because the kind anchor is a box, not a word: an
      underline under a tinted chip would draw a second line across the row.
-     `:not(.tag)` for the same reason one level along — a tag is a dot and a
-     word, painted by `styles/chip.css`, and an underline would be a third
-     mark on it. */
+     `:not(.tag)` for the same reason one level along — a tag is an outlined
+     box painted by `styles/chip.css`, and an underline would be a second
+     line inside it. */
   .strip a:not(.strip__chip):not(.tag) {
     /* --muted, never the strip's --faint: a quiet anchor inside a metadata
        container states its own ink (design.md §4, the ink floor). */
@@ -304,9 +304,7 @@ const description =
      centring transform so nothing rests on one and reduced motion has nothing
      to undo, and horizontal only so it cannot swallow the domain link beside
      it. §4's stated exception is for text — a word in a row of words — and this
-     is a box. It is also the one strip on the site where a 20.3px target sat
-     next to a 40.1px one wearing the same size chip, which is the mismatch
-     design.md §1 spends a paragraph refusing two pixels of.
+     is a box, and the tags beside it on this line claim 40px too.
 
      The row gap above is what keeps the two hit boxes from meeting: 20px of gap
      against the 19.84px two of these overreach into it leaves them touching,
