@@ -1,0 +1,76 @@
+---
+/**
+ * /me/library (VET-274): the library pane with the private rows merged in
+ * and a "Private" segment, and the private rows alone in the main column,
+ * which is what a phone sees (the pane hides under 48rem).
+ */
+import Base from "../layouts/Base.astro";
+import PrivatePane from "./PrivatePane.astro";
+import type { LibraryEntry } from "../lib/library";
+import { formatDay } from "../lib/date";
+import { privateHref } from "../lib/private";
+
+interface Props {
+  rows: LibraryEntry[];
+}
+
+const { rows } = Astro.props;
+---
+
+<Base title="Private library · Aayush Manchanda" description="Private." noindex full>
+  <PrivatePane slot="pane" rows={rows} />
+  <section class="plist">
+    <h1 class="page-title">Private <span class="plist__count tabular-nums">{rows.length}</span></h1>
+    <ul>
+      {
+        rows.map((row) => (
+          <li>
+            <a href={privateHref(row.slug)}>{row.title}</a>
+            <small class="mono">
+              {row.domain} · <time datetime={row.saved_date}>{formatDay(row.saved_date)}</time>
+            </small>
+          </li>
+        ))
+      }
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .plist {
+    max-width: 48rem;
+    margin-inline: auto;
+  }
+
+  .plist__count {
+    color: var(--text-tertiary);
+  }
+
+  .plist ul {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+
+  .plist li {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .plist a {
+    color: var(--text-primary);
+    text-decoration: none;
+    text-wrap: pretty;
+  }
+
+  .plist a:hover {
+    text-decoration: underline;
+  }
+
+  .plist small {
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+  }
+</style>

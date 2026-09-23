@@ -24,11 +24,13 @@
  * VET-231 audit.
  */
 import KindIcon from "./KindIcon.astro";
+import LockGlyph from "./LockGlyph.astro";
 import LibraryTags from "./LibraryTags.astro";
 import LibraryToolbar from "./LibraryToolbar.astro";
 import PreviewCard from "./PreviewCard.astro";
 import type { Kind, LibraryEntry } from "../lib/library";
 import { entryHref, rowSummary } from "../lib/library";
+import { privateHref } from "../lib/private";
 import { FILTER, PREPAINT } from "../lib/library-pane";
 import { clipText } from "../lib/post";
 import { libraryPreview } from "../lib/assets";
@@ -40,13 +42,15 @@ interface Props {
   current?: string;
   /** On /library and the kind routes: the kind shown on load, "" for All. */
   start?: Kind | "";
+  /** /me's private rows (VET-274): merged by date, lock-marked, under "Private". Absent: markup unchanged. */
+  extra?: LibraryEntry[];
 }
 
-const { entries, current, start } = Astro.props;
+const { entries, current, start, extra = [] } = Astro.props;
 const index = start !== undefined;
 
 /** Month headers over the main feed: "2026-09" -> its label and count. "Also saved" follows it (VET-273). */
-const main = entries.filter((entry) => !entry.also_saved);
+const main = [...entries.filter((entry) => !entry.also_saved), ...extra].sort((a, b) => b.saved_date.localeCompare(a.saved_date));
 const also = entries.filter((entry) => entry.also_saved);
 const months = new Map<string, number>();
 for (const entry of main) months.set(entry.saved_date.slice(0, 7), (months.get(entry.saved_date.slice(0, 7)) ?? 0) + 1);
@@ -62,7 +66,7 @@ const opens = (i: number) => i === 0 || main[i]!.saved_date.slice(0, 7) !== main
   data-start={start}
 >
   <div class="pane__bar">
-    <LibraryToolbar />
+    <LibraryToolbar privateCount={extra.length} />
   </div>
   <div class="pane__tags"><LibraryTags /></div>
   <ul data-rows>
@@ -70,6 +74,7 @@ const opens = (i: number) => i === 0 || main[i]!.saved_date.slice(0, 7) !== main
       [...main, ...also].map((entry, i) => {
         const quiet = entry.also_saved;
         const summary = quiet ? null : (entry.block?.tip ?? rowSummary(entry));
+        const own = extra.includes(entry);
         return (
           <>
           {!quiet && opens(i) && (
@@ -78,16 +83,17 @@ const opens = (i: number) => i === 0 || main[i]!.saved_date.slice(0, 7) !== main
             </li>
           )}
           {i === main.length && <li class="pane__month pane__also mono" data-month>Also saved · <span class="tabular-nums" data-month-count>{also.length}</span></li>}
-          <li data-kind={entry.kind} data-tags={entry.tags.join(" ")} data-also={quiet ? "" : undefined}>
+          <li data-kind={own ? "private" : entry.kind} data-tags={entry.tags.join(" ")} data-also={quiet ? "" : undefined}>
             <a
-              href={entryHref(entry)}
+              href={own ? privateHref(entry.slug) : entryHref(entry)}
               data-astro-prefetch="hover"
               aria-current={entry.slug === current ? "page" : undefined}
-              {...libraryPreview(entry)}
+              {...(own ? {} : libraryPreview(entry))}
             >
               <b>{entry.title}</b>
               <small>
                 {!quiet && <KindIcon kind={entry.kind} />}
+                {own && <LockGlyph />}
                 <span>{entry.domain}</span>
                 {quiet && <time datetime={entry.saved_date}>{formatDay(entry.saved_date)}</time>}
               </small>
@@ -100,7 +106,7 @@ const opens = (i: number) => i === 0 || main[i]!.saved_date.slice(0, 7) !== main
     }
   </ul>
   <p class="pane__empty" data-filter-empty hidden>
-    No entries match these filters. <a href={current ? `/library/${current}` : "/library"}>Show all</a>
+    No entries match these filters. <a href={extra.length > 0 ? "/me/library" : current ? `/library/${current}` : "/library"}>Show all</a>
   </p>
 </nav>
 <PreviewCard />
@@ -145,7 +151,6 @@ const opens = (i: number) => i === 0 || main[i]!.saved_date.slice(0, 7) !== main
   .pane {
     display: none;
   }
-
   /* briOS's @3xl: two panes from 48rem of container, one below it. The
      container is `.split` in `layouts/Base.astro`. */
   @container split (width >= 48rem) {
@@ -161,7 +166,6 @@ const opens = (i: number) => i === 0 || main[i]!.saved_date.slice(0, 7) !== main
       border-right: 1px solid var(--hairline);
     }
   }
-
   /* The toolbar: sticky at the top of the pane's own scroll, on the page
      colour so rows pass under it, a hairline under it. Padding lives here and
      on the list rather than on the pane, so `top: 0` is the pane's top. */
@@ -177,7 +181,6 @@ const opens = (i: number) => i === 0 || main[i]!.saved_date.slice(0, 7) !== main
   .pane__tags {
     padding: 0.25rem 0.75rem 0;
   }
-
   /* Apple Notes' month headers: sticky under the toolbar, on the page colour
      so rows pass under, the next month sliding over the last. Not a link and
      not a stop: the roving tabindex walks rows only. */
@@ -191,7 +194,6 @@ const opens = (i: number) => i === 0 || main[i]!.saved_date.slice(0, 7) !== main
     font-weight: 500;
     color: var(--text-secondary);
   }
-
   /* Quieter than a month: the rows under it are kept, not featured (VET-273). */
   .pane .pane__also {
     margin-top: 1.5rem;
@@ -238,7 +240,6 @@ const opens = (i: number) => i === 0 || main[i]!.saved_date.slice(0, 7) !== main
     color: var(--text-primary);
     text-decoration: none;
   }
-
   /* briOS's /hn row: hover and selected are one look, and hover is instant
      (design.md §4). */
   @media (hover: hover) {
@@ -252,7 +253,6 @@ const opens = (i: number) => i === 0 || main[i]!.saved_date.slice(0, 7) !== main
     background: var(--surface-selected);
     box-shadow: var(--shadow-contrast);
   }
-
   /* 14px UI text throughout the row (design.md §2). */
   .pane b {
     font-size: 0.875rem;

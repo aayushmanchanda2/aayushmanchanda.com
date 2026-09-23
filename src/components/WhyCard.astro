@@ -1,0 +1,64 @@
+---
+/**
+ * "Why I saved it" on a private entry (VET-274): his Raindrop note, in his
+ * words, and the note the sweep left, labelled as the sweep's. Nothing
+ * renders when neither exists: an empty card would be a heading with nothing
+ * under it.
+ */
+interface Props {
+  mine: string | null;
+  sweep: string | null;
+}
+
+const { mine, sweep } = Astro.props;
+---
+
+{
+  (mine || sweep) && (
+    <section class="whycard" aria-labelledby="whycard-h">
+      <h2 id="whycard-h" class="whycard__label mono">Why I saved it</h2>
+      {mine && <p class="whycard__mine">{mine}</p>}
+      {sweep && (
+        <p class="whycard__sweep">
+          <span class="mono">Hermes</span> {sweep}
+        </p>
+      )}
+    </section>
+  )
+}
+
+<style>
+  /* The DraftBlock box, dashed: a note to himself, not a verdict for readers. */
+  .whycard {
+    margin-bottom: 2rem;
+    padding: clamp(1rem, 3vw, 1.35rem);
+    border: 1px dashed var(--hairline-strong);
+    max-width: 62ch;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .whycard__label {
+    color: var(--text-tertiary);
+    line-height: 1.6;
+  }
+
+  .whycard__mine {
+    font-size: 1.0625rem;
+    line-height: 1.55;
+    color: var(--text-primary);
+    text-wrap: pretty;
+  }
+
+  .whycard__sweep {
+    font-size: 0.9375rem;
+    line-height: 1.6;
+    color: var(--text-secondary);
+  }
+
+  .whycard__sweep .mono {
+    color: var(--text-tertiary);
+    margin-right: 0.25rem;
+  }
+</style>

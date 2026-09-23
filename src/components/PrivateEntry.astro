@@ -1,0 +1,46 @@
+---
+/**
+ * A private entry at /me/library/<slug> (VET-274): the public entry page's
+ * anatomy (`pages/library/[slug].astro`) with the private rows merged into the
+ * pane and "Why I saved it" on top. Rendered by the real route and by the
+ * dev-only fixture, so both show the same thing.
+ */
+import Base from "../layouts/Base.astro";
+import EntryDetail from "./EntryDetail.astro";
+import EntryNav from "./EntryNav.astro";
+import PrivatePane from "./PrivatePane.astro";
+import WhyCard from "./WhyCard.astro";
+import type { LibraryEntry } from "../lib/library";
+import { privateHref } from "../lib/private";
+
+interface Props {
+  entry: LibraryEntry;
+  /** Every private entry, newest first; the ring walks these. */
+  rows: LibraryEntry[];
+  mine: string | null;
+  sweep: string | null;
+}
+
+const { entry, rows, mine, sweep } = Astro.props;
+const at = rows.findIndex((row) => row.slug === entry.slug);
+const step = (offset: number) => {
+  const row = rows[(at + offset + rows.length) % rows.length];
+  return at < 0 || row === undefined || row.slug === entry.slug ? null : { href: privateHref(row.slug), aria: `${offset < 0 ? "Previous" : "Next"} entry: ${row.title}` };
+};
+---
+
+<Base title={`${entry.title} · Private · Aayush Manchanda`} description="Private." noindex full>
+  <PrivatePane slot="pane" rows={rows} current={entry.slug} />
+  <div class="detail">
+    <WhyCard mine={mine} sweep={sweep} />
+    <EntryDetail entry={entry} />
+    <EntryNav label="Private entries" close={{ href: "/me/library", aria: "Close and go back to the private library" }} prev={step(-1)} next={step(1)} />
+  </div>
+</Base>
+
+<style>
+  .detail {
+    max-width: 48rem;
+    margin-inline: auto;
+  }
+</style>

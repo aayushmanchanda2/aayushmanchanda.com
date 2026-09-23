@@ -1,0 +1,26 @@
+---
+/**
+ * Dev-only harness for /me (VET-274), injected by `astro.config.mjs` under
+ * `astro dev` and never built: renders each /me state from synthetic rows
+ * (`fixtures/private.ts`), since nobody but Aayush can sign in as Aayush.
+ *   /me/fixture/entry  /me/fixture/index  /me/fixture/sign-in  /me/fixture/unconfigured  /me/fixture/not-found
+ */
+import MeGate from "../components/MeGate.astro";
+import PrivateEntry from "../components/PrivateEntry.astro";
+import PrivateIndex from "../components/PrivateIndex.astro";
+import { toEntries, toEntry } from "../lib/private";
+import { FIXTURE_ROWS } from "./private";
+
+export const prerender = false;
+
+const view = Astro.params.view;
+const rows = toEntries(FIXTURE_ROWS);
+const [first] = FIXTURE_ROWS;
+if (first === undefined) throw new Error("fixture: no rows");
+---
+
+{view === "entry" && <PrivateEntry entry={toEntry(first)} rows={rows} mine={first.raindrop_note} sweep={first.sweep_note} />}
+{view === "index" && <PrivateIndex rows={rows} />}
+{view === "sign-in" && <MeGate state="sign-in" />}
+{view === "unconfigured" && <MeGate state="unconfigured" />}
+{view === "not-found" && <MeGate state="not-found" />}

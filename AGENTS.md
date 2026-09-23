@@ -8,6 +8,10 @@
 
 Zero framework JS ships. Interactions are vanilla scripts inside `.astro` components or plain modules in `src/lib/`.
 
+## Private /me (VET-274)
+
+`/me/*` is the one on-demand route (the Vercel adapter, Clerk, Convex); every other page is prerendered, and a /me change must leave `dist/` byte-identical apart from `sitemap` dates. **This repo is public: no private entry, note, media, email or secret ever enters it.** The rows live in Convex (`convex/`), loaded by `scripts/private-import.mjs` from the private folder next to this repo; `scripts/private-setup-wizard.sh` sets every key. `astro preview` does not run with the adapter: see `.claude/skills/verify-site/SKILL.md`.
+
 ## Before you touch UI
 
 **Read `design.md` first.** It is the design contract: tokens, type, structure, interactions, links, copy, and the pre-ship checklist, each claim pointing at the file that enforces it. It is written from the shipped code, so it is checkable. If the code and `design.md` disagree, fix whichever is wrong, in the same commit.

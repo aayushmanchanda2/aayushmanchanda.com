@@ -1,0 +1,15 @@
+---
+/**
+ * Clerk's sign-in form, and the one script that loads Clerk (VET-274). Only
+ * `MeGate.astro` renders this, so no public page carries Clerk code.
+ */
+import { SignIn } from "@clerk/astro/components";
+---
+
+<SignIn routing="hash" forceRedirectUrl={Astro.url.pathname} />
+
+<script>
+  import { runInjectionScript } from "@clerk/astro/internal";
+
+  void runInjectionScript({});
+</script>

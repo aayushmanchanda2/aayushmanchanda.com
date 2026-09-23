@@ -68,6 +68,8 @@ export interface Bookmark {
   collection: Section;
   /** Existing tags, so a tag write can merge rather than overwrite. */
   tags: string[];
+  /** Raindrop's cover image URL, when it has one. Read only by `private-sync.mjs`. */
+  cover?: string;
 }
 
 export interface Collection {

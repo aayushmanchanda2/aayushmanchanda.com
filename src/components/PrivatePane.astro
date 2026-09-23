@@ -1,0 +1,26 @@
+---
+/**
+ * The library pane on /me (VET-274): the public rows with the private ones
+ * merged in. Five segments do not fit the 350px pane with every count, so
+ * here only "Private" keeps its count; the live count under the segments
+ * still says how many are showing. The rule ships on /me pages only.
+ */
+import LibraryPane from "./LibraryPane.astro";
+import type { LibraryEntry } from "../lib/library";
+import { library } from "../lib/library";
+
+interface Props {
+  rows: LibraryEntry[];
+  current?: string;
+}
+
+const { rows, current } = Astro.props;
+---
+
+<LibraryPane entries={library} extra={rows} current={current} />
+
+<style is:global>
+  .pane .seg__item:not([data-kind-set="private"]) .seg__count {
+    display: none;
+  }
+</style>

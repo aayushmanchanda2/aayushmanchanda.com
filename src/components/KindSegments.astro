@@ -27,10 +27,12 @@ interface Props {
   total: number;
   /** The kind this page is, null for /library; omitted in the pane. */
   current?: Kind | null;
+  /** One more segment after the kinds: "Private" on /me (VET-274). */
+  extra?: { kind: string; href: string; label: string; count: number } | undefined;
 }
 
-const { groups, total, current } = Astro.props;
-const segments = [
+const { groups, total, current, extra } = Astro.props;
+const segments: { kind: string; href: string; label: string; count: number }[] = [
   { kind: "", href: "/library", label: "All", count: total },
   ...groups.map((group) => ({
     kind: group.kind,
@@ -38,6 +40,7 @@ const segments = [
     label: KIND_LABELS[group.kind],
     count: group.entries.length,
   })),
+  ...(extra ? [extra] : []),
 ];
 const selected = current === null ? "" : current;
 ---

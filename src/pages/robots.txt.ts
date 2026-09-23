@@ -42,17 +42,17 @@ const AI_CRAWLERS = [
 const BODY = `# aayushmanchanda.com
 #
 # Everything here is public and meant to be read, by people and by agents
-# alike. There are no accounts, no paywall, and no private routes, so there is
-# nothing here to disallow.
+# alike, except /me: one signed-in reader's private pages, disallowed below.
 #
 # Every page also has a markdown variant. Send "Accept: text/markdown" to any
 # page URL, or append .md to it. Start at ${absolute("/llms.txt")}.
 
 User-agent: *
 Allow: /
+Disallow: /me
 
 # Named explicitly so there is no ambiguity: AI crawlers are welcome.
-${AI_CRAWLERS.map((agent) => `User-agent: ${agent}\nAllow: /`).join("\n\n")}
+${AI_CRAWLERS.map((agent) => `User-agent: ${agent}\nAllow: /\nDisallow: /me`).join("\n\n")}
 
 Sitemap: ${absolute("/sitemap-index.xml")}
 `;
