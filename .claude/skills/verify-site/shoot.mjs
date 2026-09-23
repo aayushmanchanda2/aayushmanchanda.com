@@ -19,7 +19,7 @@ const { values: a } = parseArgs({
     routes: { type: "string", default: "/" },
     label: { type: "string" },
     styles: { type: "string" },
-    click: { type: "string" },
+    click: { type: "string", multiple: true },
     hover: { type: "string" },
     expect: { type: "string" },
     wait: { type: "string", default: "400" },
@@ -93,12 +93,12 @@ try {
           await page.evaluate(() => document.fonts.ready);
           await page.waitForTimeout(300);
 
-          // One real user click (e.g. the Grid button) before anything is measured.
-          if (a.click) {
-            await page.locator(a.click).first().click();
-            await page.waitForTimeout(300);
-            shot.clicked = a.click;
+          // Real user clicks, in order (e.g. the Grid button, then a tile), before anything is measured.
+          for (const sel of a.click ?? []) {
+            await page.locator(sel).first().click();
+            await page.waitForTimeout(400);
           }
+          if (a.click) shot.clicked = a.click;
 
           shot.dataTheme = await page.evaluate(() => document.documentElement.dataset.theme);
           shot.bodyBg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);

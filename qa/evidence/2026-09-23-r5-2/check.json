@@ -1,0 +1,183 @@
+{
+  "base": "http://localhost:4331",
+  "date": "2026-09-23T18:05:15.944Z",
+  "passed": 22,
+  "failed": 0,
+  "results": [
+    {
+      "name": "tools: row opens the panel, URL is /tools/<slug>",
+      "pass": true,
+      "path": "/tools/paperclip",
+      "search": "",
+      "open": true,
+      "slug": "paperclip",
+      "historyLength": 3
+    },
+    {
+      "name": "tools: filters and toggle stay beside the open panel",
+      "pass": true,
+      "panelLeft": 549.859375,
+      "verdictRight": 190.828125,
+      "categoryRight": 358.828125,
+      "toggleRight": 467.171875
+    },
+    {
+      "name": "tools: another row swaps the content in place",
+      "pass": true,
+      "path": "/tools/cabinet",
+      "search": "",
+      "open": true,
+      "slug": "cabinet",
+      "historyLength": 3
+    },
+    {
+      "name": "tools: verdict filter works while open and the panel stays on its item",
+      "pass": true,
+      "path": "/tools/cabinet",
+      "search": "?verdict=using",
+      "open": true,
+      "slug": "cabinet",
+      "historyLength": 4,
+      "verdict": "using",
+      "rowsShown": 8
+    },
+    {
+      "name": "tools: ←/→/Esc inside a select do nothing to the panel",
+      "pass": true,
+      "before": "cabinet",
+      "after": "cabinet"
+    },
+    {
+      "name": "tools list (filtered, open item hidden): → goes to the next visible item",
+      "pass": true,
+      "from": "cabinet",
+      "expected": "improve-skill",
+      "got": "improve-skill",
+      "path": "/tools/improve-skill"
+    },
+    {
+      "name": "tools list (filtered, open item hidden): ← goes to the previous visible item",
+      "pass": true,
+      "expected": "hermes",
+      "got": "hermes"
+    },
+    {
+      "name": "tools: Esc closes (URL back to /tools, filter kept)",
+      "pass": true,
+      "path": "/tools",
+      "search": "?verdict=using",
+      "open": false,
+      "slug": "hermes",
+      "historyLength": 4
+    },
+    {
+      "name": "tools: Esc after open returns the URL to /tools",
+      "pass": true,
+      "path": "/tools",
+      "search": "",
+      "open": false,
+      "slug": "paperclip",
+      "historyLength": 6
+    },
+    {
+      "name": "tools: Back after opening closes the panel",
+      "pass": true,
+      "path": "/tools",
+      "search": "",
+      "open": false,
+      "slug": "paperclip",
+      "historyLength": 6
+    },
+    {
+      "name": "tools: Forward reopens it",
+      "pass": true,
+      "path": "/tools/paperclip",
+      "search": "",
+      "open": true,
+      "slug": "paperclip",
+      "historyLength": 6
+    },
+    {
+      "name": "tools grid: tile opens the panel, URL is /tools/<slug>",
+      "pass": true,
+      "path": "/tools/paperclip",
+      "search": "",
+      "open": true,
+      "slug": "paperclip",
+      "historyLength": 8
+    },
+    {
+      "name": "tools grid: → goes to the next visible item",
+      "pass": true,
+      "from": "paperclip",
+      "expected": "hermes",
+      "got": "hermes",
+      "path": "/tools/hermes"
+    },
+    {
+      "name": "tools grid: ← goes to the previous visible item",
+      "pass": true,
+      "expected": "paperclip",
+      "got": "paperclip"
+    },
+    {
+      "name": "sites: card opens the panel, URL is /sites/<slug>",
+      "pass": true,
+      "path": "/sites/arc-from-the-browser-company",
+      "search": "",
+      "open": true,
+      "slug": "arc-from-the-browser-company",
+      "historyLength": 10
+    },
+    {
+      "name": "sites: → goes to the next visible item",
+      "pass": true,
+      "from": "arc-from-the-browser-company",
+      "expected": "mother-design-brand-strategy-and-design",
+      "got": "mother-design-brand-strategy-and-design",
+      "path": "/sites/mother-design-brand-strategy-and-design"
+    },
+    {
+      "name": "sites: ← goes to the previous visible item",
+      "pass": true,
+      "expected": "arc-from-the-browser-company",
+      "got": "arc-from-the-browser-company"
+    },
+    {
+      "name": "sites: Esc closes, URL back to /sites",
+      "pass": true,
+      "path": "/sites",
+      "search": "",
+      "open": false,
+      "slug": "arc-from-the-browser-company",
+      "historyLength": 10
+    },
+    {
+      "name": "sites: Back after opening closes the panel",
+      "pass": true,
+      "path": "/sites",
+      "search": "",
+      "open": false,
+      "slug": "arc-from-the-browser-company",
+      "historyLength": 10
+    },
+    {
+      "name": "tools: controls-to-header gap at 390",
+      "pass": true,
+      "width": 390,
+      "gap": 16
+    },
+    {
+      "name": "tools: controls-to-header gap at 1280",
+      "pass": true,
+      "width": 1280,
+      "gap": 16
+    },
+    {
+      "name": "tools: controls-to-header gap at 1600",
+      "pass": true,
+      "width": 1600,
+      "gap": 16
+    }
+  ]
+}
