@@ -1,0 +1,62 @@
+{
+  "__typename": "Tweet",
+  "favorite_count": 2694,
+  "lang": "zxx",
+  "possibly_sensitive": false,
+  "created_at": "2025-12-30T17:40:36.000Z",
+  "display_text_range": [
+    0,
+    23
+  ],
+  "entities": {
+    "urls": [
+      {
+        "display_url": "x.com/i/article/2006…",
+        "expanded_url": "http://x.com/i/article/2006056102031499264",
+        "indices": [
+          0,
+          23
+        ],
+        "url": "https://t.co/HMVyUuWwvR"
+      }
+    ]
+  },
+  "id_str": "2006057848430604705",
+  "text": "https://t.co/HMVyUuWwvR",
+  "user": {
+    "id_str": "21714538",
+    "name": "Ben Lang",
+    "screen_name": "benln",
+    "is_blue_verified": true,
+    "profile_image_shape": "Circle",
+    "verified": false,
+    "profile_image_url_https": "https://pbs.twimg.com/profile_images/1713995709916012544/GHmSl9EK_normal.jpg"
+  },
+  "edit_control": {
+    "edit_tweet_ids": [
+      "2006057848430604705"
+    ],
+    "editable_until_msecs": "1767120036000",
+    "edits_remaining": "5",
+    "is_edit_eligible": false
+  },
+  "conversation_count": 104,
+  "news_action_type": "conversation",
+  "article": {
+    "cover_media": {
+      "id": "QXBpTWVkaWE6DAAFCgABG9bypN8XUAAKAAIAAAAAAUtWagAA",
+      "media_info": {
+        "__typename": "ApiImage",
+        "original_img_height": 480,
+        "original_img_url": "https://pbs.twimg.com/media/G9bypN8XUAAA-cL.jpg",
+        "original_img_width": 1200
+      }
+    },
+    "id": "QXJ0aWNsZUVudGl0eToyMDA2MDU2MTAyMDMxNDk5MjY0",
+    "preview_text": "Most early-stage startups are focused on two things: building stuff and selling stuff. So where does someone with a more “generalist” background fit in?\nYou may be looking for a concise phrase to",
+    "rest_id": "2006056102031499264",
+    "title": "Advice for generalists who want to join startups "
+  },
+  "isEdited": false,
+  "isStaleEdit": false
+}

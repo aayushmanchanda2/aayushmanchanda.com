@@ -36,7 +36,7 @@ const SRC = fileURLToPath(new URL("..", import.meta.url));
 
 const ROUTE = "pages/library/[slug].astro";
 const DRAFT = "components/DraftBlock.astro";
-const POST_BODY = "components/PostBody.astro";
+const POST_CARD = "components/PostCard.astro";
 const LIST = "components/LibraryList.astro";
 const INDEX = "lib/search-index.ts";
 
@@ -117,9 +117,6 @@ test("every optional block is gated on the field it draws", () => {
   const route = code(read(ROUTE));
 
   for (const [field, block] of [
-    ["entry.post", "<TweetCard"],
-    ["entry.post", "<XEmbeds"],
-    ["entry.post", "<PostBody"],
     ["entry.video", "<VideoFacade"],
     ["entry.digest", "<DigestBlocks"],
     ["entry.draft", "<DraftBlock"],
@@ -188,129 +185,39 @@ test("the draft block says what it is, at full ink, and dates itself", () => {
    The whole post lives here
    --------------------------------------------------------------------------- */
 
-test("the page holds the whole post, at a measure somebody can read", () => {
-  const source = read(POST_BODY);
-
-  assert.match(
-    code(source),
-    /<p class="post__text prose">\{post\.text\}<\/p>/,
-    "the page clips the post. The card already cut it at 700 code points and pointed here for the rest; a second cut leaves the whole thing nowhere.",
-  );
-  assert.ok(
-    !/clipText|POST_CARD_MAX|line-clamp/.test(source),
-    "a budget or a clamp reached the detail page. Both are the card's answer to a card's problem.",
-  );
-  assert.match(
-    read("styles/prose.css"),
-    /\.prose \{[^}]*max-width: 40rem;/,
-    "the post lost its reading measure (`.prose`, VET-231). Thirty-one thousand characters across a full column is a line nobody tracks.",
-  );
-
-  // Named by size rather than by slug, so this keeps meaning something as the
-  // library grows: the long posts are the reason this page has to hold them.
-  const longest = library
-    .flatMap((entry) => (entry.post === null ? [] : [entry.post.text]))
-    .reduce((a, b) => ([...a].length > [...b].length ? a : b), "");
-  assert.ok(
-    [...longest].length > 10_000,
-    "the long-form posts have gone; check the detail page still earns its long-form treatment",
-  );
-});
-
-test("the post's page shows X's embed first and the saved copy under it", () => {
-  /*
-   * VET-221. The embed is how the post looks anywhere it is pasted; the copy is
-   * what survives the original being deleted. Order is the contract: embed,
-   * loader, copy. The card is `standalone` because its `notes` bar would link
-   * to the page the reader is on, and a list item outside a list is invalid.
-   */
+test("the page holds the whole post, drawn from the repo, at a reading measure", () => {
   const route = code(read(ROUTE));
-  const card = code(read("components/TweetCard.astro"));
+  const card = code(read(POST_CARD));
 
   assert.match(
     route,
-    /<TweetCard entry=\{\{ \.\.\.entry, post: entry\.post \}\} standalone \/>\}\s*\{entry\.post && <XEmbeds \/>\}\s*\{entry\.post && <PostBody/,
-    "the post's page lost the embed, or the embed is no longer above the saved copy",
+    /\{\s*entry\.post && \(\s*<div class="thing">\s*<PostCard post=\{entry\.post\} url=\{entry\.url\} mode="page" \/>/,
+    "the post's page no longer draws the post in page mode, gated on the entry having one",
   );
+  assert.match(route, /\.thing \{[^}]*max-width: 40rem;/, "the post lost its reading measure");
   assert.match(
     card,
-    /!standalone && \(\s*<p class="card__notes">/,
-    "a standalone card still draws the `notes` bar, which on a post's own page links to itself",
-  );
-  assert.match(
-    card,
-    /const Root = standalone \? "div" : "li";/,
-    "a standalone card is still a list item, and on a post's page there is no list round it",
-  );
-  assert.match(
-    code(read(POST_BODY)),
-    /<details class="post">\s*<summary class="post__label mono">Saved copy<\/summary>/,
-    "the copy under the embed is not a closed `<details>` labelled Saved copy, so the page prints the post twice",
-  );
-  assert.ok(
-    !/<details[^>]*\bopen\b/.test(code(read(POST_BODY))),
-    "the saved copy opens by default, which puts the post on the page twice",
+    /const text = grid \? clipText\(post\.text, POST_CARD_MAX\) : post\.text;/,
+    "page mode clips the post. The grid card cut it and pointed here for the rest.",
   );
   assert.match(
     route,
     /\{entry\.note && !entry\.post && <p class="standfirst">/,
-    "a readable post shows its note as the standfirst again. For a post the note is a copy of the words the embed already shows.",
+    "a readable post shows its note as the standfirst again. For a post the note is a copy of its words.",
   );
+
+  const longest = library
+    .flatMap((entry) => (entry.post === null ? [] : [entry.post.text]))
+    .reduce((a, b) => ([...a].length > [...b].length ? a : b), "");
+  assert.ok([...longest].length > 10_000, "the long-form posts have gone");
 });
 
-test("the post's page names its author and draws no face for them", () => {
-  /*
-   * **VET-114, and the probe is why it landed this way.** Aayush's review of a
-   * post's page: "the letter instead of the profile photo looks kinda odd". The
-   * two answers were to fetch the real avatar or to drop the stand-in, and the
-   * ticket asked for a probe before choosing.
-   *
-   * Probed live against Firecrawl, twice on saved posts plus a schema-guided
-   * extraction: **an x.com post response carries no avatar at all** — author,
-   * handle, date, text and `pbs.twimg.com/media/` photos, and nothing else.
-   * Only the *profile* page carries `Profile Picture: …/profile_images/…`,
-   * which is a second scrape of a different URL for every author, a committed
-   * copy of somebody's face with no honest date on it (design.md §6), and a new
-   * class of rehosted image for /privacy to name.
-   *
-   * So the monogram left this page and nothing replaced it. It stays on
-   * `TweetCard.astro`, and the asymmetry is the point rather than an oversight:
-   * that is a fallback imitating a tweet, where the avatar slot is part of what
-   * is being imitated, and this is the uncut post set to be read (design.md §3,
-   * "a different rendering rather than a smaller one"). A reading page's head
-   * is a name, a handle and a date.
-   *
-   * Both halves are held, because either one drifting alone is the failure: a
-   * monogram coming back here, or the card losing its.
-   */
-  // Comments stripped on both sides: this file says "monogram" a dozen times
-  // explaining why there is not one, and prose has to be free to name the thing
-  // it is arguing about.
-  const body = code(read(POST_BODY));
-  assert.ok(
-    !/monogram/.test(body),
-    "a monogram is back on the post's page. It is the avatar slot with a letter in it, and this page has no avatar slot — the name, the handle and the date carry who wrote it.",
-  );
-  assert.ok(
-    !/hueSlot/.test(body),
-    "the page reads the identity palette again, which is the monogram arriving under another name",
-  );
-  assert.match(
-    body,
-    /<span class="post__author">\{post\.author\}<\/span>/,
-    "the page stopped naming the author, which is the one thing the monogram was standing beside",
-  );
-  assert.match(
-    body,
-    /<span class="post__handle">@\{post\.handle\}<\/span>/,
-    "the page stopped printing the handle",
-  );
-
-  assert.match(
-    code(read("components/TweetCard.astro")),
-    /class="monogram"/,
-    "the card's fallback lost its monogram too. That one is imitating a tweet and a tweet opens with a face — design.md §1 carries the slot and why it holds a letter.",
-  );
+test("the post card shows a face when there is one, and a letter when there is not", () => {
+  const card = code(read(POST_CARD));
+  assert.match(card, /<img class="pc__avatar" src=\{post\.avatar\}/, "the avatar is gone");
+  assert.match(card, /class="pc__avatar monogram"/, "the monogram fallback is gone");
+  assert.match(card, /\{post\.author\}/);
+  assert.match(card, /@\{post\.handle\}/);
 });
 
 /* ---------------------------------------------------------------------------

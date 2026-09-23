@@ -210,9 +210,8 @@ export function fakeCapture({ palette = FAKE_PALETTE, clipped = false, fail, des
 }
 
 /**
- * Stand-ins for the two things `thumb.mjs` fetches: a video's poster frame and
- * a post's photos. Both write a plausible file and record what they were asked
- * for.
+ * A stand-in for what `thumb.mjs` fetches: a video's poster frame. It writes a
+ * plausible file and records what it was asked for.
  *
  * Here rather than left to the real module for the reason the Raindrop fixture
  * throws on an unknown host: `thumb.mjs` reaches i.ytimg.com and
@@ -227,8 +226,6 @@ export function fakeCapture({ palette = FAKE_PALETTE, clipped = false, fail, des
 export function fakeThumb({ fail } = {}) {
   /** @type {{ id: string, slug: string, outDir: string }[]} */
   const calls = [];
-  /** @type {{ media: readonly string[], slug: string }[]} */
-  const mediaCalls = [];
 
   /** @type {typeof import("./thumb.mjs").captureThumb} */
   async function captureThumb({ video, slug, outDir }) {
@@ -243,30 +240,28 @@ export function fakeThumb({ fail } = {}) {
     return { thumb };
   }
 
-  /** @type {typeof import("./thumb.mjs").captureMedia} */
-  async function captureMedia({ media, slug, outDir }) {
-    mediaCalls.push({ media, slug });
-    if (fail !== undefined) throw new Error(fail);
+  return { calls, captureThumb };
+}
 
-    const dir = String(outDir);
-    await mkdir(dir, { recursive: true });
+/**
+ * A stand-in for `post.mjs › postFrom`, which reaches X's syndication CDN. By
+ * default it hands back what Firecrawl read, unchanged; `answer` replaces it.
+ * The real module is pinned in `post.test.mjs` against a fake `fetch`.
+ *
+ * @param {object} [options]
+ * @param {(saved: import("./types.js").Post | null) => import("./types.js").Post | null} [options.answer]
+ */
+export function fakeSyndication({ answer = (saved) => saved } = {}) {
+  /** @type {{ url: string, saved: import("./types.js").Post | null }[]} */
+  const calls = [];
 
-    /** @type {string[]} */
-    const files = [];
-    /** @type {string[]} */
-    const paths = [];
-
-    for (const [index, url] of media.entries()) {
-      const file = path.join(dir, `${slug}-media-${index + 1}.webp`);
-      await writeFile(file, `media:${url}`);
-      files.push(file);
-      paths.push(`/shots/${slug}-media-${index + 1}.webp`);
-    }
-
-    return { files, paths };
+  /** @type {typeof import("./post.mjs").postFrom} */
+  async function postFrom({ url, saved }) {
+    calls.push({ url, saved });
+    return answer(saved);
   }
 
-  return { calls, mediaCalls, captureThumb, captureMedia };
+  return { calls, postFrom };
 }
 
 /**
@@ -488,6 +483,7 @@ export function fakeFirecrawlShot({ palette = FIRECRAWL_PALETTE } = {}) {
  * @param {ReturnType<typeof fakeCapture>} [wiring.capture]
  * @param {ReturnType<typeof fakeFirecrawlShot>} [wiring.fallback] The second-chance shot.
  * @param {ReturnType<typeof fakeThumb>} [wiring.thumb] The video poster frame.
+ * @param {ReturnType<typeof fakeSyndication>} [wiring.syndication] X's record for a post.
  * @param {ReturnType<typeof fakeIcon>} [wiring.icon] A new tool's app icon.
  * @param {ReturnType<typeof fakePreview>} [wiring.preview] A new tool's hover preview.
  * @param {ReturnType<typeof fakeFirecrawl>["client"]} [wiring.firecrawl]
@@ -499,6 +495,7 @@ export function deps({
   capture = fakeCapture(),
   fallback = fakeFirecrawlShot(),
   thumb = fakeThumb(),
+  syndication = fakeSyndication(),
   icon = fakeIcon(),
   preview = fakePreview(),
   firecrawl,
@@ -509,7 +506,7 @@ export function deps({
     captureSite: capture.captureSite,
     captureWithFirecrawl: fallback.captureWithFirecrawl,
     captureThumb: thumb.captureThumb,
-    captureMedia: thumb.captureMedia,
+    postFrom: syndication.postFrom,
     fetchIcon: icon.fetchIcon,
     capturePreview: preview.capturePreview,
     // Offline by default: a repo save keeps `url` null unless a test hands in a site.

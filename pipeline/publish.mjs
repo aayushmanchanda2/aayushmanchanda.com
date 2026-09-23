@@ -19,6 +19,7 @@
  */
 
 import { execFileSync } from "node:child_process";
+import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { applyItem } from "./apply.mjs";
@@ -29,7 +30,8 @@ import { RaindropError, createClient, fetchBookmarks, resolveCollections } from 
 import { MAX_ATTEMPTS, SECTIONS, reconcile, resolvePaths } from "./state.mjs";
 import { fetchIcon, siteOf } from "./icon.mjs";
 import { capturePreview } from "./preview.mjs";
-import { captureMedia, captureThumb } from "./thumb.mjs";
+import { captureThumb } from "./thumb.mjs";
+import { postFrom } from "./post.mjs";
 import { describe } from "./util.mjs";
 
 /** @typedef {import("./types.js").Bookmark} Bookmark */
@@ -233,7 +235,7 @@ function baseDeps() {
     captureSite,
     captureWithFirecrawl,
     captureThumb,
-    captureMedia,
+    postFrom,
     fetchIcon,
     capturePreview,
     siteOf,
@@ -345,7 +347,8 @@ export async function run(argv = [], overrides = {}) {
       // so a test drives the poster frame through the same seam it drives
       // Raindrop through, and nothing in `apply.mjs` learns there is a CDN.
       captureThumb: (input) => deps.captureThumb({ ...input, fetch: deps.fetch }),
-      captureMedia: (input) => deps.captureMedia({ ...input, fetch: deps.fetch }),
+      readPost: (input) =>
+        deps.postFrom({ ...input, publicDir: path.join(paths.root, "public"), fetch: deps.fetch }),
       fetchIcon: (input) => deps.fetchIcon({ ...input, fetch: deps.fetch, log }),
       capturePreview: (input) => deps.capturePreview({ ...input, log }),
       siteOf: (repo) => deps.siteOf(repo, deps.fetch),

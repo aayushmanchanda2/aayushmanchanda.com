@@ -10,7 +10,7 @@
  *
  * Tags are plain grey since VET-219 (`styles/chip.css › .tag`), so the only
  * thing here a tag still uses is `tagLabel`. `hueSlot` stays for the post
- * monogram (`components/TweetCard.astro`), keyed on the poster's handle.
+ * monogram (`components/PostCard.astro`, when a post has no avatar), keyed on the poster's handle.
  *
  * **The hue lives in CSS and the slot lives here.** `hueSlot` returns a number
  * in `[0, MONOGRAM_HUES)` and `styles/chip.css` decides what each of those seven

@@ -137,7 +137,6 @@ const post = (text) => ({
   handle: "ephraimakanmu",
   date: "2026-07-26",
   text,
-  media: [],
 });
 
 /**
@@ -490,7 +489,7 @@ test("no tags is no key at all", () => {
   assert.equal("tags" in entry, false);
 });
 
-test("the post object is the whole card, minus the media there is none of", () => {
+test("the post object is stored as read", () => {
   const entry = buildReadingEntry({
     bookmark: saved(),
     slug: "s",
@@ -504,22 +503,17 @@ test("the post object is the whole card, minus the media there is none of", () =
     date: "2026-07-26",
     text: "Ship it on a Friday.",
   });
-  assert.equal(
-    "media" in Object(entry.post),
-    false,
-    "an empty media array is the key not being there",
-  );
 });
 
-test("a post that did carry media keeps it", () => {
+test("an X Article is titled by its own title, not by its link", () => {
   const entry = buildReadingEntry({
     bookmark: saved(),
     slug: "s",
     date: "2026-08-26",
-    post: { ...post("With a picture."), media: ["/shots/s-media-1.webp"] },
+    post: { ...post("x.com/i/article/2006…"), article: { title: "Advice for generalists" } },
   });
 
-  assert.deepEqual(Object(entry.post).media, ["/shots/s-media-1.webp"]);
+  assert.equal(entry.title, "Advice for generalists");
 });
 
 test("a video entry names its provider, its id and the thumb path", () => {
@@ -635,10 +629,6 @@ test("every picture an entry points at is one the sweep can see", () => {
   // throws away — leaving an entry pointing at nothing.
   assert.deepEqual(shotFilesOf({ shot: "/shots/otherkind.webp" }), ["otherkind.webp"]);
   assert.deepEqual(shotFilesOf({ video: { thumb: "/shots/a-thumb.webp" } }), ["a-thumb.webp"]);
-  assert.deepEqual(shotFilesOf({ post: { media: ["/shots/a-1.webp", "/shots/a-2.webp"] } }), [
-    "a-1.webp",
-    "a-2.webp",
-  ]);
   assert.deepEqual(shotFilesOf({ slug: "s" }), [], "an entry with no pictures claims none");
-  assert.deepEqual(shotFilesOf({ shot: "", video: { thumb: 4 }, post: { media: [null] } }), []);
+  assert.deepEqual(shotFilesOf({ shot: "", video: { thumb: 4 } }), []);
 });

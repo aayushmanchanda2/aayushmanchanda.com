@@ -66,38 +66,14 @@
  * still makes exactly one outside request of its own, on every page, and a page
  * with no video on it still cannot make a second one however hard you press it.
  *
- * The posts are the seventh, and they are the first one that made this page
- * worse rather than longer. It used to say the post cards were drawn from files
- * in this repository specifically so a reader would not be handed to x.com, and
- * that was true and was the better arrangement for a reader. Aayush reversed it
- * with the trade in front of him (VET-67): the hand-built cards looked wrong,
- * and the wall is what people actually look at. So `/library/kind/post` now
- * loads X's widget factory on page load — not on a press, which is the video's
- * arrangement and not this one — and every card on it becomes an iframe of
- * theirs.
- *
- * Three sections had to move together for that, which is what "in the same
- * commit" means in practice. The one outside request became **two pages that
- * load from somewhere else**, because "one" was the number and it is not any
- * more. The storage paragraph grew a sentence, because what X puts in a
- * reader's browser from inside its own frame is filed under X and this page
- * should not imply the theme key is the whole story. And the takedown section
- * stopped claiming the cards are a copy, because on that page they are not —
- * the copy is on the entry's own page, which is exactly what the card now
- * points at.
- *
- * VET-221 moved it again. The page for a single post used to be the escape
- * hatch this page offered, the place to read a post with nothing loaded from
- * X. Aayush wanted a post to look the way it does anywhere it is pasted, so
- * that page embeds it too, above the saved copy. The escape hatch it offers now
- * is the one that is actually true: with scripting off or X's script blocked,
- * both pages show the copy from this repository and load nothing from X.
- *
- * `scripts/validate-schema.mjs` holds the load-bearing half: the Twitter hosts
- * may appear on `/library/kind/post` and on the page of every saved post the
- * pipeline could read, must appear there, and may not appear on any other page
- * in `dist/`. So the sentence "every other page here loads nothing from anyone"
- * is a build failure rather than a promise.
+ * The posts are the seventh, and they have moved twice. VET-67 and VET-221
+ * swapped the hand-drawn cards for X's own embeds, which made two pages load a
+ * script and a frame from X on page load. VET-244 swapped them back: every post
+ * is drawn here from a copy the pipeline stores (`pipeline/post.mjs`), avatar,
+ * photos and video included, so no page asks X for anything.
+ * `scripts/validate-schema.mjs` fails any page in `dist/` that names X's widget
+ * hosts or points a `src` or `poster` at X's media CDN, so "every other page
+ * loads nothing from anyone" is a build failure rather than a promise.
  *
  * Underneath all seven is one rule: **every claim here is a claim about today's
  * build, and it says so.** A never-ever about analytics or third parties is a
@@ -175,12 +151,6 @@ import { NEWSLETTER_ACTION } from "../lib/site";
         leaves your browser, nothing reads it but this site, and clearing your
         site data forgets it.
       </p>
-      <p>
-        That covers what this site stores. It does not cover what X stores
-        inside its own embeds on each saved post&rsquo;s own page and on <a
-          href="/library/kind/post">the posts page</a>, which is filed under X and not
-        under me. The section below is what those pages cost you.
-      </p>
     </section>
 
     <section>
@@ -220,34 +190,23 @@ import { NEWSLETTER_ACTION } from "../lib/site";
     <section>
       <h2 class="doc__head mono">The pages that load from somewhere else</h2>
       <p>
-        Two things here load from somewhere else, and I&rsquo;d rather name them
-        than claim a clean sweep. The tool icons used to be a third. They came
-        from <a href="https://logo.dev" rel="noopener nofollow">logo.dev</a>, a
+        One thing here can load from somewhere else, and only when you press
+        it. Two others used to. The tool icons came from <a
+          href="https://logo.dev" rel="noopener nofollow">logo.dev</a>, a
         logo API, so opening <a href="/tools">/tools</a> told them your IP
         address. Now each icon is fetched once, when I add the tool, and saved
         into this site&rsquo;s own files. Your browser gets it from this domain,
         like everything else on those pages.
       </p>
       <p>
-        The saved posts are the first, and the heavier one. Every post
-        on <a href="/library/kind/post">the posts page</a> is X&rsquo;s own
-        embed, and so is the post at the top of each saved post&rsquo;s own
-        page. Opening either loads a script from X and turns each post into a
-        frame of theirs. X sees your IP address, sees that the frame is on this
-        site, and whatever happens inside it is theirs rather than mine. Each
-        embed is marked do-not-track, which asks X not to use the visit to
-        tailor anything, and asking is all I can do from here. If that trade is
-        not one you want, turn off JavaScript or block X&rsquo;s widget script:
-        both pages then load nothing from X, and each post&rsquo;s page still
-        has the whole text under the embed, as a copy I saved.
-      </p>
-      <p>
-        I used to draw those cards myself from the saved copy, and this page
-        used to say why that was better. It was better for your privacy and it
-        looked wrong: a hand-built imitation of a post is uncanny in a way the
-        real one is not. So I took the real embed, first on the posts page and
-        then on each post&rsquo;s own page, and kept the saved copy under it.
-        That is the trade written out rather than quietly made.
+        The saved posts were the other. For a while <a
+          href="/library/kind/post">the posts page</a> and each post&rsquo;s own
+        page showed X&rsquo;s own embeds, which meant a script from X and a
+        frame of theirs for every post. Now I draw each post here. The words,
+        the poster&rsquo;s profile picture and any photos or video are fetched
+        once, when I save the post, and stored in this site&rsquo;s own files.
+        Opening a post asks X for nothing. The link that says it opens the
+        original is the only way to X, and it does nothing until you press it.
       </p>
       <p>
         The saved videos are the outside request you can make yourself, and
@@ -265,10 +224,9 @@ import { NEWSLETTER_ACTION } from "../lib/site";
         nothing to load.
       </p>
       <p>
-        That is the whole list: X on the posts page and each saved post&rsquo;s
-        page, YouTube if you press play. Every other page here loads nothing from
-        anyone, and a third host would be named in this section on the commit
-        that added it.
+        That is the whole list: YouTube, if you press play. Every other page
+        here loads nothing from anyone, and a new host would be named in this
+        section on the commit that added it.
       </p>
     </section>
 
@@ -333,11 +291,10 @@ import { NEWSLETTER_ACTION } from "../lib/site";
           href="/contact">/contact</a> has my address.
       </p>
       <p>
-        The saved posts work the same way underneath. When I save something from
-        x.com, the pipeline copies the words and any pictures into this
-        repository, and the page for that post shows that copy under X&rsquo;s
-        own embed. The embed is the trade in the section above; the copy is what
-        stays if the original is deleted. The post is still the
+        The saved posts work the same way. When I save something from x.com,
+        the pipeline copies the words, the poster&rsquo;s profile picture and any
+        photos or video into this repository, and every post here is drawn from
+        that copy. It stays if the original is deleted. The post is still the
         poster&rsquo;s either way. Every one of them names who wrote it and links
         back to the original, and its row on <a href="/library">/library</a> carries
         the date I saved it. If one of them is yours, the same issue link works

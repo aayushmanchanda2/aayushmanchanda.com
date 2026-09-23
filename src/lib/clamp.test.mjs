@@ -8,11 +8,9 @@
  * **What it holds is the rule that a clamp only belongs where the overflow has
  * somewhere to go.** A listing row is scanned, so its note stops at two lines
  * and the whole of it renders on the page the row's title points at. A page
- * that IS the overflow may never clamp: `PostBody.astro` exists to render
- * thirty-one thousand characters that the card cut, and a `line-clamp` there
- * would be the site promising a reader something and then hiding it — which is
- * exactly the trade `lib/post.ts` refuses at length and the reason a post is
- * cut in the component rather than in CSS.
+ * that IS the overflow may never clamp: a post's page renders the thirty-one
+ * thousand characters the grid card cut, and a `line-clamp` there would be the
+ * site promising a reader something and then hiding it.
  *
  * So the sweep is two-sided. A fourth listing that grows a clamp has to come
  * and add itself here; a detail page that grows one fails.
@@ -70,24 +68,23 @@ const LISTINGS = [
 ];
 
 /**
- * The one detail page allowed a clamp, and only on one thing: a post's title,
- * which is the post's own words cut short with the whole post right under it
- * (VET-231, briOS's detail header). The overflow is on the same page.
+ * The post grid card: seven lines, and only in its `grid` mode. Its "Read more"
+ * and its date go to the entry page, where `page` mode renders all of it.
  */
-const POST_TITLE = "pages/library/[slug].astro";
+const POST_CARD = "components/PostCard.astro";
 
 test("every listing note stops at two lines, and nothing else in the build clamps", () => {
   const clamped = walk("").filter((file) => /-webkit-line-clamp/.test(code(read(file))));
 
   assert.deepEqual(
     clamped.sort(),
-    [...LISTINGS, POST_TITLE].sort(),
+    [...LISTINGS, POST_CARD].sort(),
     "the set of files clamping a line count changed. A clamp belongs on a listing row whose title goes to a page carrying the whole thing, and nowhere else — a page that is itself the overflow must render all of it (lib/post.ts says why at length).",
   );
 });
 
 test("the clamp is spelled both ways, so it is not a prefix nobody standardised", () => {
-  for (const file of [...LISTINGS, POST_TITLE]) {
+  for (const file of LISTINGS) {
     const css = code(read(file));
     assert.match(css, /-webkit-line-clamp:\s*2;/, `${file} does not cap its note at two lines`);
     assert.match(
@@ -109,7 +106,7 @@ test("the pages the overflow lives on render all of it", () => {
   // reader who pressed a clamped row lands on one of these, and finding the
   // same three lines there would make the row a door to nowhere.
   for (const file of [
-    "components/PostBody.astro",
+    "pages/library/[slug].astro",
     "components/VoiceBlocks.astro",
     "components/DigestBlocks.astro",
     "components/DraftBlock.astro",
@@ -122,9 +119,9 @@ test("the pages the overflow lives on render all of it", () => {
   }
 });
 
-test("the entry page clamps a post's title and nothing else", () => {
-  const route = code(read(POST_TITLE));
-  const clamps = [...route.matchAll(/([^{}]+)\{[^}]*-webkit-line-clamp/g)].map((m) => m[1].trim());
-  assert.deepEqual(clamps, [".title--post"], "the entry page clamps something other than a post's title");
-  assert.match(route, /entry\.post && "title--post"/, "the title clamp is no longer gated on the entry having its post");
+test("the post card clamps its grid text and nothing else", () => {
+  const css = code(read(POST_CARD));
+  const clamps = [...css.matchAll(/([^{}]+)\{[^}]*-webkit-line-clamp/g)].map((m) => m[1].trim());
+  assert.deepEqual(clamps, [".pc--grid .pc__text"], "PostCard clamps something other than its grid text");
+  assert.match(css, /\.pc--grid \.pc__text \{[^}]*(^|\n)\s*line-clamp:\s*7;/, "the unprefixed clamp is missing");
 });

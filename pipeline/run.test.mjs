@@ -29,6 +29,7 @@ import {
   fakeFirecrawlShot,
   fakeIcon,
   fakePreview,
+  fakeSyndication,
   fakeThumb,
   makeRepo,
   raindropServer,
@@ -836,9 +837,7 @@ test("a poster frame that will not come back holds the entry instead of dangling
   assert.equal(out.summary, "published=0 failed=0 skipped=0 pending=1");
 });
 
-test("a post's photos are committed locally, so no remote URL reaches the gallery", async (t) => {
-  // `library.ts` refuses a pbs.twimg.com URL in this field, so an entry holding
-  // one would fail the build. This is the step that means it never has to.
+test("a post is read by Firecrawl, then by X syndication, and both land on the entry", async (t) => {
   const { paths } = await makeRepo(t);
   const server = raindropServer({
     ...NESTED,
@@ -863,23 +862,40 @@ test("a post's photos are committed locally, so no remote URL reaches the galler
       "",
     ].join("\n"),
   });
-  const thumb = fakeThumb();
+  /** @type {NonNullable<import("./types.js").Post["media"]>} */
+  const media = [{ type: "photo", src: "/posts/2093171755146002776/1.webp", w: 1200, h: 800 }];
+  const syndication = fakeSyndication({
+    answer: (saved) => saved && { ...saved, id: "2093171755146002776", media },
+  });
   const out = recorder();
 
-  await run([], deps({ paths, server, firecrawl: firecrawl.client, thumb, out }));
+  await run([], deps({ paths, server, firecrawl: firecrawl.client, syndication, out }));
 
   const [entry] = await readJson(paths.libraryJson);
-  assert.deepEqual(entry.post.media, [
-    `/shots/${entry.slug}-media-1.webp`,
-    `/shots/${entry.slug}-media-2.webp`,
-  ]);
-  assert.equal(entry.post.author, "Jackson Blackledge");
+  assert.equal(syndication.calls[0]?.saved?.author, "Jackson Blackledge", "Firecrawl's read goes in");
+  assert.deepEqual(entry.post.media, media, "X's record comes out");
+  assert.equal(entry.post.id, "2093171755146002776");
   assert.equal(entry.post.date, "2026-08-28", "the day it was posted, not the run date");
-  assert.equal(await exists(path.join(paths.shotsDir, `${entry.slug}-media-1.webp`)), true);
-  assert.deepEqual(thumb.mediaCalls[0].media, [
-    "https://pbs.twimg.com/media/HQxwm3nbMAAeX0W.jpg",
-    "https://pbs.twimg.com/media/HQxwnHsbcAA4YrV.jpg",
-  ]);
+});
+
+test("an X outage publishes the post as Firecrawl read it", async (t) => {
+  const { paths } = await makeRepo(t);
+  const server = raindropServer({
+    ...NESTED,
+    raindrops: { [READING_ID]: [bookmark(904, "https://x.com/a/status/2093171755146002777")] },
+  });
+  const syndication = fakeSyndication({
+    answer: () => {
+      throw new Error("syndication returned HTTP 503");
+    },
+  });
+  const out = recorder();
+
+  await run([], deps({ paths, server, syndication, out }));
+
+  const [entry] = await readJson(paths.libraryJson);
+  assert.equal(entry.kind, "post");
+  assert.ok(out.out.some((line) => /X syndication could not read/.test(line)));
 });
 
 test("a broken draft blob in the private note holds the item and says why", async (t) => {

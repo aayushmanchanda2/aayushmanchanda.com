@@ -1,0 +1,70 @@
+{
+  "__typename": "Tweet",
+  "favorite_count": 636,
+  "lang": "en",
+  "created_at": "2026-07-26T04:25:36.000Z",
+  "display_text_range": [
+    0,
+    277
+  ],
+  "entities": {},
+  "id_str": "2081234457588056305",
+  "text": "A lot of designers have been asking me where I get my inspiration from.\n\nSo I spent the entire night going through my saved archives, links, bookmarks and design rabbit holes I’ve collected over time.\n\nAnd I finally put everything together.\n\nAgencies. Designers. Behance pages.",
+  "user": {
+    "id_str": "793145697709293568",
+    "name": "Diadem",
+    "screen_name": "EphraimAkanmu",
+    "is_blue_verified": true,
+    "profile_image_shape": "Circle",
+    "verified": false,
+    "profile_image_url_https": "https://pbs.twimg.com/profile_images/2057520081265946625/KZ31iyh-_normal.jpg"
+  },
+  "edit_control": {
+    "edit_tweet_ids": [
+      "2081234457588056305"
+    ],
+    "editable_until_msecs": "1785043536000",
+    "edits_remaining": "5",
+    "is_edit_eligible": false
+  },
+  "conversation_count": 40,
+  "news_action_type": "conversation",
+  "quoted_tweet": {
+    "favorite_count": 351,
+    "lang": "en",
+    "reply_count": 33,
+    "retweet_count": 14,
+    "created_at": "2026-07-25T12:16:33.000Z",
+    "display_text_range": [
+      0,
+      278
+    ],
+    "entities": {},
+    "id_str": "2080990588837539852",
+    "text": "I study 10-20 case study from agencies and very good designers daily. I mean. I just love to see their thinking process. It would look like a crazy project. Just let me spend more time. I’ll find myself understanding their decision and judgement. \n\nThis routine has helped me so",
+    "user": {
+      "id_str": "793145697709293568",
+      "name": "Diadem",
+      "screen_name": "EphraimAkanmu",
+      "is_blue_verified": true,
+      "profile_image_shape": "Circle",
+      "verified": false,
+      "profile_image_url_https": "https://pbs.twimg.com/profile_images/2057520081265946625/KZ31iyh-_normal.jpg"
+    },
+    "edit_control": {
+      "edit_tweet_ids": [
+        "2080990588837539852"
+      ],
+      "editable_until_msecs": "1784985393000",
+      "edits_remaining": "5",
+      "is_edit_eligible": true
+    },
+    "isEdited": false,
+    "isStaleEdit": false
+  },
+  "isEdited": false,
+  "isStaleEdit": false,
+  "note_tweet": {
+    "id": "Tm90ZVR3ZWV0UmVzdWx0czoyMDgxMjM0NDU3NDc4OTU1MDA5"
+  }
+}

@@ -118,10 +118,19 @@ const POST = {
   text: "A lot of designers have been asking me where I get my inspiration from.",
 };
 
-test("a post reads whole, with an absent media array as an empty one", () => {
+test("a post reads whole, with every absent optional field as its empty value", () => {
   const parsed = parseOne({ kind: "post", url: "https://x.com/a/status/1", domain: "x.com", post: POST });
 
-  assert.deepEqual(parsed.post, { ...POST, media: [] });
+  assert.deepEqual(parsed.post, {
+    ...POST,
+    id: null,
+    avatar: null,
+    links: [],
+    media: [],
+    quoted: null,
+    article: null,
+    removed: false,
+  });
 });
 
 test("a post on anything but a post entry stops the build", () => {
@@ -141,21 +150,32 @@ test("a half-read post is refused the way a half-written digest is", () => {
 
 test("a remote media URL cannot be carried, so no page can render one", () => {
   // The privacy rule made structural rather than remembered. A pbs.twimg.com
-  // URL in this field would render as an `<img>` pointed at x.com's CDN and
-  // hand every reader of the page to a third party. There is no flag that turns
-  // that on, because the parser will not hold the value.
+  // URL here would render as an `<img>` pointed at X's CDN and hand every
+  // reader of the page to a third party. The parser will not hold the value.
   const asPost = { kind: "post", url: "https://x.com/a/status/1", domain: "x.com" };
+  const photo = (/** @type {string} */ src) => ({ ...POST, media: [{ type: "photo", src, w: 1, h: 1 }] });
 
+  failsWith(entry({ ...asPost, post: photo("https://pbs.twimg.com/media/a.jpg") }), "never a remote URL");
+  failsWith(entry({ ...asPost, post: photo("/posts/../secret.webp") }), "never a remote URL");
+  failsWith(entry({ ...asPost, post: photo("/shots/a-1.webp") }), "never a remote URL");
+  failsWith(entry({ ...asPost, post: { ...POST, avatar: "https://pbs.twimg.com/a.jpg" } }), "never a remote URL");
+  failsWith(entry({ ...asPost, post: { ...POST, media: [] } }), "non-empty array");
   failsWith(
-    entry({ ...asPost, post: { ...POST, media: ["https://pbs.twimg.com/media/a.jpg"] } }),
-    "never a remote URL",
+    entry({ ...asPost, post: { ...POST, links: [{ text: "a", href: "javascript:alert(1)" }] } }),
+    "href to be http",
   );
-  failsWith(entry({ ...asPost, post: { ...POST, media: ["/shots/../secret.webp"] } }), "never a remote URL");
-  failsWith(entry({ ...asPost, post: { ...POST, media: ["/shots/a.jpg"] } }), "never a remote URL");
-  failsWith(entry({ ...asPost, post: { ...POST, media: [] } }), "non-empty array of /shots paths");
 
-  const ok = parseOne({ ...asPost, post: { ...POST, media: ["/shots/a-1.webp"] } });
-  assert.deepEqual(Object(ok.post).media, ["/shots/a-1.webp"]);
+  const ok = parseOne({ ...asPost, post: photo("/posts/123/1.webp") });
+  assert.deepEqual(Object(ok.post).media, [{ type: "photo", src: "/posts/123/1.webp", poster: null, w: 1, h: 1 }]);
+});
+
+test("a video may be poster-only, and a quoted post parses like its parent", () => {
+  const asPost = { kind: "post", url: "https://x.com/a/status/1", domain: "x.com" };
+  const video = { type: "video", poster: "/posts/1/1-poster.webp", w: 16, h: 9 };
+  const parsed = parseOne({ ...asPost, post: { ...POST, media: [video], quoted: { ...POST, id: "2" } } });
+
+  assert.deepEqual(Object(parsed.post).media, [{ ...video, src: null }]);
+  assert.equal(Object(parsed.post).quoted.id, "2");
 });
 
 /* ---------------------------------------------------------------------------

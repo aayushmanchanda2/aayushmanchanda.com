@@ -69,7 +69,11 @@ run also commits `pipeline/state.json`: what published, what failed, how many
 attempts. Two steps run through [Firecrawl](https://firecrawl.dev) when the
 `FIRECRAWL_API_KEY` secret is set and skip silently when it is not: reading an
 x.com post for a real title, and a last screenshot attempt on a **Publish/Sites**
-link that has already failed twice.
+link that has already failed twice. Every x.com post is then read from X's
+syndication endpoint (no key; `pipeline/post.mjs`) for its avatar, photos, video
+and quoted post, which are copied into `public/posts/<id>/` so no page loads
+from X. `node pipeline/backfill-posts.mjs` re-reads every saved post; it skips
+files already on disk.
 
 ```
 gh workflow run publish.yml                             # run it now
