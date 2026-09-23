@@ -55,7 +55,6 @@ const breakable = (name: string) => name.split(/(?<=[/.])(?=.)/);
     }
   </ul>
   <div class="home__shelf">
-    <p class="home__hint glass" data-jiggle-hint hidden>Long-press an icon</p>
     <Dock tools={dockTools(tools)} />
   </div>
 </div>
@@ -186,13 +185,6 @@ const breakable = (name: string) => name.split(/(?<=[/.])(?=.)/);
     pointer-events: none;
   }
 
-  .home__hint {
-    padding: 0.125rem 0.625rem;
-    color: var(--text-secondary);
-    font-size: 0.75rem;
-  }
-
-  .home__hint[hidden],
   .home__done[hidden] {
     display: none;
   }

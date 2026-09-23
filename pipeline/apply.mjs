@@ -106,15 +106,16 @@ import { describe, isRecord } from "./util.mjs";
  * @property {(input: { url: string, saved: Post | null }) => Promise<Post | null>} readPost
  *   X's own record for a post (`post.mjs › postFrom`), with its avatar, media
  *   and quoted post copied into `public/posts/`. Never null: no key needed.
- * @property {(input: { slug: string, url: string, dir: string }) => Promise<string | null>} fetchIcon
+ * @property {(input: { slug: string, url: string, site: string | null, dir: string }) => Promise<string | null>} fetchIcon
  *   A new tool's app icon into `dir`, or null for the letter. Always bound,
  *   never null, for the same reason as the two above.
- * @property {(input: { slug: string, url: string, dir: string, og?: boolean }) => Promise<string | null>} capturePreview
+ * @property {(input: { slug: string, url: string, site?: string | null, dir: string, og?: boolean }) => Promise<string | null>} capturePreview
  *   A new tool's 1200x630 hover preview into `dir`, or null for the icon-only
  *   card; with `og`, a /library article's (its og:image first). Always bound, like the icon.
- * @property {(repo: string) => Promise<string | null>} siteOf
- *   A repository save's own site (`icon.mjs › siteOf`: the repo's homepage or
- *   the site its README names), written to `url`. Null keeps `url` null.
+ * @property {(url: string) => Promise<string | null>} siteOf
+ *   A tool's or site's own site (`icon.mjs › siteOf`: the link, or a repo's
+ *   homepage or the site its README names). Asked once per item: a repository
+ *   save's `url`, the icon and the preview all use the one answer.
  */
 
 /**
@@ -416,6 +417,8 @@ async function captureAndPublish(bookmark, attempts, ctx) {
   }
 
   const scratch = path.join(ctx.paths.tmpDir, bookmark.id);
+  /** @type {string | null} */
+  let site = null;
 
   try {
     /** @type {string[]} */
@@ -443,9 +446,8 @@ async function captureAndPublish(bookmark, attempts, ctx) {
         ? await readingFor(bookmark, slug, scratch, ctx)
         : { post: null, video: null, draft: null, why: null };
     const entry = buildEntry(section, { bookmark, slug, date: ctx.date, palette, design, reading });
-    if (section === "tools" && entry["url"] === null && typeof entry["repo"] === "string") {
-      entry["url"] = await ctx.siteOf(entry["repo"]);
-    }
+    if (section === "tools" || section === "sites") site = await ctx.siteOf(bookmark.url);
+    if (section === "tools" && entry["url"] === null && typeof entry["repo"] === "string") entry["url"] = site;
 
     // The file is written before the in-memory list advances, so a failed write
     // leaves the run's view of the gallery matching what is on disk.
@@ -476,7 +478,7 @@ async function captureAndPublish(bookmark, attempts, ctx) {
   // A site gets one too: the /sites list draws it as the row's app icon.
   if (section === "tools" || section === "sites") {
     try {
-      await ctx.fetchIcon({ slug, url: bookmark.url, dir: ctx.paths.iconsDir });
+      await ctx.fetchIcon({ slug, url: bookmark.url, site, dir: ctx.paths.iconsDir });
     } catch (error) {
       ctx.log(`icon: ${slug} — ${describe(error)}, letter`);
     }
@@ -490,7 +492,7 @@ async function captureAndPublish(bookmark, attempts, ctx) {
       await ctx.capturePreview(
         article
           ? { slug, url: bookmark.url, dir: path.join(ctx.paths.previewsDir, "library"), og: true }
-          : { slug, url: bookmark.url, dir: ctx.paths.previewsDir },
+          : { slug, url: bookmark.url, site, dir: ctx.paths.previewsDir },
       );
     } catch (error) {
       ctx.log(`preview: ${slug} — ${describe(error)}, icon only`);

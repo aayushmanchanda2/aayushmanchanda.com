@@ -57,21 +57,9 @@ const [width, height] = box;
 </svg>
 
 <script>
-  // ponytail: one observer per page, built once; the pages draw one to three.
-  const pens = document.querySelectorAll("svg.doodle[data-draw]");
-  if (pens.length > 0 && matchMedia("(prefers-reduced-motion: no-preference)").matches) {
-    const seen = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          entry.target.classList.add("doodle--on");
-          seen.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.6 },
-    );
-    for (const pen of pens) seen.observe(pen);
-  }
+  import { reveal } from "../lib/reveal";
+
+  reveal("svg.doodle[data-draw]", "doodle--on", 0.6);
 </script>
 
 <style>

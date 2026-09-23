@@ -312,3 +312,22 @@ test("a keyline is marked word for word, and #tags link like @mentions", () => {
   assert.equal(runs("#tag", [])[0]?.href, "https://x.com/hashtag/tag");
   assert.ok(parts("no match", [], "absent").every((part) => !part.mark));
 });
+
+test("a link that straddles the keyline stays one link, cut at the keyline's edge", () => {
+  const text = "Read https://a.dev/long/path today";
+  const got = parts(text, [], "Read https://a.dev");
+  assert.deepEqual(
+    got.map((part) => [part.text, part.href, part.mark]),
+    [
+      ["Read ", null, true],
+      ["https://a.dev", "https://a.dev/long/path", true],
+      ["/long/path", "https://a.dev/long/path", false],
+      [" today", null, false],
+    ],
+  );
+  assert.equal(got.map((part) => part.text).join(""), text);
+});
+
+test("a bare URL cut by an ellipsis stops before it", () => {
+  assert.deepEqual(runs("see https://a.dev/pa…", []).map((run) => run.href), [null, "https://a.dev/pa", null]);
+});

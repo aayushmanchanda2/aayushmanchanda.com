@@ -154,6 +154,7 @@ const hints: Hint[] = [
 </style>
 
 <script>
+  import { ownsKey } from "../lib/keys";
   import { PANE_ATTRIBUTE } from "../lib/library-pane";
 
   /**
@@ -179,7 +180,7 @@ const hints: Hint[] = [
   if (nav) {
     document.addEventListener("keydown", (event) => {
       // Already handled by something closer to the action, or mid-IME.
-      if (event.defaultPrevented || event.isComposing) return;
+      if (!ownsKey(event)) return;
       // A held key would fire a navigation per repeat while the page unloads.
       if (event.repeat) return;
       // A modifier means the reader is asking the browser for something —

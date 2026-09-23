@@ -89,12 +89,14 @@ const selected = current === null ? "" : current;
     white-space: nowrap;
   }
 
-  /* At 320 the four segments are wider than the stamp's inner column (they
-     overflowed /library by 28px, VET-262); a tighter item keeps them on it. */
-  @media (max-width: 359px) {
-    .seg__item {
-      gap: 0.25rem;
-      padding-inline: 0.25rem;
+  /* The four segments with their counts need 309px; a phone's column is
+     narrower up to about 410px wide (clipped at 320, 360 and 390, QA phase 2).
+     Under 20rem of toolbar the counts go: the live count beside the tag
+     select still says how many are showing. The toolbar is the container
+     (`LibraryToolbar.astro › .ltools`), so the 350px pane keeps its counts. */
+  @container (width < 20rem) {
+    .seg__count {
+      display: none;
     }
   }
 

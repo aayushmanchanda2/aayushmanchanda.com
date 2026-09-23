@@ -20,6 +20,7 @@
  * floor, shifted to stay 20px inside the sides, and centred on the cursor's x
  * as it moves along a row (briOS's `trackCursorAxis="x"`).
  */
+import { ownsKey } from "./keys.ts";
 
 export interface Preview {
   /** Web path of the picture, or null for the icon-only card. */
@@ -193,7 +194,9 @@ export function initPreviewCard(): void {
     if (triggerOf(event.target)) leave();
   });
   document.addEventListener("keydown", (event) => {
-    if (event.key !== "Escape" || active === null) return;
+    if (event.key !== "Escape" || active === null || !ownsKey(event)) return;
+    // The card is the top layer: the panel or page under it keeps its Escape.
+    event.preventDefault();
     dismissed = active;
     hide();
   });

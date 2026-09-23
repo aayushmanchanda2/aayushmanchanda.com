@@ -13,6 +13,7 @@
  * problem until one of them is edited.
  */
 
+import { randomUUID } from "node:crypto";
 import { mkdir, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -46,7 +47,8 @@ export function describe(error) {
 }
 
 /**
- * Replace a file in one step: write `<file>.tmp` beside it, then rename.
+ * Replace a file in one step: write `<file>.<uuid>.tmp` beside it, then rename.
+ * The uuid keeps two writers of one file (a backfill pool) off each other's staging.
  *
  * A torn gallery or state file fails every later build and no reconcile rule
  * can repair one, and a half-written icon is a broken image; `rename` within a
@@ -58,7 +60,7 @@ export function describe(error) {
  * @param {string | Uint8Array} data  A string is written as UTF-8.
  */
 export async function writeAtomic(file, data) {
-  const staging = `${file}.tmp`;
+  const staging = `${file}.${randomUUID()}.tmp`;
   await mkdir(path.dirname(file), { recursive: true });
   try {
     await writeFile(staging, data);
@@ -67,6 +69,30 @@ export async function writeAtomic(file, data) {
     await rm(staging, { force: true });
     throw error;
   }
+}
+
+/**
+ * A response body read whole, or null when it is over `max` bytes. Streamed,
+ * because a missing `content-length` reads as 0 and would let any size through.
+ *
+ * @param {Response} response @param {number} max
+ * @returns {Promise<Buffer | null>}
+ */
+export async function readCapped(response, max) {
+  if (Number(response.headers.get("content-length")) > max) {
+    await response.body?.cancel();
+    return null;
+  }
+  /** @type {Uint8Array[]} */
+  const chunks = [];
+  let size = 0;
+  // Leaving the loop early cancels the stream.
+  for await (const chunk of response.body ?? []) {
+    size += chunk.length;
+    if (size > max) return null;
+    chunks.push(chunk);
+  }
+  return Buffer.concat(chunks);
 }
 
 /**

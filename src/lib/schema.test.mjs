@@ -370,6 +370,11 @@ test("no builder leaks a null, an undefined or an empty string", () => {
   }
 });
 
+test("a tool still in the inbox claims no applicationCategory; a filed one keeps its own words", () => {
+  assert.ok(!("applicationCategory" in at(toolJsonLd({ ...BARE_TOOL, category: "new" }), 0)));
+  assert.equal(at(toolJsonLd(BARE_TOOL), 0)["applicationCategory"], "cli");
+});
+
 test("an absent field is absent, not null", () => {
   // The bare tool has no URL and none of the four voice fields.
   const software = at(toolJsonLd(BARE_TOOL), 0);

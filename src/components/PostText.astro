@@ -6,8 +6,9 @@
  * highlighter. Split out of `PostCard.astro` so the card stays a layout.
  *
  * The keyline is `.hl` from `styles/prose.css`, the reader's own mark. On the
- * entry page it sweeps once as it scrolls in (`ReaderBlocks.astro`'s script);
- * on a grid tile it is `data-static` and drawn whole.
+ * entry page it sweeps once as it scrolls in (`lib/reveal.ts`, below, so a
+ * post page without the reader still sweeps); on a grid tile it is
+ * `data-static` and drawn whole.
  */
 import type { PostLink } from "../lib/library";
 import { parts, postBlocks } from "../lib/post";
@@ -51,6 +52,12 @@ const blocks = postBlocks(text).map((block) =>
     </div>
   )
 }
+
+<script>
+  import { reveal } from "../lib/reveal";
+
+  reveal("mark.hl:not([data-static])", "hl--on", 0.5);
+</script>
 
 <style>
   .pt {

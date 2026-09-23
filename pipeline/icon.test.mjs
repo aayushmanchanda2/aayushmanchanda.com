@@ -145,3 +145,29 @@ test("an icon on disk is kept without a request, unless forced", async () => {
   await fetchIcon({ slug: "eve", url: "https://eve.dev/", dir: icons, fetch, force: true });
   assert.notEqual(await readFile(path.join(icons, "eve.webp"), "utf8"), "already here");
 });
+
+test("a site the caller already resolved is used as is: no second GitHub lookup", async () => {
+  const { fetch, asked } = server({ "https://buzz.dev/apple-touch-icon.png": await png(180) });
+
+  assert.ok(await fetchIcon({ slug: "buzz", url: "https://github.com/block/buzz", site: "https://buzz.dev/", dir: await dir(), fetch }));
+  assert.ok(!asked.some((url) => url.includes("api.github.com")), asked.join("\n"));
+});
+
+test("GITHUB_TOKEN, when set, goes to GitHub's API and nowhere else", async (t) => {
+  /** @type {{ url: string, auth: string | null }[]} */
+  const seen = [];
+  /** @type {typeof globalThis.fetch} */
+  const fetch = async (input, init) => {
+    seen.push({ url: String(input), auth: new Headers(init?.headers).get("authorization") });
+    return String(input).includes("api.github.com") ? Response.json({ homepage: "buzz.dev" }) : new Response("", { status: 404 });
+  };
+  const before = process.env["GITHUB_TOKEN"];
+  process.env["GITHUB_TOKEN"] = "ghs_test";
+  t.after(() => (before === undefined ? delete process.env["GITHUB_TOKEN"] : (process.env["GITHUB_TOKEN"] = before)));
+
+  await fetchIcon({ slug: "buzz", url: "https://github.com/block/buzz", dir: await dir(), fetch });
+
+  assert.deepEqual(seen.filter((call) => call.auth !== null).map((call) => call.url), ["https://api.github.com/repos/block/buzz"]);
+  assert.equal(seen[0]?.auth, "Bearer ghs_test");
+  assert.ok(seen.length > 1, "the site itself was asked too, without the token");
+});

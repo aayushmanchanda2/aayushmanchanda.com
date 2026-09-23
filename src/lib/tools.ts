@@ -19,7 +19,7 @@
 import { githubRepo, readLogoDomain } from "./links";
 import type { Fail } from "./parse";
 import { SLUG, readers, routeSlug } from "./parse";
-import { descriptionProblem, noteProblem } from "./tool-copy";
+import { NEW_CATEGORY, descriptionProblem, noteProblem } from "./tool-copy";
 
 import rawTools from "../data/tools.json";
 
@@ -202,6 +202,9 @@ export function parseTools(value: unknown): Tool[] {
 
     const category = readString(item, "category", where);
     if (category === INBOX) console.warn(`src/data/tools.json: ${where} "${slug}" is still ${INBOX}; give it a category`);
+    else if (routeSlug(category) === routeSlug(NEW_CATEGORY)) {
+      fail(where, `has category ${JSON.stringify(category)}, which is the word the page shows for ${INBOX}; pick another`);
+    }
 
     const verdict = item["verdict"];
     if (!isVerdict(verdict)) {
@@ -224,7 +227,7 @@ export function parseTools(value: unknown): Tool[] {
       repo: readRepo(item, where),
       repo_moved: item["repo_moved"] === true,
       ...readLogoDomain(item, (problem) => fail(where, problem)),
-      category: category === INBOX ? "new" : category,
+      category: category === INBOX ? NEW_CATEGORY : category,
       verdict,
       note,
       ...(description === null ? {} : { description }),

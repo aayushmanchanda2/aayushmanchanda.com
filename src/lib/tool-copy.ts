@@ -7,6 +7,13 @@
 
 const words = (value: string): number => value.trim().split(/\s+/).length;
 
+/**
+ * What a reader sees for a tool still in the inbox (`tools.ts › INBOX`). A
+ * word for the page, not a category: no real category may take it, and the
+ * JSON-LD leaves it out rather than claim "new" is what the software is.
+ */
+export const NEW_CATEGORY = "new";
+
 export const DESCRIPTION_WORDS = 7;
 export const NOTE_WORDS = 20;
 

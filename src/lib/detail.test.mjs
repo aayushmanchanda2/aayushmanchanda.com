@@ -259,8 +259,8 @@ test("an article reads TLDR, highlights, excerpt, note, digest, then the way out
   assert.ok(order.every((at) => at > -1), `a block is missing: ${order}`);
   assert.deepEqual([...order].sort((a, b) => a - b), order, "the reader blocks are out of order");
 
-  const reader = read("components/ReaderBlocks.astro");
-  assert.match(reader, /prefers-reduced-motion: reduce/, "the sweep must not run under reduced motion");
+  assert.match(read("components/ReaderBlocks.astro"), /reveal\("mark\.hl/, "the reader releases its marks through lib/reveal.ts");
+  assert.match(read("lib/reveal.ts"), /prefers-reduced-motion: reduce/, "the sweep must not run under reduced motion");
   const marks = read("styles/prose.css");
   assert.match(marks, /@media screen and \(prefers-reduced-motion: no-preference\)/, "print and reduced motion keep the mark whole");
   assert.match(marks, /\.hl:not\(\.hl--on, \[data-static\]\)/, "a grid's static mark must never be armed");

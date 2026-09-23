@@ -149,6 +149,14 @@ for (const [ink, tint, floor] of PAIRS) {
   });
 }
 
+test("a search match on the palette's cursor row keeps its white ink at AA", () => {
+  // One value for both themes: the cursor is the same blue in each.
+  const r = inkOnTint(token(globalCss, "--accent-panel-ink"), token(globalCss, "--accent-panel-mark"), token(globalCss, "--accent-panel"));
+  assert.ok(r >= 4.5, `the active-row mark is ${r.toFixed(2)}:1`);
+  const rule = read("styles/palette.css").slice(read("styles/palette.css").indexOf(".palette__row[data-active] mark {"));
+  assert.match(rule.slice(0, rule.indexOf("}")), /var\(--accent-panel-mark\)/);
+});
+
 /* --- half two: the surfaces ------------------------------------------------ */
 
 /**

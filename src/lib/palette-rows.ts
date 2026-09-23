@@ -90,7 +90,7 @@ function rowNode(hit: SearchHit, tokens: readonly string[]): HTMLAnchorElement {
   const { entry } = hit;
   const row = el("a", "palette__row");
   row.href = entry.href;
-  row.role = "option";
+  row.setAttribute("role", "option");
   row.dataset.paletteRow = "";
   // Focus stays in the field; the highlight is a virtual cursor, so a row must
   // not be a tab stop of its own.

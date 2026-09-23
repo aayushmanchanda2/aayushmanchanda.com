@@ -27,9 +27,11 @@ const groups = foundationGroups(design);
 const familyList = familiesOf(design);
 ---
 
+{/* Outside the summary: a screen reader flattens a heading inside a button. */}
+<h2 class="visually-hidden">Design</h2>
 <details class="found" data-copy-root>
   <summary class="found__summary">
-    <h2 class="found__title mono">Design</h2>
+    <span class="found__title mono">Design</span>
     <span class="found__groups">{groups.map((group) => group.head).join(", ")}</span>
     <span class="found__chevron" aria-hidden="true"></span>
   </summary>

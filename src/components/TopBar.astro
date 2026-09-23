@@ -90,6 +90,13 @@ const { navItems, pathname, trail } = Astro.props;
     }
   }
 
+  /* The stamp's solid paper (`--cover`, z 40) sits over the bar's top edge,
+     so a ring drawn outside a control there is half hidden. Inside, instead.
+     Not in the menu sheet, which lives in here but is clear of the paper. */
+  .bar :global(:focus-visible:not(.mnav__panel *)) {
+    outline-offset: -2px;
+  }
+
   /* A phone's bar is the trail's: search is one press away in the menu. */
   @media (max-width: 599px) {
     .bar__search {

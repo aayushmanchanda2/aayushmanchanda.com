@@ -148,6 +148,22 @@ test("a half-read post is refused the way a half-written digest is", () => {
   failsWith(entry({ ...asPost, post: "@someone" }), 'needs "post" to be an object');
 });
 
+test("a post's id, quote depth, media size and flags are held to their shapes", () => {
+  const asPost = { kind: "post", url: "https://x.com/a/status/1", domain: "x.com" };
+  const quoted = (/** @type {Record<string, unknown>} */ extra) => ({ ...POST, quoted: { ...POST, ...extra } });
+  const sized = (/** @type {number} */ w, /** @type {number} */ h) => ({ ...POST, media: [{ type: "photo", src: "/posts/1/1.webp", w, h }] });
+
+  failsWith(entry({ ...asPost, post: { ...POST, id: "12a" } }), "numeric id");
+  failsWith(entry({ ...asPost, post: quoted({ id: "../1" }) }), "numeric id");
+  failsWith(entry({ ...asPost, post: quoted({ quoted: POST }) }), "nests one deep");
+  failsWith(entry({ ...asPost, post: sized(0, 10) }), "finite numbers above 0");
+  failsWith(entry({ ...asPost, post: sized(10, Infinity) }), "finite numbers above 0");
+  failsWith(entry({ ...asPost, post: { ...POST, removed: "yes" } }), "true, false or absent");
+
+  const ok = parseOne({ ...asPost, post: quoted({ id: "42" }) });
+  assert.equal(Object(ok.post).quoted.id, "42");
+});
+
 test("a remote media URL cannot be carried, so no page can render one", () => {
   // The privacy rule made structural rather than remembered. A pbs.twimg.com
   // URL here would render as an `<img>` pointed at X's CDN and hand every

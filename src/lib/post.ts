@@ -92,7 +92,7 @@ export function runs(text: string, links: readonly PostLink[]): Run[] {
     .filter((shownText) => shownText !== "")
     .sort((a, b) => b.length - a.length)
     .map(escapeRe);
-  const pattern = new RegExp([...shown, "https?://\\S*[^\\s.,;:!?)\"']", "(?<![\\w@])@[A-Za-z0-9_]{1,15}", "(?<![\\w#&])#[A-Za-z][A-Za-z0-9_]{0,49}"].join("|"), "g");
+  const pattern = new RegExp([...shown, "https?://\\S*[^\\s.,;:!?)\"'…]", "(?<![\\w@])@[A-Za-z0-9_]{1,15}", "(?<![\\w#&])#[A-Za-z][A-Za-z0-9_]{0,49}"].join("|"), "g");
 
   const out: Run[] = [];
   let last = 0;
@@ -188,16 +188,26 @@ export function postBlocks(text: string): Block[] {
 /** A run with the keyline flag: `mark` is true inside the post's key line. */
 export type Part = Run & { mark: boolean };
 
-/** `text` as runs, with the first exact `keyline` in it marked. */
+/**
+ * `text` as runs, with the first exact `keyline` in it marked. Links are found
+ * on the whole text first and then cut at the keyline's edges, so a link that
+ * straddles one stays one link (its two halves keep the same href).
+ */
 export function parts(text: string, links: readonly PostLink[], keyline: string | null): Part[] {
   const at = keyline ? text.indexOf(keyline) : -1;
-  if (keyline === null || at === -1) return runs(text, links).map((run) => ({ ...run, mark: false }));
-  const end = at + keyline.length;
-  return [
-    ...runs(text.slice(0, at), links).map((run) => ({ ...run, mark: false })),
-    ...runs(text.slice(at, end), links).map((run) => ({ ...run, mark: true })),
-    ...runs(text.slice(end), links).map((run) => ({ ...run, mark: false })),
-  ];
+  const end = at === -1 ? -1 : at + (keyline ?? "").length;
+  const out: Part[] = [];
+  let from = 0;
+  for (const run of runs(text, links)) {
+    const to = from + run.text.length;
+    const cuts = [from, ...[at, end].filter((cut) => cut > from && cut < to), to];
+    for (const [i, a] of cuts.slice(0, -1).entries()) {
+      const b = cuts[i + 1] ?? to;
+      out.push({ text: text.slice(a, b), href: run.href, mark: at !== -1 && a >= at && b <= end });
+    }
+    from = to;
+  }
+  return out;
 }
 
 /** The post on X, or the saved URL when there is no id to build it from. */

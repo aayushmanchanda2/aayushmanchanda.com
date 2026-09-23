@@ -570,8 +570,8 @@ function readMedia(item: unknown, index: number, where: string): PostMedia {
   if (type !== "photo" && type !== "video") {
     fail(where, `needs "${field}.type" to be photo or video (got ${JSON.stringify(type)})`);
   }
-  if (typeof w !== "number" || typeof h !== "number") {
-    fail(where, `needs "${field}.w" and ".h" to be numbers`);
+  if (typeof w !== "number" || typeof h !== "number" || !(w > 0 && h > 0 && Number.isFinite(w * h))) {
+    fail(where, `needs "${field}.w" and ".h" to be finite numbers above 0`);
   }
   return type === "photo"
     ? { type, src: readPostFile(item["src"], `${field}.src`, where), poster: null, w, h }
@@ -584,8 +584,13 @@ function readMedia(item: unknown, index: number, where: string): PostMedia {
       };
 }
 
-function readPostObject(value: Record<string, unknown>, where: string): Post {
+/** `quoting` is true inside a quote, which may not quote again: X nests one deep. */
+function readPostObject(value: Record<string, unknown>, where: string, quoting = false): Post {
   const at = `${where} post`;
+  const id = readOptional(value, "id", at);
+  if (id !== null && !/^\d+$/.test(id)) fail(where, `needs "post.id" to be X's numeric id (got ${JSON.stringify(id)})`);
+  const removed = value["removed"] ?? false;
+  if (typeof removed !== "boolean") fail(where, `needs "post.removed" to be true, false or absent`);
   const article = value["article"];
   if (article !== undefined && !isRecord(article)) {
     fail(where, `needs "post.article" to be an object or absent`);
@@ -594,9 +599,10 @@ function readPostObject(value: Record<string, unknown>, where: string): Post {
   if (quoted !== undefined && !isRecord(quoted)) {
     fail(where, `needs "post.quoted" to be an object or absent`);
   }
+  if (quoting && quoted !== undefined) fail(where, `has a quoted post that quotes another; X nests one deep`);
 
   return {
-    id: readOptional(value, "id", at),
+    id,
     author: readString(value, "author", at),
     handle: readString(value, "handle", at),
     date: readDate(value, "date", at),
@@ -609,7 +615,7 @@ function readPostObject(value: Record<string, unknown>, where: string): Post {
       return { text: readString(item, "text", at), href };
     }),
     media: readList(value["media"], "post.media", where, (item, index) => readMedia(item, index, where)),
-    quoted: quoted === undefined ? null : readPostObject(quoted, `${where} quoted`),
+    quoted: quoted === undefined ? null : readPostObject(quoted, `${where} quoted`, true),
     article:
       article === undefined
         ? null
@@ -617,7 +623,7 @@ function readPostObject(value: Record<string, unknown>, where: string): Post {
             title: readString(article, "title", at),
             cover: readPostFileOrNull(article["cover"], "post.article.cover", where),
           },
-    removed: value["removed"] === true,
+    removed,
   };
 }
 

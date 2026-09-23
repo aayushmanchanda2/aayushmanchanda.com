@@ -54,6 +54,25 @@ test("a repository with no homepage of its own gets no preview, and no browser",
   assert.deepEqual(asked, [buzz, `${buzz}/readme`, buzz, `${buzz}/readme`]);
 });
 
+test("a page read the caller already did is not read again, and a lazy browser is never launched for an og:image", async () => {
+  const dir = await mkdtemp(path.join(tmpdir(), "preview-"));
+  /** @type {string[]} */
+  const asked = [];
+  const png = await sharp({ create: { width: 1200, height: 630, channels: 3, background: "#808080", noise: { type: "gaussian", mean: 128, sigma: 30 } } })
+    .png()
+    .toBuffer();
+  /** @type {typeof globalThis.fetch} */
+  const fetch = async (url) => (asked.push(String(url)), new Response(new Uint8Array(png), { headers: { "content-type": "image/png" } }));
+  let launched = 0;
+  const browser = async () => (launched++, /** @type {never} */ (null));
+
+  const got = await capturePreview({ slug: "a", url: "https://a.dev/", meta: { image: "https://a.dev/card.png" }, dir, fetch, browser, og: true });
+
+  assert.ok(got);
+  assert.deepEqual(asked, ["https://a.dev/card.png"], "only the picture, not the page a second time");
+  assert.equal(launched, 0);
+});
+
 test("metaFrom reads the og:image (relative, entity-escaped) and the title, else twitter:image and <title>", async () => {
   const { metaFrom } = await import("./preview.mjs");
   const og = metaFrom(

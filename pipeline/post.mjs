@@ -11,11 +11,14 @@
 import { access } from "node:fs/promises";
 import path from "node:path";
 
+import { pickText } from "./post-text.mjs";
 import { fetchWebp } from "./thumb.mjs";
-import { isRecord, writeAtomic } from "./util.mjs";
+import { isRecord, readCapped, writeAtomic } from "./util.mjs";
 
 /** @typedef {import("./types.js").Post} Post */
 /** @typedef {typeof globalThis.fetch} Fetch */
+
+export { pickText };
 
 const SYNDICATION = "https://cdn.syndication.twimg.com/tweet-result";
 
@@ -44,8 +47,9 @@ export function tokenFor(id) {
 }
 
 /**
- * The raw tweet record, or null when X says the post is gone (404, a
- * tombstone, or a body with no author). Anything else that is not a 200 throws.
+ * The raw tweet record, or null when X says the post is gone: a 404 or a
+ * `TweetTombstone`. Anything else that is not a tweet with an author throws,
+ * a 200 that is not JSON included, so a bad minute at X never reads as removed.
  *
  * @param {string} id @param {typeof globalThis.fetch} [fetch]
  * @returns {Promise<Record<string, any> | null>}
@@ -61,10 +65,11 @@ export async function fetchSyndication(id, fetch = globalThis.fetch) {
   if (response.status === 404) return null;
   if (!response.ok) throw new Error(`syndication returned HTTP ${response.status} for ${id}`);
 
-  const body = await response.json().catch(() => null);
-  if (!isRecord(body) || body["__typename"] === "TweetTombstone" || !isRecord(body["user"])) {
-    return null;
-  }
+  const body = await response.json().catch(() => {
+    throw new Error(`syndication answered ${id} with something that is not JSON`);
+  });
+  if (isRecord(body) && body["__typename"] === "TweetTombstone") return null;
+  if (!isRecord(body) || !isRecord(body["user"])) throw new Error(`syndication answered ${id} with no tweet in it`);
   return body;
 }
 
@@ -94,20 +99,30 @@ function videoSources(detail) {
  *   quoted: Tweet | null, article: { title: string, cover: string | null } | null, long: boolean }} Tweet
  */
 
+const NUMERIC = /^\d+$/;
+
+/** @param {Record<string, any>} entity */
+const wellFormed = (entity) =>
+  isRecord(entity) && ["url", "display_url", "expanded_url"].every((key) => typeof entity[key] === "string");
+
 /**
  * The tweet record as remote URLs and plain fields, before anything is fetched.
+ * Throws on an id that is not X's numeric one; a quote with one is dropped, and
+ * a quote's own quote is never read (X nests one deep, and so does `library.ts`).
  *
  * @param {Record<string, any>} tweet
+ * @param {boolean} [quoting]  True while reading the quoted post.
  * @returns {Tweet}
  */
-export function readTweet(tweet) {
+export function readTweet(tweet, quoting = false) {
+  if (!NUMERIC.test(String(tweet.id_str))) throw new Error(`syndication id_str is not numeric (${JSON.stringify(tweet.id_str)})`);
   const user = tweet.user;
   const details = Array.isArray(tweet.mediaDetails) ? tweet.mediaDetails : [];
 
   let text = decode(String(tweet.text ?? ""));
   /** @type {{ text: string, href: string }[]} */
   const links = [];
-  for (const entity of tweet.entities?.urls ?? []) {
+  for (const entity of (tweet.entities?.urls ?? []).filter(wellFormed)) {
     text = text.replaceAll(entity.url, entity.display_url);
     links.push({ text: entity.display_url, href: entity.expanded_url });
   }
@@ -136,7 +151,10 @@ export function readTweet(tweet) {
       w: Number(detail.original_info?.width ?? 0),
       h: Number(detail.original_info?.height ?? 0),
     })),
-    quoted: isRecord(tweet.quoted_tweet) && isRecord(tweet.quoted_tweet.user) ? readTweet(tweet.quoted_tweet) : null,
+    quoted:
+      !quoting && isRecord(tweet.quoted_tweet) && isRecord(tweet.quoted_tweet.user) && NUMERIC.test(String(tweet.quoted_tweet.id_str))
+        ? readTweet(tweet.quoted_tweet, true)
+        : null,
     article,
     long: tweet.note_tweet !== undefined || article !== null,
   };
@@ -171,12 +189,12 @@ async function video(sources, id, name, publicDir, fetch) {
   for (const url of sources) {
     const response = await fetch(url, { signal: AbortSignal.timeout(120_000) });
     // A 503 here is common and passing: try the next size; a later run retries.
-    if (!response.ok || Number(response.headers.get("content-length")) > VIDEO_MAX_BYTES) {
+    if (!response.ok) {
       await response.body?.cancel();
       continue;
     }
-    const bytes = Buffer.from(await response.arrayBuffer());
-    if (bytes.length > VIDEO_MAX_BYTES) continue;
+    const bytes = await readCapped(response, VIDEO_MAX_BYTES);
+    if (bytes === null) continue;
     await writeAtomic(file, bytes);
     return web;
   }
@@ -191,26 +209,30 @@ async function video(sources, id, name, publicDir, fetch) {
  */
 async function localise(tweet, publicDir, fetch) {
   const { id } = tweet;
-  const avatar = tweet.avatar && (await picture(tweet.avatar, id, "avatar", AVATAR_WIDTH, publicDir, fetch));
+  // One picture that will not fetch costs that picture, never the post.
+  const tryPicture = (/** @type {string} */ url, /** @type {string} */ name) =>
+    picture(url, id, name, name === "avatar" ? AVATAR_WIDTH : PICTURE_WIDTH, publicDir, fetch).catch(() => null);
+  const avatar = tweet.avatar && (await tryPicture(tweet.avatar, "avatar"));
 
   /** @type {NonNullable<Post["media"]>} */
   const media = [];
   for (const [index, item] of tweet.media.slice(0, 4).entries()) {
+    // `library.ts` refuses a picture with no size, so one is dropped here.
+    if (!(item.w > 0 && item.h > 0)) continue;
     const n = String(index + 1);
     if (item.type === "photo") {
-      media.push({ type: "photo", src: await picture(item.photo, id, n, PICTURE_WIDTH, publicDir, fetch), w: item.w, h: item.h });
+      const src = await tryPicture(item.photo, n);
+      if (src) media.push({ type: "photo", src, w: item.w, h: item.h });
       continue;
     }
-    const poster = await picture(item.photo, id, `${n}-poster`, PICTURE_WIDTH, publicDir, fetch);
-    const src = await video(item.sources, id, n, publicDir, fetch);
+    const poster = await tryPicture(item.photo, `${n}-poster`);
+    if (!poster) continue;
+    const src = await video(item.sources, id, n, publicDir, fetch).catch(() => null);
     media.push({ type: "video", ...(src ? { src } : {}), poster, w: item.w, h: item.h });
   }
 
-  const cover = tweet.article?.cover;
-  const article = tweet.article && {
-    title: tweet.article.title,
-    ...(cover ? { cover: await picture(cover, id, "cover", PICTURE_WIDTH, publicDir, fetch) } : {}),
-  };
+  const cover = tweet.article?.cover && (await tryPicture(tweet.article.cover, "cover"));
+  const article = tweet.article && { title: tweet.article.title, ...(cover ? { cover } : {}) };
 
   return {
     id,
@@ -224,55 +246,6 @@ async function localise(tweet, publicDir, fetch) {
     ...(tweet.quoted ? { quoted: await localise(tweet.quoted, publicDir, fetch) } : {}),
     ...(article ? { article } : {}),
   };
-}
-
-const flat = (/** @type {string} */ text) => text.replace(/\s+/g, " ").trim();
-
-/**
- * The saved text with X's paragraph breaks put back over the part X returned.
- *
- * The saved copy is whole but flattened to one line; X's is cut at 280
- * characters on a long post but keeps its line breaks. Walking both at once
- * restores the breaks for as far as X's copy goes. Any disagreement, and the
- * saved text comes back unchanged.
- * @param {string} saved @param {string} x @returns {string}
- */
-function withBreaks(saved, x) {
-  const whole = flat(saved);
-  let at = 0;
-  let out = "";
-  for (const run of x.trim().split(/(\s+)/)) {
-    if (/^\s+$/.test(run)) {
-      if (whole[at] !== " ") return saved;
-      at += 1;
-      out += run;
-    } else if (whole.startsWith(run, at)) {
-      at += run.length;
-      out += run;
-    } else {
-      // X cut mid-word: the last run may be a prefix of the saved word.
-      return run !== "" && whole.startsWith(run.slice(0, -1), at) ? out + whole.slice(at) : saved;
-    }
-  }
-  return out + whole.slice(at);
-}
-
-/**
- * The saved text or X's. X's `text` stops at 280 characters on a long post and
- * is a stub on an Article, so the saved copy wins there and wherever it is
- * longer, with X's paragraph breaks restored over the start (`withBreaks`).
- * X's wins otherwise: same words, and it kept the breaks.
- * @param {string | undefined} saved @param {Tweet} tweet
- */
-export function pickText(saved, tweet) {
-  if (!saved?.trim()) return tweet.text;
-  if (tweet.article) return saved;
-  // A saved copy with its own breaks (Firecrawl keeps them since VET-246) is
-  // already whole; `withBreaks` would flatten everything past X's 280.
-  if (tweet.long || flat(saved).length > flat(tweet.text).length) {
-    return saved.includes("\n") ? saved : withBreaks(saved, tweet.text);
-  }
-  return tweet.text;
 }
 
 /**

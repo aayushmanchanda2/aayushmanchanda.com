@@ -131,6 +131,11 @@ export function list(items: readonly string[]): string {
   return items.map((item) => `- ${item}`).join("\n");
 }
 
+/** A blockquote, every line of it: a bare second line would fall out of the quote. */
+export function quote(text: string): string {
+  return text.split("\n").map((line) => (line === "" ? ">" : `> ${line}`)).join("\n");
+}
+
 /** Heading plus body, so an endpoint reads as a list of sections. */
 export function section(heading: string, ...body: readonly string[]): string {
   return [`## ${heading}`, ...body].join("\n\n");

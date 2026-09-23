@@ -114,7 +114,12 @@ const REQUIRED = {
   ContactPage: ["name", "url", "mainEntity"],
   ItemList: ["name", "url", "numberOfItems", "itemListElement"],
   ListItem: ["position", "name"],
-  SoftwareApplication: ["name", "applicationCategory"],
+  /*
+   * `applicationCategory` is not required: a tool still in the "new" inbox
+   * (tools.ts NEW_CATEGORY) has no category of its own yet, and schema.ts omits
+   * the field rather than invent one. Requiring it failed every fresh save.
+   */
+  SoftwareApplication: ["name"],
   Review: ["url", "itemReviewed", "author", "reviewBody", "datePublished"],
   /*
    * A `WebPage` is held to a name and a URL and no more, because the site has

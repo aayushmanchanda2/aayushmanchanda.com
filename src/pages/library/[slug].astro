@@ -78,12 +78,13 @@ const { entry, prev, next } = Astro.props;
 const jsonLd = libraryJsonLd(entry);
 
 /*
- * The page's own description, in the order the page itself would answer the
- * question. His note is the standfirst and comes first; the verdict is the one
- * sentence a digested entry is guaranteed to have; his `why` is next. The
- * fallback is the plainest true sentence there is, and no entry needs it today.
+ * The page's own description, in the order the page itself answers the
+ * question. The TLDR is the page's lead (design.md, VET-233), so a search
+ * result leads with it too; then his note, the digest's verdict, his `why`.
+ * The fallback is the plainest true sentence there is.
  */
 const description =
+  entry.tldr ??
   entry.note ??
   entry.digest?.verdict ??
   entry.why ??

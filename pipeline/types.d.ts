@@ -193,6 +193,7 @@ export interface Paths {
   shotsDir: string;
   iconsDir: string;
   previewsDir: string;
+  postsDir: string;
   tmpDir: string;
 }
 

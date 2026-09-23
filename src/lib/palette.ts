@@ -23,6 +23,7 @@
  *     because the panel's search control closes the panel on its way in.
  */
 
+import { ownsKey } from "./keys";
 import { renderRows } from "./palette-rows";
 import { RESULT_LIMIT, search, tokenize } from "./search";
 import type { SearchEntry } from "./search";
@@ -33,7 +34,8 @@ export function initPalette(root: HTMLElement): void {
   const results = root.querySelector<HTMLElement>("[data-palette-results]");
   const empty = root.querySelector<HTMLElement>("[data-palette-empty]");
   const scrim = root.querySelector<HTMLElement>("[data-palette-scrim]");
-  if (!input || !results || !empty || !scrim) return;
+  const status = root.querySelector<HTMLElement>("[data-palette-status]");
+  if (!input || !results || !empty || !scrim || !status) return;
 
   /**
    * The index, fetched on first open (`pages/search.json.ts`, VET-247). It
@@ -53,6 +55,7 @@ export function initPalette(root: HTMLElement): void {
         loading = null;
         empty.textContent = "Search didn't load. Close and try again.";
         empty.hidden = false;
+        status.textContent = empty.textContent;
       }));
 
   /** Rows in the order the arrow keys walk them — always the DOM order. */
@@ -67,7 +70,10 @@ export function initPalette(root: HTMLElement): void {
   // Const arrows, not `function`s: a hoisted function would lose the guard's
   // non-null narrowing (`lib/mnav.ts › setOpen` has the same note).
   const render = (query: string): void => {
-    if (!entries) return;
+    if (!entries) {
+      status.textContent = "Loading search";
+      return;
+    }
     const hits = search(entries, query, RESULT_LIMIT);
 
     rows = renderRows(results, hits, tokenize(query));
@@ -75,6 +81,8 @@ export function initPalette(root: HTMLElement): void {
     empty.textContent = "No matches";
     empty.hidden = hits.length > 0;
     results.hidden = hits.length === 0;
+    input.setAttribute("aria-expanded", String(hits.length > 0));
+    status.textContent = hits.length === 0 ? "No matches" : `${hits.length} ${hits.length === 1 ? "result" : "results"}`;
 
     setActive(0);
   };
@@ -248,7 +256,7 @@ export function initPalette(root: HTMLElement): void {
   });
 
   document.addEventListener("keydown", (event) => {
-    if (event.defaultPrevented || event.isComposing) return;
+    if (!ownsKey(event)) return;
 
     // Cmd+K / Ctrl+K toggles, from anywhere on the page.
     if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {

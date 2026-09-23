@@ -67,6 +67,11 @@ const COLUMNS = ALL.filter((column) => column.id !== drop);
               <a class="row__link" href={`/tools/${tool.slug}`} data-astro-prefetch="hover">
                 {tool.name}
               </a>
+              {drop !== "verdict" && (
+                <span class="row__verdict--phone">
+                  <VerdictBadge verdict={tool.verdict} />
+                </span>
+              )}
             </span>
             <p class="row__desc row__desc--phone">{tool.description ?? tool.note}</p>
           </td>
@@ -214,33 +219,46 @@ const COLUMNS = ALL.filter((column) => column.id !== drop);
     -webkit-line-clamp: 2;
     line-clamp: 2;
     overflow: hidden;
-    padding: 0.25rem 0 0 calc(32px + 0.75rem);
+    padding-top: 0.25rem;
     white-space: normal;
   }
 
-  /* Phone width, like briOS: icon and name with the description under them,
-     then the verdict. Still a table: changing `display` on a tr or th strips
-     table semantics in Safari, so columns are hidden, never restyled. The
-     description column hides and its phone copy shows, so a screen reader
-     meets one of the two at any width. Category and date, header and cell,
-     live on the tool's page. */
+  .row__verdict--phone {
+    display: none;
+    margin-left: auto;
+    flex: none;
+  }
+
+  /* Phone width: one column. Icon, name and verdict on a line, the
+     description full width under them (a verdict column left it 140px at
+     320). Still a table: changing `display` on a tr or th strips table
+     semantics in Safari, so columns are hidden, never restyled. The
+     description and verdict columns hide and their phone copies show, so a
+     screen reader meets one of each at any width. Category and date, header
+     and cell, live on the tool's page. */
   @media (max-width: 639px) {
     .th--desc,
     .th--category,
+    .th--verdict,
     .th--date,
     .cell--desc,
     .cell--category,
+    .cell--verdict,
     .cell--date {
       display: none;
     }
 
     .th--name { width: auto; }
-    .th--verdict { width: calc(6.5rem + var(--page-pad)); }
+    /* The one visible cell is also the last edge: pad back to the frame. */
+    :is(.th--name, .cell--name) { padding-right: var(--page-pad); }
     .cell--name { white-space: normal; }
-    .cell--verdict { vertical-align: top; }
 
     .row__desc--phone {
       display: -webkit-box;
+    }
+
+    .row__verdict--phone {
+      display: block;
     }
   }
 

@@ -165,7 +165,7 @@ test("a new tool or site fetches its app icon into public/icons; only a tool get
   );
   assert.ok(await exists(path.join(paths.iconsDir, "linear.webp")));
   assert.ok(await exists(path.join(paths.iconsDir, "otherkind.webp")));
-  assert.deepEqual(preview.calls, [{ slug: "linear", url: "https://linear.app", dir: paths.previewsDir }]);
+  assert.deepEqual(preview.calls, [{ slug: "linear", url: "https://linear.app", site: "https://linear.app", dir: paths.previewsDir }]);
   assert.ok(await exists(path.join(paths.previewsDir, "linear.webp")));
 });
 
@@ -184,6 +184,23 @@ test("a repository save gets its own site written to url, and keeps repo", async
   const [tool] = await readJson(paths.toolsJson);
   assert.deepEqual([tool.name, tool.url, tool.repo], ["laude-institute/headlong", "https://headlong.ai", "https://github.com/laude-institute/headlong"]);
   assert.deepEqual(asked, ["https://github.com/laude-institute/headlong"]);
+});
+
+test("a tool's site is asked once, and the url, icon and preview all get that answer", async (t) => {
+  const { paths } = await makeRepo(t);
+  const repo = "https://github.com/laude-institute/headlong";
+  const server = raindropServer({ ...NESTED, raindrops: { [TOOLS_ID]: [bookmark(203, repo, { title: "headlong" })] } });
+  /** @type {string[]} */
+  const asked = [];
+  const siteOf = async (/** @type {string | null} */ url) => (asked.push(String(url)), "https://headlong.ai");
+  const icon = fakeIcon();
+  const preview = fakePreview();
+
+  assert.equal(await run([], { ...deps({ paths, server, icon, preview, out: recorder() }), siteOf }), 0);
+
+  assert.deepEqual(asked, [repo], "one GitHub lookup per tool, not three");
+  assert.equal(icon.calls[0]?.site, "https://headlong.ai");
+  assert.equal(preview.calls[0]?.site, "https://headlong.ai");
 });
 
 test("a preview that will not capture costs the tool nothing: published, icon-only card", async (t) => {

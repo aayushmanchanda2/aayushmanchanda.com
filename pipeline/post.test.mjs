@@ -180,3 +180,96 @@ test("a long post saved with its own paragraph breaks keeps all of them", () => 
   const saved = "Hello there.\n\nSecond para is cut here.\n\nThird.";
   assert.equal(pickText(saved, tweet), saved);
 });
+
+/* --- failure modes (QA A2) ------------------------------------------------ */
+
+const TWEET = { id_str: "1755217559312269550", text: "Hi", created_at: "2026-01-01", user: { name: "A", screen_name: "a" } };
+
+test("a 200 that is not JSON, or JSON with no tweet in it, throws rather than reading as removed", async (t) => {
+  const saved = { author: "A", handle: "a", date: "2026-01-01", text: "Hello." };
+  const url = "https://x.com/a/status/123456";
+  const publicDir = await scratch(t);
+  /** @param {Response} answer @returns {typeof globalThis.fetch} */
+  const answering = (answer) => async () => answer.clone();
+
+  await assert.rejects(postFrom({ url, saved, publicDir, fetch: answering(new Response("<html>rate limited</html>")) }), /not JSON/);
+  await assert.rejects(postFrom({ url, saved, publicDir, fetch: answering(Response.json({})) }), /no tweet/);
+  const gone = await postFrom({ url, saved, publicDir, fetch: answering(Response.json({ __typename: "TweetTombstone" })) });
+  assert.equal(gone?.removed, true, "only a real tombstone is removed");
+});
+
+test("one picture or video that will not fetch costs that item, never the post", async (t) => {
+  const tweet = {
+    ...TWEET,
+    mediaDetails: [
+      { type: "photo", media_url_https: "https://pbs.twimg.com/media/ok.jpg", original_info: { width: 10, height: 10 } },
+      { type: "photo", media_url_https: "https://pbs.twimg.com/media/down.jpg", original_info: { width: 10, height: 10 } },
+      { type: "photo", media_url_https: "https://pbs.twimg.com/media/nosize.jpg" },
+      {
+        type: "video",
+        media_url_https: "https://pbs.twimg.com/media/poster.jpg",
+        original_info: { width: 16, height: 9 },
+        video_info: { variants: [{ content_type: "video/mp4", url: "https://video.twimg.com/v/640x360/a.mp4" }] },
+      },
+    ],
+  };
+  const { fetch: base } = cdn(tweet);
+  /** @type {typeof globalThis.fetch} */
+  const fetch = async (input, init) => {
+    const url = String(input);
+    if (url.includes("media/down")) return new Response("", { status: 503 });
+    if (url.includes(".mp4")) throw new TypeError("fetch failed");
+    return base(input, init);
+  };
+
+  const post = await postFrom({ url: "https://x.com/a/status/1755217559312269550", saved: null, publicDir: await scratch(t), fetch });
+
+  assert.deepEqual(post?.media, [
+    { type: "photo", src: "/posts/1755217559312269550/1.webp", w: 10, h: 10 },
+    { type: "video", poster: "/posts/1755217559312269550/4-poster.webp", w: 16, h: 9 },
+  ]);
+});
+
+test("a video with no content-length is streamed and stopped at the cap", async (t) => {
+  const tweet = await fixture("2081382827548148091");
+  /** @type {typeof globalThis.fetch} */
+  const fetch = async (input, init) => {
+    if (!String(input).includes("video.twimg.com")) return cdn(tweet).fetch(input, init);
+    const chunk = new Uint8Array(1024 * 1024);
+    let sent = 0;
+    const body = new ReadableStream({
+      pull(controller) {
+        if (sent++ > 8) controller.close();
+        else controller.enqueue(chunk);
+      },
+    });
+    return new Response(body);
+  };
+
+  const post = await postFrom({ url: "https://x.com/a/status/2081382827548148091", saved: null, publicDir: await scratch(t), fetch });
+
+  assert.equal(post?.media?.[0]?.src, undefined, "poster only");
+});
+
+test("an id that is not X's numeric one: the post throws, a quote is dropped, a quote's quote is never read", () => {
+  assert.throws(() => readTweet({ ...TWEET, id_str: "../1" }), /not numeric/);
+  assert.equal(readTweet({ ...TWEET, quoted_tweet: { ...TWEET, id_str: "1a" } }).quoted, null);
+  const deep = readTweet({ ...TWEET, quoted_tweet: { ...TWEET, id_str: "2", quoted_tweet: { ...TWEET, id_str: "3" } } });
+  assert.equal(deep.quoted?.id, "2");
+  assert.equal(deep.quoted?.quoted, null);
+});
+
+test("a link entity missing a string field is skipped, not written as undefined", () => {
+  const tweet = readTweet({
+    ...TWEET,
+    text: "see https://t.co/a and https://t.co/b",
+    entities: {
+      urls: [
+        { url: "https://t.co/a", display_url: "a.dev", expanded_url: "https://a.dev" },
+        { url: "https://t.co/b", display_url: null, expanded_url: "https://b.dev" },
+      ],
+    },
+  });
+  assert.deepEqual(tweet.links, [{ text: "a.dev", href: "https://a.dev" }]);
+  assert.equal(tweet.text, "see a.dev and https://t.co/b");
+});
