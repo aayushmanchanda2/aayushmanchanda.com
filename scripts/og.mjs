@@ -118,6 +118,7 @@ const PLATE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-3 -2.4 22 2
     ${A_PATHS}
   </svg>`;
 
+/** @type {[string, number][]} */
 const PLATES = [
   ["apple-touch-icon.png", 180],
   ["icon-192.png", 192],
@@ -284,6 +285,7 @@ async function main() {
     `favicon.ico  ${ICON_SIZE}x${ICON_SIZE}  ${(icon.length / 1024).toFixed(1)}KB`,
   );
 
+  /** @param {string} svg @param {string} name @param {number} size */
   const raster = async (svg, name, size) => {
     const png = await sharp(Buffer.from(svg), { density: 72 * (size / 16) })
       .resize(size, size)
