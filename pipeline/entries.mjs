@@ -75,13 +75,20 @@ export const FAILED_TAG = "failed";
 export const SWEEP_HOLD_TAG = "sweep-hold";
 
 /**
+ * Aayush's triage mark for a save that belongs to Vetted (library triage,
+ * R5-4): a note about where the item goes next, not what it is about, so it
+ * never becomes a public tag.
+ */
+export const VETTED_TAG = "vetted";
+
+/**
  * Tags that are a machine talking to itself, never curation.
  *
  * Compared AFTER slugification, so `Published`, `PUBLISHED` and ` published `
  * are all the same reserved word. Raindrop's tag field is free text a human
  * types on a phone, and case is not a thing they will be careful about.
  */
-export const RESERVED_TAGS = new Set([PUBLISHED_TAG, FAILED_TAG, SWEEP_HOLD_TAG]);
+export const RESERVED_TAGS = new Set([PUBLISHED_TAG, FAILED_TAG, SWEEP_HOLD_TAG, VETTED_TAG]);
 
 /** New tool saves are never a verdict — they are a note to self to look. */
 export const NEW_TOOL_VERDICT = "watching";
