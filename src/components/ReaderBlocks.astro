@@ -61,22 +61,10 @@ const { highlights, excerpt, url, domain } = Astro.props;
 }
 
 <script>
-  // ponytail: one observer per page; the reader renders once per page today.
-  // Every sweeping mark on the page, a post's keyline included (VET-264); a grid's are static.
-  const marks = document.querySelectorAll<HTMLElement>("mark.hl:not([data-static])");
-  if (marks.length > 0 && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    const seen = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (!entry.isIntersecting) continue;
-          entry.target.classList.add("hl--on");
-          seen.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.5 },
-    );
-    for (const mark of marks) seen.observe(mark);
-  }
+  import { reveal } from "../lib/reveal";
+
+  // Every sweeping mark on the page; a grid's are static.
+  reveal("mark.hl:not([data-static])", "hl--on", 0.5);
 </script>
 
 <style>
