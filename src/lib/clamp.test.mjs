@@ -69,7 +69,7 @@ const LISTINGS = [
 
 /**
  * The post grid card's text (`PostText.astro`, since VET-264): seven lines, and
- * only in its `grid` mode. The card's "Read more" and its date go to the entry
+ * only in its `grid` mode. The card's "Read more" goes to the entry
  * page, where `page` mode renders all of it.
  */
 const POST_TEXT = "components/PostText.astro";

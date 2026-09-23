@@ -7,19 +7,21 @@
  * the page is final on first paint and the browser never talks to X.
  *
  * Three modes. `grid` is a tile on `/library/kind/post`: the text is cut at
- * `POST_CARD_MAX` and clamped, the date links to the entry, and "Read more"
- * appears when there is more. `page` is the entry's own page: the whole text.
+ * `POST_CARD_MAX` and clamped. `page` is the entry's own page: the whole text.
  * `quoted` is the nested card inside either.
  *
- * An X Article renders its header only (cover, title, "Read on X"). Its body
- * is not republished; the default slot is where F3's highlights go.
+ * The foot has one pattern (QA phase 2, B8): the date, then on a tile "Read
+ * more" to the entry, then a lone ↗ to the original on X, named for a screen
+ * reader and 40px to a finger. An X Article renders its header only (cover,
+ * title); its body is not republished, and the same ↗ is the way to it. The
+ * default slot is where F3's highlights go.
  *
  * The words themselves are `PostText.astro`: lists, links and the keyline.
  */
 import type { Post } from "../lib/library";
 import { formatDay } from "../lib/date";
 import { hueSlot } from "../lib/tags";
-import { POST_CARD_MAX, clipText, isClipped, monogram, originalUrl } from "../lib/post";
+import { POST_CARD_MAX, clipText, monogram, originalUrl } from "../lib/post";
 import PostMedia from "./PostMedia.astro";
 import PostText from "./PostText.astro";
 import XGlyph from "./XGlyph.astro";
@@ -38,7 +40,6 @@ interface Props {
 const { post, url, mode, href, keyline = null } = Astro.props;
 const grid = mode === "grid";
 const original = originalUrl(post, url);
-const clipped = grid && isClipped(post.text, POST_CARD_MAX);
 const text = grid ? clipText(post.text, POST_CARD_MAX) : post.text;
 const Root = mode === "quoted" ? "div" : "article";
 const initial = monogram(post.author);
@@ -72,7 +73,6 @@ const initial = monogram(post.author);
         )}
         <p class="pc__article-title">{post.article.title}</p>
         <slot />
-        <a class="pc__out ext" href={original} rel="noopener nofollow" target="_blank">Read on X</a>
       </div>
     )
   }
@@ -84,23 +84,13 @@ const initial = monogram(post.author);
   {post.quoted && <Astro.self post={post.quoted} url={originalUrl(post.quoted, original)} mode="quoted" />}
 
   <footer class="pc__foot">
-    {
-      grid && href ? (
-        <a class="pc__date" href={href}><time datetime={post.date}>{formatDay(post.date)}</time></a>
-      ) : (
-        <time class="pc__date" datetime={post.date}>{formatDay(post.date)}</time>
-      )
-    }
-    {clipped && href && <a class="pc__more" href={href}>Read more</a>}
+    <time datetime={post.date}>{formatDay(post.date)}</time>
+    {grid && href && <a class="pc__more" href={href}>Read more</a>}
     {
       post.removed ? (
         <span class="pc__gone">Removed on X</span>
       ) : (
-        !post.article && (
-          <a class="pc__out ext" href={original} rel="noopener nofollow" target="_blank">
-            {mode === "quoted" ? "Open" : "Open original post"}
-          </a>
-        )
+        <a class="pc__out ext" href={original} rel="noopener nofollow" target="_blank" aria-label="Original post on X"></a>
       )
     }
   </footer>
@@ -178,13 +168,14 @@ const initial = monogram(post.author);
     white-space: nowrap;
   }
 
+  /* `flex: none`: a long name squeezed the mark below 14px (B8). */
   .pc__mark {
     display: inline-flex;
+    flex: none;
     margin-left: auto;
     color: var(--text-primary);
   }
 
-  .pc__out,
   .pc__more {
     color: var(--accent);
     text-decoration: none;
@@ -193,9 +184,28 @@ const initial = monogram(post.author);
     transition-timing-function: var(--ease);
   }
 
-  .pc__out:hover,
   .pc__more:hover {
     opacity: 0.75;
+  }
+
+  /* The way out: the ↗ alone (`.ext`), drawn at 16px in secondary ink and
+     given the 40px glyph target by negative margins, so the row keeps its
+     height. Accent on hover, like every link out. */
+  .pc__out {
+    display: inline-grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    margin: -0.75rem -0.75rem -0.75rem auto;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    text-decoration: none;
+  }
+
+  @media (hover: hover) {
+    .pc__out:hover {
+      color: var(--accent);
+    }
   }
 
   /* A tile's media is one 16:10 box whatever it holds, so a four-photo post
@@ -210,7 +220,7 @@ const initial = monogram(post.author);
   }
 
   /* A quoted post on a tile is who and what; the rest is on the entry. */
-  .pc--grid .pc--quoted :is(:global(.pm), .pc__cover, .pc__out, .pc__foot) {
+  .pc--grid .pc--quoted :is(:global(.pm), .pc__cover, .pc__foot) {
     display: none;
   }
 
@@ -245,12 +255,4 @@ const initial = monogram(post.author);
     font-size: 0.875rem;
   }
 
-  .pc__foot .pc__out {
-    margin-left: auto;
-  }
-
-  .pc__date {
-    color: inherit;
-    text-decoration: none;
-  }
 </style>
