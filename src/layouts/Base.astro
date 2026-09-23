@@ -68,16 +68,17 @@ interface Props {
    */
   noindex?: boolean;
   /**
-   * Widen the content column to `--page-wide`, above 900px only.
+   * Run the content edge to edge, with side padding only: the index pages
+   * (/tools, /sites, /library, a library entry's list-detail, and every filter
+   * page under them), the way briOS's list pages fill the viewport under the
+   * bar. Reading pages leave it out and keep the centred `--page-max` column.
    *
-   * The four /library list routes are the callers, and the concession is
-   * theirs: the tags column earns its keep by being a column, and a column
-   * needs the room. It is scoped to `.shell__main` and deliberately not to
-   * `.shell` — widening the shell would take the footer with it, and the
-   * colophon is the same three centred groups on every page of this site
-   * whatever the page above it is doing. `lib/wide.test.mjs` holds that scope.
+   * It lifts `.shell__main`'s cap and sets the shell's side padding to 1rem,
+   * briOS's `px-4`; it never touches the footer, which keeps `--page-max` on
+   * every page because the colophon closes every page the same way.
+   * `lib/wide.test.mjs` holds that scope.
    */
-  wide?: boolean;
+  full?: boolean;
   /**
    * The top bar's trail after home, for a page with no `BreadcrumbList` in
    * its JSON-LD and no nav section of its own (the footer pages). Everything
@@ -91,7 +92,7 @@ const {
   description = "Part entrepreneur, part marketer, part operator. Aayush Manchanda co-founded Orbis, runs Vetted, and uses AI to build things on the internet from Canada. What survives his testing shows up here with a date on it.",
   jsonLd,
   noindex = false,
-  wide = false,
+  full = false,
 } = Astro.props;
 
 /**
@@ -326,8 +327,8 @@ const markdownVariant = variant === null ? null : absolute(variant);
     */}
     <div class={hasPane ? "split" : undefined}>
     <slot name="pane" />
-    <div class="shell" data-mnav-inert>
-      <main class:list={["shell__main", wide && "shell__main--wide"]} id="main">
+    <div class:list={["shell", full && "shell--full"]} data-mnav-inert>
+      <main class:list={["shell__main", full && "shell__main--full"]} id="main">
         <slot />
       </main>
 
@@ -384,17 +385,18 @@ const markdownVariant = variant === null ? null : absolute(variant);
         max-width: var(--page-max);
       }
 
-      /* The one page-width concession on the site, and it stops here.
-         `Footer.astro › .foot` keeps `--page-max` on purpose: the colophon closes every
-         page the same way, and a footer that changed width with the content
-         above it would read as two different sites. Above 900px only, because
-         below it the shell's own padding already keeps the column under 42rem
-         and the row this width exists for is not a three-column row yet
-         (`LibraryList.astro`). */
-      @media (min-width: 900px) {
-        .shell__main--wide {
-          max-width: var(--page-wide);
-        }
+      /* The index pages run edge to edge. The shell's side padding drops to
+         briOS's 16px and the column loses its cap; `--page-pad` is redeclared
+         here, on this shell only, so a table that bleeds to the viewport edge
+         (`ToolList.astro`) pads its outer cells by the same amount the title
+         above it sits in. `Footer.astro › .foot` keeps `--page-max`: the
+         colophon is the same width under every page. */
+      .shell--full {
+        --page-pad: 1rem;
+      }
+
+      .shell__main--full {
+        max-width: none;
       }
     </style>
   </body>

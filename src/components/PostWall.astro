@@ -35,12 +35,10 @@
  * `column-width` is a minimum, not a count: the browser fits as many columns of
  * at least that width as it can. So `24rem` is the statement "a card narrower
  * than 384px is not worth a second column", and everything else falls out of
- * it. On this page — /library is the one route that takes `wide`, so the
- * content column caps at `--page-wide`, 832px — that resolves to exactly two
- * columns of 404px on a large screen, one column below about 1112px of
- * viewport, and one column of 287px on a 375px phone. Three columns are
- * arithmetically unreachable at 832px, which is the point: 260px is too narrow
- * for a paragraph.
+ * it. This page is full width (Base's `full`, 16px side padding), so it
+ * resolves to three columns of 400px at 1280, two of 484px at 1024 and one
+ * of 358px on a 390px phone. Nothing narrower than 384px is ever a column,
+ * which is the point: 260px is too narrow for a paragraph.
  *
  * The single-column case is why the card carries a measure. A lone column is
  * whatever the page is wide, and a 704px card is a line of text nobody wants to

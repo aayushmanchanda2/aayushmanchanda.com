@@ -27,7 +27,7 @@ const mnav = read("components/MobileNav.astro");
 
 test("the background surfaces carry the inert marker", () => {
   assert.ok(
-    /<div class="shell" data-mnav-inert>/.test(base),
+    /<div class:list={\["shell"[^>]*data-mnav-inert>/.test(base),
     "the shell no longer carries data-mnav-inert — an open MENU panel would leave every link on the page reachable by Tab (design.md §3)",
   );
   assert.ok(

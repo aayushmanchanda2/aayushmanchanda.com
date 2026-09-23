@@ -2,7 +2,7 @@
 /**
  * MobileNav — the section nav, at every width.
  *
- * A "Menu" button at the left of the top bar; pressing it slides a
+ * A four-dot menu button at the left of the top bar; pressing it slides a
  * full-height electric-blue panel in from the left, white items in Geist Mono,
  * entering on a ~70ms stagger. Every transition is a CSS transition (never a
  * keyframe animation) so an interrupted open/close reverses from wherever it
@@ -29,14 +29,29 @@ const current = normalize(pathname);
 ---
 
 <div class="mnav" data-mnav>
+  {/*
+    Four 4px squares in a 2x2 grid, 3px apart, swapping to an X while the
+    panel is open. The label carries the verb because the glyph has no word.
+  */}
   <button
     type="button"
-    class="mnav__trigger mono press"
+    class="mnav__trigger press"
     data-mnav-toggle
     aria-expanded="false"
     aria-controls="mobile-nav-panel"
+    aria-label="Open menu"
   >
-    Menu
+    <svg class="mnav__dots" viewBox="0 0 11 11" aria-hidden="true" focusable="false">
+      <path d="M0 0h4v4H0zM7 0h4v4H7zM0 7h4v4H0zM7 7h4v4H7z" fill="currentColor"></path>
+    </svg>
+    <svg class="mnav__x" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+      <path
+        d="M5 5 L15 15 M15 5 L5 15"
+        stroke="currentColor"
+        stroke-width="1.75"
+        stroke-linecap="round"
+        fill="none"></path>
+    </svg>
   </button>
 
   <div class="mnav__scrim" data-mnav-scrim hidden></div>
@@ -120,33 +135,46 @@ const current = normalize(pathname);
 
   /* The first thing in the top bar (`layouts/Base.astro`), at every width:
      with the dash rail gone (VET-225), this panel is the section nav on
-     desktop too. 40px tall, like the crumbs beside it. */
+     desktop too. A 40px square, 44px under a finger. */
   .mnav__trigger {
-    display: block;
-    padding: 0.625rem 0.5rem;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: var(--r-md);
     color: var(--text-secondary);
     cursor: pointer;
-    /* a tap must open the menu, not select the word "Menu" */
-    user-select: none;
-    -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent;
-    transition-property: color;
+    transition-property: color, background-color;
     transition-duration: var(--dur-fast);
     transition-timing-function: var(--ease);
   }
 
+  @media (pointer: coarse) {
+    .mnav__trigger {
+      width: 44px;
+      height: 44px;
+    }
+  }
+
+  .mnav__dots { width: 11px; height: 11px; shape-rendering: crispEdges; }
+  .mnav__x { display: none; width: 20px; height: 20px; }
+  .mnav__trigger[aria-expanded="true"] .mnav__dots { display: none; }
+  .mnav__trigger[aria-expanded="true"] .mnav__x { display: block; }
+
   /* The hover half is gated: closing the panel puts this control back on
-     screen, and on touch the tap that opened it latches `:hover` — the label
-     would sit accent-blue after the panel had gone, reading as stuck
-     (design.md §4). The expanded state is real state and stays ungated. */
+     screen, and on touch the tap that opened it latches `:hover` — the button
+     would sit tinted after the panel had gone, reading as stuck (design.md
+     §4). The expanded state is real state and stays ungated. */
   @media (hover: hover) {
     .mnav__trigger:hover {
-      color: var(--accent);
+      background: var(--surface-3);
+      color: var(--text-primary);
     }
   }
 
   .mnav__trigger[aria-expanded="true"] {
-    color: var(--accent);
+    color: var(--text-primary);
   }
 
   /* --- scrim ------------------------------------------------------------- */
@@ -389,6 +417,7 @@ const current = normalize(pathname);
       open = next;
 
       toggle.setAttribute("aria-expanded", String(next));
+      toggle.setAttribute("aria-label", next ? "Close menu" : "Open menu");
       document.documentElement.style.overflow = next ? "hidden" : "";
 
       /**
