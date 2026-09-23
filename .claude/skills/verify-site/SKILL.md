@@ -49,7 +49,7 @@ Per route x size x theme it:
 - **Screenshot:** `<route>-<width>-<theme>.png`, viewport only unless `--full`; CSS animations disabled.
 - **`--click`:** one real user click on the first match after load (e.g. `[data-tools-view-set="grid"]`), before styles and screenshot.
 - **`--styles`:** comma list (commas inside `:is(...)` are safe); for the first 3 matches of each: `color, font-size, font-weight, letter-spacing, line-height` plus a text snippet.
-- **Network:** `thirdPartyHosts` = every request host not equal to `--base`'s host (e.g. `/tools` shows none since VET-226 self-hosted the icons; X embed pages show `platform.twitter.com` etc.). Uncaught page errors land in `pageErrors`.
+- **Network:** `thirdPartyHosts` = every request host not equal to `--base`'s host (e.g. `/tools` shows only `img.logo.dev` since VET-254 loads logos live; X embed pages show `platform.twitter.com` etc.). Uncaught page errors land in `pageErrors`.
 - **`--hover`/`--expect`:** desktop widths only (>=768). Hovers the first `--hover` match, waits `--wait` ms, reports `visibleBefore`/`visibleAfter` of the first `--expect` match. Visibility is `checkVisibility({checkOpacity, checkVisibilityCSS})` + non-zero box, so opacity-0 fades count as hidden (Playwright's `isVisible` alone does not). A `--hover` target missing on a route is a failure: pass only routes that have it. Tip: `--expect '<trigger>:hover <revealed>'` scopes the reveal to the hovered element.
 
 Exit code 0 = no failures; 1 = any non-200, theme mismatch, thrown error, or failed hover; 2 = bad args. Stable handles live in `features/`; read the matching file before driving a feature.

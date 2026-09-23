@@ -50,10 +50,11 @@ const jsonLd = toolJsonLd(tool);
 /** The Source line: the product's site first, then the repository, each named by what it is. */
 const repoLabel = tool.repo_moved ? "GitHub (moved)" : "GitHub";
 
-/* Only the icon, never the initial. The initial is how a /tools row tells
-   twenty tools apart; here the name is already set at 3rem directly above it, so a
-   letter in a box would be furniture repeating what the masthead just said. */
-const hasIcon = markFor(tool).kind === "logo";
+/* Only a picture, never the initial (`letter={false}`). The initial is how a
+   /tools row tells twenty tools apart; here the name is already set at 3rem
+   directly above it, so a letter in a box would repeat what the masthead said. */
+const mark = markFor(tool);
+const hasIcon = mark.logo !== null || mark.icon !== null;
 ---
 
 <Base
@@ -106,7 +107,7 @@ const hasIcon = markFor(tool).kind === "logo";
     (tool.url || tool.repo) && (
       <p class="source">
         <span class="source__label mono">Source</span>
-        {hasIcon && <AppIcon tool={tool} size={16} class="source__favicon" />}
+        {hasIcon && <AppIcon tool={tool} size={16} letter={false} class="source__favicon" />}
         {tool.url && (
           <span class="source__link">
             <EntryLink class="ext" href={tool.url}>Website</EntryLink>

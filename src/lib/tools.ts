@@ -16,7 +16,7 @@
  * every error message, written for the person who has to fix the file.
  */
 
-import { githubRepo } from "./links";
+import { githubRepo, readLogoDomain } from "./links";
 import type { Fail } from "./parse";
 import { SLUG, readers, routeSlug } from "./parse";
 
@@ -48,28 +48,20 @@ export interface Tool {
   repo: string | null;
   /** The repository was moved or archived after the verdict: labelled so on the page. */
   repo_moved: boolean;
+  /** logo.dev's domain when `url`'s host is the wrong brand; null for none (`links.ts › logoDomain`). */
+  logoDomain?: string | null;
   category: string;
   verdict: Verdict;
   /** One line, in Aayush's voice. Rendered as-is; never editorialised. */
   note: string;
-  /**
-   * What the tool is, in a sentence, for the /tools table. Not parsed yet: the
-   * field lands with its drafted copy (briOS T2), and until then every row
-   * falls back to `note`.
-   */
+  /** What the tool is, in a sentence. Not parsed yet (briOS T2): rows fall back to `note`. */
   description?: string;
   /** ISO calendar date (YYYY-MM-DD) the verdict was last true. */
   status_date: string;
 
-  /* --- the voice fields ----------------------------------------------------
-     Four optional sentences that say more than a verdict can. All four are null
-     on most entries and that is the intended state: a tool earns one of these
-     when there is a real opinion to record, and the details page renders
-     nothing at all for the ones that are null. There is no fallback text,
-     because a stand-in sentence would be the site putting words in his mouth.
-
-     Written by hand only. `pipeline/entries.mjs` does not author any of them —
-     it can tell you a bookmark exists, not what he thought of it. */
+  /* --- the voice fields: four optional sentences, null on most entries, written
+     by hand only. A null renders nothing; a stand-in sentence would be the site
+     putting words in his mouth, and the pipeline cannot know what he thought. */
 
   /** What is good about it. */
   like: string | null;
@@ -81,10 +73,7 @@ export interface Tool {
   try: string | null;
 }
 
-/**
- * `type`, not `interface`: these are route props, and only a type alias gets
- * the implicit index signature `GetStaticPaths` asks for.
- */
+/** `type`, not `interface`: route props need the implicit index signature `GetStaticPaths` asks for. */
 export type ToolGroup = {
   category: string;
   slug: string;
@@ -227,6 +216,7 @@ export function parseTools(value: unknown): Tool[] {
       url: readUrl(item, where),
       repo: readRepo(item, where),
       repo_moved: item["repo_moved"] === true,
+      ...readLogoDomain(item, (problem) => fail(where, problem)),
       category: category === INBOX ? "new" : category,
       verdict,
       note: readString(item, "note", where),

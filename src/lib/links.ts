@@ -134,40 +134,86 @@ export function repoOwner(url: string): string {
    --------------------------------------------------------------------------- */
 
 /**
- * What to draw in the squircle: the tool's own icon, or a letter.
+ * What to draw in the squircle, three layers deep: the logo.dev logo, the
+ * site's own icon if that fails to load, the letter if both do.
  *
- * `letter` is allowed to be `""` — a name with no letter or digit anywhere in
- * it has no initial to show — and `AppIcon.astro` renders the same empty tile
- * rather than branching a third time.
+ * `letter` is allowed to be `""`: a name with no letter or digit anywhere in
+ * it has no initial to show, and `AppIcon.astro` renders the same empty tile.
  */
-export type Mark =
-  | { kind: "logo"; src: string }
-  | { kind: "initial"; letter: string };
+export interface Mark {
+  /** `img.logo.dev/<domain>`, or null when there is no domain worth asking about. */
+  logo: string | null;
+  /** `/icons/<slug>.webp` when the pipeline kept the site's own icon, else null. */
+  icon: string | null;
+  letter: string;
+}
 
 /** The first character worth printing, capitalised by `AppIcon.astro` at render time. */
 const FIRST_GLYPH = /[\p{L}\p{N}]/u;
 
-/**
- * The mark for one entry: `public/icons/<slug>.webp` when the pipeline fetched
- * one (`pipeline/icon.mjs`), the initial when it did not.
- *
- * The check is a file on disk at build time, so a page never makes a request
- * to anyone but this domain for a mark. That is the claim /privacy makes, and
- * an image host added here means editing that page in the same commit.
- *
- * **There is deliberately no GitHub avatar anywhere in this path.** A
- * repository-only row could show `github.com/{owner}.png`; most owners here are
- * individuals, whose avatar is a stranger's face or a generated identicon,
- * which is not identity. `pipeline/icon.mjs` refuses GitHub image hosts for the
- * same reason, so a repo-only tool has an icon only when its repository names a
- * homepage of its own.
- */
-export function markFor(entry: { slug: string; name: string }): Mark {
-  const src = assetFor("icons", entry.slug);
-  if (src !== null) return { kind: "logo", src };
+/** The publishable half of the logo.dev key pair; it is meant to be public. */
+const LOGO_DEV_TOKEN = "pk_YsFOVGNeRx6b1C0u0e0yTw";
 
-  const letter = [...entry.name].find((glyph) => FIRST_GLYPH.test(glyph)) ?? "";
-  return { kind: "initial", letter };
+/** Hosts logo.dev knows only as GitHub: it would draw the octocat for every one. */
+const GITHUB_HOST = /(^|\.)github\.(com|io)$/i;
+
+/**
+ * The domain logo.dev is asked about: `logoDomain` when the entry sets one
+ * (null turns logo.dev off for it), else the host of its own site. A GitHub
+ * host is never asked about.
+ */
+export function logoDomain(entry: { url?: string | null; logoDomain?: string | null }): string | null {
+  if (entry.logoDomain !== undefined) return entry.logoDomain;
+  if (!entry.url) return null;
+  const host = new URL(entry.url).hostname.replace(/^www\./, "");
+  return GITHUB_HOST.test(host) ? null : host;
+}
+
+/**
+ * `logoDomain` off a raw tools.json or sites.json entry, for its parser:
+ * absent, null, or a bare hostname. Anything else is a build error.
+ */
+export function readLogoDomain(
+  entry: Record<string, unknown>,
+  fail: (problem: string) => never,
+): { logoDomain?: string | null } {
+  const value = entry["logoDomain"];
+  if (value === undefined) return {};
+  if (value !== null && (typeof value !== "string" || !/^[a-z0-9-]+(\.[a-z0-9-]+)+$/.test(value))) {
+    fail(`needs "logoDomain" to be a bare hostname or null (got ${JSON.stringify(value)})`);
+  }
+  return { logoDomain: value };
+}
+
+/**
+ * The mark for one entry (VET-254).
+ *
+ * **The logo is a live request to img.logo.dev**, the one third-party host on
+ * /tools and /sites, which /privacy names. Their free plan does not license
+ * storing their logos, so the page asks them per view: 64px at 2x, and
+ * `fallback=404` so an unknown domain errors instead of getting a generated
+ * monogram. On that error `AppIcon.astro` swaps to `icon`, which only ever
+ * holds the site's own touch or manifest icon (`pipeline/icon.mjs`).
+ *
+ * **There is deliberately no GitHub avatar anywhere in this path.** Most
+ * owners here are individuals, whose avatar is a stranger's face, which is not
+ * identity. A repository-only row has a logo only when its `url` names a site.
+ */
+export function markFor(entry: {
+  slug: string;
+  name: string;
+  url?: string | null;
+  logoDomain?: string | null;
+}): Mark {
+  const domain = logoDomain(entry);
+  return {
+    logo:
+      domain === null
+        ? null
+        : `https://img.logo.dev/${encodeURIComponent(domain)}?token=${LOGO_DEV_TOKEN}&size=64&retina=true&fallback=404`,
+    icon: assetFor("icons", entry.slug),
+    letter: [...entry.name].find((glyph) => FIRST_GLYPH.test(glyph)) ?? "",
+  };
 }
 
 /**

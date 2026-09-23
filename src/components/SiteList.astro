@@ -29,7 +29,7 @@ const { groups } = Astro.props;
         {...previewAttributes({ image: primary.shot, name: primary.title, domain: primary.domain, note: primary.like })}
       >
         <span class="row__name">
-          <AppIcon tool={{ slug: primary.slug, name: primary.title }} size={32} />
+          <AppIcon tool={{ slug: primary.slug, name: primary.title, url: primary.url, logoDomain: primary.logoDomain }} size={32} />
           <span class="row__text">
             <a
               class="row__link"

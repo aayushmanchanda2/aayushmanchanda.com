@@ -11,7 +11,7 @@ import test from "node:test";
 
 import sharp from "sharp";
 
-import { ICON_SIZE, REJECTED, fetchIcon, siteOf } from "./icon.mjs";
+import { ICON_SIZE, fetchIcon, siteOf } from "./icon.mjs";
 
 /** @param {string} text */
 const b64 = (text) => Buffer.from(text).toString("base64");
@@ -55,7 +55,7 @@ test("the declared apple-touch-icon wins, stored as a 256px WebP", async () => {
   assert.deepEqual([meta.format, meta.width, meta.height], ["webp", ICON_SIZE, ICON_SIZE]);
 });
 
-test("the manifest's largest icon is next, then logo.dev with fallback=404", async () => {
+test("the manifest's largest icon is next", async () => {
   const icons = await dir();
   const { fetch, asked } = server({
     "https://eve.dev/big.png": await png(512),
@@ -78,8 +78,7 @@ test("a favicon too small for the 60px mark is passed over, and nothing usable m
   });
 
   assert.equal(await fetchIcon({ slug: "eve", url: "https://eve.dev/", dir: icons, fetch }), null);
-  const logoDev = asked.find((url) => url.startsWith("https://img.logo.dev/eve.dev?"));
-  assert.ok(logoDev?.includes("fallback=404"), "logo.dev is asked last, and asked not to invent a monogram");
+  assert.ok(!asked.some((url) => url.includes("logo.dev")), "logo.dev is never copied: the page asks it live");
 });
 
 test("a repo-only tool uses the repo's homepage, and never a GitHub avatar", async () => {
@@ -145,13 +144,4 @@ test("an icon on disk is kept without a request, unless forced", async () => {
 
   await fetchIcon({ slug: "eve", url: "https://eve.dev/", dir: icons, fetch, force: true });
   assert.notEqual(await readFile(path.join(icons, "eve.webp"), "utf8"), "already here");
-});
-
-test("a rejected icon stays rejected, even under --force", async () => {
-  const [slug] = REJECTED;
-  assert.ok(slug, "the list has an entry to test with");
-  const { fetch, asked } = server({});
-
-  assert.equal(await fetchIcon({ slug, url: "https://eve.dev/", dir: await dir(), fetch, force: true }), null);
-  assert.deepEqual(asked, []);
 });
