@@ -11,6 +11,7 @@
 - `tools-filter-category` /tools/category/<slug>: table without the Category column.
 - `tools-filter-verdict` /tools/verdict/<verdict>: table without the Verdict column.
 - `tools-marks` `.app-icon`: an `<img src="/icons/<slug>.webp">`, or `.app-icon__letter` where there is none.
+- `tools-preview` rows and tiles carry `data-preview` (`/previews/<slug>.webp`, empty for the icon-only card) and `data-preview-name|domain|description|note`. The shared card is `.preview-card`, built on first hover; open is `[data-open]`, icon-only is `[data-no-image]`, flipped is `[data-side="top"]`.
 
 ## How to get to it (user POV)
 
@@ -29,6 +30,7 @@ Preconditions:
 - **Grid via the button.** `... --routes /tools --label tools-grid --click '[data-tools-view-set="grid"]'`. Pressed button text is `Grid`; screenshots show 60px squircles, four across at 390.
 - **Filter pages.** `... --routes /tools/category/agent-infra,/tools/verdict/using --label tools-filters --styles '.page-title'`. Both `200`.
 - **Sort, filter round-trip, row click, Back.** `shoot.mjs` has no select or back step; `qa/evidence/2026-09-22-vet-227/interactions.mjs` is the scripted check (run from the repo root with the base URL as its argument) and writes `interactions.json`.
+- **Hover preview.** `... --routes /tools --label tools-preview --sizes 1280x800 --hover 'tbody tr[data-preview]' --expect '.preview-card[data-open]' --wait 400` (expect visible); the same with `--wait 150` reports `visibleAfter: false`, which is the 300ms delay, not a bug. Grid tiles: add `--click '[data-tools-view-set="grid"]'` and hover `.tile[data-preview]`. Flip, cursor tracking, close delay, keyboard focus + Escape and the touch gate have no `shoot.mjs` step: `qa/evidence/2026-09-22-vet-228/interactions.mjs` (run from the repo root against :4329) writes `interactions.json`.
 - **Third-party hosts.** Every run records `thirdPartyHosts`; icons are self-hosted, so /tools and its filters show none.
 
 ## Gotchas

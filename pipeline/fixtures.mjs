@@ -294,6 +294,30 @@ export function fakeIcon({ fail } = {}) {
   return { calls, fetchIcon };
 }
 
+/**
+ * A stand-in for `preview.mjs › capturePreview`, the same shape as `fakeIcon`.
+ *
+ * @param {object} [options]
+ * @param {string} [options.fail]
+ */
+export function fakePreview({ fail } = {}) {
+  /** @type {{ slug: string, url: string | null, dir: string }[]} */
+  const calls = [];
+
+  /** @type {typeof import("./preview.mjs").capturePreview} */
+  async function capturePreview({ slug, url, dir }) {
+    calls.push({ slug, url, dir });
+    if (fail !== undefined) throw new Error(fail);
+
+    await mkdir(dir, { recursive: true });
+    const file = path.join(dir, `${slug}.webp`);
+    await writeFile(file, `preview:${slug}`);
+    return file;
+  }
+
+  return { calls, capturePreview };
+}
+
 /* ---------------------------------------------------------------------------
    Firecrawl, in a literal
    --------------------------------------------------------------------------- */
@@ -465,6 +489,7 @@ export function fakeFirecrawlShot({ palette = FIRECRAWL_PALETTE } = {}) {
  * @param {ReturnType<typeof fakeFirecrawlShot>} [wiring.fallback] The second-chance shot.
  * @param {ReturnType<typeof fakeThumb>} [wiring.thumb] The video poster frame.
  * @param {ReturnType<typeof fakeIcon>} [wiring.icon] A new tool's app icon.
+ * @param {ReturnType<typeof fakePreview>} [wiring.preview] A new tool's hover preview.
  * @param {ReturnType<typeof fakeFirecrawl>["client"]} [wiring.firecrawl]
  * @param {ReturnType<typeof recorder>} wiring.out
  */
@@ -475,6 +500,7 @@ export function deps({
   fallback = fakeFirecrawlShot(),
   thumb = fakeThumb(),
   icon = fakeIcon(),
+  preview = fakePreview(),
   firecrawl,
   out,
 }) {
@@ -485,6 +511,7 @@ export function deps({
     captureThumb: thumb.captureThumb,
     captureMedia: thumb.captureMedia,
     fetchIcon: icon.fetchIcon,
+    capturePreview: preview.capturePreview,
     makeFirecrawl: firecrawl === undefined ? firecrawlFrom : () => firecrawl,
     env: { RAINDROP_TOKEN: "test-token" },
     now: () => new Date("2026-08-26T10:00:00.000Z"),

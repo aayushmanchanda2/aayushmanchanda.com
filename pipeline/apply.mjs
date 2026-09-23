@@ -27,11 +27,12 @@
  * enrichments have no files and slot in at step 3, where `readingFor` gathers
  * them.
  *
- * A new tool fetches its app icon after step 4 (`pipeline/icon.mjs`). The icon
- * is optional, since the site draws the tool's initial without one, so it goes
- * last on purpose: a crash before it leaves a tool that draws its letter,
- * never an icon nothing names, and a failed fetch is a log line, not a failed
- * item.
+ * A new tool fetches its app icon after step 4 (`pipeline/icon.mjs`), then its
+ * hover preview (`pipeline/preview.mjs`). Both are optional, since the site
+ * draws the tool's initial without an icon and an icon-only card without a
+ * preview, so they go last on purpose: a crash before them leaves a tool that
+ * draws its letter, never a file nothing names, and a failed fetch is a log
+ * line, not a failed item.
  *
  * Steps 3 and 4 each land through a write-then-rename, so neither file is ever
  * half-written even if the process dies mid-call.
@@ -107,6 +108,9 @@ import { describe, isRecord } from "./util.mjs";
  * @property {(input: { slug: string, url: string, dir: string }) => Promise<string | null>} fetchIcon
  *   A new tool's app icon into `dir`, or null for the letter. Always bound,
  *   never null, for the same reason as the two above.
+ * @property {(input: { slug: string, url: string, dir: string }) => Promise<string | null>} capturePreview
+ *   A new tool's 1200x630 hover preview into `dir`, or null for the icon-only
+ *   card. Always bound, like the icon.
  */
 
 /**
@@ -476,6 +480,11 @@ async function captureAndPublish(bookmark, attempts, ctx) {
       await ctx.fetchIcon({ slug, url: bookmark.url, dir: ctx.paths.iconsDir });
     } catch (error) {
       ctx.log(`icon: ${slug} — ${describe(error)}, letter`);
+    }
+    try {
+      await ctx.capturePreview({ slug, url: bookmark.url, dir: ctx.paths.previewsDir });
+    } catch (error) {
+      ctx.log(`preview: ${slug} — ${describe(error)}, icon only`);
     }
   }
   await tagQuietly(bookmark, PUBLISHED_TAG, ctx);

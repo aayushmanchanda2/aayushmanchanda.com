@@ -1,0 +1,11 @@
+preview: linear <- https://linear.app (14KB)
+published tools/linear — https://linear.app
+published=1 failed=0 skipped=0 pending=0
+{
+  code: 0,
+  file: 'linear.webp',
+  format: 'webp',
+  width: 800,
+  height: 420,
+  bytes: 13650
+}

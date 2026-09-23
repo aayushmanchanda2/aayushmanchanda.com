@@ -1,0 +1,129 @@
+---
+/**
+ * PreviewCard — the styles and the script for `lib/preview-card.ts`'s one
+ * shared hover card. Renders no markup: the card node is built by the script
+ * on first use. A list that carries `data-preview` triggers renders this once;
+ * Astro ships its script and styles once per page however many lists do.
+ */
+---
+
+<style is:global>
+  /* 400px, a 40:21 picture cropped from the top, briOS's rounded-lg border
+     and shadow-lg. Fixed, so it never moves the page under it. */
+  .preview-card {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 50;
+    width: min(400px, calc(100vw - 40px));
+    overflow: hidden;
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--r-md);
+    background: var(--bg);
+    box-shadow:
+      0 10px 15px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1);
+    pointer-events: none;
+    visibility: hidden;
+    opacity: 0;
+    transform: scale(0.96) translateY(-4px);
+    /* Leaves faster than it arrives. */
+    transition-property: opacity, transform, visibility;
+    transition-duration: 100ms;
+    transition-timing-function: var(--ease-out);
+  }
+
+  .preview-card[data-side="top"] {
+    transform: scale(0.96) translateY(4px);
+  }
+
+  .preview-card[data-open] {
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+    transition-duration: 150ms;
+  }
+
+  .preview-card__image {
+    aspect-ratio: 40 / 21;
+    border-bottom: 1px solid var(--hairline);
+    background: var(--surface-3);
+  }
+
+  .preview-card__image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+
+  .preview-card[data-no-image] .preview-card__image {
+    display: none;
+  }
+
+  .preview-card__foot {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    --icon-size: 40px;
+  }
+
+  .preview-card__icon:empty {
+    display: none;
+  }
+
+  .preview-card__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+
+  .preview-card__domain {
+    color: var(--text-tertiary);
+    font-size: 0.875rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .preview-card__name {
+    color: var(--text-primary);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    line-height: 1.35;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .preview-card__line {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    line-height: 1.45;
+  }
+
+  .preview-card__line[hidden] {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .preview-card,
+    .preview-card[data-side="top"] {
+      transform: none;
+      transition-property: visibility;
+    }
+  }
+</style>
+
+<script>
+  import { initPreviewCard } from "../lib/preview-card";
+
+  initPreviewCard();
+</script>

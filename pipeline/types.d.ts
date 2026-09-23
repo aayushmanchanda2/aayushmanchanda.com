@@ -183,6 +183,7 @@ export interface Paths {
   libraryJson: string;
   shotsDir: string;
   iconsDir: string;
+  previewsDir: string;
   tmpDir: string;
 }
 
