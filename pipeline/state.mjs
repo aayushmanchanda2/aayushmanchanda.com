@@ -66,6 +66,7 @@ export function resolvePaths(root) {
     shotsDir: path.join(root, "public", "shots"),
     iconsDir: path.join(root, "public", "icons"),
     previewsDir: path.join(root, "public", "previews"),
+    postsDir: path.join(root, "public", "posts"),
     tmpDir: path.join(root, "pipeline", "tmp"),
   };
 }

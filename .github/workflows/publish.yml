@@ -145,7 +145,7 @@ jobs:
         env:
           SUMMARY: ${{ steps.summary.outputs.line }}
         run: |
-          paths=(src/data public/shots public/icons public/previews pipeline/state.json)
+          paths=(src/data public/shots public/icons public/previews public/posts pipeline/state.json)
           if [ -z "$(git status --porcelain -- "${paths[@]}")" ]; then
             echo "nothing left over — the pipeline committed its own work"
             exit 0

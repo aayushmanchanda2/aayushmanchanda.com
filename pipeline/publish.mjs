@@ -179,16 +179,18 @@ export function plan({ bookmarks, state, gallery }) {
    git
    --------------------------------------------------------------------------- */
 
-/** Paths the pipeline may commit. Nothing else is ever staged. */
-const COMMITTED = [
-  "src/data/sites.json",
-  "src/data/tools.json",
-  "src/data/library.json",
-  "public/shots",
-  "public/icons",
-  "public/previews",
-  "pipeline/state.json",
-];
+/**
+ * Paths the pipeline may commit, and nothing else is ever staged: every place
+ * `resolvePaths` names except the repo root and the scratch directory. Derived,
+ * so a new output directory is committed the day it is added (`public/posts`
+ * was not, and CI dropped every post's media).
+ *
+ * @param {Paths} paths @returns {string[]} Repo-relative, `/`-separated.
+ */
+export function committedPaths(paths) {
+  const { root, tmpDir: _scratch, ...outputs } = paths;
+  return Object.values(outputs).map((file) => path.relative(root, file).split(path.sep).join("/"));
+}
 
 /**
  * One commit per run, and none when nothing moved. Pushing is CI's job.
@@ -203,7 +205,7 @@ async function gitCommit({ paths, summary, log }) {
       stdio: ["ignore", "pipe", "pipe"],
     });
 
-  git(["add", "--", ...COMMITTED]);
+  git(["add", "--", ...committedPaths(paths)]);
 
   const staged = git(["diff", "--cached", "--name-only"]).trim();
   if (staged === "") {
@@ -348,7 +350,7 @@ export async function run(argv = [], overrides = {}) {
       // Raindrop through, and nothing in `apply.mjs` learns there is a CDN.
       captureThumb: (input) => deps.captureThumb({ ...input, fetch: deps.fetch }),
       readPost: (input) =>
-        deps.postFrom({ ...input, publicDir: path.join(paths.root, "public"), fetch: deps.fetch }),
+        deps.postFrom({ ...input, publicDir: path.dirname(paths.postsDir), fetch: deps.fetch }),
       fetchIcon: (input) => deps.fetchIcon({ ...input, fetch: deps.fetch, log }),
       capturePreview: (input) => deps.capturePreview({ ...input, log }),
       siteOf: (repo) => deps.siteOf(repo, deps.fetch),
