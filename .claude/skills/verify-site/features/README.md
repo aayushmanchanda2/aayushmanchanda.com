@@ -30,7 +30,7 @@ Each feature file starts with an H1 and one paragraph of user-visible behavior, 
 
 ## Features
 
-- [Tools index](./tools-index.md) covers /tools, the list/grid toggle, and the category and verdict filter routes.
+- [Tools index](./tools-index.md) covers /tools (sortable table, URL filters, list/grid toggle) and the category and verdict filter routes.
 - [Tool detail](./tool-detail.md) covers /tools/<slug> and its verdict/category chips.
 - [Library](./library.md) covers /library, kind tabs, domain/tag filters, entry detail, and X embeds.
 - [Notes](./notes.md) covers /notes and /notes/<slug>.

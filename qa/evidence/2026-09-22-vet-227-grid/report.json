@@ -1,0 +1,425 @@
+{
+  "base": "http://localhost:4329/",
+  "label": "vet-227-grid",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-22-vet-227-grid",
+  "at": "2026-09-23T02:52:31.410Z",
+  "shots": [
+    {
+      "route": "/tools",
+      "url": "http://localhost:4329/tools",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "tools-390-light.png",
+      "status": 200,
+      "clicked": "[data-tools-view-set=\"grid\"]",
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".tile__name": [
+          {
+            "text": "Paperclip",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "16.9px"
+          },
+          {
+            "text": "Hermes",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "16.9px"
+          },
+          {
+            "text": "Headlong",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "16.9px"
+          }
+        ],
+        "[data-tools-view-set][aria-pressed=\"true\"]": [
+          {
+            "text": "Grid",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools?verdict=using",
+      "url": "http://localhost:4329/tools?verdict=using",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "tools_verdict_using-390-light.png",
+      "status": 200,
+      "clicked": "[data-tools-view-set=\"grid\"]",
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".tile__name": [
+          {
+            "text": "Paperclip",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "16.9px"
+          },
+          {
+            "text": "Hermes",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "16.9px"
+          },
+          {
+            "text": "Headlong",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "16.9px"
+          }
+        ],
+        "[data-tools-view-set][aria-pressed=\"true\"]": [
+          {
+            "text": "Grid",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4329/tools",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "tools-1280-light.png",
+      "status": 200,
+      "clicked": "[data-tools-view-set=\"grid\"]",
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".tile__name": [
+          {
+            "text": "Paperclip",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "16.9px"
+          },
+          {
+            "text": "Hermes",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "16.9px"
+          },
+          {
+            "text": "Headlong",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "16.9px"
+          }
+        ],
+        "[data-tools-view-set][aria-pressed=\"true\"]": [
+          {
+            "text": "Grid",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools?verdict=using",
+      "url": "http://localhost:4329/tools?verdict=using",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "tools_verdict_using-1280-light.png",
+      "status": 200,
+      "clicked": "[data-tools-view-set=\"grid\"]",
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".tile__name": [
+          {
+            "text": "Paperclip",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "16.9px"
+          },
+          {
+            "text": "Hermes",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "16.9px"
+          },
+          {
+            "text": "Headlong",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "16.9px"
+          }
+        ],
+        "[data-tools-view-set][aria-pressed=\"true\"]": [
+          {
+            "text": "Grid",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4329/tools",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "tools-390-dark.png",
+      "status": 200,
+      "clicked": "[data-tools-view-set=\"grid\"]",
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".tile__name": [
+          {
+            "text": "Paperclip",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "16.9px"
+          },
+          {
+            "text": "Hermes",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "16.9px"
+          },
+          {
+            "text": "Headlong",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "16.9px"
+          }
+        ],
+        "[data-tools-view-set][aria-pressed=\"true\"]": [
+          {
+            "text": "Grid",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools?verdict=using",
+      "url": "http://localhost:4329/tools?verdict=using",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "tools_verdict_using-390-dark.png",
+      "status": 200,
+      "clicked": "[data-tools-view-set=\"grid\"]",
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".tile__name": [
+          {
+            "text": "Paperclip",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "16.9px"
+          },
+          {
+            "text": "Hermes",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "16.9px"
+          },
+          {
+            "text": "Headlong",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "16.9px"
+          }
+        ],
+        "[data-tools-view-set][aria-pressed=\"true\"]": [
+          {
+            "text": "Grid",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4329/tools",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "tools-1280-dark.png",
+      "status": 200,
+      "clicked": "[data-tools-view-set=\"grid\"]",
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".tile__name": [
+          {
+            "text": "Paperclip",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "16.9px"
+          },
+          {
+            "text": "Hermes",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "16.9px"
+          },
+          {
+            "text": "Headlong",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "16.9px"
+          }
+        ],
+        "[data-tools-view-set][aria-pressed=\"true\"]": [
+          {
+            "text": "Grid",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools?verdict=using",
+      "url": "http://localhost:4329/tools?verdict=using",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "tools_verdict_using-1280-dark.png",
+      "status": 200,
+      "clicked": "[data-tools-view-set=\"grid\"]",
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".tile__name": [
+          {
+            "text": "Paperclip",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "16.9px"
+          },
+          {
+            "text": "Hermes",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "16.9px"
+          },
+          {
+            "text": "Headlong",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "16.9px"
+          }
+        ],
+        "[data-tools-view-set][aria-pressed=\"true\"]": [
+          {
+            "text": "Grid",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}

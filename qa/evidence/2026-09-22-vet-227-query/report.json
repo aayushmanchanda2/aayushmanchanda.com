@@ -1,0 +1,113 @@
+{
+  "base": "http://localhost:4329/",
+  "label": "vet-227-query",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-22-vet-227-query",
+  "at": "2026-09-23T02:52:27.352Z",
+  "shots": [
+    {
+      "route": "/tools?verdict=using",
+      "url": "http://localhost:4329/tools?verdict=using",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "tools_verdict_using-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools?category=agent-infra&verdict=watching",
+      "url": "http://localhost:4329/tools?category=agent-infra&verdict=watching",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "tools_category_agent_infra_verdict_watching-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools?verdict=using",
+      "url": "http://localhost:4329/tools?verdict=using",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "tools_verdict_using-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools?category=agent-infra&verdict=watching",
+      "url": "http://localhost:4329/tools?category=agent-infra&verdict=watching",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "tools_category_agent_infra_verdict_watching-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools?verdict=using",
+      "url": "http://localhost:4329/tools?verdict=using",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "tools_verdict_using-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools?category=agent-infra&verdict=watching",
+      "url": "http://localhost:4329/tools?category=agent-infra&verdict=watching",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "tools_category_agent_infra_verdict_watching-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools?verdict=using",
+      "url": "http://localhost:4329/tools?verdict=using",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "tools_verdict_using-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools?category=agent-infra&verdict=watching",
+      "url": "http://localhost:4329/tools?category=agent-infra&verdict=watching",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "tools_category_agent_infra_verdict_watching-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}

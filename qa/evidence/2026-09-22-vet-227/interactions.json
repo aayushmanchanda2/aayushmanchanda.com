@@ -1,0 +1,191 @@
+{
+  "base": "http://localhost:4329",
+  "at": "2026-09-23T02:52:41.856Z",
+  "results": [
+    {
+      "name": "first row y < 300 at 1280",
+      "ok": true,
+      "detail": {
+        "firstRowY": 291
+      }
+    },
+    {
+      "name": "date sort descending",
+      "ok": true,
+      "detail": {
+        "first": "2026-09-23",
+        "last": "2026-07-26",
+        "aria": "descending"
+      }
+    },
+    {
+      "name": "date sort toggles to ascending",
+      "ok": true,
+      "detail": {
+        "first": "2026-07-26",
+        "last": "2026-09-23"
+      }
+    },
+    {
+      "name": "third press restores file order",
+      "ok": true,
+      "detail": {}
+    },
+    {
+      "name": "name sort A to Z",
+      "ok": true,
+      "detail": {
+        "first": "Agent Reach"
+      }
+    },
+    {
+      "name": "verdict sort by rank",
+      "ok": true,
+      "detail": {
+        "first": "0",
+        "last": "3"
+      }
+    },
+    {
+      "name": "category sort A to Z",
+      "ok": true,
+      "detail": {
+        "first": "agent infra"
+      }
+    },
+    {
+      "name": "grid tiles follow the table order",
+      "ok": true,
+      "detail": {}
+    },
+    {
+      "name": "verdict filter writes ?verdict=using",
+      "ok": true,
+      "detail": {
+        "url": "http://localhost:4329/tools?verdict=using"
+      }
+    },
+    {
+      "name": "only using rows shown, count matches",
+      "ok": true,
+      "detail": {
+        "n": 7,
+        "count": "7 tools"
+      }
+    },
+    {
+      "name": "both filters in URL",
+      "ok": true,
+      "detail": {
+        "url": "http://localhost:4329/tools?verdict=using&category=agent-infra",
+        "rows": 3,
+        "count": "3 tools"
+      }
+    },
+    {
+      "name": "back restores verdict-only filter",
+      "ok": true,
+      "detail": {
+        "url": "http://localhost:4329/tools?verdict=using"
+      }
+    },
+    {
+      "name": "forward re-applies both",
+      "ok": true,
+      "detail": {
+        "count": "3 tools"
+      }
+    },
+    {
+      "name": "the stretched link is what sits over the description cell",
+      "ok": true,
+      "detail": {
+        "hit": "row__link"
+      }
+    },
+    {
+      "name": "row click (description cell) navigates to /tools/<slug>",
+      "ok": true,
+      "detail": {
+        "url": "http://localhost:4329/tools/paperclip",
+        "expected": "/tools/paperclip"
+      }
+    },
+    {
+      "name": "back button restores filter",
+      "ok": true,
+      "detail": {
+        "url": "http://localhost:4329/tools?verdict=using",
+        "count": "7 tools"
+      }
+    },
+    {
+      "name": "deep link filters on load",
+      "ok": true,
+      "detail": {
+        "count": "1 tool"
+      }
+    },
+    {
+      "name": "unknown value reads as All",
+      "ok": true,
+      "detail": {
+        "count": "86 tools"
+      }
+    },
+    {
+      "name": "empty combination shows the empty state",
+      "ok": true,
+      "detail": {
+        "count": "0 tools"
+      }
+    },
+    {
+      "name": "grid: table hidden, filtered tiles shown",
+      "ok": true,
+      "detail": {
+        "shownTiles": 7
+      }
+    },
+    {
+      "name": "tile links to /tools/<slug>",
+      "ok": true,
+      "detail": {
+        "tileHref": "/tools/paperclip"
+      }
+    },
+    {
+      "name": "grid persists across reload",
+      "ok": true,
+      "detail": {}
+    },
+    {
+      "name": "Tab reaches the row link and it rings the row",
+      "ok": true,
+      "detail": {
+        "stops": [
+          "Name",
+          "Category",
+          "Verdict",
+          "Date",
+          "Paperclip"
+        ],
+        "ring": "solid"
+      }
+    },
+    {
+      "name": "/tools/verdict/using 200 with table",
+      "ok": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "/tools/category/agent-infra 200 with table",
+      "ok": true,
+      "detail": {
+        "status": 200
+      }
+    }
+  ]
+}

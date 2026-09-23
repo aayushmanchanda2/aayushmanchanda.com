@@ -38,6 +38,7 @@ const jsonLd = listJsonLd({
   title={`${category} · Tools · Aayush Manchanda`}
   description={`${lead} ${category}.`}
   jsonLd={jsonLd}
+  wide
 >
 
   <header>
@@ -46,7 +47,7 @@ const jsonLd = listJsonLd({
   </header>
 
   <div class="body">
-    <ToolList tools={tools} grouped={false} />
+    <ToolList tools={tools} drop="category" />
   </div>
 </Base>
 

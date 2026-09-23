@@ -10,7 +10,7 @@
 
 ## How to get to it (user POV)
 
-- From /tools, the row's `Details` link (`.row__more`) or the tool name.
+- From /tools, anywhere on a table row (the name's `.row__link` is stretched over the row) or a grid tile (`.tile__link`).
 - Directly at `/tools/<slug>`; slugs from `ls dist/tools` (e.g. `agent-browser`).
 
 ## Driving it with shoot.mjs
@@ -25,5 +25,5 @@ Preconditions:
 
 ## Gotchas
 
-- `.row__link` on /tools points off-site (the tool's own URL); the in-site path is `.row__more` ("Details").
+- `.row__link` and `.tile__link` on /tools point at `/tools/<slug>`; the only way off-site is the details page's Source line.
 - Some tools have no repo; `.source__repo` absent is not a failure.

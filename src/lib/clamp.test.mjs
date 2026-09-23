@@ -55,9 +55,10 @@ const read = (name) => readFileSync(path.join(SRC, name), "utf8");
  */
 const code = (source) => source.replace(/\{?\/\*[\s\S]*?\*\/\}?/g, "");
 
-/** The three listings whose rows carry a note, and the only three that clamp. */
+/** The listings whose rows carry a note (or, on the /tools grid, a name), and the only files that clamp. */
 const LISTINGS = [
   "components/LibraryList.astro",
+  "components/ToolGrid.astro",
   "components/ToolList.astro",
   "components/VideoFacade.astro",
 ];
