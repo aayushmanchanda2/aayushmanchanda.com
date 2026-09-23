@@ -198,6 +198,8 @@ set_vercel() {
   local name="$1" value="$2" target
   [[ -n "$value" ]] || { SKIPPED+=("Vercel $name (left as it was: no value given)"); return; }
   for target in production preview; do
+    # the deploy key only ever runs in production builds (scripts/vercel-build.sh)
+    [[ "$name" == CONVEX_DEPLOY_KEY && "$target" == preview ]] && continue
     if printf '%s' "$value" | vercel env add "$name" "$target" --force --yes >/dev/null 2>&1; then
       WRITTEN_VERCEL+=("$name($target)"); printf '  %s✓ set%s Vercel %s (%s)\n' "$GREEN" "$RESET" "$name" "$target"
     else
@@ -258,7 +260,7 @@ say "The one email address that may open /me. Everyone else gets a 404 after sig
 ask_secret ALLOWED_EMAIL "Your email (hidden):"
 existing_secret=$(_existing INGEST_SECRET || true)
 INGEST_SECRET="${existing_secret:-$(openssl rand -hex 32)}"
-note "INGEST_SECRET: ${existing_secret:+kept the one already saved}${existing_secret:-generated a new one with openssl}."
+if [[ -n "$existing_secret" ]]; then note "INGEST_SECRET: kept the one already saved."; else note "INGEST_SECRET: generated a new one with openssl."; fi
 for key in PUBLIC_CLERK_PUBLISHABLE_KEY CLERK_SECRET_KEY PUBLIC_CONVEX_URL PROD_CONVEX_SITE_URL ALLOWED_EMAIL; do
   [[ -n "${!key}" ]] || { warn "$key is empty. Re-run and paste it."; exit 1; }
 done
