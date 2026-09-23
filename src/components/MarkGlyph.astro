@@ -5,13 +5,12 @@
  * His initials on the same 16-unit grid as the rest of the icon system, in one
  * stroke weight (1.5), butt caps, miter joins, `currentColor`.
  *
- * This used to live inside `SiteMark.astro`, and it moved out the day a second
- * surface needed the same drawing: `/design` renders the lockup as a specimen,
- * and `SiteMark.astro` is a fixed link to the home page. Pasting the paths into
- * the design page would have made a fourth copy of a glyph `lib/mark.test.mjs`
- * exists to hold at three, and the copy nobody looks at is always the one that
- * drifts. So the drawing is here and both callers import it. The test reads this
- * file for the same reason it read the old one.
+ * `/design` renders the lockup as a specimen; the fixed `SiteMark.astro` link
+ * home that also drew it went with VET-225, when the top bar's home crumb took
+ * that job. Pasting the paths into a page would make a fourth copy of a glyph
+ * `lib/mark.test.mjs` exists to hold at three (this file, `public/favicon.svg`
+ * and `scripts/og.mjs`), and the copy nobody looks at is always the one that
+ * drifts. So the drawing is here and a page that wants it imports it.
  *
  * The A is the drawing that shipped before the lockup, unchanged to the decimal.
  * The M is built to that A's *ink* metrics rather than its centreline ones,
@@ -30,11 +29,9 @@
  *
  * **Nothing in the mark touches anything.** The crossbar is 0.5 units off the
  * legs and the M is 0.5 units off the A, both measured at the tightest point,
- * which for the letterfit is the outer corner of the A's right foot. That is the
- * rail's own grammar carried into the glyph: the left edge of every page is a
- * stack of free-floating dashes, and this is a monogram held together by
- * proximity rather than by contact. It is also what makes the A separable, which
- * is what the favicon needs.
+ * which for the letterfit is the outer corner of the A's right foot: a monogram
+ * held together by proximity rather than by contact. It is also what makes the
+ * A separable, which is what the favicon needs.
  *
  * `stroke-miterlimit="2.4"` on the M is the one attribute doing work. The A's
  * apex and the M's valley are 2.144 ratios and stay points; the M's two top
@@ -58,10 +55,10 @@ interface Props {
   /**
    * The accessible name, when the glyph is the subject rather than decoration.
    *
-   * Omitted, it is hidden: in `SiteMark.astro` the anchor around it already says
-   * "Home", and a name here would announce the letters a second time. Given, the
-   * glyph becomes an image with that name, which is what `/design` needs, where
-   * the drawing is the thing being looked at rather than a way somewhere.
+   * Omitted, it is hidden, for a caller whose own link or label already names
+   * it. Given, the glyph becomes an image with that name, which is what
+   * `/design` needs, where the drawing is the thing being looked at rather than
+   * a way somewhere.
    */
   label?: string;
 }

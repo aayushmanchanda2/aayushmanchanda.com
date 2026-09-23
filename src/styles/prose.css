@@ -1,10 +1,10 @@
 /* ==========================================================================
    aayushmanchanda.com — long-form prose
 
-   `.prose` is the one class for a body of markdown someone reads top to
-   bottom: note bodies now, library and /computer bodies when they arrive.
-   Put it on the element that wraps `<Content />` and every element markdown
-   can produce is styled from here; the page adds only its own spacing.
+   `.prose` means reading text: any body someone reads top to bottom, a
+   note's markdown or an entry page's saved copy, digest and voice blocks.
+   Put it on the element that wraps the body and every element markdown can
+   produce is styled from here; the page adds only its own spacing.
 
    Values are briOS's (`writing/[slug]/page.tsx › .notion-blocks`,
    `renderBlocks.tsx`, `globals.css › .prose`) with our tokens in place of his:

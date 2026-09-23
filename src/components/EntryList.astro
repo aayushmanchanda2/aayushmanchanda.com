@@ -28,7 +28,7 @@ const stacked = entries.some((entry) => entry.meta !== undefined);
         <a class="row press" href={entry.href}>
           <span class="row__title">{entry.title}</span>
           {entry.meta && (
-            <span class="row__meta tabular-nums">
+            <span class="row__meta">
               <span>{entry.meta.label}</span>
               <time datetime={entry.meta.date}>{formatDay(entry.meta.date)}</time>
             </span>
@@ -97,7 +97,7 @@ const stacked = entries.some((entry) => entry.meta !== undefined);
     height: 30px;
     object-fit: cover;
     object-position: top center;
-    border-radius: 3px;
+    border-radius: var(--r-sm);
   }
 
   /* Title, then section and day under it. The row's own padding keeps the

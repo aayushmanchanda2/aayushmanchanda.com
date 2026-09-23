@@ -617,10 +617,10 @@ test("only a filter page gets a crumb, because only a filter page draws one", ()
   assert.deepEqual(
     trailOf(filter),
     [
-      { name: "Tools", path: "/tools/" },
-      { name: "agent infra", path: "/tools/category/agent-infra/" },
+      { name: "Tools", path: "/tools" },
+      { name: "agent infra", path: "/tools/category/agent-infra" },
     ],
-    "the bar reads the same trail back, minus the home link it always draws",
+    "the bar reads the same trail back, minus the home link it always draws, spelled like a section href (no trailing slash)",
   );
   assert.equal(trailOf(section), null);
 });

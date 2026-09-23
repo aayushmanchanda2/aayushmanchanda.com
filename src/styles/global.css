@@ -236,7 +236,7 @@ a:hover {
    seeing colour.
 
    Scoped to the places prose actually lives, not to `a`. Everywhere else on
-   this site a link is furniture — a nav dash, a filter chip, a footer item, a
+   this site a link is furniture — a crumb, a filter chip, a footer item, a
    whole row on the front page that is a link from edge to edge — and bolding
    and underlining those would turn navigation into a paragraph of shouting.
    Those surfaces set their own `text-decoration: none` and are simply not
@@ -606,7 +606,7 @@ ol {
   width: 20px;
   height: 4px;
   margin-bottom: 1rem;
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   background: var(--accent);
 }
 

@@ -3,8 +3,7 @@
  *
  * `lib/library.ts` owns what a tag *is* — a slug on an entry, a route segment,
  * a join key — and stops there. This file is the presentation half, and it is
- * separate for the reason `MarkGlyph` and `SiteMark` are two files: the data
- * boundary is already the longest module in `src/lib`, and nothing here needs
+ * separate because the data boundary is already the longest module in `src/lib`, and nothing here needs
  * to see an entry to do its job.
  *
  * ## The palette

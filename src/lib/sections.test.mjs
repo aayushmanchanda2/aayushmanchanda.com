@@ -1,8 +1,8 @@
 /**
  * The section list, and the one copy of it that lives outside the build.
  *
- * `lib/sections.ts › SECTION_HREFS` and `CATALOGUE` are the manifest: the rail nav, the mobile
- * panel and the home index all read it, so those three cannot disagree with
+ * `lib/sections.ts › SECTION_HREFS` and `CATALOGUE` are the manifest: the menu
+ * panel and the home index both read it, so those two cannot disagree with
  * each other by construction. The social card can. `scripts/og.mjs` runs under
  * plain node to lay its text out in a real browser, and `sections.ts` imports
  * `astro:content`, which only resolves inside a build — so the card keeps a

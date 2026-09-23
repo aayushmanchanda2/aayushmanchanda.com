@@ -2,8 +2,8 @@
  * The section manifest — what the site currently has enough content to show.
  *
  * The plan's empty-state rule: "sections render only if they have entries — no
- * coming soon pages". Two surfaces have to agree about that, the rail nav in
- * `layouts/Base.astro` and the index on the home page, and before this file
+ * coming soon pages". Two surfaces have to agree about that, the menu panel
+ * (`layouts/Base.astro` builds its items) and the index on the home page, and before this file
  * they each kept their own hand-written list. Adding a section meant editing
  * both, and emptying one meant remembering to edit both again.
  *
@@ -33,24 +33,10 @@ export const SECTION_HREFS = [
 
 export type SectionHref = (typeof SECTION_HREFS)[number];
 
-/**
- * Dash weight in the rail nav, and how loudly an item reads in the mobile
- * panel. `title` is the home entry; the three pipeline-fed sections carry more
- * visual weight than the two hand-written ones.
- */
-export type NavKind = "title" | "subtitle" | "section" | "body";
-
-/**
- * One entry in either nav surface.
- *
- * Lives here rather than in one of the two components that render it: the rail
- * and the mobile panel are peers, and a shared vocabulary that one peer owns is
- * a vocabulary the other has to import a component to speak.
- */
+/** One entry in the menu panel (`MobileNav.astro`), home first. */
 export interface NavItem {
   href: string;
   label: string;
-  kind?: NavKind;
 }
 
 export interface Section {
@@ -58,7 +44,6 @@ export interface Section {
   name: string;
   /** One line for the home-page index. Not used in the nav. */
   blurb: string;
-  kind: Extract<NavKind, "subtitle" | "section">;
   /** Entries the section has right now. Never zero in a returned Section. */
   count: number;
   /**
@@ -75,27 +60,22 @@ export const CATALOGUE: Record<SectionHref, Omit<Section, "href" | "count" | "md
   "/tools": {
     name: "Tools",
     blurb: "Things I actually installed and ran, with an honest verdict.",
-    kind: "subtitle",
   },
   "/sites": {
     name: "Sites",
     blurb: "Design and craft I keep coming back to.",
-    kind: "subtitle",
   },
   "/library": {
     name: "Library",
     blurb: "Articles, posts and videos I saved to get to properly.",
-    kind: "subtitle",
   },
   "/notes": {
     name: "Notes",
     blurb: "A commonplace book. Short thoughts, kept as they come.",
-    kind: "section",
   },
   "/experiments": {
     name: "Experiments",
     blurb: "What's running right now, including what I killed.",
-    kind: "section",
   },
 };
 
