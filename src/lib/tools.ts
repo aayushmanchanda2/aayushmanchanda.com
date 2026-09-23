@@ -9,16 +9,11 @@
  * Past this module the types are earned, so the rest of the site can trust
  * them. Nothing here uses an `as` cast to skip that work.
  *
- * The generic half of the parse — the slug shape, the date check, "is this a
- * non-empty string" — comes from `lib/parse.ts`, which all three data
- * boundaries share. What stayed here is what only /tools knows: the verdict
- * vocabulary, the http(s) URL rule, the product-versus-repository split, the
- * category-collision check, and every error message, which are written for the
- * person who has to go and fix the file.
- *
- * The shape of a repository URL is not one of those. It is a fact about a URL,
- * so it lives in `lib/links.ts › githubRepo` alongside `linkLabel`, and the
- * publish pipeline is held to the same rule from the other side.
+ * The generic half of the parse (slug, date, non-empty string, display name)
+ * comes from `lib/parse.ts`. What stays here is what only /tools knows: the
+ * verdicts, the URL rule, the product-versus-repository split (the repo shape
+ * itself is `lib/links.ts › githubRepo`), the category-collision check, and
+ * every error message, written for the person who has to fix the file.
  */
 
 import { githubRepo } from "./links";
@@ -44,24 +39,15 @@ export interface Tool {
   slug: string;
   name: string;
   /**
-   * The product's own site, and only that.
-   *
-   * null is the ordinary answer for half this list, because half of it is
-   * software whose only home is a repository. A repository goes in `repo`; a
-   * repository written here fails the build, which is the whole point of the
-   * split — a row whose `url` was `github.com/owner/name` showed the GitHub
-   * logo, said "github.com" where the product's name should be, and hid the
-   * real site of every tool that had one.
+   * The product's own site, and only that; null when its only home is a repo.
+   * A repository here fails the build: filed as `url` it showed the GitHub
+   * logo and "github.com" where the product's name and real site should be.
    */
   url: string | null;
-  /**
-   * `https://github.com/{owner}/{name}`, canonically spelled, or null.
-   *
-   * Independent of `url` in both directions: a tool can have a product site and
-   * no public source, source and no site, both, or neither. The pages render
-   * whichever it has.
-   */
+  /** `https://github.com/{owner}/{name}`, canonical, or null. Independent of `url`. */
   repo: string | null;
+  /** The repository was moved or archived after the verdict: labelled so on the page. */
+  repo_moved: boolean;
   category: string;
   verdict: Verdict;
   /** One line, in Aayush's voice. Rendered as-is; never editorialised. */
@@ -96,13 +82,8 @@ export interface Tool {
 }
 
 /**
- * Both groups are `type` rather than `interface` on purpose.
- *
- * They are handed straight to `getStaticPaths` as a route's props, and Astro
- * types props as an index-signature record. TypeScript gives an object *type
- * alias* an implicit index signature and an *interface* none, so an interface
- * here fails to satisfy `GetStaticPaths` for a reason that has nothing to do
- * with the shape. The alternative was to spread the group at every call site.
+ * `type`, not `interface`: these are route props, and only a type alias gets
+ * the implicit index signature `GetStaticPaths` asks for.
  */
 export type ToolGroup = {
   category: string;
@@ -124,7 +105,14 @@ const VERDICT_NAMES: readonly string[] = VERDICTS;
 const READ = readers("tools.json");
 /** Annotated, or TypeScript stops treating a call as the end of control flow. */
 const fail: Fail = READ.fail;
-const { readString, readDate, readOptional, isRecord } = READ;
+const { readString, readDate, readOptional, readName, isRecord } = READ;
+
+/**
+ * Where new saves land (`pipeline/entries.mjs › NEW_TOOL_CATEGORY`): an inbox,
+ * not a category. Allowed, so a publish never breaks the build, but warned
+ * about, and shown to readers as "new" rather than as a filing failure.
+ */
+const INBOX = "unsorted";
 
 function isVerdict(value: unknown): value is Verdict {
   return typeof value === "string" && VERDICT_NAMES.includes(value);
@@ -222,6 +210,9 @@ export function parseTools(value: unknown): Tool[] {
     }
     slugs.add(slug);
 
+    const category = readString(item, "category", where);
+    if (category === INBOX) console.warn(`src/data/tools.json: ${where} "${slug}" is still ${INBOX}; give it a category`);
+
     const verdict = item["verdict"];
     if (!isVerdict(verdict)) {
       fail(
@@ -232,10 +223,11 @@ export function parseTools(value: unknown): Tool[] {
 
     return {
       slug,
-      name: readString(item, "name", where),
+      name: readName(item, "name", where),
       url: readUrl(item, where),
       repo: readRepo(item, where),
-      category: readString(item, "category", where),
+      repo_moved: item["repo_moved"] === true,
+      category: category === INBOX ? "new" : category,
       verdict,
       note: readString(item, "note", where),
       status_date: readDate(item, "status_date", where),

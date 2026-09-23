@@ -105,6 +105,16 @@ export interface Readers {
     key: string,
     where: string,
   ) => string | null;
+  /**
+   * A display name: a present string of at most four words with none of the
+   * page-title separators in it (`| : — ·`). A name like "Voyage AI | Home" is a
+   * tab title that nobody shortened, and the build says so.
+   */
+  readName: (
+    entry: Record<string, unknown>,
+    key: string,
+    where: string,
+  ) => string;
   isRecord: (value: unknown) => value is Record<string, unknown>;
 }
 
@@ -174,5 +184,21 @@ export function readers(filename: string): Readers {
     return value;
   };
 
-  return { fail, readString, readDate, readOptional, isRecord };
+  const readName = (
+    entry: Record<string, unknown>,
+    key: string,
+    where: string,
+  ): string => {
+    const value = readString(entry, key, where);
+    if (value.trim().split(/\s+/).length > 4 || /[|:—·]/.test(value)) {
+      fail(
+        where,
+        `has a "${key}" that reads like a page title: ${JSON.stringify(value)}. ` +
+          `Use the product's own name, at most 4 words and none of | : — ·.`,
+      );
+    }
+    return value;
+  };
+
+  return { fail, readString, readDate, readOptional, readName, isRecord };
 }

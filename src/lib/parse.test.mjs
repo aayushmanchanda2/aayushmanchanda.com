@@ -148,3 +148,13 @@ test("isRecord separates an object from the two things that pretend to be one", 
   assert.equal(READ.isRecord([]), false);
   assert.equal(READ.isRecord(null), false);
 });
+
+test("readName takes a product name and refuses a tab title", () => {
+  assert.equal(READ.readName({ name: "Voyage AI" }, "name", "entry 0"), "Voyage AI");
+  assert.equal(READ.readName({ name: "The Horowitz Andreessen Academy" }, "name", "entry 0"), "The Horowitz Andreessen Academy");
+  failsWith(() => READ.readName({ name: "Voyage AI | Home" }, "name", "entry 1"), "entry 1", "4 words");
+  failsWith(() => READ.readName({ name: "Mastra Factory: from issue" }, "name", "entry 2"), "Mastra Factory:");
+  failsWith(() => READ.readName({ name: "DialKit — Tune" }, "name", "entry 3"), "DialKit");
+  failsWith(() => READ.readName({ name: "Txt · Editor" }, "name", "entry 4"), "Txt");
+  failsWith(() => READ.readName({ name: "Own Your AI Apps Today" }, "name", "entry 5"), "Own Your AI Apps Today");
+});

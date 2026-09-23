@@ -163,6 +163,23 @@ test("a new tool fetches its app icon into public/icons, and only a tool does", 
   assert.ok(await exists(path.join(paths.previewsDir, "linear.webp")));
 });
 
+test("a repository save gets its own site written to url, and keeps repo", async (t) => {
+  const { paths } = await makeRepo(t);
+  const server = raindropServer({
+    ...NESTED,
+    raindrops: { [TOOLS_ID]: [bookmark(202, "https://github.com/laude-institute/headlong", { title: "GitHub - laude-institute/headlong: agents" })] },
+  });
+  /** @type {string[]} */
+  const asked = [];
+  const siteOf = async (/** @type {string | null} */ repo) => (asked.push(String(repo)), "https://headlong.ai");
+
+  assert.equal(await run([], { ...deps({ paths, server, out: recorder() }), siteOf }), 0);
+
+  const [tool] = await readJson(paths.toolsJson);
+  assert.deepEqual([tool.name, tool.url, tool.repo], ["laude-institute/headlong", "https://headlong.ai", "https://github.com/laude-institute/headlong"]);
+  assert.deepEqual(asked, ["https://github.com/laude-institute/headlong"]);
+});
+
 test("a preview that will not capture costs the tool nothing: published, icon-only card", async (t) => {
   const { paths } = await makeRepo(t);
   const server = raindropServer({

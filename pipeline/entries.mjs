@@ -33,6 +33,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
+import { cleanName } from "./names.mjs";
 import { thumbWebPath } from "./thumb.mjs";
 import { isRecord, writeAtomic } from "./util.mjs";
 
@@ -484,7 +485,7 @@ export function shotFilesOf(entry) {
 export function buildSiteEntry({ bookmark, slug, date, palette, design }) {
   return {
     slug,
-    title: bookmark.title === "" ? hostnameOf(bookmark.url) : bookmark.title,
+    title: cleanName(bookmark.title, bookmark.url) ?? hostnameOf(bookmark.url),
     url: bookmark.url,
     domain: hostnameOf(bookmark.url),
     saved_date: date,
@@ -521,7 +522,8 @@ export function buildToolEntry({ bookmark, slug, date }) {
 
   return {
     slug,
-    name: bookmark.title === "" ? hostnameOf(bookmark.url) : bookmark.title,
+    // No clean name: the hostname (or owner/name for a repo), never a tab title.
+    name: cleanName(bookmark.title, bookmark.url) ?? (repo === null ? hostnameOf(bookmark.url) : repo.split("/").slice(-2).join("/")),
     url: repo === null ? bookmark.url : null,
     // Left out entirely rather than written as null, the way every other
     // optional field in these files is left out. `tools.ts` reads absent and

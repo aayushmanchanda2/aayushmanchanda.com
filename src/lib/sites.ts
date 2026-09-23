@@ -123,7 +123,7 @@ const MAX_PALETTE = 6;
 const READ = readers("sites.json");
 /** Annotated, or TypeScript stops treating a call as the end of control flow. */
 const fail: Fail = READ.fail;
-const { readString, readDate, readOptional, isRecord } = READ;
+const { readString, readDate, readOptional, readName, isRecord } = READ;
 
 /** Returns the parsed URL so the caller can cross-check the domain against it. */
 function readUrl(entry: Record<string, unknown>, where: string): URL {
@@ -310,7 +310,7 @@ export function parseSites(value: unknown): Site[] {
 
     return {
       slug,
-      title: readString(item, "title", where),
+      title: readName(item, "title", where),
       // Returned as authored, not as `url.href`, which would rewrite bare
       // origins with a trailing slash and change what the page shows.
       url: readString(item, "url", where),

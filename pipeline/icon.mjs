@@ -15,7 +15,7 @@
  *      than logo.dev's generated monogram
  *
  * **Never a GitHub owner's avatar.** A repository-only tool uses the repo's
- * own `homepage` field and nothing else; any candidate on a GitHub host is
+ * own `homepage` field, else a site its README names (`siteInReadme`); any candidate on a GitHub host is
  * skipped, and so is logo.dev for a github.com or github.io site, which would
  * answer with the octocat. Most owners are individuals, and their avatar is a
  * stranger's face.
@@ -168,8 +168,63 @@ async function homepageOf(repo, fetch) {
   }
 }
 
+const README_LINK = /(!?)\[([^\]]*)\]\((https?:\/\/[^)\s]+)\)|<a\b[^>]*?href="(https?:\/\/[^"]+)"[^>]*>([\s\S]*?)<\/a>/gi;
+const SITE_WORD = /\b(website|homepage|home|docs|documentation|site)\b/i;
+/** Badges and social profiles: a link to one is never the project's own site. */
+const NOT_A_SITE = /(^|\.)(shields\.io|badgen\.net|star-history\.com|x\.com|twitter\.com|linkedin\.com|youtube\.com|discord\.(gg|com))$/i;
+
 /**
- * The tool's own site: the url itself, or a repository's `homepage`. Null when
+ * The project's own site as its README names it, or null. Only the header
+ * area (above the first `##`) is read: a link labelled website, homepage,
+ * home, docs or site wins, else the first plain link. Images, badges and
+ * GitHub hosts never count.
+ * ponytail: label-and-position heuristic; a company or sponsor link in the
+ * header can still win, so a human checks the name and url on the PR.
+ *
+ * @param {string} markdown
+ * @returns {string | null}
+ */
+export function siteInReadme(markdown) {
+  const header = (markdown.split(/^##\s/m)[0] ?? "").split("\n").slice(0, 60).join("\n");
+  const links = [...header.matchAll(README_LINK)]
+    .map((m) => ({ image: m[1] === "!", label: m[2] ?? m[5] ?? "", href: m[3] ?? m[4] ?? "" }))
+    .filter(({ image, label, href }) => {
+      if (image || /!\[|<img/i.test(label)) return false;
+      const host = safeHost(href);
+      return host !== "" && !GITHUB_IMAGE_HOST.test(host) && !NOT_A_SITE.test(host);
+    });
+  return (links.find((link) => SITE_WORD.test(link.label.replace(/<[^>]+>/g, ""))) ?? links[0])?.href ?? null;
+}
+
+/** @param {string} url */
+function safeHost(url) {
+  try {
+    return new URL(url).hostname;
+  } catch {
+    return "";
+  }
+}
+
+/**
+ * The site a repository's README names, or null.
+ *
+ * @param {string} repo @param {Fetch} fetch
+ * @returns {Promise<string | null>}
+ */
+async function readmeSiteOf(repo, fetch) {
+  try {
+    const [owner, name] = new URL(repo).pathname.split("/").filter(Boolean);
+    const json = await (await get(`https://api.github.com/repos/${owner}/${name}/readme`, fetch)).json();
+    const content = isRecord(json) && typeof json["content"] === "string" ? json["content"] : "";
+    return siteInReadme(Buffer.from(content, "base64").toString("utf8"));
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The tool's own site: the url itself, a repository's `homepage`, or the site
+ * its README names. Null when
  * all that is left is a GitHub page. `preview.mjs` asks the same question, so a
  * hover card never pictures a repository either.
  *
@@ -179,13 +234,15 @@ async function homepageOf(repo, fetch) {
  */
 export async function siteOf(url, fetch = globalThis.fetch) {
   const repo = url === null ? null : repoFrom(url);
-  const site = repo === null ? url : await homepageOf(repo, fetch);
-  return site === null || GITHUB_IMAGE_HOST.test(new URL(site).hostname) ? null : site;
+  const site = repo === null ? url : ((await homepageOf(repo, fetch)) ?? (await readmeSiteOf(repo, fetch)));
+  if (site === null) return null;
+  const host = new URL(site).hostname;
+  return GITHUB_IMAGE_HOST.test(host) || NOT_A_SITE.test(host) ? null : site;
 }
 
 /**
  * Any image in, a 256px square WebP out — or null when the source is too small
- * to be anything but a blur. Transparent pixels land on white, the way a home
+ * to be anything but a blur, or flattens to one flat colour. Transparent pixels land on white, the way a home
  * screen flattens a touch icon, so a dark logo does not vanish in dark mode.
  *
  * @param {Buffer} bytes
@@ -200,11 +257,14 @@ export async function encodeIcon(bytes) {
   const image = vector
     ? sharp(bytes, { density: Math.min(2400, Math.ceil((72 * ICON_SIZE) / Math.max(edge, 1))) })
     : sharp(bytes);
-  return await image
+  const webp = await image
     .flatten({ background: "#ffffff" })
     .resize(ICON_SIZE, ICON_SIZE, { fit: "contain", background: "#ffffff" })
     .webp({ quality: 90 })
     .toBuffer();
+  // A white-on-transparent mark flattens to a blank square: no icon, try the next source.
+  const { channels } = await sharp(webp).stats();
+  return channels.every((c) => c.min === c.max) ? null : webp;
 }
 
 /** @param {string} url @param {Fetch} fetch */

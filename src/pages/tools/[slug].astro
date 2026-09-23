@@ -25,7 +25,7 @@ import EntryLink from "../../components/EntryLink.astro";
 import VerdictBadge from "../../components/VerdictBadge.astro";
 import VoiceBlocks from "../../components/VoiceBlocks.astro";
 import AppIcon from "../../components/AppIcon.astro";
-import { linkLabel, markFor } from "../../lib/links";
+import { markFor } from "../../lib/links";
 import { toolJsonLd } from "../../lib/schema";
 import { categorySlug, tools } from "../../lib/tools";
 import { formatDay } from "../../lib/date";
@@ -47,16 +47,8 @@ const { tool } = Astro.props;
  */
 const jsonLd = toolJsonLd(tool);
 
-/**
- * The Source line: the product first, then the source it is built from.
- *
- * `source` is what the reader is sent to — the product's own site when it has
- * one, the repository when it does not — and `alsoRepo` is the repository only
- * when it is a *second* place to go. A tool with no product site links its repo
- * once, not twice under two labels.
- */
-const source = tool.url ?? tool.repo;
-const alsoRepo = tool.url === null ? null : tool.repo;
+/** The Source line: the product's site first, then the repository, each named by what it is. */
+const repoLabel = tool.repo_moved ? "GitHub (moved)" : "GitHub";
 
 /* Only the icon, never the initial. The initial is how a /tools row tells
    twenty tools apart; here the name is already set at 3rem directly above it, so a
@@ -111,20 +103,18 @@ const hasIcon = markFor(tool).kind === "logo";
       site page: most of the reason a field is optional is so that its absence
       costs the reader nothing.
     */
-    source && (
+    (tool.url || tool.repo) && (
       <p class="source">
         <span class="source__label mono">Source</span>
         {hasIcon && <AppIcon tool={tool} size={16} class="source__favicon" />}
-        <EntryLink class="ext" href={source}>{linkLabel(source)}</EntryLink>
-
-        {/*
-          The repository, as a word rather than a second URL. Two full link
-          labels side by side read as a choice a reader has to make; "repo" is
-          the one of the two whose destination nobody needs spelled out.
-        */}
-        {alsoRepo && (
-          <span class="source__also">
-            <EntryLink class="source__repo mono" href={alsoRepo}>Repo</EntryLink>
+        {tool.url && (
+          <span class="source__link">
+            <EntryLink class="ext" href={tool.url}>Website</EntryLink>
+          </span>
+        )}
+        {tool.repo && (
+          <span class="source__link">
+            <EntryLink class="ext" href={tool.repo}>{repoLabel}</EntryLink>
           </span>
         )}
       </p>
@@ -175,16 +165,8 @@ const hasIcon = markFor(tool).kind === "logo";
      underline is the compromise: enough to say "this is a link" at a glance,
      not enough to make a metadata strip look like a paragraph. */
   /* `:not(.strip__chip)` because the verdict anchor is a box, not a word: an
-     underline under a tinted chip would draw a second line across the row.
-
-     The repo link at the foot joins the same rule rather than restating it:
-     both are quiet furniture pointing away from the page, and two copies of one
-     treatment is one copy too many. `:global()` is how it reaches an anchor
-     that `EntryLink` rendered — Astro's scoping stops at a component boundary,
-     and the rule still cannot leave this page because `.source` carries the
-     cid. Same idiom as `experiments.astro`. */
-  .strip a:not(.strip__chip),
-  .source :global(.source__repo) {
+     underline under a tinted chip would draw a second line across the row. */
+  .strip a:not(.strip__chip) {
     /* --text-secondary, never the strip's --text-tertiary: a quiet anchor inside a metadata
        container states its own ink (design.md §4, the ink floor). */
     color: var(--text-secondary);
@@ -196,8 +178,7 @@ const hasIcon = markFor(tool).kind === "logo";
     transition-timing-function: var(--ease);
   }
 
-  .strip a:not(.strip__chip):hover,
-  .source :global(.source__repo:hover) {
+  .strip a:not(.strip__chip):hover {
     color: var(--accent);
     text-decoration-color: var(--accent);
   }
@@ -235,17 +216,16 @@ const hasIcon = markFor(tool).kind === "logo";
     align-self: center;
   }
 
-  /* The wrapper exists for the separator and nothing else. The `·` is a
+  /* The wrapper exists for the separator between two links. The `·` is a
      `::before` on the span rather than on the anchor, so it is never part of
-     the link's text or its target — the same rule the metadata strip states
-     above, and the reason neither of them is typed into the content. */
-  .source__also {
+     the link's text or its target, the same rule as the metadata strip. */
+  .source__link {
     display: inline-flex;
     align-items: baseline;
     gap: 0.6rem;
   }
 
-  .source__also::before {
+  .source__link + .source__link::before {
     content: "\00b7" / "";
     color: var(--hairline-strong);
   }
