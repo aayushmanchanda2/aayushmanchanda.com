@@ -26,9 +26,9 @@ Then verify against the real page, not the built HTML: `npm run dev`, open it, p
 
 ## Copy
 
-**Read the voice guide before changing a word a reader sees.** It is `feature-research/aayushmanchanda-com/voice-guide-for-site.md` in the AayushOS repo, extracted from the gbrain page `voice-guide`. `PURPOSE.md` at this repo's root is what the copy is for; §6 of `design.md` is the rule set.
+**Read [`voice.md`](voice.md) before changing a word a reader sees.** It is the voice (Guide A), the value test, the banned patterns and the caps per surface. `PURPOSE.md` is what the copy is for; §6 of `design.md` is the rule set, and `src/lib/copy-lint.test.mjs` enforces the banned sentences and the em dash rule in `npm test`.
 
-Everything earns its place: writing exists for the reader, not to show its work. Audit voice stays in audits. First person, plain words, real opinions only, honest dates, no em dashes, accuracy without defensiveness.
+Every sentence gives the reader a fact or an opinion they'd want. Nothing that describes the site, narrates how it got made, or reassures. Audit voice stays in audits.
 
 ## Dev server
 
