@@ -87,17 +87,8 @@ const EAGER_COUNT = 2;
     text-decoration: none;
   }
 
-  /* Named properties only — never `transition: all`. Only `border-color`:
-     nothing here transforms the frame (the press scale rides the link, which
-     carries its own transition through `.press`), and a named property nothing
-     changes is a watch the browser keeps for free right up until someone adds
-     the property and gets an animation they never chose. */
-  .card__link :global(.frame) {
-    transition-property: border-color;
-    transition-duration: var(--dur);
-    transition-timing-function: var(--ease);
-  }
-
+  /* Hover is instant (design.md §4): no transition on the frame's border or
+     the title's ink. */
   .card__link:hover :global(.frame) {
     border-color: var(--hairline-strong);
   }
@@ -110,14 +101,10 @@ const EAGER_COUNT = 2;
   }
 
   .card__title {
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     font-weight: 500;
-    letter-spacing: -0.01em;
-    line-height: 1.35;
+    line-height: 1.45;
     overflow-wrap: anywhere;
-    transition-property: color;
-    transition-duration: var(--dur-fast);
-    transition-timing-function: var(--ease);
   }
 
   .card__link:hover .card__title {

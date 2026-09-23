@@ -206,10 +206,8 @@
   border-radius: var(--r-sm);
   color: var(--text-primary);
   text-decoration: none;
-  /* Never `transition: all` — the two that change are named. */
-  transition-property: background-color, color;
-  transition-duration: var(--dur-fast);
-  transition-timing-function: var(--ease);
+  /* No transition: the cursor moves with the arrow key, instantly
+     (design.md §4). */
 }
 
 /* The selected row, in the one token pair that stays legible in both themes.
@@ -238,8 +236,8 @@
 .palette__row-title {
   flex: 1 1 auto;
   min-width: 0;
-  font-size: 0.9375rem;
-  line-height: 1.4;
+  font-size: 0.875rem;
+  line-height: 1.45;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

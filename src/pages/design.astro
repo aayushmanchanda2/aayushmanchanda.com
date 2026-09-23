@@ -66,7 +66,8 @@ const SURFACES = [
   { name: "--text-tertiary", note: "metadata: dates, counts, labels" },
   { name: "--text-quaternary", note: "decoration only: the crumb divider" },
   { name: "--surface-2", note: "a raised surface" },
-  { name: "--surface-3", note: "a hovered or selected one" },
+  { name: "--surface-3", note: "a deeper one: code, the menu's hover" },
+  { name: "--surface-selected", note: "the selected row in a list" },
   { name: "--hairline", note: "every border on the site" },
   { name: "--hairline-strong", note: "a hovered row border, a swatch edge" },
   { name: "--outline", note: "the 1px inset on imagery" },
@@ -78,6 +79,10 @@ const ACCENTS = [
   { name: "--accent", note: "ink only: links, hover, aria-current, focus" },
   { name: "--accent-panel", note: "the accent as a background with text on it" },
   { name: "--accent-panel-ink", note: "that text" },
+  { name: "--amber-ink", note: "the second accent: the on-hold pill's word" },
+  { name: "--amber-bg", note: "the pill behind it" },
+  { name: "--highlight", note: "a highlighter mark behind words" },
+  { name: "--selection-bg", note: "selected text: blue in light, orange in dark" },
 ];
 
 /**
@@ -253,7 +258,8 @@ const jsonLd = designJsonLd();
       <p>
         The accent is one hue at two lightnesses. The hue is identical in both
         themes and lightness is the only difference, because no single lightness
-        clears 4.5:1 against both a white page and a near-black one.
+        clears 4.5:1 against both a white page and a near-black one. Amber is
+        the second accent. It marks things and is never a link.
       </p>
 
       <ul class="tokens">

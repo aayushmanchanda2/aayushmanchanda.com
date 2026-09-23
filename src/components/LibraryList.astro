@@ -156,9 +156,6 @@ const anyTags = entries.some((entry) => entry.tags.length > 0);
     align-items: start;
     padding-block: 1rem;
     border-bottom: 1px solid var(--hairline);
-    transition-property: border-color;
-    transition-duration: var(--dur-fast);
-    transition-timing-function: var(--ease);
   }
 
   .row:hover {
@@ -206,10 +203,10 @@ const anyTags = entries.some((entry) => entry.tags.length > 0);
     flex-wrap: wrap;
     align-items: baseline;
     gap: 0.5rem 0.65rem;
-    font-size: 1.0625rem;
+    /* 14px UI text, the /tools table's size (design.md §2). */
+    font-size: 0.875rem;
     font-weight: 500;
-    letter-spacing: -0.01em;
-    line-height: 1.35;
+    line-height: 1.45;
   }
 
   .row__link {
@@ -250,8 +247,8 @@ const anyTags = entries.some((entry) => entry.tags.length > 0);
     -webkit-line-clamp: 2;
     line-clamp: 2;
     overflow: hidden;
-    font-size: 0.9375rem;
-    line-height: 1.55;
+    font-size: 0.875rem;
+    line-height: 1.45;
     color: var(--text-secondary);
     /* A note about a post is the post's own first 280 characters, and a post is
        full of links with no word boundary in them. One of them — a YouTube
@@ -269,8 +266,7 @@ const anyTags = entries.some((entry) => entry.tags.length > 0);
     flex-direction: column;
     align-items: flex-end;
     gap: 0.5rem;
-    /* optical: line the domain up with the title, not the row box */
-    padding-top: 0.2rem;
+    line-height: 1.45;
   }
 
   /* Carries its own underline: on touch there is no hover to reveal one, and a

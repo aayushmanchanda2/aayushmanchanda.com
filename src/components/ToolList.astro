@@ -136,9 +136,6 @@ const COLUMNS = ALL.filter((column) => column.id !== drop);
     min-height: 40px;
     color: var(--text-secondary);
     font-weight: inherit;
-    transition-property: color;
-    transition-duration: var(--dur-fast);
-    transition-timing-function: var(--ease);
   }
 
   .sort:hover,
@@ -153,11 +150,9 @@ const COLUMNS = ALL.filter((column) => column.id !== drop);
 
   /* --- one tool ----------------------------------------------------------- */
 
+  /* Hover is instant (design.md §4). */
   .row {
     position: relative;
-    transition-property: background-color;
-    transition-duration: var(--dur-fast);
-    transition-timing-function: var(--ease);
   }
 
   .row:hover { background: var(--surface-2); }

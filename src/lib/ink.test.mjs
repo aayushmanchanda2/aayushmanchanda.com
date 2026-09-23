@@ -96,6 +96,56 @@ test("dark text levels are briOS's alpha whites", () => {
   );
 });
 
+test("every token the dark theme sets has a light value too", () => {
+  // theme.test.mjs holds the two dark blocks to each other; this is the third
+  // side. A dark-only token is `unset` on a light page (transparent, or no
+  // shadow), and neither fails loudly. VET-240 added seven tokens at once.
+  const names = (/** @type {string} */ block) => [...block.matchAll(/^\s*(--[\w-]+):/gm)].map((m) => m[1]);
+  const light = new Set(names(globalCss.slice(0, globalCss.indexOf("@media (prefers-color-scheme: dark)"))));
+  const dark = names(darkBlock.slice(0, darkBlock.indexOf("}")));
+  assert.ok(dark.length > 10, "found no dark tokens to check");
+  assert.deepEqual(dark.filter((name) => !light.has(name)), []);
+});
+
+/**
+ * Ink over a translucent tint over an opaque ground: the colour a reader
+ * actually sees behind a chip, a highlight or a selection.
+ */
+function inkOnTint(/** @type {string} */ ink, /** @type {string} */ tint, /** @type {string} */ ground) {
+  const [r, g, b, a] = parse(tint);
+  const under = parse(ground);
+  const flat = [r, g, b].map((v, i) => Math.round(v * a + under[i] * (1 - a)));
+  return ratio(ink, `#${flat.map((v) => v.toString(16).padStart(2, "0")).join("")}`);
+}
+
+/** A token's value, following one `var()` hop. */
+function token(/** @type {string} */ css, /** @type {string} */ name) {
+  const v = value(css, name);
+  const ref = v.match(/^var\((--[\w-]+)\)$/);
+  return ref ? value(css, ref[1]) : v;
+}
+
+/* VET-240's pairs, each over the page and over the darkest row surface it can
+   sit on. The amber pill holds the chip bar (6:1 over its own tint, design.md
+   §1); the highlighter and the selection hold AA. */
+/** @type {[string, string, number][]} */
+const PAIRS = [
+  ["--amber-ink", "--amber-bg", 6],
+  ["--text-primary", "--highlight", 4.5],
+  ["--selection-ink", "--selection-bg", 4.5],
+];
+
+for (const [ink, tint, floor] of PAIRS) {
+  test(`${ink} on ${tint} clears ${floor}:1 in both themes`, () => {
+    for (const [name, css] of Object.entries(themes)) {
+      for (const ground of ["--bg", "--surface-3"]) {
+        const r = inkOnTint(token(css, ink), token(css, tint), token(css, ground));
+        assert.ok(r >= floor, `${ink} on ${tint} over ${ground} is ${r.toFixed(2)}:1 on the ${name} theme`);
+      }
+    }
+  });
+}
+
 /* --- half two: the surfaces ------------------------------------------------ */
 
 /**
