@@ -53,3 +53,15 @@ test("a repository with no homepage of its own gets no preview, and no browser",
   const buzz = "https://api.github.com/repos/block/buzz";
   assert.deepEqual(asked, [buzz, `${buzz}/readme`, buzz, `${buzz}/readme`]);
 });
+
+test("metaFrom reads the og:image (relative, entity-escaped) and the title, else twitter:image and <title>", async () => {
+  const { metaFrom } = await import("./preview.mjs");
+  const og = metaFrom(
+    `<head><meta content="A &amp; B" property="og:title"><meta property='og:image' content='/img/card.png?a=1&amp;b=2'></head>`,
+    "https://example.com/post/1",
+  );
+  assert.deepEqual(og, { image: "https://example.com/img/card.png?a=1&b=2", title: "A & B" });
+  const twitter = metaFrom(`<title>Plain</title><meta name="twitter:image" content="https://cdn.example.com/x.jpg">`, "https://example.com");
+  assert.deepEqual(twitter, { image: "https://cdn.example.com/x.jpg", title: "Plain" });
+  assert.deepEqual(metaFrom(`<meta property="og:image" content="javascript:alert(1)">`, "https://example.com"), { image: null, title: null });
+});

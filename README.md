@@ -76,6 +76,12 @@ from X. `node pipeline/backfill-posts.mjs` re-reads every saved post; it skips
 files already on disk.
 Long posts keep their paragraph breaks from Firecrawl; `gh workflow run
 rescrape-posts.yml` re-reads the ones saved before that (`pipeline/rescrape-posts.mjs`).
+A new tool and a new /library article also get the picture their hover card
+shows, in `public/previews/` (`pipeline/preview.mjs`: a tool's site, an article's
+og:image or else its first screen); `node pipeline/preview.mjs [library]`
+backfills either. Outbound links written by hand in a note or on /about get theirs
+from `node pipeline/link-previews.mjs`, which the publish workflow runs after each
+publish.
 
 **Changing a published entry** goes through `node pipeline/patch.mjs --slug <slug>`
 (its flags are `USAGE` in that file). It is how Hermes writes the `title`, `tldr`,

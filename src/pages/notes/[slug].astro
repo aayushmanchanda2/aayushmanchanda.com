@@ -18,6 +18,8 @@ import { getCollection, render } from "astro:content";
 
 import Base from "../../layouts/Base.astro";
 import EntryLink from "../../components/EntryLink.astro";
+import PreviewCard from "../../components/PreviewCard.astro";
+import { linkPreview } from "../../lib/assets";
 import ImageFrame from "../../components/ImageFrame.astro";
 import EntryList from "../../components/EntryList.astro";
 import { noteJsonLd } from "../../lib/schema";
@@ -40,6 +42,10 @@ const { Content } = await render(note);
 
 const day = isoDay(note.data.date);
 const links = note.data.links ?? [];
+// ponytail: the Links row gets the hover card, a link inside the body does not
+// (no note body links out yet). Add a Sätteri hast plugin calling `linkPreview`
+// when one does; `pipeline/link-previews.mjs` already captures body links.
+const carded = links.some((url) => Object.keys(linkPreview(url)).length > 0);
 
 /**
  * The same three things the page shows: the title, the date above it, and the
@@ -83,7 +89,7 @@ const jsonLd = noteJsonLd({
           <ul class="also__list mono">
             {links.map((link) => (
               <li>
-                <EntryLink href={link} />
+                <EntryLink href={link} {...linkPreview(link)} />
               </li>
             ))}
           </ul>
@@ -100,6 +106,7 @@ const jsonLd = noteJsonLd({
       </nav>
     )
   }
+  {carded && <PreviewCard />}
 </Base>
 
 <style>

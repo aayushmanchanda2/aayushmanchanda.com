@@ -22,9 +22,11 @@ interface Props {
   href: string;
   /** Forwarded so the two pages can keep their own row styling. */
   class?: string;
+  /** The hover card's attributes (`lib/preview-card.ts › previewAttributes`). */
+  [data: `data-${string}`]: string;
 }
 
-const { href, class: className } = Astro.props;
+const { href, class: className, ...data } = Astro.props;
 
 const external = !isInternal(href);
 ---
@@ -34,6 +36,7 @@ const external = !isInternal(href);
   href={href}
   rel={external ? "noopener nofollow" : undefined}
   target={external ? "_blank" : undefined}
+  {...data}
 >
   <slot>{external ? linkLabel(href) : href}</slot>
 </a>

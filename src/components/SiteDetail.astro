@@ -15,7 +15,9 @@
 import type { Site } from "../lib/sites";
 import { domainSlug, screensOf } from "../lib/sites";
 import { formatDay } from "../lib/date";
+import { previewAttributes } from "../lib/preview-card";
 import CollectionChips from "./CollectionChips.astro";
+import PreviewCard from "./PreviewCard.astro";
 import PaletteRow from "./PaletteRow.astro";
 import ShotActions from "./ShotActions.astro";
 import ShotFrame from "./ShotFrame.astro";
@@ -119,13 +121,20 @@ const screens = screensOf(site.slug);
     <div class="fact">
       <dt class="mono">Link</dt>
       <dd>
-        <a class="ext" href={site.url} rel="noopener nofollow" target="_blank">
+        <a
+          class="ext"
+          href={site.url}
+          rel="noopener nofollow"
+          target="_blank"
+          {...previewAttributes({ image: site.shot, name: site.title, domain: site.domain })}
+        >
           Visit {site.domain}
         </a>
       </dd>
     </div>
   </dl>
 
+  <PreviewCard />
   {site.design && <SiteFoundations design={site.design} title={site.title} domain={site.domain} />}
 </article>
 

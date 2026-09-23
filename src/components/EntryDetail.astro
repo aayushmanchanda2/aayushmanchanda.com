@@ -24,6 +24,7 @@ import VideoFacade from "./VideoFacade.astro";
 import VoiceBlocks from "./VoiceBlocks.astro";
 import type { LibraryEntry } from "../lib/library";
 import { entryHref } from "../lib/library";
+import { libraryPreview } from "../lib/assets";
 import { formatDay } from "../lib/date";
 
 interface Props {
@@ -34,6 +35,8 @@ interface Props {
 
 const { entry, level = "h1" } = Astro.props;
 const Title = level;
+// The hover card itself ships with `LibraryPane`, on both pages that render this.
+const preview = libraryPreview(entry);
 ---
 
 <header>
@@ -41,7 +44,7 @@ const Title = level;
     {level === "h1" ? entry.title : <a class="title-link" href={entryHref(entry)}>{entry.title}</a>}
   </Title>
   <p class="out">
-    <EntryLink class="ext" href={entry.url}>{entry.domain}</EntryLink>
+    <EntryLink class="ext" href={entry.url} {...preview}>{entry.domain}</EntryLink>
   </p>
 
   {/*
@@ -131,7 +134,7 @@ const Title = level;
 {
   entry.kind === "article" && (
     <p class="full">
-      <EntryLink class="full__link ext press" href={entry.url}>Read the full article</EntryLink>
+      <EntryLink class="full__link ext press" href={entry.url} {...preview}>Read the full article</EntryLink>
     </p>
   )
 }

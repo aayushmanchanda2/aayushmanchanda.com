@@ -1,0 +1,147 @@
+{
+  "base": "http://localhost:4391",
+  "at": "2026-09-23T12:39:32.962Z",
+  "results": [
+    {
+      "name": "Paperclip",
+      "path": "/tools/paperclip",
+      "pass": true,
+      "open": true,
+      "visible": true,
+      "noImage": false,
+      "img": "/previews/paperclip.webp",
+      "natural": 800,
+      "want": "/previews/paperclip.webp",
+      "ariaHidden": "true",
+      "visibleMs": 389
+    },
+    {
+      "name": "Introducing DigitalOcean Managed Agents",
+      "path": "/library/how-to-unclench",
+      "pass": true,
+      "open": true,
+      "visible": true,
+      "noImage": false,
+      "img": "/previews/library/introducing-digitalocean-managed-agents.webp",
+      "natural": 800,
+      "want": "/previews/library/introducing-digitalocean-managed-agents.webp",
+      "ariaHidden": "true",
+      "visibleMs": 386
+    },
+    {
+      "name": "L8 Principal Building a Full Stack App with Agentic Engineering",
+      "path": "/library/how-to-unclench",
+      "pass": true,
+      "open": true,
+      "visible": true,
+      "noImage": false,
+      "img": "/shots/l8-principal-building-a-full-stack-app-with-agentic-engineer-thumb.webp",
+      "natural": 1280,
+      "want": "/shots/l8-principal-building-a-full-stack-app-with-agentic-engineer-thumb.webp",
+      "ariaHidden": "true",
+      "visibleMs": 378
+    },
+    {
+      "name": "How to Unclench",
+      "path": "/library/how-to-unclench",
+      "pass": true,
+      "open": true,
+      "visible": true,
+      "noImage": false,
+      "img": "/previews/library/how-to-unclench.webp",
+      "natural": 800,
+      "want": "/previews/library/how-to-unclench.webp",
+      "ariaHidden": "true",
+      "visibleMs": 363
+    },
+    {
+      "name": "How to Unclench",
+      "path": "/library/how-to-unclench",
+      "pass": true,
+      "open": true,
+      "visible": true,
+      "noImage": false,
+      "img": "/previews/library/how-to-unclench.webp",
+      "natural": 800,
+      "want": "/previews/library/how-to-unclench.webp",
+      "ariaHidden": "true",
+      "visibleMs": 367
+    },
+    {
+      "name": "The Philosopher CEO | Clay Co-Founder Kareem Amin",
+      "path": "/library/philosopher-ceo-kareem-amin",
+      "pass": true,
+      "open": true,
+      "visible": true,
+      "noImage": false,
+      "img": "/shots/philosopher-ceo-kareem-amin-thumb.webp",
+      "natural": 1280,
+      "want": "/shots/philosopher-ceo-kareem-amin-thumb.webp",
+      "ariaHidden": "true",
+      "visibleMs": 326
+    },
+    {
+      "name": "The Rise and Fall of Agent Civilizations",
+      "path": "/library/tag/agents",
+      "pass": true,
+      "open": true,
+      "visible": true,
+      "noImage": false,
+      "img": "/previews/library/the-rise-and-fall-of-agent-civilizations.webp",
+      "natural": 800,
+      "want": "/previews/library/the-rise-and-fall-of-agent-civilizations.webp",
+      "ariaHidden": "true",
+      "visibleMs": 372
+    },
+    {
+      "name": "Arc",
+      "path": "/sites",
+      "pass": true,
+      "open": true,
+      "visible": true,
+      "noImage": false,
+      "img": "/shots/arc-from-the-browser-company.webp",
+      "natural": 1440,
+      "want": "/shots/arc-from-the-browser-company.webp",
+      "ariaHidden": "true",
+      "visibleMs": 324
+    },
+    {
+      "name": "Design Engineer Tools",
+      "path": "/sites/designengineer-tools",
+      "pass": true,
+      "open": true,
+      "visible": true,
+      "noImage": false,
+      "img": "/shots/designengineer-tools.webp",
+      "natural": 1440,
+      "want": "/shots/designengineer-tools.webp",
+      "ariaHidden": "true",
+      "visibleMs": 389
+    },
+    {
+      "name": "note-link",
+      "path": "/notes/building-this-site",
+      "sel": ".also a[data-preview]",
+      "optional": true,
+      "pass": true,
+      "note": "no trigger on page"
+    },
+    {
+      "name": null,
+      "path": "/sites",
+      "pass": true,
+      "open": false,
+      "visible": false,
+      "noImage": null,
+      "img": null,
+      "natural": 0,
+      "want": null,
+      "ariaHidden": null,
+      "visibleMs": null
+    }
+  ],
+  "thirdPartyHosts": [
+    "img.logo.dev"
+  ]
+}
