@@ -1,9 +1,6 @@
 - 0 errors
 - 0 warnings
-# tests 667
 # pass 667
 # fail 0
-18:12:42 [build] Complete!
-  library details (digested): 2
-  library details: 43
-  filter: 89
+18:26:36 [build] Complete!
+Structured data OK — 264 graphs across 265 pages.

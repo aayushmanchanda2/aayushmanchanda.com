@@ -1,19 +1,19 @@
 {
  "archiveRows": 106,
- "alsoPublicOnMain": 10,
+ "alsoPublicOnMain": 6,
  "terms": 47,
- "distChangedFiles": 8,
+ "distFiles": 565,
  "untrackedFiles": 0,
- "distChanged": {
-  "bytes": 125392,
+ "dist": {
+  "bytes": 27817610,
   "hits": {}
  },
  "vercelOutput": {
-  "bytes": 48082553,
+  "bytes": 47502898,
   "hits": {}
  },
  "branchDiff": {
-  "bytes": 105759,
+  "bytes": 125244,
   "hits": {}
  }
 }
