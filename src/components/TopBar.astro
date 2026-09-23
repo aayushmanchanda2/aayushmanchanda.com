@@ -48,7 +48,7 @@ const { navItems, pathname, trail } = Astro.props;
 <style>
   .bar {
     position: sticky;
-    top: 0;
+    top: var(--frame);
     z-index: 30;
     display: flex;
     align-items: center;
@@ -57,6 +57,14 @@ const { navItems, pathname, trail } = Astro.props;
     padding-inline: max(0.5rem, env(safe-area-inset-left))
       max(0.5rem, env(safe-area-inset-right));
     background: var(--bg);
+  }
+
+  /* The menu's scrim and panel live in here, so this stacking context is
+     theirs. While the menu is up (the scrim leaves `hidden` only then, and
+     after its fade out) it rises over the stamp frame's 40, so the panel
+     covers the whole window, frame included (`styles/frame.css`). */
+  .bar:has(.mnav__scrim:not([hidden])) {
+    z-index: 90;
   }
 
   .bar__search {

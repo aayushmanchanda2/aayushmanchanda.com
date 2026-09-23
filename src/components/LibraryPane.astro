@@ -112,9 +112,9 @@ const tags = [...libraryTags].sort(
     .pane {
       display: block;
       position: sticky;
-      top: var(--bar-h);
+      top: calc(var(--frame) + var(--bar-h));
       flex: 0 0 350px;
-      height: calc(100dvh - var(--bar-h));
+      height: calc(100dvh - var(--bar-h) - 2 * var(--frame));
       overflow-y: auto;
       /* Arrow-key focus scrolls a row clear of the sticky toolbar. */
       scroll-padding-top: 7rem;

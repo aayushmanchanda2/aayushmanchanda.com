@@ -1,0 +1,43 @@
+/* The stamp frame (VET-255): every page sits on a sheet of `--frame-paper`,
+   inset `--frame` from the viewport, with perforation holes bitten into its
+   edge like a postage stamp's.
+
+   It belongs to the window, not the page, so it is the same on every route:
+   a frame that came and went would move the bar 12 to 20px between /tools and
+   a tool's own page. The reading pages look lighter under it on their own,
+   because their column sits far from the edges.
+
+   Body padding makes the room; everything sticky or fixed under the bar reads
+   `--frame` too (`TopBar`, `ToolList`, `SitePanel`, `LibraryPane`, the shell's
+   min-height in `Base.astro`). One fixed, click-through layer draws it: its
+   outline paints the gutter over anything scrolling past, and four rows of
+   half-circles along its edge are the perforation. Static, so reduced motion
+   has nothing to change. design.md §3 has the numbers. */
+
+html {
+  background: var(--frame-paper);
+}
+
+body {
+  padding: var(--frame);
+}
+
+body::after {
+  --hole: radial-gradient(circle closest-side, var(--frame-paper) 92%, transparent);
+
+  content: "";
+  position: fixed;
+  inset: var(--frame);
+  /* over the bar (30) and the site panel (20); under the preview card (50),
+     the menu (70, 80) and the palette (100) */
+  z-index: 40;
+  pointer-events: none;
+  outline: calc(var(--frame) + 1px) solid var(--frame-paper);
+  /* 10px holes on a 12px pitch, centred on the edge so half of each bites in;
+     `space` spreads them so both ends of an edge match */
+  background:
+    var(--hole) 0 -5px / 12px 10px space no-repeat,
+    var(--hole) 0 calc(100% + 5px) / 12px 10px space no-repeat,
+    var(--hole) -5px 0 / 10px 12px no-repeat space,
+    var(--hole) calc(100% + 5px) 0 / 10px 12px no-repeat space;
+}

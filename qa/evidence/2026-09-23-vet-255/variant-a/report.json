@@ -1,0 +1,122 @@
+{
+ "/tools 390 light": {
+  "barBottom": 68,
+  "barLeft": 12,
+  "h1Top": 100,
+  "titleOffset": 32,
+  "titleLeft": 35,
+  "mainLeft": 36,
+  "scrollW": 390,
+  "clientW": 390
+ },
+ "/sites 390 light": {
+  "barBottom": 68,
+  "barLeft": 12,
+  "h1Top": 100,
+  "titleOffset": 32,
+  "titleLeft": 35,
+  "mainLeft": 36,
+  "scrollW": 390,
+  "clientW": 390
+ },
+ "/library/philosopher-ceo-kareem-amin 390 light": {
+  "barBottom": 68,
+  "barLeft": 12,
+  "h1Top": 100,
+  "titleOffset": 32,
+  "titleLeft": 35,
+  "mainLeft": 36,
+  "scrollW": 390,
+  "clientW": 390
+ },
+ "/tools 1280 light": {
+  "barBottom": 75.1875,
+  "barLeft": 19.1875,
+  "h1Top": 123,
+  "titleOffset": 48,
+  "titleLeft": 65,
+  "mainLeft": 67,
+  "scrollW": 1280,
+  "clientW": 1280
+ },
+ "/sites 1280 light": {
+  "barBottom": 75.1875,
+  "barLeft": 19.1875,
+  "h1Top": 123,
+  "titleOffset": 48,
+  "titleLeft": 65,
+  "mainLeft": 67,
+  "scrollW": 1280,
+  "clientW": 1280
+ },
+ "/library/philosopher-ceo-kareem-amin 1280 light": {
+  "barBottom": 75.1875,
+  "barLeft": 19.1875,
+  "h1Top": 123,
+  "titleOffset": 48,
+  "titleLeft": 429,
+  "mainLeft": 417,
+  "scrollW": 1280,
+  "clientW": 1280
+ },
+ "/tools 390 dark": {
+  "barBottom": 68,
+  "barLeft": 12,
+  "h1Top": 100,
+  "titleOffset": 32,
+  "titleLeft": 35,
+  "mainLeft": 36,
+  "scrollW": 390,
+  "clientW": 390
+ },
+ "/sites 390 dark": {
+  "barBottom": 68,
+  "barLeft": 12,
+  "h1Top": 100,
+  "titleOffset": 32,
+  "titleLeft": 35,
+  "mainLeft": 36,
+  "scrollW": 390,
+  "clientW": 390
+ },
+ "/library/philosopher-ceo-kareem-amin 390 dark": {
+  "barBottom": 68,
+  "barLeft": 12,
+  "h1Top": 100,
+  "titleOffset": 32,
+  "titleLeft": 35,
+  "mainLeft": 36,
+  "scrollW": 390,
+  "clientW": 390
+ },
+ "/tools 1280 dark": {
+  "barBottom": 75.1875,
+  "barLeft": 19.1875,
+  "h1Top": 123,
+  "titleOffset": 48,
+  "titleLeft": 65,
+  "mainLeft": 67,
+  "scrollW": 1280,
+  "clientW": 1280
+ },
+ "/sites 1280 dark": {
+  "barBottom": 75.1875,
+  "barLeft": 19.1875,
+  "h1Top": 123,
+  "titleOffset": 48,
+  "titleLeft": 65,
+  "mainLeft": 67,
+  "scrollW": 1280,
+  "clientW": 1280
+ },
+ "/library/philosopher-ceo-kareem-amin 1280 dark": {
+  "barBottom": 75.1875,
+  "barLeft": 19.1875,
+  "h1Top": 123,
+  "titleOffset": 48,
+  "titleLeft": 429,
+  "mainLeft": 417,
+  "scrollW": 1280,
+  "clientW": 1280
+ }
+}
