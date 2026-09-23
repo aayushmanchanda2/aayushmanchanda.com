@@ -1,0 +1,111 @@
+{
+  "base": "http://localhost:4329",
+  "checks": [
+    {
+      "name": "pane Posts: URL has kind=post",
+      "ok": true,
+      "detail": "http://localhost:4329/library/how-gumclaw-works?kind=post"
+    },
+    {
+      "name": "pane Posts: only posts visible",
+      "ok": true,
+      "detail": {
+        "shown": 83
+      }
+    },
+    {
+      "name": "pane count is live",
+      "ok": true
+    },
+    {
+      "name": "hop 1: filter persists",
+      "ok": true,
+      "detail": "http://localhost:4329/library/how-to-build-a-one-person-media-company-with-hermes-bots?kind=post"
+    },
+    {
+      "name": "hop 1: Posts segment selected",
+      "ok": true
+    },
+    {
+      "name": "hop 1: pane scroll restored",
+      "ok": true,
+      "detail": {
+        "before": 900,
+        "after": 900,
+        "current": "post"
+      }
+    },
+    {
+      "name": "hop 2: filter persists",
+      "ok": true,
+      "detail": "http://localhost:4329/library/my-llm-cliche-highlighter-is-up-to-38-patterns-now?kind=post"
+    },
+    {
+      "name": "hop 2: Posts segment selected",
+      "ok": true
+    },
+    {
+      "name": "hop 2: pane scroll restored",
+      "ok": true,
+      "detail": {
+        "before": 900,
+        "after": 900,
+        "current": "post"
+      }
+    },
+    {
+      "name": "hop 3: filter persists",
+      "ok": true,
+      "detail": "http://localhost:4329/library/how-to-build-a-one-person-media-company-with-hermes-bots?kind=post"
+    },
+    {
+      "name": "hop 3: Posts segment selected",
+      "ok": true
+    },
+    {
+      "name": "hop 3: pane scroll restored",
+      "ok": true,
+      "detail": {
+        "before": 900,
+        "after": 900,
+        "current": "post"
+      }
+    },
+    {
+      "name": "next carries the filter",
+      "ok": true,
+      "detail": "http://localhost:4329/library/my-llm-cliche-highlighter-is-up-to-38-patterns-now?kind=post"
+    },
+    {
+      "name": "close returns to the filtered index",
+      "ok": true,
+      "detail": "http://localhost:4329/library?kind=post"
+    },
+    {
+      "name": "ArrowDown lands on the next visible row",
+      "ok": true,
+      "detail": {
+        "from": "http://localhost:4329/library/how-to-build-a-one-person-media-company-with-hermes-bots?kind=post",
+        "to": "http://localhost:4329/library/my-llm-cliche-highlighter-is-up-to-38-patterns-now?kind=post"
+      }
+    },
+    {
+      "name": "tag select narrows",
+      "ok": true,
+      "detail": {
+        "tag": "agents",
+        "shown": 11,
+        "url": "http://localhost:4329/library/how-to-build-a-one-person-media-company-with-hermes-bots?kind=post&tag=agents"
+      }
+    },
+    {
+      "name": "pane row name includes its kind",
+      "ok": true,
+      "detail": "- link \"Tell your agent to mine your conversations post x.com\":"
+    },
+    {
+      "name": "/library keeps its tab row, no segmented control",
+      "ok": true
+    }
+  ]
+}

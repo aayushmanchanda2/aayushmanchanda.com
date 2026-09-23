@@ -5,18 +5,24 @@
  * surface with a 12px radius. The layout it sits in is `layouts/Base.astro`'s
  * `pane` slot; the container query that hides it under 48rem is here.
  *
- * It repeats on all 139 entry pages, so the row is kept small on purpose:
- * three bare elements, no scoped-style attributes (the style block is global
- * and namespaced to `.pane`), and the summary cut at 110 characters, about
- * what the two-line clamp shows. The measured cost is in the VET-231 audit.
+ * A sticky toolbar sits on top (VET-245): the kind segmented control
+ * (`KindSegments`), a tag select and a live count. `lib/library-pane.ts › FILTER`
+ * runs inline after the list, so a filtered pane paints filtered, and it
+ * writes the filter onto every row link so it carries from entry to entry.
  *
- * Filters stay on /library. This is the whole list in list order, which is
- * also the ring EntryNav's keys walk.
+ * It repeats on all 139 entry pages, so the row is kept small on purpose:
+ * three bare elements plus the kind glyph, no scoped-style attributes (the
+ * style block is global and namespaced to `.pane`), and the summary cut at 110
+ * characters, about what the two-line clamp shows. The measured cost is in the
+ * VET-231 audit.
  */
+import KindIcon from "./KindIcon.astro";
+import KindSegments from "./KindSegments.astro";
 import type { LibraryEntry } from "../lib/library";
-import { entryHref, rowSummary } from "../lib/library";
-import { PREPAINT } from "../lib/library-pane";
+import { entryHref, kindGroups, libraryTags, rowSummary } from "../lib/library";
+import { FILTER, PREPAINT } from "../lib/library-pane";
 import { clipText } from "../lib/post";
+import { tagLabel } from "../lib/tags";
 
 interface Props {
   entries: LibraryEntry[];
@@ -25,23 +31,39 @@ interface Props {
 }
 
 const { entries, current } = Astro.props;
+
+/** Busiest first, ties alphabetical: `TagFilters.astro`'s order. */
+const tags = [...libraryTags].sort(
+  (a, b) => b.entries.length - a.entries.length || a.slug.localeCompare(b.slug),
+);
 ---
 
 <nav class="pane" aria-label="Library list" data-pane data-mnav-inert>
-  <ul>
+  <div class="pane__bar">
+    <KindSegments groups={kindGroups} total={entries.length} />
+    <div class="pane__row">
+      <label class="visually-hidden" for="pane-tag">Tag</label>
+      <select class="select" id="pane-tag" data-tag-set>
+        <option value="">All tags</option>
+        {tags.map((group) => <option value={group.slug}>{tagLabel(group.slug)} ({group.entries.length})</option>)}
+      </select>
+      <p class="pane__count tabular-nums" aria-live="polite" data-filter-count>{entries.length} entries</p>
+    </div>
+  </div>
+  <ul data-rows>
     {
       entries.map((entry) => {
         const summary = rowSummary(entry);
         return (
-          <li>
+          <li data-kind={entry.kind} data-tags={entry.tags.join(" ")}>
             <a
               href={entryHref(entry)}
               aria-current={entry.slug === current ? "page" : undefined}
             >
               <b>{entry.title}</b>
               <small>
+                <KindIcon kind={entry.kind} />
                 <span>{entry.domain}</span>
-                <span>{entry.kind}</span>
               </small>
               {summary && <span>{clipText(summary, 110)}</span>}
             </a>
@@ -50,33 +72,33 @@ const { entries, current } = Astro.props;
       })
     }
   </ul>
+  <p class="pane__empty" data-filter-empty hidden>
+    No entries match both filters. <a href={`/library/${current}`}>Show all</a>
+  </p>
 </nav>
+<script is:inline set:html={FILTER} />
 <script is:inline set:html={PREPAINT} />
 <script>
   import { PANE_ATTRIBUTE, paneStep } from "../lib/library-pane";
 
-  // A roving tabindex: 139 links are one tab stop, so Tab from the bar reaches
-  // the entry instead of walking the whole list. The stop starts on the
-  // `aria-current` row and follows focus; Up, Down, Home and End move it, and
-  // Enter is the link's own. Without this script every row is a stop again.
+  // A roving tabindex: the rows are one tab stop, so Tab from the bar reaches
+  // the entry instead of walking the whole list. `FILTER` puts the stop on the
+  // `aria-current` row, or the first shown one, every time the filter changes;
+  // Up, Down, Home and End move it among the rows the filter shows, and Enter
+  // is the link's own. Without scripting every row is a stop again.
   const pane = document.querySelector<HTMLElement>(`[${PANE_ATTRIBUTE}]`);
-  if (pane) {
-    const links = [...pane.querySelectorAll<HTMLAnchorElement>("a")];
-    const start = pane.querySelector('[aria-current="page"]') ?? links[0];
-    for (const link of links) link.tabIndex = link === start ? 0 : -1;
-
-    pane.addEventListener("keydown", (event) => {
-      if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
-      const from = links.indexOf(event.target as HTMLAnchorElement);
-      const to = from < 0 ? null : paneStep(event.key, from, links.length);
-      const next = to === null ? undefined : links[to];
-      if (!next) return;
-      event.preventDefault();
-      (event.target as HTMLAnchorElement).tabIndex = -1;
-      next.tabIndex = 0;
-      next.focus();
-    });
-  }
+  pane?.addEventListener("keydown", (event) => {
+    if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+    const links = [...pane.querySelectorAll<HTMLAnchorElement>("[data-rows] > li:not([hidden]) > a")];
+    const from = links.indexOf(event.target as HTMLAnchorElement);
+    const to = from < 0 ? null : paneStep(event.key, from, links.length);
+    const next = to === null ? undefined : links[to];
+    if (!next) return;
+    event.preventDefault();
+    (event.target as HTMLAnchorElement).tabIndex = -1;
+    next.tabIndex = 0;
+    next.focus();
+  });
 </script>
 
 <style is:global>
@@ -94,18 +116,66 @@ const { entries, current } = Astro.props;
       flex: 0 0 350px;
       height: calc(100dvh - var(--bar-h));
       overflow-y: auto;
-      padding: 0.75rem;
+      /* Arrow-key focus scrolls a row clear of the sticky toolbar. */
+      scroll-padding-top: 7rem;
       border-right: 1px solid var(--hairline);
     }
+  }
+
+  /* The toolbar: sticky at the top of the pane's own scroll, on the page
+     colour so rows pass under it, a hairline under it. Padding lives here and
+     on the list rather than on the pane, so `top: 0` is the pane's top. */
+  .pane__bar {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background: var(--bg);
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .pane .seg {
+    width: 100%;
+  }
+
+  .pane__row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .pane__row .select {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .pane__count {
+    font-size: 0.875rem;
+    color: var(--text-tertiary);
+    white-space: nowrap;
+  }
+
+  .pane__empty {
+    padding: 1.5rem 0.75rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+  }
+
+  .pane__empty a {
+    color: var(--text-primary);
   }
 
   .pane ul {
     display: flex;
     flex-direction: column;
     gap: 2px;
+    padding: 0.75rem;
   }
 
-  .pane a {
+  .pane li > a {
     display: flex;
     flex-direction: column;
     gap: 0.125rem;
@@ -118,13 +188,13 @@ const { entries, current } = Astro.props;
   /* briOS's /hn row: hover and selected are one look, and hover is instant
      (design.md §4). */
   @media (hover: hover) {
-    .pane a:hover {
+    .pane li > a:hover {
       background: var(--surface-selected);
       box-shadow: var(--shadow-contrast);
     }
   }
 
-  .pane a[aria-current="page"] {
+  .pane li > a[aria-current="page"] {
     background: var(--surface-selected);
     box-shadow: var(--shadow-contrast);
   }
@@ -142,23 +212,20 @@ const { entries, current } = Astro.props;
     overflow: hidden;
   }
 
+  /* The kind glyph, then the domain (VET-245); the glyph carries the kind's
+     word for a screen reader. */
   .pane small {
     display: flex;
+    align-items: center;
     gap: 0.4rem;
     font-size: 0.875rem;
     line-height: 1.45;
     color: var(--text-tertiary);
   }
 
-  .pane small span + span::before {
-    content: "\00b7" / "";
-    margin-right: 0.4rem;
-    color: var(--hairline-strong);
-  }
-
   /* The TLDR line (T14 fills it; `lib/library.ts › rowSummary` says what
      stands in until then). */
-  .pane a > span {
+  .pane li > a > span {
     margin-top: 0.125rem;
     font-size: 0.875rem;
     line-height: 1.45;

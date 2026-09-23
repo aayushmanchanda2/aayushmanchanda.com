@@ -79,44 +79,10 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
     margin-bottom: 0.25rem;
   }
 
-  /* Native, so the platform's own picker opens on a phone; only the closed
-     box is drawn. The chevron is two gradients rather than an image. */
-  /* 40px tall, the hit floor; 44px under a finger. */
-  .select {
-    appearance: none;
-    min-height: 40px;
-    padding: 0 1.75rem 0 0.75rem;
-    border: 1px solid var(--hairline-strong);
-    border-radius: var(--r-md);
-    background:
-      linear-gradient(45deg, transparent 50%, currentColor 50%) right 0.875rem center / 5px 5px no-repeat,
-      linear-gradient(135deg, currentColor 50%, transparent 50%) right 0.5625rem center / 5px 5px no-repeat,
-      var(--bg);
-    color: var(--text-primary);
-    font: inherit;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition-property: border-color;
-    transition-duration: var(--dur-fast);
-    transition-timing-function: var(--ease);
-  }
-
-  /* A step up from the resting hairline. Not --text-quaternary: that token is
-     decoration only, and this is a control (design.md §2). */
-  .select:hover {
-    border-color: var(--text-tertiary);
-  }
-
   .count {
     margin-left: 0.25rem;
     color: var(--text-tertiary);
     font-size: 0.875rem;
-  }
-
-  @media (pointer: coarse) {
-    .select {
-      min-height: 44px;
-    }
   }
 
   .empty {

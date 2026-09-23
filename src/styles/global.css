@@ -654,6 +654,40 @@ mark {
   border: 0;
 }
 
+/* A native select: the /tools filters and the /library pane's tag filter.
+   Native, so the platform's own picker opens on a phone; only the closed box
+   is drawn, the chevron two gradients. 40px tall, the hit floor; 44px under a
+   finger. The hover border is a step up from the hairline, never
+   --text-quaternary: that token is decoration only (design.md §2). */
+.select {
+  appearance: none;
+  min-height: 40px;
+  padding: 0 1.75rem 0 0.75rem;
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--r-md);
+  background:
+    linear-gradient(45deg, transparent 50%, currentColor 50%) right 0.875rem center / 5px 5px no-repeat,
+    linear-gradient(135deg, currentColor 50%, transparent 50%) right 0.5625rem center / 5px 5px no-repeat,
+    var(--bg);
+  color: var(--text-primary);
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition-property: border-color;
+  transition-duration: var(--dur-fast);
+  transition-timing-function: var(--ease);
+}
+
+.select:hover {
+  border-color: var(--text-tertiary);
+}
+
+@media (pointer: coarse) {
+  .select {
+    min-height: 44px;
+  }
+}
+
 /* --------------------------------------------------------------------------
    4. Reduced motion — global brake
    -------------------------------------------------------------------------- */
