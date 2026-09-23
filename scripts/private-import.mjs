@@ -9,7 +9,9 @@
  * goes through `parseLibrary` first, the same parser the site builds with, so
  * a bad row stops here rather than on the page. Rows upsert by slug and files
  * skip when the stored copy has the same hash, so a re-run changes nothing.
- * Prints counts only.
+ * An entry that is public (its slug is in `src/data/library.json`) is never
+ * private too: it is skipped, and removed from Convex with the files only it
+ * used. Prints counts only.
  */
 import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
@@ -72,7 +74,16 @@ async function call(route, init = {}, tries = 3) {
 const archive = JSON.parse(readFileSync(path.join(PRIVATE, "library-private-archive.json"), "utf8"));
 parseLibrary(archive.map((item) => libraryJson(item.entry)));
 
-const rows = archive.map((item) => ({
+const PUBLIC = new Set(JSON.parse(readFileSync(path.join(ROOT, "src", "data", "library.json"), "utf8")).map((/** @type {{ slug: string }} */ e) => e.slug));
+const MEDIA_REF = /\/(?:posts|shots|previews)\/[A-Za-z0-9/_.-]+\.(?:webp|mp4)/g;
+/** The files an archive row points at, and its library preview. @param {(typeof archive)[number]} item */
+const refs = (item) => [...(JSON.stringify(item.entry).match(MEDIA_REF) ?? []), `/previews/library/${item.entry["slug"]}.webp`];
+const isPublic = (/** @type {(typeof archive)[number]} */ item) => PUBLIC.has(String(item.entry["slug"]));
+const kept = new Set(archive.filter((item) => !isPublic(item)).flatMap(refs));
+const pruneSlugs = archive.filter(isPublic).map((item) => String(item.entry["slug"]));
+const prunePaths = [...new Set(archive.filter(isPublic).flatMap(refs))].filter((p) => !kept.has(p));
+
+const rows = archive.filter((item) => !isPublic(item)).map((item) => ({
   ...item.entry,
   raindrop_id: item.raindrop_id ?? null,
   bucket: item.bucket ?? null,
@@ -93,7 +104,8 @@ for (let i = 0; i < rows.length; i += 25) {
 
 const files = readdirSync(MEDIA, { recursive: true, withFileTypes: true })
   .filter((entry) => entry.isFile())
-  .map((entry) => path.join(entry.parentPath, entry.name));
+  .map((entry) => path.join(entry.parentPath, entry.name))
+  .filter((file) => !prunePaths.includes(`/${path.relative(MEDIA, file).split(path.sep).join("/")}`));
 let stored = 0;
 for (const file of files) {
   const bytes = readFileSync(file);
@@ -106,9 +118,15 @@ for (const file of files) {
   if (result.stored) stored++;
 }
 
+const pruned = await call("/import/prune", {
+  method: "POST",
+  headers: { "content-type": "application/json" },
+  body: JSON.stringify({ slugs: pruneSlugs, paths: prunePaths }),
+});
 const counts = await call("/import");
 console.log(
   `target=${prod ? "prod" : "dev"} rows_sent=${rows.length} inserted=${total.inserted} updated=${total.updated} ` +
     `files_sent=${files.length} files_stored=${stored} files_unchanged=${files.length - stored} ` +
+    `public_skipped=${pruneSlugs.length} rows_pruned=${pruned.rows} files_pruned=${pruned.files} ` +
     `entries_in_convex=${counts.entries} media_in_convex=${counts.media}`,
 );

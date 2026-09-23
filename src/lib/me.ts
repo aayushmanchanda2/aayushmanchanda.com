@@ -1,9 +1,12 @@
 /**
  * me.ts — who may see /me (VET-274), decided on the server.
  *
- * Two checks, both required: Clerk says there is a session and its primary
- * email is ALLOWED_EMAIL, and then Convex checks the same email again on the
- * "convex" JWT before it returns a row (`convex/entries.ts › requireOwner`).
+ * Two checks, both required. Here: the session's user, looked up by id through
+ * Clerk's backend API, has ALLOWED_EMAIL as primary email; that needs no token
+ * claim. Then Convex checks the email again on the token it is handed
+ * (`convex/entries.ts › requireOwner`). Clerk's Convex integration puts only
+ * `aud` in that token, so the session token needs an `email` claim added once
+ * (the wizard's Clerk stage says where); until then Convex refuses, fail closed.
  * Values are read from `process.env` at request time, never inlined into the
  * build, so a local `npm run build` with none of them set still works and
  * /me says it is not configured.
@@ -40,7 +43,9 @@ export async function gate(locals: App.Locals): Promise<Gate> {
   if (!auth.userId) return { state: "sign-in" };
   const user = await locals.currentUser();
   if (!isOwner(user?.primaryEmailAddress?.emailAddress, env.allowed)) return { state: "forbidden" };
-  const token = await auth.getToken({ template: "convex" });
+  // The way convex/react-clerk asks: the session token once the Convex
+  // integration has set its audience, else the legacy "convex" JWT template.
+  const token = await (auth.sessionClaims?.aud === "convex" ? auth.getToken() : auth.getToken({ template: "convex" }));
   if (!token) return { state: "forbidden" };
   const convex = new ConvexHttpClient(env.convexUrl);
   convex.setAuth(token);

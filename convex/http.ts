@@ -53,6 +53,13 @@ http.route({
   }),
 });
 
+/** `{ slugs, paths }`: delete those rows and files (public entries never stay private). */
+http.route({
+  path: "/import/prune",
+  method: "POST",
+  handler: guarded(async (ctx, request) => json(await ctx.runMutation(internal.entries.prune, await request.json()))),
+});
+
 /** Row and file counts, for the import script's closing line. */
 http.route({
   path: "/import",

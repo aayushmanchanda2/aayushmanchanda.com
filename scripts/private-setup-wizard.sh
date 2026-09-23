@@ -241,6 +241,9 @@ step "Configure → API keys. Copy the Publishable key (pk_test_…)."
 ask_secret PUBLIC_CLERK_PUBLISHABLE_KEY "Paste the publishable key (hidden):"
 step "Copy the Secret key (sk_test_…) from the same page."
 ask_secret CLERK_SECRET_KEY "Paste the secret key (hidden):"
+step "Configure → Sessions → Customize session token. Add this claim and save, so Convex can check your email:"
+note '  "email": "{{user.primary_email_address}}"'
+pause "Press Enter once it is saved."
 stage "Convex production values"
 open_url "https://dashboard.convex.dev/t/aayush-personal/aayushmanchanda-private"
 step "Switch the deployment picker (top left) to Production."
@@ -288,7 +291,6 @@ confirm "Set INGEST_SECRET and CONVEX_SITE_URL now?" && {
   set_secret CONVEX_SITE_URL "$PROD_CONVEX_SITE_URL"
 }
 pause "Press Enter to finish."
-
 finish
 (( ${#WRITTEN_VERCEL[@]} )) && note "set on Vercel: ${WRITTEN_VERCEL[*]}"
 (( ${#WRITTEN_CONVEX[@]} )) && note "set on Convex: ${WRITTEN_CONVEX[*]}"

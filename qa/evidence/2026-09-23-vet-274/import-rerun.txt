@@ -1,1 +1,1 @@
-target=dev rows_sent=106 inserted=0 updated=106 files_sent=185 files_stored=0 files_unchanged=185 entries_in_convex=106 media_in_convex=185
+target=dev rows_sent=100 inserted=0 updated=100 files_sent=185 files_stored=0 files_unchanged=185 public_skipped=6 rows_pruned=6 files_pruned=0 entries_in_convex=100 media_in_convex=185

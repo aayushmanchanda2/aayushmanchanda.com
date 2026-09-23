@@ -96,6 +96,26 @@ export const putMedia = internalMutation({
   },
 });
 
+/**
+ * Rows that must not be private because they are public (`src/data/library.json`),
+ * and the files only they used. The import sends both lists on every run.
+ */
+export const prune = internalMutation({
+  args: { slugs: v.array(v.string()), paths: v.array(v.string()) },
+  handler: async (ctx, { slugs, paths }) => {
+    const out = { rows: 0, files: 0 };
+    for (const slug of slugs) {
+      const row = await bySlug(ctx, slug);
+      if (row) (await ctx.db.delete(row._id), out.rows++);
+    }
+    for (const path of paths) {
+      const file = await ctx.db.query("media").withIndex("by_path", (q) => q.eq("path", path)).unique();
+      if (file) (await ctx.storage.delete(file.storageId), await ctx.db.delete(file._id), out.files++);
+    }
+    return out;
+  },
+});
+
 export const counts = internalQuery({
   args: {},
   handler: async (ctx) => ({
