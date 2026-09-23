@@ -21,7 +21,7 @@ import EntryLink from "../../components/EntryLink.astro";
 import ImageFrame from "../../components/ImageFrame.astro";
 import EntryList from "../../components/EntryList.astro";
 import { noteJsonLd } from "../../lib/schema";
-import { formatDay } from "../../lib/date";
+import { formatDay, isoDay } from "../../lib/date";
 import { noteEntry } from "../../lib/entry-list";
 import { readNext } from "../../lib/read-next";
 
@@ -38,7 +38,7 @@ type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 const { note, next } = Astro.props;
 const { Content } = await render(note);
 
-const day = note.data.date.toISOString().slice(0, 10);
+const day = isoDay(note.data.date);
 const links = note.data.links ?? [];
 
 /**

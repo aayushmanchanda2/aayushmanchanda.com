@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { absolutize, escapeXml, newestFirst, paragraphs, renderFeed, rfc822 } from "./rss.ts";
+import { rfc822 } from "./date.ts";
+import { absolutizeHtml, escapeXml, newestFirst, paragraphs, renderFeed } from "./rss.ts";
 
 const ORIGIN = "https://example.com";
 
@@ -37,7 +38,7 @@ test("plain text becomes escaped paragraphs, blanks skipped", () => {
 
 test("root-relative links and images go absolute; other URLs are left alone", () => {
   assert.equal(
-    absolutize(`<a href="/tools">t</a><img src="/notes/x.webp"><a href="//cdn.x/y">c</a><a href="https://z.com/">z</a>`, ORIGIN),
+    absolutizeHtml(`<a href="/tools">t</a><img src="/notes/x.webp"><a href="//cdn.x/y">c</a><a href="https://z.com/">z</a>`, ORIGIN),
     `<a href="https://example.com/tools">t</a><img src="https://example.com/notes/x.webp"><a href="//cdn.x/y">c</a><a href="https://z.com/">z</a>`,
   );
 });

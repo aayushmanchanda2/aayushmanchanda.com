@@ -10,6 +10,7 @@ import type { APIRoute } from "astro";
 
 import { getCollection } from "astro:content";
 
+import { isoDay } from "../lib/date";
 import { experiments } from "../lib/experiments";
 import { feedItems } from "../lib/feeds";
 import {
@@ -60,9 +61,7 @@ export const GET: APIRoute = async () => {
       ...tools.map((tool) => tool.status_date),
       ...sites.map((site) => site.saved_date),
       ...experiments.map((experiment) => experiment.started),
-      ...(await getCollection("notes")).map((note) =>
-        note.data.date.toISOString().slice(0, 10),
-      ),
+      ...(await getCollection("notes")).map((note) => isoDay(note.data.date)),
     ]),
     blocks: [
       [

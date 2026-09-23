@@ -9,6 +9,7 @@
 
 import { getCollection } from "astro:content";
 
+import { isoDay } from "./date";
 import { library, rowSummary } from "./library";
 import { VOICE_FIELDS, type Voice } from "./markdown";
 import { newestFirst, paragraphs, renderFeed, escapeXml, type FeedItem } from "./rss";
@@ -63,7 +64,7 @@ async function notes(): Promise<FeedItem[]> {
   return (await getCollection("notes")).map((note) => ({
     title: note.data.title,
     path: `/notes/${note.id}`,
-    date: note.data.date.toISOString().slice(0, 10),
+    date: isoDay(note.data.date),
     section: "Notes",
     html:
       (note.data.image ? `<p><img src="${escapeXml(note.data.image)}" alt="" /></p>` : "") +
