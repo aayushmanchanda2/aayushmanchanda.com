@@ -8,10 +8,15 @@
  * than rounded tinted cards (design.md §3). "Copy as DESIGN.md" stands in for
  * ui-skills' source pane. Copy and its flash are `lib/copy-flash.ts`, shared
  * with `PaletteRow.astro`, which this panel replaces once it names three
- * colours (`pages/sites/[slug].astro`).
+ * colours (`SiteDetail.astro`).
  *
  * `lib/design-md.ts › parseDesign` is why the inline styles below may
  * interpolate tokens: hex is `#rrggbb`, lengths are px, families are plain.
+ *
+ * A closed `<details>` (VET-242): the tokens are there for the reader who
+ * came to take them, and below the fold of everyone else. The summary names
+ * which groups are inside, so closed still says what opening gets you.
+ * Behaviour (copy, "Show all N") is `lib/site-detail.ts`.
  */
 import type { SiteDesign } from "../lib/design-md";
 import { toDesignMd } from "../lib/design-md";
@@ -73,15 +78,19 @@ const familyList =
   families.length > 1 ? `${families.slice(0, -1).join(", ")} or ${families.at(-1)}` : families[0];
 ---
 
-<section class="found" aria-labelledby="found-title" data-copy-root>
+<details class="found" data-copy-root>
+  <summary class="found__summary">
+    <h2 class="found__title mono">Design</h2>
+    <span class="found__groups">{groups.map((group) => group.head).join(", ")}</span>
+    <span class="found__chevron" aria-hidden="true"></span>
+  </summary>
   <div class="found__head">
-    <h2 class="found__title mono" id="found-title">Design</h2>
+    <p class="found__note">Read from {domain} on <time datetime={design.read_date}>{formatDay(design.read_date)}</time>.</p>
     <button type="button" class="found__md mono press" data-copy={markdown} data-copy-name="DESIGN.md">
       <span data-copy-label aria-hidden="true">Copy as DESIGN.md</span>
       <span class="visually-hidden">Copy {title}'s tokens as DESIGN.md</span>
     </button>
   </div>
-  <p class="found__note">Read from {domain} on <time datetime={design.read_date}>{formatDay(design.read_date)}</time>.</p>
 
   {
     groups.map((group) => (
@@ -134,7 +143,7 @@ const familyList =
   }
 
   <p class="visually-hidden" role="status" data-copy-status></p>
-</section>
+</details>
 
 <style>
   /* 40px above, the section rhythm (design.md §2). Each token group is a
@@ -144,11 +153,58 @@ const familyList =
     margin-top: 2.5rem;
   }
 
+  /* The whole row is the toggle, 40px tall, the hit floor. */
+  .found__summary {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    min-height: 40px;
+    padding-block: 0.625rem;
+    border-bottom: 1px solid var(--hairline);
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .found__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .found__groups {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+  }
+
+  /* A chevron drawn from two borders, pointing down, flipping up when open. */
+  .found__chevron {
+    width: 7px;
+    height: 7px;
+    margin-right: 0.25rem;
+    border-right: 1.5px solid var(--text-secondary);
+    border-bottom: 1.5px solid var(--text-secondary);
+    transform: translateY(-2px) rotate(45deg);
+    transition-property: transform;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .found[open] .found__chevron {
+    transform: translateY(1px) rotate(-135deg);
+  }
+
+  @media (hover: hover) {
+    .found__summary:hover .found__chevron {
+      border-color: var(--text-primary);
+    }
+  }
+
   .found__head {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
+    margin-top: 0.5rem;
   }
 
   /* ShotActions' `.act`: a housekeeping control at --text-secondary, 40px tall. */
@@ -167,7 +223,7 @@ const familyList =
     color: var(--text-tertiary);
   }
 
-  .found__note,
+  .group > .found__note,
   .group > .rows,
   .styles,
   .tag--more {
@@ -290,23 +346,3 @@ const familyList =
     }
   }
 </style>
-
-<script>
-  import { wireAllCopy } from "../lib/copy-flash";
-
-  wireAllCopy();
-
-  // "Show all N": the tail is in the HTML, so with scripting off every token
-  // shows and the button never does. TagFilters.astro's toggle, per group.
-  document.querySelectorAll<HTMLButtonElement>(".found [data-more]").forEach((button) => {
-    const tail = button.parentElement?.querySelectorAll<HTMLElement>("[data-tail]") ?? [];
-    const set = (open: boolean) => {
-      tail.forEach((item) => item.toggleAttribute("hidden", !open));
-      button.setAttribute("aria-expanded", String(open));
-      button.textContent = open ? "Show fewer" : (button.dataset.label ?? "Show all");
-    };
-    set(false);
-    button.hidden = false;
-    button.addEventListener("click", () => set(button.getAttribute("aria-expanded") !== "true"));
-  });
-</script>

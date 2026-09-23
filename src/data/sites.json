@@ -1846,53 +1846,110 @@
   {
     "slug": "desengs-resources-for-design-engineers",
     "title": "DESENGS",
-    "url": "https://api.raindrop.io/v2/raindrop/1852881773/file?type=image/jpeg",
-    "domain": "api.raindrop.io",
+    "url": "https://desengs.com/",
+    "domain": "desengs.com",
     "saved_date": "2026-09-14",
     "shot": "/shots/desengs-resources-for-design-engineers.webp",
     "palette": [
-      "#ffffff",
-      "#1987e1",
-      "#146fb9",
-      "#0db4e2",
-      "#3153ff",
-      "#2cd4ed"
+      "#09090b",
+      "#6d6d75",
+      "#2c2c30",
+      "#4c4c51",
+      "#d3d3d3",
+      "#aeaeb0"
     ],
     "design": {
-      "read_date": "2026-09-22",
+      "read_date": "2026-09-23",
       "colors": [
         {
           "name": "background",
-          "hex": "#ffffff"
+          "hex": "#09090b"
         },
         {
           "name": "surface",
-          "hex": "#1987e1"
+          "hex": "#f97316"
+        },
+        {
+          "name": "text",
+          "hex": "#fafafa"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#71717a"
         },
         {
           "name": "accent",
-          "hex": "#1987e1"
+          "hex": "#0000ee"
+        },
+        {
+          "name": "border",
+          "hex": "#27272a"
         }
       ],
-      "type": [],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Instrument Serif",
+          "fontSize": "33.18px",
+          "fontWeight": "400",
+          "lineHeight": "39.81px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "Instrument Serif",
+          "fontSize": "23.04px",
+          "fontWeight": "400",
+          "lineHeight": "normal",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "body",
+          "fontFamily": "IBM Plex Mono",
+          "fontSize": "12.64px",
+          "fontWeight": "400",
+          "lineHeight": "normal",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "label",
+          "fontFamily": "Geist",
+          "fontSize": "12.64px",
+          "fontWeight": "500",
+          "lineHeight": "normal",
+          "letterSpacing": "normal"
+        }
+      ],
       "spacing": [
         {
-          "name": "5px",
-          "value": "5px"
+          "name": "1",
+          "value": "4px"
         },
         {
-          "name": "9px",
-          "value": "9px"
+          "name": "6px",
+          "value": "6px"
         },
         {
-          "name": "18px",
-          "value": "18px"
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        },
+        {
+          "name": "50px",
+          "value": "50px"
         }
       ],
       "radius": [
         {
-          "name": "card",
-          "value": "5px"
+          "name": "image",
+          "value": "8px"
+        },
+        {
+          "name": "full",
+          "value": "9999px"
         }
       ]
     },

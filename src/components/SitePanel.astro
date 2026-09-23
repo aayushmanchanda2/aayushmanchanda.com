@@ -1,0 +1,142 @@
+---
+/**
+ * SitePanel — /sites' slide-over detail. builtbydesigners' `.details-panel`:
+ * fixed right under the bar, `calc(100% - min(460px, 50vw))` wide, a hairline
+ * on its left edge, sliding in on translateX. Under 48rem it is a full-width
+ * sheet.
+ *
+ * Its content is the static page's: a click on a tile or a row fetches
+ * `/sites/<slug>`, lifts `SiteDetail.astro`'s `article` out of it and wires it
+ * (`lib/site-detail.ts`). The tile's href is untouched, so a modifier click,
+ * a reload or no scripting at all gets the full static page.
+ *
+ * **A non-modal dialog** (`role="dialog"`, `aria-modal="false"`). The gallery
+ * beside it stays visible and live: a click on another tile switches the
+ * panel, a click on the gallery's empty canvas closes it, and nothing dims.
+ * Modal semantics would hide that live half from a screen reader while a
+ * pointer can still use it. Focus moves in on open and Tab wraps inside, so a
+ * keyboard reader stays with what just opened; Escape (or the close button)
+ * leaves and puts focus back on the tile that opened it.
+ *
+ * History: opening pushes `/sites/<slug>`, closing pushes `/sites`, switching
+ * between screens of one site replaces; back and forward replay all three.
+ */
+/*
+ * Imported for its styles, never rendered here. The content arrives fetched,
+ * and Astro ships a component's CSS (and its children's) only on pages whose
+ * module graph holds it; an unused import is elided, hence the `void`.
+ */
+import SiteDetail from "./SiteDetail.astro";
+void SiteDetail;
+---
+
+<div
+  class="panel"
+  role="dialog"
+  aria-modal="false"
+  aria-labelledby="site-panel-title"
+  tabindex="-1"
+  data-site-panel
+  inert
+>
+  <div class="panel__bar">
+    <button class="panel__close" type="button" aria-label="Close" data-panel-close>
+      <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
+        <path d="M4 4 L12 12 M12 4 L4 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+      </svg>
+    </button>
+  </div>
+  <div class="panel__body" data-panel-body></div>
+</div>
+
+<style>
+  .panel {
+    --list-width: min(460px, 50vw);
+
+    position: fixed;
+    top: var(--bar-h);
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+    width: calc(100% - var(--list-width));
+    overflow-y: auto;
+    overscroll-behavior-y: auto;
+    border-left: 1px solid var(--hairline);
+    background: var(--bg);
+    visibility: hidden;
+    transform: translateX(100%);
+    transition-property: transform, visibility;
+    transition-duration: 0.22s;
+    transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
+  .panel[data-open] {
+    visibility: visible;
+    transform: none;
+    transition-timing-function: cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  .panel:focus {
+    outline: none;
+  }
+
+  @media (max-width: 48rem) {
+    .panel {
+      width: 100%;
+      border-left: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .panel {
+      transition: none;
+    }
+  }
+
+  .panel__bar {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.5rem 0.5rem 0;
+    pointer-events: none;
+  }
+
+  /* 40px, the hit floor, on the page's own background so it reads over the
+     screenshot as it scrolls past. */
+  .panel__close {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-pill);
+    background: var(--bg);
+    color: var(--text-secondary);
+    pointer-events: auto;
+  }
+
+  @media (hover: hover) {
+    .panel__close:hover {
+      color: var(--text-primary);
+      border-color: var(--hairline-strong);
+    }
+  }
+
+  .panel__body {
+    max-width: 52rem;
+    padding: 0 clamp(1rem, 4vw, 2.5rem) 3rem;
+    margin-top: -1.5rem;
+  }
+
+  .panel__body[aria-busy="true"] {
+    opacity: 0.5;
+  }
+</style>
+
+<script>
+  import { initSitePanel } from "../lib/site-panel";
+
+  initSitePanel();
+</script>

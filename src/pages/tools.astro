@@ -4,10 +4,8 @@ import ToolGrid from "../components/ToolGrid.astro";
 import ToolList from "../components/ToolList.astro";
 import { listJsonLd, pageUrl } from "../lib/schema";
 import { VERDICT_LABELS, categories, tools, verdictGroups } from "../lib/tools";
-import { PREPAINT, VIEWS, type View } from "../lib/tools-view";
-
-/** Sentence case on the buttons; the stored value stays the lowercase key. */
-const VIEW_LABELS: Record<View, string> = { list: "List", grid: "Grid" };
+import ViewToggle from "../components/ViewToggle.astro";
+import { TOOLS_VIEW } from "../lib/view-toggle";
 
 /** Every row on the page, pointing where the row points: its details page. */
 const jsonLd = listJsonLd({
@@ -37,10 +35,8 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
   {/*
     Filters, count and layout in one row directly above the table. The
     filters are native selects synced to `?verdict=&category=` (script below).
-    The layout toggle is two `aria-pressed` buttons; it ships `hidden` and
-    PREPAINT unhides it, so without scripting there is no control that does
-    nothing. PREPAINT sits after the toggle and before the table, so a reload
-    paints the stored view on its first frame.
+    The layout toggle is `ViewToggle.astro`, which also carries the pre-paint
+    pass, so it sits before the table.
   */}
   <div class="controls">
     <label class="visually-hidden" for="filter-verdict">Verdict</label>
@@ -54,22 +50,8 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
       {categories.map((group) => <option value={group.slug}>{group.category}</option>)}
     </select>
     <p class="count tabular-nums" aria-live="polite" data-filter-count>{count(tools.length)}</p>
-    <div class="views" role="group" aria-label="Tools layout" hidden>
-      {
-        VIEWS.map((view) => (
-          <button
-            class="views__btn mono"
-            type="button"
-            data-tools-view-set={view}
-            aria-pressed={view === "list" ? "true" : "false"}
-          >
-            {VIEW_LABELS[view]}
-          </button>
-        ))
-      }
-    </div>
+    <ViewToggle config={TOOLS_VIEW} label="Tools layout" />
   </div>
-  <script is:inline set:html={PREPAINT} />
 
   <ToolList tools={tools} />
   <ToolGrid tools={tools} />
@@ -131,59 +113,10 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
     font-size: 0.875rem;
   }
 
-  .views {
-    display: flex;
-    margin-left: auto;
-    padding: 2px;
-    border: 1px solid var(--hairline);
-    border-radius: var(--r-md);
-  }
-
-  /* `display: flex` above outranks the UA's `[hidden] { display: none }`. */
-  .views[hidden] {
-    display: none;
-  }
-
-  /* 26px drawn inside the 32px frame, 40px pressed (44px under a finger): the
-     `::after` reaches past each edge, the offset trick `.tag::after` uses for
-     its hit floor. */
-  .views__btn {
-    position: relative;
-    min-height: 26px;
-    padding-inline: 0.75rem;
-    border-radius: var(--r-sm);
-    color: var(--text-secondary);
-    transition-property: color, background-color, box-shadow;
-    transition-duration: var(--dur-fast);
-    transition-timing-function: var(--ease);
-  }
-
-  .views__btn::after {
-    content: "";
-    position: absolute;
-    inset: -7px 0;
-  }
-
   @media (pointer: coarse) {
     .select {
       min-height: 44px;
     }
-
-    .views__btn::after {
-      inset: -9px 0;
-    }
-  }
-
-  .views__btn:hover {
-    color: var(--text-primary);
-  }
-
-  /* Fill, ink and an inset ring: the fill alone is a faint tint that
-     disappears on a dim screen, and the ring keeps the pressed one legible. */
-  .views__btn[aria-pressed="true"] {
-    background: var(--hairline);
-    box-shadow: inset 0 0 0 1px var(--hairline-strong);
-    color: var(--text-primary);
   }
 
   .empty {
@@ -204,27 +137,7 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
 </style>
 
 <script>
-  import { ATTRIBUTE, BUTTON_ATTRIBUTE, STORAGE_KEY, toView } from "../lib/tools-view";
   import { filterSearch, matches, readFilters, type Filters } from "../lib/tools-table";
-
-  const buttons = document.querySelectorAll<HTMLButtonElement>(`[${BUTTON_ATTRIBUTE}]`);
-
-  for (const button of buttons) {
-    button.addEventListener("click", () => {
-      const view = toView(button.getAttribute(BUTTON_ATTRIBUTE));
-      document.documentElement.setAttribute(ATTRIBUTE, view);
-      for (const other of buttons) {
-        other.setAttribute("aria-pressed", String(other === button));
-      }
-      // Same guard as the pre-paint read: blocked storage still gets the
-      // layout for the length of the page, just not across a reload.
-      try {
-        localStorage.setItem(STORAGE_KEY, view);
-      } catch {
-        /* not persisted, still applied */
-      }
-    });
-  }
 
   /* --- filters: the URL is the state ------------------------------------- */
 

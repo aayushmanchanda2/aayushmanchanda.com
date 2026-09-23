@@ -8,6 +8,7 @@ import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 
 import Base from "../../../layouts/Base.astro";
 import SiteGrid from "../../../components/SiteGrid.astro";
+import { groupByDomain } from "../../../lib/screens";
 import { listJsonLd, pageUrl } from "../../../lib/schema";
 import { domains } from "../../../lib/sites";
 
@@ -48,7 +49,7 @@ const jsonLd = listJsonLd({
   </header>
 
   <div class="body">
-    <SiteGrid sites={sites} />
+    <SiteGrid groups={groupByDomain(sites)} />
   </div>
 </Base>
 

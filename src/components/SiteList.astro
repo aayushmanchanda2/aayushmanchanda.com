@@ -1,0 +1,154 @@
+---
+/**
+ * SiteList — the list view of /sites. briOS's /sites rows
+ * (`GoodWebsiteItemComponent`): from 768px a 12-column row, the icon and name
+ * across 7, the domain across 3, the screen count across 2; under it, a 48px
+ * icon with the domain under the name.
+ *
+ * The rows carry the hover preview card (`lib/preview-card.ts`): here the row
+ * is words, so the picture is what the card adds. Each row is one stretched
+ * link to `/sites/<slug>`, which `SitePanel.astro` opens in the slide-over.
+ */
+import AppIcon from "./AppIcon.astro";
+import PreviewCard from "./PreviewCard.astro";
+import { previewAttributes } from "../lib/preview-card";
+import type { SiteGroup } from "../lib/screens";
+
+interface Props {
+  groups: SiteGroup[];
+}
+
+const { groups } = Astro.props;
+---
+
+<ul class="list" data-sites-list>
+  {
+    groups.map(({ primary, screens }) => (
+      <li
+        class="row"
+        {...previewAttributes({ image: primary.shot, name: primary.title, domain: primary.domain, note: primary.like })}
+      >
+        <span class="row__name">
+          <AppIcon tool={{ slug: primary.slug, name: primary.title }} size={32} />
+          <span class="row__text">
+            <a
+              class="row__link"
+              href={`/sites/${primary.slug}`}
+              data-site-open
+              data-slugs={screens.map((screen) => screen.site.slug).join(" ")}
+            >
+              {primary.title}
+            </a>
+            <span class="row__domain row__domain--phone">{primary.domain}</span>
+          </span>
+        </span>
+        <span class="row__domain row__domain--wide">{primary.domain}</span>
+        <span class="row__count">{screens.length > 1 ? `${screens.length} screens` : ""}</span>
+      </li>
+    ))
+  }
+</ul>
+
+<PreviewCard />
+
+<style>
+  /* Edge to edge like the /tools table; outer padding is `--page-pad`. */
+  .list {
+    display: none;
+    width: calc(100% + 2 * var(--page-pad));
+    margin: 0 calc(-1 * var(--page-pad));
+    border-top: 1px solid var(--hairline);
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
+
+  :global(html[data-sites-view="list"]) .list {
+    display: block;
+  }
+
+  /* `flex gap-3 px-4 py-3`, then `md:grid md:grid-cols-12 md:gap-4`. Hover is
+     instant (design.md §4). */
+  .row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem var(--page-pad);
+    border-bottom: 1px solid var(--hairline);
+    --icon-size: 48px;
+  }
+
+  .row:hover {
+    background: var(--surface-2);
+  }
+
+  .row__name {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .row__text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .row__link {
+    overflow: hidden;
+    color: var(--text-primary);
+    font-weight: 500;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* The stretched link: the row is the target, the anchor is the one tab stop. */
+  .row__link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  .row__link:focus-visible {
+    outline: none;
+  }
+
+  .row__link:focus-visible::after {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+  }
+
+  .row__domain,
+  .row__count {
+    overflow: hidden;
+    color: var(--text-tertiary);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .row__domain--wide,
+  .row__count:empty {
+    display: none;
+  }
+
+  .row__count {
+    flex: none;
+  }
+
+  @media (min-width: 768px) {
+    .row {
+      display: grid;
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      gap: 1rem;
+      --icon-size: 32px;
+    }
+
+    .row__name { grid-column: span 7; }
+    .row__domain--wide { display: block; grid-column: span 3; }
+    .row__domain--phone { display: none; }
+    .row__count { display: block; grid-column: span 2; }
+  }
+</style>
