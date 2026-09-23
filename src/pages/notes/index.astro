@@ -6,6 +6,7 @@
  * the year is a small label over each group, and the rows are `EntryList`, the
  * same list "Read next" draws under a note.
  */
+import Mark from "../../components/Mark.astro";
 import { getCollection } from "astro:content";
 
 import Base from "../../layouts/Base.astro";
@@ -36,7 +37,7 @@ const jsonLd = listJsonLd({
   jsonLd={jsonLd}
 >
   <header>
-    <h1 class="page-title">Notes</h1>
+    <h1 class="page-title"><Mark color="pink" variant={3}>Notes</Mark></h1>
     <p class="standfirst">
       Short writing. Some typed out, some a whiteboard photo with one line
       under it.

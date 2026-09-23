@@ -7,6 +7,7 @@
  * matches, down to the chip and the dated metadata column, because a reader
  * moving between the two sections should not have to relearn the page.
  */
+import Mark from "../components/Mark.astro";
 import Base from "../layouts/Base.astro";
 import EntryLink from "../components/EntryLink.astro";
 import StatusChip from "../components/StatusChip.astro";
@@ -39,7 +40,7 @@ const jsonLd = listJsonLd({
   jsonLd={jsonLd}
 >
   <header>
-    <h1 class="page-title">Experiments</h1>
+    <h1 class="page-title"><Mark color="ink" variant={3} stroke={1.5}>Experiments</Mark></h1>
     <p class="standfirst">
       What&rsquo;s running right now, and what I stopped. Killed ones stay
       listed.

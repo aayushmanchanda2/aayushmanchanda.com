@@ -15,6 +15,7 @@
  */
 import AppIcon from "../components/AppIcon.astro";
 import Avatar from "../components/Avatar.astro";
+import Doodle from "../components/Doodle.astro";
 import Base from "../layouts/Base.astro";
 import { aboutJsonLd } from "../lib/schema";
 import { getSections } from "../lib/sections";
@@ -53,7 +54,10 @@ const elsewhere = [
   jsonLd={jsonLd}
 >
   <header>
-    <Avatar size={64} class="about__avatar" />
+    <div class="about__photo">
+      <Avatar size={64} />
+      <Doodle class="about__spark" shape="sparkle" variant={3} color="amber" draw />
+    </div>
     <h1 class="page-title">About</h1>
     <p class="bio">
       I co-founded Orbis, an AI healthcare company, and I run Vetted, my AI
@@ -127,8 +131,21 @@ const elsewhere = [
 </Base>
 
 <style>
-  .about__avatar {
+  /* The photo's box, so the sparkle sits off its top-right edge in the empty
+     space beside it and never on the face or the title. */
+  .about__photo {
+    position: relative;
+    width: 64px;
+    height: 64px;
     margin-bottom: 1.5rem;
+  }
+
+  .about__spark {
+    position: absolute;
+    top: -8px;
+    left: 70px;
+    width: 22px;
+    height: 22px;
   }
 
   /* briOS's bio: 24px (20px on a phone), medium, secondary ink. */

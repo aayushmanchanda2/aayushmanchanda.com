@@ -1,0 +1,110 @@
+---
+/**
+ * Doodle: one pen mark from the in-house set (VET-251), inline so it takes
+ * `currentColor`. The paths are `src/assets/doodles/doodles.json`, written by
+ * `scripts/doodles.mjs`. Decorative: `aria-hidden`, no pointer events, and the
+ * caller places it where it cannot sit on text or a control.
+ *
+ * The stroke is in CSS pixels at any size (`non-scaling-stroke`), so `stretch`
+ * can pull a mark to the width of a word without fattening it. `draw` draws
+ * the line on the first time it scrolls into view, the `.hl` highlighter's
+ * rule (`styles/prose.css`): armed only on a screen, with motion allowed,
+ * where the pre-paint script has run. Reduced motion and print get it whole.
+ */
+import set from "../assets/doodles/doodles.json";
+
+export type DoodleShape = keyof typeof set;
+export type PenColor = "amber" | "blue" | "pink" | "green" | "ink";
+
+interface Props {
+  shape: DoodleShape;
+  variant?: 1 | 2 | 3;
+  color?: PenColor;
+  stroke?: 1.5 | 2 | 3;
+  draw?: boolean;
+  /** Fill the box CSS gives it, ignoring the drawing's own proportions. */
+  stretch?: boolean;
+  class?: string;
+}
+
+const {
+  shape,
+  variant = 1,
+  color = "ink",
+  stroke = 2,
+  draw = false,
+  stretch = false,
+  class: className,
+  ...rest
+} = Astro.props;
+const { box, variants } = set[shape];
+const [width, height] = box;
+---
+
+<svg
+  class:list={["doodle", className]}
+  viewBox={`0 0 ${width} ${height}`}
+  width={stretch ? undefined : width}
+  height={stretch ? undefined : height}
+  preserveAspectRatio={stretch ? "none" : undefined}
+  style={`--pen: var(--pen-${color}); --stroke: ${stroke}px`}
+  data-draw={draw ? "" : undefined}
+  aria-hidden="true"
+  focusable="false"
+  {...rest}
+>
+  {variants[variant - 1].map((d, i) => <path d={d} pathLength="1" style={`--i: ${i}`} />)}
+</svg>
+
+<script>
+  // ponytail: one observer per page, built once; the pages draw one to three.
+  const pens = document.querySelectorAll("svg.doodle[data-draw]");
+  if (pens.length > 0 && matchMedia("(prefers-reduced-motion: no-preference)").matches) {
+    const seen = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.classList.add("doodle--on");
+          seen.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.6 },
+    );
+    for (const pen of pens) seen.observe(pen);
+  }
+</script>
+
+<style>
+  /* The stamp's faded ink (`styles/frame.css › --ink-wear`), so a pen line
+     prints as unevenly as the keyline and the postmark beside it. */
+  .doodle {
+    overflow: visible;
+    color: var(--pen);
+    pointer-events: none;
+    mask: var(--ink-wear);
+  }
+
+  path {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: var(--stroke);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  @media screen and (prefers-reduced-motion: no-preference) {
+    [data-draw] path {
+      stroke-dasharray: 1 2;
+      transition-property: stroke-dashoffset;
+      transition-duration: 640ms;
+      transition-timing-function: var(--ease-out);
+      transition-delay: calc(var(--i) * 180ms);
+    }
+
+    /* 1.05, not 1: a dash ending exactly on the start would leave a round cap. */
+    :global(html[data-theme]) [data-draw]:not(.doodle--on) path {
+      stroke-dashoffset: 1.05;
+    }
+  }
+</style>

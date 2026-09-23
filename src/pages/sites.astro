@@ -1,4 +1,5 @@
 ---
+import Mark from "../components/Mark.astro";
 import Base from "../layouts/Base.astro";
 import SiteGrid from "../components/SiteGrid.astro";
 import SiteList from "../components/SiteList.astro";
@@ -42,7 +43,7 @@ const jsonLd = listJsonLd({
   full
 >
   <header>
-    <h1 class="page-title">Sites</h1>
+    <h1 class="page-title"><Mark shape="squiggle" color="blue" variant={2}>Sites</Mark></h1>
     <p class="standfirst">
       Sites I saved for how they look, each a full-page screenshot from the day
       I saved it.

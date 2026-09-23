@@ -8,6 +8,7 @@ import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 import { getCollection, render } from "astro:content";
 
 import Base from "../../layouts/Base.astro";
+import Doodle from "../../components/Doodle.astro";
 import EntryList from "../../components/EntryList.astro";
 import { tipEntry } from "../../lib/entry-list";
 import { readNext } from "../../lib/read-next";
@@ -43,6 +44,7 @@ const { title, emoji, summary } = tip.data;
     <div class="prose">
       <Content />
     </div>
+    <Doodle class="tip__check" shape="check" variant={2} color="green" draw />
   </article>
 
   {
@@ -74,6 +76,32 @@ const { title, emoji, summary } = tip.data;
 
   .prose {
     margin-top: 2rem;
+  }
+
+  /* A green check in the gutter beside the steps (VET-251). The steps are
+     markdown, so the check is anchored to the first list rather than placed
+     in it. Only where the gutter can hold it and anchoring exists; elsewhere
+     the list stands alone. */
+  .prose > :global(ol:first-of-type) {
+    anchor-name: --steps;
+  }
+
+  .tip__check {
+    display: none;
+  }
+
+  @supports (anchor-name: --steps) {
+    @media (min-width: 60rem) {
+      .tip__check {
+        display: block;
+        position: absolute;
+        position-anchor: --steps;
+        top: anchor(top);
+        right: calc(anchor(left) + 0.75rem);
+        width: 26px;
+        height: 26px;
+      }
+    }
   }
 
   .next {

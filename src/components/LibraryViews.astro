@@ -19,6 +19,7 @@
  * after the views exist: it swaps views in place on a segment press, keeps the
  * kind in `?kind=`, and replays it on Back and Forward.
  */
+import Mark from "./Mark.astro";
 import EntryDetail from "./EntryDetail.astro";
 import LibraryFeed from "./LibraryFeed.astro";
 import LibraryToolbar from "./LibraryToolbar.astro";
@@ -47,7 +48,7 @@ const videos = of("video").filter(
 );
 ---
 
-<h1 class="page-title">Library</h1>
+<h1 class="page-title"><Mark shape="underline-double" variant={3}>Library</Mark></h1>
 
 <div class="views__bar">
   <LibraryToolbar id="view-tag" />
