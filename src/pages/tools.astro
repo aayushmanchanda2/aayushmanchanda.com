@@ -72,9 +72,12 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
     flex-wrap: wrap;
     align-items: center;
     gap: 0.5rem;
-    /* tight under the standfirst, so the table's header starts near 300px
+    /* tight under the standfirst, so the table's header starts near 320px
        at 1280 with the title and its line stacked like every other index */
     margin-top: 0.75rem;
+    /* 16px to the table's header or the grid's roof (design.md §2, between
+       groups): the selects used to sit on the header's top edge (R5-2). */
+    margin-bottom: 1rem;
   }
 
   /* ViewToggle pushes itself right on /sites; here the panel would cover it. */
