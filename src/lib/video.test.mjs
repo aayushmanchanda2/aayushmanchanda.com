@@ -31,7 +31,7 @@ import { PROVIDERS, library } from "./library.ts";
 const SRC = fileURLToPath(new URL("..", import.meta.url));
 
 const FACADE = "components/VideoFacade.astro";
-const VIEWS = "components/LibraryViews.astro";
+const VIEWS = "components/VideoGrid.astro";
 const DETAIL = "components/EntryDetail.astro";
 
 /** @param {string} name @returns {string} */

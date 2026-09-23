@@ -81,12 +81,12 @@ test("Up, Down, Home and End walk the pane rows and stop at the ends", () => {
 
 /**
  * `FILTER` against a fake pane: four rows, the kind links, the tag select, a
- * count, an empty state and the entry's hint row; with `home`, the /library
- * shell's four views and two tagged items in them.
+ * count, an empty state and the entry's hint row; with `home`, two tagged
+ * items in the route's view.
  *
- * @param {{ search?: string, current?: number, home?: string, start?: string, pathname?: string, crumbs?: object }} options
+ * @param {{ search?: string, current?: number, home?: string, start?: string, pathname?: string }} options
  */
-function filter({ search = "", current = 1, home, start, pathname = "/library/e1", crumbs }) {
+function filter({ search = "", current = 1, home, start, pathname = "/library/e1" }) {
   /** @param {Record<string, string>} attrs */
   const el = (attrs = {}) => {
     /** @type {Record<string, (event: object) => void>} */
@@ -133,7 +133,6 @@ function filter({ search = "", current = 1, home, start, pathname = "/library/e1
   const empty = el();
   /** @type {Record<string, ReturnType<typeof el>>} */
   const nav = { prev: el(), next: el(), close: el() };
-  const views = ["", "article", "post", "video"].map((view) => Object.assign(el(), { dataset: { view } }));
   const items = ["agents", "design"].map((tags) => Object.assign(el(), { dataset: { tags } }));
   const pane = {
     dataset: { home, start },
@@ -152,18 +151,19 @@ function filter({ search = "", current = 1, home, start, pathname = "/library/e1
   /** @type {string[]} */
   const pushed = [];
   const document = {
-    querySelector: (/** @type {string} */ s) => (s.includes("entry-nav") ? hints : s.includes("crumbs") ? crumbs ?? null : pane),
+    querySelector: (/** @type {string} */ s) => (s.includes("entry-nav") ? hints : pane),
     /** @param {string} s */
     querySelectorAll: (s) =>
       s.includes("kind-set") ? segs
       : s.includes("tag-set") ? [select]
       : s.includes("count") ? [count]
       : s.includes("data-tags") ? items
-      : s.includes("data-view") ? views
       : [],
     addEventListener: () => {},
   };
-  const location = { search, pathname };
+  /** @type {string[]} */
+  const replacedTo = [];
+  const location = { search, pathname, replaced: replacedTo, replace: (/** @type {string} */ url) => replacedTo.push(url) };
   /** @param {string[]} log */
   const record = (log) => (/** @type {unknown} */ _, /** @type {string} */ __, /** @type {string} */ url) => {
     log.push(url);
@@ -176,7 +176,7 @@ function filter({ search = "", current = 1, home, start, pathname = "/library/e1
   const on = {};
   const addEventListener = (/** @type {string} */ type, /** @type {() => void} */ fn) => (on[type] = fn);
   new Function("document", "location", "history", "addEventListener", FILTER)(document, location, history, addEventListener);
-  return { rows, segs, select, count, empty, nav, replaced, pushed, views, items, location, on };
+  return { rows, segs, select, count, empty, nav, replaced, pushed, items, location, on };
 }
 
 const shown = (/** @type {{ hidden: boolean }[]} */ rows) => rows.map((row) => (row.hidden ? 0 : 1)).join("");
@@ -225,88 +225,35 @@ test("the tag select narrows, and close, prev and next follow the rows it shows"
   assert.equal(pane.nav.next?.attrs["aria-label"], "Next entry: Entry 3");
 });
 
-const view = (/** @type {{ hidden: boolean, dataset: { view: string } }[]} */ views) =>
-  views.find((v) => !v.hidden)?.dataset.view;
+test("on /library and a kind route, a kind press is the segment's own link, carrying the tag", () => {
+  const index = filter({ home: "/library", start: "", pathname: "/library", search: "?tag=design", current: -1 });
+  assert.equal(shown(index.rows), "0100");
+  assert.equal(index.rows[1]?.firstElementChild.search, "?tag=design");
+  index.segs[2]?.on.click?.({ button: 0, preventDefault: () => assert.fail("a kind press on /library navigates") });
+  assert.equal(index.segs[2]?.search, "?tag=design");
+  assert.deepEqual([index.pushed, index.replaced], [[], []]);
 
-test("on /library the kind picks the view, pushes ?kind=, and Back replays it", () => {
-  const index = filter({ home: "/library", start: "", pathname: "/library", current: -1 });
-  assert.equal(view(index.views), "");
-  assert.equal(shown(index.rows), "1111");
-
-  index.segs[2]?.on.click?.({ button: 0, preventDefault: () => {} });
-  assert.deepEqual(index.pushed, ["/library?kind=post"]);
-  assert.equal(view(index.views), "post");
-  assert.equal(shown(index.rows), "0110");
-
-  // A tag narrows the rows and the tagged items in the views, and replaces.
-  index.select.value = "design";
-  index.select.on.change?.({});
-  assert.deepEqual(index.replaced, ["/library?kind=post&tag=design"]);
-  assert.deepEqual(index.items.map((item) => item.hidden), [true, false]);
-
-  // Back to /library: All again, every item shown.
-  Object.assign(index.location, { pathname: "/library", search: "" });
-  index.on.popstate?.();
-  assert.equal(view(index.views), "");
-  assert.deepEqual(index.items.map((item) => item.hidden), [false, false]);
+  // The route's own segment stays put.
+  let prevented = false;
+  index.segs[0]?.on.click?.({ button: 0, preventDefault: () => (prevented = true) });
+  assert.ok(prevented);
 });
 
-test("a kind route starts on its kind and swaps to /library?kind=", () => {
+test("a kind route starts on its kind, and a tag replaces its own path and narrows the view", () => {
   const route = filter({ home: "/library", start: "video", pathname: "/library/kind/video", current: -1 });
-  assert.equal(view(route.views), "video");
-  assert.equal(route.rows[0]?.firstElementChild.search, "?kind=video");
+  assert.equal(shown(route.rows), "0001");
+  assert.equal(route.rows[3]?.firstElementChild.search, "?kind=video");
+  assert.equal(route.segs[3]?.attrs["aria-current"], "true");
 
-  route.segs[0]?.on.click?.({ button: 0, preventDefault: () => {} });
-  assert.deepEqual(route.pushed, ["/library"]);
-  assert.equal(view(route.views), "");
-
-  // Back lands on the kind route with no query: its own kind again.
-  Object.assign(route.location, { pathname: "/library/kind/video", search: "" });
-  route.on.popstate?.();
-  assert.equal(view(route.views), "video");
+  route.select.value = "design";
+  route.select.on.change?.({});
+  assert.deepEqual(route.replaced, ["/library/kind/video?tag=design"]);
+  assert.deepEqual(route.items.map((item) => item.hidden), [true, false]);
 });
 
-/** A trail as `Breadcrumbs.astro` draws it: li > a for a link, li > span for the current step. */
-function trail(/** @type {[string, string | null][]} */ steps) {
-  /** @param {string} name @param {string | null} href */
-  const li = (name, href) => ({
-    href,
-    firstElementChild: { textContent: name, href: href ?? undefined },
-    get textContent() {
-      return ` ${this.firstElementChild.textContent} `;
-    },
-    cloneNode() {
-      return li(this.firstElementChild.textContent, this.firstElementChild.href ?? null);
-    },
-  });
-  /** @type {ReturnType<typeof li>[]} */
-  const children = steps.map(([name, href]) => li(name, href));
-  return {
-    children,
-    get lastElementChild() {
-      return children.at(-1);
-    },
-    removeChild: (/** @type {unknown} */ node) => children.splice(children.indexOf(/** @type {any} */ (node)), 1),
-    appendChild: (/** @type {any} */ node) => children.push(node),
-    /** The trail as text, a link marked with its href. */
-    read: () => children.map((c) => c.firstElementChild.textContent + (c.firstElementChild.href ? `(${c.firstElementChild.href})` : "")).join(" > "),
-  };
-}
-
-test("an in-place kind switch updates the trail's last step, and All puts Library back", () => {
-  const crumbs = trail([["Aayush Manchanda", "/"], ["Library", null]]);
-  const index = filter({ home: "/library", start: "", pathname: "/library", current: -1, crumbs });
-  assert.equal(crumbs.read(), "Aayush Manchanda(/) > Library");
-  index.segs[3]?.on.click?.({ button: 0, preventDefault: () => {} });
-  assert.equal(crumbs.read(), "Aayush Manchanda(/) > Library(/library) > Videos");
-  index.segs[2]?.on.click?.({ button: 0, preventDefault: () => {} });
-  assert.equal(crumbs.read(), "Aayush Manchanda(/) > Library(/library) > Posts");
-  index.segs[0]?.on.click?.({ button: 0, preventDefault: () => {} });
-  assert.equal(crumbs.read(), "Aayush Manchanda(/) > Library");
-
-  const kindTrail = trail([["Aayush Manchanda", "/"], ["Library", "/library"], ["Videos", null]]);
-  const route = filter({ home: "/library", start: "video", pathname: "/library/kind/video", current: -1, crumbs: kindTrail });
-  assert.equal(kindTrail.read(), "Aayush Manchanda(/) > Library(/library) > Videos");
-  route.segs[0]?.on.click?.({ button: 0, preventDefault: () => {} });
-  assert.equal(kindTrail.read(), "Aayush Manchanda(/) > Library");
+test("a /library?kind= from before the split replaces to the kind's route", () => {
+  const legacy = filter({ home: "/library", start: "", pathname: "/library", search: "?kind=post&tag=agents", current: -1 });
+  assert.deepEqual(legacy.location.replaced, ["/library/kind/post?tag=agents"]);
+  const unknown = filter({ home: "/library", start: "", pathname: "/library", search: "?kind=podcast", current: -1 });
+  assert.deepEqual(unknown.location.replaced, []);
 });

@@ -64,7 +64,7 @@ const LISTINGS = [
   "components/PreviewCard.astro",
   "components/ToolGrid.astro",
   "components/ToolList.astro",
-  "components/LibraryViews.astro",
+  "components/VideoGrid.astro",
 ];
 
 /**
