@@ -8,13 +8,33 @@
  * left click on one is taken over, and so is a link inside the panel to
  * another entry of the section. Anything with a modifier is the browser's.
  */
-import { ownsKey } from "./keys.ts";
+import { inField, ownsKey } from "./keys.ts";
 import { tick } from "./ui-sound.ts";
 
 type Entry = { node: Element; title: string };
 
 /** `checkVisibility` arrived in Safari 17.4; before it, a rendered box is the answer. */
 const visible = (el: Element): boolean => el.checkVisibility?.() ?? el.getClientRects().length > 0;
+
+/** On screen, or hidden only by a filter: its item is `[hidden]` inside a list that shows. */
+const inView = (el: Element): boolean => {
+  const item = el.closest("[hidden]");
+  return visible(el) || (item?.parentElement != null && visible(item.parentElement));
+};
+
+/**
+ * The index `dir` steps to from `from`: the next shown entry, wrapping, or -1
+ * when no other shows. `from` itself may be hidden, because the open entry
+ * keeps its place in the order after a filter hides it.
+ */
+export function step(shown: readonly boolean[], from: number, dir: 1 | -1): number {
+  const n = shown.length;
+  for (let i = 1; i < n; i++) {
+    const at = (((from + dir * i) % n) + n) % n;
+    if (shown[at]) return at;
+  }
+  return -1;
+}
 
 /** `enhance` wires a freshly inserted entry, as the static page's own load does. */
 export function initDetailPanel(enhance?: (node: Element) => void): void {
@@ -49,6 +69,14 @@ function wire(
 
   /** The visible tile or row that holds `slug`, for focus to come back to. */
   const triggerFor = (slug: string) => triggers().find((el) => holds(el, slug) && visible(el)) ?? null;
+
+  /** ← and →: the entry beside the open one, in the order the view on screen shows. */
+  function neighbour(dir: 1 | -1): string | null {
+    const ring = triggers().filter(inView);
+    const from = ring.findIndex((el) => holds(el, current));
+    const to = from < 0 ? -1 : step(ring.map(visible), from, dir);
+    return to < 0 ? null : slugOf(ring[to].href);
+  }
 
   function load(slug: string): Promise<Entry | null> {
     let entry = cache.get(slug);
@@ -157,13 +185,23 @@ function wire(
   closer.addEventListener("click", close);
 
   document.addEventListener("keydown", (event) => {
-    if (!isOpen() || !ownsKey(event)) return;
-    // An open palette owns Escape (design.md §4, precedence), whichever
-    // listener runs first: it took the key already, or it is still open.
-    if (event.key === "Escape" && !document.querySelector('[aria-modal="true"][data-open]')) {
+    // A select or a text field keeps its keys, even Escape.
+    if (!isOpen() || !ownsKey(event) || inField(event)) return;
+    // An open palette or menu owns its keys (design.md §4, precedence),
+    // whichever listener runs first: it took the key already, or it is open.
+    if (document.querySelector('[aria-modal="true"][data-open]')) return;
+    if (event.key === "Escape") {
       event.preventDefault();
       close();
       return;
+    }
+    const dir = event.key === "ArrowRight" ? 1 : event.key === "ArrowLeft" ? -1 : 0;
+    // A modifier asks the browser (Cmd+← is Back); a held key would fetch per repeat.
+    if (dir && !event.repeat && !event.metaKey && !event.ctrlKey && !event.altKey && !event.shiftKey) {
+      const slug = neighbour(dir);
+      if (!slug) return;
+      event.preventDefault();
+      return open(slug, null);
     }
     // Tab wraps inside the panel while focus is in it.
     if (event.key !== "Tab" || !panel.contains(document.activeElement)) return;
