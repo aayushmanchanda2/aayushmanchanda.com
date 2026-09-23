@@ -28,8 +28,8 @@ const updated = feed ? (await feedItems(feed)).map((item) => item.date).sort().a
 ---
 
 <div class="stamp" aria-hidden="true">
-  <span class="stamp__mark">2026</span>
-  {denomination && <span class="stamp__mark stamp__mark--end">{denomination}</span>}
+  <span class="stamp__mark"><span>2026</span></span>
+  {denomination && <span class="stamp__mark stamp__mark--end"><span>{denomination}</span></span>}
 </div>
 <div class="mat" aria-hidden="true"><div class="mat__lift"></div></div>
 {
