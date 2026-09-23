@@ -50,7 +50,7 @@ export const GET: APIRoute = async () => {
     status: 404,
     title: "Not found",
     description:
-      "This URL does not exist on aayushmanchanda.com. What follows is everything the site actually has.",
+      "This URL doesn't exist on aayushmanchanda.com. Everything the site has follows.",
     blocks: [section("Where to look instead", list(rows))],
   });
 };

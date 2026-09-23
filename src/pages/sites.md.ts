@@ -51,7 +51,7 @@ export const GET: APIRoute = () => {
     page: PAGES.sites,
     title: "Sites",
     description:
-      "Websites Aayush Manchanda saved for how they look, each one captured as a full-page screenshot on the day it was saved.",
+      "Websites Aayush Manchanda saved for how they look, each a full-page screenshot from the day it was saved.",
     updated: newest(sites.map((site) => site.saved_date)),
     blocks: [
       table(
@@ -61,9 +61,9 @@ export const GET: APIRoute = () => {
       ...(words === null ? [] : [words]),
       section(
         "About the screenshots",
-        "These are screenshots of other people's sites, captured automatically on the day the site was saved. Every row credits the original with a link to it.",
-        "Each shot is the whole page, top to bottom, in whatever colour scheme the site itself renders by default. Very long pages are cut off after 12,000 pixels.",
-        "The palette is read off the pixels of that screenshot, most-used colour first. It is measured, not chosen, so it is a description of the capture rather than the designer's own swatches.",
+        "Screenshots of other people's sites, taken the day each was saved. Every row links to the original.",
+        "Each shot is the whole page in the site's default colour scheme, cut off after 12,000 pixels.",
+        "The palette is the screenshot's most-used colours, measured from the pixels, not the designer's swatches.",
       ),
       section(
         "About the pages",
@@ -71,8 +71,8 @@ export const GET: APIRoute = () => {
       ),
       section(
         "About the collections",
-        "Collections are groupings I made by hand. They overlap: a site can be in several of them, or in none, and the column is empty for most entries.",
-        "Each one is browsable at /sites/collection/<slug>, using the slug exactly as it appears in the column.",
+        "Collections are hand-made groupings. A site can be in several or none.",
+        "Each is at /sites/collection/<slug>, using the slug in the column.",
       ),
     ],
   });

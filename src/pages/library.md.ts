@@ -73,7 +73,7 @@ export const GET: APIRoute = () => {
     page: PAGES.library,
     title: "Library",
     description:
-      "Articles, posts and videos Aayush Manchanda saved to read or watch properly, with the date he saved each one.",
+      "Articles, posts and videos Aayush Manchanda saved to read or watch, with the date he saved each one.",
     // A digest is the newest thing that can happen to this page, so its date
     // counts alongside the saves.
     updated: newest([
@@ -85,7 +85,7 @@ export const GET: APIRoute = () => {
       section(
         "Kinds",
         list(KINDS.map((kind) => `\`${kind}\`: ${MEANING[kind]}`)),
-        "A saved link is not a finished one, and neither is a recommendation. The date is the day it was saved and nothing more.",
+        "The date is the day the link was saved.",
       ),
       section(
         "Filtered views",
@@ -130,11 +130,11 @@ export const GET: APIRoute = () => {
         // The second sentence exists because the shape of a page is no longer
         // one thing: an article nobody has read yet is a catalogue card, and a
         // post carries the whole post.
-        `Every entry has a page of its own at /library/<slug>, and the Title column above links it. A page holds the kind, the host, the tags, the saved date and the note in the table, plus whatever else that entry carries: a one-sentence TLDR of the source, up to five passages quoted from it and its opening lines, a saved post's full text, a saved video's poster, a digest where one has been written, and a draft where the pipeline has written one and Aayush has not read the piece yet. A drafted block is labelled as a draft on the page and is not his verdict. ${
+        `Every entry has a page at /library/<slug>, linked from the Title column. It holds the kind, host, tags, saved date and note, plus a one-sentence TLDR of the source, up to five passages quoted from it and its opening lines, a saved post's full text, a saved video's poster, a digest where one exists, and a draft where the pipeline wrote one and Aayush hasn't read the piece yet. A draft is labelled as one and isn't his verdict. ${
           digests === null
             ? "Nothing has been digested yet."
-            : "The digested entries are listed in the Digests section above."
-        } The Source column is the thing itself, which is off this site.`,
+            : "Digested entries are listed under Digests above."
+        } The Source column is the original, off this site.`,
       ),
     ],
   });
