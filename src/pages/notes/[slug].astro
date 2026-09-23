@@ -19,6 +19,7 @@ import Base from "../../layouts/Base.astro";
 import EntryLink from "../../components/EntryLink.astro";
 import ImageFrame from "../../components/ImageFrame.astro";
 import { noteJsonLd } from "../../lib/schema";
+import { formatDay } from "../../lib/date";
 
 export const getStaticPaths = (async () => {
   const notes = await getCollection("notes");
@@ -51,7 +52,6 @@ const jsonLd = noteJsonLd({
   description={`A note by Aayush Manchanda, written ${day}: ${note.data.title}.`}
   jsonLd={jsonLd}
 >
-  <p class="crumb mono"><a href="/notes">&larr; Notes</a></p>
 
   <article class="note" data-type={note.data.type}>
     {
@@ -61,8 +61,8 @@ const jsonLd = noteJsonLd({
     }
 
     <header class="note__head">
+      <time class="note__date mono" datetime={day}>{formatDay(day)}</time>
       <h1 class="page-title page-title--entry">{note.data.title}</h1>
-      <time class="note__date mono tabular-nums" datetime={day}>{day}</time>
     </header>
 
     <div class="prose">
@@ -92,20 +92,25 @@ const jsonLd = noteJsonLd({
     margin-top: clamp(1.5rem, 4vw, 2.25rem);
   }
 
+  /* Above the title, briOS's order: when, then what. */
   .note__date {
     display: block;
-    margin-top: 1rem;
-    color: var(--faint);
+    margin-bottom: 0.5rem;
+    color: var(--text-tertiary);
   }
 
   /* --- body ---------------------------------------------------------------- */
 
+  /* Primary ink at 18/1.6, capped in rem (Geist's ch runs wide), and
+     unsmoothed so the strokes keep their weight on macOS (VET-225). */
   .prose {
     margin-top: clamp(2rem, 5vw, 3rem);
-    max-width: 65ch;
-    font-size: 1.0625rem;
-    line-height: 1.7;
-    color: var(--muted);
+    max-width: 40rem;
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    -webkit-font-smoothing: auto;
+    -moz-osx-font-smoothing: auto;
   }
 
   .prose :global(p + p),
@@ -117,9 +122,19 @@ const jsonLd = noteJsonLd({
 
   .prose :global(h2),
   .prose :global(h3) {
-    margin-top: 2.25em;
-    color: var(--fg);
-    font-size: 1.125rem;
+    margin-top: 2em;
+    color: var(--text-primary);
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.015em;
+  }
+
+  .prose :global(h2) {
+    font-size: 1.5rem;
+  }
+
+  .prose :global(h3) {
+    font-size: 1.25rem;
   }
 
   .prose :global(ul),
@@ -136,16 +151,16 @@ const jsonLd = noteJsonLd({
     margin-top: 0.4em;
   }
 
-  /* --muted, not --faint: a quotation is prose a reader is reading, and
-     --faint is the meta level (design.md §2's three text levels). The rule and
+  /* --text-secondary, not --text-tertiary: a quotation is prose a reader is reading, and
+     --text-tertiary is the meta level (design.md §2's three text levels). The rule and
      the indent are what set it apart from the body around it. */
   .prose :global(blockquote) {
     padding-left: 1rem;
     border-left: 1px solid var(--hairline-strong);
-    color: var(--muted);
+    color: var(--text-secondary);
   }
 
-  /* A link in the body is bold and underlined, and that rule now lives in
+  /* A link in the body is underlined in the accent, and that rule lives in
      global.css as `.prose a` — one convention across note bodies, /privacy, the
      standfirsts and the entry pages, rather than this file's own half of it. */
 
@@ -163,7 +178,7 @@ const jsonLd = noteJsonLd({
   }
 
   .also__head {
-    color: var(--faint);
+    color: var(--text-tertiary);
   }
 
   .also__list {

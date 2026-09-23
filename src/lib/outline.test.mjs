@@ -88,7 +88,7 @@ test("the image outline is a real outline, because an inset shadow is not one", 
 
 test("the outline colour is pure black and pure white, never a tinted neutral", () => {
   // A tinted near-black picks up the surface under it and reads as dirt on the
-  // image edge, which is why `--outline` is declared separately from `--fg`
+  // image edge, which is why `--outline` is declared separately from `--text-primary`
   // and its channels rather than derived from them.
   const css = code(read("styles/global.css"));
   assert.match(

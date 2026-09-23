@@ -1,0 +1,3017 @@
+{
+  "base": "http://localhost:4329/",
+  "label": "vet-225",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-22-vet-225",
+  "at": "2026-09-23T02:18:40.678Z",
+  "shots": [
+    {
+      "route": "/",
+      "url": "http://localhost:4329/",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "home-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Hey, I’m Aayush.",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "36px",
+            "font-weight": "700",
+            "letter-spacing": "-0.9px",
+            "line-height": "37.8px"
+          }
+        ],
+        ".prose p": [],
+        "time": [],
+        ".standfirst": [
+          {
+            "text": "Part entrepreneur, part marketer, part o",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          },
+          {
+            "text": "There’s a lot of noise in AI. I read it,",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          }
+        ],
+        ".crumbs__link": [],
+        ".crumbs__here": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4329/tools",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "tools-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Tools",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "36px",
+            "font-weight": "700",
+            "letter-spacing": "-0.9px",
+            "line-height": "37.8px"
+          }
+        ],
+        ".prose p": [],
+        "time": [
+          {
+            "text": "Aug 17, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "Software I installed, ran, and formed an",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "Tools",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools/agent-browser",
+      "url": "http://localhost:4329/tools/agent-browser",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "tools_agent_browser-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "agent-browser",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "30px",
+            "font-weight": "700",
+            "letter-spacing": "-0.6px",
+            "line-height": "36px"
+          }
+        ],
+        ".prose p": [],
+        "time": [
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "Browser automation CLI for agents — acce",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Tools",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "agent-browser",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/library",
+      "url": "http://localhost:4329/library",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "library-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Library",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "36px",
+            "font-weight": "700",
+            "letter-spacing": "-0.9px",
+            "line-height": "37.8px"
+          }
+        ],
+        ".prose p": [],
+        "time": [
+          {
+            "text": "Sep 23, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Sep 23, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Sep 23, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "Things I saved to read or watch properly",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "Library",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/a-great-cold-email-can-change-your-life",
+      "url": "http://localhost:4329/library/a-great-cold-email-can-change-your-life",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "library_a_great_cold_email_can_change_your_life-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "a great cold email can change your life ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "30px",
+            "font-weight": "700",
+            "letter-spacing": "-0.6px",
+            "line-height": "36px"
+          }
+        ],
+        ".prose p": [],
+        "time": [
+          {
+            "text": "Sep 14, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Aug 29, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Aug 29, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Library",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "a great cold email can change your life ",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [
+        "platform.twitter.com",
+        "syndication.twitter.com"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes/building-this-site",
+      "url": "http://localhost:4329/notes/building-this-site",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "notes_building_this_site-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Building this site",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "30px",
+            "font-weight": "700",
+            "letter-spacing": "-0.6px",
+            "line-height": "36px"
+          }
+        ],
+        ".prose p": [
+          {
+            "text": "I built this site overnight, mostly by t",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "The part I care about is the pipeline. I",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "Verdicts carry a date because opinions g",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ],
+        "time": [
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Notes",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "Building this site",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/about",
+      "url": "http://localhost:4329/about",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "about-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "About",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "36px",
+            "font-weight": "700",
+            "letter-spacing": "-0.9px",
+            "line-height": "37.8px"
+          }
+        ],
+        ".prose p": [],
+        "time": [],
+        ".standfirst": [
+          {
+            "text": "Who I am, what this site is, and where t",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "About",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/sites",
+      "url": "http://localhost:4329/sites",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "sites-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Sites",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "36px",
+            "font-weight": "700",
+            "letter-spacing": "-0.9px",
+            "line-height": "37.8px"
+          }
+        ],
+        ".prose p": [],
+        "time": [],
+        ".standfirst": [
+          {
+            "text": "Sites I saved for how they look. Every s",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "Sites",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/design",
+      "url": "http://localhost:4329/design",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "design-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "design.",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "32px",
+            "font-weight": "500",
+            "letter-spacing": "-0.64px",
+            "line-height": "33.6px"
+          }
+        ],
+        ".prose p": [],
+        "time": [
+          {
+            "text": "Sep 22, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "What this site is made of: the mark, the",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          },
+          {
+            "text": "One line under every title, and never tw",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "Design",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools/category/agent-infra",
+      "url": "http://localhost:4329/tools/category/agent-infra",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "tools_category_agent_infra-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "agent infra",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "36px",
+            "font-weight": "700",
+            "letter-spacing": "-0.9px",
+            "line-height": "37.8px"
+          }
+        ],
+        ".prose p": [],
+        "time": [
+          {
+            "text": "Aug 17, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "6 tools I filed under agent infra.",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Tools",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "agent infra",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/",
+      "url": "http://localhost:4329/",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "home-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Hey, I’m Aayush.",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "56px",
+            "font-weight": "700",
+            "letter-spacing": "-1.4px",
+            "line-height": "58.8px"
+          }
+        ],
+        ".prose p": [],
+        "time": [],
+        ".standfirst": [
+          {
+            "text": "Part entrepreneur, part marketer, part o",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          },
+          {
+            "text": "There’s a lot of noise in AI. I read it,",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          }
+        ],
+        ".crumbs__link": [],
+        ".crumbs__here": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4329/tools",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "tools-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Tools",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "56px",
+            "font-weight": "700",
+            "letter-spacing": "-1.4px",
+            "line-height": "58.8px"
+          }
+        ],
+        ".prose p": [],
+        "time": [
+          {
+            "text": "Aug 17, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "Software I installed, ran, and formed an",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "Tools",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools/agent-browser",
+      "url": "http://localhost:4329/tools/agent-browser",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "tools_agent_browser-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "agent-browser",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "40px",
+            "font-weight": "700",
+            "letter-spacing": "-0.8px",
+            "line-height": "48px"
+          }
+        ],
+        ".prose p": [],
+        "time": [
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "Browser automation CLI for agents — acce",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Tools",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "agent-browser",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/library",
+      "url": "http://localhost:4329/library",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Library",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "56px",
+            "font-weight": "700",
+            "letter-spacing": "-1.4px",
+            "line-height": "58.8px"
+          }
+        ],
+        ".prose p": [],
+        "time": [
+          {
+            "text": "Sep 23, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Sep 23, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Sep 23, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "Things I saved to read or watch properly",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "Library",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/a-great-cold-email-can-change-your-life",
+      "url": "http://localhost:4329/library/a-great-cold-email-can-change-your-life",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library_a_great_cold_email_can_change_your_life-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "a great cold email can change your life ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "40px",
+            "font-weight": "700",
+            "letter-spacing": "-0.8px",
+            "line-height": "48px"
+          }
+        ],
+        ".prose p": [],
+        "time": [
+          {
+            "text": "Sep 14, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Aug 29, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Aug 29, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Library",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "a great cold email can change your life ",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [
+        "platform.twitter.com",
+        "syndication.twitter.com"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes/building-this-site",
+      "url": "http://localhost:4329/notes/building-this-site",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "notes_building_this_site-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Building this site",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "40px",
+            "font-weight": "700",
+            "letter-spacing": "-0.8px",
+            "line-height": "48px"
+          }
+        ],
+        ".prose p": [
+          {
+            "text": "I built this site overnight, mostly by t",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "The part I care about is the pipeline. I",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "Verdicts carry a date because opinions g",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ],
+        "time": [
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Notes",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "Building this site",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/about",
+      "url": "http://localhost:4329/about",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "about-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "About",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "56px",
+            "font-weight": "700",
+            "letter-spacing": "-1.4px",
+            "line-height": "58.8px"
+          }
+        ],
+        ".prose p": [],
+        "time": [],
+        ".standfirst": [
+          {
+            "text": "Who I am, what this site is, and where t",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "About",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/sites",
+      "url": "http://localhost:4329/sites",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "sites-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Sites",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "56px",
+            "font-weight": "700",
+            "letter-spacing": "-1.4px",
+            "line-height": "58.8px"
+          }
+        ],
+        ".prose p": [],
+        "time": [],
+        ".standfirst": [
+          {
+            "text": "Sites I saved for how they look. Every s",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "Sites",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/design",
+      "url": "http://localhost:4329/design",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "design-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "design.",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "48px",
+            "font-weight": "500",
+            "letter-spacing": "-0.96px",
+            "line-height": "50.4px"
+          }
+        ],
+        ".prose p": [],
+        "time": [
+          {
+            "text": "Sep 22, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "What this site is made of: the mark, the",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          },
+          {
+            "text": "One line under every title, and never tw",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "Design",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools/category/agent-infra",
+      "url": "http://localhost:4329/tools/category/agent-infra",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "tools_category_agent_infra-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "agent infra",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "56px",
+            "font-weight": "700",
+            "letter-spacing": "-1.4px",
+            "line-height": "58.8px"
+          }
+        ],
+        ".prose p": [],
+        "time": [
+          {
+            "text": "Aug 17, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "6 tools I filed under agent infra.",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Tools",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "agent infra",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/",
+      "url": "http://localhost:4329/",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "home-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Hey, I’m Aayush.",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "36px",
+            "font-weight": "700",
+            "letter-spacing": "-0.9px",
+            "line-height": "37.8px"
+          }
+        ],
+        ".prose p": [],
+        "time": [],
+        ".standfirst": [
+          {
+            "text": "Part entrepreneur, part marketer, part o",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          },
+          {
+            "text": "There’s a lot of noise in AI. I read it,",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          }
+        ],
+        ".crumbs__link": [],
+        ".crumbs__here": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4329/tools",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "tools-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Tools",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "36px",
+            "font-weight": "700",
+            "letter-spacing": "-0.9px",
+            "line-height": "37.8px"
+          }
+        ],
+        ".prose p": [],
+        "time": [
+          {
+            "text": "Aug 17, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "Software I installed, ran, and formed an",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "Tools",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools/agent-browser",
+      "url": "http://localhost:4329/tools/agent-browser",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "tools_agent_browser-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "agent-browser",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "30px",
+            "font-weight": "700",
+            "letter-spacing": "-0.6px",
+            "line-height": "36px"
+          }
+        ],
+        ".prose p": [],
+        "time": [
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "Browser automation CLI for agents — acce",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Tools",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "agent-browser",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/library",
+      "url": "http://localhost:4329/library",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "library-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Library",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "36px",
+            "font-weight": "700",
+            "letter-spacing": "-0.9px",
+            "line-height": "37.8px"
+          }
+        ],
+        ".prose p": [],
+        "time": [
+          {
+            "text": "Sep 23, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Sep 23, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Sep 23, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "Things I saved to read or watch properly",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "Library",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/a-great-cold-email-can-change-your-life",
+      "url": "http://localhost:4329/library/a-great-cold-email-can-change-your-life",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "library_a_great_cold_email_can_change_your_life-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "a great cold email can change your life ",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "30px",
+            "font-weight": "700",
+            "letter-spacing": "-0.6px",
+            "line-height": "36px"
+          }
+        ],
+        ".prose p": [],
+        "time": [
+          {
+            "text": "Sep 14, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Aug 29, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Aug 29, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Library",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "a great cold email can change your life ",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [
+        "platform.twitter.com",
+        "syndication.twitter.com"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes/building-this-site",
+      "url": "http://localhost:4329/notes/building-this-site",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "notes_building_this_site-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Building this site",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "30px",
+            "font-weight": "700",
+            "letter-spacing": "-0.6px",
+            "line-height": "36px"
+          }
+        ],
+        ".prose p": [
+          {
+            "text": "I built this site overnight, mostly by t",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "The part I care about is the pipeline. I",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "Verdicts carry a date because opinions g",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ],
+        "time": [
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Notes",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "Building this site",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/about",
+      "url": "http://localhost:4329/about",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "about-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "About",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "36px",
+            "font-weight": "700",
+            "letter-spacing": "-0.9px",
+            "line-height": "37.8px"
+          }
+        ],
+        ".prose p": [],
+        "time": [],
+        ".standfirst": [
+          {
+            "text": "Who I am, what this site is, and where t",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "About",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/sites",
+      "url": "http://localhost:4329/sites",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "sites-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Sites",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "36px",
+            "font-weight": "700",
+            "letter-spacing": "-0.9px",
+            "line-height": "37.8px"
+          }
+        ],
+        ".prose p": [],
+        "time": [],
+        ".standfirst": [
+          {
+            "text": "Sites I saved for how they look. Every s",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "Sites",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/design",
+      "url": "http://localhost:4329/design",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "design-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "design.",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "32px",
+            "font-weight": "500",
+            "letter-spacing": "-0.64px",
+            "line-height": "33.6px"
+          }
+        ],
+        ".prose p": [],
+        "time": [
+          {
+            "text": "Sep 22, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "What this site is made of: the mark, the",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          },
+          {
+            "text": "One line under every title, and never tw",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "Design",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools/category/agent-infra",
+      "url": "http://localhost:4329/tools/category/agent-infra",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "tools_category_agent_infra-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "agent infra",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "36px",
+            "font-weight": "700",
+            "letter-spacing": "-0.9px",
+            "line-height": "37.8px"
+          }
+        ],
+        ".prose p": [],
+        "time": [
+          {
+            "text": "Aug 17, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "6 tools I filed under agent infra.",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Tools",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "agent infra",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/",
+      "url": "http://localhost:4329/",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "home-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Hey, I’m Aayush.",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "56px",
+            "font-weight": "700",
+            "letter-spacing": "-1.4px",
+            "line-height": "58.8px"
+          }
+        ],
+        ".prose p": [],
+        "time": [],
+        ".standfirst": [
+          {
+            "text": "Part entrepreneur, part marketer, part o",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          },
+          {
+            "text": "There’s a lot of noise in AI. I read it,",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          }
+        ],
+        ".crumbs__link": [],
+        ".crumbs__here": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4329/tools",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "tools-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Tools",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "56px",
+            "font-weight": "700",
+            "letter-spacing": "-1.4px",
+            "line-height": "58.8px"
+          }
+        ],
+        ".prose p": [],
+        "time": [
+          {
+            "text": "Aug 17, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "Software I installed, ran, and formed an",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "Tools",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools/agent-browser",
+      "url": "http://localhost:4329/tools/agent-browser",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "tools_agent_browser-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "agent-browser",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "40px",
+            "font-weight": "700",
+            "letter-spacing": "-0.8px",
+            "line-height": "48px"
+          }
+        ],
+        ".prose p": [],
+        "time": [
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "Browser automation CLI for agents — acce",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Tools",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "agent-browser",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/library",
+      "url": "http://localhost:4329/library",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Library",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "56px",
+            "font-weight": "700",
+            "letter-spacing": "-1.4px",
+            "line-height": "58.8px"
+          }
+        ],
+        ".prose p": [],
+        "time": [
+          {
+            "text": "Sep 23, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Sep 23, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Sep 23, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "Things I saved to read or watch properly",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "Library",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/a-great-cold-email-can-change-your-life",
+      "url": "http://localhost:4329/library/a-great-cold-email-can-change-your-life",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library_a_great_cold_email_can_change_your_life-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "a great cold email can change your life ",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "40px",
+            "font-weight": "700",
+            "letter-spacing": "-0.8px",
+            "line-height": "48px"
+          }
+        ],
+        ".prose p": [],
+        "time": [
+          {
+            "text": "Sep 14, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Aug 29, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Aug 29, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Library",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "a great cold email can change your life ",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [
+        "platform.twitter.com",
+        "syndication.twitter.com"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes/building-this-site",
+      "url": "http://localhost:4329/notes/building-this-site",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "notes_building_this_site-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Building this site",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "40px",
+            "font-weight": "700",
+            "letter-spacing": "-0.8px",
+            "line-height": "48px"
+          }
+        ],
+        ".prose p": [
+          {
+            "text": "I built this site overnight, mostly by t",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "The part I care about is the pipeline. I",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "Verdicts carry a date because opinions g",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ],
+        "time": [
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Notes",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "Building this site",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/about",
+      "url": "http://localhost:4329/about",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "about-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "About",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "56px",
+            "font-weight": "700",
+            "letter-spacing": "-1.4px",
+            "line-height": "58.8px"
+          }
+        ],
+        ".prose p": [],
+        "time": [],
+        ".standfirst": [
+          {
+            "text": "Who I am, what this site is, and where t",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "About",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/sites",
+      "url": "http://localhost:4329/sites",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "sites-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Sites",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "56px",
+            "font-weight": "700",
+            "letter-spacing": "-1.4px",
+            "line-height": "58.8px"
+          }
+        ],
+        ".prose p": [],
+        "time": [],
+        ".standfirst": [
+          {
+            "text": "Sites I saved for how they look. Every s",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "Sites",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/design",
+      "url": "http://localhost:4329/design",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "design-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "design.",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "48px",
+            "font-weight": "500",
+            "letter-spacing": "-0.96px",
+            "line-height": "50.4px"
+          }
+        ],
+        ".prose p": [],
+        "time": [
+          {
+            "text": "Sep 22, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "What this site is made of: the mark, the",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          },
+          {
+            "text": "One line under every title, and never tw",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "Design",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools/category/agent-infra",
+      "url": "http://localhost:4329/tools/category/agent-infra",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "tools_category_agent_infra-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "agent infra",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "56px",
+            "font-weight": "700",
+            "letter-spacing": "-1.4px",
+            "line-height": "58.8px"
+          }
+        ],
+        ".prose p": [],
+        "time": [
+          {
+            "text": "Aug 17, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "6 tools I filed under agent infra.",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          }
+        ],
+        ".crumbs__link": [
+          {
+            "text": "Aayush Manchanda",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "Tools",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".crumbs__here": [
+          {
+            "text": "agent infra",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}

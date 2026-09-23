@@ -8,9 +8,10 @@
  * and the card is rendered by a hand-run script in a throwaway browser that has
  * no Astro build to import a component from.
  *
- * Three, and only three. Two surfaces in the build now render the lockup —
- * `SiteMark.astro`, which is the fixed link home, and `/design`, which shows it
- * as a specimen — and both import `MarkGlyph.astro` rather than drawing it. The
+ * Three, and only three. One surface in the build renders the lockup —
+ * `/design`, which shows it as a specimen (the fixed `SiteMark` link home went
+ * with the top bar, VET-225) — and it imports `MarkGlyph.astro` rather than
+ * drawing it. The
  * last test in this file is what keeps that true: a fourth copy pasted into a
  * page is a copy nobody looks at, which is the one that drifts.
  *
@@ -45,7 +46,6 @@ const OG = read("../../scripts/og.mjs");
 
 /** Every file that renders the lockup without being allowed to draw it. */
 const CONSUMERS = [
-  ["SiteMark.astro", read("../components/SiteMark.astro")],
   ["design.astro", read("../pages/design.astro")],
 ];
 

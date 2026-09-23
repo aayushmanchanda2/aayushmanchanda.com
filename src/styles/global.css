@@ -3,8 +3,8 @@
    Design direction, locked from code-level inspection.
 
    Type:   Geist Sans (body, labels) + Geist Mono (data: dates, counts, code)
-   Light:  bg #FFFFFF, fg #171717, muted = fg @ 75%
-   Dark:   bg #09090B, fg #FAFAFA
+   Light:  bg #FFFFFF, text neutral 900 / 600 / 500 / 400
+   Dark:   bg #000000, text white at .9 / .7 / .5 / .32
    Accent: one electric blue, hue 231deg, used ONLY for links,
            active/hover states, and the mobile nav panel.
    ========================================================================== */
@@ -14,12 +14,12 @@
    --------------------------------------------------------------------------
    Accent contrast (WCAG, computed):
      light #2B4BFF on #FFFFFF -> 5.91:1  (AA normal text)
-     dark  #5C74FF on #09090B -> 5.11:1  (AA normal text)
+     dark  #5C74FF on #000000 -> 5.40:1  (AA normal text)
      white #FFFFFF on #2B4BFF -> 5.91:1  (AA — panel items, skip link, selection)
      white #FFFFFF on #5C74FF -> 3.89:1  (FAILS — never paint ink on --accent)
    Both accents are hsl(231, 100%, L) — identical hue across themes,
    lightness is the only difference, because no single lightness can clear
-   4.5:1 against both #FFFFFF and #09090B simultaneously.
+   4.5:1 against both #FFFFFF and #000000 simultaneously.
    -------------------------------------------------------------------------- */
 
 :root {
@@ -27,18 +27,25 @@
 
   /* surface + ink */
   --bg: #ffffff;
-  --fg: #171717;
-  --fg-channels: 23 23 23;
-  /* Three text levels, and every piece of text is one of them (design.md §2):
-       --fg     primary: titles, names, links, anything a reader came for
-       --muted  secondary: prose, notes, standfirsts, and every control
-       --faint  meta: labels, dates, counts, separators — never a control */
-  --muted: rgb(var(--fg-channels) / 0.75);
-  --faint: rgb(var(--fg-channels) / 0.45);
-  --hairline: rgb(var(--fg-channels) / 0.1);
-  --hairline-strong: rgb(var(--fg-channels) / 0.18);
+  /* Four text levels, briOS's, and every piece of text is one of them
+     (design.md §2). Contrast on the page background, light / dark:
+       --text-primary     17.93 / 16.75  titles, prose, names
+       --text-secondary    7.81 /  9.96  standfirsts, notes, every control
+       --text-tertiary     4.74 /  5.28  meta: labels, dates, counts
+       --text-quaternary   2.52 /  2.67  decoration only: dividers, never words
+     `lib/ink.test.mjs` recomputes these and fails the build under AA. */
+  --text-primary: #171717;
+  --text-secondary: #525252;
+  --text-tertiary: #737373;
+  --text-quaternary: #a3a3a3;
+  /* Raised surfaces: hover and selected rows, panels. */
+  --surface-2: #fafafa;
+  --surface-3: #f5f5f5;
+  /* Borders: `--hairline` separates, `--hairline-strong` outlines a control. */
+  --hairline: rgb(0 0 0 / 0.09);
+  --hairline-strong: rgb(0 0 0 / 0.12);
   --outline: rgb(0 0 0 / 0.1);
-  --dot: rgb(var(--fg-channels) / 0.14);
+  --dot: rgb(0 0 0 / 0.12);
 
   /* accent — hsl(231 100% 58.4%) */
   --accent: #2b4bff;
@@ -59,6 +66,10 @@
      TopicTag `rounded-lg` on a 28px box (design.md §1, §3). */
   --r-sm: 4px;
   --r-md: 8px;
+  /* Panels and selected rows. */
+  --r-lg: 12px;
+  /* Status pills. */
+  --r-pill: 999px;
 
   /* motion */
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -68,7 +79,7 @@
   --dur-slow: 420ms;
 
   /* layout */
-  --page-max: 44rem;
+  --page-max: 42rem;
   /* The one page allowed to be wider, and only the content half of it.
      /library's rows carry a tags column above 900px, and 44rem cannot hold a
      title, a tags column and a metadata column without squeezing the title to
@@ -78,7 +89,9 @@
      the eight worth taking. `layouts/Base.astro › .shell__main--wide` is the
      only consumer; the footer keeps `--page-max` on every page. */
   --page-wide: 52rem;
-  --page-pad: clamp(1.5rem, 5vw, 3rem);
+  --page-pad: clamp(1rem, 5vw, 3rem);
+  /* The sticky top bar in `layouts/Base.astro`. */
+  --bar-h: 3.5rem;
 
   /* The gap under a masthead, before whatever the page is actually about.
      Every section index, every filter page, /design, the 404 and the three
@@ -116,13 +129,19 @@
   :root:not([data-theme="light"]) {
     color-scheme: dark;
 
-    --bg: #09090b;
-    --fg: #fafafa;
-    --fg-channels: 250 250 250;
+    --bg: #000000;
+    --text-primary: rgb(255 255 255 / 0.9);
+    --text-secondary: rgb(255 255 255 / 0.7);
+    --text-tertiary: rgb(255 255 255 / 0.5);
+    --text-quaternary: rgb(255 255 255 / 0.32);
+    --surface-2: #171717;
+    --surface-3: #262626;
+    --hairline: rgb(255 255 255 / 0.09);
+    --hairline-strong: rgb(255 255 255 / 0.12);
     --outline: rgb(255 255 255 / 0.1);
-    --dot: rgb(var(--fg-channels) / 0.1);
+    --dot: rgb(255 255 255 / 0.1);
 
-    /* hsl(231 100% 68%) — same hue, lifted for AA on #09090B */
+    /* hsl(231 100% 68%) — same hue, lifted for AA on #000000 */
     --accent: #5c74ff;
   }
 }
@@ -130,13 +149,19 @@
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --bg: #09090b;
-  --fg: #fafafa;
-  --fg-channels: 250 250 250;
+  --bg: #000000;
+  --text-primary: rgb(255 255 255 / 0.9);
+  --text-secondary: rgb(255 255 255 / 0.7);
+  --text-tertiary: rgb(255 255 255 / 0.5);
+  --text-quaternary: rgb(255 255 255 / 0.32);
+  --surface-2: #171717;
+  --surface-3: #262626;
+  --hairline: rgb(255 255 255 / 0.09);
+  --hairline-strong: rgb(255 255 255 / 0.12);
   --outline: rgb(255 255 255 / 0.1);
-  --dot: rgb(var(--fg-channels) / 0.1);
+  --dot: rgb(255 255 255 / 0.1);
 
-  /* hsl(231 100% 68%) — same hue, lifted for AA on #09090B */
+  /* hsl(231 100% 68%) — same hue, lifted for AA on #000000 */
   --accent: #5c74ff;
 }
 
@@ -161,7 +186,7 @@ html {
 
 body {
   background: var(--bg);
-  color: var(--fg);
+  color: var(--text-primary);
   font-family: var(--font-sans);
   font-size: 1rem;
   line-height: 1.6;
@@ -203,12 +228,12 @@ a:hover {
   color: var(--accent);
 }
 
-/* A link inside a sentence is bold and underlined. The swipe.md convention, and
-   it is the right one for a page whose body text is set at --muted: a blue word
-   at 400 in a muted paragraph is a colour difference and nothing else, which is
-   the one signal that goes missing on a bad screen, in bright sun, or for a
-   reader who cannot separate those two hues at all. Weight and a line are two
-   more, and neither depends on seeing colour.
+/* A link inside a sentence is blue and underlined: a 2px line in the accent at
+   40%, 2px below the baseline, going solid on hover (briOS's link, with our
+   accent in place of his quaternary grey). Prose is primary ink now, so the
+   600 weight it carried at --text-secondary went: a bold blue word in a
+   near-black paragraph shouts. The line is the cue that does not depend on
+   seeing colour.
 
    Scoped to the places prose actually lives, not to `a`. Everywhere else on
    this site a link is furniture — a nav dash, a filter chip, a footer item, a
@@ -232,8 +257,7 @@ a:hover {
    lives here rather than in the page's own styles so /design cannot end up
    showing a prose link that the rest of the site has stopped drawing that way.
 
-   Both themes: --accent already swaps, and weight and underline are identical
-   in either one. */
+   Both themes: --accent already swaps, and the mix follows it. */
 .prose a,
 .doc a,
 .sheet p a,
@@ -241,8 +265,15 @@ a:hover {
 .voice__body a,
 .source a:not(.source__repo),
 .fact dd a:not(.chip) {
-  font-weight: 600;
   text-decoration-line: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+  text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  transition-property: color, text-decoration-color;
+}
+
+:is(.prose, .doc, .sheet p, .standfirst, .voice__body, .source, .fact dd) a:hover {
+  text-decoration-color: var(--accent);
 }
 
 img,
@@ -268,12 +299,11 @@ ol {
   list-style: none;
 }
 
-/* The panel pair, for the same reason the mobile nav and the palette's active
-   row use it: this paints the accent as a background with text on it, and the
-   dark theme's --accent is 3.89:1 against white. Selected text is still text. */
+/* A tint, not a fill: the accent at 18% with the text left at primary ink,
+   so a selected line stays as readable as the one beside it in both themes. */
 ::selection {
-  background: var(--accent-panel);
-  color: var(--accent-panel-ink);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  color: var(--text-primary);
 }
 
 :focus-visible {
@@ -293,21 +323,22 @@ ol {
 }
 
 /* The label voice: section heads, field labels, crumbs, footer items, tabs.
-   Sans at 13px/500, normal tracking, sentence case, the ui-skills label
+   Sans at 14px/400, normal tracking, sentence case (VET-225: briOS's meta
+   size, and 14px at --text-tertiary clears AA where 13px at 45% did not), the ui-skills label
    (`DESIGN.md`: "Use sentence case for labels and links"). It was 11px
    uppercase mono with 0.08em tracking until VET-223, which is why the class is
    still called `mono`: ninety call sites and the tests that read them match
    the name, and renaming it would be a diff about a word.
 
-   What is still mono is data inside a label: a date, a count, a clock, a year.
-   Those already carry `.tabular-nums` (§2 of design.md: any digit that changes
+   What is still mono is data inside a label: a count, a clock, a year. Dates
+   are words now ("Aug 13, 2026", `lib/date.ts`) and stay sans. The rest carry `.tabular-nums` (§2 of design.md: any digit that changes
    in place or sits in a column), so that class is the switch and no call site
-   has to opt in twice. Colour is the caller's: `--faint` for pure metadata,
-   `--muted` for anything a reader presses (design.md §4, the ink floor). */
+   has to opt in twice. Colour is the caller's: `--text-tertiary` for pure metadata,
+   `--text-secondary` for anything a reader presses (design.md §4, the ink floor). */
 .mono {
   font-family: var(--font-sans);
-  font-size: 0.8125rem;
-  font-weight: 500;
+  font-size: 0.875rem;
+  font-weight: 400;
   letter-spacing: normal;
 }
 
@@ -399,14 +430,14 @@ ol {
   text-decoration: none;
 }
 
-/* The masthead: one huge h1, one line of standfirst under it. Every page that
-   has a title uses this one, the home page included — its title is a sentence
-   rather than a section name, which is a difference in the words, not the type. */
+/* The masthead: one bold h1, one line of standfirst under it. Every page that
+   has a title uses this one, the home page included. Weight carries it, not
+   size: 36px on a phone, 56px at most (VET-225, down from 84px). */
 .page-title {
-  font-size: clamp(2.75rem, 10vw, 5.25rem);
-  font-weight: 600;
-  letter-spacing: -0.045em;
-  line-height: 0.98;
+  font-size: clamp(2.25rem, 6vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
   /* optical: pull the first stem flush with the column edge */
   margin-left: -0.04em;
 }
@@ -427,9 +458,23 @@ ol {
    same problem, and it costs an authored title nothing — a heading that fits
    never reaches for it. */
 .page-title--entry {
-  font-size: clamp(2rem, 6vw, 3.25rem);
-  letter-spacing: -0.035em;
+  /* briOS's detail title: 30, then 36, then 40px. */
+  font-size: 1.875rem;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
   overflow-wrap: anywhere;
+}
+
+@media (min-width: 600px) {
+  .page-title--entry {
+    font-size: 2.25rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .page-title--entry {
+    font-size: 2.5rem;
+  }
 }
 
 /* Lowercase mono, for a masthead that is a terse statement rather than a
@@ -440,7 +485,7 @@ ol {
   font-weight: 500;
   /* mono glyphs are already wide; the sans tracking would crowd them */
   letter-spacing: -0.02em;
-  font-size: clamp(2.25rem, 8vw, 4.25rem);
+  font-size: clamp(2rem, 6vw, 3rem);
   text-transform: lowercase;
   /* mono has no side bearing to correct for */
   margin-left: 0;
@@ -451,7 +496,7 @@ ol {
   max-width: 46ch;
   font-size: clamp(1.0625rem, 1.6vw, 1.1875rem);
   line-height: 1.65;
-  color: var(--muted);
+  color: var(--text-secondary);
 }
 
 /* The footer pages — /privacy, /about, /contact — which are prose under mono
@@ -470,7 +515,9 @@ ol {
    fighting over one name and winning on specificity rather than on intent. */
 .doc {
   margin-top: var(--gap-masthead);
-  max-width: 62ch;
+  /* rem, not ch: Geist's 1ch is wider than its average glyph, so 62ch ran to
+     90 characters a line (design-review, VET-225). */
+  max-width: 40rem;
   border-top: 1px solid var(--hairline);
 }
 
@@ -480,16 +527,18 @@ ol {
 }
 
 .doc__head {
-  color: var(--faint);
+  color: var(--text-tertiary);
   /* the head is the label; the paragraph under it carries the reading size */
   line-height: 1.6;
 }
 
 .doc p {
   margin-top: 0.85rem;
-  font-size: 1rem;
-  line-height: 1.7;
-  color: var(--muted);
+  font-size: 1.125rem;
+  line-height: 1.6;
+  color: var(--text-primary);
+  -webkit-font-smoothing: auto;
+  -moz-osx-font-smoothing: auto;
 }
 
 @media (max-width: 599px) {
@@ -522,7 +571,7 @@ ol {
 }
 
 .fact dt {
-  color: var(--faint);
+  color: var(--text-tertiary);
 }
 
 .fact dd {
@@ -537,21 +586,16 @@ ol {
   }
 }
 
-/* Back link above a page title. --muted, not --faint: the crumb is a control,
-   and interactive ink never sits below --muted (§4 of design.md — --faint is
-   2.94:1 on the light theme, which fails AA for the 13px label voice). */
-.crumb {
-  margin-bottom: clamp(1.25rem, 3vw, 2rem);
-  color: var(--muted);
-}
-
-.crumb a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.crumb a:hover {
-  color: var(--accent);
+/* A 20×4px accent pill above a small section heading, briOS's "Read next"
+   marker. Put the class on the heading; the pill is drawn, not markup. */
+.accent-bar::before {
+  content: "";
+  display: block;
+  width: 20px;
+  height: 4px;
+  margin-bottom: 1rem;
+  border-radius: 999px;
+  background: var(--accent);
 }
 
 .visually-hidden {

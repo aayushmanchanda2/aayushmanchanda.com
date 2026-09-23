@@ -40,6 +40,7 @@ import TagChips from "./TagChips.astro";
 import { routeSlug } from "../lib/parse";
 import type { LibraryEntry } from "../lib/library";
 import { entryHref } from "../lib/library";
+import { formatDay } from "../lib/date";
 
 interface Props {
   entries: LibraryEntry[];
@@ -125,7 +126,7 @@ const anyTags = entries.some((entry) => entry.tags.length > 0);
           >
             Source<span class="visually-hidden">: {entry.title}</span>
           </a>
-          <span class="row__date mono tabular-nums">{entry.saved_date}</span>
+          <time class="row__date mono" datetime={entry.saved_date}>{formatDay(entry.saved_date)}</time>
         </span>
 
         {entry.note && <p class="row__note">{entry.note}</p>}
@@ -251,7 +252,7 @@ const anyTags = entries.some((entry) => entry.tags.length > 0);
     overflow: hidden;
     font-size: 0.9375rem;
     line-height: 1.55;
-    color: var(--muted);
+    color: var(--text-secondary);
     /* A note about a post is the post's own first 280 characters, and a post is
        full of links with no word boundary in them. One of them — a YouTube
        watch URL with three query parameters — is 178px wider than a 375px
@@ -283,9 +284,9 @@ const anyTags = entries.some((entry) => entry.tags.length > 0);
      so letting the domain take its natural width costs the title a little room
      and costs the row nothing. */
   .row__domain {
-    /* --muted, not the date's --faint: this is a control (design.md §4, the
+    /* --text-secondary, not the date's --text-tertiary: this is a control (design.md §4, the
        ink floor). */
-    color: var(--muted);
+    color: var(--text-secondary);
     text-decoration-line: underline;
     text-decoration-color: var(--hairline-strong);
     white-space: nowrap;
@@ -301,7 +302,7 @@ const anyTags = entries.some((entry) => entry.tags.length > 0);
     text-decoration-color: currentColor;
   }
 
-  /* The quiet pattern, same as the domain above it: `--muted` because it is a
+  /* The quiet pattern, same as the domain above it: `--text-secondary` because it is a
      control (design.md §4, the ink floor), and its own underline because on
      touch there is no hover to reveal one.
 
@@ -315,7 +316,7 @@ const anyTags = entries.some((entry) => entry.tags.length > 0);
      the domain and the date already sit from each other, and a toolbar-sized
      box around it would put a toolbar into every row. */
   .row__source {
-    color: var(--muted);
+    color: var(--text-secondary);
     text-decoration-line: underline;
     text-decoration-color: var(--hairline-strong);
     white-space: nowrap;
@@ -328,7 +329,7 @@ const anyTags = entries.some((entry) => entry.tags.length > 0);
   }
 
   .row__date {
-    color: var(--faint);
+    color: var(--text-tertiary);
     white-space: nowrap;
   }
 

@@ -1,0 +1,95 @@
+---
+/**
+ * Breadcrumbs — the trail in the top bar: `Aayush Manchanda / Tools / Notion`.
+ *
+ * Home is always the first link, so the name is the way home from anywhere.
+ * The last step is the page itself: plain text with `aria-current`, never a
+ * link to where the reader already is. `Base.astro` works out the trail, from
+ * the page's `BreadcrumbList` when it has one, so the JSON-LD and this markup
+ * are one list.
+ *
+ * `data-mnav-inert`: the open menu panel covers the bar, so these links go
+ * inert with the rest of the background (`MobileNav.astro › setOpen`).
+ */
+import { HOME, type Crumb } from "../lib/schema";
+
+interface Props {
+  /** The steps after home. Empty on the home page. */
+  trail: Crumb[];
+}
+
+const steps = [HOME, ...Astro.props.trail];
+---
+
+<nav class="crumbs" aria-label="Breadcrumb" data-mnav-inert>
+  <ol class="crumbs__list">
+    {
+      steps.map((step, i) => (
+        <li class="crumbs__step">
+          {i === steps.length - 1 ? (
+            <span class="crumbs__here" aria-current="page">{step.name}</span>
+          ) : (
+            <a class="crumbs__link" href={step.path}>{step.name}</a>
+          )}
+        </li>
+      ))
+    }
+  </ol>
+</nav>
+
+<style>
+  .crumbs {
+    min-width: 0;
+  }
+
+  .crumbs__list {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+  .crumbs__step {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+  }
+
+  /* Ancestors keep their full names; only the page's own title gives way. */
+  .crumbs__step:not(:last-child) {
+    flex-shrink: 0;
+  }
+
+  /* Drawn, not typed, so it is never part of a link or read out. */
+  .crumbs__step + .crumbs__step::before {
+    content: "/" / "";
+    color: var(--text-quaternary);
+  }
+
+  /* 40px tall targets inside the 56px bar, text-sized across. */
+  .crumbs__link,
+  .crumbs__here {
+    display: block;
+    padding: 0.625rem 0.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* the li's global `text-wrap: pretty` resets an inherited nowrap */
+    white-space: nowrap;
+  }
+
+  .crumbs__link {
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .crumbs__here {
+    color: var(--text-secondary);
+  }
+
+  @media (hover: hover) {
+    .crumbs__link:hover {
+      color: var(--accent);
+    }
+  }
+</style>

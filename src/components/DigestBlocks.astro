@@ -62,7 +62,7 @@ const { digest } = Astro.props;
   }
 
   .digest__label {
-    color: var(--faint);
+    color: var(--text-tertiary);
     /* the label is metadata; the text under it carries the reading size */
     line-height: 1.6;
   }
@@ -71,7 +71,7 @@ const { digest } = Astro.props;
     margin-top: 0.5rem;
     font-size: 1rem;
     line-height: 1.7;
-    color: var(--muted);
+    color: var(--text-secondary);
   }
 
   /* A real list, marked as one: these are claims from the piece, and the
@@ -89,11 +89,11 @@ const { digest } = Astro.props;
   .digest__bullet {
     font-size: 1rem;
     line-height: 1.7;
-    color: var(--muted);
+    color: var(--text-secondary);
   }
 
   .digest__bullet::marker {
-    color: var(--faint);
+    color: var(--text-tertiary);
   }
 
   @media (max-width: 599px) {

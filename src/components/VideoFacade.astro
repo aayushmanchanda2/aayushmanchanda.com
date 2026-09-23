@@ -58,6 +58,7 @@
  */
 import type { LibraryEntry, Video } from "../lib/library";
 import { entryHref } from "../lib/library";
+import { formatDay } from "../lib/date";
 
 interface Props {
   /** A video entry the pipeline could fetch a poster for. */
@@ -131,7 +132,7 @@ const Wrapper = chrome ? "li" : "div";
 
         {entry.note && <p class="tile__note">{entry.note}</p>}
 
-        <span class="tile__date mono tabular-nums">{entry.saved_date}</span>
+        <time class="tile__date mono" datetime={entry.saved_date}>{formatDay(entry.saved_date)}</time>
       </Fragment>
     )
   }
@@ -281,11 +282,11 @@ const Wrapper = chrome ? "li" : "div";
     overflow: hidden;
     font-size: 0.9375rem;
     line-height: 1.55;
-    color: var(--muted);
+    color: var(--text-secondary);
   }
 
   .tile__date {
-    color: var(--faint);
+    color: var(--text-tertiary);
   }
 
   /* The player, once there is one. Keyed to the frame and `:global` for the

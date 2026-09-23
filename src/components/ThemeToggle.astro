@@ -110,10 +110,9 @@ const { variant = "quiet" } = Astro.props;
        nothing sensible to put on one. Centre it in the line instead. */
     align-self: center;
     cursor: pointer;
-    /* --muted, not --faint: this is a control, and the glyph is the whole
-       control — --faint is 2.94:1 on the light theme, under even the 3:1 a
-       non-text control is held to (design.md §4, the ink floor). */
-    color: var(--muted);
+    /* --text-secondary, not --text-tertiary: this is a control, and controls
+       sit a level above metadata (design.md §4, the ink floor). */
+    color: var(--text-secondary);
   }
 
   /* Gated: this control stays on screen after a press, and on touch `:hover`

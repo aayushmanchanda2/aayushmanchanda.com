@@ -134,7 +134,7 @@ const form = newsletterForm(NEWSLETTER_ACTION);
   /* The section-head voice, matching `index.astro › .index__title` and
      `ToolList.astro › .group__head`. */
   .news__title {
-    color: var(--faint);
+    color: var(--text-tertiary);
   }
 
   .news__line {
@@ -142,11 +142,11 @@ const form = newsletterForm(NEWSLETTER_ACTION);
     max-width: 52ch;
     font-size: 0.9375rem;
     line-height: 1.55;
-    color: var(--muted);
+    color: var(--text-secondary);
   }
 
-  /* The line the form becomes once the address is in. Full-ink `--fg`, not
-     `--muted`: it is the one moment this section is the point of the page.
+  /* The line the form becomes once the address is in. Full-ink `--text-primary`, not
+     `--text-secondary`: it is the one moment this section is the point of the page.
      Focus lands here programmatically for screen readers; the ring is for
      controls, and a paragraph that cannot be operated should not wear one. */
   .news__done {
@@ -154,7 +154,7 @@ const form = newsletterForm(NEWSLETTER_ACTION);
     max-width: 52ch;
     font-size: 0.9375rem;
     line-height: 1.55;
-    color: var(--fg);
+    color: var(--text-primary);
   }
 
   .news__done:focus {
@@ -183,7 +183,7 @@ const form = newsletterForm(NEWSLETTER_ACTION);
     padding-inline: 0.75rem;
     font: inherit;
     font-size: 0.9375rem;
-    color: var(--fg);
+    color: var(--text-primary);
     background: none;
     border: 1px solid var(--hairline);
     /* Stated, not inherited, and stated twice over: the site rounds one thing
@@ -197,7 +197,7 @@ const form = newsletterForm(NEWSLETTER_ACTION);
   }
 
   .news__input::placeholder {
-    color: var(--faint);
+    color: var(--text-tertiary);
   }
 
   /* The hover weight of a border, the same step a list row takes. There is no
@@ -217,7 +217,7 @@ const form = newsletterForm(NEWSLETTER_ACTION);
        edge has nowhere left to go. */
     border: 1px solid var(--hairline-strong);
     border-radius: 0;
-    color: var(--fg);
+    color: var(--text-primary);
     cursor: pointer;
     /* `.press` already names transform, colour, background and border; a second
        transition-property here would race it depending on stylesheet order. */
@@ -232,6 +232,6 @@ const form = newsletterForm(NEWSLETTER_ACTION);
     max-width: 52ch;
     font-size: 0.8125rem;
     line-height: 1.55;
-    color: var(--muted);
+    color: var(--text-secondary);
   }
 </style>

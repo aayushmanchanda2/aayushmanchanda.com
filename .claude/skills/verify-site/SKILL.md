@@ -45,12 +45,12 @@ node .claude/skills/verify-site/shoot.mjs --base <url> --routes /,/tools --label
 
 Per route x size x theme it:
 
-- **Theme:** sets Playwright `colorScheme` AND pins the site's own toggle state (`localStorage.theme = light|dark`, read by the PREPAINT script in `src/lib/theme.ts`, which writes `html[data-theme]`). The report records `dataTheme` and `bodyBg`; a mismatch is a failure. Dark `bodyBg` is `rgb(9, 9, 11)` (#09090B), light is `rgb(255, 255, 255)`.
+- **Theme:** sets Playwright `colorScheme` AND pins the site's own toggle state (`localStorage.theme = light|dark`, read by the PREPAINT script in `src/lib/theme.ts`, which writes `html[data-theme]`). The report records `dataTheme` and `bodyBg`; a mismatch is a failure. Dark `bodyBg` is `rgb(0, 0, 0)` (#000000), light is `rgb(255, 255, 255)`.
 - **Screenshot:** `<route>-<width>-<theme>.png`, viewport only unless `--full`; CSS animations disabled.
 - **`--click`:** one real user click on the first match after load (e.g. `[data-tools-view-set="grid"]`), before styles and screenshot.
 - **`--styles`:** comma list (commas inside `:is(...)` are safe); for the first 3 matches of each: `color, font-size, font-weight, letter-spacing, line-height` plus a text snippet.
 - **Network:** `thirdPartyHosts` = every request host not equal to `--base`'s host (e.g. `/tools` currently shows `img.logo.dev`; X embed pages show `platform.twitter.com` etc.). Uncaught page errors land in `pageErrors`.
-- **`--hover`/`--expect`:** desktop widths only (>=768). Hovers the first `--hover` match, waits `--wait` ms, reports `visibleBefore`/`visibleAfter` of the first `--expect` match. Visibility is `checkVisibility({checkOpacity, checkVisibilityCSS})` + non-zero box, so opacity-0 fades count as hidden (Playwright's `isVisible` alone does not). A `--hover` target missing on a route is a failure: pass only routes that have it. Tip: `--expect '<trigger>:hover <revealed>'` scopes the reveal to the hovered element. Known-good control: `--hover '.rail__item:not([aria-current])' --expect '.rail__item:hover .rail__label'` (the left rail on every page at 1280).
+- **`--hover`/`--expect`:** desktop widths only (>=768). Hovers the first `--hover` match, waits `--wait` ms, reports `visibleBefore`/`visibleAfter` of the first `--expect` match. Visibility is `checkVisibility({checkOpacity, checkVisibilityCSS})` + non-zero box, so opacity-0 fades count as hidden (Playwright's `isVisible` alone does not). A `--hover` target missing on a route is a failure: pass only routes that have it. Tip: `--expect '<trigger>:hover <revealed>'` scopes the reveal to the hovered element.
 
 Exit code 0 = no failures; 1 = any non-200, theme mismatch, thrown error, or failed hover; 2 = bad args. Stable handles live in `features/`; read the matching file before driving a feature.
 

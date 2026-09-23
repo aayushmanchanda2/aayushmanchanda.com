@@ -252,10 +252,10 @@ test("a row of tag chips is as tall as the chips, not as tall as a line of text"
   }
 });
 
-test("the tag is an 8px box and the chip a 4px one, both off the token scale", () => {
+test("the tag is an 8px box and the chip a pill, both off the token scale", () => {
   /*
    * ui-skills' TopicTag is `rounded-lg`, 8px, on its 32px box; ours is 28px and
-   * keeps the 8px (`--r-md`). The `.chip` keeps `--r-sm`. Both are tokens, so a
+   * keeps the 8px (`--r-md`). The `.chip` is a pill, `--r-pill`. Both are tokens, so a
    * shape is never typed outside `styles/global.css`.
    */
   const chip = readFileSync(
@@ -269,7 +269,7 @@ test("the tag is an 8px box and the chip a 4px one, both off the token scale", (
 
   assert.match(global, /--r-md: 8px;/, "the tag radius left the token block");
   assert.match(chip, /\n\.tag \{[^}]*border-radius: var\(--r-md\);/);
-  assert.match(chip, /\n\.chip \{[^}]*border-radius: var\(--r-sm\);/);
+  assert.match(chip, /\n\.chip \{[^}]*border-radius: var\(--r-pill\);/);
   // The focus ring takes the element's own radius, so a focused tag under
   // `global.css › :focus-visible`'s `--r-sm` would draw a 4px ring round an
   // 8px box.

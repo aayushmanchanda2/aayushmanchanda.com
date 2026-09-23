@@ -15,6 +15,7 @@
  */
 import type { SiteDesign } from "../lib/design-md";
 import { toDesignMd } from "../lib/design-md";
+import { formatDay } from "../lib/date";
 
 interface Props {
   design: SiteDesign;
@@ -80,7 +81,7 @@ const familyList =
       <span class="visually-hidden">Copy {title}'s tokens as DESIGN.md</span>
     </button>
   </div>
-  <p class="found__note">Read from {domain} on <span class="tabular-nums">{design.read_date}</span>.</p>
+  <p class="found__note">Read from {domain} on <time datetime={design.read_date}>{formatDay(design.read_date)}</time>.</p>
 
   {
     groups.map((group) => (
@@ -150,12 +151,12 @@ const familyList =
     gap: 1rem;
   }
 
-  /* ShotActions' `.act`: a housekeeping control at --muted, 40px tall. */
+  /* ShotActions' `.act`: a housekeeping control at --text-secondary, 40px tall. */
   .found__md {
     min-height: 40px;
     padding-inline: 0.5rem;
     margin-right: -0.5rem;
-    color: var(--muted);
+    color: var(--text-secondary);
     cursor: pointer;
   }
 
@@ -163,7 +164,7 @@ const familyList =
   .style__name,
   .group__head {
     font-size: 0.8125rem;
-    color: var(--faint);
+    color: var(--text-tertiary);
   }
 
   .found__note,
@@ -209,7 +210,7 @@ const familyList =
   .row__value {
     font-family: var(--font-mono);
     font-size: 0.8125rem;
-    color: var(--muted);
+    color: var(--text-secondary);
     text-align: right;
     transition-property: color;
     transition-duration: var(--dur-fast);
@@ -217,14 +218,14 @@ const familyList =
   }
 
   .row:focus-visible .row__value {
-    color: var(--fg);
+    color: var(--text-primary);
   }
 
   /* Gated: a tapped control's `:hover` latches on touch (design.md §4). */
   @media (hover: hover) {
     .row:hover .row__value,
     .found__md:hover {
-      color: var(--fg);
+      color: var(--text-primary);
     }
   }
 
@@ -238,7 +239,7 @@ const familyList =
   .bar {
     height: 8px;
     max-width: 100%;
-    background: var(--muted);
+    background: var(--text-secondary);
   }
 
   /* The site's radius on a 48px box: corners that are data, like a swatch's
@@ -270,7 +271,7 @@ const familyList =
 
   .style__aa {
     line-height: 1.1;
-    color: var(--fg);
+    color: var(--text-primary);
   }
 
   /* `.tag` and `.style` set `display`, which beats the UA's `[hidden]`. */

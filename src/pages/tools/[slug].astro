@@ -27,6 +27,7 @@ import VoiceBlocks from "../../components/VoiceBlocks.astro";
 import { linkLabel, markFor } from "../../lib/links";
 import { toolJsonLd } from "../../lib/schema";
 import { categorySlug, tools } from "../../lib/tools";
+import { formatDay } from "../../lib/date";
 
 export const getStaticPaths = (() =>
   tools.map((tool) => ({
@@ -68,7 +69,6 @@ const logo = mark.kind === "logo" ? mark.src : null;
   description={tool.note}
   jsonLd={jsonLd}
 >
-  <p class="crumb mono"><a href="/tools">&larr; Tools</a></p>
 
   <header>
     <h1 class="page-title page-title--entry">{tool.name}</h1>
@@ -90,7 +90,7 @@ const logo = mark.kind === "logo" ? mark.src : null;
         </a>
       </li>
       <li class="strip__item">
-        As of <span class="tabular-nums">{tool.status_date}</span>
+        As of <time datetime={tool.status_date}>{formatDay(tool.status_date)}</time>
       </li>
     </ul>
 
@@ -158,7 +158,7 @@ const logo = mark.kind === "logo" ? mark.src : null;
     /* title to strip and strip to standfirst are both 16px: design.md §2's
        rhythm, 8 within a group, 16 between groups, 40 between sections */
     margin-top: 1rem;
-    color: var(--faint);
+    color: var(--text-tertiary);
   }
 
   .strip + .standfirst {
@@ -195,9 +195,9 @@ const logo = mark.kind === "logo" ? mark.src : null;
      cid. Same idiom as `experiments.astro`. */
   .strip a:not(.strip__chip),
   .source :global(.source__repo) {
-    /* --muted, never the strip's --faint: a quiet anchor inside a metadata
+    /* --text-secondary, never the strip's --text-tertiary: a quiet anchor inside a metadata
        container states its own ink (design.md §4, the ink floor). */
-    color: var(--muted);
+    color: var(--text-secondary);
     text-decoration-line: underline;
     text-decoration-color: var(--hairline-strong);
     text-underline-offset: 0.25em;
@@ -237,7 +237,7 @@ const logo = mark.kind === "logo" ? mark.src : null;
   }
 
   .source__label {
-    color: var(--faint);
+    color: var(--text-tertiary);
   }
 
   .source__favicon {

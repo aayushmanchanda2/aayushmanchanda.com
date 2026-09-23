@@ -127,7 +127,7 @@
   flex: none;
   width: 1rem;
   height: 1rem;
-  color: var(--faint);
+  color: var(--text-tertiary);
 }
 
 .palette__input {
@@ -137,7 +137,7 @@
   font: inherit;
   font-size: 1.0625rem;
   letter-spacing: -0.01em;
-  color: var(--fg);
+  color: var(--text-primary);
   background: none;
   border: 0;
   padding: 0;
@@ -151,7 +151,7 @@
 }
 
 .palette__input::placeholder {
-  color: var(--faint);
+  color: var(--text-tertiary);
 }
 
 /* The kbd chip, beui's: a filled cap rather than an outline, so it reads as a
@@ -161,7 +161,7 @@
   flex: none;
   /* a key cap is a literal, so it keeps mono (design.md §2) */
   font-family: var(--font-mono);
-  color: var(--faint);
+  color: var(--text-tertiary);
   background: var(--bg);
   border: 1px solid var(--hairline);
   border-radius: var(--r-sm);
@@ -191,7 +191,7 @@
 
 /* Left padding matches the row's, so heading and title share a left edge. */
 .palette__heading {
-  color: var(--faint);
+  color: var(--text-tertiary);
   padding: 0.375rem 0.5rem;
 }
 
@@ -204,7 +204,7 @@
   gap: 0.75rem;
   padding: 0.5rem;
   border-radius: var(--r-sm);
-  color: var(--fg);
+  color: var(--text-primary);
   text-decoration: none;
   /* Never `transition: all` — the two that change are named. */
   transition-property: background-color, color;
@@ -247,7 +247,7 @@
 
 .palette__row-where {
   flex: none;
-  color: var(--faint);
+  color: var(--text-tertiary);
 }
 
 .palette__row[data-active] .palette__row-where {
@@ -256,14 +256,14 @@
 }
 
 .palette__legend {
-  color: var(--faint);
+  color: var(--text-tertiary);
 }
 
-/* --muted, not the legend's --faint: this line is the panel's whole answer to
+/* --text-secondary, not the legend's --text-tertiary: this line is the panel's whole answer to
    a failed search, and the reader is actively reading it (design.md §4, the
-   ink floor keeps anything a reader is sent to read at --muted or above). */
+   ink floor keeps anything a reader is sent to read at --text-secondary or above). */
 .palette__empty {
-  color: var(--muted);
+  color: var(--text-secondary);
 }
 
 /* beui's `p-8 text-center`: a miss is the one moment the panel has nothing to

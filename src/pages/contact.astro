@@ -45,6 +45,7 @@ const jsonLd = contactJsonLd();
 
 <Base
   title="Contact · Aayush Manchanda"
+  trail={[{ name: "Contact", path: "/contact" }]}
   description="How to reach Aayush Manchanda: one email address, two profiles, and an honest note about what is worth writing about and what is not."
   jsonLd={jsonLd}
 >
@@ -185,7 +186,7 @@ const jsonLd = contactJsonLd();
   .mailto__arrow {
     width: 16px;
     height: 16px;
-    color: var(--faint);
+    color: var(--text-tertiary);
     transition-property: transform, color;
     transition-duration: var(--dur);
     transition-timing-function: var(--ease-out);

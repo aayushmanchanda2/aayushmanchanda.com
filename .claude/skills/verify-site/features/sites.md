@@ -11,7 +11,7 @@
 
 ## How to get to it (user POV)
 
-- Sites link in the rail, or `/sites`.
+- Sites in the Menu panel or the top bar trail, or `/sites`.
 - A collection link in the Collections row; a domain link in a site's facts.
 - A card in the gallery for its detail page (slugs from `ls dist/sites`, e.g. `about-brian-lovin`).
 

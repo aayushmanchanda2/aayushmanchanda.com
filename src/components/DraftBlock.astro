@@ -13,7 +13,7 @@
  *   - **It is boxed.** Everything else down a `/library/<slug>` page is prose
  *     under a mono label, flush left on the page background. This is the only
  *     thing inside a border, which is what says it is quoted rather than said.
- *   - **The label is at full ink**, against the `--faint` every other label on
+ *   - **The label is at full ink**, against the `--text-tertiary` every other label on
  *     an entry page takes. A label whose whole job is to stop a reader taking
  *     the paragraph under it as his verdict cannot be the quietest thing in the
  *     box.
@@ -32,6 +32,7 @@
  * until then.
  */
 import type { Draft } from "../lib/library";
+import { formatDay } from "../lib/date";
 
 interface Props {
   draft: Draft;
@@ -66,7 +67,7 @@ const { draft } = Astro.props;
 
   {draft.why && <p class="draft__body">{draft.why}</p>}
 
-  <p class="draft__date mono">Drafted <span class="tabular-nums">{draft.drafted}</span></p>
+  <p class="draft__date mono">Drafted <time datetime={draft.drafted}>{formatDay(draft.drafted)}</time></p>
 </section>
 
 <style>
@@ -83,10 +84,10 @@ const { draft } = Astro.props;
     max-width: 62ch;
   }
 
-  /* Full ink, against the `--faint` a digest label takes. The whole job of this
+  /* Full ink, against the `--text-tertiary` a digest label takes. The whole job of this
      word is to stop a reader taking the box as his verdict. */
   .draft__label {
-    color: var(--fg);
+    color: var(--text-primary);
     line-height: 1.6;
   }
 
@@ -94,7 +95,7 @@ const { draft } = Astro.props;
     margin-top: 0.5rem;
     font-size: 0.9375rem;
     line-height: 1.6;
-    color: var(--muted);
+    color: var(--text-secondary);
   }
 
   /* A real list, marked as one, the same shape `DigestBlocks.astro` gives the
@@ -112,11 +113,11 @@ const { draft } = Astro.props;
   .draft__body {
     font-size: 1rem;
     line-height: 1.7;
-    color: var(--muted);
+    color: var(--text-secondary);
   }
 
   .draft__bullet::marker {
-    color: var(--faint);
+    color: var(--text-tertiary);
   }
 
   .draft__body {
@@ -124,11 +125,11 @@ const { draft } = Astro.props;
   }
 
   /* The label's own date, at the foot rather than beside the heading: it is the
-     day this was written and not part of the warning. `--faint` is right here,
+     day this was written and not part of the warning. `--text-tertiary` is right here,
      which is the layer static metadata sits on everywhere else (design.md §4). */
   .draft__date {
     margin-top: 1rem;
-    color: var(--faint);
+    color: var(--text-tertiary);
   }
 
   @media (max-width: 599px) {
