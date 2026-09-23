@@ -2,10 +2,9 @@
 /**
  * /contact — one address, two profiles, and what is worth writing about.
  *
- * No form, for the same reason /privacy can say the site collects nothing: a
- * form needs an endpoint, an endpoint needs a service, and a service is a third
- * party reading everything anyone types into this site. A `mailto:` needs none
- * of that, and it is the only contact affordance here.
+ * No form: a form needs an endpoint, an endpoint needs a service, and a
+ * service is a third party reading everything anyone types into this site. A
+ * `mailto:` needs none of that, and it is the only contact affordance here.
  *
  * ---------------------------------------------------------------------------
  * THE ADDRESS IS ENTITY-ENCODED, AND IT HAS TO STAY THAT WAY.
@@ -46,13 +45,13 @@ const jsonLd = contactJsonLd();
 <Base
   title="Contact · Aayush Manchanda"
   trail={[{ name: "Contact", path: "/contact" }]}
-  description="How to reach Aayush Manchanda: one email address, two profiles, and an honest note about what is worth writing about and what is not."
+  description="How to reach Aayush Manchanda, and what gets a reply."
   jsonLd={jsonLd}
 >
   <header>
     <h1 class="page-title">Contact</h1>
     <p class="standfirst">
-      One address, two profiles, and an honest note about what I answer.
+      Email, X or GitHub, and what gets a reply.
     </p>
   </header>
 
@@ -89,67 +88,54 @@ const jsonLd = contactJsonLd();
     <section>
       <h2 class="doc__head mono">Worth writing about</h2>
       <p>
-        A tool I should be running, especially if you built it. Tell me what it
-        is for and what it replaces. I test things on real work rather than on a
-        demo, so I will say honestly whether it fits what I do, and if it does
-        not fit, that is a fast no rather than a slow silence.
+        A tool I should be running, especially if you built it. Tell me what
+        it&rsquo;s for and what it replaces. If it doesn&rsquo;t fit my work,
+        you&rsquo;ll get a fast no.
       </p>
       <p>
-        Something wrong on this site. A dead link, a verdict that has gone
-        stale, a screenshot that stopped looking like that site a year ago.
-        Corrections get the quickest reply out of me, and you do not need to be
-        polite about it.
+        Something wrong here: a dead link, a stale verdict, a screenshot that no
+        longer looks like the site. Corrections get the fastest reply, and you
+        don&rsquo;t need to be polite about it.
       </p>
       <p>
-        Work that is actually interesting. Vetted takes a small number of
-        clients, so a real problem with a real budget is a conversation worth
-        having. Put the problem in the first paragraph.
+        Work. Vetted takes a small number of clients. A real problem with a real
+        budget is a conversation; put the problem in the first paragraph.
       </p>
     </section>
 
     <section>
       <h2 class="doc__head mono">Not worth writing about</h2>
       <p>
-        Link exchanges, guest posts, and sponsored placements. The verdicts on <a
-          href="/tools">/tools</a> are not for sale, because a bought verdict is
-        worth nothing to the person reading it. If you want to work on something
-        real together, that is the section above.
+        Link exchanges, guest posts and sponsored placements. The verdicts on <a
+          href="/tools">/tools</a> aren&rsquo;t for sale.
       </p>
       <p>
-        Cold pitches for services I did not ask about. Anything that opens by
-        telling me it noticed my website. Requests to add a link to a page you
-        have written on the same topic. None of these get a reply, and I am
-        saying that here so you can spend the email somewhere better.
+        Cold pitches, anything that opens by telling me it noticed my website,
+        and requests to add your link to a page. None of these get a reply.
       </p>
     </section>
 
     <section>
       <h2 class="doc__head mono">Elsewhere</h2>
       {/*
-        Written tight against the surrounding words on purpose. A line break
-        between a word and a tag is not a space to Astro, it is nothing, and the
-        readable version of this block shipped as "I am@amanchanda7on X and".
-        See the note in `design.md` §6.
+        Anchors keep their neighbouring space on the same line: a line break
+        next to a tag is nothing to Astro. See `design.md` §6.
       */}
       <p>
-        I am <a class="ext" rel="me noopener" target="_blank"
+        I&rsquo;m <a class="ext" rel="me noopener" target="_blank"
           href="https://x.com/amanchanda7">@amanchanda7</a> on X and <a
           class="ext" rel="me noopener" target="_blank"
           href="https://github.com/aayushmanchanda2">aayushmanchanda2</a> on
-        GitHub. Both are in the footer of every page here too. X is the faster
-        route for a short question; email is better for anything that needs more
-        than a sentence.
+        GitHub. X for a short question, email for anything longer.
       </p>
     </section>
 
     <section>
       <h2 class="doc__head mono">A screenshot of your site</h2>
       <p>
-        If one of the screenshots in <a href="/sites">/sites</a> is yours and
-        you want it gone, you do not need to email me about it. <a
-          href="/privacy">/privacy</a> has the route, it is a GitHub issue, and
-        you do not have to explain why. That page is also where I say what this
-        site collects, which is nothing.
+        If a screenshot in <a href="/sites">/sites</a> is yours and you want it
+        gone, open a GitHub issue; the link is on <a
+          href="/privacy">/privacy</a>. No reason needed.
       </p>
     </section>
   </div>

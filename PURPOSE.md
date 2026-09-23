@@ -34,12 +34,10 @@ Anything added here has to pass all five.
    A sentence whose job is to prove I thought about something goes.
 2. **Tested, or it says it is not.** A saved link says saved. Only work I ran
    gets a verdict.
-3. **Dated.** Every opinion carries the day it was last true. An old date is a
-   warning, not a badge.
+3. **Dated.** Every opinion carries the day it was last true.
 4. **Accurate without being defensive.** Say the true thing plainly, then stop.
    No disclaimers managing what you think of me.
-5. **Warm, direct, forward-looking.** Confident, and never a sales voice.
+5. **Warm and direct.** Confident, and never a sales voice.
 
-The voice these are written in is `voice-guide-for-site.md`, in the research
-notes for this repo. Read it before writing copy. `design.md` §6 is the rule set
-it feeds.
+The voice these are written in is `voice.md` at the repo root. Read it before
+writing copy. `design.md` §6 is the rule set it feeds.

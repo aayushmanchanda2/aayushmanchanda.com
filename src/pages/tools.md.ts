@@ -36,8 +36,8 @@ import { VERDICTS, categories, tools, verdictGroups } from "../lib/tools";
  */
 const MEANING: Record<Verdict, string> = {
   using: "In the daily stack right now.",
-  watching: "Runs fine and has not earned a place in the daily stack.",
-  "on-hold": "Testing started, then stopped before reaching a verdict.",
+  watching: "Runs fine and hasn't made the daily stack yet.",
+  "on-hold": "Testing started, then stopped before a verdict.",
   skipped: "Looked at and set aside. The note says why.",
 };
 
@@ -73,7 +73,7 @@ export const GET: APIRoute = () => {
     page: PAGES.tools,
     title: "Tools",
     description:
-      "Software Aayush Manchanda installed, ran, and formed an opinion about, with a dated verdict on each one.",
+      "Software Aayush Manchanda installed and ran, with a dated verdict on each.",
     updated: newest(tools.map((tool) => tool.status_date)),
     blocks: [
       table(["Tool", "Repo", "Verdict", "Category", "Updated", "Note"], rows),
@@ -81,7 +81,7 @@ export const GET: APIRoute = () => {
       section(
         "Verdicts",
         list(VERDICTS.map((verdict) => `\`${verdict}\`: ${MEANING[verdict]}`)),
-        "Every verdict carries the date it was last true. How stale that makes it is the reader's call to make, not a thing the page decides.",
+        "Every verdict carries the date it was last true.",
       ),
       section(
         "Filtered views",

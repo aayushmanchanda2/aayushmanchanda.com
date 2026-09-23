@@ -54,7 +54,7 @@ export const GET: APIRoute = async () => {
     // the identity beat and the first block picks up at the purpose beat. Both
     // here would print the same sentence twice in a row.
     description:
-      "Part entrepreneur, part marketer, part operator. Aayush Manchanda co-founded Orbis, runs Vetted, and uses AI to build things on the internet from Canada.",
+      "Aayush Manchanda co-founded Orbis, runs Vetted, and builds things with AI from Canada.",
     // The home page summarises every section, so its freshness is the freshest
     // thing any section has.
     updated: newest([
@@ -65,14 +65,8 @@ export const GET: APIRoute = async () => {
     ]),
     blocks: [
       [
-        "There is a lot of noise in AI. He reads it, tests it on his own",
-        "companies and his clients, and what survives shows up here with a date",
-        "on it.",
-      ].join(" "),
-      [
-        "The site is a log rather than a portfolio. Every entry carries the date",
-        "it was written or last checked, and nothing is deleted once it stops",
-        "being flattering.",
+        "He tests AI tools on his own companies and his clients; what survives",
+        "shows up here with a date on it.",
       ].join(" "),
       section("Sections", table(["Section", "Entries", "Page", "Markdown", "About"], rows)),
       ...(latest.length > 0 ? [section("Latest", list(latest))] : []),

@@ -224,7 +224,7 @@ export function voiceSection(
   return [
     section(
       "In my words",
-      "Some entries carry more than the one-line note. Most do not, and an entry missing from this list simply means I have not written it up, not that I had nothing good to say.",
+      "Entries with more than the one-line note.",
     ),
     ...blocks,
   ].join("\n\n");
@@ -285,7 +285,7 @@ export function digestSection(
   return [
     section(
       "Digests",
-      "These entries have been read properly, not just saved. Each carries cliff notes and a call on whether it is worth your time.",
+      "Entries I've read. Each carries cliff notes and a call on whether it's worth your time.",
     ),
     ...blocks,
   ].join("\n\n");

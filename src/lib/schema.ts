@@ -126,7 +126,7 @@ const SAME_AS = [
  * the long version of that same hero.
  */
 const PERSON_DESCRIPTION =
-  "Aayush Manchanda is part entrepreneur, part marketer, part operator. He co-founded Orbis, runs Vetted, and uses AI to build things on the internet from Canada. There is a lot of noise in AI, so he reads it, tests it on his own companies and his clients, and what survives shows up on this site with a date on it.";
+  "Aayush Manchanda co-founded Orbis, runs Vetted, and builds things with AI from Canada. There is a lot of noise in AI. He tests it on his own companies and his clients, and what survives shows up on this site with a date on it.";
 
 /**
  * A page's canonical URL, in the exact form `Base.astro` puts in the canonical
@@ -195,6 +195,7 @@ export function person(full = false): JsonLdNode {
     name: NAME,
     url: absolute("/"),
     description: full ? PERSON_DESCRIPTION : null,
+    image: full ? absolute("/aayush.jpg") : null,
     sameAs: SAME_AS,
   });
 }

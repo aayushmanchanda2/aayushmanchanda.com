@@ -31,7 +31,7 @@ const MEANING: Record<Status, string> = {
   running: "Going right now.",
   paused: "Stopped for the moment, not abandoned.",
   shipped: "Finished and out.",
-  killed: "Stopped for good. Still listed rather than deleted.",
+  killed: "Stopped for good. Still listed.",
 };
 
 /** An experiment links at the section it produced, or out at something else. */
@@ -53,7 +53,7 @@ export const GET: APIRoute = () => {
     page: PAGES.experiments,
     title: "Experiments",
     description:
-      "What Aayush Manchanda is running right now, with a status and a start date on each one. The dead ones stay listed.",
+      "What Aayush Manchanda is running right now, with a status and start date on each. Killed ones stay listed.",
     updated: newest(experiments.map((experiment) => experiment.started)),
     blocks: [
       rows.length === 0
