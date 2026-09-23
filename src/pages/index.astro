@@ -1,12 +1,18 @@
 ---
 import NewsletterSignup from "../components/NewsletterSignup.astro";
 import Base from "../layouts/Base.astro";
+import { formatDay } from "../lib/date";
+import { feedItems } from "../lib/feeds";
+import { newestFirst } from "../lib/rss";
 import { homeJsonLd } from "../lib/schema";
 import { getSections } from "../lib/sections";
 
 // Sections with no entries do not come back, so the index never offers a row
 // that leads to an empty page.
 const sections = await getSections();
+
+/** The five newest entries across the sections that have feeds. */
+const latest = newestFirst(await feedItems(), 5);
 
 /**
  * Who this site is about, in a form a machine can resolve.
@@ -66,6 +72,30 @@ const jsonLd = homeJsonLd();
       }
     </ul>
   </section>
+
+  {
+    latest.length > 0 && (
+      <section class="latest" aria-labelledby="latest-heading">
+        <h2 class="latest__head accent-bar" id="latest-heading">Latest</h2>
+        <ul class="latest__list">
+          {latest.map((item) => (
+            <li>
+              <a class="entry press" href={item.path}>
+                <span class="entry__title">{item.title}</span>
+                <span class="entry__meta tabular-nums">
+                  <span>{item.section}</span>
+                  <time datetime={item.date}>{formatDay(item.date)}</time>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+        <p class="latest__feed">
+          <a href="/rss.xml">Follow it all by RSS</a>
+        </p>
+      </section>
+    )
+  }
 
   {/*
     Renders nothing until `NEWSLETTER_ACTION` in `lib/site.ts` is set, which is
@@ -192,4 +222,68 @@ const jsonLd = homeJsonLd();
       grid-template-columns: 2rem 1fr auto;
     }
   }
+
+  /* --- latest ------------------------------------------------------------- */
+
+  /* The "Read next" head under a note, reused: same pill, same 16px label. */
+  .latest {
+    margin-top: clamp(3.5rem, 10vh, 5rem);
+  }
+
+  .latest__head {
+    margin-bottom: 0.5rem;
+    color: var(--text-tertiary);
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: normal;
+    line-height: 1.6;
+  }
+
+  /* Title, then section and day under it: side by side went ragged, since a
+     long title wraps the meta under it anyway. Each row is a 40px target by
+     its own padding (design.md §4). */
+  .entry {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-height: 40px;
+    padding-block: 0.375rem;
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .entry:hover {
+    color: var(--text-primary);
+  }
+
+  .entry__title {
+    min-width: 0;
+    font-size: 1.125rem;
+    font-weight: 500;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    text-underline-offset: 3px;
+    text-wrap: pretty;
+  }
+
+  .entry:hover .entry__title {
+    text-decoration-line: underline;
+  }
+
+  .entry__meta {
+    font-size: 0.875rem;
+    color: var(--text-tertiary);
+  }
+
+  .entry__meta > * + *::before {
+    content: "\00b7" / "";
+    margin-inline: 0.4em;
+  }
+
+  .latest__feed {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: var(--text-tertiary);
+  }
+
 </style>

@@ -18,6 +18,7 @@
 
 import type { APIRoute } from "astro";
 
+import { FEEDS } from "../lib/feeds";
 import { PAGES } from "../lib/markdown";
 import { digested, kindGroups, library } from "../lib/library";
 import { getSections } from "../lib/sections";
@@ -40,6 +41,8 @@ export const GET: APIRoute = async () => {
       return `- [${section.name}](${absolute(section.href)}) (${entries(section.count)}${md}): ${section.blurb}`;
     })
     .join("\n");
+
+  const feedList = FEEDS.map((feed) => `- [${feed.title}](${absolute(feed.href)})`).join("\n");
 
   const verdictCounts = verdictGroups
     .map((group) => `${group.verdict} (${group.tools.length})`)
@@ -146,6 +149,14 @@ ${sectionList}
 - [Sitemap](${absolute("/sitemap-index.xml")}): every indexable URL.
 - [robots.txt](${absolute("/robots.txt")}): everything is allowed, AI crawlers
   included and named.
+
+## Feeds
+
+RSS 2.0, newest 50 entries each. Every item carries the entry's own text: a
+tool's verdict and note, a library entry's digest or note, what he thinks of a
+site when he has said, a note in full. The first feed is every section at once.
+
+${feedList}
 `;
 
   return new Response(body, {

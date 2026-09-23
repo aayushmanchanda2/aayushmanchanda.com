@@ -66,7 +66,7 @@ export interface Section {
   md: string | null;
 }
 
-const CATALOGUE: readonly Omit<Section, "count" | "md">[] = [
+export const CATALOGUE: readonly Omit<Section, "count" | "md">[] = [
   {
     href: "/tools",
     name: "Tools",

@@ -11,14 +11,17 @@ import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
 
 import { experiments } from "../lib/experiments";
+import { feedItems } from "../lib/feeds";
 import {
   PAGES,
+  link,
   list,
   markdownDocument,
   newest,
   section,
   table,
 } from "../lib/markdown";
+import { newestFirst } from "../lib/rss";
 import { getSections } from "../lib/sections";
 import { absolute } from "../lib/site";
 import { sites } from "../lib/sites";
@@ -37,6 +40,11 @@ export const GET: APIRoute = async () => {
     entry.md === null ? "none" : absolute(entry.md),
     entry.blurb,
   ]);
+
+  // The home page's "Latest" list, the same five.
+  const latest = newestFirst(await feedItems(), 5).map(
+    (item) => `${link(item.title, absolute(item.path))} (${item.section}, ${item.date})`,
+  );
 
   return markdownDocument({
     page: PAGES.home,
@@ -68,12 +76,14 @@ export const GET: APIRoute = async () => {
         "being flattering.",
       ].join(" "),
       section("Sections", table(["Section", "Entries", "Page", "Markdown", "About"], rows)),
+      ...(latest.length > 0 ? [section("Latest", list(latest))] : []),
       section(
         "For agents",
         list([
           `Every section page has a markdown variant at the same path with \`.md\` on the end. The home page is at ${absolute(PAGES.home.md)}.`,
           `${absolute("/llms.txt")} is a short index of the site written for language models.`,
           `${absolute("/sitemap-index.xml")} lists every URL the site publishes.`,
+          `${absolute("/rss.xml")} is an RSS feed of every section; each section has its own at \`/<section>/rss.xml\`.`,
         ]),
       ),
     ],

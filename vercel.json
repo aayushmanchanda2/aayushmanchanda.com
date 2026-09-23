@@ -17,6 +17,16 @@
       "status": 308,
       "headers": { "Location": "/library/$1" }
     },
+    {
+      "src": "^/(feed|rss)/?$",
+      "status": 308,
+      "headers": { "Location": "/rss.xml" }
+    },
+    {
+      "src": "^/(notes|library|tools|sites)/feed/?$",
+      "status": 308,
+      "headers": { "Location": "/$1/rss.xml" }
+    },
 
     {
       "src": "^/$",
