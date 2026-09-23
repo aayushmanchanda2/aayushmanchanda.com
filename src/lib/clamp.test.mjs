@@ -62,24 +62,32 @@ const code = (source) => source.replace(/\{?\/\*[\s\S]*?\*\/\}?/g, "");
  */
 const LISTINGS = [
   "components/LibraryList.astro",
+  "components/LibraryPane.astro",
   "components/PreviewCard.astro",
   "components/ToolGrid.astro",
   "components/ToolList.astro",
   "components/VideoFacade.astro",
 ];
 
+/**
+ * The one detail page allowed a clamp, and only on one thing: a post's title,
+ * which is the post's own words cut short with the whole post right under it
+ * (VET-231, briOS's detail header). The overflow is on the same page.
+ */
+const POST_TITLE = "pages/library/[slug].astro";
+
 test("every listing note stops at two lines, and nothing else in the build clamps", () => {
   const clamped = walk("").filter((file) => /-webkit-line-clamp/.test(code(read(file))));
 
   assert.deepEqual(
     clamped.sort(),
-    [...LISTINGS].sort(),
+    [...LISTINGS, POST_TITLE].sort(),
     "the set of files clamping a line count changed. A clamp belongs on a listing row whose title goes to a page carrying the whole thing, and nowhere else — a page that is itself the overflow must render all of it (lib/post.ts says why at length).",
   );
 });
 
 test("the clamp is spelled both ways, so it is not a prefix nobody standardised", () => {
-  for (const file of LISTINGS) {
+  for (const file of [...LISTINGS, POST_TITLE]) {
     const css = code(read(file));
     assert.match(css, /-webkit-line-clamp:\s*2;/, `${file} does not cap its note at two lines`);
     assert.match(
@@ -105,7 +113,6 @@ test("the pages the overflow lives on render all of it", () => {
     "components/VoiceBlocks.astro",
     "components/DigestBlocks.astro",
     "components/DraftBlock.astro",
-    "pages/library/[slug].astro",
     "pages/tools/[slug].astro",
   ]) {
     assert.ok(
@@ -113,4 +120,11 @@ test("the pages the overflow lives on render all of it", () => {
       `${file} clamps something. It is a detail page, which is where the overflow was sent.`,
     );
   }
+});
+
+test("the entry page clamps a post's title and nothing else", () => {
+  const route = code(read(POST_TITLE));
+  const clamps = [...route.matchAll(/([^{}]+)\{[^}]*-webkit-line-clamp/g)].map((m) => m[1].trim());
+  assert.deepEqual(clamps, [".title--post"], "the entry page clamps something other than a post's title");
+  assert.match(route, /entry\.post && "title--post"/, "the title clamp is no longer gated on the entry having its post");
 });

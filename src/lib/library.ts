@@ -262,6 +262,11 @@ export interface LibraryEntry {
    * move, not a relabel. If that empties the draft, the draft becomes null.
    */
   why: string | null;
+  /**
+   * The source in 25 words or fewer, or null. The TLDR ticket (T14) writes
+   * and validates it; until then no entry has one and `rowSummary` falls back.
+   */
+  tldr: string | null;
 }
 
 /** An entry somebody has actually read. What the `Review` node is built from. */
@@ -648,6 +653,7 @@ export function parseLibrary(value: unknown): LibraryEntry[] {
       video: readVideo(item, kind, where),
       draft: readDraft(item, where),
       why: readOptional(item, "why", where),
+      tldr: readOptional(item, "tldr", where),
     };
   });
 
@@ -697,6 +703,15 @@ export function parseLibrary(value: unknown): LibraryEntry[] {
  */
 export function entryHref(entry: Pick<LibraryEntry, "slug">): string {
   return `/library/${entry.slug}`;
+}
+
+/**
+ * The line under a row's title in the /library/<slug> list pane: the TLDR
+ * once there is one, the note until then. A post the pipeline could read gets
+ * no fallback, because its note is its own words and its title already is.
+ */
+export function rowSummary(entry: LibraryEntry): string | null {
+  return entry.tldr ?? (entry.post ? null : entry.note);
 }
 
 /* ---------------------------------------------------------------------------

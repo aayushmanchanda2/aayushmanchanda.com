@@ -71,7 +71,7 @@ const blocks: Block[] = VOICE_FIELDS.flatMap(({ key, label, code }) => {
       {blocks.map((block) => (
         <section class="voice__block">
           <h2 class="voice__label mono">{block.label}</h2>
-          <p class:list={["voice__body", block.code && "voice__body--code"]}>
+          <p class:list={["voice__body prose", block.code && "voice__body--code"]}>
             {block.body}
           </p>
         </section>
@@ -81,11 +81,11 @@ const blocks: Block[] = VOICE_FIELDS.flatMap(({ key, label, code }) => {
 }
 
 <style>
-  /* Measured against /privacy, which is the site's other block of labelled
-     prose: same label at --text-tertiary, same muted body at 1.7. Two pages that
-     are both "a label and a paragraph" should not be two typographic systems.
+  /* A label at --text-tertiary over a `.prose` body (`styles/prose.css`),
+     the note page's reading type, the same as DigestBlocks beside it on a
+     library entry (VET-231).
 
-     What is different is the rules. /privacy hairlines every section because it
+     No rules between blocks, unlike /privacy, which hairlines every section as it
      is a long document you scan for the clause you came for. Three or four
      short blocks on an entry page are one thought, and ruling them would slice
      it up and then compete with the facts table underneath. Gap does the work. */
@@ -94,7 +94,6 @@ const blocks: Block[] = VOICE_FIELDS.flatMap(({ key, label, code }) => {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    max-width: 62ch;
   }
 
   .voice__label {
@@ -105,9 +104,6 @@ const blocks: Block[] = VOICE_FIELDS.flatMap(({ key, label, code }) => {
 
   .voice__body {
     margin-top: 0.5rem;
-    font-size: 1rem;
-    line-height: 1.7;
-    color: var(--text-secondary);
   }
 
   .voice__body--code {
@@ -120,9 +116,4 @@ const blocks: Block[] = VOICE_FIELDS.flatMap(({ key, label, code }) => {
     overflow-wrap: anywhere;
   }
 
-  @media (max-width: 599px) {
-    .voice {
-      max-width: none;
-    }
-  }
 </style>

@@ -1,0 +1,49 @@
+{
+  "results": [
+    {
+      "hop": 1,
+      "to": "/library/ordinary-abundance",
+      "saved": 2000,
+      "restored": 2000,
+      "ok": true
+    },
+    {
+      "hop": 2,
+      "to": "/library/learn-how-to-make-ultra-realistic-scenes-in-runway",
+      "saved": 2000,
+      "restored": 2000,
+      "ok": true
+    },
+    {
+      "hop": 3,
+      "to": "/library/60-new-creative-growth-ideas",
+      "saved": 2000,
+      "restored": 2000,
+      "ok": true
+    },
+    {
+      "hop": 4,
+      "to": "/library/hawthorne-effect",
+      "saved": 2000,
+      "restored": 2000,
+      "ok": true
+    },
+    {
+      "hop": 5,
+      "to": "/library/how-to-build-a-one-person-media-company-with-hermes-bots",
+      "saved": 2000,
+      "restored": 2000,
+      "ok": true
+    }
+  ],
+  "keys": {
+    "start": "/library/how-to-build-a-one-person-media-company-with-hermes-bots",
+    "afterJ": "/library/my-llm-cliche-highlighter-is-up-to-38-patterns-now",
+    "afterK": "/library/how-to-build-a-one-person-media-company-with-hermes-bots",
+    "jWentNext": true,
+    "kCameBack": true,
+    "nextHref": "/library/my-llm-cliche-highlighter-is-up-to-38-patterns-now",
+    "prevHref": "/library/hawthorne-effect",
+    "typingStayed": true
+  }
+}

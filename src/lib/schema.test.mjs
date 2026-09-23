@@ -167,6 +167,7 @@ const DIGESTED_ENTRY = {
   video: null,
   draft: null,
   why: null,
+  tldr: null,
 };
 
 /**
@@ -199,6 +200,7 @@ const SAVED_ENTRY = {
     drafted: "2026-08-15",
   },
   why: null,
+  tldr: null,
 };
 
 /** @type {import("./sites.ts").Site} */

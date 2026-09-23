@@ -1,7 +1,7 @@
 {
   "extends": "astro/tsconfigs/strict",
   "include": [".astro/types.d.ts", "**/*"],
-  "exclude": ["dist"],
+  "exclude": ["dist", "qa/evidence"],
   "compilerOptions": {
     /**
      * The publish pipeline is plain `.mjs` annotated with JSDoc, and

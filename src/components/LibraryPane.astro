@@ -1,0 +1,144 @@
+---
+/**
+ * LibraryPane — the list beside an entry on /library/<slug>, briOS's
+ * `ListDetailLayout` list pane: 350px, its own scroll, the current row on a
+ * surface with a 12px radius. The layout it sits in is `layouts/Base.astro`'s
+ * `pane` slot; the container query that hides it under 48rem is here.
+ *
+ * It repeats on all 139 entry pages, so the row is kept small on purpose:
+ * three bare elements, no scoped-style attributes (the style block is global
+ * and namespaced to `.pane`), and the summary cut at 110 characters, about
+ * what the two-line clamp shows. The measured cost is in the VET-231 audit.
+ *
+ * Filters stay on /library. This is the whole list in list order, which is
+ * also the ring EntryNav's keys walk.
+ */
+import type { LibraryEntry } from "../lib/library";
+import { entryHref, rowSummary } from "../lib/library";
+import { PREPAINT } from "../lib/library-pane";
+import { clipText } from "../lib/post";
+
+interface Props {
+  entries: LibraryEntry[];
+  /** The slug of the entry on this page; its row gets `aria-current`. */
+  current: string;
+}
+
+const { entries, current } = Astro.props;
+---
+
+<nav class="pane" aria-label="Library list" data-pane data-mnav-inert>
+  <ul>
+    {
+      entries.map((entry) => {
+        const summary = rowSummary(entry);
+        return (
+          <li>
+            <a
+              href={entryHref(entry)}
+              aria-current={entry.slug === current ? "page" : undefined}
+            >
+              <b>{entry.title}</b>
+              <small>
+                <span>{entry.domain}</span>
+                <span>{entry.kind}</span>
+              </small>
+              {summary && <span>{clipText(summary, 110)}</span>}
+            </a>
+          </li>
+        );
+      })
+    }
+  </ul>
+</nav>
+<script is:inline set:html={PREPAINT} />
+
+<style is:global>
+  .pane {
+    display: none;
+  }
+
+  /* briOS's @3xl: two panes from 48rem of container, one below it. The
+     container is `.split` in `layouts/Base.astro`. */
+  @container split (width >= 48rem) {
+    .pane {
+      display: block;
+      position: sticky;
+      top: var(--bar-h);
+      flex: 0 0 350px;
+      height: calc(100dvh - var(--bar-h));
+      overflow-y: auto;
+      padding: 0.75rem;
+      border-right: 1px solid var(--hairline);
+    }
+  }
+
+  .pane ul {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .pane a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding: 0.75rem 0.875rem;
+    border-radius: var(--r-lg);
+    color: var(--text-primary);
+    text-decoration: none;
+    transition-property: background-color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  @media (hover: hover) {
+    .pane a:hover {
+      background: var(--surface-2);
+    }
+  }
+
+  .pane a[aria-current="page"] {
+    background: var(--surface-3);
+  }
+
+  .pane b {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .pane small {
+    display: flex;
+    gap: 0.4rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--text-tertiary);
+  }
+
+  .pane small span + span::before {
+    content: "\00b7" / "";
+    margin-right: 0.4rem;
+    color: var(--hairline-strong);
+  }
+
+  /* The TLDR line (T14 fills it; `lib/library.ts › rowSummary` says what
+     stands in until then). */
+  .pane a > span {
+    margin-top: 0.125rem;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+</style>

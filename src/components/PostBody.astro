@@ -87,7 +87,7 @@ const { post } = entry;
     </span>
   </div>
 
-  <p class="post__text">{post.text}</p>
+  <p class="post__text prose">{post.text}</p>
 
   {
     post.media.length > 0 && (
@@ -186,15 +186,11 @@ const { post } = entry;
     white-space: nowrap;
   }
 
-  /* The reading measure, which is the note page's and not the card's: 65ch at
-     the site's prose size (design.md §2). The card sets a post at 0.9375rem
-     inside a 550px box because it is a quote in a wall; a page holding
-     thirty-one thousand characters of it is somebody reading, and the two want
-     different type.
-
-     `overflow-wrap` is for what a post is full of and a note page is not: a
-     t.co shortlink has no word boundary in it, so without this one runs out
-     past the column. */
+  /* The reading type is `.prose` (`styles/prose.css`), the note page's: 18px
+     at 1.6 in primary ink, 40rem. The card sets a post at 0.9375rem inside a
+     550px box because it is a quote in a wall; a page holding thirty-one
+     thousand characters of it is somebody reading, and the two want different
+     type. `.prose` also carries the `overflow-wrap` a t.co shortlink needs. */
   .post__text {
     /* 1.25rem before, when the head was a 48px circle and needed the air to
        clear it. The head is two lines of small type now, and it is this
@@ -203,11 +199,6 @@ const { post } = entry;
        body without going all the way there — those labels are one line of 13px
        and this is a name over a date. */
     margin-top: 0.85rem;
-    max-width: 65ch;
-    font-size: 1.0625rem;
-    line-height: 1.7;
-    color: var(--text-secondary);
-    overflow-wrap: anywhere;
   }
 
   /* Stacked at the reading measure rather than in the card's 2-up grid. The
@@ -220,7 +211,7 @@ const { post } = entry;
     flex-direction: column;
     gap: 0.75rem;
     margin-top: 1.5rem;
-    max-width: 65ch;
+    max-width: 40rem;
   }
 
   .post__picture {
@@ -236,10 +227,4 @@ const { post } = entry;
     border-radius: 0;
   }
 
-  @media (max-width: 599px) {
-    .post__text,
-    .post__media {
-      max-width: none;
-    }
-  }
 </style>
