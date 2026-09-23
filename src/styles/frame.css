@@ -1,6 +1,8 @@
 /* The stamp frame (VET-255) on a cutting mat (VET-260): every page is a sheet
-   of paper inset `--frame` from the viewport, perforated at its edge like a
+   of paper inset `--mat-w` from the viewport, perforated at its edge like a
    postage stamp, lying on a mat whose colour says which section you are in.
+   Inside the perforation a white band runs to a keyline, and the content sits
+   inside that (VET-262), so `--frame` is the mat plus the band.
 
    It belongs to the window, not the page, so it is the same on every route:
    a frame that came and went would move the bar between /tools and a tool's
@@ -30,6 +32,9 @@ html {
   --mat-hi: light-dark(oklch(0.54 0.015 70), oklch(0.37 0.012 70));
   --mat: light-dark(oklch(0.43 0.015 60), oklch(0.27 0.01 60));
   --mat-h: 70;
+  /* the keyline, denomination and postmark: the deeper stop on white, the
+     luminous one on black, so all five hues read on both papers */
+  --stamp-ink: light-dark(var(--mat), var(--mat-hi));
 
   background: var(--mat);
 }
@@ -63,6 +68,10 @@ body {
 }
 
 .mat {
+  /* hole diameter, about half the mat, so it stays in proportion as the mat
+     slims: 6px at a phone, 8px from 1280 */
+  --d: clamp(6px, var(--mat-w) / 2, 8px);
+  --p: calc(var(--d) * 1.2);
   --hole: radial-gradient(circle closest-side, #000 92%, transparent);
   --solid: linear-gradient(#000 0 0);
   /* white lines, tinted toward the mat's hue so they glow rather than grey */
@@ -78,7 +87,7 @@ body {
   pointer-events: none;
   /* the content box is the page: the holes and the cut-out are laid out on
      it, while the mat's own background fills the whole window */
-  padding: var(--frame);
+  padding: var(--mat-w);
   overflow: hidden;
   /* top to bottom: grain, ruler ticks (40px, then 8px) along the top and left
      edges, 40px major and 8px minor lines, the gradient */
@@ -95,15 +104,15 @@ body {
     linear-gradient(160deg, var(--mat-hi), var(--mat));
   background-size: auto, 100% 5.5px, 5.5px 100%, 100% 2.5px, 2.5px 100%, auto, auto, auto, auto, auto;
   background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat, repeat, repeat, repeat, no-repeat;
-  /* 10px holes on a 12px pitch, centred on the page's edge so half of each
-     bites in; `space` spreads them so both ends of an edge match. Below them
+  /* `--d` holes on a 1.2 × `--d` pitch, centred on the page's edge so half
+     of each bites in; `space` spreads them so both ends of an edge match. Below them
      the page (the content box) is cut out of the window: `exclude` against the
      bottom layer leaves the gutter, and the holes are added back on top. */
   mask:
-    var(--hole) 0 -5px / 12px 10px space no-repeat content-box border-box,
-    var(--hole) 0 calc(100% + 5px) / 12px 10px space no-repeat content-box border-box,
-    var(--hole) -5px 0 / 10px 12px no-repeat space content-box border-box,
-    var(--hole) calc(100% + 5px) 0 / 10px 12px no-repeat space content-box border-box,
+    var(--hole) 0 calc(var(--d) / -2) / var(--p) var(--d) space no-repeat content-box border-box,
+    var(--hole) 0 calc(100% + var(--d) / 2) / var(--p) var(--d) space no-repeat content-box border-box,
+    var(--hole) calc(var(--d) / -2) 0 / var(--d) var(--p) no-repeat space content-box border-box,
+    var(--hole) calc(100% + var(--d) / 2) 0 / var(--d) var(--p) no-repeat space content-box border-box,
     var(--solid) content-box content-box,
     var(--solid) border-box;
   mask-composite: add, add, add, add, exclude, add;
@@ -123,22 +132,96 @@ body {
   white-space: nowrap;
 }
 
-/* both rows start at the first major line, so the corner stays clear */
+/* both rows start at the first major line, so the corner stays clear, and
+   sit 3px in, clear of the holes */
 .mat::before {
-  top: 7px;
+  top: 3px;
   left: 43px;
 }
 
 .mat::after {
   top: 43px;
-  left: 7px;
+  left: 3px;
   writing-mode: vertical-lr;
 }
 
-/* under 1024px the gutter (18px there) is too thin for ticks and numbers */
+/* under 1024px the mat (13.8px there) is too thin for the numbers */
 @media (max-width: 1023px) {
   .mat::before,
   .mat::after {
     content: none;
   }
+}
+
+/* The paper's white margin (VET-262): a fixed border of `--band` in the page
+   colour from the perforation in, covering anything scrolling past, with a
+   keyline in the section's hue at its inner edge. Under `.mat` (same z-index,
+   earlier in the DOM), so the holes still bite into it. */
+.stamp {
+  position: fixed;
+  inset: var(--mat-w);
+  z-index: 40;
+  pointer-events: none;
+  border: var(--band) solid var(--bg);
+  box-shadow: inset 0 0 0 1.25px var(--stamp-ink);
+}
+
+/* The denomination, printed across the keyline in the band's colour so the
+   rule breaks round it: the year bottom-left, the section and its count
+   bottom-right (`Stamp.astro`). */
+.stamp__mark {
+  position: absolute;
+  bottom: 0;
+  left: 1.5rem;
+  translate: 0 50%;
+  padding-inline: 0.375rem;
+  background: var(--bg);
+  color: var(--stamp-ink);
+  font: 500 9px/1 var(--font-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.stamp__mark--end {
+  left: auto;
+  right: 1.5rem;
+}
+
+/* The postmark (add-on): a cancellation struck across the stamp's top edge,
+   the circle over mat, band and bar, the waves trailing left along the bar's
+   empty stretch. Cancelling ink, not the section's: `--text-primary`, faint,
+   so it reads on the mat and on the paper and the bar under it still reads.
+   Over `.mat` to cross the edge; left of Search where Search shows. */
+.postmark {
+  position: fixed;
+  top: 0;
+  right: calc(var(--frame) + 0.5rem);
+  z-index: 41;
+  width: clamp(7rem, 12vw, 10rem);
+  pointer-events: none;
+  color: var(--text-primary);
+  opacity: 0.15;
+  rotate: -8deg;
+  font-family: var(--font-mono);
+}
+
+@media (min-width: 600px) {
+  .postmark {
+    right: calc(var(--frame) + 7rem);
+  }
+}
+
+/* The lift (add-on): the paper's shadow on the mat, tinted by it. Inside
+   `.mat`, so the mask shows it only in the gutter and the holes. Static. */
+.mat__lift {
+  position: absolute;
+  inset: var(--mat-w);
+  box-shadow:
+    0 1px 2px oklch(0.2 0.06 var(--mat-h) / 0.3),
+    0 8px 24px oklch(0.2 0.08 var(--mat-h) / 0.4);
+}
+
+[data-stamp="base"] .postmark,
+html:not([data-stamp="full"]) .mat__lift {
+  display: none;
 }
