@@ -1,0 +1,15 @@
+{
+  "hermes-agent-masterclass": {
+    "src": "https://www.youtube-nocookie.com/embed/videoseries?list=PLmpUb_PWAkDx-VWjh00tVCji794xAa_IX&autoplay=1",
+    "validList": true
+  },
+  "the-money-button-v1": {
+    "src": "https://www.youtube-nocookie.com/embed/videoseries?list=PLHF3tIZgsbOE&autoplay=1",
+    "validList": true
+  }
+}
+PLmpUb_PWAkDx-VWjh00tVCji794xAa_IX title: null error-overlays: 1
+PLHF3tIZgsbOE title: null error-overlays: 1
+hermes-agent-masterclass errors: [] title: null playlist-ui: 0
+the-money-button-v1 errors: [] title: null playlist-ui: 0
+philosopher-ceo-kareem-amin errors: [] title: null playlist-ui: 0

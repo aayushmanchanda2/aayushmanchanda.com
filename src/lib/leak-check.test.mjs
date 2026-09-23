@@ -1,7 +1,7 @@
 /**
  * Leak check: nothing from the private setup behind this site reaches a page.
  *
- * Every word a reader sees comes from `src/content/` (notes, /computer tips)
+ * Every word a reader sees comes from `src/content/` (notes, and the tips /notes lists)
  * or `src/data/` (the pipeline's JSON). A tip about how Aayush works is the
  * likeliest place for a local address, a path on his machine or a ticket id to
  * slip in, so all of it is scanned for the markers below on every `npm test`.
@@ -40,9 +40,6 @@ const MARKERS = [
  * the exact text so a new occurrence anywhere else still fails.
  */
 const ALLOWED = [
-  // A tool the site reviews by name on /tools; its note names no setup detail.
-  ["src/data/tools.json", '"slug": "claudex",'],
-  ["src/data/tools.json", '"name": "claudex",'],
   // Quoted from a saved video's transcript, about someone else's setup.
   ["src/data/library.json", "instead of using .env files."],
 ];
@@ -75,7 +72,7 @@ export function leaks(file, text) {
 
 test("no private setup detail in any published content", () => {
   const files = [...walk(path.join(ROOT, "src/content")), ...walk(path.join(ROOT, "src/data"))];
-  assert.ok(files.some((file) => file.includes("/content/computer/")), "the /computer tips are scanned");
+  assert.ok(files.some((file) => file.includes("/content/computer/")), "the tips are scanned");
   const hits = files.flatMap((file) => {
     const rel = path.relative(ROOT, file);
     return leaks(rel, readFileSync(file, "utf8"));
@@ -104,6 +101,6 @@ test("the check catches each marker and lets ordinary prose through", () => {
     assert.equal(leaks("x.md", line).length, 1, line);
   }
   assert.deepEqual(leaks("x.md", "At 10:30 I walk. Every env var stays put. A 16:9 frame."), []);
-  assert.deepEqual(leaks("src/data/tools.json", '    "slug": "claudex",'), []);
-  assert.equal(leaks("src/content/computer/x.md", '"slug": "claudex",').length, 1);
+  assert.deepEqual(leaks("src/data/library.json", "instead of using .env files."), []);
+  assert.equal(leaks("src/content/notes/x.md", "instead of using .env files.").length, 1);
 });

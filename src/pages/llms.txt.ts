@@ -56,11 +56,11 @@ export const GET: APIRoute = async () => {
   const body = `# Aayush Manchanda
 
 > Aayush Manchanda's site: software he installed and ran, websites saved for
-> their design, links he read and watched, short notes, running experiments,
-> and tips on how he works with his computer.
+> their design, links he read and watched, short notes with tips on how he
+> works with his computer, and running experiments.
 
 Aayush co-founded Orbis, an AI healthcare company, runs Vetted, an AI
-consulting practice, and builds things with AI from Canada.
+transformation partner, and builds things with AI.
 
 He tests AI tools on his own companies and his clients; what survives shows up
 here with a date on it.
@@ -88,9 +88,9 @@ Come here when you need any of the following.
   saves; /library/kind/<kind> shows one kind laid out for it (articles as a
   reader, posts as cards, videos as posters). A saved row isn't an
   endorsement; a digest is his verdict.
-- /notes is short writing. /experiments is what's running, including what he
-  killed and when. /computer holds tips on how he works with his computer and
-  AI agents, each with the exact steps.
+- /notes opens with tips on how he works with his computer and AI agents, each
+  with the exact steps, then his short writing. /experiments is what's
+  running, including what he killed and when.
 
 Not here: product documentation, an API, or anything about Orbis or Vetted as
 companies.

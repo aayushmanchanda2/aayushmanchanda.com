@@ -139,6 +139,8 @@ export interface Video {
   provider: Provider;
   /** The id at the provider — `xoE_pE26yDQ`, not the whole watch URL. */
   id: string;
+  /** A saved playlist's id. The facade embeds the playlist; `id` is its first video. */
+  list?: string;
   /**
    * Web path under `/shots` to the poster frame, fetched from the provider at
    * publish time and re-encoded here. Committed rather than hotlinked so the
@@ -504,9 +506,17 @@ function readVideo(
     );
   }
 
+  const id = readString(value, "id", `${where} video`);
+  if (!/^[A-Za-z0-9_-]{11}$/.test(id)) fail(where, `needs "video.id" to be an 11-character YouTube id (got ${JSON.stringify(id)})`);
+  const list = value["list"];
+  if (list !== undefined && (typeof list !== "string" || !/^[A-Za-z0-9_-]{10,64}$/.test(list))) {
+    fail(where, `needs "video.list" to be a YouTube playlist id (got ${JSON.stringify(list)})`);
+  }
+
   return {
     provider,
-    id: readString(value, "id", `${where} video`),
+    id,
+    ...(list === undefined ? {} : { list }),
     thumb: readCommittedPath(value["thumb"], "video.thumb", where, SHOT_PATH, "a committed picture under /shots (`/shots/<name>.webp`)"),
   };
 }
@@ -584,6 +594,9 @@ export function parseLibrary(value: unknown): LibraryEntry[] {
     const url = readUrl(item, where);
     const post = readPost(item, kind, where);
     const video = readVideo(item, kind, where);
+    if (kind === "video" && video === null) {
+      fail(where, `is a video with nothing to play; it needs a "video" object (a playlist carries its first video's "id" and its "list")`);
+    }
     // A plain post quotes itself under the post caps; an X Article's body is not shown, so it keeps the article's.
     const plain = post !== null && post.article === null;
     const quote = (value: unknown) => (plain ? postHighlights(value, post.text) : highlights(value));

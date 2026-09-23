@@ -122,6 +122,8 @@ export interface Post {
 export interface Video {
   provider: "youtube";
   id: string;
+  /** A playlist's id, when the saved link was one; `id` is then its first video. */
+  list?: string;
 }
 
 /**

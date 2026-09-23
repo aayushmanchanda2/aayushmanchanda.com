@@ -3297,6 +3297,12 @@
     "domain": "m.youtube.com",
     "saved_date": "2026-09-14",
     "kind": "video",
+    "video": {
+      "provider": "youtube",
+      "id": "BeWUUclCin0",
+      "list": "PLmpUb_PWAkDx-VWjh00tVCji794xAa_IX",
+      "thumb": "/shots/hermes-agent-masterclass-thumb.webp"
+    },
     "tldr": "Tonbi's AI Garage runs a 10-part Hermes Agent masterclass covering install, VPS deployment, memory, skills, providers, MCP tools, cron automation, subagents, profiles, and security.",
     "note": "Tonbi's 10-part video masterclass on Hermes Agent - install, deploy to a VPS, memory, skills, providers, tools, cron, subagents and security, about five hours end to end.",
     "moments": [
@@ -3329,6 +3335,12 @@
     "domain": "m.youtube.com",
     "saved_date": "2026-09-14",
     "kind": "video",
+    "video": {
+      "provider": "youtube",
+      "id": "w6JINrK3m_o",
+      "list": "PLHF3tIZgsbOE",
+      "thumb": "/shots/the-money-button-v1-thumb.webp"
+    },
     "tldr": "JCH's 43-video Money Button course walks through outcomes, promises, offers, funnels, buyer psychology, and big ideas before building a sales letter, bullets, proof and VSL.",
     "note": "JCH's free 43-video copywriting course - offers, funnels, buyer psychology, big ideas and sales letters, from outcomes and promises through writing the VSL.",
     "moments": [

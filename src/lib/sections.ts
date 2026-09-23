@@ -29,7 +29,6 @@ export const SECTION_HREFS = [
   "/library",
   "/notes",
   "/experiments",
-  "/computer",
 ] as const;
 
 export type SectionHref = (typeof SECTION_HREFS)[number];
@@ -72,20 +71,16 @@ export const CATALOGUE: Record<SectionHref, Omit<Section, "href" | "count" | "md
   },
   "/notes": {
     name: "Notes",
-    blurb: "Short thoughts, kept as they come.",
+    blurb: "How I work with my computer, and short thoughts as they come.",
   },
   "/experiments": {
     name: "Experiments",
     blurb: "What's running right now, including what I killed.",
   },
-  "/computer": {
-    name: "Computer",
-    blurb: "How I work with my computer and the agents on it.",
-  },
 };
 
 /** The sections with a feed. /experiments has no per-entry pages to link, and
- *  a /computer tip has no date for a feed to order by. */
+ *  the /notes feed carries notes only: a tip has no date for a feed to order by. */
 export const FEED_SECTIONS = ["/notes", "/library", "/tools", "/sites"] as const satisfies readonly SectionHref[];
 
 export type FeedSection = (typeof FEED_SECTIONS)[number];
@@ -118,9 +113,8 @@ export async function getSections(): Promise<Section[]> {
     "/tools": tools.length,
     "/sites": sites.length,
     "/library": library.length,
-    "/notes": notes.length,
+    "/notes": notes.length + tips.length,
     "/experiments": experiments.length,
-    "/computer": tips.length,
   };
 
   return SECTION_HREFS.map((href) => ({

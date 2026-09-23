@@ -7,8 +7,8 @@
  * facade on the page plays in place from that second: an idle facade is
  * pressed with a start time (`VideoFacade.astro` builds the player), and a
  * running player has its `src` re-pointed by the script below. Either way the
- * page asks YouTube for nothing until a reader presses something. A playlist has no facade and keeps the
- * plain link, timed against the playlist's first video.
+ * page asks YouTube for nothing until a reader presses something. A playlist's
+ * moments are timed against its first video, which is the facade's `data-video`.
  */
 import type { Moment } from "../lib/library";
 import { clock, watchAt } from "../lib/reader.mjs";

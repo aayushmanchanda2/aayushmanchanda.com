@@ -42,7 +42,7 @@ export interface MarkdownPage {
  * `markdownVariantFor`. A seventh variant is added here and nowhere else.
  */
 export const PAGES: Record<
-  "home" | "tools" | "sites" | "library" | "experiments" | "notes" | "computer",
+  "home" | "tools" | "sites" | "library" | "experiments" | "notes",
   MarkdownPage
 > = {
   home: { html: "/", md: "/index.md", name: "Home" },
@@ -55,7 +55,6 @@ export const PAGES: Record<
     name: "Experiments",
   },
   notes: { html: "/notes", md: "/notes.md", name: "Notes" },
-  computer: { html: "/computer", md: "/computer.md", name: "Computer" },
 };
 
 /**

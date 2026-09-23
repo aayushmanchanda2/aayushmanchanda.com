@@ -1,6 +1,6 @@
 /**
  * link-previews.mjs — hover-card pictures for the outbound links written by
- * hand: the notes and /about (add /computer to SOURCES when it ships).
+ * hand: the notes and /about (add src/content/computer to SOURCES when a tip links out).
  *
  * Scans the sources for http(s) links (any URL in markdown, a literal
  * `href="…"` in a page), and for each one not already done

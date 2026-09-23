@@ -231,10 +231,28 @@ test("a video's thumb obeys the same /shots rule the media does", () => {
   failsWith(
     entry({
       ...AS_VIDEO,
-      video: { provider: "youtube", id: "a", thumb: "https://i.ytimg.com/vi/a/hq.jpg" },
+      video: { provider: "youtube", id: "vJEy3nP2_C8", thumb: "https://i.ytimg.com/vi/a/hq.jpg" },
     }),
     "never a remote URL",
   );
+});
+
+test("a video with nothing to play stops the build", () => {
+  failsWith(entry({ ...AS_VIDEO }), "is a video with nothing to play");
+  failsWith(entry({ ...AS_VIDEO, video: null }), "is a video with nothing to play");
+  failsWith(
+    entry({ ...AS_VIDEO, video: { provider: "youtube", id: "vJEy3nP2", thumb: "/shots/a-thumb.webp" } }),
+    '"video.id" to be an 11-character YouTube id',
+  );
+  failsWith(
+    entry({ ...AS_VIDEO, video: { provider: "youtube", id: "vJEy3nP2_C8", list: "PL", thumb: "/shots/a-thumb.webp" } }),
+    '"video.list" to be a YouTube playlist id',
+  );
+  const playlist = parseOne({
+    ...AS_VIDEO,
+    video: { provider: "youtube", id: "vJEy3nP2_C8", list: "PLHF3tIZgsbOE", thumb: "/shots/a-thumb.webp" },
+  });
+  assert.equal(playlist.video?.list, "PLHF3tIZgsbOE");
 });
 
 test("a video object on a post or an article stops the build", () => {

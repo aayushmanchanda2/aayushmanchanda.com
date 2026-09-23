@@ -135,6 +135,42 @@ export function videoFrom(url) {
   return null;
 }
 
+/** A YouTube playlist id. Old ones run as short as 13 characters. */
+const PLAYLIST_ID = /^[A-Za-z0-9_-]{10,64}$/;
+
+/**
+ * A playlist link as a playable video: the playlist's own id for the embed, and
+ * its first video's id for the poster and the moments. YouTube's oEmbed names
+ * no video, but its thumbnail is the first video's (`/vi/<id>/`), so that is
+ * where the id comes from. Null for anything that is not a playlist link, or
+ * a playlist YouTube will not describe.
+ *
+ * @param {string} url
+ * @param {typeof globalThis.fetch} [fetch]
+ * @returns {Promise<(Video & { list: string }) | null>}
+ */
+export async function playlistFrom(url, fetch = globalThis.fetch) {
+  let list;
+  try {
+    const parsed = new URL(url);
+    const host = bareHost(parsed);
+    if (host !== "youtube.com" && !host.endsWith(".youtube.com")) return null;
+    list = parsed.searchParams.get("list");
+  } catch {
+    return null;
+  }
+  if (list === null || !PLAYLIST_ID.test(list)) return null;
+
+  const page = `https://www.youtube.com/playlist?list=${list}`;
+  const response = await fetch(`https://www.youtube.com/oembed?format=json&url=${encodeURIComponent(page)}`, {
+    signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+  });
+  if (!response.ok) return null;
+  const { thumbnail_url: thumb } = /** @type {{ thumbnail_url?: unknown }} */ (await response.json());
+  const video = youtube(typeof thumb === "string" ? /\/vi\/([^/]+)\//.exec(thumb)?.[1] : null);
+  return video === null ? null : { ...video, list };
+}
+
 /** @param {string | null | undefined} id @returns {Video | null} */
 function youtube(id) {
   if (typeof id !== "string" || !YOUTUBE_ID.test(id)) return null;

@@ -18,24 +18,34 @@
  *
  * The label drops the hyphens (`collectionLabel`), the href keeps them. The
  * slug is the route and the join key; the reader only ever needs the words.
+ *
+ * Three places draw it: a site's facts, the filter row on /sites, and the
+ * /sites list's Collections column, where `linked={false}` makes them labels
+ * because the whole row is already one link to the site.
  */
 import { collectionLabel } from "../lib/sites";
 
 interface Props {
   /** Collection slugs, as stored on the entry. */
   collections: string[];
+  /** Off inside a row that is already a link. */
+  linked?: boolean;
 }
 
-const { collections } = Astro.props;
+const { collections, linked = true } = Astro.props;
 ---
 
 <ul class="collections">
   {
     collections.map((slug) => (
       <li>
-        <a class="chip chip--link" data-tone="gray" href={`/sites/collection/${slug}`}>
-          {collectionLabel(slug)}
-        </a>
+        {linked ? (
+          <a class="chip chip--link" data-tone="gray" href={`/sites/collection/${slug}`}>
+            {collectionLabel(slug)}
+          </a>
+        ) : (
+          <span class="chip" data-tone="gray">{collectionLabel(slug)}</span>
+        )}
       </li>
     ))
   }
