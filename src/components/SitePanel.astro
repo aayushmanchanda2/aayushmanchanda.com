@@ -54,11 +54,11 @@ void SiteDetail;
     --list-width: min(460px, 50vw);
 
     position: fixed;
-    top: var(--bar-h);
-    right: 0;
-    bottom: 0;
+    top: calc(var(--frame) + var(--bar-h));
+    right: var(--frame);
+    bottom: var(--frame);
     z-index: 20;
-    width: calc(100% - var(--list-width));
+    width: calc(100% - var(--list-width) - 2 * var(--frame));
     overflow-y: auto;
     overscroll-behavior-y: auto;
     border-left: 1px solid var(--hairline);
@@ -82,7 +82,7 @@ void SiteDetail;
 
   @media (max-width: 48rem) {
     .panel {
-      width: 100%;
+      width: calc(100% - 2 * var(--frame));
       border-left: 0;
     }
   }

@@ -68,8 +68,12 @@ export const THEME_COLOR_MEDIA = {
   dark: { light: "not all", dark: "all" },
 } as const;
 
-/** `--bg` per scheme, as the `theme-color` metas carry it. */
-export const THEME_COLORS = { light: "#FFFFFF", dark: "#000000" } as const;
+/**
+ * `--frame-paper` per scheme, as the `theme-color` metas carry it: the edge of
+ * the window is the stamp frame's gutter (`styles/frame.css`), so a phone's
+ * status bar runs into it without a seam.
+ */
+export const THEME_COLORS = { light: "#F5F5F5", dark: "#171717" } as const;
 
 /**
  * The button's accessible name: what the theme is now, and what pressing does

@@ -106,7 +106,7 @@ const COLUMNS = ALL.filter((column) => column.id !== drop);
      border stays behind when a sticky cell moves. */
   .th {
     position: sticky;
-    top: var(--bar-h);
+    top: calc(var(--frame) + var(--bar-h));
     z-index: 1;
     padding: 0 1rem 0 0;
     background: var(--surface-2);
@@ -117,8 +117,10 @@ const COLUMNS = ALL.filter((column) => column.id !== drop);
     white-space: nowrap;
   }
 
-  /* Under 1280px a one-span track is narrower than a date ("Aug 17, 2026" is
-     88px), so the short columns take fixed widths. Every cell ends in 16px. */
+  /* The short columns take fixed widths at every size: inside the frame and
+     48px of side padding, a one-twelfth track (briOS's grid) is narrower than
+     a date ("Aug 17, 2026" is 88px) until well past 1600px. Every cell ends in
+     16px; the outer cells add `--page-pad`. */
   .th--name { width: 27%; }
   .th--category { width: 9.5rem; }
   .th--verdict { width: 7.5rem; }
@@ -214,23 +216,6 @@ const COLUMNS = ALL.filter((column) => column.id !== drop);
     overflow: hidden;
     padding: 0.25rem 0 0 calc(32px + 0.75rem);
     white-space: normal;
-  }
-
-  /* From 1280px, briOS's `grid-cols-12 gap-4 px-4` exactly (3/5/2/1/1). A fixed
-     table ignores `calc(% + px)` widths, so columns are plain twelfths and the
-     gaps are paid as padding that puts each content box where the grid does:
-     track t = (W - 208px) / 12, Name 3t + 32 from 16px, Description 5t + 64. */
-  @media (min-width: 1280px) {
-    .th--name { width: 25%; }
-    .th--category { width: 16.6667%; }
-    .th--verdict, .th--date { width: 8.3333%; }
-
-    .th--name, .cell--name { padding: 0 4px 0 16px; }
-    .th--desc, .cell--desc { padding: 0 10.667px 0 12px; }
-    .th--category, .cell--category { padding: 0 13.333px 0 5.333px; }
-    .th--verdict, .cell--verdict { padding: 0 14.667px 0 2.667px; }
-    .th--date, .cell--date { padding: 0 16px 0 1.333px; }
-    .cell { padding-block: 0.75rem; }
   }
 
   /* Phone width, like briOS: icon and name with the description under them,

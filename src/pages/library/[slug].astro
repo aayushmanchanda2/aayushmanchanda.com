@@ -213,23 +213,10 @@ const description =
 </Base>
 
 <style>
-  /* 48rem centred; the shell's 1rem pad plus 0.5rem at 768px and 1rem at
-     1024px makes briOS's 16 / 24 / 32. */
+  /* 48rem centred; the side padding is the full shell's (`Base.astro`). */
   .detail {
     max-width: 48rem;
     margin-inline: auto;
-  }
-
-  @media (min-width: 768px) {
-    .detail {
-      padding-inline: 0.5rem;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .detail {
-      padding-inline: 1rem;
-    }
   }
 
   /* --- the metadata strip --------------------------------------------------
