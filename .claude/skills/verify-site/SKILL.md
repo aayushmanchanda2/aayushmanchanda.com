@@ -14,11 +14,11 @@ The harness is `shoot.mjs` in this directory: plain Node + the repo's own `playw
 Local (proves the current checkout):
 
 ```sh
-npm run build                                   # "[build] Complete!" + "N page(s) built"
-npx astro preview --background --port 4329      # ready line: "Preview server running at http://localhost:4329 (pid N)"
+npm run build                                          # "[build] Complete!"
+python3 -m http.server 4329 --directory dist &         # serves dist/ as built
 ```
 
-Astro 7's preview daemonizes (`--background`, and it also backgrounds itself when stdout is not a TTY). It serves `dist/` as built: rebuild after every source change, a running preview does not pick edits up.
+`astro preview` stopped working in VET-274: the Vercel adapter (for the on-demand /me pages) has no preview server. The prerendered site is still `dist/`, byte for byte, so any static server proves it; rebuild after every source change. `/tools` answers 301 to `/tools/` here (Vercel serves both), which the harness follows. /me is on demand: drive it through `astro dev`, whose dev-only `/me/fixture/<entry|index|sign-in|unconfigured|not-found>` routes render the signed-in pages from synthetic rows.
 
 Deployed: skip the build and pass `--base https://aayushmanchandacom.vercel.app` (production) or a Vercel preview URL. Deployed runs prove what shipped, not your working tree.
 
@@ -27,12 +27,12 @@ Deployed: skip the build and pass `--base https://aayushmanchandacom.vercel.app`
 Read-only; run first, and whenever output looks wrong:
 
 ```sh
-npx astro preview status          # "running at http://localhost:4329 (pid N, uptime ...)" — note the port/pid
-curl -sI http://localhost:4329/tools | head -1   # HTTP/1.1 200 OK
+lsof -nP -iTCP:4329 -sTCP:LISTEN  # who is serving the port you are about to use
+curl -sI http://localhost:4329/tools/ | head -1   # HTTP/1.0 200 OK
 ls -la dist/index.html            # timestamp newer than your last src edit? if not, rebuild
 ```
 
-If `status` shows a server you did not start (different port, older uptime), it is the user's: drive it read-only or start yours on another `--port`, and do not `stop` it. Only one background preview per project can be tracked by `astro preview stop`, so do not run two verifications side by side against separate local previews; share one instance and use distinct `--label`s.
+A server on the port that you did not start is the user's: drive it read-only or use another port, and do not stop it.
 
 ## Drive
 
@@ -67,7 +67,7 @@ Exit code 0 = no failures; 1 = any non-200, theme mismatch, thrown error, or fai
 ## Cleanup
 
 ```sh
-npx astro preview stop     # stops the background preview this project started (only if you started it)
+kill <pid of the http.server you started>     # only yours
 ```
 
 Leaves `qa/evidence/` alone. Nothing else is created: each shoot run launches and closes its own headless Chromium. Evidence survives cleanup; delete old evidence dirs only when the user asks.

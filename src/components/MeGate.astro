@@ -1,0 +1,54 @@
+---
+/**
+ * What /me shows anyone who is not through the gate yet (VET-274): Clerk's
+ * sign-in (`ClerkSignIn.astro`), a line saying this deployment has no keys,
+ * or, for a signed-in account that is not his, the same "not found" a
+ * missing page gets (the route sets the 404 status). The publishable key reaches Clerk through the data `clerkMiddleware`
+ * writes into the page, never through the build.
+ */
+import Base from "../layouts/Base.astro";
+import ClerkSignIn from "./ClerkSignIn.astro";
+
+interface Props {
+  state: "sign-in" | "unconfigured" | "not-found";
+}
+
+const { state } = Astro.props;
+---
+
+<Base title={state === "not-found" ? "Not found · Aayush Manchanda" : "Sign in · Aayush Manchanda"} description="Private." noindex>
+  <section class="gate">
+    <h1 class="page-title">{state === "not-found" ? "Not found" : "Private"}</h1>
+    {state === "not-found" && <p class="gate__line">Nothing here. <a href="/">Go home</a></p>}
+    {
+      state === "not-found" ? null : state === "sign-in" ? (
+        <>
+          <p class="gate__line">This part of the site is mine. Sign in to see it.</p>
+          <div class="gate__widget">
+            <ClerkSignIn />
+          </div>
+        </>
+      ) : (
+        <p class="gate__line">Not configured on this deployment. Nothing private is served from here.</p>
+      )
+    }
+  </section>
+</Base>
+
+<style>
+  .gate {
+    max-width: 30rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .gate__line {
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  .gate__widget {
+    min-height: 22rem;
+  }
+</style>

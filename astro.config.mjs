@@ -1,6 +1,7 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import vercel from '@astrojs/vercel';
 
 import { PAGES } from './src/lib/markdown.ts';
 import { SITE_URL, absolute } from './src/lib/site.ts';
@@ -29,6 +30,34 @@ import { SITE_URL, absolute } from './src/lib/site.ts';
  */
 const MARKDOWN_VARIANTS = Object.values(PAGES).map((page) => absolute(page.md));
 
+/**
+ * The /me harness (`src/fixtures/MeFixture.astro`): a route under `astro dev`
+ * only, so it is never part of a build. It renders the signed-in pages from
+ * synthetic rows for screenshots.
+ */
+/** @type {import('astro').AstroIntegration} */
+const meFixture = {
+  name: 'me-fixture',
+  hooks: {
+    'astro:config:setup': ({ command, injectRoute }) => {
+      if (command === 'dev') injectRoute({ pattern: '/me/fixture/[view]', entrypoint: './src/fixtures/MeFixture.astro', prerender: false });
+    },
+  },
+};
+
+/**
+ * `@clerk/astro/components` imports a virtual module that only Clerk's own
+ * integration provides, and that integration injects Clerk's script into every
+ * page, public ones included. So the integration stays out and this answers
+ * the one question the module asks: /me is rendered on demand.
+ * @type {import('vite').Plugin}
+ */
+const clerkConfig = {
+  name: 'clerk-astro-config',
+  resolveId: (id) => (id === 'virtual:@clerk/astro/config' ? '\0clerk-astro-config' : undefined),
+  load: (id) => (id === '\0clerk-astro-config' ? 'export const isStaticOutput = (forceStatic) => forceStatic ?? false;' : undefined),
+};
+
 // https://astro.build/config
 export default defineConfig({
   /**
@@ -39,6 +68,19 @@ export default defineConfig({
    * See that file for the DNS cutover note.
    */
   site: SITE_URL,
+
+  /**
+   * On demand under /me only (VET-274); every other page stays prerendered.
+   * `build.client: './'` keeps the prerendered site at `dist/` exactly where
+   * it was before the adapter, which `validate:schema`, the leak scan and the
+   * verify-site skill all read. `src/lib/assets.ts` reads `public/` and
+   * `src/data/link-previews.json` at import time; the adapter's file tracing
+   * ships both with the /me function. The adapter has no preview server, so
+   * `astro preview` no longer runs; serve `dist/` statically instead
+   * (`.claude/skills/verify-site/SKILL.md`), or use `astro dev` for /me.
+   */
+  adapter: vercel(),
+  build: { client: './' },
 
   /**
    * No Shiki. It paints every fenced block in an inline `github-dark` style
@@ -54,6 +96,8 @@ export default defineConfig({
    * cached before the click. Nothing else on the site prefetches.
    */
   prefetch: { prefetchAll: false, defaultStrategy: "hover" },
+
+  vite: { plugins: [clerkConfig] },
 
   integrations: [
     sitemap({
@@ -79,7 +123,8 @@ export default defineConfig({
        * that ever changes.
        */
       filter: (page) =>
-        !page.endsWith('/robots.txt') && !page.endsWith('/llms.txt'),
+        !page.endsWith('/robots.txt') && !page.endsWith('/llms.txt') && !new URL(page).pathname.startsWith('/me/'),
     }),
+    meFixture,
   ],
 });

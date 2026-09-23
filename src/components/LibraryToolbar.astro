@@ -10,12 +10,20 @@
 import KindSegments from "./KindSegments.astro";
 import { feed, kindGroups } from "../lib/library";
 
+interface Props {
+  /** Private rows in the pane (/me only, VET-274): adds a "Private" segment. */
+  privateCount?: number;
+}
+
+const { privateCount = 0 } = Astro.props;
+const extra = privateCount > 0 ? { kind: "private", href: "/me/library?kind=private", label: "Private", count: privateCount } : undefined;
+
 const groups = kindGroups.map((group) => ({ ...group, entries: group.entries.filter((entry) => !entry.also_saved) }));
 ---
 
 <div class="ltools">
-  <KindSegments groups={groups} total={feed.length} />
-  <p class="ltools__count tabular-nums" aria-live="polite" data-filter-count>{feed.length} entries</p>
+  <KindSegments groups={groups} total={feed.length + privateCount} extra={extra} />
+  <p class="ltools__count tabular-nums" aria-live="polite" data-filter-count>{feed.length + privateCount} entries</p>
 </div>
 
 <style is:global>
