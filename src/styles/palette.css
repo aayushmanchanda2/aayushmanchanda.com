@@ -239,7 +239,7 @@
 /* Amber over the blue cursor turns muddy; a dark wash keeps the match and the
    white ink over it at AA (a white wash was 3.5:1). */
 .palette__row[data-active] mark {
-  background: var(--accent-panel-mark);
+  --pen: var(--accent-panel-mark);
   color: inherit;
 }
 
