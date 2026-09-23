@@ -2,6 +2,7 @@
  * The MENU panel's open and close (`MobileNav.astro`, `MobileNavPanel.astro`):
  * the trigger, the scrim, inert on everything behind it, and Escape.
  */
+import { ownsKey } from "./keys.ts";
 
 export function initMobileNav(root: HTMLElement): void {
   const toggle = root.querySelector<HTMLButtonElement>("[data-mnav-toggle]");
@@ -89,7 +90,7 @@ export function initMobileNav(root: HTMLElement): void {
     ?.addEventListener("click", () => setOpen(false));
 
   document.addEventListener("keydown", (e) => {
-    if (e.key !== "Escape" || !open) return;
+    if (e.key !== "Escape" || !open || !ownsKey(e)) return;
 
     // An open palette owns Escape. Asked of the document rather than settled
     // by listener order, which is a bundling detail: the same reasoning the

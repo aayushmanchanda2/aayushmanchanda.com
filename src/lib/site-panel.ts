@@ -6,6 +6,7 @@
  * a fetched entry is `a[data-site-screen]`. A plain left click on either is
  * taken over; anything with a modifier is the browser's.
  */
+import { ownsKey } from "./keys";
 import { enhanceSiteDetail } from "./site-detail";
 import { tick } from "./ui-sound";
 
@@ -13,6 +14,9 @@ import { tick } from "./ui-sound";
 const SLUG_PATH = /^\/sites\/([a-z0-9][a-z0-9-]*)\/?$/;
 
 type Entry = { node: Element; title: string };
+
+/** `checkVisibility` arrived in Safari 17.4; before it, a rendered box is the answer. */
+const visible = (el: Element): boolean => el.checkVisibility?.() ?? el.getClientRects().length > 0;
 
 export function initSitePanel(): void {
   const panel = document.querySelector<HTMLElement>("[data-site-panel]");
@@ -33,7 +37,7 @@ function wire(panel: HTMLElement, body: HTMLElement, closer: HTMLButtonElement):
   /** The visible tile or row that holds `slug`, for focus to come back to. */
   const triggerFor = (slug: string) =>
     [...document.querySelectorAll<HTMLElement>("[data-site-open]")].find(
-      (el) => el.dataset.slugs?.split(" ").includes(slug) && el.checkVisibility(),
+      (el) => el.dataset.slugs?.split(" ").includes(slug) && visible(el),
     ) ?? null;
 
   function load(slug: string): Promise<Entry | null> {
@@ -62,8 +66,9 @@ function wire(panel: HTMLElement, body: HTMLElement, closer: HTMLButtonElement):
 
     const entry = await load(slug);
     if (current !== slug) return;
-    // No entry means the fetch failed: the static page is the fallback.
-    if (!entry) return location.assign(`/sites/${slug}`);
+    // No entry means the fetch failed: the static page is the fallback, in
+    // place of the entry already pushed, so Back does not land on it twice.
+    if (!entry) return location.replace(`/sites/${slug}`);
 
     const node = document.importNode(entry.node, true);
     // The page already has its h1 ("Sites"); in here the site is a section of it.
@@ -91,20 +96,24 @@ function wire(panel: HTMLElement, body: HTMLElement, closer: HTMLButtonElement):
     panel.removeAttribute("data-open");
     panel.setAttribute("inert", "");
     document.title = indexTitle;
-    (opener?.isConnected && opener.checkVisibility() ? opener : back)?.focus({ preventScroll: true });
+    (opener?.isConnected && visible(opener) ? opener : back)?.focus({ preventScroll: true });
     opener = null;
   }
 
+  /* The open panel is one history entry, whichever site it shows, so Back and
+     the close button both return to the gallery in one step. */
   function open(slug: string, trigger: HTMLElement | null) {
     if (slug === current) return;
     opener = trigger ?? opener;
-    history.pushState({ site: slug }, "", `/sites/${slug}`);
+    history[isOpen() ? "replaceState" : "pushState"]({ site: slug }, "", `/sites/${slug}`);
     void show(slug, true);
   }
 
   function close() {
     if (!isOpen()) return;
-    history.pushState(null, "", "/sites");
+    // Our own entry: step back off it (popstate hides). Otherwise nothing to pop.
+    if (history.state?.site) return history.back();
+    history.replaceState(null, "", "/sites");
     hide();
   }
 
@@ -136,17 +145,17 @@ function wire(panel: HTMLElement, body: HTMLElement, closer: HTMLButtonElement):
   closer.addEventListener("click", close);
 
   document.addEventListener("keydown", (event) => {
-    if (!isOpen()) return;
-    // An open palette owns Escape (design.md §4, precedence).
+    if (!isOpen() || !ownsKey(event)) return;
+    // An open palette owns Escape (design.md §4, precedence), whichever
+    // listener runs first: it took the key already, or it is still open.
     if (event.key === "Escape" && !document.querySelector('[aria-modal="true"][data-open]')) {
+      event.preventDefault();
       close();
       return;
     }
     // Tab wraps inside the panel while focus is in it.
     if (event.key !== "Tab" || !panel.contains(document.activeElement)) return;
-    const focusable = [...panel.querySelectorAll<HTMLElement>("a[href], button:not([hidden]), summary, [tabindex='0']")].filter(
-      (el) => el.checkVisibility(),
-    );
+    const focusable = [...panel.querySelectorAll<HTMLElement>("a[href], button:not([hidden]), summary, [tabindex='0']")].filter(visible);
     const first = focusable[0];
     const last = focusable.at(-1);
     if (!first || !last) return;

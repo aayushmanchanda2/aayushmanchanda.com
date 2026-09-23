@@ -23,6 +23,7 @@
  *     because the panel's search control closes the panel on its way in.
  */
 
+import { ownsKey } from "./keys";
 import { renderRows } from "./palette-rows";
 import { RESULT_LIMIT, search, tokenize } from "./search";
 import type { SearchEntry } from "./search";
@@ -248,7 +249,7 @@ export function initPalette(root: HTMLElement): void {
   });
 
   document.addEventListener("keydown", (event) => {
-    if (event.defaultPrevented || event.isComposing) return;
+    if (!ownsKey(event)) return;
 
     // Cmd+K / Ctrl+K toggles, from anywhere on the page.
     if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
