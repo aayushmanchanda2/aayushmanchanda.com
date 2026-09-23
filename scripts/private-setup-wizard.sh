@@ -181,23 +181,16 @@ finish() {
 
 
 # ──────────────────────────────────────────────────────────────────────────
-# STAGES — VET-274: the private /me library (Clerk + Convex + Vercel + GitHub).
-#
-#   bash scripts/private-setup-wizard.sh      (from the repo root)
-#
-# Every value is typed hidden and set through a CLI; nothing is printed, and
-# the closing summary names only which variables were set. Safe to re-run: it
-# overwrites each value in place, and Enter keeps a value already saved in the
-# local file below.
+# STAGES — VET-274, the private /me library.  Run: bash scripts/private-setup-wizard.sh
+# Values are typed hidden and set through CLIs, never printed; the summary names
+# only what was set. Re-runnable: it overwrites in place; Enter keeps a saved value.
 # ──────────────────────────────────────────────────────────────────────────
 
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_ROOT"
 # Outside the repo, so nothing in it can be committed by accident.
 ENV_FILE="${PRIVATE_ENV_FILE:-$HOME/Downloads/Aayush/aayushmanchanda-private/.env}"
-WRITTEN_VERCEL=()
-WRITTEN_CONVEX=()
-
+WRITTEN_VERCEL=(); WRITTEN_CONVEX=()
 TOTAL_STAGES=7
 
 # set_vercel NAME VALUE — production and preview, overwriting. Skips an empty value.
@@ -206,11 +199,9 @@ set_vercel() {
   [[ -n "$value" ]] || { SKIPPED+=("Vercel $name (left as it was: no value given)"); return; }
   for target in production preview; do
     if printf '%s' "$value" | vercel env add "$name" "$target" --force --yes >/dev/null 2>&1; then
-      WRITTEN_VERCEL+=("$name($target)")
-      printf '  %s✓ set%s Vercel %s (%s)\n' "$GREEN" "$RESET" "$name" "$target"
+      WRITTEN_VERCEL+=("$name($target)"); printf '  %s✓ set%s Vercel %s (%s)\n' "$GREEN" "$RESET" "$name" "$target"
     else
-      SKIPPED+=("Vercel $name ($target): vercel env add $name $target --force")
-      warn "could not set Vercel $name ($target)"
+      SKIPPED+=("Vercel $name ($target): vercel env add $name $target --force"); warn "could not set Vercel $name ($target)"
     fi
   done
 }
@@ -220,17 +211,13 @@ set_convex() {
   local name="$1" value="$2" flag="${3:-}" label="dev"
   [[ "$flag" == "--prod" ]] && label="prod"
   if printf '%s' "$value" | npx convex env set "$name" $flag >/dev/null 2>&1; then
-    WRITTEN_CONVEX+=("$name($label)")
-    printf '  %s✓ set%s Convex %s (%s)\n' "$GREEN" "$RESET" "$name" "$label"
+    WRITTEN_CONVEX+=("$name($label)"); printf '  %s✓ set%s Convex %s (%s)\n' "$GREEN" "$RESET" "$name" "$label"
   else
-    SKIPPED+=("Convex $name ($label): npx convex env set $name $flag")
-    warn "could not set Convex $name ($label)"
+    SKIPPED+=("Convex $name ($label): npx convex env set $name $flag"); warn "could not set Convex $name ($label)"
   fi
 }
 
 banner "Private library setup (VET-274)"
-
-# ──────────────────────────────────────────────────────────────────────────
 stage "Check the tools"
 missing=0
 for tool in vercel gh npx openssl; do
@@ -244,12 +231,9 @@ grep -q '^CONVEX_DEPLOYMENT=' .env.local 2>/dev/null || {
 }
 gh auth status >/dev/null 2>&1 || warn "gh is not logged in; GitHub secrets will be listed as to-do at the end"
 (( missing == 0 )) || { warn "fix the above, then re-run"; exit 1; }
-mkdir -p "$(dirname "$ENV_FILE")"
-touch "$ENV_FILE" && chmod 600 "$ENV_FILE"
+mkdir -p "$(dirname "$ENV_FILE")" && touch "$ENV_FILE" && chmod 600 "$ENV_FILE"
 note "Local values go to $ENV_FILE (outside the repo, mode 600)."
 pause "Press Enter to continue."
-
-# ──────────────────────────────────────────────────────────────────────────
 stage "Clerk keys"
 open_url "https://dashboard.clerk.com"
 step "Open the aayushmanchanda.com application (the development instance)."
@@ -257,8 +241,6 @@ step "Configure → API keys. Copy the Publishable key (pk_test_…)."
 ask_secret PUBLIC_CLERK_PUBLISHABLE_KEY "Paste the publishable key (hidden):"
 step "Copy the Secret key (sk_test_…) from the same page."
 ask_secret CLERK_SECRET_KEY "Paste the secret key (hidden):"
-
-# ──────────────────────────────────────────────────────────────────────────
 stage "Convex production values"
 open_url "https://dashboard.convex.dev/t/aayush-personal/aayushmanchanda-private"
 step "Switch the deployment picker (top left) to Production."
@@ -268,8 +250,6 @@ step "Copy the Deployment URL (https://…convex.cloud)."
 ask_secret PUBLIC_CONVEX_URL "Paste the Cloud URL (hidden):"
 step "Copy the HTTP Actions URL (https://…convex.site)."
 ask_secret PROD_CONVEX_SITE_URL "Paste the HTTP Actions URL (hidden):"
-
-# ──────────────────────────────────────────────────────────────────────────
 stage "Who is allowed in"
 say "The one email address that may open /me. Everyone else gets a 404 after signing in."
 ask_secret ALLOWED_EMAIL "Your email (hidden):"
@@ -282,8 +262,6 @@ done
 for key in PUBLIC_CLERK_PUBLISHABLE_KEY CLERK_SECRET_KEY PUBLIC_CONVEX_URL PROD_CONVEX_SITE_URL ALLOWED_EMAIL INGEST_SECRET; do
   write_env "$key" "${!key}"
 done
-
-# ──────────────────────────────────────────────────────────────────────────
 stage "Vercel environment variables"
 say "Sets five variables on the Vercel project for production and preview, overwriting."
 confirm "Set them now?" && {
@@ -294,8 +272,6 @@ confirm "Set them now?" && {
   set_vercel ALLOWED_EMAIL "$ALLOWED_EMAIL"
 }
 pause "Press Enter to continue."
-
-# ──────────────────────────────────────────────────────────────────────────
 stage "Convex environment variables"
 say "ALLOWED_EMAIL and INGEST_SECRET on the production and the dev deployment."
 confirm "Set them now?" && {
@@ -305,8 +281,6 @@ confirm "Set them now?" && {
   set_convex INGEST_SECRET "$INGEST_SECRET"
 }
 pause "Press Enter to continue."
-
-# ──────────────────────────────────────────────────────────────────────────
 stage "GitHub secrets for the publish cron"
 say "The cron posts new Internal/* raindrops to the production /import endpoint."
 confirm "Set INGEST_SECRET and CONVEX_SITE_URL now?" && {
