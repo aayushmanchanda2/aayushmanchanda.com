@@ -28,6 +28,7 @@ import {
   ThumbError,
   captureThumb,
   fetchWebp,
+  playlistFrom,
   thumbFileName,
   thumbWebPath,
   videoFrom,
@@ -287,4 +288,19 @@ test("a photo that is gone throws rather than returning nothing", async () => {
 test("an error page where a photo should be is refused before the encoder sees it", async () => {
   const { fetch } = cdn({ "pbs.twimg.com": () => new Response("<html>nope</html>", { status: 200 }) });
   await assert.rejects(fetchWebp(PHOTO, 600, fetch), /did not answer with an image/);
+});
+
+test("a playlist link plays as the playlist, posted by its first video", async () => {
+  const oembed = /** @type {typeof globalThis.fetch} */ (
+    async () => Response.json({ thumbnail_url: "https://i.ytimg.com/vi/BeWUUclCin0/hqdefault.jpg" })
+  );
+  assert.deepEqual(await playlistFrom("https://m.youtube.com/playlist?list=PLHF3tIZgsbOE", oembed), {
+    provider: "youtube",
+    id: "BeWUUclCin0",
+    list: "PLHF3tIZgsbOE",
+  });
+  const gone = /** @type {typeof globalThis.fetch} */ (async () => new Response("", { status: 404 }));
+  assert.equal(await playlistFrom("https://www.youtube.com/playlist?list=PLHF3tIZgsbOE", gone), null);
+  assert.equal(await playlistFrom("https://www.youtube.com/@sequoiacapital", oembed), null);
+  assert.equal(await playlistFrom("https://example.com/playlist?list=PLHF3tIZgsbOE", oembed), null);
 });

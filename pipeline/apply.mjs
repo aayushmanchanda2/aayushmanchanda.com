@@ -57,7 +57,7 @@ import {
 import { isOutOfCredits } from "./firecrawl.mjs";
 import { tagBookmark } from "./raindrop.mjs";
 import { MAX_ATTEMPTS, galleryFor, saveState } from "./state.mjs";
-import { thumbFileName, videoFrom } from "./thumb.mjs";
+import { ThumbError, playlistFrom, thumbFileName, videoFrom } from "./thumb.mjs";
 import { describe, isRecord } from "./util.mjs";
 
 /** @typedef {import("./types.js").Bookmark} Bookmark */
@@ -293,12 +293,11 @@ async function thumbFor(bookmark, slug, outDir, ctx) {
   // `deriveKind` rather than a second host list, for the reason `postFor` gives.
   if (deriveKind(bookmark.url) !== "video") return null;
 
-  const video = videoFrom(bookmark.url);
+  // A video entry with nothing to play fails the build (`lib/library.ts`), so a
+  // channel or a search stays pending and dead-letters rather than publishing.
+  const video = videoFrom(bookmark.url) ?? (await playlistFrom(bookmark.url));
   if (video === null) {
-    // A channel, a playlist, a search. Still a video row by host; just not one
-    // this repo can name a still for.
-    ctx.log(`thumb: ${bookmark.url} is a video host but not one video — no poster frame`);
-    return null;
+    throw new ThumbError(`${bookmark.url} is a video host but names no video or playlist to play`);
   }
 
   await mkdir(outDir, { recursive: true });

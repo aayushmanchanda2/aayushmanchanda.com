@@ -75,6 +75,7 @@ const { video } = entry;
       rel="noopener nofollow"
       target="_blank"
       data-video={video.id}
+      data-list={video.list}
       data-video-title={entry.title}
     >
       <span class="tile__badge">
@@ -239,7 +240,10 @@ const { video } = entry;
     // `data-start` is set by a pressed moment (`Moments.astro`), which then
     // finds this player again by `data-video` to seek it.
     const start = link.dataset.start ? `&start=${Number(link.dataset.start)}` : "";
-    player.src = `${EMBED}${encodeURIComponent(id)}?autoplay=1${start}`;
+    // A playlist plays as itself; its first video is the poster and the moments.
+    const list = link.dataset.list;
+    const what = list ? `videoseries?list=${encodeURIComponent(list)}&` : `${encodeURIComponent(id)}?`;
+    player.src = `${EMBED}${what}autoplay=1${start}`;
     player.dataset.video = id;
     // An iframe with no name is an unlabelled region to a screen reader.
     player.title = title;
