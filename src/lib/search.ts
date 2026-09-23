@@ -29,6 +29,8 @@ export interface SearchEntry {
    * single `indexOf` over the joined text answers that without a loop.
    */
   terms?: string;
+  /** A command rather than a destination: the row runs it instead of navigating. */
+  action?: "sound";
 }
 
 /** A ranked entry. `score` is only meaningful relative to its siblings. */

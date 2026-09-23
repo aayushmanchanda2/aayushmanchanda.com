@@ -7,6 +7,7 @@
  * taken over; anything with a modifier is the browser's.
  */
 import { enhanceSiteDetail } from "./site-detail";
+import { tick } from "./ui-sound";
 
 /** `/sites/<slug>` or `/sites/<slug>/`; the filter routes have two segments. */
 const SLUG_PATH = /^\/sites\/([a-z0-9][a-z0-9-]*)\/?$/;
@@ -53,6 +54,7 @@ function wire(panel: HTMLElement, body: HTMLElement, closer: HTMLButtonElement):
   }
 
   async function show(slug: string, focus: boolean) {
+    if (!isOpen()) tick({ rate: 0.85 });
     current = slug;
     panel.removeAttribute("inert");
     panel.setAttribute("data-open", "");
@@ -83,6 +85,7 @@ function wire(panel: HTMLElement, body: HTMLElement, closer: HTMLButtonElement):
 
   function hide() {
     if (!isOpen()) return;
+    tick({ rate: 1.15 });
     const back = current ? triggerFor(current) : null;
     current = null;
     panel.removeAttribute("data-open");

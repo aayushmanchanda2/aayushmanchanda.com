@@ -3,6 +3,7 @@
  * Footer — the colophon under every page: the profiles, the two clocks, the
  * theme toggle, the pages about the site, and the copyright.
  */
+import SoundToggle from "./SoundToggle.astro";
 import ThemeToggle from "./ThemeToggle.astro";
 import XGlyph from "./XGlyph.astro";
 
@@ -92,9 +93,13 @@ const year = new Date().getFullYear();
       Beside the clocks, at the clocks' weight: the theme is housekeeping,
       like the timezone readouts and the copyright, not a feature the page
       is selling. The mobile nav panel carries the same control, because
-      below 900px this footer is a long scroll away.
+      below 900px this footer is a long scroll away. The sound toggle is
+      housekeeping of the same kind, so it sits in the same pair.
     */}
-    <ThemeToggle />
+    <span class="foot__toggles">
+      <ThemeToggle />
+      <SoundToggle />
+    </span>
   </div>
 
   {/* The colophon: the four pages that are about the site rather than in
@@ -175,6 +180,13 @@ const year = new Date().getFullYear();
     justify-content: center;
     align-items: baseline;
     gap: 1rem 2.5rem;
+  }
+
+  /* 28px between two 14px glyphs keeps their 40px hit areas from overlapping. */
+  .foot__toggles {
+    display: inline-flex;
+    align-self: center;
+    gap: 1.75rem;
   }
 
   .foot__links {

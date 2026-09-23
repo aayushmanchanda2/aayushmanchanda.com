@@ -18,6 +18,7 @@
  */
 
 import type { SearchEntry, SearchGroup } from "./search";
+import { soundOn } from "./ui-sound";
 
 function rowNode(entry: SearchEntry): HTMLAnchorElement {
   const row = document.createElement("a");
@@ -31,7 +32,9 @@ function rowNode(entry: SearchEntry): HTMLAnchorElement {
 
   const title = document.createElement("span");
   title.className = "palette__row-title";
-  title.textContent = entry.title;
+  title.textContent =
+    entry.action === "sound" ? `Sound: ${soundOn() ? "on" : "off"}` : entry.title;
+  if (entry.action) row.dataset.paletteAction = entry.action;
 
   const where = document.createElement("span");
   where.className = "palette__row-where mono";
@@ -39,7 +42,7 @@ function rowNode(entry: SearchEntry): HTMLAnchorElement {
   // where that is decided and why — so the muted column is simply the path.
   // There is no external case to handle: no `target`, no `rel`, and no second
   // navigation path to keep working.
-  where.textContent = entry.href;
+  where.textContent = entry.action ? "toggle" : entry.href;
 
   row.append(title, where);
   return row;
