@@ -48,7 +48,9 @@ function wire(panel: HTMLElement, body: HTMLElement, closer: HTMLButtonElement):
         .then((html) => {
           const doc = new DOMParser().parseFromString(html, "text/html");
           const node = doc.querySelector("[data-site-detail]");
-          return node ? { node, title: doc.title } : null;
+          // Adopt the fragment and let the parsed page go: the cache holds
+          // one article per site, not a whole Document per site.
+          return node ? { node: document.importNode(node, true), title: doc.title } : null;
         })
         .catch(() => null);
       entry.then((value) => value ?? cache.delete(slug));
@@ -70,7 +72,7 @@ function wire(panel: HTMLElement, body: HTMLElement, closer: HTMLButtonElement):
     // place of the entry already pushed, so Back does not land on it twice.
     if (!entry) return location.replace(`/sites/${slug}`);
 
-    const node = document.importNode(entry.node, true);
+    const node = entry.node.cloneNode(true) as Element;
     // The page already has its h1 ("Sites"); in here the site is a section of it.
     const h1 = node.querySelector("[data-detail-title]");
     if (h1) {

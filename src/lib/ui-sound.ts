@@ -110,11 +110,24 @@ export function tick({ rate = 1 } = {}): void {
   source.start(at);
 }
 
-/** Only called from inside a press, the one place a context may start. */
+/**
+ * Only called from inside a press, the one place a context may start. A
+ * browser that refuses one (no Web Audio, too many contexts) stays silent
+ * rather than breaking the press (QA phase 2, B12).
+ */
 function play(rate = 1): void {
   if (!soundOn()) return;
-  ctx ??= new AudioContext({ latencyHint: "interactive" });
+  try {
+    ctx ??= new AudioContext({ latencyHint: "interactive" });
+  } catch {
+    return;
+  }
   tick({ rate });
+}
+
+/** Muted or out of sight: let the audio thread sleep. `tick` resumes it. */
+function rest(): void {
+  if (ctx?.state === "running" && (!soundOn() || document.hidden)) void ctx.suspend();
 }
 
 function sync(): void {
@@ -131,6 +144,7 @@ export function toggleSound(): void {
   store(STORAGE_KEY, chosen ? "on" : "off");
   sync();
   play(); // turning it on answers with the sound it just turned on
+  rest();
 }
 
 export function initSound(): void {
@@ -155,5 +169,6 @@ export function initSound(): void {
   document.addEventListener("click", (event) => {
     if ((event.target as Element | null)?.closest?.("[data-sound-toggle]")) toggleSound();
   });
+  document.addEventListener("visibilitychange", rest);
   sync();
 }
