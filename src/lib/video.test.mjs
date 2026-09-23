@@ -195,7 +195,7 @@ test("the play control is a link to the video, named for the video", () => {
 
 test("a Videos tile opens the entry's page through the seam, and the facade has one way out", () => {
   const views = code(read(VIEWS));
-  assert.match(views, /<a class="vtile" href=\{entryHref\(entry\)\}>/, "a video tile no longer opens the entry's page");
+  assert.match(views, /<a class="vtile" href=\{entryHref\(entry\)\}[ >]/, "a video tile no longer opens the entry's page");
   assert.ok(!/href=\{`\/library\/\$\{/.test(views), "the view builds a /library URL of its own");
 
   // The one outbound anchor in the facade is the play control.
