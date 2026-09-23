@@ -189,21 +189,28 @@ body {
 /* The paper's white margin (VET-262): a fixed border of `--band` in the page
    colour from the perforation in, covering anything scrolling past, with a
    keyline in faded ink at its inner edge (its own layer, so the wear mask
-   leaves the band solid). Under `.mat` (same z-index, earlier in the DOM),
-   so the holes still bite into it. */
+   leaves the band solid). Under the keyline, top and bottom, the paper stays
+   solid for `--clear` and fades over 8px (VET-263), so text scrolling past
+   never touches the keyline. Under `.mat` (same z-index, earlier in the
+   DOM), so the holes still bite into it. */
 .stamp {
+  --cover: calc(var(--keyline) + var(--clear));
+
   position: fixed;
   inset: var(--mat-w);
   z-index: 40;
   pointer-events: none;
   border: var(--band) solid var(--bg);
+  background:
+    linear-gradient(var(--bg) var(--cover), transparent calc(var(--cover) + 8px)),
+    linear-gradient(to top, var(--bg) var(--cover), transparent calc(var(--cover) + 8px));
 }
 
 .stamp::before {
   content: "";
   position: absolute;
   inset: 0;
-  border: 1.25px solid var(--stamp-ink);
+  border: var(--keyline) solid var(--stamp-ink);
   mask: var(--ink-mask);
   mask-composite: intersect;
 }

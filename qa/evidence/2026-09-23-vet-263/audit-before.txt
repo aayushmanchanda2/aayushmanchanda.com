@@ -1,0 +1,415 @@
+[
+ {
+  "w": 1280,
+  "r": "/",
+  "text": 2,
+  "pixels": 0,
+  "sample": [
+   "mid: \"Tools\" 304.0,762.6..337.4,770.2 (keyline in 30.8,30.8..1249.2,769.2)",
+   "mid: \"Sep 23, 2026\" 351.4,762.6..438.3,770.2 (keyline in 30.8,30.8..1249.2,769.2)"
+  ]
+ },
+ {
+  "w": 1280,
+  "r": "/design",
+  "text": 4,
+  "pixels": 0,
+  "sample": [
+   "top: \"It is also what makes the A \" 304.0,750.8..387.5,770.2 (keyline in 30.8,30.8..1249.2,769.2)",
+   "mid: \"The masthead at the top of t\" 304.0,29.8..910.3,36.6 (keyline in 30.8,30.8..1249.2,769.2)",
+   "mid: \"Tabular numbers are not opti\" 304.0,766.7..955.6,770.2 (keyline in 30.8,30.8..1249.2,769.2)",
+   "bottom: \"Scroll chaining is contained\" 304.0,29.8..930.9,31.7 (keyline in 30.8,30.8..1249.2,769.2)"
+  ]
+ },
+ {
+  "w": 1280,
+  "r": "/contact",
+  "text": 2,
+  "pixels": 0,
+  "sample": [
+   "top: \"Work that is actually intere\" 304.0,768.9..929.9,770.2 (keyline in 30.8,30.8..1249.2,769.2)",
+   "mid: \"A tool I should be running, \" 304.0,29.8..465.0,44.5 (keyline in 30.8,30.8..1249.2,769.2)"
+  ]
+ },
+ {
+  "w": 1280,
+  "r": "/tools",
+  "text": 21,
+  "pixels": 0,
+  "sample": [
+   "mid: \"D\" 89.7,29.8..98.0,39.7 (keyline in 30.8,30.8..1249.2,769.2)",
+   "mid: \"Diffusion Studio\" 121.8,29.8..225.8,40.6 (keyline in 30.8,30.8..1249.2,769.2)",
+   "mid: \"An open-source desktop video\" 359.3,29.8..806.3,40.6 (keyline in 30.8,30.8..1249.2,769.2)",
+   "mid: \"An open-source desktop video\" 359.3,29.8..797.3,40.6 (keyline in 30.8,30.8..1249.2,769.2)"
+  ]
+ },
+ {
+  "w": 1280,
+  "r": "/privacy",
+  "text": 2,
+  "pixels": 0,
+  "sample": [
+   "mid: \", a logo API. Your browser a\" 304.0,29.8..497.8,43.0 (keyline in 30.8,30.8..1249.2,769.2)",
+   "mid: \"The newsletter\" 304.0,767.3..398.0,770.2 (keyline in 30.8,30.8..1249.2,769.2)"
+  ]
+ },
+ {
+  "w": 1280,
+  "r": "/experiments",
+  "text": 1,
+  "pixels": 0,
+  "sample": [
+   "mid: \"Experiments\" 301.8,29.8..631.6,86.8 (keyline in 30.8,30.8..1249.2,769.2)"
+  ]
+ },
+ {
+  "w": 1280,
+  "r": "/library",
+  "text": 5,
+  "pixels": 0,
+  "sample": [
+   "top: \"Paul Klay explains why he sk\" 55.8,757.8..344.3,769.8 (keyline in 30.8,30.8..1249.2,769.2)",
+   "top: \"Paul Klay explains why he sk\" 453.8,755.0..1195.8,770.2 (keyline in 30.8,30.8..1249.2,769.2)",
+   "top: \"Paul Klay explains why he sk\" 453.8,755.0..1187.7,770.2 (keyline in 30.8,30.8..1249.2,769.2)",
+   "mid: \"Benji catalogues Honk's real\" 55.8,761.9..344.0,769.8 (keyline in 30.8,30.8..1249.2,769.2)"
+  ]
+ },
+ {
+  "w": 1280,
+  "r": "/about",
+  "text": 2,
+  "pixels": 0,
+  "sample": [
+   "top: \"My mindscape, in public. Fiv\" 304.0,747.1..495.5,770.1 (keyline in 30.8,30.8..1249.2,769.2)",
+   "mid: \"The site publishes itself. I\" 304.0,753.0..899.5,770.2 (keyline in 30.8,30.8..1249.2,769.2)"
+  ]
+ },
+ {
+  "w": 1280,
+  "r": "/sites",
+  "text": 3,
+  "pixels": 0,
+  "sample": [
+   "mid: \"Mike Barton\" 77.8,29.8..156.7,46.6 (keyline in 30.8,30.8..1249.2,769.2)",
+   "mid: \"Rauno Freiberg\" 461.1,29.8..560.2,46.6 (keyline in 30.8,30.8..1249.2,769.2)",
+   "mid: \"Celine Nova\" 844.5,29.8..923.0,46.6 (keyline in 30.8,30.8..1249.2,769.2)"
+  ]
+ },
+ {
+  "w": 1280,
+  "r": "/library/herdr-crash-course-a-beginner-s-guide",
+  "text": 2,
+  "pixels": 0,
+  "sample": [
+   "top: \"Paul Klay explains why he sk\" 55.8,757.8..344.3,769.8 (keyline in 30.8,30.8..1249.2,769.2)",
+   "mid: \"Benji catalogues Honk's real\" 55.8,761.9..344.0,769.8 (keyline in 30.8,30.8..1249.2,769.2)"
+  ]
+ },
+ {
+  "w": 1280,
+  "r": "/sites/inspora",
+  "text": 5,
+  "pixels": 0,
+  "sample": [
+   "top: scroller span.scroller y 230.8..790.8 (window 29.8..770.2)",
+   "mid: scroller span.scroller y -181.2..378.8 (window 29.8..770.2)",
+   "mid: \"Design\" 304.0,754.7..348.5,770.2 (keyline in 30.8,30.8..1249.2,769.2)",
+   "mid: \"Colors, Typography, Spacing\" 360.5,755.7..527.3,770.2 (keyline in 30.8,30.8..1249.2,769.2)"
+  ]
+ },
+ {
+  "w": 1280,
+  "r": "/tools/verdict/watching",
+  "text": 12,
+  "pixels": 0,
+  "sample": [
+   "mid: \"B\" 89.7,752.1..98.0,770.1 (keyline in 30.8,30.8..1249.2,769.2)",
+   "mid: \"Butter\" 121.8,753.0..162.6,770.2 (keyline in 30.8,30.8..1249.2,769.2)",
+   "mid: \"A browser video editor with \" 359.3,753.0..926.3,770.2 (keyline in 30.8,30.8..1249.2,769.2)",
+   "mid: \"A browser video editor with \" 359.3,753.0..912.5,770.2 (keyline in 30.8,30.8..1249.2,769.2)"
+  ]
+ },
+ {
+  "w": 1280,
+  "r": "/notes/building-this-site",
+  "text": 1,
+  "pixels": 0,
+  "sample": [
+   "mid: \"Aug 26, 2026\" 304.0,29.8..391.0,38.8 (keyline in 30.8,30.8..1249.2,769.2)"
+  ]
+ },
+ {
+  "w": 1280,
+  "r": "/sites/collection/mdx",
+  "text": 6,
+  "pixels": 0,
+  "sample": [
+   "top: \"GitHub\" 381.1,758.9..424.9,770.2 (keyline in 30.8,30.8..1249.2,769.2)",
+   "top: \"Winnipeg\" 502.9,758.9..563.0,770.2 (keyline in 30.8,30.8..1249.2,769.2)",
+   "top: \"06:37:04\" 571.0,758.9..638.2,770.2 (keyline in 30.8,30.8..1249.2,769.2)",
+   "top: \"New Delhi\" 662.2,758.9..727.7,770.2 (keyline in 30.8,30.8..1249.2,769.2)"
+  ]
+ },
+ {
+  "w": 1280,
+  "r": "/sites/domain/rareui-com",
+  "text": 4,
+  "pixels": 0,
+  "sample": [
+   "mid: \"©\" 551.2,759.9..566.3,770.2 (keyline in 30.8,30.8..1249.2,769.2)",
+   "mid: \"2026\" 566.3,759.9..599.9,770.2 (keyline in 30.8,30.8..1249.2,769.2)",
+   "mid: \"Aayush Manchanda\" 599.9,759.9..728.8,770.2 (keyline in 30.8,30.8..1249.2,769.2)",
+   "bottom: \"rareui.com\" 76.2,29.8..275.3,67.8 (keyline in 30.8,30.8..1249.2,769.2)"
+  ]
+ },
+ {
+  "w": 1280,
+  "r": "/library/kind/video",
+  "text": 2,
+  "pixels": 0,
+  "sample": [
+   "top: \"JCH's 43-video Money Button \" 55.8,757.8..337.1,769.8 (keyline in 30.8,30.8..1249.2,769.2)",
+   "mid: \"youtube.com\" 76.2,754.3..158.7,769.8 (keyline in 30.8,30.8..1249.2,769.2)"
+  ]
+ },
+ {
+  "w": 1280,
+  "r": "/tools/category/design",
+  "text": 6,
+  "pixels": 0,
+  "sample": [
+   "bottom: \"p\" 89.7,29.8..98.0,32.1 (keyline in 30.8,30.8..1249.2,769.2)",
+   "bottom: \"playgrnd\" 121.8,29.8..178.8,33.0 (keyline in 30.8,30.8..1249.2,769.2)",
+   "bottom: \"A collection of free single-\" 359.3,29.8..958.3,33.0 (keyline in 30.8,30.8..1249.2,769.2)",
+   "bottom: \"A collection of free single-\" 359.3,29.8..948.8,33.0 (keyline in 30.8,30.8..1249.2,769.2)"
+  ]
+ },
+ {
+  "w": 1280,
+  "r": "/library/tag/local-agency",
+  "text": 4,
+  "pixels": 0,
+  "sample": [
+   "mid: \"©\" 551.2,765.3..566.3,770.2 (keyline in 30.8,30.8..1249.2,769.2)",
+   "mid: \"2026\" 566.3,765.3..599.9,770.2 (keyline in 30.8,30.8..1249.2,769.2)",
+   "mid: \"Aayush Manchanda\" 599.9,765.3..728.8,770.2 (keyline in 30.8,30.8..1249.2,769.2)",
+   "bottom: \"local agency\" 76.2,29.8..314.1,54.8 (keyline in 30.8,30.8..1249.2,769.2)"
+  ]
+ },
+ {
+  "w": 1280,
+  "r": "/sites#panel",
+  "text": 5,
+  "pixels": 0,
+  "sample": [
+   "mid: scroller span.scroller y 8.8..568.8 (window 29.8..770.2)",
+   "mid: \"Mike Barton\" 77.8,29.8..156.7,46.6 (keyline in 30.8,30.8..1249.2,769.2)",
+   "mid: \"Rauno Freiberg\" 461.1,29.8..560.2,46.6 (keyline in 30.8,30.8..1249.2,769.2)",
+   "mid: \"Celine Nova\" 844.5,29.8..923.0,46.6 (keyline in 30.8,30.8..1249.2,769.2)"
+  ]
+ },
+ {
+  "w": 390,
+  "r": "/",
+  "text": 1,
+  "pixels": 0,
+  "sample": [
+   "mid: \"Follow it all by RSS\" 38.2,776.9..160.3,781.3 (keyline in 19.7,19.7..370.3,780.3)"
+  ]
+ },
+ {
+  "w": 390,
+  "r": "/design",
+  "text": 2,
+  "pixels": 0,
+  "sample": [
+   "top: \"It is also what makes the A \" 38.2,773.5..337.2,781.3 (keyline in 19.7,19.7..370.3,780.3)",
+   "mid: \"Labels, dates, counts\" 38.2,18.7..172.5,33.4 (keyline in 19.7,19.7..370.3,780.3)"
+  ]
+ },
+ {
+  "w": 390,
+  "r": "/contact",
+  "text": 4,
+  "pixels": 0,
+  "sample": [
+   "top: \"Something wrong on this site\" 38.2,763.9..336.7,781.3 (keyline in 19.7,19.7..370.3,780.3)",
+   "mid: \"I am\" 38.2,769.0..77.7,781.3 (keyline in 19.7,19.7..370.3,780.3)",
+   "mid: \"@amanchanda7\" 77.7,769.0..209.5,781.3 (keyline in 19.7,19.7..370.3,780.3)",
+   "mid: \"on X and\" 223.2,769.0..299.0,781.3 (keyline in 19.7,19.7..370.3,780.3)"
+  ]
+ },
+ {
+  "w": 390,
+  "r": "/tools",
+  "text": 6,
+  "pixels": 0,
+  "sample": [
+   "top: \"C\" 54.6,765.8..62.8,781.3 (keyline in 19.7,19.7..370.3,780.3)",
+   "top: \"Cloudflare OS\" 86.7,766.7..177.7,781.3 (keyline in 19.7,19.7..370.3,780.3)",
+   "mid: \"E\" 54.6,18.8..62.8,36.8 (keyline in 19.7,19.7..370.3,780.3)",
+   "mid: \"watching\" 251.3,18.7..312.7,31.7 (keyline in 19.7,19.7..370.3,780.3)"
+  ]
+ },
+ {
+  "w": 390,
+  "r": "/privacy",
+  "text": 4,
+  "pixels": 0,
+  "sample": [
+   "top: \"The fonts are bundled into t\" 38.2,768.5..329.0,781.3 (keyline in 19.7,19.7..370.3,780.3)",
+   "mid: \"and each post’s own page sho\" 38.2,18.7..310.9,36.0 (keyline in 19.7,19.7..370.3,780.3)",
+   "mid: \"That is the whole list: logo\" 38.2,760.1..342.9,781.3 (keyline in 19.7,19.7..370.3,780.3)",
+   "bottom: \"A saved video is the same ar\" 38.2,18.7..317.6,36.8 (keyline in 19.7,19.7..370.3,780.3)"
+  ]
+ },
+ {
+  "w": 390,
+  "r": "/experiments",
+  "text": 3,
+  "pixels": 0,
+  "sample": [
+   "mid: \"Things I am running right no\" 38.2,18.7..340.4,19.6 (keyline in 19.7,19.7..370.3,780.3)",
+   "mid: \"Winnipeg\" 107.0,763.6..167.0,781.3 (keyline in 19.7,19.7..370.3,780.3)",
+   "mid: \"06:37:25\" 215.8,763.6..283.0,781.3 (keyline in 19.7,19.7..370.3,780.3)"
+  ]
+ },
+ {
+  "w": 390,
+  "r": "/library",
+  "text": 3,
+  "pixels": 0,
+  "sample": [
+   "mid: \"Diogo Almeida's Jev founder \" 68.7,762.6..213.2,781.3 (keyline in 19.7,19.7..370.3,780.3)",
+   "bottom: \"Dhravya Shah reverse-enginee\" 68.7,18.7..347.7,35.7 (keyline in 19.7,19.7..370.3,780.3)",
+   "bottom: \"Dhravya Shah reverse-enginee\" 68.7,18.7..337.5,35.7 (keyline in 19.7,19.7..370.3,780.3)"
+  ]
+ },
+ {
+  "w": 390,
+  "r": "/about",
+  "text": 3,
+  "pixels": 0,
+  "sample": [
+   "mid: \"is other people’s websites, \" 38.2,18.7..336.1,27.1 (keyline in 19.7,19.7..370.3,780.3)",
+   "mid: \"Every opinion carries the da\" 38.2,757.8..334.6,780.8 (keyline in 19.7,19.7..370.3,780.3)",
+   "bottom: \"The site publishes itself. I\" 38.2,18.7..186.2,36.6 (keyline in 19.7,19.7..370.3,780.3)"
+  ]
+ },
+ {
+  "w": 390,
+  "r": "/library/herdr-crash-course-a-beginner-s-guide",
+  "text": 1,
+  "pixels": 0,
+  "sample": [
+   "mid: \"Alejandro AO records a begin\" 42.7,18.7..147.6,23.7 (keyline in 19.7,19.7..370.3,780.3)"
+  ]
+ },
+ {
+  "w": 390,
+  "r": "/sites/inspora",
+  "text": 5,
+  "pixels": 0,
+  "sample": [
+   "top: \"Full page. Scroll inside the\" 38.2,770.7..247.0,781.3 (keyline in 19.7,19.7..370.3,780.3)",
+   "mid: scroller span.scroller y -318.3..241.7 (window 18.7..781.3)",
+   "mid: \"Design\" 38.2,765.5..82.7,781.3 (keyline in 19.7,19.7..370.3,780.3)",
+   "mid: \"Colors, Typography, Spacing\" 94.7,766.5..261.6,781.3 (keyline in 19.7,19.7..370.3,780.3)"
+  ]
+ },
+ {
+  "w": 390,
+  "r": "/tools/verdict/watching",
+  "text": 2,
+  "pixels": 0,
+  "sample": [
+   "top: \"Installed via Homebrew cask \" 86.7,773.6..311.7,781.3 (keyline in 19.7,19.7..370.3,780.3)",
+   "bottom: \"A single MCP and CLI connect\" 86.7,18.7..336.0,27.6 (keyline in 19.7,19.7..370.3,780.3)"
+  ]
+ },
+ {
+  "w": 390,
+  "r": "/notes/building-this-site",
+  "text": 1,
+  "pixels": 0,
+  "sample": [
+   "top: \"is sitting at “using” with a\" 38.2,773.5..340.5,781.3 (keyline in 19.7,19.7..370.3,780.3)"
+  ]
+ },
+ {
+  "w": 390,
+  "r": "/sites/collection/mdx",
+  "text": 6,
+  "pixels": 0,
+  "sample": [
+   "top: \"New Delhi\" 107.0,770.4..172.5,781.3 (keyline in 19.7,19.7..370.3,780.3)",
+   "top: \"17:07:38\" 215.8,770.4..283.0,781.3 (keyline in 19.7,19.7..370.3,780.3)",
+   "mid: \"mdx\" 41.5,18.7..103.3,54.7 (keyline in 19.7,19.7..370.3,780.3)",
+   "mid: \"Design\" 141.4,764.6..185.9,781.3 (keyline in 19.7,19.7..370.3,780.3)"
+  ]
+ },
+ {
+  "w": 390,
+  "r": "/sites/domain/rareui-com",
+  "text": 8,
+  "pixels": 0,
+  "sample": [
+   "top: \"Search\" 92.3,768.7..140.9,781.3 (keyline in 19.7,19.7..370.3,780.3)",
+   "top: \"⌘K\" 153.1,768.7..169.9,781.3 (keyline in 19.7,19.7..370.3,780.3)",
+   "top: \"About\" 192.5,768.7..230.8,781.3 (keyline in 19.7,19.7..370.3,780.3)",
+   "top: \"Contact\" 246.8,768.7..297.7,781.3 (keyline in 19.7,19.7..370.3,780.3)"
+  ]
+ },
+ {
+  "w": 390,
+  "r": "/library/kind/video",
+  "text": 1,
+  "pixels": 0,
+  "sample": [
+   "bottom: \"Anthropic Workshop: Build Ag\" 42.7,18.7..316.6,36.7 (keyline in 19.7,19.7..370.3,780.3)"
+  ]
+ },
+ {
+  "w": 390,
+  "r": "/tools/category/design",
+  "text": 2,
+  "pixels": 0,
+  "sample": [
+   "mid: \"A React toolkit for adding l\" 86.7,18.7..202.8,31.6 (keyline in 19.7,19.7..370.3,780.3)",
+   "bottom: \"A copy-and-paste library of \" 86.7,18.7..202.0,27.6 (keyline in 19.7,19.7..370.3,780.3)"
+  ]
+ },
+ {
+  "w": 390,
+  "r": "/library/tag/local-agency",
+  "text": 1,
+  "pixels": 0,
+  "sample": [
+   "mid: \"1 link I filed under local a\" 42.7,18.7..321.9,25.8 (keyline in 19.7,19.7..370.3,780.3)"
+  ]
+ },
+ {
+  "w": 390,
+  "r": "/404",
+  "text": 5,
+  "pixels": 0,
+  "sample": [
+   "top: \"/sitemap-index.xml\" 38.2,767.0..162.6,781.3 (keyline in 19.7,19.7..370.3,780.3)",
+   "top: \".\" 162.6,767.0..165.4,781.3 (keyline in 19.7,19.7..370.3,780.3)",
+   "mid: \"This URL does not exist. Eit\" 38.2,18.7..323.3,29.4 (keyline in 19.7,19.7..370.3,780.3)",
+   "mid: \"Winnipeg\" 107.0,778.2..167.0,781.3 (keyline in 19.7,19.7..370.3,780.3)"
+  ]
+ },
+ {
+  "w": 390,
+  "r": "/sites#panel",
+  "text": 3,
+  "pixels": 0,
+  "sample": [
+   "mid: scroller span.scroller y -55.3..504.7 (window 18.7..781.3)",
+   "mid: \"Sep 23, 2026\" 34.7,764.0..134.0,781.3 (keyline in 19.7,19.7..370.3,780.3)",
+   "bottom: scroller span.scroller y -294.3..265.7 (window 18.7..781.3)"
+  ]
+ }
+]
+46 route checks (23 routes x 2 widths, 3 scroll states each), failing: 38, text violations: 150, pixel violations: 0
