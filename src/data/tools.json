@@ -6,7 +6,8 @@
     "repo": "https://github.com/paperclipai/paperclip",
     "category": "agent infra",
     "verdict": "using",
-    "note": "Agent org control plane. Verified working on the overnight bench — boots clean, embedded Postgres, telemetry off.",
+    "description": "Self-hosted control plane for agent teams",
+    "note": "Boots clean with embedded Postgres, telemetry off. Ran it on the overnight bench.",
     "status_date": "2026-08-17"
   },
   {
@@ -16,7 +17,8 @@
     "repo": "https://github.com/NousResearch/hermes-agent",
     "category": "agent infra",
     "verdict": "using",
-    "note": "Telegram-gateway agent runtime. My daily driver.",
+    "description": "Agent runtime with a messaging gateway",
+    "note": "My daily driver. Talks to me over Telegram.",
     "status_date": "2026-08-26"
   },
   {
@@ -26,7 +28,8 @@
     "repo": "https://github.com/laude-institute/headlong",
     "category": "agent infra",
     "verdict": "watching",
-    "note": "Persistent agent harness. Installed on a Factory droid backend; first real run still pending.",
+    "description": "Always-on agent harness, sandboxed in Docker",
+    "note": "Installed on a Factory droid backend, no real run yet.",
     "status_date": "2026-08-26"
   },
   {
@@ -36,7 +39,8 @@
     "repo": "https://github.com/cabinetai/cabinet",
     "category": "agent infra",
     "verdict": "on-hold",
-    "note": "Won my head-to-head demo comparison against two alternatives; full re-scaffold pending. Promising.",
+    "description": "Self-hosted agent team stored as markdown",
+    "note": "Won my demo head-to-head against two alternatives. Promising; on hold until the full re-scaffold.",
     "status_date": "2026-08-17"
   },
   {
@@ -47,6 +51,7 @@
     "repo": "https://github.com/cloudflare/cloudflare-os",
     "category": "agent infra",
     "verdict": "skipped",
+    "description": "Cloudflare's agent environment with sandboxed apps",
     "note": "Lost the same head-to-head to Cabinet on my use case.",
     "status_date": "2026-08-17"
   },
@@ -57,7 +62,8 @@
     "repo": "https://github.com/Emanuele-web04/synara",
     "category": "agent workspaces",
     "verdict": "watching",
-    "note": "Desktop app builds and boots clean end-to-end (Bun + Electron). Works; not yet part of the daily stack.",
+    "description": "Local-first desktop workspace for coding agents",
+    "note": "Builds and boots clean end to end on Bun and Electron. Not in my daily stack yet.",
     "status_date": "2026-08-19"
   },
   {
@@ -67,7 +73,8 @@
     "repo": "https://github.com/block/buzz",
     "category": "agent workspaces",
     "verdict": "on-hold",
-    "note": "Block's agent workspace. Cloned, never judged — the source build wants multi-GB toolchain and disk ran out mid-bench. Prebuilt release is the easy path.",
+    "description": "Block's shared workspace for humans and agents",
+    "note": "Cloned, never judged: the source build wants a multi-GB toolchain and my disk ran out mid-bench. Prebuilt release next.",
     "status_date": "2026-08-17"
   },
   {
@@ -77,6 +84,7 @@
     "repo": "https://github.com/nex-crm/wuphf",
     "category": "agent workspaces",
     "verdict": "skipped",
+    "description": "Agent workspace, since renamed gawkbot",
     "note": "Weaker take on what Buzz does, with a restrictive license on top.",
     "status_date": "2026-08-17",
     "repo_moved": true
@@ -88,7 +96,8 @@
     "repo": "https://github.com/shadcn/improve",
     "category": "agent skills",
     "verdict": "using",
-    "note": "Plan-cheap-execute optimization loop as a Claude skill. Cherry-picked from the bench.",
+    "description": "Agent skill that writes optimization plans",
+    "note": "Cherry-picked from the bench for its plan-cheap-execute loop.",
     "status_date": "2026-08-17"
   },
   {
@@ -98,7 +107,8 @@
     "repo": "https://github.com/davidondrej/skills",
     "category": "agent skills",
     "verdict": "using",
-    "note": "Three skills kept after a security read: risky-changes (adapted), folder-specific-claude-md, effective-agent-skills.",
+    "description": "Agent skills pack in five categories",
+    "note": "Kept three after a security read: risky-changes (adapted), folder-specific-claude-md, effective-agent-skills.",
     "status_date": "2026-08-17"
   },
   {
@@ -107,7 +117,8 @@
     "url": "https://lazyweb.com",
     "category": "agent skills",
     "verdict": "skipped",
-    "note": "Design-research skill pack with a curl|bash installer; paid tier can decrypt browser cookies. Only ever deliberately, with the cookie-decryption caveat in mind.",
+    "description": "UI/UX screenshot library with MCP server",
+    "note": "Skipped over the curl-to-bash installer and a paid tier that can decrypt browser cookies.",
     "status_date": "2026-08-17"
   },
   {
@@ -117,7 +128,8 @@
     "logoDomain": null,
     "category": "web access",
     "verdict": "using",
-    "note": "Browser automation CLI for agents — accessibility-tree snapshots at a fraction of screenshot token cost. Daily driver.",
+    "description": "Browser automation CLI for agents",
+    "note": "Daily driver. Accessibility-tree snapshots cost a fraction of screenshots, and the element refs mean no pixel guessing.",
     "status_date": "2026-08-26",
     "like": "The accessibility-tree snapshots cost a fraction of what screenshots do. The project claims about 82 percent less; feels right in my use. The tree comes with element refs, so an agent clicks a named thing instead of guessing at pixel coordinates."
   },
@@ -127,7 +139,8 @@
     "url": "https://firecrawl.dev",
     "category": "web access",
     "verdict": "using",
-    "note": "Scrape/crawl/extract API for pages that fight plain fetch. Its X postprocessor is the only reliable way I read tweets programmatically.",
+    "description": "Scrape, crawl, search and extract API",
+    "note": "Its X postprocessor is the only reliable way I read tweets programmatically. For content, not clicking.",
     "status_date": "2026-08-26",
     "like": "Its X postprocessor is the only reliable way I read tweets programmatically.",
     "why": "When the job is to get the content, not to click through a UI. A page that blocks a plain fetch, a whole site I want as markdown, a structured field I want pulled out. If the job needs a login or real clicking, I reach for agent-browser instead.",
@@ -139,7 +152,8 @@
     "url": "https://is-agentic.com/",
     "category": "web access",
     "verdict": "watching",
-    "note": "Score how ready a website is for AI agents, then get evidence and recommendations to improve it.",
+    "description": "Scores a site's readiness for AI agents",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-08-26"
   },
   {
@@ -149,7 +163,8 @@
     "repo": "https://github.com/teamchong/pxpipe",
     "category": "agent infra",
     "verdict": "skipped",
-    "note": "Token-saving MITM proxy with documented silent string corruption. Unusable anywhere fidelity matters.",
+    "description": "Token-saving MITM proxy for LLM requests",
+    "note": "Unusable anywhere fidelity matters: its own docs admit it silently corrupts strings in transit.",
     "status_date": "2026-08-17",
     "dislike": "It corrupts strings on the way through and says nothing about it. That is not my finding, it is in the project's own documentation. A proxy that quietly changes the bytes is worse than no proxy at all, because you do not find out where it broke, you find out somewhere downstream when a thing that should have matched does not. No token saving buys that back."
   },
@@ -160,7 +175,8 @@
     "repo": "https://github.com/heyderekj/dinky",
     "category": "personal apps",
     "verdict": "skipped",
-    "note": "Unsigned app from a personal tap — not worth the trust exception.",
+    "description": "Mac app compressing images, video, audio, PDFs",
+    "note": "Unsigned app from a personal tap. Not worth the trust exception.",
     "status_date": "2026-08-17"
   },
   {
@@ -169,6 +185,7 @@
     "url": "https://hubble.md",
     "category": "personal apps",
     "verdict": "skipped",
+    "description": "Web-based markdown notepad with tags",
     "note": "Duplicates my existing markdown vault workflow.",
     "status_date": "2026-08-17"
   },
@@ -178,7 +195,8 @@
     "url": "https://macro.com",
     "category": "personal apps",
     "verdict": "skipped",
-    "note": "The workspace product turned out to be a Notion replacement, not the PDF tool I wanted.",
+    "description": "Workspace app with email, chat, docs, CRM",
+    "note": "Turned out to be a Notion replacement, not the PDF tool I wanted.",
     "status_date": "2026-08-17"
   },
   {
@@ -188,7 +206,8 @@
     "repo": "https://github.com/treygoff24/papercuts",
     "category": "agent infra",
     "verdict": "skipped",
-    "note": "Fine tool, but requires a Rust toolchain I don't want to carry right now.",
+    "description": "CLI for agents to log friction",
+    "note": "Fine tool. Needs a Rust toolchain I don't want to carry right now.",
     "status_date": "2026-08-17"
   },
   {
@@ -198,7 +217,8 @@
     "repo": "https://github.com/vercel/eve",
     "category": "agent infra",
     "verdict": "watching",
-    "note": "Vercel's agent sandbox. Scaffolded and ready to test — needs Node 24.",
+    "description": "Vercel's framework for durable backend agents",
+    "note": "Scaffolded, not tested yet. Needs Node 24.",
     "status_date": "2026-08-17"
   },
   {
@@ -208,7 +228,8 @@
     "repo": "https://github.com/pluk-inc/markdown-preview",
     "category": "personal apps",
     "verdict": "watching",
-    "note": "Installed via Homebrew cask and verified signed. Not yet made the default or smoke-tested.",
+    "description": "Markdown preview app for macOS",
+    "note": "Installed from the Homebrew cask, signature verified. Not my default and not smoke-tested yet.",
     "status_date": "2026-07-26"
   },
   {
@@ -217,7 +238,8 @@
     "url": null,
     "category": "agent infra",
     "verdict": "using",
-    "note": "Claude Code's harness running on GPT-5.6 Sol through a local proxy. My delegation lane for big well-specified diffs.",
+    "description": "Claude Code harness on GPT-5.6 Sol",
+    "note": "My delegation lane for big, well-specified diffs. Runs through a local proxy.",
     "status_date": "2026-08-26"
   },
   {
@@ -228,7 +250,8 @@
     "repo": "https://github.com/stablyai/orca",
     "category": "agent workspaces",
     "verdict": "watching",
-    "note": "Came out of my orchestrator comparison as the one to try next if mobile coding starts mattering. Watching until it does.",
+    "description": "Desktop agent orchestrator with mobile companion",
+    "note": "The one to try next if mobile coding starts mattering, per my orchestrator comparison. Not yet.",
     "status_date": "2026-08-27"
   },
   {
@@ -238,7 +261,8 @@
     "logoDomain": null,
     "category": "dev platforms",
     "verdict": "watching",
-    "note": "A small WebGPU library from Vercel Labs with one API for browser canvases, headless Node.js and serverless runtimes, plus CLI and MCP discovery for agents.",
+    "description": "WebGPU library for browser, Node and serverless",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-08-28"
   },
   {
@@ -247,7 +271,8 @@
     "url": "https://www.opensession.com/",
     "category": "agent workspaces",
     "verdict": "watching",
-    "note": "A self-hosted control room for running coding agents in isolated worktrees, sharing live sessions, and taking each run through diff review to a pull request.",
+    "description": "Self-hosted control room for coding agents",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-08-28"
   },
   {
@@ -256,7 +281,8 @@
     "url": "https://swiped.design/",
     "category": "design",
     "verdict": "watching",
-    "note": "A weekly, hand-curated swipe file of high-performing design content from X and LinkedIn, useful for seeing what formats and ideas are working.",
+    "description": "Weekly swipe file of design content",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-08-28"
   },
   {
@@ -266,7 +292,8 @@
     "repo": "https://github.com/Merit-Systems/OpenInstinct",
     "category": "personal apps",
     "verdict": "watching",
-    "note": "A self-hostable iMessage assistant that can browse and act for you while keeping credentials encrypted in your own stack; promising, but explicitly not production-ready.",
+    "description": "Self-hosted iMessage assistant with encrypted credentials",
+    "note": "Promising, but the project itself says it's not for production use. Not tried.",
     "status_date": "2026-08-28"
   },
   {
@@ -275,7 +302,8 @@
     "url": "https://bronnhq.com/",
     "category": "business ops",
     "verdict": "watching",
-    "note": "An AI-native Stockholm accounting firm that combines automated bookkeeping with human sign-off, covering payroll, VAT, reporting and CFO advice.",
+    "description": "AI-assisted accounting firm in Stockholm",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-08-30"
   },
   {
@@ -284,7 +312,8 @@
     "url": "https://adapt.com/",
     "category": "agent infra",
     "verdict": "watching",
-    "note": "A full-stack platform for building company agents across Slack, GitHub, Linear and the web, with model routing, sandboxed infrastructure and deployable TypeScript.",
+    "description": "Platform for deploying company agents",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-08-30"
   },
   {
@@ -293,7 +322,8 @@
     "url": "https://www.wist.chat/",
     "category": "business ops",
     "verdict": "watching",
-    "note": "A no-code AI support chat builder that trains on websites and files, routes to humans, supports multiple models and mines conversations for product insights.",
+    "description": "No-code AI support chat widget",
+    "note": "Saved, not tried yet. Plans run $40 to $250 a month.",
     "status_date": "2026-08-30"
   },
   {
@@ -303,7 +333,8 @@
     "logoDomain": null,
     "category": "agent infra",
     "verdict": "watching",
-    "note": "A Grok bot template for orchestrating coding agents through Herdr, with explicit pane-layout and blocking-wait guidance.",
+    "description": "Grok bot orchestrating coding agents in Herdr",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-08-31"
   },
   {
@@ -313,7 +344,8 @@
     "logoDomain": null,
     "category": "business ops",
     "verdict": "watching",
-    "note": "Ploy ranks identified website visitors by ICP fit, resolves one verified contact per company, and stages Gmail drafts for review without auto-sending.",
+    "description": "Drafts emails to ICP-fit website visitors",
+    "note": "Saved, not tried yet. Stages Gmail drafts, never auto-sends.",
     "status_date": "2026-08-31"
   },
   {
@@ -323,7 +355,8 @@
     "logoDomain": null,
     "category": "personal apps",
     "verdict": "watching",
-    "note": "A native, local-first Mac text editor with quick notes, focus mode, Markdown and PDF export, and Apple Intelligence features; it's coming soon.",
+    "description": "Minimalist text editor for macOS",
+    "note": "Not out yet. Saved for when it ships.",
     "status_date": "2026-08-31"
   },
   {
@@ -332,7 +365,8 @@
     "url": "https://circleback.ai/",
     "category": "personal apps",
     "verdict": "watching",
-    "note": "AI meeting notes that capture transcripts, action items, searchable context, and automations across video calls and in-person conversations.",
+    "description": "AI meeting notes with action items",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-08-31"
   },
   {
@@ -342,7 +376,8 @@
     "repo": "https://github.com/msitarzewski/agency-agents",
     "category": "agent skills",
     "verdict": "watching",
-    "note": "A large collection of specialized agent personas and workflows, with installers for Claude Code, Codex, Cursor, Hermes, and other coding tools.",
+    "description": "Agent persona library with desktop installer",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-08-31"
   },
   {
@@ -352,7 +387,8 @@
     "repo": "https://github.com/Panniantong/Agent-Reach",
     "category": "agent skills",
     "verdict": "watching",
-    "note": "A CLI capability layer that equips agents to read and search the web, YouTube, X, Reddit, GitHub, RSS, and several Chinese platforms.",
+    "description": "CLI giving agents web and social access",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-08-31"
   },
   {
@@ -362,7 +398,8 @@
     "repo": "https://github.com/DeusData/codebase-memory-mcp",
     "category": "agent skills",
     "verdict": "watching",
-    "note": "A local MCP server that indexes code into a persistent tree-sitter knowledge graph for fast structural queries, call traces, and impact analysis.",
+    "description": "MCP server indexing code into a graph",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-08-31"
   },
   {
@@ -372,7 +409,8 @@
     "repo": "https://github.com/diffusionstudio/editor",
     "category": "design",
     "verdict": "watching",
-    "note": "An open-source desktop video editor and CLI that lets coding agents inspect footage, edit timelines, and leave every output editable in the UI.",
+    "description": "Open-source video editor with agent CLI",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-08-31"
   },
   {
@@ -381,7 +419,8 @@
     "url": "https://orenmeetsworld.github.io/business-flight-finder/",
     "category": "personal apps",
     "verdict": "watching",
-    "note": "A free ChatGPT skill that searches flexible dates and trip lengths, then checks cabins, connections, seat availability, and stale fares before recommending business-class options.",
+    "description": "ChatGPT skill for flexible business-class fares",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-01"
   },
   {
@@ -390,7 +429,8 @@
     "url": "https://lexingtonthemes.com/",
     "category": "design",
     "verdict": "watching",
-    "note": "A collection of 133 production-ready Astro 7 themes with Tailwind CSS, including Sanity and EmDash CMS variants.",
+    "description": "Astro and Tailwind theme marketplace",
+    "note": "Saved, not tried yet. $89 a theme, $99 for the bundle.",
     "status_date": "2026-09-01"
   },
   {
@@ -399,7 +439,8 @@
     "url": "https://emdashcms.com/",
     "category": "dev platforms",
     "verdict": "watching",
-    "note": "An open source, Astro-native CMS with typed schemas, secure plugins, and MCP APIs that humans and coding agents can both use.",
+    "description": "Open-source Astro-native CMS with MCP",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-01"
   },
   {
@@ -408,7 +449,8 @@
     "url": "https://www.voyageai.com/",
     "category": "dev platforms",
     "verdict": "watching",
-    "note": "Embedding and reranking APIs for semantic search and RAG, with general, domain-specific, and multimodal models.",
+    "description": "Embedding and reranking model APIs",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-01"
   },
   {
@@ -418,7 +460,8 @@
     "logoDomain": null,
     "category": "agent workspaces",
     "verdict": "watching",
-    "note": "Chroma’s Foundation turns agent sessions into a versioned, cited team wiki and connects it to coding agents, Slack, MCP, a CLI, and an API.",
+    "description": "Turns agent sessions into a team wiki",
+    "note": "Saved, not tried yet. $30 a user a month.",
     "status_date": "2026-09-02"
   },
   {
@@ -427,7 +470,8 @@
     "url": "https://spacefs.com/",
     "category": "dev platforms",
     "verdict": "watching",
-    "note": "A cloud filesystem that mounts in Finder, streams only the file ranges an app needs, and syncs edits across Macs without filling local storage.",
+    "description": "Cloud filesystem that mounts in Finder",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-02"
   },
   {
@@ -436,7 +480,8 @@
     "url": "https://www.dialkit.dev/",
     "category": "design",
     "verdict": "watching",
-    "note": "A React toolkit for adding live controls beside an interface so you can tune animation, layout, spacing, and visual details in real time.",
+    "description": "Live dev-time controls for tuning UI values",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-02"
   },
   {
@@ -445,7 +490,8 @@
     "url": "https://textmotion.dev/",
     "category": "design",
     "verdict": "watching",
-    "note": "A tiny text-roll animation library with reduced-motion handling, screen-reader support, grapheme-aware transitions, and real-browser tests.",
+    "description": "Tiny text-roll animation library",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-02"
   },
   {
@@ -455,7 +501,8 @@
     "repo": "https://github.com/tw93/Kami",
     "category": "agent skills",
     "verdict": "watching",
-    "note": "A reusable design system that gives agent-made reports, slides, and web pages a consistent editorial style.",
+    "description": "Design system for agent-generated documents",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-04"
   },
   {
@@ -464,7 +511,8 @@
     "url": "https://seomade.app/",
     "category": "business ops",
     "verdict": "watching",
-    "note": "A ranked directory of startup, SaaS, and AI submission sites with domain ratings, link types, pricing, and a browser-saved tracker.",
+    "description": "Leaderboard of startup submission directories",
+    "note": "Saved, not tried yet. About 1,000 directories ranked by domain rating.",
     "status_date": "2026-09-04"
   },
   {
@@ -474,7 +522,8 @@
     "repo": "https://github.com/boringmarketer/meta-ads-skill",
     "category": "agent skills",
     "verdict": "watching",
-    "note": "An open-source agent skill for Meta API setup, campaign publishing, browser-only steps, and conversion-tracking verification drawn from production failures.",
+    "description": "Agent skill for the Meta Ads API",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-04"
   },
   {
@@ -484,7 +533,8 @@
     "logoDomain": null,
     "category": "dev platforms",
     "verdict": "watching",
-    "note": "A netcat-style CLI from Tailscale for short-lived encrypted connections between machines without accounts, tailnets, or IP addresses.",
+    "description": "Netcat-style encrypted connections from Tailscale",
+    "note": "Saved, not tried yet. Free, no account needed.",
     "status_date": "2026-09-04"
   },
   {
@@ -494,7 +544,8 @@
     "logoDomain": null,
     "category": "agent workspaces",
     "verdict": "watching",
-    "note": "Shared plan editor where teams review an agent's plan before the diff lands. Multiplayer, visual, hooks into coding agents, free tier.",
+    "description": "Multiplayer plan review before code",
+    "note": "Saved, not tried yet. Free tier has 200 credits.",
     "status_date": "2026-09-05"
   },
   {
@@ -503,7 +554,8 @@
     "url": "https://openseo.so/open-source-seo",
     "category": "business ops",
     "verdict": "watching",
-    "note": "Self-hostable open-source SEO platform on DataForSEO data, built so you and your agents can extend it instead of renting a closed dashboard.",
+    "description": "Open-source SEO platform on DataForSEO",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-05"
   },
   {
@@ -512,7 +564,8 @@
     "url": "https://tangleml.com/",
     "category": "dev platforms",
     "verdict": "watching",
-    "note": "Open-source drag-and-drop editor from Shopify engineers for building and running ML pipelines collaboratively, any language, with execution caching so reruns are cheap.",
+    "description": "Visual ML pipeline editor from Shopify",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-05"
   },
   {
@@ -522,7 +575,8 @@
     "logoDomain": null,
     "category": "personal apps",
     "verdict": "watching",
-    "note": "EEG headband that shows you your own brain activity. Waitlist only, six years in the making, pitched as a telescope pointed inward.",
+    "description": "EEG headband showing your brain activity",
+    "note": "Preorder only, so nothing to try. Six years in the making, pitched as a telescope pointed inward.",
     "status_date": "2026-09-05"
   },
   {
@@ -531,7 +585,8 @@
     "url": "https://www.playgrnd.tools/",
     "category": "design",
     "verdict": "watching",
-    "note": "A collection of free single-purpose generative design tools that run locally in the browser without accounts, uploads, or stored data.",
+    "description": "Free generative design tools in the browser",
+    "note": "Saved, not tried yet. 52 tools, nothing uploaded.",
     "status_date": "2026-09-05"
   },
   {
@@ -541,7 +596,8 @@
     "logoDomain": null,
     "category": "agent workspaces",
     "verdict": "watching",
-    "note": "A real-time multiplayer planning environment from GitHub Next built for the agentic development loop, where planning and review matter more than implementation.",
+    "description": "Multiplayer planning environment from GitHub Next",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-05"
   },
   {
@@ -550,7 +606,8 @@
     "url": "https://aside.com/",
     "category": "web access",
     "verdict": "watching",
-    "note": "An agent-first browser that works across logged-in sites while keeping memory local and gating sensitive actions for review.",
+    "description": "Desktop browser with a built-in agent",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-05"
   },
   {
@@ -559,7 +616,8 @@
     "url": "https://kitbitz.art/",
     "category": "design",
     "verdict": "watching",
-    "note": "A CC0 library of hand-drawn SVG and PNG illustrations with Figma kits, a Figma plugin, and MCP access for AI tools.",
+    "description": "CC0 hand-drawn illustration library",
+    "note": "Saved, not tried yet. 2,000-plus illustrations, CC0.",
     "status_date": "2026-09-05"
   },
   {
@@ -568,7 +626,8 @@
     "url": "https://www.butter.video/pricing",
     "category": "design",
     "verdict": "watching",
-    "note": "A browser video editor with captions, reusable components, brand kits, remixing, stock assets, and exports across free and team plans.",
+    "description": "Browser video editor for short-form content",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-05"
   },
   {
@@ -577,7 +636,8 @@
     "url": "https://serper.dev/",
     "category": "web access",
     "verdict": "watching",
-    "note": "A real-time Google Search API covering web, images, news, maps, places, videos, shopping, scholar, patents, and autocomplete with usage-based pricing.",
+    "description": "Real-time Google Search API",
+    "note": "Saved, not tried yet. 2,500 free queries a month.",
     "status_date": "2026-09-05"
   },
   {
@@ -586,7 +646,8 @@
     "url": "https://www.scrapingbee.com/",
     "category": "web access",
     "verdict": "watching",
-    "note": "A web scraping API that handles proxies, anti-bot defenses, JavaScript rendering, browser interactions, screenshots, and structured AI extraction.",
+    "description": "Web scraping API with JS rendering",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-05"
   },
   {
@@ -595,7 +656,8 @@
     "url": "https://nodes-web.com/",
     "category": "personal apps",
     "verdict": "watching",
-    "note": "A private macOS writing app that stores notes as plain Markdown, maps their links, and searches them locally by text or meaning.",
+    "description": "Local Markdown notes app for macOS",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-14"
   },
   {
@@ -604,7 +666,8 @@
     "url": "https://buckochat.com/?v=2",
     "category": "personal apps",
     "verdict": "watching",
-    "note": "A family AI assistant you text — plans, errands, and everyday life. Built by a parent, currently waitlist-only.",
+    "description": "Family AI assistant over text messages",
+    "note": "Waitlist only, so nothing to try yet. Built by a parent.",
     "status_date": "2026-09-14"
   },
   {
@@ -614,7 +677,8 @@
     "logoDomain": null,
     "category": "dev platforms",
     "verdict": "watching",
-    "note": "A native SDK for adding small, task-specific AI models to Apple, Android, and web apps, free for up to 100,000 monthly active devices per platform.",
+    "description": "SDK of small on-device AI models",
+    "note": "Saved, not tried yet. Free to 100,000 monthly active devices.",
     "status_date": "2026-09-14"
   },
   {
@@ -623,7 +687,8 @@
     "url": "https://mastra.ai/factory",
     "category": "agent workspaces",
     "verdict": "watching",
-    "note": "An open-source software delivery environment that moves issues through intake, planning, coding, and pull request review with persistent agents and explicit gates.",
+    "description": "Agent-run delivery pipeline from issue to PR",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-14"
   },
   {
@@ -632,7 +697,8 @@
     "url": "https://spell.sh/docs/components",
     "category": "design",
     "verdict": "watching",
-    "note": "A component library of animated React UI elements, from charts and buttons to WebGL backgrounds and text effects.",
+    "description": "Animated React components, some WebGL",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-14"
   },
   {
@@ -641,7 +707,8 @@
     "url": "https://spacefast.com/",
     "category": "dev platforms",
     "verdict": "watching",
-    "note": "An agent-first publishing service for static sites and full-stack apps, with private-by-default sharing, version history, comments, and built-in backend services.",
+    "description": "Automattic's publishing layer for agent-made apps",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-14"
   },
   {
@@ -650,7 +717,8 @@
     "url": "https://scrape.it/",
     "category": "web access",
     "verdict": "watching",
-    "note": "A scraping and crawling API that routes requests through proxies you already own, with agent-friendly docs and optional CAPTCHA solving and storage connectors.",
+    "description": "Free crawling API, bring your own proxies",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-14"
   },
   {
@@ -659,7 +727,8 @@
     "url": "https://buildinpublic.com/deals",
     "category": "business ops",
     "verdict": "watching",
-    "note": "A directory of 600-plus discounts on software, services, and credits for people building in public.",
+    "description": "Software deals for builders in public",
+    "note": "Saved, not tried yet. 633 deals listed.",
     "status_date": "2026-09-14"
   },
   {
@@ -668,7 +737,8 @@
     "url": "https://railcode.dev/pricing",
     "category": "dev platforms",
     "verdict": "watching",
-    "note": "Railcode's pricing starts with a free personal tier, then adds unlimited builders and viewers for teams without per-seat fees.",
+    "description": "Hosting for internal JavaScript apps",
+    "note": "Saved, not tried yet. Free tier is 1 builder, 3 viewers; Team is $27 a month.",
     "status_date": "2026-09-14"
   },
   {
@@ -678,7 +748,8 @@
     "logoDomain": null,
     "category": "design",
     "verdict": "watching",
-    "note": "A copy-and-paste library of UI transitions for web apps, with a skill that coding agents can use.",
+    "description": "Copy-paste UI transitions with an agent skill",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-14"
   },
   {
@@ -688,7 +759,8 @@
     "logoDomain": null,
     "category": "agent skills",
     "verdict": "watching",
-    "note": "A set of agent skills for reviewing and improving UI, typography, color, layout, accessibility, and product copy.",
+    "description": "16 interface design skills for agents",
+    "note": "Saved, no verdict yet.",
     "status_date": "2026-09-14"
   },
   {
@@ -698,7 +770,8 @@
     "logoDomain": null,
     "category": "agent skills",
     "verdict": "watching",
-    "note": "Emil Kowalski's agent skills encode practical judgment for interface design, animation, prototyping, and modern Swift.",
+    "description": "13 design and animation skills for agents",
+    "note": "Saved, no verdict yet.",
     "status_date": "2026-09-14"
   },
   {
@@ -707,7 +780,8 @@
     "url": "https://www.obsidianui.dev/components",
     "category": "design",
     "verdict": "watching",
-    "note": "A library of polished React components built with Tailwind CSS and Motion, with previews, docs, and code to copy.",
+    "description": "Copyable React components styled with Tailwind",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-14"
   },
   {
@@ -716,7 +790,8 @@
     "url": "https://clapper.archastro.tryintern.dev/",
     "category": "design",
     "verdict": "watching",
-    "note": "An open-source React-to-MP4 toolkit with deterministic frame rendering, coded sound, live previews, and agent-ready contact-sheet reviews.",
+    "description": "Deterministic React-to-MP4 video framework",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-15"
   },
   {
@@ -725,7 +800,8 @@
     "url": "https://gadget.dev/",
     "category": "dev platforms",
     "verdict": "watching",
-    "note": "A hosted JavaScript platform that bundles a database, backend, API, React frontend, IDE, integrations, and deployment for building full-stack web apps.",
+    "description": "Hosted full-stack JavaScript app platform",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-15"
   },
   {
@@ -735,7 +811,8 @@
     "repo": "https://github.com/Tencent/BrowserSkill",
     "category": "web access",
     "verdict": "watching",
-    "note": "Tencent's open-source CLI and browser extension let agents use your real logged-in browser without interrupting your work.",
+    "description": "Lets agents use your logged-in browser",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-16"
   },
   {
@@ -744,7 +821,8 @@
     "url": "https://ultraspeaking.com/",
     "category": "personal apps",
     "verdict": "watching",
-    "note": "A practice-led public speaking course built around live coaching, peer feedback, and games that train clear thinking under pressure.",
+    "description": "Public speaking course with live coaching",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-17"
   },
   {
@@ -753,7 +831,8 @@
     "url": "https://moonjar.ai/",
     "category": "agent skills",
     "verdict": "watching",
-    "note": "A Mac MCP server that lets coding agents capture, arrange and style product screenshots without opening an editor.",
+    "description": "Mac screenshot app with an MCP server",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-18"
   },
   {
@@ -762,7 +841,8 @@
     "url": "https://atonomi.ai/",
     "category": "business ops",
     "verdict": "watching",
-    "note": "Custom AI agents for lead generation, outreach, follow-ups, and sales operations, with a dashboard for reviewing work and triggering workflows.",
+    "description": "Custom AI agents for sales operations",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-22"
   },
   {
@@ -771,7 +851,8 @@
     "url": "https://pool.day/",
     "category": "personal apps",
     "verdict": "watching",
-    "note": "A screenshot organizer that reads what's inside, files captures into pools automatically, and brings them back when needed.",
+    "description": "iOS app that organizes screenshots by content",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-22"
   },
   {
@@ -780,7 +861,8 @@
     "url": "https://www.haus.io/",
     "category": "business ops",
     "verdict": "watching",
-    "note": "An incrementality platform for designing geo experiments, measuring causal lift, and allocating marketing spend from the results.",
+    "description": "Incrementality testing for marketing spend",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-22"
   },
   {
@@ -789,7 +871,8 @@
     "url": "https://www.akai.run/",
     "category": "agent infra",
     "verdict": "watching",
-    "note": "Deel's enterprise agent platform learns operational workflows from a demonstration, then runs them across systems with shared context, audit trails, and human approval gates.",
+    "description": "Deel's agent platform for operations workflows",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-22"
   },
   {
@@ -799,7 +882,8 @@
     "logoDomain": null,
     "category": "agent skills",
     "verdict": "watching",
-    "note": "A single MCP and CLI connection to 82 providers and 471 capabilities across research, finance, code, government data, and more.",
+    "description": "One MCP connection to 82 data providers",
+    "note": "Saved, not tried yet. 471 capabilities across 82 providers.",
     "status_date": "2026-09-22"
   },
   {
@@ -808,7 +892,8 @@
     "url": "https://www.monaco.com/",
     "category": "business ops",
     "verdict": "watching",
-    "note": "An AI-native revenue platform that combines TAM building, outbound, interaction capture, and pipeline management, with agents handling follow-ups and record updates.",
+    "description": "AI-native revenue platform for startups",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-22"
   },
   {
@@ -817,7 +902,8 @@
     "url": "https://brilliant.design/",
     "category": "design",
     "verdict": "watching",
-    "note": "An editable vector design canvas where Claude Code, Cursor, Codex, and other MCP agents can create and refine real designs.",
+    "description": "Vector design app with MCP agent access",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-23"
   },
   {
@@ -826,7 +912,8 @@
     "url": "https://www.diabrowser.com/",
     "category": "web access",
     "verdict": "watching",
-    "note": "An AI-native work browser that turns context into decks, links tabs to tools like GitHub and Notion, and keeps work and personal profiles separate.",
+    "description": "AI-native browser for work",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-23"
   },
   {
@@ -836,7 +923,8 @@
     "repo": "https://github.com/Lex-Inc/roughdraft",
     "category": "unsorted",
     "verdict": "watching",
-    "note": "A local-first Markdown editor for reviewing files with AI agents, with inline comments and suggested changes stored directly in the file.",
+    "description": "Local-first Markdown reviewer with inline comments",
+    "note": "Saved, not tried yet.",
     "status_date": "2026-09-23"
   }
 ]

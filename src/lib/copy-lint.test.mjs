@@ -5,8 +5,8 @@
  * shipped) must not appear anywhere in `src/`. Em dashes must not appear in
  * site-authored copy: the text of `.astro` templates, string literals in `.ts`,
  * and `.md` content. Comments, `<style>` blocks and `src/data/` are exempt:
- * comments are not copy, and the data notes are dated verdicts fixed on touch
- * (VET-234).
+ * comments are not copy, and the data is checked where it is parsed (tool
+ * descriptions and notes by `lib/tool-copy.ts`, VET-234).
  */
 import test from "node:test";
 import assert from "node:assert/strict";
