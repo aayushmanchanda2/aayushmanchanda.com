@@ -1,4 +1,12 @@
-import { createHash } from "node:crypto";
+/** FNV-1a, 32-bit: a spread-out number for a string, no crypto needed. */
+function hash(text: string): number {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < text.length; i++) {
+    h ^= text.charCodeAt(i);
+    h = Math.imul(h, 0x01000193);
+  }
+  return h >>> 0;
+}
 
 /**
  * Up to `count` of the other entries, in an order that looks random and is the
@@ -15,13 +23,10 @@ export function readNext<T extends { id: string }>(
   entries: readonly T[],
   count = 5,
 ): T[] {
-  const rank = (entry: T) =>
-    createHash("sha1").update(`${slug}\n${entry.id}`).digest("hex");
-
   return entries
     .filter((entry) => entry.id !== slug)
-    .map((entry) => ({ entry, key: rank(entry) }))
-    .sort((a, b) => (a.key < b.key ? -1 : 1))
+    .map((entry) => ({ entry, key: hash(`${slug}\n${entry.id}`) }))
+    .sort((a, b) => a.key - b.key)
     .slice(0, count)
     .map(({ entry }) => entry);
 }
