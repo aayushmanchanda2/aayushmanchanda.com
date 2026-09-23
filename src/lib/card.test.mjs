@@ -122,7 +122,7 @@ test("the card reaches for nothing outside this origin", () => {
   ]) {
     assert.ok(
       !/https?:\/\//.test(code(read(name))),
-      `${name} names an outside host. /privacy is built on there being one, and it is logo.dev.`,
+      `${name} names an outside host. /privacy names every outside host, and a post card is not one of them.`,
     );
   }
 });

@@ -13,15 +13,15 @@
  * agree today are eight chances to disagree the first time the rule changes.
  * The rule itself is unchanged.
  *
- * `linkLabel` and `faviconUrl` live here too. They used to sit in `lib/tools.ts`
- * because /tools was the first page to need them, which meant /experiments and
+ * `linkLabel` lives here too. They used to sit in `lib/tools.ts`
+ * because /tools was the first page to need it, which meant /experiments and
  * /notes imported a tools module to render a link that has nothing to do with a
- * tool. They are about URLs, not about verdicts.
+ * tool. It is about URLs, not about verdicts.
  *
  * `githubRepo` and `markFor` arrived for the same reason. A /tools entry now
  * carries two links — the product's own site and the repository it is built in
  * — and the two questions that split are "is this link a repository" and "what
- * do we draw in the 16px square beside the name". Both are about URLs.
+ * do we draw in the square beside the name".
  */
 
 /*
@@ -31,6 +31,9 @@
  * The rule this file now owns — what counts as a GitHub repository URL — is
  * shared with the publish pipeline, so it has to be testable outside a bundler.
  */
+import { existsSync } from "node:fs";
+import path from "node:path";
+
 import { absolute } from "./site.ts";
 
 /**
@@ -72,26 +75,6 @@ export function linkLabel(url: string): string {
   return `${parsed.hostname.replace(/^www\./, "")}${path}${parsed.search}`;
 }
 
-/**
- * logo.dev logo service. The only third-party host the site touches, and
- * /privacy names it as exactly that — changing this host requires changing
- * that page in the same commit, or the privacy page lies about which third
- * party sees a reader's IP.
- *
- * No `onerror` fallback: logo.dev answers every request with an image and
- * falls back to a generated monogram for a domain it does not know (verified
- * against a nonsense domain). The `pk_` half of a logo.dev key pair is meant
- * to ship in public HTML, so it belongs here rather than in an env var that
- * would buy no secrecy.
- *
- * `size=128`: the /tools grid draws the mark at 40px, which is 80 device
- * pixels at 2x, and 64 was being upscaled.
- */
-export function faviconUrl(url: string): string {
-  const host = new URL(url).hostname.replace(/^www\./, "");
-  return `https://img.logo.dev/${encodeURIComponent(host)}?token=pk_YsFOVGNeRx6b1C0u0e0yTw&size=128&format=webp`;
-}
-
 /* ---------------------------------------------------------------------------
    GitHub repositories
    --------------------------------------------------------------------------- */
@@ -115,7 +98,7 @@ const GITHUB_NAME = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
  * `github.com/block`, `github.com/block/buzz/tree/main` and
  * `gist.github.com/...` are not. The `.git` suffix a clone URL carries is
  * dropped, and so is a trailing slash, because both name the same repository
- * as the bare form and a favicon and a link label should not depend on which
+ * as the bare form and an icon and a link label should not depend on which
  * spelling was pasted.
  */
 export function githubRepo(url: string): string | null {
@@ -149,41 +132,42 @@ export function repoOwner(url: string): string {
 }
 
 /* ---------------------------------------------------------------------------
-   The 16px mark beside an entry
+   The app icon beside an entry
    --------------------------------------------------------------------------- */
 
 /**
- * What to draw in the little square: a real logo, or a letter.
+ * What to draw in the squircle: the tool's own icon, or a letter.
  *
  * `letter` is allowed to be `""` — a name with no letter or digit anywhere in
- * it has no initial to show — and the caller renders the same empty square it
- * always did rather than branching a third time.
+ * it has no initial to show — and `AppIcon.astro` renders the same empty tile
+ * rather than branching a third time.
  */
 export type Mark =
   | { kind: "logo"; src: string }
   | { kind: "initial"; letter: string };
 
-/** The first character worth printing, capitalised by `ToolList.astro › .row__mark--initial` at render time. */
+/** The first character worth printing, capitalised by `AppIcon.astro` at render time. */
 const FIRST_GLYPH = /[\p{L}\p{N}]/u;
 
 /**
- * The mark for one entry, in one place, because /tools draws it twice.
+ * The mark for one entry: `public/icons/<slug>.webp` when the pipeline fetched
+ * one (`pipeline/icon.mjs`), the initial when it did not.
  *
- * **There is deliberately no GitHub branch here, and that is a privacy
- * decision rather than an oversight.** A repository-only row could show its
- * owner's avatar from `github.com/{owner}.png`, which would be better identity
- * than a letter for the two or three rows owned by a company. It is not worth
- * what it costs: that URL redirects to `avatars.githubusercontent.com`, so it
- * is two new third-party hosts, not one; most of the owners here are
- * individuals, whose avatar is a photograph of a stranger's face at 16px or a
- * generated identicon, which is not identity at all; and /privacy's "The one
- * outside request" is a claim the whole page is built around. A crisp, true,
- * checkable promise is worth more than seven small pictures. If that trade is
- * ever revisited, the branch goes here and /privacy is edited in the same
- * commit — see `faviconUrl` above for the rule that governs it.
+ * The check is a file on disk at build time, so a page never makes a request
+ * to anyone but this domain for a mark. That is the claim /privacy makes, and
+ * an image host added here means editing that page in the same commit.
+ *
+ * **There is deliberately no GitHub avatar anywhere in this path.** A
+ * repository-only row could show `github.com/{owner}.png`; most owners here are
+ * individuals, whose avatar is a stranger's face or a generated identicon,
+ * which is not identity. `pipeline/icon.mjs` refuses GitHub image hosts for the
+ * same reason, so a repo-only tool has an icon only when its repository names a
+ * homepage of its own.
  */
-export function markFor(entry: { name: string; url: string | null }): Mark {
-  if (entry.url !== null) return { kind: "logo", src: faviconUrl(entry.url) };
+export function markFor(entry: { slug: string; name: string }): Mark {
+  if (existsSync(path.join(process.cwd(), "public", "icons", `${entry.slug}.webp`))) {
+    return { kind: "logo", src: `/icons/${entry.slug}.webp` };
+  }
 
   const letter = [...entry.name].find((glyph) => FIRST_GLYPH.test(glyph)) ?? "";
   return { kind: "initial", letter };

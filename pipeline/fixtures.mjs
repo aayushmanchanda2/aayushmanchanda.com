@@ -269,6 +269,31 @@ export function fakeThumb({ fail } = {}) {
   return { calls, mediaCalls, captureThumb, captureMedia };
 }
 
+/**
+ * A stand-in for `icon.mjs › fetchIcon`: records the call and writes a file,
+ * or throws `fail` to prove an icon can never cost a tool its publish.
+ *
+ * @param {object} [options]
+ * @param {string} [options.fail]
+ */
+export function fakeIcon({ fail } = {}) {
+  /** @type {{ slug: string, url: string | null, dir: string }[]} */
+  const calls = [];
+
+  /** @type {typeof import("./icon.mjs").fetchIcon} */
+  async function fetchIcon({ slug, url, dir }) {
+    calls.push({ slug, url, dir });
+    if (fail !== undefined) throw new Error(fail);
+
+    await mkdir(dir, { recursive: true });
+    const file = path.join(dir, `${slug}.webp`);
+    await writeFile(file, `icon:${slug}`);
+    return file;
+  }
+
+  return { calls, fetchIcon };
+}
+
 /* ---------------------------------------------------------------------------
    Firecrawl, in a literal
    --------------------------------------------------------------------------- */
@@ -439,6 +464,7 @@ export function fakeFirecrawlShot({ palette = FIRECRAWL_PALETTE } = {}) {
  * @param {ReturnType<typeof fakeCapture>} [wiring.capture]
  * @param {ReturnType<typeof fakeFirecrawlShot>} [wiring.fallback] The second-chance shot.
  * @param {ReturnType<typeof fakeThumb>} [wiring.thumb] The video poster frame.
+ * @param {ReturnType<typeof fakeIcon>} [wiring.icon] A new tool's app icon.
  * @param {ReturnType<typeof fakeFirecrawl>["client"]} [wiring.firecrawl]
  * @param {ReturnType<typeof recorder>} wiring.out
  */
@@ -448,6 +474,7 @@ export function deps({
   capture = fakeCapture(),
   fallback = fakeFirecrawlShot(),
   thumb = fakeThumb(),
+  icon = fakeIcon(),
   firecrawl,
   out,
 }) {
@@ -457,6 +484,7 @@ export function deps({
     captureWithFirecrawl: fallback.captureWithFirecrawl,
     captureThumb: thumb.captureThumb,
     captureMedia: thumb.captureMedia,
+    fetchIcon: icon.fetchIcon,
     makeFirecrawl: firecrawl === undefined ? firecrawlFrom : () => firecrawl,
     env: { RAINDROP_TOKEN: "test-token" },
     now: () => new Date("2026-08-26T10:00:00.000Z"),
