@@ -17,10 +17,12 @@
  * about it, and the source. That is a catalogue card, which is a real thing to
  * be, and every filter on it goes somewhere.
  *
- * The anatomy is still the /tools entry page, which is the save.design shape: a
- * strip of metadata whose values are filter links, whatever the entry actually
- * carries in the middle, and the source at the foot. The external link lives
- * down there because a reader decides first and leaves second.
+ * Since VET-231 it is briOS's list-detail: the whole library in a 350px pane
+ * beside the entry (`LibraryPane.astro`, in `Base.astro`'s `pane` slot), one
+ * pane under 48rem. The header is his detail header: the title, the domain
+ * with ↗ as the one way out, then a strip of metadata whose values are filter
+ * links. The domain moved out of the strip and the source line left the foot:
+ * both were that same link out, and the filters stay on /library.
  *
  * The middle is four optional blocks and they stack in the order a reader
  * wants them: the thing itself first when the site has it (the post's own
@@ -39,6 +41,7 @@ import DigestBlocks from "../../components/DigestBlocks.astro";
 import DraftBlock from "../../components/DraftBlock.astro";
 import EntryLink from "../../components/EntryLink.astro";
 import EntryNav from "../../components/EntryNav.astro";
+import LibraryPane from "../../components/LibraryPane.astro";
 import KindChip from "../../components/KindChip.astro";
 import PostBody from "../../components/PostBody.astro";
 import TagChips from "../../components/TagChips.astro";
@@ -46,9 +49,7 @@ import TweetCard from "../../components/TweetCard.astro";
 import VideoFacade from "../../components/VideoFacade.astro";
 import VoiceBlocks from "../../components/VoiceBlocks.astro";
 import XEmbeds from "../../components/XEmbeds.astro";
-import { linkLabel } from "../../lib/links";
 import { library } from "../../lib/library";
-import { routeSlug } from "../../lib/parse";
 import { libraryJsonLd } from "../../lib/schema";
 import { formatDay } from "../../lib/date";
 
@@ -104,9 +105,19 @@ const description =
   description={description}
   jsonLd={jsonLd}
 >
+  <LibraryPane slot="pane" entries={library} current={entry.slug} />
 
   <header>
-    <h1 class="page-title page-title--entry">{entry.title}</h1>
+    {/*
+      A post's title is its own words cut short, and the whole post is right
+      below, so it stops at two lines. Every other title renders whole.
+    */}
+    <h1 class:list={["page-title page-title--entry", entry.post && "title--post"]}>
+      {entry.title}
+    </h1>
+    <p class="out">
+      <EntryLink class="ext" href={entry.url}>{entry.domain}</EntryLink>
+    </p>
 
     {/*
       A `ul`, so the facts are separate items to anything reading the page out
@@ -132,9 +143,6 @@ const description =
         <a class="strip__chip" href={`/library/kind/${entry.kind}`}>
           <KindChip kind={entry.kind} />
         </a>
-      </li>
-      <li class="strip__item">
-        <a href={`/library/domain/${routeSlug(entry.domain)}`}>{entry.domain}</a>
       </li>
       <li class="strip__item">
         Saved <time datetime={entry.saved_date}>{formatDay(entry.saved_date)}</time>
@@ -199,17 +207,6 @@ const description =
     in the box above, in the third person, where it is labelled as such.
   */}
   <VoiceBlocks why={entry.why} />
-
-  {/*
-    The way out, prominent by being the only full link on the page. At the
-    foot rather than in the masthead because whatever is above is the decision
-    and this is what the decision is about — a reader who got their answer
-    leaves through here, and one who did not was never going to.
-  */}
-  <p class="source">
-    <span class="source__label mono">Source</span>
-    <EntryLink class="ext" href={entry.url}>{linkLabel(entry.url)}</EntryLink>
-  </p>
 
   {/*
     The hint row is the keyboard legend and the links themselves — EntryNav
@@ -288,36 +285,6 @@ const description =
     content: none;
   }
 
-  /* Quiet by default and accent on hover — navigation furniture, deliberately
-     outside the bold-and-underlined treatment prose links get in global.css.
-     `:not(.strip__chip)` because the kind anchor is a box, not a word: an
-     underline under a tinted chip would draw a second line across the row.
-     `:not(.tag)` for the same reason one level along — a tag is an outlined
-     box painted by `styles/chip.css`, and an underline would be a second
-     line inside it. */
-  .strip a:not(.strip__chip):not(.tag) {
-    /* --text-secondary, never the strip's --text-tertiary: a quiet anchor inside a metadata
-       container states its own ink (design.md §4, the ink floor). */
-    color: var(--text-secondary);
-    text-decoration-line: underline;
-    text-decoration-color: var(--hairline-strong);
-    text-underline-offset: 0.25em;
-    transition-property: color, text-decoration-color;
-    /* `--dur`, not the `--dur-fast` a list row takes. The one thing the
-       thebridge reference transfers to this page whole: its hovers are 150 to
-       300ms fades, long enough to read as a state settling rather than a light
-       switching, and 220ms is the house token inside that band. A row in a list
-       of forty wants the fast one — the pointer is crossing it, not resting on
-       it — and a metadata strip on the page you have stopped on does not. */
-    transition-duration: var(--dur);
-    transition-timing-function: var(--ease);
-  }
-
-  .strip a:not(.strip__chip):not(.tag):hover {
-    color: var(--accent);
-    text-decoration-color: var(--accent);
-  }
-
   /* the chip does the talking; the anchor only carries the target */
   .strip__chip {
     position: relative;
@@ -350,21 +317,33 @@ const description =
     opacity: 0.75;
   }
 
-  /* --- the source line ------------------------------------------------------ */
+  /* --- the header ---------------------------------------------------------- */
 
-  .source {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.25rem 0.6rem;
-    margin-top: 2.5rem;
-    padding-top: 1.1rem;
-    border-top: 1px solid var(--hairline);
-    /* a URL has no spaces to break at, so it must be allowed to break anywhere */
+  /* The detail header's second line: the domain, linked out, 8px under the
+     title so the two read as one group. briOS sets it tertiary; here it is a
+     control, so --text-secondary (design.md §4, the ink floor). */
+  .out {
+    margin-top: 0.5rem;
     overflow-wrap: anywhere;
   }
 
-  .source__label {
-    color: var(--text-tertiary);
+  .out :global(a) {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition-property: color;
+    transition-duration: var(--dur);
+    transition-timing-function: var(--ease);
+  }
+
+  .out :global(a:hover) {
+    color: var(--accent);
+  }
+
+  .title--post {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
   }
 </style>

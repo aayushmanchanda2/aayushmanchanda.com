@@ -13,7 +13,7 @@
  * exactly what proved the point: the row, its CSS and its key handler were one
  * page's scoped block, and a copy in the second page would have been ninety
  * lines held in step by nothing. Escape closes to the section index, ← and →
- * walk the entries in the order the section renders them, wrapping; the caller
+ * (or k and j) walk the entries in the order the section renders them, wrapping; the caller
  * decides the ring, this file only reads it.
  */
 
@@ -146,7 +146,7 @@ const hints: Hint[] = [
 
 <script>
   /**
-   * The three keys, and which hint each one presses.
+   * The keys, and which hint each one presses.
    *
    * The destinations are not in here on purpose. They are read off the anchors
    * in the hint row, which means the legend a reader can see and the behaviour
@@ -157,6 +157,9 @@ const hints: Hint[] = [
     Escape: "close",
     ArrowLeft: "prev",
     ArrowRight: "next",
+    // Vim-style aliases, briOS's: j down the list, k up it (VET-231).
+    j: "next",
+    k: "prev",
   };
 
   const nav = document.querySelector<HTMLElement>("[data-entry-nav]");
@@ -165,6 +168,8 @@ const hints: Hint[] = [
     document.addEventListener("keydown", (event) => {
       // Already handled by something closer to the action, or mid-IME.
       if (event.defaultPrevented || event.isComposing) return;
+      // A held key would fire a navigation per repeat while the page unloads.
+      if (event.repeat) return;
       // A modifier means the reader is asking the browser for something —
       // Cmd+Left is Back, and taking that over would be a hijack.
       if (event.metaKey || event.ctrlKey || event.altKey || event.shiftKey) return;

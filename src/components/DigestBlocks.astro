@@ -33,32 +33,31 @@ const { digest } = Astro.props;
 <div class="digest">
   <section class="digest__block">
     <h2 class="digest__label mono">{DIGEST_LABELS.bullets}</h2>
-    <ul class="digest__bullets">
+    <ul class="digest__bullets prose">
       {digest.bullets.map((bullet) => <li class="digest__bullet">{bullet}</li>)}
     </ul>
   </section>
 
   <section class="digest__block">
     <h2 class="digest__label mono">{DIGEST_LABELS.verdict}</h2>
-    <p class="digest__body">{digest.verdict}</p>
+    <p class="digest__body prose">{digest.verdict}</p>
   </section>
 
   <section class="digest__block">
     <h2 class="digest__label mono">{DIGEST_LABELS.why}</h2>
-    <p class="digest__body">{digest.why}</p>
+    <p class="digest__body prose">{digest.why}</p>
   </section>
 </div>
 
 <style>
-  /* Measured against VoiceBlocks, which is the other "label over muted
-     prose" surface on an entry page: same gaps, same 62ch, same label voice.
-     Two blocks that read as siblings must not be two typographic systems. */
+  /* Measured against VoiceBlocks, the other "label over prose" surface on an
+     entry page: same gaps, same label voice, and the body is `.prose`
+     (`styles/prose.css`) in both, the note page's reading type (VET-231). */
   .digest {
     margin-top: 2.5rem;
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    max-width: 62ch;
   }
 
   .digest__label {
@@ -69,9 +68,6 @@ const { digest } = Astro.props;
 
   .digest__body {
     margin-top: 0.5rem;
-    font-size: 1rem;
-    line-height: 1.7;
-    color: var(--text-secondary);
   }
 
   /* A real list, marked as one: these are claims from the piece, and the
@@ -81,24 +77,10 @@ const { digest } = Astro.props;
     margin-top: 0.5rem;
     padding-left: 1.1rem;
     list-style: disc;
-    display: flex;
-    flex-direction: column;
-    gap: 0.55rem;
-  }
-
-  .digest__bullet {
-    font-size: 1rem;
-    line-height: 1.7;
-    color: var(--text-secondary);
   }
 
   .digest__bullet::marker {
     color: var(--text-tertiary);
   }
 
-  @media (max-width: 599px) {
-    .digest {
-      max-width: none;
-    }
-  }
 </style>

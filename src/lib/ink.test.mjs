@@ -112,7 +112,7 @@ const FLOORS = [
   ["pages/experiments.astro", ".row__links :global(.row__link) {"],
   ["components/EntryNav.astro", ".hints__row {"],
   ["pages/tools/[slug].astro", ".source :global(.source__repo) {"],
-  ["pages/library/[slug].astro", ".strip a:not(.strip__chip):not(.tag) {"],
+  ["pages/library/[slug].astro", ".out :global(a) {"],
   ["pages/404.astro", ".agents {"],
   ["styles/palette.css", ".palette__empty {"],
   ["pages/sites.astro", ".collections a {"],

@@ -146,6 +146,8 @@ const clocks = [
   { label: "New Delhi", tz: "Asia/Kolkata" },
 ];
 
+const hasPane = Astro.slots.has("pane");
+
 const pathname = Astro.url.pathname;
 const year = new Date().getFullYear();
 
@@ -363,6 +365,15 @@ const markdownVariant = variant === null ? null : absolute(variant);
     </header>
     <CommandPalette />
 
+    {/*
+      A page with a `pane` slot (only /library/<slug>) gets briOS's list-detail
+      shape: the pane on the left with its own scroll, the shell beside it as
+      the detail, and the document still the detail's scroller, so the bar,
+      the footer and a phone's address bar behave as on every other page. The
+      pane hides itself under 48rem of this container (`LibraryPane.astro`).
+    */}
+    <div class={hasPane ? "split" : undefined}>
+    <slot name="pane" />
     <div class="shell" data-mnav-inert>
       <main class:list={["shell__main", wide && "shell__main--wide"]} id="main">
         <slot />
@@ -471,6 +482,7 @@ const markdownVariant = variant === null ? null : absolute(variant);
         <p class="foot__legal mono">&copy; <span class="tabular-nums">{year}</span> Aayush Manchanda</p>
       </footer>
     </div>
+    </div>
 
     <script>
       // The dual-city footer clocks. Each `data-clock` carries its own IANA
@@ -551,6 +563,16 @@ const markdownVariant = variant === null ? null : absolute(variant);
         .bar__search {
           display: none;
         }
+      }
+
+      .split {
+        container: split / inline-size;
+        display: flex;
+      }
+
+      .split > .shell {
+        flex: 1;
+        min-width: 0;
       }
 
       /* One centred column under the bar. */

@@ -1,0 +1,169 @@
+{
+  "base": "http://localhost:4329/",
+  "label": "vet-231-extra",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-22-vet-231-extra",
+  "at": "2026-09-23T03:38:42.725Z",
+  "shots": [
+    {
+      "route": "/library/one-of-the-best-write-ups-i-have-seen-on-getting-hermes-agen",
+      "url": "http://localhost:4329/library/one-of-the-best-write-ups-i-have-seen-on-getting-hermes-agen",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "library_one_of_the_best_write_ups_i_have_seen_on_getting_hermes_agen-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "one of the best write-ups I have seen on",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "30px",
+            "font-weight": "700",
+            "letter-spacing": "-0.6px",
+            "line-height": "36px"
+          }
+        ],
+        ".voice__body": []
+      },
+      "thirdPartyHosts": [
+        "platform.twitter.com",
+        "syndication.twitter.com"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools/firecrawl",
+      "url": "http://localhost:4329/tools/firecrawl",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "tools_firecrawl-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Firecrawl",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "30px",
+            "font-weight": "700",
+            "letter-spacing": "-0.6px",
+            "line-height": "36px"
+          }
+        ],
+        ".voice__body": [
+          {
+            "text": "When the job is to get the content, not ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "Its X postprocessor is the only reliable",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "npx -y firecrawl-cli@latest",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/one-of-the-best-write-ups-i-have-seen-on-getting-hermes-agen",
+      "url": "http://localhost:4329/library/one-of-the-best-write-ups-i-have-seen-on-getting-hermes-agen",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library_one_of_the_best_write_ups_i_have_seen_on_getting_hermes_agen-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "one of the best write-ups I have seen on",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "40px",
+            "font-weight": "700",
+            "letter-spacing": "-0.8px",
+            "line-height": "48px"
+          }
+        ],
+        ".voice__body": []
+      },
+      "thirdPartyHosts": [
+        "platform.twitter.com",
+        "syndication.twitter.com"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools/firecrawl",
+      "url": "http://localhost:4329/tools/firecrawl",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "tools_firecrawl-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Firecrawl",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "40px",
+            "font-weight": "700",
+            "letter-spacing": "-0.8px",
+            "line-height": "48px"
+          }
+        ],
+        ".voice__body": [
+          {
+            "text": "When the job is to get the content, not ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "Its X postprocessor is the only reliable",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "npx -y firecrawl-cli@latest",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}

@@ -193,7 +193,7 @@ test("the page holds the whole post, at a measure somebody can read", () => {
 
   assert.match(
     code(source),
-    /<p class="post__text">\{post\.text\}<\/p>/,
+    /<p class="post__text prose">\{post\.text\}<\/p>/,
     "the page clips the post. The card already cut it at 700 code points and pointed here for the rest; a second cut leaves the whole thing nowhere.",
   );
   assert.ok(
@@ -201,9 +201,9 @@ test("the page holds the whole post, at a measure somebody can read", () => {
     "a budget or a clamp reached the detail page. Both are the card's answer to a card's problem.",
   );
   assert.match(
-    source,
-    /max-width: 65ch/,
-    "the post lost its reading measure. Thirty-one thousand characters across a full column is a line nobody tracks.",
+    read("styles/prose.css"),
+    /\.prose \{[^}]*max-width: 40rem;/,
+    "the post lost its reading measure (`.prose`, VET-231). Thirty-one thousand characters across a full column is a line nobody tracks.",
   );
 
   // Named by size rather than by slug, so this keeps meaning something as the

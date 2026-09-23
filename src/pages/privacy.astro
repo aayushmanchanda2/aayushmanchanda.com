@@ -12,8 +12,10 @@
  *
  * The storage paragraph is the same rule applied a second time. This page used
  * to say the site "writes nothing to local storage", which stopped being true
- * the moment the theme toggle shipped, so it now names the one key instead.
- * Anything that reaches for `localStorage` has to come back and edit this.
+ * the moment the theme toggle shipped, so it now names each key instead: the
+ * theme, the /tools view (VET-227) and the library list's scroll in session
+ * storage (VET-231, `lib/library-pane.ts`). Anything that reaches for
+ * `localStorage` or `sessionStorage` has to come back and edit this.
  *
  * The takedown paragraph is the third. It used to end "That is the only contact
  * route on this site", which stopped being true the moment /contact shipped, so
@@ -155,12 +157,19 @@ import { NEWSLETTER_ACTION } from "../lib/site";
         reading a page here does not tell a font CDN that you were reading it.
       </p>
       <p>
-        It writes one thing to local storage, and only after you ask it to: the
-        theme. If you press the theme button in the footer, the site saves the
-        word <em>light</em>, <em>dark</em> or <em>system</em> so the next page
-        you open is the colour you picked. That is the whole entry. It never
+        It writes two things to local storage, and only after you ask it to.
+        If you press the theme button in the footer, the site saves the word
+        <em>light</em>, <em>dark</em> or <em>system</em> so the next page you
+        open is the colour you picked. If you switch <a
+          href="/tools">/tools</a> between list and grid, it saves which one.
+        Until you press one of them, nothing goes in local storage.
+      </p>
+      <p>
+        One number goes in session storage, which your browser drops when you
+        close the tab: how far you scrolled the list beside a library entry, so
+        moving to the next entry does not throw you back to the top. None of it
         leaves your browser, nothing reads it but this site, and clearing your
-        site data forgets it. Until you press it, nothing is stored at all.
+        site data forgets it.
       </p>
       <p>
         That covers what this site stores. It does not cover what X stores

@@ -1,0 +1,1645 @@
+{
+  "base": "http://localhost:4329/",
+  "label": "vet-231",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-22-vet-231",
+  "at": "2026-09-23T03:37:44.340Z",
+  "shots": [
+    {
+      "route": "/library",
+      "url": "http://localhost:4329/library",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "library-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Library",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "36px",
+            "font-weight": "700",
+            "letter-spacing": "-0.9px",
+            "line-height": "37.8px"
+          }
+        ],
+        ".out a": [],
+        ".pane b": [],
+        ".pane small": [],
+        ".pane a > span": [],
+        ".prose": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/benln-post",
+      "url": "http://localhost:4329/library/benln-post",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "library_benln_post-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "A post from @benln",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "30px",
+            "font-weight": "700",
+            "letter-spacing": "-0.6px",
+            "line-height": "36px"
+          }
+        ],
+        ".out a": [
+          {
+            "text": "x.com",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".pane b": [
+          {
+            "text": "Prompt in Claude Tag \"Recreate Market St",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          },
+          {
+            "text": "Have you seen any of the launches below ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          },
+          {
+            "text": "Introducing DigitalOcean Managed Agents",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          }
+        ],
+        ".pane small": [
+          {
+            "text": "x.compost",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "x.compost",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "digitalocean.comarticle",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          }
+        ],
+        ".pane a > span": [
+          {
+            "text": "DigitalOcean introduces a managed platfo",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "Kun Chen builds and ships a full-stack i",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "Sharif Shameem argues that avoiding brie",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          }
+        ],
+        ".prose": [
+          {
+            "text": "Most early-stage startups are focused on",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [
+        "platform.twitter.com",
+        "syndication.twitter.com"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/how-gumclaw-works",
+      "url": "http://localhost:4329/library/how-gumclaw-works",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "library_how_gumclaw_works-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "How Gumclaw Works",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "30px",
+            "font-weight": "700",
+            "letter-spacing": "-0.6px",
+            "line-height": "36px"
+          }
+        ],
+        ".out a": [
+          {
+            "text": "gumclaw.github.io",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".pane b": [
+          {
+            "text": "Prompt in Claude Tag \"Recreate Market St",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          },
+          {
+            "text": "Have you seen any of the launches below ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          },
+          {
+            "text": "Introducing DigitalOcean Managed Agents",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          }
+        ],
+        ".pane small": [
+          {
+            "text": "x.compost",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "x.compost",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "digitalocean.comarticle",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          }
+        ],
+        ".pane a > span": [
+          {
+            "text": "DigitalOcean introduces a managed platfo",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "Kun Chen builds and ships a full-stack i",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "Sharif Shameem argues that avoiding brie",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          }
+        ],
+        ".prose": [
+          {
+            "text": "Written by the agent, not about it: Gumc",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "Read now: this is the setup my own agent",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "Two rules are worth stealing straight in",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/philosopher-ceo-kareem-amin",
+      "url": "http://localhost:4329/library/philosopher-ceo-kareem-amin",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "library_philosopher_ceo_kareem_amin-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "The Philosopher CEO | Clay Co-Founder Ka",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "30px",
+            "font-weight": "700",
+            "letter-spacing": "-0.6px",
+            "line-height": "36px"
+          }
+        ],
+        ".out a": [
+          {
+            "text": "youtube.com",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".pane b": [
+          {
+            "text": "Prompt in Claude Tag \"Recreate Market St",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          },
+          {
+            "text": "Have you seen any of the launches below ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          },
+          {
+            "text": "Introducing DigitalOcean Managed Agents",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          }
+        ],
+        ".pane small": [
+          {
+            "text": "x.compost",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "x.compost",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "digitalocean.comarticle",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          }
+        ],
+        ".pane a > span": [
+          {
+            "text": "DigitalOcean introduces a managed platfo",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "Kun Chen builds and ships a full-stack i",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "Sharif Shameem argues that avoiding brie",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          }
+        ],
+        ".prose": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library",
+      "url": "http://localhost:4329/library",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Library",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "56px",
+            "font-weight": "700",
+            "letter-spacing": "-1.4px",
+            "line-height": "58.8px"
+          }
+        ],
+        ".out a": [],
+        ".pane b": [],
+        ".pane small": [],
+        ".pane a > span": [],
+        ".prose": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/benln-post",
+      "url": "http://localhost:4329/library/benln-post",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library_benln_post-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "A post from @benln",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "40px",
+            "font-weight": "700",
+            "letter-spacing": "-0.8px",
+            "line-height": "48px"
+          }
+        ],
+        ".out a": [
+          {
+            "text": "x.com",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".pane b": [
+          {
+            "text": "Prompt in Claude Tag \"Recreate Market St",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          },
+          {
+            "text": "Have you seen any of the launches below ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          },
+          {
+            "text": "Introducing DigitalOcean Managed Agents",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          }
+        ],
+        ".pane small": [
+          {
+            "text": "x.compost",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "x.compost",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "digitalocean.comarticle",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          }
+        ],
+        ".pane a > span": [
+          {
+            "text": "DigitalOcean introduces a managed platfo",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "Kun Chen builds and ships a full-stack i",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "Sharif Shameem argues that avoiding brie",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          }
+        ],
+        ".prose": [
+          {
+            "text": "Most early-stage startups are focused on",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [
+        "platform.twitter.com",
+        "syndication.twitter.com"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/how-gumclaw-works",
+      "url": "http://localhost:4329/library/how-gumclaw-works",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library_how_gumclaw_works-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "How Gumclaw Works",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "40px",
+            "font-weight": "700",
+            "letter-spacing": "-0.8px",
+            "line-height": "48px"
+          }
+        ],
+        ".out a": [
+          {
+            "text": "gumclaw.github.io",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".pane b": [
+          {
+            "text": "Prompt in Claude Tag \"Recreate Market St",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          },
+          {
+            "text": "Have you seen any of the launches below ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          },
+          {
+            "text": "Introducing DigitalOcean Managed Agents",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          }
+        ],
+        ".pane small": [
+          {
+            "text": "x.compost",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "x.compost",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "digitalocean.comarticle",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          }
+        ],
+        ".pane a > span": [
+          {
+            "text": "DigitalOcean introduces a managed platfo",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "Kun Chen builds and ships a full-stack i",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "Sharif Shameem argues that avoiding brie",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          }
+        ],
+        ".prose": [
+          {
+            "text": "Written by the agent, not about it: Gumc",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "Read now: this is the setup my own agent",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "Two rules are worth stealing straight in",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/philosopher-ceo-kareem-amin",
+      "url": "http://localhost:4329/library/philosopher-ceo-kareem-amin",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library_philosopher_ceo_kareem_amin-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "The Philosopher CEO | Clay Co-Founder Ka",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "40px",
+            "font-weight": "700",
+            "letter-spacing": "-0.8px",
+            "line-height": "48px"
+          }
+        ],
+        ".out a": [
+          {
+            "text": "youtube.com",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".pane b": [
+          {
+            "text": "Prompt in Claude Tag \"Recreate Market St",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          },
+          {
+            "text": "Have you seen any of the launches below ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          },
+          {
+            "text": "Introducing DigitalOcean Managed Agents",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          }
+        ],
+        ".pane small": [
+          {
+            "text": "x.compost",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "x.compost",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "digitalocean.comarticle",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          }
+        ],
+        ".pane a > span": [
+          {
+            "text": "DigitalOcean introduces a managed platfo",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "Kun Chen builds and ships a full-stack i",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "Sharif Shameem argues that avoiding brie",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          }
+        ],
+        ".prose": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library",
+      "url": "http://localhost:4329/library",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "library-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Library",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "36px",
+            "font-weight": "700",
+            "letter-spacing": "-0.9px",
+            "line-height": "37.8px"
+          }
+        ],
+        ".out a": [],
+        ".pane b": [],
+        ".pane small": [],
+        ".pane a > span": [],
+        ".prose": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/benln-post",
+      "url": "http://localhost:4329/library/benln-post",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "library_benln_post-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "A post from @benln",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "30px",
+            "font-weight": "700",
+            "letter-spacing": "-0.6px",
+            "line-height": "36px"
+          }
+        ],
+        ".out a": [
+          {
+            "text": "x.com",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".pane b": [
+          {
+            "text": "Prompt in Claude Tag \"Recreate Market St",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          },
+          {
+            "text": "Have you seen any of the launches below ",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          },
+          {
+            "text": "Introducing DigitalOcean Managed Agents",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          }
+        ],
+        ".pane small": [
+          {
+            "text": "x.compost",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "x.compost",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "digitalocean.comarticle",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          }
+        ],
+        ".pane a > span": [
+          {
+            "text": "DigitalOcean introduces a managed platfo",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "Kun Chen builds and ships a full-stack i",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "Sharif Shameem argues that avoiding brie",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          }
+        ],
+        ".prose": [
+          {
+            "text": "Most early-stage startups are focused on",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [
+        "platform.twitter.com",
+        "syndication.twitter.com"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/how-gumclaw-works",
+      "url": "http://localhost:4329/library/how-gumclaw-works",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "library_how_gumclaw_works-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "How Gumclaw Works",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "30px",
+            "font-weight": "700",
+            "letter-spacing": "-0.6px",
+            "line-height": "36px"
+          }
+        ],
+        ".out a": [
+          {
+            "text": "gumclaw.github.io",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".pane b": [
+          {
+            "text": "Prompt in Claude Tag \"Recreate Market St",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          },
+          {
+            "text": "Have you seen any of the launches below ",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          },
+          {
+            "text": "Introducing DigitalOcean Managed Agents",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          }
+        ],
+        ".pane small": [
+          {
+            "text": "x.compost",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "x.compost",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "digitalocean.comarticle",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          }
+        ],
+        ".pane a > span": [
+          {
+            "text": "DigitalOcean introduces a managed platfo",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "Kun Chen builds and ships a full-stack i",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "Sharif Shameem argues that avoiding brie",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          }
+        ],
+        ".prose": [
+          {
+            "text": "Written by the agent, not about it: Gumc",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "Read now: this is the setup my own agent",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "Two rules are worth stealing straight in",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/philosopher-ceo-kareem-amin",
+      "url": "http://localhost:4329/library/philosopher-ceo-kareem-amin",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "library_philosopher_ceo_kareem_amin-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "The Philosopher CEO | Clay Co-Founder Ka",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "30px",
+            "font-weight": "700",
+            "letter-spacing": "-0.6px",
+            "line-height": "36px"
+          }
+        ],
+        ".out a": [
+          {
+            "text": "youtube.com",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".pane b": [
+          {
+            "text": "Prompt in Claude Tag \"Recreate Market St",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          },
+          {
+            "text": "Have you seen any of the launches below ",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          },
+          {
+            "text": "Introducing DigitalOcean Managed Agents",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          }
+        ],
+        ".pane small": [
+          {
+            "text": "x.compost",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "x.compost",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "digitalocean.comarticle",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          }
+        ],
+        ".pane a > span": [
+          {
+            "text": "DigitalOcean introduces a managed platfo",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "Kun Chen builds and ships a full-stack i",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "Sharif Shameem argues that avoiding brie",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          }
+        ],
+        ".prose": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library",
+      "url": "http://localhost:4329/library",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Library",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "56px",
+            "font-weight": "700",
+            "letter-spacing": "-1.4px",
+            "line-height": "58.8px"
+          }
+        ],
+        ".out a": [],
+        ".pane b": [],
+        ".pane small": [],
+        ".pane a > span": [],
+        ".prose": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/benln-post",
+      "url": "http://localhost:4329/library/benln-post",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library_benln_post-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "A post from @benln",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "40px",
+            "font-weight": "700",
+            "letter-spacing": "-0.8px",
+            "line-height": "48px"
+          }
+        ],
+        ".out a": [
+          {
+            "text": "x.com",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".pane b": [
+          {
+            "text": "Prompt in Claude Tag \"Recreate Market St",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          },
+          {
+            "text": "Have you seen any of the launches below ",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          },
+          {
+            "text": "Introducing DigitalOcean Managed Agents",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          }
+        ],
+        ".pane small": [
+          {
+            "text": "x.compost",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "x.compost",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "digitalocean.comarticle",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          }
+        ],
+        ".pane a > span": [
+          {
+            "text": "DigitalOcean introduces a managed platfo",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "Kun Chen builds and ships a full-stack i",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "Sharif Shameem argues that avoiding brie",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          }
+        ],
+        ".prose": [
+          {
+            "text": "Most early-stage startups are focused on",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [
+        "platform.twitter.com",
+        "syndication.twitter.com"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/how-gumclaw-works",
+      "url": "http://localhost:4329/library/how-gumclaw-works",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library_how_gumclaw_works-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "How Gumclaw Works",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "40px",
+            "font-weight": "700",
+            "letter-spacing": "-0.8px",
+            "line-height": "48px"
+          }
+        ],
+        ".out a": [
+          {
+            "text": "gumclaw.github.io",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".pane b": [
+          {
+            "text": "Prompt in Claude Tag \"Recreate Market St",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          },
+          {
+            "text": "Have you seen any of the launches below ",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          },
+          {
+            "text": "Introducing DigitalOcean Managed Agents",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          }
+        ],
+        ".pane small": [
+          {
+            "text": "x.compost",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "x.compost",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "digitalocean.comarticle",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          }
+        ],
+        ".pane a > span": [
+          {
+            "text": "DigitalOcean introduces a managed platfo",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "Kun Chen builds and ships a full-stack i",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "Sharif Shameem argues that avoiding brie",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          }
+        ],
+        ".prose": [
+          {
+            "text": "Written by the agent, not about it: Gumc",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "Read now: this is the setup my own agent",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "Two rules are worth stealing straight in",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/philosopher-ceo-kareem-amin",
+      "url": "http://localhost:4329/library/philosopher-ceo-kareem-amin",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library_philosopher_ceo_kareem_amin-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "The Philosopher CEO | Clay Co-Founder Ka",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "40px",
+            "font-weight": "700",
+            "letter-spacing": "-0.8px",
+            "line-height": "48px"
+          }
+        ],
+        ".out a": [
+          {
+            "text": "youtube.com",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".pane b": [
+          {
+            "text": "Prompt in Claude Tag \"Recreate Market St",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          },
+          {
+            "text": "Have you seen any of the launches below ",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          },
+          {
+            "text": "Introducing DigitalOcean Managed Agents",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "21px"
+          }
+        ],
+        ".pane small": [
+          {
+            "text": "x.compost",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "x.compost",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "digitalocean.comarticle",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          }
+        ],
+        ".pane a > span": [
+          {
+            "text": "DigitalOcean introduces a managed platfo",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "Kun Chen builds and ships a full-stack i",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          },
+          {
+            "text": "Sharif Shameem argues that avoiding brie",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "13px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "19.5px"
+          }
+        ],
+        ".prose": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}
