@@ -140,9 +140,10 @@ function filter({ search = "", current = 1, home, start, pathname = "/library/e1
     return li;
   });
   const segs = ["", "article", "post", "video"].map((kind) => Object.assign(el(), { dataset: { kindSet: kind } }));
+  const list = el();
   const boxes = ["agents", "design"].map((tag) => {
-    const box = Object.assign(el(), { value: tag, dataset: { label: tag }, count: el() });
-    box.parentNode = { querySelector: () => box.count };
+    const box = Object.assign(el(), { value: tag, dataset: { label: tag }, count: el(), disabled: false });
+    box.parentNode = { tag, querySelector: () => box.count, parentNode: list };
     return box;
   });
   const summary = el();
@@ -198,7 +199,7 @@ function filter({ search = "", current = 1, home, start, pathname = "/library/e1
     box.checked = on;
     box.on.change?.({});
   };
-  return { rows, month, segs, boxes, chips, summary, count, empty, nav, replaced, items, location: { ...location, replaced: replacedTo }, tick };
+  return { list, rows, month, segs, boxes, chips, summary, count, empty, nav, replaced, items, location: { ...location, replaced: replacedTo }, tick };
 }
 
 const shown = (/** @type {{ hidden: boolean }[]} */ rows) => rows.map((row) => (row.hidden ? 0 : 1)).join("");
@@ -319,4 +320,18 @@ test("a /library?kind= from before the split replaces to the kind's route", () =
   assert.deepEqual(legacy.location.replaced, ["/library/kind/post?tags=agents"]);
   const unknown = filter({ home: "/library", start: "", pathname: "/library", search: "?kind=podcast", current: -1 });
   assert.deepEqual(unknown.location.replaced, []);
+});
+
+test("a tag the filter leaves at 0 is disabled and sorted last; a ticked one never is", () => {
+  const pane = filter({ search: "?kind=article" });
+  assert.deepEqual(pane.boxes.map((box) => box.disabled), [false, true]);
+  assert.deepEqual(pane.list.children.slice(-2).map((label) => label.tag), ["agents", "design"]);
+
+  const cleared = filter({ search: "?tags=agents" });
+  cleared.tick("agents", false);
+  assert.deepEqual(cleared.boxes.map((box) => box.disabled), [false, false]);
+
+  const ticked = filter({ search: "?kind=article&tags=design" });
+  assert.deepEqual(ticked.boxes.map((box) => box.disabled), [true, false]);
+  assert.deepEqual(ticked.list.children.slice(-2).map((label) => label.tag), ["design", "agents"]);
 });

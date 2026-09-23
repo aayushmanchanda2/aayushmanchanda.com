@@ -46,7 +46,8 @@ addEventListener("pagehide",s);p.addEventListener("click",s);
  * rows (`[data-tag-chips]`) and the live counts; /library draws a second
  * toolbar for phones, where the pane is hidden. A month header counts the rows
  * the filter shows under it and hides at zero; a tag's count is how many shown
- * rows carry it. On an entry page a plain click on a segment filters in place
+ * rows carry it, and a tag at 0 (ticking it could only empty the list) is
+ * disabled and moved to the end of its list (R5-4). On an entry page a plain click on a segment filters in place
  * (a modifier click still opens the kind page). Every row link, and the hint
  * row's close, prev and next, carry the query, so the filter survives a click
  * to any entry; prev and next step to the nearest shown row, and the roving
@@ -90,7 +91,8 @@ li.dataset.tags.split(" ").forEach(function(t){per[t]=(per[t]||0)+1;});});
 if(stop)stop.tabIndex=0;
 heads.forEach(function(h){h.li.hidden=!h.n;h.li.querySelector("[data-month-count]").textContent=h.n;});
 segs.forEach(function(g){if(g.dataset.kindSet===f.kind)g.setAttribute("aria-current","true");else g.removeAttribute("aria-current");});
-boxes.forEach(function(b){b.checked=f.tags.indexOf(b.value)>=0;b.parentNode.querySelector("[data-tag-count]").textContent=per[b.value]||0;});
+boxes.forEach(function(b){var c=per[b.value]||0;b.checked=f.tags.indexOf(b.value)>=0;b.disabled=!c&&!b.checked;b.parentNode.querySelector("[data-tag-count]").textContent=c;});
+boxes.filter(function(b){return !b.disabled;}).concat(boxes.filter(function(b){return b.disabled;})).forEach(function(b){b.parentNode.parentNode.append(b.parentNode);});
 chips.forEach(function(box){box.replaceChildren();box.hidden=!f.tags.length;if(!f.tags.length)return;
 f.tags.forEach(function(t){chip(box,"tag",labels[t]+" \\u00d7","Remove tag "+labels[t],function(ts){return ts.filter(function(x){return x!==t;});});});
 chip(box,"tag tag--more","Clear","Clear tags",function(){return [];});});
