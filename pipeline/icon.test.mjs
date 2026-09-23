@@ -11,7 +11,7 @@ import test from "node:test";
 
 import sharp from "sharp";
 
-import { ICON_SIZE, REJECTED, fetchIcon, siteInReadme, siteOf } from "./icon.mjs";
+import { ICON_SIZE, REJECTED, fetchIcon, siteOf } from "./icon.mjs";
 
 /** @param {string} text */
 const b64 = (text) => Buffer.from(text).toString("base64");
@@ -113,14 +113,6 @@ test("a repo with no homepage falls back to the site its README names", async ()
   });
 
   assert.equal(await siteOf("https://github.com/block/buzz", fetch), "https://buzz.dev/docs");
-});
-
-test("siteInReadme: a labelled link wins, else the first plain header link; images, badges and GitHub never do", () => {
-  assert.equal(siteInReadme(`<p><a href="https://x.dev"><img src="logo.png"></a></p>\n<a href="https://kami.tw93.fun">Website</a>`), "https://kami.tw93.fun");
-  assert.equal(siteInReadme("# A\nSee [the app](https://agencyagents.app) and [site](https://github.com/a/b)."), "https://agencyagents.app");
-  assert.equal(siteInReadme("# A\n![shot](https://a.dev/s.png)\n## Links\n[Homepage](https://a.dev)"), null);
-  assert.equal(siteInReadme("# A\nby [@steveruizok](https://x.com/steveruizok), see [the site](https://a.dev)"), "https://a.dev");
-  assert.equal(siteInReadme(""), null);
 });
 
 test("a white-on-transparent icon that flattens to a blank square is passed over", async () => {

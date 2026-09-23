@@ -15,10 +15,9 @@
  *      than logo.dev's generated monogram
  *
  * **Never a GitHub owner's avatar.** A repository-only tool uses the repo's
- * own `homepage` field, else a site its README names (`siteInReadme`); any candidate on a GitHub host is
- * skipped, and so is logo.dev for a github.com or github.io site, which would
- * answer with the octocat. Most owners are individuals, and their avatar is a
- * stranger's face.
+ * `homepage`, else the site its README names (`readme-site.mjs`, strict). Any
+ * candidate on a GitHub host is skipped, and so is logo.dev for a github.com or
+ * github.io site (the octocat). Most owners are individuals: a stranger's face.
  *
  * Run directly to backfill every tool: `node pipeline/icon.mjs [--force]`.
  */
@@ -30,6 +29,7 @@ import { pathToFileURL } from "node:url";
 import sharp from "sharp";
 
 import { repoFrom } from "./entries.mjs";
+import { NOT_A_SITE, siteInReadme } from "./readme-site.mjs";
 import { resolvePaths } from "./state.mjs";
 import { backfill, describe, isRecord, writeAtomic } from "./util.mjs";
 
@@ -150,10 +150,7 @@ export async function candidatesFor(site, fetch) {
 
 /**
  * The repository's own `homepage`, or null. Never the owner's profile.
- *
- * @param {string} repo  `https://github.com/{owner}/{name}`
- * @param {Fetch} fetch
- * @returns {Promise<string | null>}
+ * @param {string} repo  `https://github.com/{owner}/{name}` @param {Fetch} fetch @returns {Promise<string | null>}
  */
 async function homepageOf(repo, fetch) {
   try {
@@ -168,65 +165,21 @@ async function homepageOf(repo, fetch) {
   }
 }
 
-const README_LINK = /(!?)\[([^\]]*)\]\((https?:\/\/[^)\s]+)\)|<a\b[^>]*?href="(https?:\/\/[^"]+)"[^>]*>([\s\S]*?)<\/a>/gi;
-const SITE_WORD = /\b(website|homepage|home|docs|documentation|site)\b/i;
-/** Badges and social profiles: a link to one is never the project's own site. */
-const NOT_A_SITE = /(^|\.)(shields\.io|badgen\.net|star-history\.com|x\.com|twitter\.com|linkedin\.com|youtube\.com|discord\.(gg|com))$/i;
-
-/**
- * The project's own site as its README names it, or null. Only the header
- * area (above the first `##`) is read: a link labelled website, homepage,
- * home, docs or site wins, else the first plain link. Images, badges and
- * GitHub hosts never count.
- * ponytail: label-and-position heuristic; a company or sponsor link in the
- * header can still win, so a human checks the name and url on the PR.
- *
- * @param {string} markdown
- * @returns {string | null}
- */
-export function siteInReadme(markdown) {
-  const header = (markdown.split(/^##\s/m)[0] ?? "").split("\n").slice(0, 60).join("\n");
-  const links = [...header.matchAll(README_LINK)]
-    .map((m) => ({ image: m[1] === "!", label: m[2] ?? m[5] ?? "", href: m[3] ?? m[4] ?? "" }))
-    .filter(({ image, label, href }) => {
-      if (image || /!\[|<img/i.test(label)) return false;
-      const host = safeHost(href);
-      return host !== "" && !GITHUB_IMAGE_HOST.test(host) && !NOT_A_SITE.test(host);
-    });
-  return (links.find((link) => SITE_WORD.test(link.label.replace(/<[^>]+>/g, ""))) ?? links[0])?.href ?? null;
-}
-
-/** @param {string} url */
-function safeHost(url) {
-  try {
-    return new URL(url).hostname;
-  } catch {
-    return "";
-  }
-}
-
-/**
- * The site a repository's README names, or null.
- *
- * @param {string} repo @param {Fetch} fetch
- * @returns {Promise<string | null>}
- */
+/** The site a repository's README names, or null. @param {string} repo @param {Fetch} fetch @returns {Promise<string | null>} */
 async function readmeSiteOf(repo, fetch) {
   try {
     const [owner, name] = new URL(repo).pathname.split("/").filter(Boolean);
     const json = await (await get(`https://api.github.com/repos/${owner}/${name}/readme`, fetch)).json();
     const content = isRecord(json) && typeof json["content"] === "string" ? json["content"] : "";
-    return siteInReadme(Buffer.from(content, "base64").toString("utf8"));
+    return siteInReadme(Buffer.from(content, "base64").toString("utf8"), owner ?? "", name ?? "");
   } catch {
     return null;
   }
 }
 
 /**
- * The tool's own site: the url itself, a repository's `homepage`, or the site
- * its README names. Null when
- * all that is left is a GitHub page. `preview.mjs` asks the same question, so a
- * hover card never pictures a repository either.
+ * The tool's own site: the url, a repo's `homepage`, or the site its README
+ * names. Null when all that is left is a GitHub page; `preview.mjs` asks too.
  *
  * @param {string | null} url  The product site, or a GitHub repository.
  * @param {Fetch} [fetch]
@@ -237,7 +190,7 @@ export async function siteOf(url, fetch = globalThis.fetch) {
   const site = repo === null ? url : ((await homepageOf(repo, fetch)) ?? (await readmeSiteOf(repo, fetch)));
   if (site === null) return null;
   const host = new URL(site).hostname;
-  return GITHUB_IMAGE_HOST.test(host) || NOT_A_SITE.test(host) ? null : site;
+  return NOT_A_SITE.test(host.replace(/^www\./, "")) ? null : site;
 }
 
 /**
