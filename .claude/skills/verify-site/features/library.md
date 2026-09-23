@@ -19,7 +19,7 @@
 
 - **Views.** `node .claude/skills/verify-site/shoot.mjs --base http://localhost:4329 --routes /library,/library/kind/article,/library/kind/post,/library/kind/video --label library --sizes 390x844,1280x800,1600x1000`.
 - **Kind switch.** A segment press on /library or a kind route follows its link to `/library/kind/<kind>` (tag carried as `?tag=`), and `/library?kind=<kind>` redirects there; on an entry page it filters the pane in place. Scripted proof: `qa/evidence/2026-09-23-qa-fix-b-library/check.mjs`.
-- **Detail.** `... --routes /library/a-post-from-ephraimakanmu --label library-detail --styles '.page-title--entry,.strip'`.
+- **Detail.** `... --routes /library/matt-van-horn-agent-first-workflow --label library-detail --styles '.page-title--entry,.strip'`.
 - **Hosts.** No page under /library lists a third-party host: posts are drawn from `/posts/`, videos load nothing until a play press on the detail page.
 
 ## Gotchas
