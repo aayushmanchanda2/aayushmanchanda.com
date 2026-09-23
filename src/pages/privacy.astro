@@ -3,12 +3,13 @@
  * /privacy — the trust anchor.
  *
  * Every claim on this page was checked against the code before it was written.
- * The tool icons used to be the first exception: `faviconUrl()` rendered a live
- * logo.dev URL on every tool page. Since VET-226 `pipeline/icon.mjs` fetches
- * each icon once and `lib/links.ts › markFor` only ever names `/icons/`, so the
- * exception is gone and the section below says so. A privacy page that is
- * wrong about its own build is worth less than no page at all; adding an image
- * host means changing this page in the same commit.
+ * The logos are the first exception, and they have moved twice. VET-226 made
+ * them self-hosted copies; VET-254 found logo.dev's free plan does not license
+ * copies, so `lib/links.ts › markFor` names img.logo.dev live again on /tools,
+ * a tool's page and /sites, with `strict-origin-when-cross-origin` so they get
+ * the site's address and not the page. The section below says exactly that. A
+ * privacy page that is wrong about its own build is worth less than no page at
+ * all; adding an image host means changing this page in the same commit.
  *
  * The storage paragraph is the same rule applied a second time. This page used
  * to say the site "writes nothing to local storage", which stopped being true
@@ -103,7 +104,7 @@ import { NEWSLETTER_ACTION } from "../lib/site";
     <h1 class="page-title">Privacy</h1>
     <p class="standfirst">
       Short version: this site is a pile of static files. It counts how many
-      people open a page, and it has no idea who any of them are. Two pages
+      people open a page, and it has no idea who any of them are. A few pages
       borrow something from somebody else, and they are named below.
     </p>
   </header>
@@ -190,16 +191,19 @@ import { NEWSLETTER_ACTION } from "../lib/site";
     <section>
       <h2 class="doc__head mono">The pages that load from somewhere else</h2>
       <p>
-        One thing here can load from somewhere else, and only when you press
-        it. Two others used to. The tool icons came from <a
-          href="https://logo.dev" rel="noopener nofollow">logo.dev</a>, a
-        logo API, so opening <a href="/tools">/tools</a> told them your IP
-        address. Now each icon is fetched once, when I add the tool, and saved
-        into this site&rsquo;s own files. Your browser gets it from this domain,
-        like everything else on those pages.
+        The logos on <a href="/tools">/tools</a>, on each tool&rsquo;s page
+        and on <a href="/sites">/sites</a> load from <a
+          href="https://logo.dev" rel="noopener nofollow">logo.dev</a>, a logo
+        API. Your browser asks them for each logo, so they see your IP address
+        and that the request came from this site. They don&rsquo;t see which
+        page you were on: those requests carry this site&rsquo;s address and
+        nothing after it. I&rsquo;d rather keep copies here, but their free plan
+        doesn&rsquo;t allow it. When logo.dev has no logo, the icon comes from
+        this domain or is a letter. Nothing else on those pages loads from
+        anyone else.
       </p>
       <p>
-        The saved posts were the other. For a while <a
+        The saved posts used to load from X. For a while <a
           href="/library/kind/post">the posts page</a> and each post&rsquo;s own
         page showed X&rsquo;s own embeds, which meant a script from X and a
         frame of theirs for every post. Now I draw each post here. The words,
@@ -224,9 +228,10 @@ import { NEWSLETTER_ACTION } from "../lib/site";
         nothing to load.
       </p>
       <p>
-        That is the whole list: YouTube, if you press play. Every other page
-        here loads nothing from anyone, and a new host would be named in this
-        section on the commit that added it.
+        That is the whole list: logo.dev on the tools and sites pages, and
+        YouTube if you press play. Every other page here loads nothing from
+        anyone, and a new host would be named in this section on the commit
+        that added it.
       </p>
     </section>
 

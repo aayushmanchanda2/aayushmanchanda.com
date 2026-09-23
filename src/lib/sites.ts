@@ -23,6 +23,7 @@ import { existsSync } from "node:fs";
 import path from "node:path";
 
 import { PUBLIC_DIR } from "./assets";
+import { readLogoDomain } from "./links";
 import type { SiteDesign } from "./design-md";
 import { parseDesign } from "./design-md";
 import type { Fail } from "./parse";
@@ -38,6 +39,8 @@ export interface Site {
   url: string;
   /** Hostname without `www.`; also the filter page (`/sites/domain/<slug>`). */
   domain: string;
+  /** logo.dev's domain when `domain` draws the wrong picture; null for none (`links.ts › logoDomain`). */
+  logoDomain?: string | null;
   /** ISO calendar date (YYYY-MM-DD) the site was saved. */
   saved_date: string;
   /**
@@ -316,6 +319,7 @@ export function parseSites(value: unknown): Site[] {
       // origins with a trailing slash and change what the page shows.
       url: readString(item, "url", where),
       domain: readDomain(item, url, where),
+      ...readLogoDomain(item, (problem) => fail(where, problem)),
       saved_date: readDate(item, "saved_date", where),
       shot: readShot(item, slug, where),
       palette: readPalette(item, where),

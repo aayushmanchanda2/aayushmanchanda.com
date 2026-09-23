@@ -10,9 +10,9 @@
  *     `url`. Both are build-stopping rules, so the shape they test for has to
  *     be exact: `github.com/block/buzz` is a repository, and a profile, a
  *     branch, a file, a gist and a release are not.
- *   - **`markFor`** draws a self-hosted icon or a letter, and nothing that
- *     loads from another host. /privacy says so, and the test below is the
- *     cheapest check that the sentence is still true of the code.
+ *   - **`markFor`** asks img.logo.dev live, falls back to a self-hosted icon
+ *     or a letter, and names no other host. /privacy says so, and the test
+ *     below is the cheapest check that the sentence is still true of the code.
  *
  * The last test in the file is the one that could not live anywhere else: the
  * publish pipeline keeps its own copy of the repository rule, because it runs
@@ -34,6 +34,7 @@ import {
   githubRepo,
   isInternal,
   linkLabel,
+  logoDomain,
   markFor,
   repoOwner,
 } from "./links.ts";
@@ -113,17 +114,27 @@ test("repoOwner is the owner, and empty for anything that is not a repo", () => 
    markFor
    --------------------------------------------------------------------------- */
 
-test("a tool with an icon in public/icons gets that file, from this domain", () => {
-  // `agent-reach` is repo-only with no homepage; `firecrawl` has a fetched icon.
-  assert.deepEqual(markFor({ slug: "firecrawl", name: "Firecrawl" }), {
-    kind: "logo",
-    src: "/icons/firecrawl.webp",
-  });
+test("a tool with a site asks logo.dev live, with its own icon as the fallback", () => {
+  const mark = markFor({ slug: "firecrawl", name: "Firecrawl", url: "https://www.firecrawl.dev/alexandria" });
+  assert.ok(mark.logo?.startsWith("https://img.logo.dev/firecrawl.dev?"), String(mark.logo));
+  assert.ok(mark.logo?.includes("fallback=404"), "an unknown domain errors instead of getting a made-up monogram");
+  assert.equal(mark.icon, "/icons/firecrawl.webp");
+  assert.equal(mark.letter, "F");
 });
 
-test("a tool with no icon file gets its own initial, not a GitHub avatar", () => {
-  const mark = markFor({ slug: "no-such-tool", name: "Papercuts" });
-  assert.deepEqual(mark, { kind: "initial", letter: "P" });
+test("a repo-only tool or a GitHub-hosted site never asks logo.dev: that is the octocat", () => {
+  assert.equal(markFor({ slug: "agent-reach", name: "Agent Reach", url: null }).logo, null);
+  assert.equal(logoDomain({ url: "https://deusdata.github.io/codebase-memory-mcp/" }), null);
+  assert.equal(logoDomain({ url: "https://github.com/gustavo-fior/craft" }), null);
+});
+
+test("logoDomain overrides the host, and null turns logo.dev off", () => {
+  assert.equal(logoDomain({ url: "https://tailscale.com/tailcat", logoDomain: "tailcat.dev" }), "tailcat.dev");
+  assert.equal(logoDomain({ url: "https://tailscale.com/tailcat", logoDomain: null }), null);
+});
+
+test("a tool with no icon file and no site gets its own initial, not a GitHub avatar", () => {
+  assert.deepEqual(markFor({ slug: "no-such-tool", name: "Papercuts" }), { logo: null, icon: null, letter: "P" });
 });
 
 test("the initial is the first letter or digit, whatever leads the name", () => {
@@ -132,17 +143,14 @@ test("the initial is the first letter or digit, whatever leads the name", () => 
    *
    * @param {string} name
    */
-  const initial = (name) => markFor({ slug: "no-such-tool", name });
+  const initial = (name) => markFor({ slug: "no-such-tool", name }).letter;
 
-  assert.deepEqual(initial("cloudflare-os"), { kind: "initial", letter: "c" });
-  assert.deepEqual(initial("improve (shadcn skill)"), { kind: "initial", letter: "i" });
-  assert.deepEqual(initial("  Buzz"), { kind: "initial", letter: "B" }, "leading space skipped");
-  assert.deepEqual(initial("1Password"), { kind: "initial", letter: "1" }, "a digit counts");
-  assert.deepEqual(initial("λ-calc"), { kind: "initial", letter: "λ" }, "any script, not Latin only");
-});
-
-test("a name with nothing to print asks for an empty square rather than throwing", () => {
-  assert.deepEqual(markFor({ slug: "no-such-tool", name: "!!!" }), { kind: "initial", letter: "" });
+  assert.equal(initial("cloudflare-os"), "c");
+  assert.equal(initial("improve (shadcn skill)"), "i");
+  assert.equal(initial("  Buzz"), "B", "leading space skipped");
+  assert.equal(initial("1Password"), "1", "a digit counts");
+  assert.equal(initial("λ-calc"), "λ", "any script, not Latin only");
+  assert.equal(initial("!!!"), "", "nothing to print is an empty square, not a throw");
 });
 
 /* ---------------------------------------------------------------------------
@@ -155,18 +163,15 @@ test("linkLabel drops the protocol noise and keeps the path", () => {
   assert.equal(linkLabel("https://eve.dev"), "eve.dev");
 });
 
-test("no mark the site can draw names another host", () => {
-  /*
-   * /privacy says the tool pages load nothing from anyone else. This is the
-   * cheapest check that the sentence is still true of the code: every mark is
-   * a path on this site or a letter.
-   */
+test("no mark names a host other than this site and img.logo.dev", () => {
+  /* /privacy names img.logo.dev as the one outside host on /tools and /sites. */
   for (const entry of [
-    { slug: "firecrawl", name: "Firecrawl" },
-    { slug: "agent-reach", name: "Agent Reach" },
+    { slug: "firecrawl", name: "Firecrawl", url: "https://firecrawl.dev" },
+    { slug: "agent-reach", name: "Agent Reach", url: null },
   ]) {
     const mark = markFor(entry);
-    if (mark.kind === "logo") assert.ok(mark.src.startsWith("/icons/"), entry.name);
+    if (mark.logo) assert.equal(new URL(mark.logo).hostname, "img.logo.dev", entry.name);
+    if (mark.icon) assert.ok(mark.icon.startsWith("/icons/"), entry.name);
   }
 });
 

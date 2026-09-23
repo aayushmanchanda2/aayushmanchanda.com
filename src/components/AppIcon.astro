@@ -1,12 +1,21 @@
 ---
 /**
- * AppIcon — a tool's mark, shaped like an app icon.
+ * AppIcon — an entry's mark, shaped like an app icon.
  *
- * The picture is `public/icons/<slug>.webp`, fetched once by
- * `pipeline/icon.mjs` and served from this domain; with no file, the tile is
- * the tool's initial on its identity hue (`lib/tags.ts › hueSlot`, keyed on the
- * slug, painted by `styles/chip.css › .monogram`). `lib/links.ts › markFor`
- * decides which.
+ * Three layers in one grid cell, top first (`lib/links.ts › markFor`):
+ *
+ *   1. the logo, live from img.logo.dev for the entry's domain (VET-254; the
+ *      free plan does not license keeping a copy, so /privacy names the host)
+ *   2. on that image's `error`, the same `<img>` swaps once to
+ *      `public/icons/<slug>.webp`, the site's own icon, when the pipeline kept one
+ *   3. when that fails too, or there was nothing to ask for, the image removes
+ *      itself and the letter underneath shows: the initial on its identity hue
+ *      (`lib/tags.ts › hueSlot`, painted by `styles/chip.css › .monogram`)
+ *
+ * The letter is always rendered, under the picture, so a failed logo costs no
+ * layout shift and no script beyond the one-line handler. `letter={false}` is
+ * for the tool page's Source line, where the name is already set right above:
+ * with no picture the tile hides instead.
  *
  * The shape is Apple's continuous corner: a superellipse, |x|^5 + |y|^5 = 1,
  * sampled at 96 points into one path (below) and applied as a mask so it scales
@@ -15,7 +24,7 @@
  * minus itself inset by a pixel, in `--outline`, so a white icon keeps an edge
  * on a white page.
  *
- * Always decorative: every caller sets the tool's name right beside it, so the
+ * Always decorative: every caller sets the entry's name right beside it, so the
  * tile is `aria-hidden` and the image `alt=""`.
  *
  * Size is the `size` prop, unless an ancestor sets `--icon-size`: the /tools
@@ -25,14 +34,19 @@ import { markFor } from "../lib/links";
 import { hueSlot } from "../lib/tags";
 
 interface Props {
-  tool: { slug: string; name: string };
+  tool: { slug: string; name: string; url?: string | null; logoDomain?: string | null };
   size: 16 | 28 | 32 | 40 | 60;
+  letter?: boolean;
   class?: string;
 }
 
 // `rest` carries the caller's scope attribute, so its `class` styles land here.
-const { tool, size, class: className, ...rest } = Astro.props;
+const { tool, size, letter = true, class: className, ...rest } = Astro.props;
 const mark = markFor(tool);
+const src = mark.logo ?? mark.icon;
+
+/* Swap to the self-hosted icon once, then give up to the letter. */
+const onerror = "this.dataset.fallback?(this.src=this.dataset.fallback,this.removeAttribute('data-fallback')):this.remove()";
 ---
 
 <span
@@ -42,20 +56,26 @@ const mark = markFor(tool);
   {...rest}
 >
   {
-    mark.kind === "logo" ? (
+    letter && (
+      <span class="app-icon__letter monogram" data-hue={hueSlot(tool.slug)}>
+        {mark.letter}
+      </span>
+    )
+  }
+  {
+    src && (
       <img
-        src={mark.src}
+        src={src}
+        data-fallback={mark.logo ? mark.icon : null}
         alt=""
         width={size}
         height={size}
         loading="lazy"
         decoding="async"
         draggable="false"
+        referrerpolicy="strict-origin-when-cross-origin"
+        onerror={onerror}
       />
-    ) : (
-      <span class="app-icon__letter monogram" data-hue={hueSlot(tool.slug)}>
-        {mark.letter}
-      </span>
     )
   }
 </span>
@@ -88,10 +108,23 @@ const mark = markFor(tool);
     pointer-events: none;
   }
 
+  /* Picture over letter, one cell. White under the picture: a transparent
+     logo reads the way a home screen flattens it, and the letter never shows
+     through. */
+  .app-icon > * {
+    grid-area: 1 / 1;
+  }
+
   .app-icon img {
     inline-size: 100%;
     block-size: 100%;
+    background: #fff;
     -webkit-user-drag: none;
+  }
+
+  /* `letter={false}` and no picture left: no empty ring. */
+  .app-icon:not(:has(img, .app-icon__letter)) {
+    display: none;
   }
 
   /* `.monogram` brings the hue fill and the ink; the box and the type scale

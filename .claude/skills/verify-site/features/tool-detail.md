@@ -21,7 +21,7 @@ Preconditions:
 
 - **Render.** `node .claude/skills/verify-site/shoot.mjs --base http://localhost:4329 --routes /tools/agent-browser --label tool-detail --styles '.page-title--entry,.strip,.standfirst,.source__label'`. `200` at all four variants; styles show the entry title scale.
 - **Chip navigation.** The verdict chip's target is its own route: include `/tools/verdict/<verdict>` from the strip in `--routes` and confirm `200`.
-- **Hosts.** `thirdPartyHosts` must be empty: the Source-line icon is `/icons/<slug>.webp` since VET-226.
+- **Hosts.** `thirdPartyHosts` is `img.logo.dev` at most: the Source-line icon is the live logo.dev logo, else `/icons/<slug>.webp` (VET-254).
 
 ## Gotchas
 

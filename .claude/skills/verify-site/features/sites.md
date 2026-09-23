@@ -24,7 +24,7 @@ Preconditions:
 
 - **Gallery.** `node .claude/skills/verify-site/shoot.mjs --base http://localhost:4329 --routes /sites,/sites/collection/portfolios --label sites --styles '.card__title,.card__domain,.collections a'`. Animations are disabled at capture, so cards are in their final state.
 - **Detail.** `... --routes /sites/about-brian-lovin --label sites-detail --styles '.page-title--entry,.shot__caption,.facts dt,.found__title' --full`. `.found__title` present proves the design panel rendered.
-- **Hosts.** Gallery and detail currently have empty `thirdPartyHosts` (screenshots are self-hosted).
+- **Hosts.** The list view's icons load from `img.logo.dev` (VET-254), so /sites shows exactly that one host once the list is on screen; detail pages show none (screenshots are self-hosted).
 
 ## Gotchas
 
