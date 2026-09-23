@@ -55,9 +55,14 @@ const read = (name) => readFileSync(path.join(SRC, name), "utf8");
  */
 const code = (source) => source.replace(/\{?\/\*[\s\S]*?\*\/\}?/g, "");
 
-/** The listings whose rows carry a note (or, on the /tools grid, a name), and the only files that clamp. */
+/**
+ * The listings whose rows carry a note (or, on the /tools grid, a name), and the
+ * only files that clamp. The hover card counts: it repeats a row's words, and a
+ * click on that row opens the page with all of them.
+ */
 const LISTINGS = [
   "components/LibraryList.astro",
+  "components/PreviewCard.astro",
   "components/ToolGrid.astro",
   "components/ToolList.astro",
   "components/VideoFacade.astro",

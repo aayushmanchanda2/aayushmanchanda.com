@@ -15,6 +15,8 @@
  * get caught; the whole page is one click away, on the details page.
  */
 import type { Site } from "../lib/sites";
+import { previewAttributes } from "../lib/preview-card";
+import PreviewCard from "./PreviewCard.astro";
 import ShotFrame from "./ShotFrame.astro";
 
 interface Props {
@@ -36,7 +38,11 @@ const EAGER_COUNT = 2;
 <ul class="grid">
   {
     sites.map((site, index) => (
-      <li class="card" style={`--stagger: ${Math.min(index, STAGGER_CAP)}`}>
+      <li
+        class="card"
+        style={`--stagger: ${Math.min(index, STAGGER_CAP)}`}
+        {...previewAttributes({ image: site.shot, name: site.title, domain: site.domain, note: site.like })}
+      >
         <a class="card__link press" href={`/sites/${site.slug}`}>
           <ShotFrame
             src={site.shot}
@@ -53,6 +59,8 @@ const EAGER_COUNT = 2;
     ))
   }
 </ul>
+
+<PreviewCard />
 
 <style>
   .grid {

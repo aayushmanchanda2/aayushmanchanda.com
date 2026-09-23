@@ -174,6 +174,14 @@ export function markFor(entry: { slug: string; name: string }): Mark {
 }
 
 /**
+ * A tool's hover preview, `public/previews/<slug>.webp` (`pipeline/preview.mjs`),
+ * or null for the icon-only card. A file on disk at build time, like `markFor`.
+ */
+export function previewFor(slug: string): string | null {
+  return existsSync(path.join(process.cwd(), "public", "previews", `${slug}.webp`)) ? `/previews/${slug}.webp` : null;
+}
+
+/**
  * A pathname in the one spelling the nav compares against.
  *
  * Astro builds directory-format routes, so the current page arrives as

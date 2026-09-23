@@ -1,0 +1,56 @@
+{
+  "base": "http://localhost:4329/",
+  "label": "vet-228-row-150",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-22-vet-228-row-150",
+  "at": "2026-09-23T03:08:47.001Z",
+  "shots": [
+    {
+      "route": "/tools",
+      "url": "http://localhost:4329/tools",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "tools-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "hoverCheck": {
+        "hover": "tbody tr[data-preview]",
+        "expect": ".preview-card[data-open]",
+        "waitMs": 150,
+        "visibleBefore": false,
+        "visibleAfter": false,
+        "png": "tools-1280-light-hover.png",
+        "pass": false
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4329/tools",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "tools-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "hoverCheck": {
+        "hover": "tbody tr[data-preview]",
+        "expect": ".preview-card[data-open]",
+        "waitMs": 150,
+        "visibleBefore": false,
+        "visibleAfter": false,
+        "png": "tools-1280-dark-hover.png",
+        "pass": false
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    }
+  ],
+  "failures": [
+    "tools-1280-light: hover tbody tr[data-preview] -> .preview-card[data-open] not visible",
+    "tools-1280-dark: hover tbody tr[data-preview] -> .preview-card[data-open] not visible"
+  ]
+}

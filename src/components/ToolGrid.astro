@@ -10,6 +10,7 @@
  * the rows, so the filters hide both and a sort orders both.
  */
 import AppIcon from "./AppIcon.astro";
+import PreviewCard from "./PreviewCard.astro";
 import type { Tool } from "../lib/tools";
 import { toolAttributes } from "../lib/tools";
 
@@ -32,6 +33,8 @@ const { tools } = Astro.props;
     ))
   }
 </ul>
+
+<PreviewCard />
 
 <style>
   .tiles {

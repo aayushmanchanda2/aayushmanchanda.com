@@ -5,6 +5,7 @@
 ## Sub-features
 
 - `sites-gallery` `ul.grid` of `li.card` > `a.card__link` with `.card__title`, `.card__domain`; cards stagger in (`--stagger`).
+- `sites-preview` each `li.card` carries `data-preview` (its `/shots` file) and the hover card opens over it; see `tools-index.md › tools-preview`.
 - `sites-filters` `nav.collections[aria-label="Filter sites by collection"]` links to `/sites/collection/<slug>`; `/sites/domain/<domain>`.
 - `sites-detail` `/sites/<slug>`: `figure.shot` (ShotFrame, `.shot__caption`), `[data-shot-actions]` with Copy/Download buttons (`aria-label="Copy the <title> screenshot to the clipboard"`, `"Download the <title> screenshot"`), `dl.facts`.
 - `sites-design-panel` `.found` (`.found__head`, `.found__title`, `.found__note`, `.found__md`) on sites with a captured `design`.

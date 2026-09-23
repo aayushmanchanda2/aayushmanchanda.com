@@ -1,0 +1,55 @@
+{
+  "base": "http://localhost:4329/",
+  "label": "vet-228-tile",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-22-vet-228-tile",
+  "at": "2026-09-23T03:08:48.994Z",
+  "shots": [
+    {
+      "route": "/tools",
+      "url": "http://localhost:4329/tools",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "tools-1280-light.png",
+      "status": 200,
+      "clicked": "[data-tools-view-set=\"grid\"]",
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "hoverCheck": {
+        "hover": ".tile[data-preview]",
+        "expect": ".preview-card[data-open]",
+        "waitMs": 400,
+        "visibleBefore": false,
+        "visibleAfter": true,
+        "png": "tools-1280-light-hover.png",
+        "pass": true
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4329/tools",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "tools-1280-dark.png",
+      "status": 200,
+      "clicked": "[data-tools-view-set=\"grid\"]",
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "hoverCheck": {
+        "hover": ".tile[data-preview]",
+        "expect": ".preview-card[data-open]",
+        "waitMs": 400,
+        "visibleBefore": false,
+        "visibleAfter": true,
+        "png": "tools-1280-dark-hover.png",
+        "pass": true
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}

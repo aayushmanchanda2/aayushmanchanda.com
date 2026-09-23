@@ -1,0 +1,41 @@
+{
+  "flip": {
+    "rowTop": 668.296875,
+    "cardBottom": 660.468017578125,
+    "side": "top",
+    "open": true,
+    "pass": true
+  },
+  "noLayoutShift": {
+    "before": [
+      6520,
+      290.796875
+    ],
+    "after": [
+      6520,
+      290.796875
+    ],
+    "pass": true
+  },
+  "trackX": {
+    "leftA": 174,
+    "leftB": 724,
+    "pass": true
+  },
+  "closeDelay": {
+    "openAt50ms": true,
+    "openAt250ms": false,
+    "pass": true
+  },
+  "keyboard": {
+    "focused": "row__link",
+    "openedOnFocus": true,
+    "closedOnEscape": true,
+    "pass": true
+  },
+  "touch": {
+    "gateMatches": false,
+    "cardNodeExists": false,
+    "pass": true
+  }
+}

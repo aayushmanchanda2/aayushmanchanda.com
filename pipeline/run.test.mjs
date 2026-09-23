@@ -28,6 +28,7 @@ import {
   fakeFirecrawl,
   fakeFirecrawlShot,
   fakeIcon,
+  fakePreview,
   fakeThumb,
   makeRepo,
   raindropServer,
@@ -151,12 +152,30 @@ test("a new tool fetches its app icon into public/icons, and only a tool does", 
     },
   });
   const icon = fakeIcon();
+  const preview = fakePreview();
   const out = recorder();
 
-  assert.equal(await run([], deps({ paths, server, icon, out })), 0);
+  assert.equal(await run([], deps({ paths, server, icon, preview, out })), 0);
 
   assert.deepEqual(icon.calls, [{ slug: "linear", url: "https://linear.app", dir: paths.iconsDir }]);
   assert.ok(await exists(path.join(paths.iconsDir, "linear.webp")));
+  assert.deepEqual(preview.calls, [{ slug: "linear", url: "https://linear.app", dir: paths.previewsDir }]);
+  assert.ok(await exists(path.join(paths.previewsDir, "linear.webp")));
+});
+
+test("a preview that will not capture costs the tool nothing: published, icon-only card", async (t) => {
+  const { paths } = await makeRepo(t);
+  const server = raindropServer({
+    ...NESTED,
+    raindrops: { [TOOLS_ID]: [bookmark(201, "https://linear.app", { title: "Linear" })] },
+  });
+  const out = recorder();
+
+  assert.equal(await run([], deps({ paths, server, preview: fakePreview({ fail: "bot wall" }), out })), 0);
+
+  assert.equal((await loadState(paths))["201"]?.kind, "published");
+  assert.ok(out.out.some((line) => line.startsWith("preview: linear") && line.includes("bot wall")));
+  assert.equal(out.summary, "published=1 failed=0 skipped=0 pending=0");
 });
 
 test("an icon that will not fetch costs the tool nothing: published, and the letter draws", async (t) => {

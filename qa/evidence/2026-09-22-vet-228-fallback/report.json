@@ -1,0 +1,31 @@
+{
+  "base": "http://localhost:4329/",
+  "label": "vet-228-fallback",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-22-vet-228-fallback",
+  "at": "2026-09-23T03:09:43.568Z",
+  "shots": [
+    {
+      "route": "/tools",
+      "url": "http://localhost:4329/tools",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "tools-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "hoverCheck": {
+        "hover": "tr[data-preview-name=\"claudex\"]",
+        "expect": ".preview-card[data-open][data-no-image]",
+        "waitMs": 400,
+        "visibleBefore": false,
+        "visibleAfter": true,
+        "png": "tools-1280-light-hover.png",
+        "pass": true
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}
