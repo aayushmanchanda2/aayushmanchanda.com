@@ -263,6 +263,12 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  /* A press is answered by the control's own :active, not a grey flash. */
+  -webkit-tap-highlight-color: transparent;
+  /* Thin and in the theme's own greys; `scrollbar-color` inherits, so every
+     inner scroller (a pane, the palette, a shot) gets it too. */
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-quaternary) transparent;
 }
 
 body {
@@ -359,6 +365,14 @@ canvas {
   display: block;
   max-width: 100%;
   height: auto;
+}
+
+/* An icon or logo is a picture of the name beside it: not text to select.
+   `AppIcon`, `Avatar` and a post's avatar also carry `draggable="false"`. */
+svg,
+img[draggable="false"] {
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 button {

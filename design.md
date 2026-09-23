@@ -414,6 +414,8 @@ Nothing is written to local storage until a press. `/privacy` names every key: t
 
 Both size refusals came up again on the post block in VET-114 and both were kept, which is what a ledger is for: a refusal that has to be re-argued every time it is inconvenient is not recorded, it is just deferred. The post block also stays **unseparated** — no hairline above it — because `DigestBlocks`, `VoiceBlocks` and `DraftBlock` all separate by top margin alone, and a fourth block on that page ruling itself off would be the only one.
 
+**Small details** (`styles/global.css › html`, VET-238). No tap highlight: a press is answered by the control's own `:active`. Scrollbars are thin and `--text-quaternary` on transparent, set once on `html` and inherited by every inner scroller. Every `svg` and every `img[draggable="false"]` (`AppIcon`, `Avatar`, a post's avatar) is `user-select: none`: an icon, a logo or a face is a picture of the name beside it, not text.
+
 **Focus.** `styles/global.css › :focus-visible` is 2px `--accent`, offset 3px, radius `--r-sm` (`--r-md` on a tag, whose ring follows its 8px box). It flips to `--accent-panel-ink` on the blue panel, and on the screenshot scroller the frame *is* the ring (`ShotFrame.astro › .scroller:focus-visible`). The palette input sets `outline: none` on purpose: it is the only focusable control in an open palette, so a permanent ring would be furniture rather than a signal, and the highlighted row is the cursor.
 
 ---
