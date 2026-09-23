@@ -12,7 +12,9 @@
  *
  * **A non-modal dialog** (`role="dialog"`, `aria-modal="false"`). The gallery
  * beside it stays visible and live: a click on another tile switches the
- * panel, a click on the gallery's empty canvas closes it, and nothing dims.
+ * panel, a click on the gallery's empty canvas closes it. On a desktop it
+ * lifts off the gallery with a layered shadow on its left edge and dims it
+ * by a few percent (QA phase 2, B3); the dim is a shadow, so it takes no clicks.
  * Modal semantics would hide that live half from a screen reader while a
  * pointer can still use it. Focus moves in on open and Tab wraps inside, so a
  * keyboard reader stays with what just opened; Escape (or the close button)
@@ -65,7 +67,7 @@ void SiteDetail;
     background: var(--bg);
     visibility: hidden;
     transform: translateX(100%);
-    transition-property: transform, visibility;
+    transition-property: transform, visibility, box-shadow;
     transition-duration: 0.22s;
     transition-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
   }
@@ -78,6 +80,18 @@ void SiteDetail;
 
   .panel:focus {
     outline: none;
+  }
+
+  /* Beside the gallery: two shadow layers off the left edge, then a spread
+     the size of the window, which is the dim. Under the bar (30) and the
+     mat (40), so only the gallery takes it. */
+  @media (width > 48rem) {
+    .panel[data-open] {
+      box-shadow:
+        -1px 0 3px var(--panel-shadow),
+        -12px 0 32px var(--panel-shadow),
+        0 0 0 100vmax var(--panel-dim);
+    }
   }
 
   @media (max-width: 48rem) {

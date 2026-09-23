@@ -22,7 +22,8 @@ export interface RowIcon {
   src?: string;
   fallback?: string;
   letter: string;
-  hue: number;
+  /** A person's identity hue (`lib/tags.ts › hueSlot`); a tool's or a site's letter tile has none. */
+  hue?: number;
 }
 
 /** A row with no picture draws one of these (`styles/kind-icon.css`). */

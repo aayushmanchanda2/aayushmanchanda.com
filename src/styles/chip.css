@@ -338,6 +338,15 @@
   background: hsl(var(--hue-h) var(--hue-s) var(--hue-l) / var(--monogram-tint));
 }
 
+/* A tool's or a site's letter tile (`AppIcon`, the palette's app rows) has
+   no identity hue (QA phase 2, B2): hues are for people, so a letter on a
+   tool is one neutral tile, surface-2 under tertiary ink, and a column of
+   them reads as a placeholder on purpose rather than as confetti. */
+.monogram:not([data-hue]) {
+  color: var(--text-tertiary);
+  background: var(--surface-2);
+}
+
 /* The dark tones, twice, for the reason written out at the top of the dark
    section in `global.css`: once for the OS preference (guarded so a pinned
    light theme wins over it) and once for a pinned dark theme. `theme.test.mjs`

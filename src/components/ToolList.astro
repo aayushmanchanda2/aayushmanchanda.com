@@ -12,6 +12,7 @@
  * verdict and category pages render their subset. Rows keep file order until a
  * header is pressed (`lib/tools-table.ts`).
  */
+import "../styles/table.css";
 import AppIcon from "./AppIcon.astro";
 import PreviewCard from "./PreviewCard.astro";
 import VerdictBadge from "./VerdictBadge.astro";
@@ -38,7 +39,7 @@ const ALL: { id: string; label: string; sort: SortKey | null }[] = [
 const COLUMNS = ALL.filter((column) => column.id !== drop);
 ---
 
-<table class="table">
+<table class="table dtable">
   <thead class="thead">
     <tr class="head">
       {
@@ -96,33 +97,9 @@ const COLUMNS = ALL.filter((column) => column.id !== drop);
 <PreviewCard />
 
 <style>
-  /* briOS's /stack, edge to edge: the table bleeds out of the shell's padding
-     and its outer cells pad back by `--page-pad`, so names meet the title. */
-  .table {
-    width: calc(100% + 2 * var(--page-pad));
-    margin-inline: calc(-1 * var(--page-pad));
-    table-layout: fixed;
-    border-collapse: collapse;
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-  }
+  /* The table itself is `styles/table.css › .dtable`, shared with /sites.
 
-  /* Sticky under the bar. A `box-shadow` draws the rule because a collapsed
-     border stays behind when a sticky cell moves. */
-  .th {
-    position: sticky;
-    top: calc(var(--frame) + var(--bar-h));
-    z-index: 1;
-    padding: 0 1rem 0 0;
-    background: var(--surface-2);
-    box-shadow: inset 0 -1px 0 var(--hairline);
-    color: var(--text-secondary);
-    font-weight: 500;
-    text-align: left;
-    white-space: nowrap;
-  }
-
-  /* The short columns take fixed widths at every size: inside the frame and
+     The short columns take fixed widths at every size: inside the frame and
      48px of side padding, a one-twelfth track (briOS's grid) is narrower than
      a date ("Aug 17, 2026" is 88px) until well past 1600px. Every cell ends in
      16px; the outer cells add `--page-pad`. */
@@ -130,9 +107,6 @@ const COLUMNS = ALL.filter((column) => column.id !== drop);
   .th--category { width: 9.5rem; }
   .th--verdict { width: 7.5rem; }
   .th--date { width: calc(6.75rem + var(--page-pad)); }
-
-  :is(.th, .cell):first-child { padding-left: var(--page-pad); }
-  :is(.th, .cell):last-child { padding-right: var(--page-pad); }
 
   /* A control: `--text-secondary` (the ink floor), 40px tall (the hit floor;
      briOS's header row is 36). */
@@ -154,55 +128,6 @@ const COLUMNS = ALL.filter((column) => column.id !== drop);
      header already says which way. */
   .th[aria-sort="ascending"] .sort__arrow::before { content: "\2191" / ""; }
   .th[aria-sort="descending"] .sort__arrow::before { content: "\2193" / ""; }
-
-  /* --- one tool ----------------------------------------------------------- */
-
-  /* Hover is instant (design.md §4). */
-  .row {
-    position: relative;
-  }
-
-  .row:hover { background: var(--surface-2); }
-
-  /* `py-3`, briOS's 12px, and a 16px gap to the next column. */
-  .cell {
-    padding: 0.75rem 1rem 0.75rem 0;
-    border-bottom: 1px solid var(--hairline);
-    vertical-align: middle;
-    color: var(--text-tertiary);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .row__name { display: flex; align-items: center; gap: 0.75rem; }
-
-  /* One line, briOS's `truncate font-medium`. */
-  .row__link {
-    min-width: 0;
-    overflow: hidden;
-    color: var(--text-primary);
-    font-weight: 500;
-    text-decoration: none;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  /* The stretched link: the row is the target, the anchor is the one tab stop,
-     and the focus ring goes round the row rather than round the name. */
-  .row__link::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: var(--r-lg);
-  }
-
-  .row__link:focus-visible { outline: none; }
-
-  .row__link:focus-visible::after {
-    outline: 2px solid var(--accent);
-    outline-offset: -2px;
-  }
 
   /* One line in tertiary, briOS's; the whole note is on the tool's page. */
   .row__desc {
