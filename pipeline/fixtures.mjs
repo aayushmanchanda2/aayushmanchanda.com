@@ -512,6 +512,8 @@ export function deps({
     captureMedia: thumb.captureMedia,
     fetchIcon: icon.fetchIcon,
     capturePreview: preview.capturePreview,
+    // Offline by default: a repo save keeps `url` null unless a test hands in a site.
+    siteOf: async () => null,
     makeFirecrawl: firecrawl === undefined ? firecrawlFrom : () => firecrawl,
     env: { RAINDROP_TOKEN: "test-token" },
     now: () => new Date("2026-08-26T10:00:00.000Z"),

@@ -58,8 +58,13 @@ calibrated so real quiet footers survive (the numbers and their anchors are in
 that file's comments). Firecrawl's fullPage screenshot renders the same
 document height, so it inherits the same tail and is not a way around this;
 the trim runs on both paths. Tools get
-an entry and no picture: category `unsorted`, verdict `watching`, note "Saved
-from Raindrop. Not tested yet." A GitHub link lands in `repo`, never `url`. Each
+an entry and no picture: category `unsorted` (shown as "new" on /tools, and a
+build warning until it is filed), verdict `watching`, note "Saved from Raindrop.
+Not tested yet." The name is the product, not the tab title
+(`pipeline/names.mjs › cleanName`, else the hostname). A GitHub link lands in
+`repo`, and `url` gets the repo's own site when it names one (its `homepage`,
+or a README link labelled website/docs/demo or on a host named after the repo
+or owner; `pipeline/readme-site.mjs`). Each
 run also commits `pipeline/state.json`: what published, what failed, how many
 attempts. Two steps run through [Firecrawl](https://firecrawl.dev) when the
 `FIRECRAWL_API_KEY` secret is set and skip silently when it is not: reading an

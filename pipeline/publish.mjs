@@ -27,7 +27,7 @@ import { POST_HOSTS, hostIsOneOf, readEntries, repoFrom, urlKey } from "./entrie
 import { firecrawlFrom, parsePost } from "./firecrawl.mjs";
 import { RaindropError, createClient, fetchBookmarks, resolveCollections } from "./raindrop.mjs";
 import { MAX_ATTEMPTS, SECTIONS, reconcile, resolvePaths } from "./state.mjs";
-import { fetchIcon } from "./icon.mjs";
+import { fetchIcon, siteOf } from "./icon.mjs";
 import { capturePreview } from "./preview.mjs";
 import { captureMedia, captureThumb } from "./thumb.mjs";
 import { describe } from "./util.mjs";
@@ -236,6 +236,7 @@ function baseDeps() {
     captureMedia,
     fetchIcon,
     capturePreview,
+    siteOf,
     /**
      * Firecrawl, or null. A function rather than a client so the decision is
      * made from the run's own `env` — a test that hands in a different
@@ -347,6 +348,7 @@ export async function run(argv = [], overrides = {}) {
       captureMedia: (input) => deps.captureMedia({ ...input, fetch: deps.fetch }),
       fetchIcon: (input) => deps.fetchIcon({ ...input, fetch: deps.fetch, log }),
       capturePreview: (input) => deps.capturePreview({ ...input, log }),
+      siteOf: (repo) => deps.siteOf(repo, deps.fetch),
     };
 
     /** @type {Summary} */

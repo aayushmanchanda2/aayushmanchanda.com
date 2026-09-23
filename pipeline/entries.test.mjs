@@ -351,6 +351,16 @@ test("the pipeline never invents a product site it was not given", () => {
   assert.notEqual(entry.repo, entry.url);
 });
 
+test("a new save is named for the product, not the tab title", () => {
+  const tool = (/** @type {string} */ title, /** @type {string} */ url) => buildToolEntry({ bookmark: bookmark({ title, url }), slug: "s", date: "2026-08-26" }).name;
+  assert.equal(tool("Voyage AI | Home", "https://voyageai.com"), "Voyage AI");
+  assert.equal(tool("On-device AI models and SDKs", "https://desertant.com"), "desertant.com");
+  assert.equal(tool("GitHub - block/buzz: agents at work together", "https://github.com/block/buzz"), "block/buzz");
+  assert.equal(tool("", "https://github.com/block/buzz"), "block/buzz");
+  const site = buildSiteEntry({ bookmark: bookmark({ title: "Arc from The Browser Company", url: "https://arc.net" }), slug: "arc", date: "2026-08-26", palette: [] });
+  assert.equal(site.title, "Arc");
+});
+
 test("a deep link is folded back to the repository it is inside", () => {
   // Somebody saving a project from its README on a phone saves the README.
   assert.equal(

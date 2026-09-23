@@ -49,5 +49,7 @@ test("a repository with no homepage of its own gets no preview, and no browser",
     assert.equal(got, null);
   }
   assert.equal(await capturePreview({ slug: "me", url: "https://github.com/block", dir, fetch: fetchWith({}) }), null);
-  assert.deepEqual(asked, ["https://api.github.com/repos/block/buzz", "https://api.github.com/repos/block/buzz"]);
+  // The repo record, then its README (no `content`, so no site), for each of the two.
+  const buzz = "https://api.github.com/repos/block/buzz";
+  assert.deepEqual(asked, [buzz, `${buzz}/readme`, buzz, `${buzz}/readme`]);
 });

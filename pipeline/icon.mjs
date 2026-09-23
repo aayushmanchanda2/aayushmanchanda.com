@@ -15,10 +15,9 @@
  *      than logo.dev's generated monogram
  *
  * **Never a GitHub owner's avatar.** A repository-only tool uses the repo's
- * own `homepage` field and nothing else; any candidate on a GitHub host is
- * skipped, and so is logo.dev for a github.com or github.io site, which would
- * answer with the octocat. Most owners are individuals, and their avatar is a
- * stranger's face.
+ * `homepage`, else the site its README names (`readme-site.mjs`, strict). Any
+ * candidate on a GitHub host is skipped, and so is logo.dev for a github.com or
+ * github.io site (the octocat). Most owners are individuals: a stranger's face.
  *
  * Run directly to backfill every tool: `node pipeline/icon.mjs [--force]`.
  */
@@ -30,6 +29,7 @@ import { pathToFileURL } from "node:url";
 import sharp from "sharp";
 
 import { repoFrom } from "./entries.mjs";
+import { NOT_A_SITE, siteInReadme } from "./readme-site.mjs";
 import { resolvePaths } from "./state.mjs";
 import { backfill, describe, isRecord, writeAtomic } from "./util.mjs";
 
@@ -150,10 +150,7 @@ export async function candidatesFor(site, fetch) {
 
 /**
  * The repository's own `homepage`, or null. Never the owner's profile.
- *
- * @param {string} repo  `https://github.com/{owner}/{name}`
- * @param {Fetch} fetch
- * @returns {Promise<string | null>}
+ * @param {string} repo  `https://github.com/{owner}/{name}` @param {Fetch} fetch @returns {Promise<string | null>}
  */
 async function homepageOf(repo, fetch) {
   try {
@@ -168,10 +165,21 @@ async function homepageOf(repo, fetch) {
   }
 }
 
+/** The site a repository's README names, or null. @param {string} repo @param {Fetch} fetch @returns {Promise<string | null>} */
+async function readmeSiteOf(repo, fetch) {
+  try {
+    const [owner, name] = new URL(repo).pathname.split("/").filter(Boolean);
+    const json = await (await get(`https://api.github.com/repos/${owner}/${name}/readme`, fetch)).json();
+    const content = isRecord(json) && typeof json["content"] === "string" ? json["content"] : "";
+    return siteInReadme(Buffer.from(content, "base64").toString("utf8"), owner ?? "", name ?? "");
+  } catch {
+    return null;
+  }
+}
+
 /**
- * The tool's own site: the url itself, or a repository's `homepage`. Null when
- * all that is left is a GitHub page. `preview.mjs` asks the same question, so a
- * hover card never pictures a repository either.
+ * The tool's own site: the url, a repo's `homepage`, or the site its README
+ * names. Null when all that is left is a GitHub page; `preview.mjs` asks too.
  *
  * @param {string | null} url  The product site, or a GitHub repository.
  * @param {Fetch} [fetch]
@@ -179,13 +187,15 @@ async function homepageOf(repo, fetch) {
  */
 export async function siteOf(url, fetch = globalThis.fetch) {
   const repo = url === null ? null : repoFrom(url);
-  const site = repo === null ? url : await homepageOf(repo, fetch);
-  return site === null || GITHUB_IMAGE_HOST.test(new URL(site).hostname) ? null : site;
+  const site = repo === null ? url : ((await homepageOf(repo, fetch)) ?? (await readmeSiteOf(repo, fetch)));
+  if (site === null) return null;
+  const host = new URL(site).hostname;
+  return NOT_A_SITE.test(host.replace(/^www\./, "")) ? null : site;
 }
 
 /**
  * Any image in, a 256px square WebP out — or null when the source is too small
- * to be anything but a blur. Transparent pixels land on white, the way a home
+ * to be anything but a blur, or flattens to one flat colour. Transparent pixels land on white, the way a home
  * screen flattens a touch icon, so a dark logo does not vanish in dark mode.
  *
  * @param {Buffer} bytes
@@ -200,11 +210,14 @@ export async function encodeIcon(bytes) {
   const image = vector
     ? sharp(bytes, { density: Math.min(2400, Math.ceil((72 * ICON_SIZE) / Math.max(edge, 1))) })
     : sharp(bytes);
-  return await image
+  const webp = await image
     .flatten({ background: "#ffffff" })
     .resize(ICON_SIZE, ICON_SIZE, { fit: "contain", background: "#ffffff" })
     .webp({ quality: 90 })
     .toBuffer();
+  // A white-on-transparent mark flattens to a blank square: no icon, try the next source.
+  const { channels } = await sharp(webp).stats();
+  return channels.every((c) => c.min === c.max) ? null : webp;
 }
 
 /** @param {string} url @param {Fetch} fetch */

@@ -273,13 +273,7 @@ a:hover {
    and underlining those would turn navigation into a paragraph of shouting.
    Those surfaces set their own `text-decoration: none` and are simply not
    matched here. `:not(.chip)` keeps a collection chip in a facts row out of it
-   for the same reason, and `:not(.source__repo)` keeps the quiet `repo` word at
-   the foot of a tool page out of it: that anchor is furniture by design (§5's
-   quiet pattern — inherit the colour, underline in --hairline-strong), and
-   `tools/[slug].astro` styles it as such but never resets the weight, so it was
-   shipping at 600 while looking like it had opted out. Structurally exempt, not
-   overridden — the page cannot un-bold it without becoming the override this
-   comment forbids.
+   for the same reason. Structurally exempt, not overridden.
 
    `.sheet p a` is the specimen sheet on /design, and it is the one entry scoped
    to the paragraph rather than to the container. That page's shell holds chips,
@@ -295,7 +289,7 @@ a:hover {
 .sheet p a,
 .standfirst a,
 .voice__body a,
-.source a:not(.source__repo),
+.source a,
 .fact dd a:not(.chip) {
   text-decoration-line: underline;
   text-decoration-thickness: 2px;

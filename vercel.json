@@ -27,6 +27,31 @@
       "status": 308,
       "headers": { "Location": "/$1/rss.xml" }
     },
+    {
+      "src": "^/tools/category/claude-skills/?$",
+      "status": 308,
+      "headers": { "Location": "/tools/category/agent-skills" }
+    },
+    {
+      "src": "^/tools/category/web-utility/?$",
+      "status": 308,
+      "headers": { "Location": "/tools/category/web-access" }
+    },
+    {
+      "src": "^/tools/category/desktop-utility/?$",
+      "status": 308,
+      "headers": { "Location": "/tools/category/personal-apps" }
+    },
+    {
+      "src": "^/tools/category/sandboxes/?$",
+      "status": 308,
+      "headers": { "Location": "/tools/category/agent-infra" }
+    },
+    {
+      "src": "^/tools/category/unsorted/?$",
+      "status": 308,
+      "headers": { "Location": "/tools" }
+    },
 
     {
       "src": "^/$",

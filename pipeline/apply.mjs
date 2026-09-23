@@ -111,6 +111,9 @@ import { describe, isRecord } from "./util.mjs";
  * @property {(input: { slug: string, url: string, dir: string }) => Promise<string | null>} capturePreview
  *   A new tool's 1200x630 hover preview into `dir`, or null for the icon-only
  *   card. Always bound, like the icon.
+ * @property {(repo: string) => Promise<string | null>} siteOf
+ *   A repository save's own site (`icon.mjs › siteOf`: the repo's homepage or
+ *   the site its README names), written to `url`. Null keeps `url` null.
  */
 
 /**
@@ -448,6 +451,9 @@ async function captureAndPublish(bookmark, attempts, ctx) {
         ? await readingFor(bookmark, slug, scratch, ctx)
         : { post: null, video: null, draft: null, why: null };
     const entry = buildEntry(section, { bookmark, slug, date: ctx.date, palette, design, reading });
+    if (section === "tools" && entry["url"] === null && typeof entry["repo"] === "string") {
+      entry["url"] = await ctx.siteOf(entry["repo"]);
+    }
 
     // The file is written before the in-memory list advances, so a failed write
     // leaves the run's view of the gallery matching what is on disk.
