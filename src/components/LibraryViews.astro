@@ -87,7 +87,7 @@ const more = [
         {more.map((section) => (
           <section class="mix__part" aria-labelledby={`mix-${section.kind}`}>
             <h2 class="mix__head mono" id={`mix-${section.kind}`}>
-              Latest {KIND_LABELS[section.kind].toLowerCase()}
+              <span>Latest {KIND_LABELS[section.kind].toLowerCase()}</span>
               <a href={`/library/kind/${section.kind}`}>All {section.total}</a>
             </h2>
             {section.kind === "post" ? <PostWall entries={section.entries} compact /> : <VideoGrid entries={section.entries} />}
