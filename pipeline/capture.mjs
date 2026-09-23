@@ -52,9 +52,12 @@ import {
   readChallengeProbe,
   shotLooksBlank,
 } from "./challenge.mjs";
+import { readDesign } from "./design.mjs";
 import { extractPalette } from "./palette.mjs";
 import { trimTrailingBlank } from "./trim.mjs";
 import { describe } from "./util.mjs";
+
+/** @typedef {import("./design.mjs").Design} Design */
 
 /** Desktop width, 1x. Retina would quadruple the bytes for no gallery gain. */
 const VIEWPORT = { width: 1440, height: 900 };
@@ -248,39 +251,82 @@ export async function scrollThroughPage(
  * @template T
  * @param {Promise<T>} work
  * @param {string} label
+ * @param {number} [ms]
  * @returns {Promise<T>}
  */
-function withDeadline(work, label) {
+export function withDeadline(work, label, ms = SHOT_TIMEOUT_MS) {
   /** @type {ReturnType<typeof setTimeout>} */
   let timer;
   const deadline = new Promise((_resolve, reject) => {
     timer = setTimeout(
-      () => reject(new ShotTimeout(`${label} exceeded ${SHOT_TIMEOUT_MS}ms`)),
-      SHOT_TIMEOUT_MS,
+      () => reject(new ShotTimeout(`${label} exceeded ${ms}ms`)),
+      ms,
     );
   });
   return Promise.race([work, deadline]).finally(() => clearTimeout(timer));
 }
 
+/** The browser context every shot is taken in. `backfill-design.mjs` reuses it. */
+export const CONTEXT_OPTIONS = {
+  // No `colorScheme`. Forcing one is what produced the old light/dark pair;
+  // leaving it alone is what makes the shot the site's own default rendering.
+  viewport: VIEWPORT,
+  deviceScaleFactor: DEVICE_SCALE_FACTOR,
+  // Sites that gate on motion preference should render their resting state:
+  // a shot taken mid-animation is a shot of nothing.
+  reducedMotion: /** @type {const} */ ("reduce"),
+};
+
 /**
- * One page, one PNG buffer of the whole scroll.
+ * Open `url` and bring it to rest: loaded, webfonts in, settled, checked for a
+ * bot wall, walked top to bottom and back. What a shot and a token read both
+ * need before they look at the page.
+ *
+ * @param {import("playwright").Page} page
+ * @param {string} url
+ * @param {string} slug   Only so a refusal names the entry it is about.
+ */
+export async function loadPage(page, url, slug) {
+  await page.goto(url, {
+    waitUntil: "load",
+    timeout: SHOT_TIMEOUT_MS,
+  });
+
+  // Webfonts swap in after `load`. Shooting before they land gives you a
+  // screenshot of the fallback stack, which is a screenshot of the wrong
+  // site. A page with no webfonts resolves this immediately.
+  await page.evaluate(() => document.fonts.ready);
+
+  await page.waitForTimeout(SETTLE_MS);
+
+  // Before the walk, not after. A wall has nothing to mount and no fold to
+  // scroll past, so walking one is seconds of the deadline spent on a page
+  // that is about to be thrown away — and after the settle, not before, so
+  // an interstitial that swaps itself for the real page has had its chance.
+  const challenge = matchChallenge(await readChallengeProbe(page));
+  if (challenge !== null) {
+    throw new CaptureBlockedError(
+      `${slug} answered with a bot wall, not the page: ${challenge.name} (${challenge.evidence})`,
+      { signature: challenge.name, evidence: challenge.evidence },
+    );
+  }
+
+  // Before the height is measured, not after: the walk is what mounts the
+  // lazy half of the page, and a page that mounts gets taller.
+  await scrollThroughPage(pageScroller(page));
+}
+
+/**
+ * One page: a PNG buffer of the whole scroll, and the tokens it is built from.
  *
  * @param {import("playwright").Browser} browser
  * @param {string} url
  * @param {(line: string) => void} log
  * @param {string} slug   Only so the clip notice names the entry it is about.
- * @returns {Promise<Buffer>}
+ * @returns {Promise<{ png: Buffer, design: Design | null }>}
  */
 async function shoot(browser, url, log, slug) {
-  const context = await browser.newContext({
-    // No `colorScheme`. Forcing one is what produced the old light/dark pair;
-    // leaving it alone is what makes the shot the site's own default rendering.
-    viewport: VIEWPORT,
-    deviceScaleFactor: DEVICE_SCALE_FACTOR,
-    // Sites that gate on motion preference should render their resting state:
-    // a shot taken mid-animation is a shot of nothing.
-    reducedMotion: "reduce",
-  });
+  const context = await browser.newContext(CONTEXT_OPTIONS);
 
   try {
     return await withDeadline(
@@ -288,33 +334,12 @@ async function shoot(browser, url, log, slug) {
         const page = await context.newPage();
         page.setDefaultTimeout(SHOT_TIMEOUT_MS);
 
-        await page.goto(url, {
-          waitUntil: "load",
-          timeout: SHOT_TIMEOUT_MS,
-        });
+        await loadPage(page, url, slug);
 
-        // Webfonts swap in after `load`. Shooting before they land gives you a
-        // screenshot of the fallback stack, which is a screenshot of the wrong
-        // site. A page with no webfonts resolves this immediately.
-        await page.evaluate(() => document.fonts.ready);
-
-        await page.waitForTimeout(SETTLE_MS);
-
-        // Before the walk, not after. A wall has nothing to mount and no fold to
-        // scroll past, so walking one is seconds of the deadline spent on a page
-        // that is about to be thrown away — and after the settle, not before, so
-        // an interstitial that swaps itself for the real page has had its chance.
-        const challenge = matchChallenge(await readChallengeProbe(page));
-        if (challenge !== null) {
-          throw new CaptureBlockedError(
-            `${slug} answered with a bot wall, not the page: ${challenge.name} (${challenge.evidence})`,
-            { signature: challenge.name, evidence: challenge.evidence },
-          );
-        }
-
-        // Before the height is measured, not after: the walk is what mounts the
-        // lazy half of the page, and a page that mounts gets taller.
-        await scrollThroughPage(pageScroller(page));
+        // After the walk, so lazy sections are mounted and counted; back at
+        // the top, so a sticky header is read in its resting state. Null on
+        // any failure: a shot never fails for want of tokens.
+        const design = await readDesign(page);
 
         const height = await page.evaluate(() => {
           const { body, documentElement: root } = document;
@@ -336,14 +361,15 @@ async function shoot(browser, url, log, slug) {
           // viewport, so it would silently hand back the top 900px and call it
           // a 12,000px capture — which looks like a working clip right up until
           // you open the file.
-          return await page.screenshot({
+          const png = await page.screenshot({
             type: "png",
             fullPage: true,
             clip: { x: 0, y: 0, width: VIEWPORT.width, height: MAX_SHOT_PX },
           });
+          return { png, design };
         }
 
-        return await page.screenshot({ type: "png", fullPage: true });
+        return { png: await page.screenshot({ type: "png", fullPage: true }), design };
       })(),
       `shot of ${url}`,
     );
@@ -450,8 +476,9 @@ async function finish(png, slug, outDir, log) {
  *   run: those lines go to stderr, outside the run log, so the one sentence
  *   explaining why an entry stops mid-page would land where nobody is reading.
  *   `apply.mjs` passes the run's own logger.
- * @returns {Promise<{ shot: string, palette: string[] }>}
- *   Absolute path of the file written, and its dominant colours.
+ * @returns {Promise<{ shot: string, palette: string[], design?: Design }>}
+ *   Absolute path of the file written, its dominant colours, and the tokens
+ *   read off the live page when `readDesign` found any.
  */
 export async function captureSite({
   url,
@@ -466,8 +493,9 @@ export async function captureSite({
   const browser = await chromium.launch({ headless: true });
 
   try {
-    const png = await shoot(browser, url, log, slug);
-    return await finish(png, slug, outDir, log);
+    const { png, design } = await shoot(browser, url, log, slug);
+    const done = await finish(png, slug, outDir, log);
+    return design === null ? done : { ...done, design };
   } finally {
     await browser.close();
   }
@@ -493,6 +521,9 @@ export async function captureSite({
  * no status to read; if it is served the same wall, the picture is all there is
  * to go on. `finish` below judges it exactly as it judges a local shot, and a
  * second chance that came back with a checkpoint fails rather than publishes.
+ *
+ * No DOM also means no `design`. An entry this path publishes keeps only its
+ * pixel palette, and /sites/<slug> renders the palette row for it.
  *
  * @param {object} options
  * @param {string} options.url

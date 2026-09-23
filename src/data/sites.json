@@ -14,6 +14,77 @@
       "#555555",
       "#919191"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "surface",
+          "hex": "#171717"
+        },
+        {
+          "name": "text",
+          "hex": "#171717"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "geistSans",
+          "fontSize": "32px",
+          "fontWeight": "600",
+          "lineHeight": "normal",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "geistSans",
+          "fontSize": "16px",
+          "fontWeight": "500",
+          "lineHeight": "normal",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "body",
+          "fontFamily": "geistSans",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "normal",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "7px",
+          "value": "7px"
+        },
+        {
+          "name": "13px",
+          "value": "13px"
+        },
+        {
+          "name": "26px",
+          "value": "26px"
+        },
+        {
+          "name": "13",
+          "value": "52px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "3px"
+        }
+      ]
+    },
     "collections": [
       "reference-libraries"
     ],
@@ -34,6 +105,97 @@
       "#4f4f50",
       "#53578a"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#09090b"
+        },
+        {
+          "name": "surface",
+          "hex": "#08080c"
+        },
+        {
+          "name": "text",
+          "hex": "#fafafa"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#a1a1aa"
+        },
+        {
+          "name": "border",
+          "hex": "#3f3f46"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Geist",
+          "fontSize": "42px",
+          "fontWeight": "400",
+          "lineHeight": "46.2px",
+          "letterSpacing": "-0.84px"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "GeistPixelSquare",
+          "fontSize": "30px",
+          "fontWeight": "400",
+          "lineHeight": "36px",
+          "letterSpacing": "-0.75px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "Geist",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "22.75px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "label",
+          "fontFamily": "Geist Mono",
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "lineHeight": "16px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "2px",
+          "value": "2px"
+        },
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "6px",
+          "value": "6px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "8",
+          "value": "32px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "4px"
+        },
+        {
+          "name": "card-2",
+          "value": "8px"
+        }
+      ]
+    },
     "collections": [
       "dark-by-default",
       "reference-libraries"
@@ -54,6 +216,60 @@
       "#737373",
       "#afb1b1"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#f7f7f7"
+        },
+        {
+          "name": "text",
+          "hex": "#737373"
+        }
+      ],
+      "type": [
+        {
+          "name": "heading",
+          "fontFamily": "monument",
+          "fontSize": "14px",
+          "fontWeight": "500",
+          "lineHeight": "20px",
+          "letterSpacing": "-0.2px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "monument",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "20px",
+          "letterSpacing": "-0.2px"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "2px",
+          "value": "2px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        },
+        {
+          "name": "6",
+          "value": "24px"
+        },
+        {
+          "name": "16",
+          "value": "64px"
+        }
+      ],
+      "radius": []
+    },
     "collections": [
       "portfolios"
     ]
@@ -73,6 +289,97 @@
       "#727171",
       "#2c2c2c"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#fafafa"
+        },
+        {
+          "name": "surface",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "text",
+          "hex": "#404040"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#a3a3a3"
+        },
+        {
+          "name": "border",
+          "hex": "#e5e5e5"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Fraunces",
+          "fontSize": "36px",
+          "fontWeight": "300",
+          "lineHeight": "45px",
+          "letterSpacing": "-1.08px"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "Fraunces",
+          "fontSize": "36px",
+          "fontWeight": "300",
+          "lineHeight": "40px",
+          "letterSpacing": "-1.08px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "Inter",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "26px",
+          "letterSpacing": "-0.4px"
+        },
+        {
+          "name": "label",
+          "fontFamily": "Inter",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "20px",
+          "letterSpacing": "-0.35px"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "6px",
+          "value": "6px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        },
+        {
+          "name": "5",
+          "value": "20px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "4px"
+        },
+        {
+          "name": "card-2",
+          "value": "8px"
+        }
+      ]
+    },
     "collections": [
       "personal-sites"
     ]
@@ -92,6 +399,105 @@
       "#b4b4b4",
       "#fd7941"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#000000"
+        },
+        {
+          "name": "surface",
+          "hex": "#121212"
+        },
+        {
+          "name": "text",
+          "hex": "#e5e5e5"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#a2a2a2"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "openRunde",
+          "fontSize": "72px",
+          "fontWeight": "700",
+          "lineHeight": "72px",
+          "letterSpacing": "-1.8px"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "openRunde",
+          "fontSize": "36px",
+          "fontWeight": "700",
+          "lineHeight": "40px",
+          "letterSpacing": "-0.9px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "Inter",
+          "fontSize": "16px",
+          "fontWeight": "500",
+          "lineHeight": "24px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "label",
+          "fontFamily": "Inter",
+          "fontSize": "18px",
+          "fontWeight": "400",
+          "lineHeight": "28px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "mono",
+          "fontFamily": "Geist Mono",
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "20px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        },
+        {
+          "name": "6",
+          "value": "24px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "16px"
+        },
+        {
+          "name": "card-2",
+          "value": "24px"
+        },
+        {
+          "name": "card-3",
+          "value": "32px"
+        }
+      ]
+    },
     "collections": [
       "dark-by-default",
       "reference-libraries"
@@ -113,6 +519,61 @@
       "#cd8971",
       "#b2aeb1"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "surface",
+          "hex": "#d5d5d5"
+        },
+        {
+          "name": "accent",
+          "hex": "#0000ee"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "SF Pro Text Bold",
+          "fontSize": "13px",
+          "fontWeight": "400",
+          "lineHeight": "15.6px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "10px",
+          "value": "10px"
+        },
+        {
+          "name": "15px",
+          "value": "15px"
+        },
+        {
+          "name": "5",
+          "value": "20px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "1px"
+        },
+        {
+          "name": "image",
+          "value": "2px"
+        },
+        {
+          "name": "card-2",
+          "value": "15px"
+        }
+      ]
+    },
     "collections": [
       "personal-sites",
       "portfolios"
@@ -133,6 +594,109 @@
       "#6e6e6e",
       "#afb0ae"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "surface",
+          "hex": "#000000"
+        },
+        {
+          "name": "text",
+          "hex": "#111111"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#555555"
+        },
+        {
+          "name": "accent",
+          "hex": "#284f8f"
+        },
+        {
+          "name": "border",
+          "hex": "#ffffff"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Bricolage Grotesque",
+          "fontSize": "24px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "letterSpacing": "-0.08px"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "JetBrains Mono",
+          "fontSize": "11px",
+          "fontWeight": "500",
+          "lineHeight": "17.6px",
+          "letterSpacing": "1.21px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "Hanken Grotesk",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "21px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "label",
+          "fontFamily": "Hanken Grotesk",
+          "fontSize": "11.5px",
+          "fontWeight": "600",
+          "lineHeight": "18.4px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "9px",
+          "value": "9px"
+        },
+        {
+          "name": "14px",
+          "value": "14px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "2px"
+        },
+        {
+          "name": "image",
+          "value": "10px"
+        },
+        {
+          "name": "card-2",
+          "value": "18px"
+        },
+        {
+          "name": "full",
+          "value": "9999px"
+        }
+      ]
+    },
     "collections": [
       "portfolios"
     ]
@@ -152,6 +716,60 @@
       "#c05efd",
       "#afb0b2"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "surface",
+          "hex": "#f3f3f3"
+        },
+        {
+          "name": "text",
+          "hex": "#262626"
+        },
+        {
+          "name": "border",
+          "hex": "#e6e6e6"
+        }
+      ],
+      "type": [
+        {
+          "name": "label",
+          "fontFamily": "inter",
+          "fontSize": "13px",
+          "fontWeight": "400",
+          "lineHeight": "13px",
+          "letterSpacing": "0.2px"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "6px",
+          "value": "6px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "11px",
+          "value": "11px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "6",
+          "value": "24px"
+        }
+      ],
+      "radius": []
+    },
     "collections": [
       "reference-libraries"
     ]
@@ -171,6 +789,72 @@
       "#ebceb3",
       "#b6d5ef"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "text",
+          "hex": "#171717"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#a1a1a1"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Inter",
+          "fontSize": "24px",
+          "fontWeight": "600",
+          "lineHeight": "32px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "Inter",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "25.6px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "body",
+          "fontFamily": "Inter",
+          "fontSize": "24px",
+          "fontWeight": "600",
+          "lineHeight": "32px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "6px",
+          "value": "6px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        }
+      ],
+      "radius": []
+    },
     "collections": [
       "personal-sites"
     ]
@@ -190,6 +874,77 @@
       "#68ffad",
       "#a000ff"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "surface",
+          "hex": "#f6f6f6"
+        },
+        {
+          "name": "text",
+          "hex": "#000000"
+        },
+        {
+          "name": "accent",
+          "hex": "#0000ee"
+        }
+      ],
+      "type": [
+        {
+          "name": "body",
+          "fontFamily": "Saans Regular",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "10px",
+          "value": "10px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        },
+        {
+          "name": "6",
+          "value": "24px"
+        },
+        {
+          "name": "8",
+          "value": "32px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "image",
+          "value": "12px"
+        },
+        {
+          "name": "card",
+          "value": "50px"
+        },
+        {
+          "name": "card-2",
+          "value": "60px"
+        },
+        {
+          "name": "full",
+          "value": "9999px"
+        }
+      ]
+    },
     "collections": []
   },
   {
@@ -207,6 +962,27 @@
       "#515050",
       "#6f6f70"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        }
+      ],
+      "type": [
+        {
+          "name": "body",
+          "fontFamily": "Inter",
+          "fontSize": "13px",
+          "fontWeight": "500",
+          "lineHeight": "16.25px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [],
+      "radius": []
+    },
     "collections": []
   },
   {
@@ -224,6 +1000,84 @@
       "#8f908e",
       "#50504f"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#fbfaf9"
+        },
+        {
+          "name": "surface",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "text",
+          "hex": "#111111"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#2563eb"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "CommitMono",
+          "fontSize": "20px",
+          "fontWeight": "600",
+          "lineHeight": "24px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "CommitMono",
+          "fontSize": "13px",
+          "fontWeight": "500",
+          "lineHeight": "20px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "body",
+          "fontFamily": "CommitMono",
+          "fontSize": "14px",
+          "fontWeight": "460",
+          "lineHeight": "20px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "mono",
+          "fontFamily": "CommitMono",
+          "fontSize": "10.67px",
+          "fontWeight": "400",
+          "lineHeight": "12.8px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "6px",
+          "value": "6px"
+        },
+        {
+          "name": "7px",
+          "value": "7px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        }
+      ],
+      "radius": []
+    },
     "collections": []
   },
   {
@@ -241,6 +1095,109 @@
       "#291b12",
       "#52514d"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#f7f7f5"
+        },
+        {
+          "name": "surface",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "text",
+          "hex": "#4b5563"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#6b7280"
+        },
+        {
+          "name": "accent",
+          "hex": "#3691ed"
+        },
+        {
+          "name": "border",
+          "hex": "#efeeeb"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Inter",
+          "fontSize": "32px",
+          "fontWeight": "500",
+          "lineHeight": "38.4px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "Inter",
+          "fontSize": "38px",
+          "fontWeight": "500",
+          "lineHeight": "45.6px",
+          "letterSpacing": "-0.76px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "Inter",
+          "fontSize": "15px",
+          "fontWeight": "400",
+          "lineHeight": "25.5px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "label",
+          "fontFamily": "Inter",
+          "fontSize": "14px",
+          "fontWeight": "500",
+          "lineHeight": "16.8px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "2px",
+          "value": "2px"
+        },
+        {
+          "name": "6px",
+          "value": "6px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "10px",
+          "value": "10px"
+        },
+        {
+          "name": "14px",
+          "value": "14px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "2px"
+        },
+        {
+          "name": "card-2",
+          "value": "6px"
+        },
+        {
+          "name": "card-3",
+          "value": "14px"
+        },
+        {
+          "name": "full",
+          "value": "9999px"
+        }
+      ]
+    },
     "collections": []
   },
   {
@@ -258,6 +1215,101 @@
       "#2b2f2b",
       "#afafaf"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "surface",
+          "hex": "#f2f2f2"
+        },
+        {
+          "name": "text",
+          "hex": "#000000"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#7f838a"
+        },
+        {
+          "name": "accent",
+          "hex": "#0000ee"
+        },
+        {
+          "name": "border",
+          "hex": "#2a3fcc"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Familjen Grotesk",
+          "fontSize": "48px",
+          "fontWeight": "500",
+          "lineHeight": "52.8px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "body",
+          "fontFamily": "Familjen Grotesk",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "22.4px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "label",
+          "fontFamily": "Familjen Grotesk",
+          "fontSize": "15px",
+          "fontWeight": "400",
+          "lineHeight": "normal",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "5px",
+          "value": "5px"
+        },
+        {
+          "name": "6px",
+          "value": "6px"
+        },
+        {
+          "name": "10px",
+          "value": "10px"
+        },
+        {
+          "name": "6",
+          "value": "24px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "1px"
+        },
+        {
+          "name": "card-2",
+          "value": "4px"
+        },
+        {
+          "name": "card-3",
+          "value": "9px"
+        },
+        {
+          "name": "full",
+          "value": "9999px"
+        }
+      ]
+    },
     "collections": []
   },
   {
@@ -292,6 +1344,65 @@
       "#fc494e",
       "#fee3b1"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "surface",
+          "hex": "#fcfcfc"
+        },
+        {
+          "name": "text",
+          "hex": "#171717"
+        }
+      ],
+      "type": [
+        {
+          "name": "body",
+          "fontFamily": "X",
+          "fontSize": "18px",
+          "fontWeight": "400",
+          "lineHeight": "30.6px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        },
+        {
+          "name": "6",
+          "value": "24px"
+        },
+        {
+          "name": "8",
+          "value": "32px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "image",
+          "value": "12px"
+        },
+        {
+          "name": "full",
+          "value": "9999px"
+        }
+      ]
+    },
     "collections": []
   },
   {
@@ -309,6 +1420,52 @@
       "#d6d4cb",
       "#b3b2a8"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "text",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "accent",
+          "hex": "#f0cf78"
+        }
+      ],
+      "type": [
+        {
+          "name": "label",
+          "fontFamily": "Share Tech Mono",
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "lineHeight": "15px",
+          "letterSpacing": "1.68px"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "3px",
+          "value": "3px"
+        },
+        {
+          "name": "9px",
+          "value": "9px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        },
+        {
+          "name": "5",
+          "value": "20px"
+        }
+      ],
+      "radius": []
+    },
     "collections": []
   },
   {
@@ -326,6 +1483,101 @@
       "#b5aafd",
       "#ceae90"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "surface",
+          "hex": "#fcfcfd"
+        },
+        {
+          "name": "text",
+          "hex": "#344054"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#667085"
+        },
+        {
+          "name": "accent",
+          "hex": "#155dfc"
+        },
+        {
+          "name": "border",
+          "hex": "#eaecf0"
+        }
+      ],
+      "type": [
+        {
+          "name": "heading",
+          "fontFamily": "ppMori",
+          "fontSize": "16px",
+          "fontWeight": "500",
+          "lineHeight": "24px",
+          "letterSpacing": "-0.32px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "ppMori",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "20px",
+          "letterSpacing": "-0.32px"
+        },
+        {
+          "name": "label",
+          "fontFamily": "ppMori",
+          "fontSize": "16px",
+          "fontWeight": "600",
+          "lineHeight": "24px",
+          "letterSpacing": "-0.32px"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "2px",
+          "value": "2px"
+        },
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "6px",
+          "value": "6px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "image",
+          "value": "4px"
+        },
+        {
+          "name": "card",
+          "value": "6px"
+        },
+        {
+          "name": "card-2",
+          "value": "10px"
+        },
+        {
+          "name": "full",
+          "value": "9999px"
+        }
+      ]
+    },
     "collections": []
   },
   {
@@ -343,6 +1595,73 @@
       "#909090",
       "#545454"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "surface",
+          "hex": "#fafafa"
+        },
+        {
+          "name": "text",
+          "hex": "#737373"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#a1a1a1"
+        },
+        {
+          "name": "accent",
+          "hex": "#fc532a"
+        }
+      ],
+      "type": [
+        {
+          "name": "label",
+          "fontFamily": "Inter",
+          "fontSize": "15px",
+          "fontWeight": "500",
+          "lineHeight": "22.5px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "10px",
+          "value": "10px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "image",
+          "value": "6px"
+        },
+        {
+          "name": "card",
+          "value": "8px"
+        }
+      ]
+    },
     "collections": []
   },
   {
@@ -360,6 +1679,72 @@
       "#c57b3a",
       "#ecd0b1"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "text",
+          "hex": "#171717"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#525252"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Inter",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "25.6px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "Inter",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "25.6px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "body",
+          "fontFamily": "Inter",
+          "fontSize": "24px",
+          "fontWeight": "500",
+          "lineHeight": "32px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "6px",
+          "value": "6px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        }
+      ],
+      "radius": []
+    },
     "collections": []
   },
   {
@@ -377,6 +1762,101 @@
       "#afd3e7",
       "#6f7178"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#f0f0f0"
+        },
+        {
+          "name": "surface",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "text",
+          "hex": "#333333"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#6b6f77"
+        },
+        {
+          "name": "accent",
+          "hex": "#0000ee"
+        },
+        {
+          "name": "border",
+          "hex": "#e7e7e9"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Inter",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "20px",
+          "letterSpacing": "-0.08px"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "Inter",
+          "fontSize": "20px",
+          "fontWeight": "700",
+          "lineHeight": "24px",
+          "letterSpacing": "-0.34px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "Inter",
+          "fontSize": "13px",
+          "fontWeight": "400",
+          "lineHeight": "16px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "6px",
+          "value": "6px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "16px"
+        },
+        {
+          "name": "image",
+          "value": "32px"
+        },
+        {
+          "name": "image-2",
+          "value": "40px"
+        },
+        {
+          "name": "full",
+          "value": "9999px"
+        }
+      ]
+    },
     "collections": []
   },
   {
@@ -394,6 +1874,44 @@
       "#3153ff",
       "#2cd4ed"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "surface",
+          "hex": "#1987e1"
+        },
+        {
+          "name": "accent",
+          "hex": "#1987e1"
+        }
+      ],
+      "type": [],
+      "spacing": [
+        {
+          "name": "5px",
+          "value": "5px"
+        },
+        {
+          "name": "9px",
+          "value": "9px"
+        },
+        {
+          "name": "18px",
+          "value": "18px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "5px"
+        }
+      ]
+    },
     "collections": []
   },
   {
@@ -411,6 +1929,101 @@
       "#d1d1d5",
       "#151516"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "surface",
+          "hex": "#0a84ff"
+        },
+        {
+          "name": "text",
+          "hex": "#1d1d1f"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#6e6e73"
+        },
+        {
+          "name": "accent",
+          "hex": "#0a84ff"
+        },
+        {
+          "name": "border",
+          "hex": "#d2d2d7"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "-apple-system",
+          "fontSize": "26px",
+          "fontWeight": "700",
+          "lineHeight": "29.9px",
+          "letterSpacing": "-0.52px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "-apple-system",
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "lineHeight": "17.4px",
+          "letterSpacing": "0.12px"
+        },
+        {
+          "name": "label",
+          "fontFamily": "-apple-system",
+          "fontSize": "12.5px",
+          "fontWeight": "600",
+          "lineHeight": "18.13px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "3px",
+          "value": "3px"
+        },
+        {
+          "name": "6px",
+          "value": "6px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "10px",
+          "value": "10px"
+        },
+        {
+          "name": "14px",
+          "value": "14px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "1px"
+        },
+        {
+          "name": "card-2",
+          "value": "8px"
+        },
+        {
+          "name": "card-3",
+          "value": "9px"
+        },
+        {
+          "name": "full",
+          "value": "9999px"
+        }
+      ]
+    },
     "collections": []
   },
   {
@@ -428,6 +2041,64 @@
       "#0c7bf9",
       "#ee5c2b"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#f5f5f3"
+        },
+        {
+          "name": "surface",
+          "hex": "#fbfbfa"
+        },
+        {
+          "name": "text",
+          "hex": "#171a1d"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "TWK Lausanne",
+          "fontSize": "32px",
+          "fontWeight": "700",
+          "lineHeight": "normal",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "body",
+          "fontFamily": "TWK Lausanne",
+          "fontSize": "12px",
+          "fontWeight": "250",
+          "lineHeight": "16px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "6px",
+          "value": "6px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        },
+        {
+          "name": "5",
+          "value": "20px"
+        }
+      ],
+      "radius": []
+    },
     "collections": []
   },
   {
@@ -445,6 +2116,93 @@
       "#656596",
       "#9da29d"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "surface",
+          "hex": "#f7f8fb"
+        },
+        {
+          "name": "text",
+          "hex": "#0d0f15"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#6f7179"
+        },
+        {
+          "name": "border",
+          "hex": "#dfe1e7"
+        }
+      ],
+      "type": [
+        {
+          "name": "heading",
+          "fontFamily": "kalice",
+          "fontSize": "52px",
+          "fontWeight": "400",
+          "lineHeight": "55.12px",
+          "letterSpacing": "-1.3px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "neueMontreal",
+          "fontSize": "13px",
+          "fontWeight": "500",
+          "lineHeight": "20px",
+          "letterSpacing": "-0.26px"
+        },
+        {
+          "name": "label",
+          "fontFamily": "neueMontreal",
+          "fontSize": "12px",
+          "fontWeight": "530",
+          "lineHeight": "20px",
+          "letterSpacing": "-0.32px"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "6px",
+          "value": "6px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        },
+        {
+          "name": "12",
+          "value": "48px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "8px"
+        },
+        {
+          "name": "button",
+          "value": "12px"
+        },
+        {
+          "name": "card-2",
+          "value": "32px"
+        }
+      ]
+    },
     "collections": []
   },
   {
@@ -462,6 +2220,101 @@
       "#a99071",
       "#b1b1ad"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#21201c"
+        },
+        {
+          "name": "surface",
+          "hex": "#fdfdfc"
+        },
+        {
+          "name": "text",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "border",
+          "hex": "#261608"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Bogue",
+          "fontSize": "42px",
+          "fontWeight": "500",
+          "lineHeight": "45.36px",
+          "letterSpacing": "-1.05px"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "Bogue",
+          "fontSize": "42px",
+          "fontWeight": "400",
+          "lineHeight": "45.36px",
+          "letterSpacing": "-1.05px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "Mulish",
+          "fontSize": "16px",
+          "fontWeight": "450",
+          "lineHeight": "25.6px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "label",
+          "fontFamily": "Mulish",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "25.6px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        },
+        {
+          "name": "6",
+          "value": "24px"
+        },
+        {
+          "name": "8",
+          "value": "32px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "12px"
+        },
+        {
+          "name": "card-2",
+          "value": "24px"
+        },
+        {
+          "name": "card-3",
+          "value": "32px"
+        },
+        {
+          "name": "full",
+          "value": "9999px"
+        }
+      ]
+    },
     "collections": []
   },
   {
@@ -479,6 +2332,117 @@
       "#596470",
       "#92d0f2"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "surface",
+          "hex": "#f6f8fa"
+        },
+        {
+          "name": "text",
+          "hex": "#1f2328"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#59636e"
+        },
+        {
+          "name": "accent",
+          "hex": "#0969da"
+        },
+        {
+          "name": "border",
+          "hex": "#d1d9e0"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Mona Sans VF",
+          "fontSize": "32px",
+          "fontWeight": "600",
+          "lineHeight": "40px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "Mona Sans VF",
+          "fontSize": "24px",
+          "fontWeight": "600",
+          "lineHeight": "36px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "body",
+          "fontFamily": "Mona Sans VF",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "label",
+          "fontFamily": "Mona Sans VF",
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "lineHeight": "18px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "mono",
+          "fontFamily": "ui-monospace",
+          "fontSize": "13.6px",
+          "fontWeight": "400",
+          "lineHeight": "20.4px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "3px",
+          "value": "3px"
+        },
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "4px"
+        },
+        {
+          "name": "card-2",
+          "value": "6px"
+        },
+        {
+          "name": "card-3",
+          "value": "24px"
+        },
+        {
+          "name": "full",
+          "value": "9999px"
+        }
+      ]
+    },
     "collections": [
       "design-engineering",
       "mdx",
@@ -502,6 +2466,97 @@
       "#6a936d",
       "#121613"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#fbfbfb"
+        },
+        {
+          "name": "surface",
+          "hex": "#f2f2f2"
+        },
+        {
+          "name": "text",
+          "hex": "#000000"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#707070"
+        },
+        {
+          "name": "border",
+          "hex": "#0d99ff"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Public Sans",
+          "fontSize": "15px",
+          "fontWeight": "500",
+          "lineHeight": "22.5px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "body",
+          "fontFamily": "Public Sans",
+          "fontSize": "15px",
+          "fontWeight": "500",
+          "lineHeight": "22.5px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "label",
+          "fontFamily": "Figtree",
+          "fontSize": "13px",
+          "fontWeight": "600",
+          "lineHeight": "18.2px",
+          "letterSpacing": "-0.5px"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "2px",
+          "value": "2px"
+        },
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "4px"
+        },
+        {
+          "name": "card-2",
+          "value": "6px"
+        },
+        {
+          "name": "card-3",
+          "value": "28px"
+        },
+        {
+          "name": "full",
+          "value": "9999px"
+        }
+      ]
+    },
     "collections": []
   },
   {
@@ -519,6 +2574,105 @@
       "#d3d1cd",
       "#ff3d00"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "surface",
+          "hex": "#f9f9f9"
+        },
+        {
+          "name": "text",
+          "hex": "#646464"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#838383"
+        },
+        {
+          "name": "accent",
+          "hex": "#ff3d00"
+        },
+        {
+          "name": "border",
+          "hex": "#e8e8e8"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "restartSoft",
+          "fontSize": "46px",
+          "fontWeight": "500",
+          "lineHeight": "50.6px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "restartSoft",
+          "fontSize": "35px",
+          "fontWeight": "450",
+          "lineHeight": "40px",
+          "letterSpacing": "-0.35px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "restartSoft",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "label",
+          "fontFamily": "restartSoft",
+          "fontSize": "14px",
+          "fontWeight": "450",
+          "lineHeight": "20px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "6px",
+          "value": "6px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "4px"
+        },
+        {
+          "name": "card-2",
+          "value": "8px"
+        },
+        {
+          "name": "card-3",
+          "value": "10px"
+        }
+      ]
+    },
     "collections": []
   },
   {
@@ -536,6 +2690,93 @@
       "#929294",
       "#3e3e41"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#fafafa"
+        },
+        {
+          "name": "surface",
+          "hex": "#09090b"
+        },
+        {
+          "name": "text",
+          "hex": "#18181b"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#71717a"
+        },
+        {
+          "name": "border",
+          "hex": "#c4c4c4"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Sans",
+          "fontSize": "16px",
+          "fontWeight": "450",
+          "lineHeight": "24.8px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "Sans",
+          "fontSize": "16px",
+          "fontWeight": "450",
+          "lineHeight": "24.8px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "body",
+          "fontFamily": "Sans",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24.8px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "label",
+          "fontFamily": "Sans",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "16px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "6px",
+          "value": "6px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "5",
+          "value": "20px"
+        },
+        {
+          "name": "9",
+          "value": "36px"
+        },
+        {
+          "name": "14",
+          "value": "56px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "4px"
+        }
+      ]
+    },
     "collections": []
   },
   {
@@ -553,6 +2794,105 @@
       "#d1d2d1",
       "#4d4d4e"
     ],
+    "design": {
+      "read_date": "2026-09-22",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#111111"
+        },
+        {
+          "name": "surface",
+          "hex": "#f7f6f4"
+        },
+        {
+          "name": "text",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#fe3619"
+        },
+        {
+          "name": "accent",
+          "hex": "#fe3619"
+        },
+        {
+          "name": "border",
+          "hex": "#fe3619"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "nudge",
+          "fontSize": "70.56px",
+          "fontWeight": "500",
+          "lineHeight": "71.97px",
+          "letterSpacing": "-2.47px"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "nudge",
+          "fontSize": "49.68px",
+          "fontWeight": "500",
+          "lineHeight": "54.65px",
+          "letterSpacing": "-1.24px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "nudge",
+          "fontSize": "14.3px",
+          "fontWeight": "400",
+          "lineHeight": "17.88px",
+          "letterSpacing": "0.16px"
+        },
+        {
+          "name": "label",
+          "fontFamily": "nudge",
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "lineHeight": "18px",
+          "letterSpacing": "0.16px"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "2px",
+          "value": "2px"
+        },
+        {
+          "name": "6px",
+          "value": "6px"
+        },
+        {
+          "name": "10px",
+          "value": "10px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "5",
+          "value": "20px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "button",
+          "value": "3px"
+        },
+        {
+          "name": "card",
+          "value": "5px"
+        },
+        {
+          "name": "card-2",
+          "value": "10px"
+        }
+      ]
+    },
     "collections": []
   }
 ]

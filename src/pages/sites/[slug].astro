@@ -10,7 +10,8 @@
  * Domain is a link, not a label — the save.design anatomy, where every field
  * value is also a way back out into the rest of the collection. The rest of
  * that anatomy is the two things a page like this is actually used for:
- * taking something away from it (the palette row, the shot buttons) and moving
+ * taking something away from it (the design panel or, for a site with no
+ * tokens, the palette row; the shot buttons) and moving
  * to the next one without going back to the gallery (the hint row at the foot,
  * which is both the keyboard legend and the links themselves).
  */
@@ -20,6 +21,7 @@ import Base from "../../layouts/Base.astro";
 import CollectionChips from "../../components/CollectionChips.astro";
 import EntryNav from "../../components/EntryNav.astro";
 import PaletteRow from "../../components/PaletteRow.astro";
+import SiteFoundations from "../../components/SiteFoundations.astro";
 import ShotActions from "../../components/ShotActions.astro";
 import ShotFrame from "../../components/ShotFrame.astro";
 import VoiceBlocks from "../../components/VoiceBlocks.astro";
@@ -130,12 +132,21 @@ const jsonLd = siteJsonLd(site);
       <dd class="tabular-nums">{site.saved_date}</dd>
     </div>
 
-    <div class="fact fact--palette">
-      <dt class="mono">Palette</dt>
-      <dd>
-        <PaletteRow palette={site.palette} title={site.title} />
-      </dd>
-    </div>
+    {/*
+      The pixel palette only when there are no tokens. A site with `design`
+      shows its colours, named, in the Design section under this table, and
+      six unnamed swatches above it would be the same colours said twice.
+    */}
+    {
+      site.design === undefined && (
+        <div class="fact fact--palette">
+          <dt class="mono">Palette</dt>
+          <dd>
+            <PaletteRow palette={site.palette} title={site.title} />
+          </dd>
+        </div>
+      )
+    }
 
     {/* Last, because it is the way out. */}
     <div class="fact">
@@ -147,6 +158,8 @@ const jsonLd = siteJsonLd(site);
       </dd>
     </div>
   </dl>
+
+  {site.design && <SiteFoundations design={site.design} title={site.title} domain={site.domain} />}
 
   {/*
     The hint row is the keyboard legend and the links themselves — EntryNav

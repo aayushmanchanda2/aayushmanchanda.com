@@ -22,6 +22,8 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
 
+import type { SiteDesign } from "./design-md";
+import { parseDesign } from "./design-md";
 import type { Fail } from "./parse";
 import { SLUG, readers, routeSlug } from "./parse";
 
@@ -46,6 +48,14 @@ export interface Site {
    * pixels by `pipeline/palette.mjs`, never authored by hand.
    */
   palette: string[];
+  /**
+   * Named tokens (colours, type, spacing, radius) read off the live page's
+   * computed styles by `pipeline/design.mjs`. Absent when the capture had no
+   * page to read (the Firecrawl fallback) or read nothing usable; the details
+   * page then shows `palette` instead. Checked by `lib/design-md.ts ›
+   * parseDesign`, which drops a bad token rather than failing the build.
+   */
+  design?: SiteDesign | undefined;
   /**
    * Curated groupings this site belongs to, each also a filter route
    * (`/sites/collection/<slug>`). Many-to-many and unordered: a site can be in
@@ -324,6 +334,7 @@ export function parseSites(value: unknown): Site[] {
       saved_date: readDate(item, "saved_date", where),
       shot: readShot(item, slug, where),
       palette: readPalette(item, where),
+      design: parseDesign(item["design"]),
       collections: readCollections(item, where),
       like: readOptional(item, "like", where),
       dislike: readOptional(item, "dislike", where),
