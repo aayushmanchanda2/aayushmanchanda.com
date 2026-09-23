@@ -1,15 +1,8 @@
 /**
  * The command palette's behaviour, separated from its markup.
  *
- * `components/CommandPalette.astro` owns what the thing looks like; this owns
- * what it does. The split is about size — the two together are past the point
- * where either reads well — and about the fact that this half is ordinary DOM
- * code that benefits from being read as a unit rather than as the tail of a
- * `.astro` file.
- *
- * The ranking is not here either. It is in `lib/search.ts`, which has no
- * imports so it can be tested under `node --test`; this module is the part that
- * cannot be, because it is all document.
+ * `components/CommandPalette.astro` owns the look and `lib/search.ts` the
+ * ranking (import-free, so `node --test` covers it). This is the DOM half.
  *
  * ---------------------------------------------------------------------------
  * Precedence, which is the only genuinely subtle thing in this file
@@ -33,6 +26,7 @@
 import { renderGroups } from "./palette-rows";
 import { RESULT_LIMIT, flatten, search } from "./search";
 import type { SearchEntry } from "./search";
+import { toggleSound } from "./ui-sound";
 
 export function initPalette(root: HTMLElement): void {
   const input = root.querySelector<HTMLInputElement>("[data-palette-input]");
@@ -153,14 +147,8 @@ export function initPalette(root: HTMLElement): void {
       input.value = "";
       render("");
 
-      /**
-       * Focus lands synchronously too.
-       *
-       * It sat inside a `requestAnimationFrame` first, which loses whatever the
-       * reader typed in the frame between Cmd+K and the field becoming ready —
-       * and typing straight after the shortcut is the normal way to use a
-       * palette, not an edge case. It cost the first character every time.
-       */
+      // Synchronously too: inside a rAF it lost the first character typed
+      // straight after Cmd+K.
       input.focus({ preventScroll: true });
     } else {
       opener?.focus({ preventScroll: true });
@@ -169,18 +157,17 @@ export function initPalette(root: HTMLElement): void {
   };
 
   /**
-   * Follow a row.
-   *
-   * Assigning `location.href` rather than synthesising `row.click()`. The click
-   * was the first attempt and it silently did nothing: `setOpen(false)` takes
-   * `data-open` off the palette root on its way out, which drops the whole
-   * subtree to `visibility: hidden`, and a synthetic click on an anchor inside
-   * a subtree that is no longer rendered does not navigate. The
-   * href is read first here, so the close cannot affect it — and this is the
-   * same one-liner the /sites entry pages already use for their arrow keys.
+   * Follow a row, or run its command. `location.href`, not `row.click()`: the
+   * close hides the subtree, and a synthetic click inside a hidden subtree does
+   * not navigate. The href is read before the close for the same reason.
    */
   const go = (row: HTMLAnchorElement | undefined): void => {
     if (!row) return;
+    if (row.dataset.paletteAction) {
+      setOpen(false);
+      toggleSound();
+      return;
+    }
     const href = row.href;
     setOpen(false);
     window.location.href = href;
@@ -231,7 +218,11 @@ export function initPalette(root: HTMLElement): void {
     if (row) setActive(rows.indexOf(row));
   });
 
-  results.addEventListener("click", () => setOpen(false));
+  results.addEventListener("click", (event) => {
+    const command = (event.target as HTMLElement).closest<HTMLAnchorElement>("[data-palette-action]");
+    if (command) event.preventDefault();
+    return command ? go(command) : setOpen(false);
+  });
   scrim.addEventListener("click", () => setOpen(false));
 
   /**

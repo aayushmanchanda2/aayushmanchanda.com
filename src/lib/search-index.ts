@@ -42,6 +42,7 @@ const SECTION = {
   library: "Library",
   notes: "Notes",
   experiments: "Experiments",
+  settings: "Settings",
 } as const;
 
 /**
@@ -152,6 +153,15 @@ async function build(): Promise<SearchEntry[]> {
      * the palette offers a route to a page with nothing on it.
      */
     ...(await sectionPages()),
+
+    // After the ten pages, so an empty palette still shows it (the cap is 12).
+    {
+      title: "Sound",
+      section: SECTION.settings,
+      href: "#sound",
+      terms: "audio click tick mute unmute",
+      action: "sound",
+    },
 
     ...tools.map(
       (tool): SearchEntry => ({
