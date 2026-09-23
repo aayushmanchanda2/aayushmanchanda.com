@@ -206,11 +206,9 @@ const jsonLd = designJsonLd();
       </ul>
 
       <p>
-        Those three are the real file, at the three sizes a browser asks for it.
-        Its colours are pinned rather than inherited, and they answer to your
-        browser's own light or dark setting rather than to the theme button in
-        the footer: this glyph sits in the tab strip, not on the page, so it
-        should match the chrome around it.
+        The favicon at the three sizes a browser asks for. Its colours follow
+        your browser&rsquo;s light or dark setting, not the theme button in the
+        footer, because it sits in the tab strip.
       </p>
     </section>
 
@@ -219,19 +217,15 @@ const jsonLd = designJsonLd();
     <section>
       <h2 class="sheet__head mono">Tokens</h2>
       <p>
-        Every colour on the site is one of these. If I typed a hex outside the
-        stylesheets, I broke something. Light is the base, so it is what a page
-        is with no attribute, no media query and no scripting; dark is written
-        out twice, once for a reader following their OS and once for a reader who
-        pinned it, and a test parses both blocks and fails if they drift apart.
+        Every colour on the site is one of these. Light is the base. Dark is
+        written twice: once for a reader following their OS, once for a reader
+        who pinned it.
       </p>
       <p>
-        The swatches are painted from the tokens and the values beside them are
-        read back out of the live stylesheet. Press the theme button in the
-        footer and both halves move, because neither half is written down here.
-        They are the shipped strings rather than the ones I typed, so the build's
-        minifier has been at them: it shortens a six-digit hex to three and folds
-        an alpha into the hex where it can. Same colours, one step further along.
+        The values beside the swatches are read from the live stylesheet, so
+        they follow the theme button in the footer. They&rsquo;re the shipped
+        strings, so the minifier has shortened some hexes to three digits and
+        folded alpha in where it could.
       </p>
 
       <ul class="tokens">
@@ -291,12 +285,9 @@ const jsonLd = designJsonLd();
       </p>
 
       <p>
-        And a real palette row, the component that sits under every screenshot in
-        the gallery. Every swatch is a button, because the point of the row is
-        that you can take the colour out of it. These six were read off the <a
-        href={`/sites/${capture.slug}`}>{capture.title}</a> capture by the
-        pipeline, so they are a fact about the screenshot rather than an opinion
-        about the site.
+        The palette row that sits under every screenshot in the gallery. Every
+        swatch is a button that copies its hex. These six were measured off the <a
+        href={`/sites/${capture.slug}`}>{capture.title}</a> screenshot.
       </p>
 
       <div class="capture">
@@ -310,8 +301,8 @@ const jsonLd = designJsonLd();
       <h2 class="sheet__head mono">Type</h2>
       <p>
         Geist Sans for prose and labels, Geist Mono for data: dates, counts,
-        clocks, hex values and code. Both are variable fonts bundled into the build and served from this domain, so
-        reading a page here does not tell a font CDN that you were reading it.
+        clocks, hex values and code. Both are variable fonts served from this
+        domain.
       </p>
 
       {/*
@@ -516,26 +507,23 @@ const jsonLd = designJsonLd();
       </p>
 
       <p>
-        The last row is the site&rsquo;s seven identity hues. A saved post on <a
-          href="/library/kind/post">/library</a> is drawn as a card, and a card
-        like that opens with a face. This site does not fetch faces, so the
-        circle holds the poster&rsquo;s initial and takes its colour from their
-        handle, hashed into one of seven slots.
+        The monogram row is the site&rsquo;s seven identity hues. A saved post on <a
+          href="/library/kind/post">/library</a> opens with the poster&rsquo;s
+        profile picture, or without one, a circle holding their initial,
+        coloured by hashing their handle into one of seven slots.
       </p>
 
       <p>
         Those are every verdict on <a href="/tools">/tools</a>, every status on <a
         href="/experiments">/experiments</a> and every kind on <a
-        href="/library">/library</a>, iterated from the same lists those pages
-        read. A fifth verdict will show up here on the commit that adds it, and
-        it will not compile until it has a tone.
+        href="/library">/library</a>, read from the same lists those pages
+        use.
       </p>
       <p>
-        The last row is the filter form. Same tone, same size, and the only
-        things added are the affordances a label has no use for: a pointer
-        cursor, and a tint that deepens on hover instead of changing colour. Hover
-        one. That state holds AA rather than 6:1, which is the one place the
-        vocabulary spends contrast on purpose.
+        The chip--link row is the filter form: same tone, same size, plus a
+        pointer cursor and a tint that deepens on hover. Hover one. That state
+        holds AA rather than 6:1, the one place the vocabulary spends contrast
+        on purpose.
       </p>
       <p>
         Blue is the accent hue held back from the accent lightness, because an
@@ -557,13 +545,11 @@ const jsonLd = designJsonLd();
         colour.
       </p>
       <p>
-        A link that leaves the site takes an arrow, and the arrow comes from CSS
-        rather than from markup: <a class="ext" href="https://rareui.com"
-        rel="noopener nofollow" target="_blank">rareui.com</a>. Typing the
-        character by hand is how a convention ends up on nine links and missing
-        from the tenth, and how the arrow ends up inside the text a screen reader
-        has to read out. The generated one has an empty accessible name, so it
-        announces the link and not "north east arrow" after it.
+        A link that leaves the site takes an arrow, drawn by CSS: <a class="ext"
+        href="https://rareui.com" rel="noopener nofollow"
+        target="_blank">rareui.com</a>. It has an empty accessible name, so a
+        screen reader announces the link and not &ldquo;north east arrow&rdquo;
+        after it.
       </p>
       <p>
         Everything else is exempt, and exempt structurally rather than by an
@@ -574,14 +560,10 @@ const jsonLd = designJsonLd();
         shouting.
       </p>
       <p>
-        Furniture that still has to read as a link uses the quiet pattern
-        instead: it keeps the ink it already had and carries an underline in the
-        hairline colour, going accent on hover. <span class="quiet"
-        >It looks like this.</span> It carries the underline permanently rather
-        than revealing one, because on a touchscreen there is no hover to reveal
-        it with. It is a rule rather than a shared class, so this one specimen is
-        drawn rather than rendered, and the three surfaces that use it each keep
-        their own colour and alignment.
+        Furniture that still has to read as a link uses the quiet pattern: it
+        keeps its ink and carries a permanent underline in the hairline colour,
+        going accent on hover. <span class="quiet">It looks like this.</span> The
+        underline is permanent because a touchscreen has no hover to reveal one.
       </p>
     </section>
 
@@ -614,8 +596,7 @@ const jsonLd = designJsonLd();
       </ul>
 
       <p>
-        They do nothing else. A control that cannot work is not shown on this
-        site, so these three exist to be pressed.
+        They do nothing else.
       </p>
       <p>
         Every transition names its properties. There is no <span class="code"
@@ -666,9 +647,8 @@ const jsonLd = designJsonLd();
       </p>
       <p>
         The contract is <a class="ext" href={CONTRACT} rel="noopener"
-        target="_blank">design.md</a>, in the repository. Every claim in it names
-        the file and the selector that enforces it, so any of it can be checked
-        with one grep, and this page is the half of it you can press.
+        target="_blank">design.md</a>, in the repository. This page is the half
+        of it you can press.
       </p>
     </section>
   </div>
