@@ -40,9 +40,6 @@ const MARKERS = [
  * the exact text so a new occurrence anywhere else still fails.
  */
 const ALLOWED = [
-  // A tool the site reviews by name on /tools; its note names no setup detail.
-  ["src/data/tools.json", '"slug": "claudex",'],
-  ["src/data/tools.json", '"name": "claudex",'],
   // Quoted from a saved video's transcript, about someone else's setup.
   ["src/data/library.json", "instead of using .env files."],
 ];
@@ -104,6 +101,6 @@ test("the check catches each marker and lets ordinary prose through", () => {
     assert.equal(leaks("x.md", line).length, 1, line);
   }
   assert.deepEqual(leaks("x.md", "At 10:30 I walk. Every env var stays put. A 16:9 frame."), []);
-  assert.deepEqual(leaks("src/data/tools.json", '    "slug": "claudex",'), []);
-  assert.equal(leaks("src/content/computer/x.md", '"slug": "claudex",').length, 1);
+  assert.deepEqual(leaks("src/data/library.json", "instead of using .env files."), []);
+  assert.equal(leaks("src/content/notes/x.md", "instead of using .env files.").length, 1);
 });
