@@ -55,6 +55,7 @@ import { describe, isRecord } from "./util.mjs";
 
 /** @typedef {import("./types.js").Bookmark} Bookmark */
 /** @typedef {import("./types.js").CaptureVia} CaptureVia */
+/** @typedef {import("./design.mjs").Design} Design */
 /** @typedef {import("./types.js").Draft} Draft */
 /** @typedef {import("./types.js").Paths} Paths */
 /** @typedef {import("./types.js").PlannedItem} PlannedItem */
@@ -196,13 +197,13 @@ async function moveShot(from, to) {
  * a fourth section has to be handled here or the `never` arm stops compiling.
  *
  * @param {Section} section
- * @param {{ bookmark: Bookmark, slug: string, date: string, palette: string[], reading: Reading }} input
+ * @param {{ bookmark: Bookmark, slug: string, date: string, palette: string[], design?: Design, reading: Reading }} input
  * @returns {Record<string, unknown>}
  */
-function buildEntry(section, { bookmark, slug, date, palette, reading }) {
+function buildEntry(section, { bookmark, slug, date, palette, design, reading }) {
   switch (section) {
     case "sites":
-      return buildSiteEntry({ bookmark, slug, date, palette });
+      return buildSiteEntry({ bookmark, slug, date, palette, design });
     case "tools":
       return buildToolEntry({ bookmark, slug, date });
     case "reading":
@@ -363,7 +364,7 @@ async function withMedia(post, slug, outDir, ctx) {
  * @param {Bookmark} bookmark @param {string} slug @param {string} outDir
  * @param {number} attempts  Attempts already spent before this one.
  * @param {ApplyContext} ctx
- * @returns {Promise<{ shot: string, palette: string[], via: CaptureVia | null }>}
+ * @returns {Promise<{ shot: string, palette: string[], design?: Design, via: CaptureVia | null }>}
  */
 async function shootSite(bookmark, slug, outDir, attempts, ctx) {
   // `log` so a clipped capture is reported in the run log, next to the entry it
@@ -411,6 +412,8 @@ async function captureAndPublish(bookmark, attempts, ctx) {
   try {
     /** @type {string[]} */
     let palette = [];
+    /** @type {Design | undefined} */
+    let design;
     /** @type {CaptureVia | null} */
     let via = null;
 
@@ -423,6 +426,7 @@ async function captureAndPublish(bookmark, attempts, ctx) {
 
       await moveShot(capture.shot, path.join(ctx.paths.shotsDir, shotFileName(slug)));
       palette = capture.palette;
+      design = capture.design;
       via = capture.via;
     }
 
@@ -430,7 +434,7 @@ async function captureAndPublish(bookmark, attempts, ctx) {
       section === "reading"
         ? await readingFor(bookmark, slug, scratch, ctx)
         : { post: null, video: null, draft: null, why: null };
-    const entry = buildEntry(section, { bookmark, slug, date: ctx.date, palette, reading });
+    const entry = buildEntry(section, { bookmark, slug, date: ctx.date, palette, design, reading });
 
     // The file is written before the in-memory list advances, so a failed write
     // leaves the run's view of the gallery matching what is on disk.

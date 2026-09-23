@@ -14,6 +14,7 @@ import path from "node:path";
 import test from "node:test";
 
 import {
+  FAKE_DESIGN,
   FAKE_PALETTE,
   FIRECRAWL_PALETTE,
   NESTED,
@@ -44,7 +45,7 @@ test("publishes a site, moves its shot, records state, tags the bookmark", async
       [TOOLS_ID]: [bookmark(201, "https://linear.app", { title: "Linear", excerpt: "Issue tracker." })],
     },
   });
-  const capture = fakeCapture();
+  const capture = fakeCapture({ design: FAKE_DESIGN });
   const out = recorder();
 
   assert.equal(await run([], deps({ paths, server, capture, out })), 0);
@@ -55,6 +56,12 @@ test("publishes a site, moves its shot, records state, tags the bookmark", async
   assert.equal(site.saved_date, "2026-08-26");
   assert.equal(site.shot, "/shots/otherkind.webp");
   assert.deepEqual(site.palette, FAKE_PALETTE, "the capture's colours reach the entry");
+  assert.deepEqual(site.design, FAKE_DESIGN, "the tokens read off the page reach the entry");
+  assert.deepEqual(
+    Object.keys(site).slice(6, 9),
+    ["palette", "design", "collections"],
+    "design sits next to the palette it extends",
+  );
   assert.ok(await exists(path.join(paths.shotsDir, "otherkind.webp")));
 
   // The /tools contract: new saves land as `watching`, dated today.
@@ -488,6 +495,7 @@ test("a site that beats the browser on its last try is caught by Firecrawl", asy
   assert.deepEqual(site.palette, FIRECRAWL_PALETTE, "a fallback shot goes through the same path");
   assert.equal(site.shot, "/shots/fortress.webp");
   assert.equal("via" in site, false, "who took the picture is not the reader's business");
+  assert.equal("design" in site, false, "a Firecrawl shot has no DOM, so no tokens and no null");
   assert.ok(await exists(path.join(paths.shotsDir, "fortress.webp")));
 
   assert.deepEqual((await loadState(paths))["400"], {

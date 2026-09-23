@@ -482,8 +482,12 @@ export function shotFilesOf(entry) {
  * @param {string} input.slug
  * @param {string} input.date ISO calendar date.
  * @param {string[]} input.palette Dominant colours, from the capture.
+ * @param {import("./design.mjs").Design} [input.design]
+ *   Tokens read off the live page. Absent when the capture had no DOM to read
+ *   (the Firecrawl fallback) or the read found nothing, and then the key is
+ *   left out rather than written as null.
  */
-export function buildSiteEntry({ bookmark, slug, date, palette }) {
+export function buildSiteEntry({ bookmark, slug, date, palette, design }) {
   return {
     slug,
     title: bookmark.title === "" ? hostnameOf(bookmark.url) : bookmark.title,
@@ -494,6 +498,7 @@ export function buildSiteEntry({ bookmark, slug, date, palette }) {
     // Copied, not aliased: the capture's array must not stay reachable from the
     // gallery it was written into.
     palette: [...palette],
+    ...(design === undefined ? {} : { design }),
     collections: collectionsFrom(bookmark.tags),
   };
 }

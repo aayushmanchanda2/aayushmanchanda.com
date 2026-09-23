@@ -1,0 +1,297 @@
+---
+/**
+ * SiteFoundations — a saved site's design tokens, as things you can take.
+ *
+ * A port of ui-skills' `design-md-foundations.astro` (colours, typography,
+ * spacing, radius; click-to-copy; "Show all N") in our voice and shape: sans
+ * sentence-case labels, mono only for values, hairline rows on `--bg` rather
+ * than rounded tinted cards (design.md §3). "Copy as DESIGN.md" stands in for
+ * ui-skills' source pane. Copy and its flash are `lib/copy-flash.ts`, shared
+ * with `PaletteRow.astro`, which this panel replaces when a site has tokens.
+ *
+ * `lib/design-md.ts › parseDesign` is why the inline styles below may
+ * interpolate tokens: hex is `#rrggbb`, lengths are px, families are plain.
+ */
+import type { SiteDesign } from "../lib/design-md";
+import { toDesignMd } from "../lib/design-md";
+
+interface Props {
+  design: SiteDesign;
+  /** The site's title and domain, for the DESIGN.md name and Overview line. */
+  title: string;
+  domain: string;
+}
+
+const { design, title, domain } = Astro.props;
+const markdown = toDesignMd(design, { title, domain });
+
+/** ui-skills' caps: ten colours, three type styles, then "Show all N". */
+const COLOR_CAP = 10;
+const TYPE_CAP = 3;
+
+/** Past this a specimen stops being a letter and starts being the page. */
+const SPECIMEN_MAX = "48px";
+
+const PROPERTIES = [["fontFamily", "Family"], ["fontSize", "Size"], ["fontWeight", "Weight"],
+  ["lineHeight", "Line height"], ["letterSpacing", "Letter spacing"]] as const;
+
+/**
+ * The four groups in ui-skills' order. Colours, spacing and radius share one
+ * row (a picture of the token, its name, its value); typography is its own.
+ */
+const groups = [
+  {
+    head: "Colors",
+    cap: COLOR_CAP,
+    visual: "swatch",
+    rows: design.colors.map((c) => ({ name: c.name, value: c.hex, paint: `background-color: ${c.hex}` })),
+  },
+  { head: "Typography", cap: TYPE_CAP, visual: "", rows: [] },
+  { head: "Spacing", cap: Infinity, visual: "bar", rows: design.spacing.map((t) => ({ ...t, paint: `width: ${t.value}` })) },
+  { head: "Radius", cap: Infinity, visual: "shape", rows: design.radius.map((t) => ({ ...t, paint: `border-radius: ${t.value}` })) },
+]
+  .map((group) => ({ ...group, id: `found-${group.head.toLowerCase()}`, count: group.head === "Typography" ? design.type.length : group.rows.length }))
+  .filter((group) => group.count > 0);
+
+const families = [...new Set(design.type.map((style) => style.fontFamily))];
+const familyList =
+  families.length > 1 ? `${families.slice(0, -1).join(", ")} or ${families.at(-1)}` : families[0];
+---
+
+<section class="found" aria-labelledby="found-title" data-copy-root>
+  <div class="found__head">
+    <h2 class="found__title mono" id="found-title">Design</h2>
+    <button type="button" class="found__md mono press" data-copy={markdown} data-copy-name="DESIGN.md">
+      <span data-copy-label aria-hidden="true">Copy as DESIGN.md</span>
+      <span class="visually-hidden">Copy {title}'s tokens as DESIGN.md</span>
+    </button>
+  </div>
+  <p class="found__note">Read from {domain} on <span class="tabular-nums">{design.read_date}</span>.</p>
+
+  {
+    groups.map((group) => (
+      <div class="group">
+        <h3 class="group__head mono">{group.head}</h3>
+        {group.head === "Typography" ? (
+          <>
+            <p class="found__note">Rendered in your fallback if {familyList} isn't installed.</p>
+            <ul class="styles" id={group.id}>
+              {design.type.map((style, index) => (
+                <li class="style" data-tail={index >= group.cap ? "" : undefined}>
+                  <div class="style__specimen">
+                    <span class="style__aa" aria-hidden="true" style={`font-family: '${style.fontFamily}', var(--font-sans); font-size: min(${style.fontSize}, ${SPECIMEN_MAX}); font-weight: ${style.fontWeight}; letter-spacing: ${style.letterSpacing};`}>Aa</span>
+                    <span class="style__name">{style.name}</span>
+                  </div>
+                  <ul class="rows">
+                    {PROPERTIES.map(([key, label]) => (
+                      <li>
+                        <button type="button" class="row row--prop" data-copy={style[key]} aria-label={`Copy ${style.name} ${label.toLowerCase()} ${style[key]}`}>
+                          <span class="row__name">{label}</span>
+                          <span class="row__value" data-copy-label aria-hidden="true">{style[key]}</span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ))}
+            </ul>
+          </>
+        ) : (
+          <ul class="rows" id={group.id}>
+            {group.rows.map((row, index) => (
+              <li data-tail={index >= group.cap ? "" : undefined}>
+                <button type="button" class="row" data-copy={row.value} aria-label={`Copy ${group.head.toLowerCase()} ${row.name} ${row.value}`}>
+                  <span class="row__visual">
+                    <span class={group.visual} style={row.paint} aria-hidden="true" />
+                  </span>
+                  <span class="row__name">{row.name}</span>
+                  <span class="row__value" data-copy-label aria-hidden="true">{row.value}</span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+        {group.count > group.cap && (
+          <button type="button" class="tag tag--more" data-more hidden aria-expanded="false" aria-controls={group.id} data-label={`Show all ${group.count}`}>Show all {group.count}</button>
+        )}
+      </div>
+    ))
+  }
+
+  <p class="visually-hidden" role="status" data-copy-status></p>
+</section>
+
+<style>
+  /* 40px above, the section rhythm (design.md §2). Each token group is a
+     section of its own, so the groups sit 40px apart too; 8px inside one. */
+  .found,
+  .group {
+    margin-top: 2.5rem;
+  }
+
+  .found__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  /* ShotActions' `.act`: a housekeeping control at --muted, 40px tall. */
+  .found__md {
+    min-height: 40px;
+    padding-inline: 0.5rem;
+    margin-right: -0.5rem;
+    color: var(--muted);
+    cursor: pointer;
+  }
+
+  .found__note,
+  .style__name,
+  .group__head {
+    font-size: 0.8125rem;
+    color: var(--faint);
+  }
+
+  .found__note,
+  .group > .rows,
+  .styles,
+  .tag--more {
+    margin-top: 0.5rem;
+  }
+
+  .rows {
+    border-top: 1px solid var(--hairline);
+  }
+
+  /* The facts table's columns (global.css › .fact): 7rem for the picture of
+     the token, then its name, then the value you copy. 40px tall, the floor. */
+  .row {
+    display: grid;
+    grid-template-columns: 7rem minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    min-height: 2.5rem;
+    padding-block: 0.375rem;
+    border-bottom: 1px solid var(--hairline);
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .row--prop {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .row__visual {
+    display: flex;
+  }
+
+  .row__name {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  /* A value reads exactly as it will arrive (design.md §2). */
+  .row__value {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--muted);
+    text-align: right;
+    transition-property: color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .row:focus-visible .row__value {
+    color: var(--fg);
+  }
+
+  /* Gated: a tapped control's `:hover` latches on touch (design.md §4). */
+  @media (hover: hover) {
+    .row:hover .row__value,
+    .found__md:hover {
+      color: var(--fg);
+    }
+  }
+
+  /* ui-skills' 16px swatch with a 1px edge, so white on white is a chip. */
+  .swatch {
+    width: 16px;
+    height: 16px;
+    box-shadow: inset 0 0 0 1px var(--hairline-strong);
+  }
+
+  .bar {
+    height: 8px;
+    max-width: 100%;
+    background: var(--muted);
+  }
+
+  /* The site's radius on a 48px box: corners that are data, like a swatch's
+     colour, not a fifth radius of ours (design.md §3, sharp corners). */
+  .shape {
+    width: 48px;
+    height: 48px;
+    border: 1px solid var(--hairline-strong);
+    background: var(--hairline);
+  }
+
+  .styles {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .style {
+    display: grid;
+    grid-template-columns: 7rem minmax(0, 1fr);
+    gap: 0.5rem 1rem;
+  }
+
+  .style__specimen {
+    display: grid;
+    align-content: start;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+  }
+
+  .style__aa {
+    line-height: 1.1;
+    color: var(--fg);
+  }
+
+  /* `.tag` and `.style` set `display`, which beats the UA's `[hidden]`. */
+  .tag--more[hidden],
+  li[hidden] {
+    display: none;
+  }
+
+  @media (max-width: 599px) {
+    .style {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .row:not(.row--prop) {
+      grid-template-columns: 6rem minmax(0, 1fr) auto;
+    }
+  }
+</style>
+
+<script>
+  import { wireAllCopy } from "../lib/copy-flash";
+
+  wireAllCopy();
+
+  // "Show all N": the tail is in the HTML, so with scripting off every token
+  // shows and the button never does. TagFilters.astro's toggle, per group.
+  document.querySelectorAll<HTMLButtonElement>(".found [data-more]").forEach((button) => {
+    const tail = button.parentElement?.querySelectorAll<HTMLElement>("[data-tail]") ?? [];
+    const set = (open: boolean) => {
+      tail.forEach((item) => item.toggleAttribute("hidden", !open));
+      button.setAttribute("aria-expanded", String(open));
+      button.textContent = open ? "Show fewer" : (button.dataset.label ?? "Show all");
+    };
+    set(false);
+    button.hidden = false;
+    button.addEventListener("click", () => set(button.getAttribute("aria-expanded") !== "true"));
+  });
+</script>

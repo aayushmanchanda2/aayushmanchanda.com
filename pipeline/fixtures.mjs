@@ -157,6 +157,15 @@ export function raindropServer({ roots = [], children = [], raindrops = {} } = {
 /** What `fakeCapture` reports when a test does not ask for something else. */
 export const FAKE_PALETTE = ["#1c1c1e", "#f5f3ef", "#3b6cf6"];
 
+/** Tokens `fakeCapture` reports when a test asks it to have read the page. */
+export const FAKE_DESIGN = {
+  read_date: "2026-08-26",
+  colors: [{ name: "background", hex: "#f5f3ef" }],
+  type: [],
+  spacing: [{ name: "2", value: "8px" }],
+  radius: [],
+};
+
 /**
  * A stand-in for `captureSite` that writes a plausible file and records what it
  * was asked to shoot — so "never called" is a thing a test can assert.
@@ -170,8 +179,10 @@ export const FAKE_PALETTE = ["#1c1c1e", "#f5f3ef", "#3b6cf6"];
  * @param {string[]} [options.palette] Colours to report for the shot.
  * @param {boolean} [options.clipped]  Report the page as too tall to shoot whole.
  * @param {string} [options.fail]      Throw with this message instead of shooting.
+ * @param {import("./design.mjs").Design} [options.design]
+ *   Tokens to report, as `captureSite` does when the page read found any.
  */
-export function fakeCapture({ palette = FAKE_PALETTE, clipped = false, fail } = {}) {
+export function fakeCapture({ palette = FAKE_PALETTE, clipped = false, fail, design } = {}) {
   /** @type {{ url: string, slug: string, outDir: string }[]} */
   const calls = [];
 
@@ -192,7 +203,7 @@ export function fakeCapture({ palette = FAKE_PALETTE, clipped = false, fail } = 
       log(`capture: ${slug} is 30000px tall, clipped to the first 12000px`);
     }
 
-    return { shot, palette };
+    return design === undefined ? { shot, palette } : { shot, palette, design };
   }
 
   return { calls, captureSite };

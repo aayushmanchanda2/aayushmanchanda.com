@@ -27,12 +27,17 @@ interface Props {
 const { palette, title } = Astro.props;
 ---
 
-<div class="palette" data-palette>
-  <ul class="palette__row" aria-label={`Colours read off the ${title} screenshot`}>
+{/*
+  `swatches`, never `palette`: `styles/palette.css` is the command palette's
+  global sheet, and its `.palette` is a fixed, `visibility: hidden` overlay.
+  This row carried that class from VET-31 to VET-224 and rendered invisible.
+*/}
+<div class="swatches" data-copy-root>
+  <ul class="swatches__row" aria-label={`Colours read off the ${title} screenshot`}>
     {
       palette.map((hex) => (
         <li>
-          <button type="button" class="swatch press" data-hex={hex} aria-label={`Copy ${hex}`}>
+          <button type="button" class="swatch press" data-copy={hex} aria-label={`Copy ${hex}`}>
             {/*
               An inline background is the only way to paint a value that comes
               from data. It is safe to interpolate because `readPalette()` in
@@ -46,7 +51,7 @@ const { palette, title } = Astro.props;
               transient "copied" that would otherwise rename the control
               mid-press. The announcement goes through the status line below.
             */}
-            <span class="swatch__hex" data-hex-label aria-hidden="true">
+            <span class="swatch__hex" data-copy-label aria-hidden="true">
               {hex}
             </span>
           </button>
@@ -55,11 +60,11 @@ const { palette, title } = Astro.props;
     }
   </ul>
 
-  <p class="visually-hidden" role="status" data-palette-status></p>
+  <p class="visually-hidden" role="status" data-copy-status></p>
 </div>
 
 <style>
-  .palette__row {
+  .swatches__row {
     display: flex;
     flex-wrap: wrap;
     /* Row gap is the larger one: the chips carry their hex underneath, so two
@@ -125,56 +130,9 @@ const { palette, title } = Astro.props;
 </style>
 
 <script>
-  /** How long a confirmation holds before the hex comes back. */
-  const FLASH_MS = 1200;
+  // The handler, the "copied" flash and the status line are `lib/copy-flash.ts`,
+  // shared with the design panel that replaces this row when a site has tokens.
+  import { wireAllCopy } from "../lib/copy-flash";
 
-  function initPalette(root: HTMLElement) {
-    const status = root.querySelector<HTMLElement>("[data-palette-status]");
-    /**
-     * One pending reset per swatch, so hammering two chips in a row cannot
-     * leave the first one reading "copied" forever.
-     */
-    const timers = new WeakMap<HTMLButtonElement, number>();
-
-    root.querySelectorAll<HTMLButtonElement>("[data-hex]").forEach((button) => {
-      const label = button.querySelector<HTMLElement>("[data-hex-label]");
-      const hex = button.dataset.hex;
-      if (!label || !hex) return;
-
-      button.addEventListener("click", async () => {
-        let copied = true;
-        try {
-          // Throws on its own in an insecure context, where `navigator.clipboard`
-          // is not there to have a method — same catch either way.
-          await navigator.clipboard.writeText(hex);
-        } catch {
-          copied = false;
-        }
-
-        /*
-         * Unlike the image-copy button next to the frame, a swatch that cannot
-         * copy is not hidden: it is the only place this colour is written down,
-         * so it has to stay on the page and say what happened instead.
-         */
-        label.textContent = copied ? "copied" : "failed";
-        if (status) {
-          status.textContent = copied ? `Copied ${hex}` : `Could not copy ${hex}`;
-        }
-
-        window.clearTimeout(timers.get(button));
-        timers.set(
-          button,
-          window.setTimeout(() => {
-            label.textContent = hex;
-            if (status) status.textContent = "";
-            timers.delete(button);
-          }, FLASH_MS),
-        );
-      });
-    });
-  }
-
-  document
-    .querySelectorAll<HTMLElement>("[data-palette]")
-    .forEach((root) => initPalette(root));
+  wireAllCopy();
 </script>
