@@ -1,0 +1,70 @@
+# Give long saved posts their paragraph breaks back (VET-246).
+#
+# Manual only: `gh workflow run rescrape-posts.yml`. It re-reads every saved
+# post over 280 characters through Firecrawl (`pipeline/rescrape-posts.mjs`),
+# keeps a new text only when it is the same words with more breaks, and commits
+# `src/data/library.json` the way `publish.yml` does: bot identity, a build of
+# the committed tree, then a push. Same concurrency group as publish, so the two
+# never write the gallery at once.
+
+name: rescrape-posts
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  rescrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+
+      - name: Set up Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test the pipeline
+        run: npm test
+
+      - name: Re-scrape long posts
+        env:
+          FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+        run: node pipeline/rescrape-posts.mjs
+
+      - name: Commit
+        id: commit
+        run: |
+          if [ -z "$(git status --porcelain -- src/data/library.json)" ]; then
+            echo "no post changed"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- src/data/library.json
+          git commit -m "library: long posts keep their paragraph breaks"
+          echo "committed=true" >> "$GITHUB_OUTPUT"
+
+      # The same last gate as publish.yml: a tree that does not build is never pushed.
+      - name: Verify the committed tree still builds
+        if: steps.commit.outputs.committed == 'true'
+        run: npx astro build
+
+      - name: Push
+        if: steps.commit.outputs.committed == 'true'
+        run: git push origin "HEAD:${GITHUB_REF_NAME}"

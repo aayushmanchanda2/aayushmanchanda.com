@@ -413,12 +413,12 @@ test("an escaped entity stays escaped, because someone was writing about HTML", 
   assert.equal(parsePost(postMarkdown({ text: "Type &amp;lt; to escape it." }), POST_URL)?.text, "Type &lt; to escape it.");
 });
 
-test("markdown decoration is flattened into one line of prose", () => {
+test("markdown decoration comes out and the paragraphs stay", () => {
   const markdown = postMarkdown({
-    text: "Read this\n\n**properly** and see [the thread](https://x.com/i/1) ![img](https://p.example/a.jpg)",
+    text: "Read this\nnow\n\n**properly** and see [the thread](https://x.com/i/1)\n\n![img](https://p.example/a.jpg)\n\n  \n\nEnd.",
   });
 
-  assert.equal(parsePost(markdown, POST_URL)?.text, "Read this properly and see the thread");
+  assert.equal(parsePost(markdown, POST_URL)?.text, "Read this now\n\nproperly and see the thread\n\nEnd.");
 });
 
 test("the URL is the second source for a handle the heading did not give", () => {

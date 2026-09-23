@@ -1,9 +1,10 @@
 ---
 /**
  * EntryDetail — a library entry's detail: the header (title, the domain as
- * the one way out, the strip of facts whose values are filter links, the
- * standfirst), then the four optional blocks in reading order: the thing itself
- * (post or video), the digest, the draft, his own `why`.
+ * the one way out, the strip of facts whose values are filter links, the TLDR
+ * as the lead), then the optional blocks in reading order: the thing itself
+ * (post or video), the piece's own words (highlights, excerpt), his note, the
+ * digest, the draft, his own `why`, and on an article the way out (VET-246).
  *
  * Lifted out of `pages/library/[slug].astro` (VET-258) so /library's Articles
  * view can open the newest article beside the pane with the same markup. There
@@ -17,6 +18,7 @@ import EntryLink from "./EntryLink.astro";
 import KindChip from "./KindChip.astro";
 import TagChips from "./TagChips.astro";
 import PostCard from "./PostCard.astro";
+import ReaderBlocks from "./ReaderBlocks.astro";
 import VideoFacade from "./VideoFacade.astro";
 import VoiceBlocks from "./VoiceBlocks.astro";
 import type { LibraryEntry } from "../lib/library";
@@ -54,11 +56,8 @@ const Title = level;
     and `drafted` is the day the pipeline had its go. An opinion with an old
     date on it is a warning, which is the whole reason they are printed.
 
-    The tags come last and take a line of their own (VET-223). In the middle
-    of the row they wrapped as one block on a phone: the list indented under
-    its own separator, which sat alone to the left of it, and the date after
-    it started the next line with another. Last, they are one line of facts
-    and then one row of subjects, at every width.
+    The tags come last on a line of their own (VET-223): mid-row they wrapped
+    as one indented block on a phone, orphaning a separator either side.
   */}
   <ul class="strip mono">
     <li class="strip__item">
@@ -92,12 +91,8 @@ const Title = level;
     }
   </ul>
 
-  {/*
-    Not on a post the pipeline could read: there the note is a copy of the
-    post's words, which the embed below already shows (VET-221). A post it
-    could not read keeps the note, because then it is the only text there is.
-  */}
-  {entry.note && !entry.post && <p class="standfirst">{entry.note}</p>}
+  {/* What the source says, in a sentence: the first thing to read (VET-233). */}
+  {entry.tldr && <p class="lead">{entry.tldr}</p>}
 </header>
 
 {/*
@@ -114,6 +109,11 @@ const Title = level;
 }
 {entry.video && <VideoFacade entry={{ ...entry, video: entry.video }} />}
 
+<ReaderBlocks highlights={entry.highlights} excerpt={entry.excerpt} url={entry.url} domain={entry.domain} />
+
+{/* His note, after the piece speaks. Not on a read post: there it copies the card (VET-221). */}
+{entry.note && !entry.post && <p class="standfirst note">{entry.note}</p>}
+
 {entry.digest && <DigestBlocks digest={entry.digest} />}
 {entry.draft && <DraftBlock draft={entry.draft} />}
 
@@ -124,6 +124,15 @@ const Title = level;
   in the box above, in the third person, where it is labelled as such.
 */}
 <VoiceBlocks why={entry.why} />
+
+{/* The piece itself is off this site, and on an article this is the last word. */}
+{
+  entry.kind === "article" && (
+    <p class="full">
+      <EntryLink class="full__link ext press" href={entry.url}>Read the full article</EntryLink>
+    </p>
+  )
+}
 
 <style>
   /* --- the metadata strip --------------------------------------------------
@@ -155,8 +164,36 @@ const Title = level;
     color: var(--text-tertiary);
   }
 
-  .strip + .standfirst {
+  .lead {
+    max-width: 40rem;
     margin-top: 1rem;
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    line-height: 1.5;
+  }
+
+  .note,
+  .full {
+    margin-top: 2.5rem;
+  }
+
+  /* The one large control on the page: 48px, a hairline box, accent on hover. */
+  .full :global(.full__link) {
+    display: inline-flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 0 1.25rem;
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--r-md);
+    color: var(--text-primary);
+    font-size: 1.125rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .full :global(.full__link:hover) {
+    border-color: var(--accent);
+    color: var(--accent);
   }
 
   .strip__item {

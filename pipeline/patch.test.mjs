@@ -188,6 +188,39 @@ test("a blank sentence is a mistake, and clearing is spelled null", async (t) =>
   );
 });
 
+test("a patch writes a title, a TLDR, highlights and an excerpt for a new save", async (t) => {
+  /** @type {NonNullable<import("./types.js").Patch["highlights"]>} */
+  const highlights = [{ text: "Verify against a live source.", note: "The rule", color: "blue" }, { text: "Report." }];
+  const { entries, result } = await apply(t, {
+    url: URL_A,
+    title: "How Gumclaw works",
+    tldr: "Gumroad's agent runs a loop: check policy, verify, work, report.",
+    highlights,
+    excerpt: "I am Gumclaw.",
+  });
+
+  assert.deepEqual(result.changed, ["title", "tldr", "highlights", "excerpt"]);
+  assert.equal(entries[0].title, "How Gumclaw works");
+  assert.equal(entries[0].tldr, "Gumroad's agent runs a loop: check policy, verify, work, report.");
+  assert.deepEqual(entries[0].highlights, highlights, "absent note and colour stay absent");
+  assert.equal(entries[0].excerpt, "I am Gumclaw.");
+});
+
+test("the source fields are held to the caps the build holds them to", async (t) => {
+  const { paths, log } = await repo(t);
+  const run = (/** @type {any} */ patch) =>
+    patchLibrary({ patch: { url: URL_A, ...patch }, paths, log, commit: false });
+
+  await assert.rejects(run({ tldr: "word ".repeat(26) }), /26 words; the cap is 25/);
+  await assert.rejects(run({ tldr: "One thing — then another." }), /em dash/);
+  await assert.rejects(run({ excerpt: "word ".repeat(81) }), /81 words; the cap is 80/);
+  await assert.rejects(run({ highlights: Array(6).fill({ text: "a" }) }), /1 to 5 passages/);
+  await assert.rejects(run({ highlights: [{ text: "word ".repeat(61) }] }), /highlights\[0\]\.text" is 61 words/);
+  await assert.rejects(run({ highlights: [{ text: "a", color: "red" }] }), /amber, blue, pink, green/);
+  await assert.rejects(run({ title: "Two\nlines" }), /one non-empty line/);
+  await assert.rejects(run({ title: null }), /cannot be cleared/);
+});
+
 /* ---------------------------------------------------------------------------
    Writing
    --------------------------------------------------------------------------- */
@@ -376,6 +409,13 @@ test("an empty value is how the CLI spells clearing a field", () => {
     note: null,
     digest: null,
   });
+});
+
+test("the source flags parse, highlights as JSON", () => {
+  assert.deepEqual(
+    parseArgs(["--slug", "s", "--title", "T", "--tldr", "A line.", "--highlights", '[{"text":"q"}]', "--excerpt", ""]).patch,
+    { slug: "s", title: "T", tldr: "A line.", highlights: [{ text: "q" }], excerpt: null },
+  );
 });
 
 test("a JSON flag that is not JSON says so before anything is written", () => {

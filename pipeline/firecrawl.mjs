@@ -488,11 +488,13 @@ const ENTITIES = [
 ];
 
 /**
- * Markdown decoration out, one line of prose in.
+ * Markdown decoration out, the post's paragraphs in.
  *
- * Images go entirely (a post's own media is not something a one-line note can
- * show), links keep their text, and the rest collapses to single spaces because
- * the destination is a single row on a page, not a document.
+ * Images go entirely (the post's media comes from X's record, not from here),
+ * links keep their text, and whitespace collapses to single spaces inside each
+ * paragraph. The blank lines between paragraphs survive as `\n\n`: a long post
+ * used to arrive as one wall of text past X's first 280 characters (VET-246),
+ * and `lib/post.ts › postParagraphs` splits on exactly this.
  *
  * The entity pass at the end is the half that came out of reading real
  * responses: Firecrawl HTML-escapes the ampersands and angle brackets a person
@@ -514,8 +516,10 @@ function flatten(body) {
       // this line is on the ordinary path, not an exotic one.
       .replace(/^[ \t]*>[ \t]?/gm, "")
       .replace(/\*\*(.+?)\*\*/gs, "$1")
-      .replace(/\s+/g, " ")
-      .trim()
+      .split(/\n[ \t]*\n/)
+      .map((paragraph) => paragraph.replace(/\s+/g, " ").trim())
+      .filter((paragraph) => paragraph !== "")
+      .join("\n\n")
   );
 
   let text = flat;

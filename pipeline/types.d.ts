@@ -149,6 +149,12 @@ export interface Patch {
   /** The entry to edit, by URL or by slug. Exactly one of the two. */
   url?: string;
   slug?: string;
+  /** One line. Never null: every entry has a title. */
+  title?: string;
+  /** The caps are `src/lib/reader.mjs`'s, the same ones the build holds. */
+  tldr?: string | null;
+  highlights?: { text: string; note?: string; color?: "amber" | "blue" | "pink" | "green" }[] | null;
+  excerpt?: string | null;
   tags?: string[] | null;
   note?: string | null;
   why?: string | null;

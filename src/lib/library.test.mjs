@@ -298,3 +298,30 @@ test("the rules the new fields sit beside still hold", () => {
     "slugs are the pipeline's key",
   );
 });
+
+/* --- the source fields: TLDR, highlights, excerpt (VET-233, VET-246) ------- */
+
+test("a TLDR of 25 words builds and one of 26 does not", () => {
+  const [ok] = parseLibrary([entry({ tldr: "word ".repeat(25).trim() })]);
+  assert.equal(ok?.tldr?.split(" ").length, 25);
+  failsWith(entry({ tldr: "word ".repeat(26) }), "26 words; the cap is 25");
+  failsWith(entry({ tldr: "A claim — and a turn." }), "em dash");
+});
+
+test("highlights default to amber and no note, and hold their caps", () => {
+  const [parsed] = parseLibrary([
+    entry({ highlights: [{ text: "A line.", note: "Why", color: "pink" }, { text: "Another." }], excerpt: "It opens." }),
+  ]);
+  assert.deepEqual(parsed?.highlights, [
+    { text: "A line.", note: "Why", color: "pink" },
+    { text: "Another.", note: null, color: "amber" },
+  ]);
+  assert.equal(parsed?.excerpt, "It opens.");
+  assert.deepEqual(parseLibrary([entry()])[0]?.highlights, [], "absent is none");
+
+  failsWith(entry({ highlights: Array(6).fill({ text: "a" }) }), "1 to 5 passages");
+  failsWith(entry({ highlights: [] }), "1 to 5 passages");
+  failsWith(entry({ highlights: [{ text: "word ".repeat(61) }] }), "61 words; the cap is 60");
+  failsWith(entry({ highlights: [{ text: "a", color: "red" }] }), "amber, blue, pink, green");
+  failsWith(entry({ excerpt: "word ".repeat(81) }), "81 words; the cap is 80");
+});

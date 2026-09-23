@@ -46,16 +46,20 @@ async function notes(): Promise<FeedItem[]> {
 
 function libraryItems(): FeedItem[] {
   return library.map((entry) => {
-    // A digest is his call on the piece, so it leads when there is one.
+    // The TLDR says what the piece is; a digest is his call on it and follows.
     const text = entry.digest
-      ? paragraphs(entry.digest.verdict, entry.digest.why)
+      ? paragraphs(entry.tldr, entry.digest.verdict, entry.digest.why)
       : paragraphs(entry.why, rowSummary(entry) ?? (entry.post?.article ? null : entry.post?.text));
+    // Quoted passages only, never the piece (VET-246).
+    const quotes = entry.highlights
+      .map((highlight) => `<blockquote><p>${escapeXml(highlight.text)}</p></blockquote>`)
+      .join("");
     return {
       title: entry.title,
       path: `/library/${entry.slug}`,
       date: entry.digest?.digested ?? entry.saved_date,
       section: "Library",
-      html: (text || paragraphs(`Saved from ${entry.domain}.`)) + source(entry.url),
+      html: (text || paragraphs(`Saved from ${entry.domain}.`)) + quotes + source(entry.url),
     };
   });
 }

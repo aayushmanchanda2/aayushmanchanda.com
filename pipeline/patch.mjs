@@ -34,6 +34,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { collectionsFrom, readEntries, urlKey, writeEntries } from "./entries.mjs";
 import { resolvePaths } from "./state.mjs";
 import { isRecord } from "./util.mjs";
+import { CAPS, highlights, prose } from "../src/lib/reader.mjs";
 
 /** @typedef {import("./types.js").Paths} Paths */
 /** @typedef {import("./types.js").Patch} Patch */
@@ -41,7 +42,7 @@ import { isRecord } from "./util.mjs";
 const REPO_ROOT = fileURLToPath(new URL("..", import.meta.url));
 
 /** Every field a patch may touch, in the order the entry writes them. */
-const FIELDS = ["tags", "note", "why", "draft", "digest"];
+const FIELDS = ["title", "tldr", "highlights", "excerpt", "tags", "note", "why", "draft", "digest"];
 
 /**
  * A patch that cannot be applied: no such entry, two entries, a field that is
@@ -122,9 +123,18 @@ function findEntry(entries, patch) {
  */
 function normalise(field, value) {
   if (value === undefined) return undefined;
+  // Every entry has a title, so there is nothing to clear it to.
+  if (value === null && field === "title") throw new PatchError("a title cannot be cleared");
   if (value === null) return null;
 
   switch (field) {
+    case "title":
+      return line(value, "the title");
+    case "tldr":
+    case "excerpt":
+      return capped(() => prose(value, field, CAPS[field]));
+    case "highlights":
+      return capped(() => highlights(value));
     case "tags":
       return normaliseTags(value);
     case "note":
@@ -158,6 +168,19 @@ function normaliseSentence(field, value) {
     throw new PatchError(`"${field}" has to be a sentence, or null to clear it`);
   }
   return value.trim();
+}
+
+/**
+ * The source fields (`tldr`, `highlights`, `excerpt`) under the caps
+ * `library.ts` builds with, so a patch the build would refuse is refused here.
+ * @template T @param {() => T} read @returns {T}
+ */
+function capped(read) {
+  try {
+    return read();
+  } catch (error) {
+    throw new PatchError(error instanceof Error ? error.message : String(error));
+  }
 }
 
 /** One non-empty line. @param {unknown} value @param {string} where */
@@ -395,6 +418,10 @@ export async function patchLibrary({
 const USAGE = [
   "usage: node pipeline/patch.mjs (--url <url> | --slug <slug>) [edits]",
   "",
+  "  --title <text>    replace the title (one line)",
+  "  --tldr <text>     the source in 25 words or fewer; --tldr '' removes it",
+  "  --highlights <json>  [{\"text\":\"…\",\"note\":\"…\",\"color\":\"amber\"}], 1-5 verbatim quotes of 60 words or fewer",
+  "  --excerpt <text>  the source's opening, quoted, 80 words or fewer",
   "  --tags a,b,c      replace the tags; --tags '' removes them",
   "  --note <text>     replace the note; --note '' removes it",
   "  --why <text>      replace Aayush's why; --why '' removes it",
@@ -441,12 +468,18 @@ export function parseArgs(argv) {
       case "--tags":
         patch.tags = value.trim() === "" ? null : value.split(",");
         break;
+      case "--title":
+        patch.title = value;
+        break;
       case "--note":
       case "--why":
+      case "--tldr":
+      case "--excerpt":
         patch[flag.slice(2)] = value.trim() === "" ? null : value;
         break;
       case "--draft":
       case "--digest":
+      case "--highlights":
         patch[flag.slice(2)] = jsonArg(value, flag);
         break;
       default:

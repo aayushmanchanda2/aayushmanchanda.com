@@ -267,7 +267,11 @@ function withBreaks(saved, x) {
 export function pickText(saved, tweet) {
   if (!saved?.trim()) return tweet.text;
   if (tweet.article) return saved;
-  if (tweet.long || flat(saved).length > flat(tweet.text).length) return withBreaks(saved, tweet.text);
+  // A saved copy with its own breaks (Firecrawl keeps them since VET-246) is
+  // already whole; `withBreaks` would flatten everything past X's 280.
+  if (tweet.long || flat(saved).length > flat(tweet.text).length) {
+    return saved.includes("\n") ? saved : withBreaks(saved, tweet.text);
+  }
   return tweet.text;
 }
 
