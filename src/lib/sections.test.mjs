@@ -1,8 +1,8 @@
 /**
  * The section list, and the one copy of it that lives outside the build.
  *
- * `lib/sections.ts › CATALOGUE` is the manifest: the rail nav, the mobile
- * panel and the home index all read it, so those three cannot disagree with
+ * `lib/sections.ts › SECTION_HREFS` and `CATALOGUE` are the manifest: the menu
+ * panel and the home index both read it, so those two cannot disagree with
  * each other by construction. The social card can. `scripts/og.mjs` runs under
  * plain node to lay its text out in a real browser, and `sections.ts` imports
  * `astro:content`, which only resolves inside a build — so the card keeps a
@@ -35,22 +35,17 @@ const SECTIONS_TS = read("./sections.ts");
 const OG = read("../../scripts/og.mjs");
 
 /**
- * Every `href` in `CATALOGUE`, in source order, with the leading slash dropped.
- *
- * Scoped to the `CATALOGUE` block rather than run over the whole file, because
- * `SectionHref` above it lists the same five strings and `getSections` below it
- * lists them again as `counts` keys. Matching the file would find fifteen.
+ * `SECTION_HREFS`, in source order, with the leading slash dropped. That array
+ * is the manifest's order: `getSections` maps it and `CATALOGUE` is keyed off it.
  */
 function catalogueSections() {
-  const block = SECTIONS_TS.match(
-    /const CATALOGUE:[^=]*=\s*\[([\s\S]*?)\n\];/,
-  );
+  const block = SECTIONS_TS.match(/const SECTION_HREFS = \[([\s\S]*?)\]/);
   assert.ok(
     block,
-    "could not find the CATALOGUE array in sections.ts — if it was renamed or reshaped, this test has to learn the new shape",
+    "could not find the SECTION_HREFS array in sections.ts — if it was renamed or reshaped, this test has to learn the new shape",
   );
 
-  return [...block[1].matchAll(/href:\s*"\/([a-z-]+)"/g)].map((m) => m[1]);
+  return [...block[1].matchAll(/"\/([a-z-]+)"/g)].map((m) => m[1]);
 }
 
 /** The card's hand-kept copy, `scripts/og.mjs › SECTIONS`. */

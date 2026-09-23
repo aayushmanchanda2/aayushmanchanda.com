@@ -3,13 +3,14 @@
  *
  * Same job the home page does for a person: say what this is, then point at the
  * sections. The section list comes from `lib/sections.ts`, the manifest the
- * rail nav and the home-page index already read, so a section that is empty
+ * menu panel and the home-page index already read, so a section that is empty
  * disappears from all three at once instead of from two of them.
  */
 import type { APIRoute } from "astro";
 
 import { getCollection } from "astro:content";
 
+import { isoDay } from "../lib/date";
 import { experiments } from "../lib/experiments";
 import { feedItems } from "../lib/feeds";
 import {
@@ -60,9 +61,7 @@ export const GET: APIRoute = async () => {
       ...tools.map((tool) => tool.status_date),
       ...sites.map((site) => site.saved_date),
       ...experiments.map((experiment) => experiment.started),
-      ...(await getCollection("notes")).map((note) =>
-        note.data.date.toISOString().slice(0, 10),
-      ),
+      ...(await getCollection("notes")).map((note) => isoDay(note.data.date)),
     ]),
     blocks: [
       [

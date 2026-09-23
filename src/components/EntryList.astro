@@ -1,0 +1,133 @@
+---
+/**
+ * A column of titles to read: briOS's `ListItem` (`shared/ListComponents.tsx`).
+ * Each year on /notes, "Read next" under a note and "Latest" on the home page,
+ * so the three cannot drift apart.
+ *
+ * Plain titles in primary ink, underlined on hover, no rule between rows: the
+ * list is a column of things to read, not a table. A title-only row is 20px
+ * with an optional thumbnail after it (`lib/entry-list.ts › noteEntry`). A list
+ * whose entries carry `meta` stacks an 18px title over the section and day, at
+ * every width: side by side went ragged when a long title wrapped anyway.
+ */
+import { formatDay } from "../lib/date";
+import type { Entry } from "../lib/entry-list";
+
+interface Props {
+  entries: Entry[];
+}
+
+const { entries } = Astro.props;
+const stacked = entries.some((entry) => entry.meta !== undefined);
+---
+
+<ul class:list={["list", stacked && "list--stacked"]}>
+  {
+    entries.map((entry) => (
+      <li>
+        <a class="row press" href={entry.href}>
+          <span class="row__title">{entry.title}</span>
+          {entry.meta && (
+            <span class="row__meta">
+              <span>{entry.meta.label}</span>
+              <time datetime={entry.meta.date}>{formatDay(entry.meta.date)}</time>
+            </span>
+          )}
+          {entry.thumb && (
+            <img
+              class="row__thumb outlined"
+              src={entry.thumb}
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
+          )}
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  /* 16px between rows on a phone, 6px above 640px: briOS's `gap-4 sm:gap-1.5`,
+     paid for here by the row's own padding so each row is a 40px target
+     (design.md §4). */
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .list {
+      gap: 0;
+    }
+  }
+
+  .row {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 40px;
+    padding-block: 0.25rem;
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  /* The underline is the hover, not the accent `a:hover` gives a bare link. */
+  .row:hover {
+    color: var(--text-primary);
+  }
+
+  .row__title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+    text-underline-offset: 3px;
+  }
+
+  .row:hover .row__title {
+    text-decoration-line: underline;
+  }
+
+  .row__thumb {
+    flex: none;
+    width: 44px;
+    height: 30px;
+    object-fit: cover;
+    object-position: top center;
+    border-radius: var(--r-sm);
+  }
+
+  /* Title, then section and day under it. The row's own padding keeps the
+     40px target with no gap between rows. */
+  .list--stacked {
+    gap: 0;
+  }
+
+  .list--stacked .row {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.125rem;
+    padding-block: 0.375rem;
+  }
+
+  .list--stacked .row__title {
+    min-width: 0;
+    font-size: 1.125rem;
+    line-height: 1.5;
+    text-wrap: pretty;
+  }
+
+  .row__meta {
+    font-size: 0.875rem;
+    color: var(--text-tertiary);
+  }
+
+  .row__meta > * + *::before {
+    content: "\00b7" / "";
+    margin-inline: 0.4em;
+  }
+</style>

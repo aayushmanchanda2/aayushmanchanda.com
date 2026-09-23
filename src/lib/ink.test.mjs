@@ -103,7 +103,7 @@ test("dark text levels are briOS's alpha whites", () => {
  * follows the selector must declare `var(--text-secondary)`.
  */
 const FLOORS = [
-  ["layouts/Base.astro", ".foot__quiet {"],
+  ["components/Footer.astro", ".foot__quiet {"],
   ["components/ThemeToggle.astro", ".tt {"],
   ["components/ShotActions.astro", ".act {"],
   ["components/ToolList.astro", ".sort {"],

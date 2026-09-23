@@ -31,9 +31,7 @@
  * The rule this file now owns — what counts as a GitHub repository URL — is
  * shared with the publish pipeline, so it has to be testable outside a bundler.
  */
-import { existsSync } from "node:fs";
-import path from "node:path";
-
+import { assetFor } from "./assets.ts";
 import { absolute } from "./site.ts";
 
 /**
@@ -165,20 +163,11 @@ const FIRST_GLYPH = /[\p{L}\p{N}]/u;
  * homepage of its own.
  */
 export function markFor(entry: { slug: string; name: string }): Mark {
-  if (existsSync(path.join(process.cwd(), "public", "icons", `${entry.slug}.webp`))) {
-    return { kind: "logo", src: `/icons/${entry.slug}.webp` };
-  }
+  const src = assetFor("icons", entry.slug);
+  if (src !== null) return { kind: "logo", src };
 
   const letter = [...entry.name].find((glyph) => FIRST_GLYPH.test(glyph)) ?? "";
   return { kind: "initial", letter };
-}
-
-/**
- * A tool's hover preview, `public/previews/<slug>.webp` (`pipeline/preview.mjs`),
- * or null for the icon-only card. A file on disk at build time, like `markFor`.
- */
-export function previewFor(slug: string): string | null {
-  return existsSync(path.join(process.cwd(), "public", "previews", `${slug}.webp`)) ? `/previews/${slug}.webp` : null;
 }
 
 /**

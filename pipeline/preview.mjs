@@ -19,7 +19,7 @@
  * Run directly to backfill every tool: `node pipeline/preview.mjs [--force]`.
  */
 
-import { access, mkdir, readFile, rename, writeFile } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -30,7 +30,7 @@ import { CONTEXT_OPTIONS, loadPage, withDeadline } from "./capture.mjs";
 import { measureShot, shotLooksBlank } from "./challenge.mjs";
 import { siteOf } from "./icon.mjs";
 import { resolvePaths } from "./state.mjs";
-import { describe } from "./util.mjs";
+import { backfill, describe, writeAtomic } from "./util.mjs";
 
 /** The page is laid out at this size: the Open Graph card shape. */
 export const PREVIEW_VIEWPORT = { width: 1200, height: 630 };
@@ -129,9 +129,7 @@ export async function capturePreview({ slug, url: given, dir, browser, fetch, fo
     const webp = await encodePreview(png);
     if (shotLooksBlank(await measureShot(webp))) throw new Error("captured as a blank page");
 
-    await mkdir(dir, { recursive: true });
-    await writeFile(`${file}.tmp`, webp);
-    await rename(`${file}.tmp`, file);
+    await writeAtomic(file, webp);
     log(`preview: ${slug} <- ${url} (${Math.round(webp.length / 1000)}KB)`);
     return file;
   } catch (error) {
@@ -155,18 +153,17 @@ if (invokedDirectly) {
 
   /** @type {string[]} */
   const missing = [];
-  let next = 0;
-  // Three pages at once, the `backfill-design.mjs` number.
-  const worker = async () => {
-    while (next < tools.length) {
-      const tool = /** @type {(typeof tools)[number]} */ (tools[next++]);
-      const url = tool.url ?? tool.repo ?? null;
-      const got = await capturePreview({ slug: tool.slug, url, dir: paths.previewsDir, browser, force, log: console.log });
-      if (got === null) missing.push(tool.slug);
-    }
-  };
   try {
-    await Promise.all([worker(), worker(), worker()]);
+    // Three pages at once, the `backfill-design.mjs` number.
+    await backfill(
+      tools,
+      async (tool) => {
+        const url = tool.url ?? tool.repo ?? null;
+        const got = await capturePreview({ slug: tool.slug, url, dir: paths.previewsDir, browser, force, log: console.log });
+        if (got === null) missing.push(tool.slug);
+      },
+      3,
+    );
   } finally {
     await browser.close();
   }

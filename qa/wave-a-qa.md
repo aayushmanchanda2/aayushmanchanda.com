@@ -1,6 +1,7 @@
 # Wave A QA (2026-09-22), diff 2921b8c..6d7c29f
 
 Fix 1 applied on branch `qa-wave-a-fix-1`; evidence in `qa/evidence/2026-09-22-qa-fix-1*/`.
+Fix 2 applied on branch `qa-wave-a-fix-2`; evidence in `qa/evidence/2026-09-22-qa-fix-2/` (HTML diff script, K dry-run log, `qa-fix-2` shots).
 
 Reviewers (all read-only):
 - thermo-nuclear code review (opus)
@@ -31,14 +32,14 @@ Verdicts:
 - [x] **P. /privacy** has no JSON-LD. Pre-existing. Fix: add the same WebPage and breadcrumb JSON-LD the other pages have.
 
 ## Accepted: Fix 2 (structure), one PR after Fix 1
-- [ ] **I. `lib/assets.ts`.** Read `public/icons` and `public/previews` once each into a Set, following `sites.ts:135` PUBLIC_DIR. `markFor` and `previewFor` use it, which removes the repeated `existsSync`. Move `toolAttributes` out of `tools.ts` so it sits next to ToolList/ToolGrid.
-- [ ] **J. One `EntryList` component** (`{title, href, meta?, thumb?}`) for /notes, Read next, and Latest on home. The heading style goes into `.accent-bar`.
-- [ ] **K. `pipeline/util.mjs`.** Add `writeAtomic`, which replaces the 5 copies of temp-then-rename, and `backfill(items, fn, n)`, which gives both backfills one concurrency. Make sure a stray `.tmp` file can never be committed.
-- [ ] **L. Dates.**
+- [x] **I. `lib/assets.ts`.** Read `public/icons` and `public/previews` once each into a Set, following `sites.ts:135` PUBLIC_DIR. `markFor` and `previewFor` use it, which removes the repeated `existsSync`. Move `toolAttributes` out of `tools.ts` so it sits next to ToolList/ToolGrid.
+- [x] **J. One `EntryList` component** (`{title, href, meta?, thumb?}`) for /notes, Read next, and Latest on home. The heading style goes into `.accent-bar`.
+- [x] **K. `pipeline/util.mjs`.** Add `writeAtomic`, which replaces the 5 copies of temp-then-rename *(4 on inspection: patch.mjs already went through writeEntries)*, and `backfill(items, fn, n)`, which gives both backfills one concurrency. Make sure a stray `.tmp` file can never be committed.
+- [x] **L. Dates.**
   - `date.ts` gets `isoDay` and `rfc822`, and the 4 copies of `toISOString().slice(0,10)` use it.
   - Rename rss.ts's `absolutize` to `absolutizeHtml`.
-- [ ] **M. `TopBar.astro`.** Pull the bar markup, the scroll-to-top script and the bar CSS out of Base (828 lines). `FEEDS`/`FEED_SECTIONS` move into `sections.ts` and the `catalogue()` helper is deleted.
-- [ ] **N. Dead code and contract drift.**
+- [x] **M. `TopBar.astro`.** Pull the bar markup, the scroll-to-top script and the bar CSS out of Base (828 lines). *(Footer.astro came out too, for the file-size rule: Base is 408.)* `FEEDS`/`FEED_SECTIONS` move into `sections.ts` and the `catalogue()` helper is deleted.
+- [x] **N. Dead code and contract drift.**
   - Delete `NavKind`, `NavItem.kind`, `Section.kind`, the catalogue `kind` values and Base's "Dash hierarchy" code.
   - Fix the stale SiteMark comments in MarkGlyph and design.md's "rail dashes".
   - Resolve the design.md contradictions: `.tabular-nums` on dates (lines 114 vs 143), and the radii statement (line 325) against pills and `--r-lg` on pane rows.
@@ -46,7 +47,7 @@ Verdicts:
   - `.select:hover` stops using `--text-quaternary`.
   - `trailOf` trailing-slash consistency (`schema.ts:416`).
   - Update design.md so `.prose` means "reading text" wherever it's applied.
-- [ ] **O.** `read-next.ts` uses a tiny string hash instead of `node:crypto` sha1. `links.ts` gets one shared file-on-disk helper (folded into I).
+- [x] **O.** `read-next.ts` uses a tiny string hash instead of `node:crypto` sha1. `links.ts` gets one shared file-on-disk helper (folded into I).
 
 ## Deferred, with reasons
 - `Tool.description` and `LibraryEntry.tldr` are unused today. T2 and T14 fill them soon, so they stay.

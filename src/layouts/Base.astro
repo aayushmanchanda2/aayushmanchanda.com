@@ -19,18 +19,15 @@ import "../styles/chip.css";
 import "../styles/palette.css";
 import "../styles/prose.css";
 
-import Breadcrumbs from "../components/Breadcrumbs.astro";
 import CommandPalette from "../components/CommandPalette.astro";
-import MobileNav from "../components/MobileNav.astro";
-import ThemeToggle from "../components/ThemeToggle.astro";
-import XGlyph from "../components/XGlyph.astro";
+import Footer from "../components/Footer.astro";
+import TopBar from "../components/TopBar.astro";
 import { normalize } from "../lib/links";
 import { markdownVariantFor } from "../lib/markdown";
 import type { Crumb, JsonLd } from "../lib/schema";
 import { serialize, trailOf } from "../lib/schema";
 import type { NavItem } from "../lib/sections";
-import { FEEDS } from "../lib/feeds";
-import { getSections } from "../lib/sections";
+import { FEEDS, getSections } from "../lib/sections";
 import { absolute } from "../lib/site";
 import { PREPAINT, THEME_COLORS } from "../lib/theme";
 
@@ -98,59 +95,17 @@ const {
 } = Astro.props;
 
 /**
- * Dash hierarchy: home is the root (title); the sections carry the weight the
- * manifest gives them, which maps to the reference dash presets.
- *
- * Only sections that have entries come back from `getSections()`, so an empty
- * one is never linked from the nav.
+ * Home, then the sections. Only sections that have entries come back from
+ * `getSections()`, so an empty one is never linked from the nav.
  */
 const navItems: NavItem[] = [
-  { href: "/", label: "Home", kind: "title" },
-  ...(await getSections()).map((section) => ({
-    href: section.href,
-    label: section.name,
-    kind: section.kind,
-  })),
-];
-
-/**
- * Only links that go somewhere.
- *
- * `rel="me"` is a claim of identity, so every row here has to resolve to a real
- * profile. A row pointing at a bare `https://x.com/` would be a claim about
- * nobody, and worse than an absent row: a dead link a reader has to click to
- * find out. Both of these are handles, so both are safe to make the claim.
- *
- * The same two profiles are the `sameAs` list on the home page's Person node.
- * Two copies, because one is markup a reader clicks and the other is structured
- * data a machine resolves; if a third profile ever appears, it goes in both.
- */
-/**
- * `glyph` says the profile's mark is drawn rather than spelled, and only X
- * carries it. That is a judgement about legibility, not about consistency: "X"
- * is a single character that reads as a close button or a multiplication sign
- * long before it reads as a company, and it is the only label on this site with
- * that problem. "GitHub" is a word that reads as itself, so it stays a word —
- * and the octocat is a filled silhouette that would be the only one of its kind
- * in an icon set that is otherwise monoline, illegible at 14px, and a logo
- * standing in for a word that was already doing the job. `label` stays the
- * accessible name either way, so the two rows say the same thing to a screen
- * reader whichever way they are drawn.
- */
-const social: { label: string; href: string; glyph?: boolean }[] = [
-  { label: "GitHub", href: "https://github.com/aayushmanchanda2" },
-  { label: "X", href: "https://x.com/amanchanda7", glyph: true },
-];
-
-const clocks = [
-  { label: "Winnipeg", tz: "America/Winnipeg" },
-  { label: "New Delhi", tz: "Asia/Kolkata" },
+  { href: "/", label: "Home" },
+  ...(await getSections()).map((section) => ({ href: section.href, label: section.name })),
 ];
 
 const hasPane = Astro.slots.has("pane");
 
 const pathname = Astro.url.pathname;
-const year = new Date().getFullYear();
 
 /**
  * The top bar's trail, in order of authority: the page's own `BreadcrumbList`
@@ -342,7 +297,7 @@ const markdownVariant = variant === null ? null : absolute(variant);
     {/*
       `data-mnav-inert` marks what the mobile MENU panel takes out of the tab
       order and the accessibility tree while it is open: the skip link, the
-      site mark and the whole shell. The panel is `aria-modal`, and before this
+      bar's trail and Search, and the whole shell. The panel is `aria-modal`, and before this
       a keyboard could Tab straight out of it into content sitting behind the
       scrim. The theme live region below deliberately does not carry it — the
       panel's own theme toggle announces through it while the panel is open.
@@ -359,24 +314,7 @@ const markdownVariant = variant === null ? null : absolute(variant);
     */}
     <span class="visually-hidden" aria-live="polite" data-theme-live></span>
 
-    {/*
-      The top bar: menu, trail, search. Sticky, 56px, the page colour behind
-      it, and no backdrop filter on purpose: a filter would make this the
-      containing block for the menu panel's `position: fixed` and clip it to
-      the bar. A press on its empty stretch scrolls to the top (script below).
-    */}
-    <header class="bar" data-bar>
-      <MobileNav items={navItems} pathname={pathname} />
-      <Breadcrumbs trail={trail} />
-      <button
-        class="bar__search mono press"
-        type="button"
-        data-palette-open
-        data-mnav-inert
-      >
-        Search <kbd data-palette-hint>&#8984;K</kbd>
-      </button>
-    </header>
+    <TopBar navItems={navItems} pathname={pathname} trail={trail} />
     <CommandPalette />
 
     {/*
@@ -393,126 +331,9 @@ const markdownVariant = variant === null ? null : absolute(variant);
         <slot />
       </main>
 
-      {/*
-        Three stacked groups, every one of them centred. The page above is flush
-        left and stays that way; the footer is the one block that is not content
-        but a colophon closing it, and centring is what says so. It also settles
-        an alignment the old row could not: the socials sat left, the clocks
-        were pushed right by an `auto` margin, and the colophon wrapped
-        underneath at the left edge again, so three groups took three different
-        alignments and read as a row that had come apart rather than as a block.
-      */}
-      <footer class="foot">
-        <div class="foot__row">
-          <ul class="foot__links mono">
-            {
-              social.map((link) => (
-                <li>
-                  <a
-                    class:list={[
-                      "foot__link",
-                      "press",
-                      link.glyph && "foot__link--glyph",
-                    ]}
-                    href={link.href}
-                    rel="me noopener"
-                    target="_blank"
-                    aria-label={link.glyph ? link.label : undefined}
-                  >
-                    {link.glyph ? <XGlyph /> : link.label}
-                  </a>
-                </li>
-              ))
-            }
-          </ul>
-
-          <dl class="foot__clocks mono">
-            {
-              clocks.map((clock) => (
-                <div class="foot__clock">
-                  <dt>{clock.label}</dt>
-                  <dd class="tabular-nums" data-clock={clock.tz}>
-                    --:--:--
-                  </dd>
-                </div>
-              ))
-            }
-          </dl>
-
-          {/*
-            Beside the clocks, at the clocks' weight: the theme is housekeeping,
-            like the timezone readouts and the copyright, not a feature the page
-            is selling. The mobile nav panel carries the same control, because
-            below 900px this footer is a long scroll away.
-          */}
-          <ThemeToggle />
-        </div>
-
-        {/* The colophon: the four pages that are about the site rather than in
-            it, with the palette in front of them. They live here and not in the
-            nav on purpose — the nav is the five content sections, and a reader
-            looking for who wrote this or how to reach him looks at the bottom
-            of the page.
-
-            Ordered by what a reader is answering. About and Contact are about
-            the person, and they come first because that is what most people are
-            looking for down here. Design and Privacy are about the machinery of
-            the site, and Privacy is last because it is the one nobody comes
-            looking for until they need it.
-
-            A list rather than a paragraph now that the separators are drawn
-            rather than typed: the `·` is a `::before` on the list item, which is
-            what the rest of the site already does. */}
-        <ul class="foot__meta mono">
-          <li>
-            {/* The palette's only permanently visible affordance on desktop. A
-                shortcut nobody is told about is a shortcut nobody uses, and the
-                footer is where this site already keeps its housekeeping. The
-                key cap is corrected to Ctrl off macOS by `lib/palette.ts`. */}
-            {/* `mono` sits on the button itself rather than being inherited
-                from the list, which is what every other label-voice button on
-                the site does and is not a style preference: `button` resets
-                `font` to inherit but the UA stylesheet still owns a control's
-                other text properties, so a button inside a `.mono` container
-                can drop out of the label voice. This one did once — "Search"
-                was the only item in the colophon not matching its neighbours. */}
-            <button
-              class="foot__quiet foot__search mono press"
-              type="button"
-              data-palette-open
-            >
-              Search <kbd data-palette-hint>&#8984;K</kbd>
-            </button>
-          </li>
-          <li><a class="foot__quiet press" href="/about">About</a></li>
-          <li><a class="foot__quiet press" href="/contact">Contact</a></li>
-          <li><a class="foot__quiet press" href="/design">Design</a></li>
-          <li><a class="foot__quiet press" href="/privacy">Privacy</a></li>
-        </ul>
-
-        {/* Its own line, and his name on it. The year is `tabular-nums` like
-            every other digit that changes in place, which also sets it in mono
-            inside the label voice; the name stays a name. */}
-        <p class="foot__legal mono">&copy; <span class="tabular-nums">{year}</span> Aayush Manchanda</p>
-      </footer>
+      <Footer />
     </div>
     </div>
-
-    <script>
-      // The dual-city footer clocks. Each `data-clock` carries its own IANA
-      // zone, so DST for Winnipeg and New Delhi is the platform's problem.
-      import { startTicker } from "../lib/clock";
-
-      startTicker("data-clock");
-
-      // A press on the bar's empty stretch goes back to the top. Controls in
-      // it keep their own job. `html { scroll-behavior }` decides smooth or
-      // instant, so reduced motion is already honoured.
-      document.querySelector("[data-bar]")?.addEventListener("click", (event) => {
-        if ((event.target as Element).closest("a, button")) return;
-        window.scrollTo({ top: 0 });
-      });
-    </script>
 
     <style>
       .skip {
@@ -534,49 +355,6 @@ const markdownVariant = variant === null ? null : absolute(variant);
 
       .skip:focus {
         left: 0;
-      }
-
-      .bar {
-        position: sticky;
-        top: 0;
-        z-index: 30;
-        display: flex;
-        align-items: center;
-        gap: 0.25rem;
-        height: var(--bar-h);
-        padding-inline: max(0.5rem, env(safe-area-inset-left))
-          max(0.5rem, env(safe-area-inset-right));
-        background: var(--bg);
-      }
-
-      .bar__search {
-        flex-shrink: 0;
-        margin-left: auto;
-        padding: 0.625rem 0.5rem;
-        color: var(--text-secondary);
-        cursor: pointer;
-      }
-
-      .bar__search kbd {
-        font: inherit;
-        font-family: var(--font-mono);
-        margin-left: 0.35rem;
-        padding: 0.1rem 0.35rem;
-        border: 1px solid var(--hairline-strong);
-        border-radius: var(--r-sm);
-      }
-
-      @media (hover: hover) {
-        .bar__search:hover {
-          color: var(--accent);
-        }
-      }
-
-      /* A phone's bar is the trail's: search is one press away in the menu. */
-      @media (max-width: 599px) {
-        .bar__search {
-          display: none;
-        }
       }
 
       .split {
@@ -607,7 +385,7 @@ const markdownVariant = variant === null ? null : absolute(variant);
       }
 
       /* The one page-width concession on the site, and it stops here.
-         `.foot` below keeps `--page-max` on purpose: the colophon closes every
+         `Footer.astro › .foot` keeps `--page-max` on purpose: the colophon closes every
          page the same way, and a footer that changed width with the content
          above it would read as two different sites. Above 900px only, because
          below it the shell's own padding already keeps the column under 42rem
@@ -616,215 +394,6 @@ const markdownVariant = variant === null ? null : absolute(variant);
       @media (min-width: 900px) {
         .shell__main--wide {
           max-width: var(--page-wide);
-        }
-      }
-
-      /* --- footer ---------------------------------------------------------- */
-
-      .foot {
-        width: 100%;
-        max-width: var(--page-max);
-        margin-top: clamp(5rem, 16vh, 10rem);
-        padding-top: 1.75rem;
-        border-top: 1px solid var(--hairline);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-      }
-
-      /* Group one: who he is and what time it is where he is. */
-      .foot__row {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: baseline;
-        gap: 1rem 2.5rem;
-      }
-
-      .foot__links {
-        display: flex;
-        align-items: center;
-        gap: 1.5rem;
-        margin: 0;
-      }
-
-      .foot__link {
-        display: inline-block;
-        color: var(--text-secondary);
-        text-decoration: none;
-      }
-
-      /* Footer hovers are gated: the profile links open a new tab and Search
-         opens the palette, so this page stays on screen, and on touch a tap
-         latches `:hover` — the pressed item would sit accent-blue until the
-         reader tapped elsewhere (design.md §4). The colophon links share the
-         gate because they share the selector; on touch they navigate before a
-         hover could show, so the gate costs them nothing. */
-      @media (hover: hover) {
-        .foot__link:hover {
-          color: var(--accent);
-        }
-
-        .foot__quiet:hover {
-          color: var(--accent);
-        }
-
-        .foot__search:hover kbd {
-          border-color: currentColor;
-        }
-      }
-
-      /* The glyph row is a 14px target, so it takes the 40px hit area the
-         theme toggle takes, by the same trick: an absolutely
-         positioned `::before`, so a toolbar's worth of height never lands in
-         the footer row. The text links beside it are text and stay text —
-         design.md §4's stated exception, for the same reason the /sites hint
-         row takes it. Offsets rather than a centring transform, so nothing here
-         rests on one and reduced motion has nothing to undo. */
-      .foot__link--glyph {
-        position: relative;
-        display: inline-flex;
-      }
-
-      .foot__link--glyph::before {
-        content: "";
-        position: absolute;
-        left: -13px;
-        top: -13px;
-        width: 40px;
-        height: 40px;
-      }
-
-      .foot__clocks {
-        display: flex;
-        gap: 1.5rem;
-        margin: 0;
-      }
-
-      .foot__clock {
-        display: flex;
-        gap: 0.5rem;
-        align-items: baseline;
-        color: var(--text-tertiary);
-      }
-
-      .foot__clock dd {
-        margin: 0;
-        color: var(--text-secondary);
-      }
-
-      /* The gap that makes the two halves read as two things rather than as one
-         row that wrapped. `--gap-masthead` is the space under a masthead, 3.5
-         to 6rem, and far too much air for the foot of a page; this is its
-         smaller sibling. It stays a literal rather than becoming a token
-         because the footer is its only consumer — `--gap-masthead` earned a
-         token by being written out fourteen times, and one call site is
-         retunable by opening one file. */
-      .foot__meta {
-        margin: 2rem 0 0;
-        color: var(--text-tertiary);
-        display: flex;
-        align-items: baseline;
-        justify-content: center;
-        /* Wraps because five items is wider than a 375px column, and an
-           unwrapped flex row pushes the last one off the side rather than
-           dropping it to a second line. The row gap is tighter than the column
-           gap so a wrapped row still reads as one block. */
-        flex-wrap: wrap;
-        gap: 0.4rem 0.5rem;
-      }
-
-      /* Drawn, never typed: the separator is generated content on the list item
-         and sits outside the anchor, so it is never part of a link's text or
-         its target. The `/ ""` is the alt-text form — it gives the glyph an
-         empty accessible name, which is what the `aria-hidden` spans this
-         replaced were doing by hand. Margin on the pseudo-element rather than a
-         wider gap, so the dot sits centred between two items instead of hard
-         against the one after it. */
-      .foot__meta li + li::before {
-        content: "\00b7" / "";
-        margin-right: 0.5rem;
-        color: var(--hairline-strong);
-      }
-
-      /* The tail of the colophon rather than a third group, so it takes one
-         line of air against the block of it above. */
-      .foot__legal {
-        margin: 0.85rem 0 0;
-        color: var(--text-tertiary);
-      }
-
-      /* Quieter than the social links, but at --text-secondary, never the
-         row's --text-tertiary: these are controls, and controls sit a level
-         above metadata (§4's ink floor). The copyright is metadata. */
-      .foot__quiet {
-        display: inline-block;
-        color: var(--text-secondary);
-        text-decoration: none;
-      }
-
-      .foot__search {
-        cursor: pointer;
-      }
-
-      /* Mono: a key cap is a literal (design.md §2). */
-      .foot__search kbd {
-        font: inherit;
-        font-family: var(--font-mono);
-        margin-left: 0.35rem;
-        padding: 0.1rem 0.35rem;
-        border: 1px solid var(--hairline);
-      }
-
-      @media (max-width: 599px) {
-        /* The column here is narrow, and three things sharing
-           one wrapped row inside it centre as *pairs* rather than individually:
-           the clocks came out left of centre because the theme toggle was
-           riding beside them.
-
-           So the clocks take the second line to themselves and the two controls
-           keep the first. Ordering the clocks last rather than stacking all
-           three costs nothing in tab order — a `dl` of readouts has nothing
-           focusable in it, so the only two stops are the profile links and the
-           toggle, and they now run left to right along one line in the order
-           the markup already had them. */
-        .foot__row {
-          gap: 1.25rem 1.75rem;
-        }
-
-        /* Stacked, they are also the one place the clocks stop being centred
-           *inside* themselves: two readouts with their labels flush left and
-           their times flush right is a small table, and a table reads by its
-           columns. `align-items: center` is what still centres the block on the
-           page — it is the pair that is aligned to each other, not to the
-           column. */
-        .foot__clocks {
-          order: 1;
-          flex-basis: 100%;
-          flex-direction: column;
-          align-items: center;
-          gap: 0.35rem;
-          text-align: left;
-        }
-
-        .foot__clock {
-          justify-content: space-between;
-          min-width: 11rem;
-        }
-
-        /* It wraps here, and a dot that travels with its item can start or end
-           a wrapped line. So no dots: the gap is the separator, and the 16rem
-           box makes the wrap deliberate, three items then two, both with real
-           margin, rather than leaving it to whether a glyph is a pixel wider
-           today. */
-        .foot__meta {
-          max-width: 16rem;
-          gap: 0.4rem 1rem;
-        }
-
-        .foot__meta li + li::before {
-          content: none;
         }
       }
     </style>

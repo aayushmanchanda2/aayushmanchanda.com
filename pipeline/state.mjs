@@ -22,11 +22,11 @@
  * gallery, which is the only place both facts are in hand at once.
  */
 
-import { readFile, readdir, rename, rm, writeFile } from "node:fs/promises";
+import { readFile, readdir, rm } from "node:fs/promises";
 import path from "node:path";
 
 import { SHOT_FILE, readEntries, shotFilesOf } from "./entries.mjs";
-import { isRecord } from "./util.mjs";
+import { isRecord, writeAtomic } from "./util.mjs";
 
 /** @typedef {import("./types.js").ItemState} ItemState */
 /** @typedef {import("./types.js").Paths} Paths */
@@ -187,9 +187,7 @@ export async function saveState(paths, state) {
   const sorted = {};
   for (const id of Object.keys(state).sort()) sorted[id] = state[id];
 
-  const staging = `${paths.statePath}.staging`;
-  await writeFile(staging, `${JSON.stringify(sorted, null, 2)}\n`, "utf8");
-  await rename(staging, paths.statePath);
+  await writeAtomic(paths.statePath, `${JSON.stringify(sorted, null, 2)}\n`);
 }
 
 /* ---------------------------------------------------------------------------

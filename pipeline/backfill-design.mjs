@@ -19,7 +19,7 @@ import { chromium } from "playwright";
 import { CONTEXT_OPTIONS, loadPage, withDeadline } from "./capture.mjs";
 import { readDesign } from "./design.mjs";
 import { readEntries, writeEntries } from "./entries.mjs";
-import { describe } from "./util.mjs";
+import { backfill, describe } from "./util.mjs";
 
 const SITES_JSON = fileURLToPath(new URL("../src/data/sites.json", import.meta.url));
 
@@ -37,49 +37,46 @@ const today = new Date().toISOString().slice(0, 10);
 
 /** @type {string[]} */
 const failed = [];
-let next = 0;
 
-async function worker() {
-  while (next < todo.length) {
-    const entry = /** @type {Record<string, unknown>} */ (todo[next++]);
-    const slug = String(entry["slug"]);
-    /** @type {import("playwright").BrowserContext | undefined} */
-    let context;
-    try {
-      // Inside the try, so a context that fails to open fails this site only
-      // and the run still reaches `writeEntries` with everything else it read.
-      const ctx = (context = await browser.newContext(CONTEXT_OPTIONS));
-      const design = await withDeadline(
-        (async () => {
-          const page = await ctx.newPage();
-          page.setDefaultTimeout(SITE_TIMEOUT_MS);
-          await loadPage(page, String(entry["url"]), slug);
-          return await readDesign(page, today);
-        })(),
-        `design of ${slug}`,
-        SITE_TIMEOUT_MS,
-      );
-      if (design === null) throw new Error("no tokens observed");
+/** @param {Record<string, unknown>} entry */
+async function readOne(entry) {
+  const slug = String(entry["slug"]);
+  /** @type {import("playwright").BrowserContext | undefined} */
+  let context;
+  try {
+    // Inside the try, so a context that fails to open fails this site only
+    // and the run still reaches `writeEntries` with everything else it read.
+    const ctx = (context = await browser.newContext(CONTEXT_OPTIONS));
+    const design = await withDeadline(
+      (async () => {
+        const page = await ctx.newPage();
+        page.setDefaultTimeout(SITE_TIMEOUT_MS);
+        await loadPage(page, String(entry["url"]), slug);
+        return await readDesign(page, today);
+      })(),
+      `design of ${slug}`,
+      SITE_TIMEOUT_MS,
+    );
+    if (design === null) throw new Error("no tokens observed");
 
-      // Rebuilt rather than assigned, so the key lands after `palette`.
-      const at = entries.indexOf(entry);
-      entries[at] = Object.fromEntries(
-        Object.entries(entry).flatMap(([key, value]) =>
-          key === "palette" ? [[key, value], ["design", design]] : [[key, value]],
-        ),
-      );
-      console.log(`ok     ${slug}: ${design.colors.length} colours, ${design.type.length} type, ${design.spacing.length} spacing, ${design.radius.length} radius`);
-    } catch (error) {
-      failed.push(slug);
-      console.log(`failed ${slug}: ${describe(error)}`);
-    } finally {
-      await context?.close().catch(() => {});
-    }
+    // Rebuilt rather than assigned, so the key lands after `palette`.
+    const at = entries.indexOf(entry);
+    entries[at] = Object.fromEntries(
+      Object.entries(entry).flatMap(([key, value]) =>
+        key === "palette" ? [[key, value], ["design", design]] : [[key, value]],
+      ),
+    );
+    console.log(`ok     ${slug}: ${design.colors.length} colours, ${design.type.length} type, ${design.spacing.length} spacing, ${design.radius.length} radius`);
+  } catch (error) {
+    failed.push(slug);
+    console.log(`failed ${slug}: ${describe(error)}`);
+  } finally {
+    await context?.close().catch(() => {});
   }
 }
 
 try {
-  await Promise.all(Array.from({ length: CONCURRENCY }, worker));
+  await backfill(todo, readOne, CONCURRENCY);
 } finally {
   await browser.close();
 }

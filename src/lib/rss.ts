@@ -3,9 +3,13 @@
  *
  * A feed is one small XML document, so there is no library here: the only
  * parts that can go wrong are escaping and dates, and both are tested in
- * `lib/rss.test.mjs`. Pure on purpose, with no imports, so the test runs it
- * without Astro. `lib/feeds.ts` turns the site's data into `FeedItem`s.
+ * `lib/rss.test.mjs`. Pure on purpose, importing only `lib/date.ts`, so the
+ * test runs it without Astro. `lib/feeds.ts` turns the site's data into
+ * `FeedItem`s.
  */
+
+// With the extension: `rss.test.mjs` loads this module under plain `node --test`.
+import { rfc822 } from "./date.ts";
 
 /** One entry in a feed, or in the home page's "Latest" list. */
 export interface FeedItem {
@@ -49,11 +53,6 @@ export function escapeXml(text: string): string {
     .replace(/[&<>"']/g, (char) => ENTITIES[char] ?? char);
 }
 
-/** "2026-09-22" -> "Tue, 22 Sep 2026 00:00:00 GMT", the RFC 822 form RSS wants. */
-export function rfc822(iso: string): string {
-  return new Date(`${iso}T00:00:00Z`).toUTCString();
-}
-
 /** Newest first, capped. Same-day entries keep the order they came in. */
 export function newestFirst(items: readonly FeedItem[], cap = 50): FeedItem[] {
   return [...items].sort((a, b) => b.date.localeCompare(a.date)).slice(0, cap);
@@ -71,7 +70,7 @@ export function paragraphs(...texts: readonly (string | null | undefined)[]): st
  * Root-relative `href` and `src` values made absolute. A reader shows the
  * item away from the site, where `/tools` means nothing. `//host` is left alone.
  */
-export function absolutize(html: string, origin: string): string {
+export function absolutizeHtml(html: string, origin: string): string {
   return html.replace(/\b(href|src)="\/(?!\/)/g, `$1="${origin}/`);
 }
 
@@ -86,7 +85,7 @@ export function renderFeed(channel: Channel, origin: string): string {
       <guid isPermaLink="true">${page(item.path)}</guid>
       <pubDate>${rfc822(item.date)}</pubDate>
       <category>${escapeXml(item.section)}</category>
-      <description>${escapeXml(absolutize(item.html, origin))}</description>
+      <description>${escapeXml(absolutizeHtml(item.html, origin))}</description>
     </item>`,
   );
   // The newest item's day, not the clock, so a rebuild with nothing new

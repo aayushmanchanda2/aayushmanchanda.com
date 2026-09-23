@@ -119,8 +119,10 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
     transition-timing-function: var(--ease);
   }
 
+  /* A step up from the resting hairline. Not --text-quaternary: that token is
+     decoration only, and this is a control (design.md §2). */
   .select:hover {
-    border-color: var(--text-quaternary);
+    border-color: var(--text-tertiary);
   }
 
   .count {

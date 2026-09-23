@@ -1,0 +1,365 @@
+---
+/**
+ * Footer — the colophon under every page: the profiles, the two clocks, the
+ * theme toggle, the pages about the site, and the copyright.
+ */
+import ThemeToggle from "./ThemeToggle.astro";
+import XGlyph from "./XGlyph.astro";
+
+/**
+ * Only links that go somewhere.
+ *
+ * `rel="me"` is a claim of identity, so every row here has to resolve to a real
+ * profile. A row pointing at a bare `https://x.com/` would be a claim about
+ * nobody, and worse than an absent row: a dead link a reader has to click to
+ * find out. Both of these are handles, so both are safe to make the claim.
+ *
+ * The same two profiles are the `sameAs` list on the home page's Person node.
+ * Two copies, because one is markup a reader clicks and the other is structured
+ * data a machine resolves; if a third profile ever appears, it goes in both.
+ *
+ * `glyph` says the profile's mark is drawn rather than spelled, and only X
+ * carries it. That is a judgement about legibility, not about consistency: "X"
+ * is a single character that reads as a close button or a multiplication sign
+ * long before it reads as a company, and it is the only label on this site with
+ * that problem. "GitHub" is a word that reads as itself, so it stays a word —
+ * and the octocat is a filled silhouette that would be the only one of its kind
+ * in an icon set that is otherwise monoline, illegible at 14px, and a logo
+ * standing in for a word that was already doing the job. `label` stays the
+ * accessible name either way, so the two rows say the same thing to a screen
+ * reader whichever way they are drawn.
+ */
+const social: { label: string; href: string; glyph?: boolean }[] = [
+  { label: "GitHub", href: "https://github.com/aayushmanchanda2" },
+  { label: "X", href: "https://x.com/amanchanda7", glyph: true },
+];
+
+const clocks = [
+  { label: "Winnipeg", tz: "America/Winnipeg" },
+  { label: "New Delhi", tz: "Asia/Kolkata" },
+];
+
+const year = new Date().getFullYear();
+---
+
+{/*
+  Three stacked groups, every one of them centred. The page above is flush
+  left and stays that way; the footer is the one block that is not content
+  but a colophon closing it, and centring is what says so. It also settles
+  an alignment the old row could not: the socials sat left, the clocks
+  were pushed right by an `auto` margin, and the colophon wrapped
+  underneath at the left edge again, so three groups took three different
+  alignments and read as a row that had come apart rather than as a block.
+*/}
+<footer class="foot">
+  <div class="foot__row">
+    <ul class="foot__links mono">
+      {
+        social.map((link) => (
+          <li>
+            <a
+              class:list={[
+                "foot__link",
+                "press",
+                link.glyph && "foot__link--glyph",
+              ]}
+              href={link.href}
+              rel="me noopener"
+              target="_blank"
+              aria-label={link.glyph ? link.label : undefined}
+            >
+              {link.glyph ? <XGlyph /> : link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <dl class="foot__clocks mono">
+      {
+        clocks.map((clock) => (
+          <div class="foot__clock">
+            <dt>{clock.label}</dt>
+            <dd class="tabular-nums" data-clock={clock.tz}>
+              --:--:--
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+
+    {/*
+      Beside the clocks, at the clocks' weight: the theme is housekeeping,
+      like the timezone readouts and the copyright, not a feature the page
+      is selling. The mobile nav panel carries the same control, because
+      below 900px this footer is a long scroll away.
+    */}
+    <ThemeToggle />
+  </div>
+
+  {/* The colophon: the four pages that are about the site rather than in
+      it, with the palette in front of them. They live here and not in the
+      nav on purpose — the nav is the five content sections, and a reader
+      looking for who wrote this or how to reach him looks at the bottom
+      of the page.
+
+      Ordered by what a reader is answering. About and Contact are about
+      the person, and they come first because that is what most people are
+      looking for down here. Design and Privacy are about the machinery of
+      the site, and Privacy is last because it is the one nobody comes
+      looking for until they need it.
+
+      A list rather than a paragraph now that the separators are drawn
+      rather than typed: the `·` is a `::before` on the list item, which is
+      what the rest of the site already does. */}
+  <ul class="foot__meta mono">
+    <li>
+      {/* The palette's only permanently visible affordance on desktop. A
+          shortcut nobody is told about is a shortcut nobody uses, and the
+          footer is where this site already keeps its housekeeping. The
+          key cap is corrected to Ctrl off macOS by `lib/palette.ts`. */}
+      {/* `mono` sits on the button itself rather than being inherited
+          from the list, which is what every other label-voice button on
+          the site does and is not a style preference: `button` resets
+          `font` to inherit but the UA stylesheet still owns a control's
+          other text properties, so a button inside a `.mono` container
+          can drop out of the label voice. This one did once — "Search"
+          was the only item in the colophon not matching its neighbours. */}
+      <button
+        class="foot__quiet foot__search mono press"
+        type="button"
+        data-palette-open
+      >
+        Search <kbd data-palette-hint>&#8984;K</kbd>
+      </button>
+    </li>
+    <li><a class="foot__quiet press" href="/about">About</a></li>
+    <li><a class="foot__quiet press" href="/contact">Contact</a></li>
+    <li><a class="foot__quiet press" href="/design">Design</a></li>
+    <li><a class="foot__quiet press" href="/privacy">Privacy</a></li>
+  </ul>
+
+  {/* Its own line, and his name on it. The year is `tabular-nums` like
+      every other digit that changes in place, which also sets it in mono
+      inside the label voice; the name stays a name. */}
+  <p class="foot__legal mono">&copy; <span class="tabular-nums">{year}</span> Aayush Manchanda</p>
+</footer>
+
+<script>
+  // The dual-city footer clocks. Each `data-clock` carries its own IANA
+  // zone, so DST for Winnipeg and New Delhi is the platform's problem.
+  import { startTicker } from "../lib/clock";
+
+  startTicker("data-clock");
+</script>
+
+<style>
+  /* --- footer ---------------------------------------------------------- */
+
+  .foot {
+    width: 100%;
+    max-width: var(--page-max);
+    margin-top: clamp(5rem, 16vh, 10rem);
+    padding-top: 1.75rem;
+    border-top: 1px solid var(--hairline);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* Group one: who he is and what time it is where he is. */
+  .foot__row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: baseline;
+    gap: 1rem 2.5rem;
+  }
+
+  .foot__links {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin: 0;
+  }
+
+  .foot__link {
+    display: inline-block;
+    color: var(--text-secondary);
+    text-decoration: none;
+  }
+
+  /* Footer hovers are gated: the profile links open a new tab and Search
+     opens the palette, so this page stays on screen, and on touch a tap
+     latches `:hover` — the pressed item would sit accent-blue until the
+     reader tapped elsewhere (design.md §4). The colophon links share the
+     gate because they share the selector; on touch they navigate before a
+     hover could show, so the gate costs them nothing. */
+  @media (hover: hover) {
+    .foot__link:hover {
+      color: var(--accent);
+    }
+
+    .foot__quiet:hover {
+      color: var(--accent);
+    }
+
+    .foot__search:hover kbd {
+      border-color: currentColor;
+    }
+  }
+
+  /* The glyph row is a 14px target, so it takes the 40px hit area the
+     theme toggle takes, by the same trick: an absolutely
+     positioned `::before`, so a toolbar's worth of height never lands in
+     the footer row. The text links beside it are text and stay text —
+     design.md §4's stated exception, for the same reason the /sites hint
+     row takes it. Offsets rather than a centring transform, so nothing here
+     rests on one and reduced motion has nothing to undo. */
+  .foot__link--glyph {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .foot__link--glyph::before {
+    content: "";
+    position: absolute;
+    left: -13px;
+    top: -13px;
+    width: 40px;
+    height: 40px;
+  }
+
+  .foot__clocks {
+    display: flex;
+    gap: 1.5rem;
+    margin: 0;
+  }
+
+  .foot__clock {
+    display: flex;
+    gap: 0.5rem;
+    align-items: baseline;
+    color: var(--text-tertiary);
+  }
+
+  .foot__clock dd {
+    margin: 0;
+    color: var(--text-secondary);
+  }
+
+  /* The gap that makes the two halves read as two things rather than as one
+     row that wrapped. `--gap-masthead` is the space under a masthead, 3.5
+     to 6rem, and far too much air for the foot of a page; this is its
+     smaller sibling. It stays a literal rather than becoming a token
+     because the footer is its only consumer — `--gap-masthead` earned a
+     token by being written out fourteen times, and one call site is
+     retunable by opening one file. */
+  .foot__meta {
+    margin: 2rem 0 0;
+    color: var(--text-tertiary);
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    /* Wraps because five items is wider than a 375px column, and an
+       unwrapped flex row pushes the last one off the side rather than
+       dropping it to a second line. The row gap is tighter than the column
+       gap so a wrapped row still reads as one block. */
+    flex-wrap: wrap;
+    gap: 0.4rem 0.5rem;
+  }
+
+  /* Drawn, never typed: the separator is generated content on the list item
+     and sits outside the anchor, so it is never part of a link's text or
+     its target. The `/ ""` is the alt-text form — it gives the glyph an
+     empty accessible name, which is what the `aria-hidden` spans this
+     replaced were doing by hand. Margin on the pseudo-element rather than a
+     wider gap, so the dot sits centred between two items instead of hard
+     against the one after it. */
+  .foot__meta li + li::before {
+    content: "\00b7" / "";
+    margin-right: 0.5rem;
+    color: var(--hairline-strong);
+  }
+
+  /* The tail of the colophon rather than a third group, so it takes one
+     line of air against the block of it above. */
+  .foot__legal {
+    margin: 0.85rem 0 0;
+    color: var(--text-tertiary);
+  }
+
+  /* Quieter than the social links, but at --text-secondary, never the
+     row's --text-tertiary: these are controls, and controls sit a level
+     above metadata (§4's ink floor). The copyright is metadata. */
+  .foot__quiet {
+    display: inline-block;
+    color: var(--text-secondary);
+    text-decoration: none;
+  }
+
+  .foot__search {
+    cursor: pointer;
+  }
+
+  /* Mono: a key cap is a literal (design.md §2). */
+  .foot__search kbd {
+    font: inherit;
+    font-family: var(--font-mono);
+    margin-left: 0.35rem;
+    padding: 0.1rem 0.35rem;
+    border: 1px solid var(--hairline);
+  }
+
+  @media (max-width: 599px) {
+    /* The column here is narrow, and three things sharing
+       one wrapped row inside it centre as *pairs* rather than individually:
+       the clocks came out left of centre because the theme toggle was
+       riding beside them.
+
+       So the clocks take the second line to themselves and the two controls
+       keep the first. Ordering the clocks last rather than stacking all
+       three costs nothing in tab order — a `dl` of readouts has nothing
+       focusable in it, so the only two stops are the profile links and the
+       toggle, and they now run left to right along one line in the order
+       the markup already had them. */
+    .foot__row {
+      gap: 1.25rem 1.75rem;
+    }
+
+    /* Stacked, they are also the one place the clocks stop being centred
+       *inside* themselves: two readouts with their labels flush left and
+       their times flush right is a small table, and a table reads by its
+       columns. `align-items: center` is what still centres the block on the
+       page — it is the pair that is aligned to each other, not to the
+       column. */
+    .foot__clocks {
+      order: 1;
+      flex-basis: 100%;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.35rem;
+      text-align: left;
+    }
+
+    .foot__clock {
+      justify-content: space-between;
+      min-width: 11rem;
+    }
+
+    /* It wraps here, and a dot that travels with its item can start or end
+       a wrapped line. So no dots: the gap is the separator, and the 16rem
+       box makes the wrap deliberate, three items then two, both with real
+       margin, rather than leaving it to whether a glyph is a pixel wider
+       today. */
+    .foot__meta {
+      max-width: 16rem;
+      gap: 0.4rem 1rem;
+    }
+
+    .foot__meta li + li::before {
+      content: none;
+    }
+  }
+</style>

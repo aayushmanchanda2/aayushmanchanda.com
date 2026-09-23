@@ -21,6 +21,9 @@
  * those messages for its own.
  */
 
+// With the extension: `parse.test.mjs` loads this module under plain `node --test`.
+import { isoDay } from "./date.ts";
+
 /** URL-safe id: lowercase, digits, single hyphens, no leading or trailing one. */
 export const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
@@ -142,7 +145,7 @@ export function readers(filename: string): Readers {
     const isRealDate =
       ISO_DATE.test(value) &&
       !Number.isNaN(time) &&
-      new Date(time).toISOString().slice(0, 10) === value;
+      isoDay(new Date(time)) === value;
 
     if (!isRealDate) {
       fail(where, `needs "${key}" as a real YYYY-MM-DD date (got ${JSON.stringify(value)})`);

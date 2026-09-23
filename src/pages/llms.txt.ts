@@ -18,10 +18,9 @@
 
 import type { APIRoute } from "astro";
 
-import { FEEDS } from "../lib/feeds";
 import { PAGES } from "../lib/markdown";
 import { digested, kindGroups, library } from "../lib/library";
-import { getSections } from "../lib/sections";
+import { FEEDS, getSections } from "../lib/sections";
 import { sites } from "../lib/sites";
 import { categories, tools, verdictGroups } from "../lib/tools";
 import { absolute } from "../lib/site";

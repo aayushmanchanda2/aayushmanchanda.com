@@ -236,7 +236,7 @@ a:hover {
    seeing colour.
 
    Scoped to the places prose actually lives, not to `a`. Everywhere else on
-   this site a link is furniture — a nav dash, a filter chip, a footer item, a
+   this site a link is furniture — a crumb, a filter chip, a footer item, a
    whole row on the front page that is a link from edge to edge — and bolding
    and underlining those would turn navigation into a paragraph of shouting.
    Those surfaces set their own `text-decoration: none` and are simply not
@@ -588,15 +588,25 @@ ol {
   }
 }
 
-/* A 20×4px accent pill above a small section heading, briOS's "Read next"
-   marker. Put the class on the heading; the pill is drawn, not markup. */
+/* A small section heading under a 20×4px accent pill, briOS's "Read next"
+   marker: "Read next" under a note and "Latest" on home. Put the class on the
+   heading; the pill is drawn, not markup. */
+.accent-bar {
+  margin-bottom: 0.5rem;
+  color: var(--text-tertiary);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1.6;
+}
+
 .accent-bar::before {
   content: "";
   display: block;
   width: 20px;
   height: 4px;
   margin-bottom: 1rem;
-  border-radius: 999px;
+  border-radius: var(--r-pill);
   background: var(--accent);
 }
 

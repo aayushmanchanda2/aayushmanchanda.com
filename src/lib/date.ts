@@ -15,3 +15,13 @@ const DAY = new Intl.DateTimeFormat("en-US", {
 export function formatDay(iso: string): string {
   return DAY.format(new Date(`${iso}T00:00:00Z`));
 }
+
+/** A `Date` as its ISO calendar day, "2026-09-22", in UTC. */
+export function isoDay(date: Date): string {
+  return date.toISOString().slice(0, 10);
+}
+
+/** "2026-09-22" -> "Tue, 22 Sep 2026 00:00:00 GMT", the RFC 822 form RSS wants. */
+export function rfc822(iso: string): string {
+  return new Date(`${iso}T00:00:00Z`).toUTCString();
+}

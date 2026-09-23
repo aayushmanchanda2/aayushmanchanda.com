@@ -59,14 +59,14 @@ import type { Tool } from "./tools";
  * The one relative *runtime* import in this file, and the one place on the site
  * written with its extension.
  *
- * Every other module here says `from "./site"`, which Vite resolves and Node
- * does not. That has never mattered because the three modules the test suite
- * loads directly — `parse`, `search`, `theme` — import nothing relative at all.
- * This one has to: the origin lives in `site.ts` and copying it here would be
- * the second copy the DNS-cutover note in that file exists to prevent. So the
+ * Most modules here say `from "./site"`, which Vite resolves and Node does
+ * not; the few the test suite loads directly spell the extension. This one has
+ * to import: the origin lives in `site.ts` and copying it here would be the
+ * second copy the DNS-cutover note in that file exists to prevent. So the
  * extension goes in, `node --test` can resolve it, and the type-only imports
  * above stay bare because they are erased before either tool sees them.
  */
+import { normalize } from "./links.ts";
 import { absolute } from "./site.ts";
 
 /** One node in the graph. */
@@ -184,7 +184,7 @@ function ref(id: string): JsonLdNode {
  * `full` is for the two pages that print the biography: the home page, whose
  * hero the description restates, and /about, which is that hero at length.
  * Everywhere else the node is compact — `name`, `url`, `sameAs` — because those
- * are the three things the site mark and the two footer identity rows make
+ * are the three things the top bar's home crumb and the two footer identity rows make
  * visible on *every* page. Shipping the long description onto a tool page would
  * be a paragraph of biography no reader of that page can see.
  */
@@ -410,12 +410,17 @@ function breadcrumb(...steps: Crumb[]): JsonLdNode {
   };
 }
 
-/** The steps after home in a document's `BreadcrumbList`, or null without one. */
+/**
+ * The steps after home in a document's `BreadcrumbList`, or null without one.
+ *
+ * Paths come back without the trailing slash `pageUrl` put on, so a crumb read
+ * from the graph is spelled like one from a section or a `trail` prop.
+ */
 export function trailOf(doc: JsonLd | undefined): Crumb[] | null {
   const list = doc?.["@graph"].find((node) => node["@type"] === "BreadcrumbList");
   if (!list) return null;
   const items = list["itemListElement"] as { name: string; item: string }[];
-  return items.slice(1).map((step) => ({ name: step.name, path: new URL(step.item).pathname }));
+  return items.slice(1).map((step) => ({ name: step.name, path: normalize(new URL(step.item).pathname) }));
 }
 
 /**

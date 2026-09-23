@@ -77,20 +77,24 @@ function declarations() {
 }
 
 /**
- * The scoped stylesheet inside `layouts/Base.astro`, flattened to one selector
- * per entry. Nested at-rules fall out of the walk on their own: a selector
+ * The scoped stylesheets of the shell, `layouts/Base.astro` and the footer it
+ * renders (`components/Footer.astro`), flattened to one selector per entry. Nested at-rules fall out of the walk on their own: a selector
  * whose body still contains braces cannot match, so `@media` wrappers are
  * skipped and the rules inside them are read at their own selector.
  *
  * @returns {Map<string, string>}
  */
 function shellRules() {
-  const source = readFileSync(path.join(SRC, "layouts/Base.astro"), "utf8");
-  const open = source.indexOf("<style>");
-  const close = source.indexOf("</style>");
-  assert.ok(open !== -1 && close > open, "Base.astro has no scoped stylesheet");
-
-  const css = source.slice(open + "<style>".length, close).replace(/\/\*[\s\S]*?\*\//g, "");
+  const css = ["layouts/Base.astro", "components/Footer.astro"]
+    .map((file) => {
+      const source = readFileSync(path.join(SRC, file), "utf8");
+      const open = source.indexOf("<style>");
+      const close = source.indexOf("</style>");
+      assert.ok(open !== -1 && close > open, `${file} has no scoped stylesheet`);
+      return source.slice(open + "<style>".length, close);
+    })
+    .join("\n")
+    .replace(/\/\*[\s\S]*?\*\//g, "");
 
   /** @type {Map<string, string>} */
   const found = new Map();

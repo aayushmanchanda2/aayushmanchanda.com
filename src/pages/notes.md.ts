@@ -14,12 +14,11 @@
 import type { APIRoute } from "astro";
 import { getCollection } from "astro:content";
 
+import { isoDay } from "../lib/date";
 import { absolutize } from "../lib/links";
 import { PAGES, markdownDocument, newest } from "../lib/markdown";
 import { absolute } from "../lib/site";
 
-/** Dates are stored as dates and shown as `YYYY-MM-DD`, same as every page. */
-const day = (date: Date): string => date.toISOString().slice(0, 10);
 
 export const GET: APIRoute = async () => {
   const notes = (await getCollection("notes")).sort(
@@ -27,7 +26,7 @@ export const GET: APIRoute = async () => {
   );
 
   const blocks = notes.map((note) => {
-    const meta = [`date: ${day(note.data.date)}`, `type: ${note.data.type}`];
+    const meta = [`date: ${isoDay(note.data.date)}`, `type: ${note.data.type}`];
 
     // A scratch note is mostly its picture, so a variant that dropped the image
     // would leave an agent reading a caption with nothing above it.
@@ -56,7 +55,7 @@ export const GET: APIRoute = async () => {
     title: "Notes",
     description:
       "Every note Aayush Manchanda has published, newest first, with the full text of each one.",
-    updated: newest(notes.map((note) => day(note.data.date))),
+    updated: newest(notes.map((note) => isoDay(note.data.date))),
     blocks:
       blocks.length === 0
         ? ["No notes yet."]
