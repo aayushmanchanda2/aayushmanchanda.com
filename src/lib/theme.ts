@@ -69,9 +69,9 @@ export const THEME_COLOR_MEDIA = {
 } as const;
 
 /**
- * `--frame-paper` per scheme, as the `theme-color` metas carry it: the edge of
- * the window is the stamp frame's gutter (`styles/frame.css`), so a phone's
- * status bar runs into it without a seam.
+ * The neutral paper per scheme, as the `theme-color` metas carry it. The edge
+ * of the window is now the section's mat (`styles/frame.css`, VET-260), which
+ * these do not follow yet, so a phone's status bar sits a shade off the gutter.
  */
 export const THEME_COLORS = { light: "#F5F5F5", dark: "#171717" } as const;
 

@@ -1,43 +1,159 @@
-/* The stamp frame (VET-255): every page sits on a sheet of `--frame-paper`,
-   inset `--frame` from the viewport, with perforation holes bitten into its
-   edge like a postage stamp's.
+/* The stamp frame (VET-255) on a cutting mat (VET-260): every page is a sheet
+   of paper inset `--frame` from the viewport, perforated at its edge like a
+   postage stamp, lying on a mat whose colour says which section you are in.
 
    It belongs to the window, not the page, so it is the same on every route:
-   a frame that came and went would move the bar 12 to 20px between /tools and
-   a tool's own page. The reading pages look lighter under it on their own,
-   because their column sits far from the edges.
+   a frame that came and went would move the bar between /tools and a tool's
+   own page. Only the mat's colour changes, off `data-section` on <html>
+   (`layouts/Base.astro`).
 
    Body padding makes the room; everything sticky or fixed under the bar reads
    `--frame` too (`TopBar`, `ToolList`, `SitePanel`, `LibraryPane`, the shell's
-   min-height in `Base.astro`). One fixed, click-through layer draws it: its
-   outline paints the gutter over anything scrolling past, and four rows of
-   half-circles along its edge are the perforation. Static, so reduced motion
-   has nothing to change. design.md §3 has the numbers. */
+   min-height in `Base.astro`). One fixed, click-through layer (`.mat`) draws
+   it: a full-window sheet of mat, masked down to the gutter plus four rows of
+   half-circles along the page's edge, which are the perforation. The mat shows
+   through the holes because the holes are the mat. Fixed and static, so it is
+   painted once and never repaints on scroll; reduced motion has nothing to
+   change. design.md §3 has the numbers.
 
+   Three patterns sit behind `data-mat` on <html> until Aayush picks one:
+   a (cutting mat: 8/40px grid, ruler ticks and numbers), b (blueprint: a blue
+   field whose hue shifts per section, white hairlines), c (dot grid). The
+   default is written in `Base.astro`, so a pick is a one-token change. */
+
+/* Mat colours per section. Every mat is mid to deep, so one set of white-alpha
+   lines reads on all of them. `light-dark()` resolves off the `color-scheme`
+   both dark blocks in global.css already set, so all three theme states are
+   covered without a second copy. `--mat-h` is the blueprint's hue (b). */
 html {
-  background: var(--frame-paper);
+  --mat: light-dark(#5e5d58, #2a2926);
+  --mat-h: 250;
+
+  background: var(--mat);
+}
+
+[data-section="tools"] {
+  --mat: light-dark(#2f5d50, #1c3a31);
+  --mat-h: 215;
+}
+
+[data-section="sites"] {
+  --mat: light-dark(#2d5189, #1a2f52);
+  --mat-h: 258;
+}
+
+[data-section="library"] {
+  --mat: light-dark(#9a7446, #4a3722);
+  --mat-h: 240;
+}
+
+[data-section="notes"] {
+  --mat: light-dark(#484b50, #25272a);
+  --mat-h: 268;
+}
+
+[data-mat="b"] {
+  --mat: light-dark(oklch(0.43 0.12 var(--mat-h)), oklch(0.28 0.09 var(--mat-h)));
 }
 
 body {
   padding: var(--frame);
 }
 
-body::after {
-  --hole: radial-gradient(circle closest-side, var(--frame-paper) 92%, transparent);
+.mat {
+  --hole: radial-gradient(circle closest-side, #000 92%, transparent);
+  --solid: linear-gradient(#000 0 0);
 
-  content: "";
   position: fixed;
-  inset: var(--frame);
+  inset: 0;
   /* over the bar (30) and the site panel (20); under the preview card (50),
      the menu (70, 80) and the palette (100) */
   z-index: 40;
   pointer-events: none;
-  outline: calc(var(--frame) + 1px) solid var(--frame-paper);
-  /* 10px holes on a 12px pitch, centred on the edge so half of each bites in;
-     `space` spreads them so both ends of an edge match */
-  background:
-    var(--hole) 0 -5px / 12px 10px space no-repeat,
-    var(--hole) 0 calc(100% + 5px) / 12px 10px space no-repeat,
-    var(--hole) -5px 0 / 10px 12px no-repeat space,
-    var(--hole) calc(100% + 5px) 0 / 10px 12px no-repeat space;
+  /* the content box is the page: the holes and the cut-out are laid out on
+     it, while the mat's own background fills the whole window */
+  padding: var(--frame);
+  overflow: hidden;
+  background-color: var(--mat);
+  /* 10px holes on a 12px pitch, centred on the page's edge so half of each
+     bites in; `space` spreads them so both ends of an edge match. Below them
+     the page (the content box) is cut out of the window: `exclude` against the
+     bottom layer leaves the gutter, and the holes are added back on top. */
+  mask:
+    var(--hole) 0 -5px / 12px 10px space no-repeat content-box border-box,
+    var(--hole) 0 calc(100% + 5px) / 12px 10px space no-repeat content-box border-box,
+    var(--hole) -5px 0 / 10px 12px no-repeat space content-box border-box,
+    var(--hole) calc(100% + 5px) 0 / 10px 12px no-repeat space content-box border-box,
+    var(--solid) content-box content-box,
+    var(--solid) border-box;
+  mask-composite: add, add, add, add, exclude, add;
+}
+
+/* (a) cutting mat: 8px minor and 40px major lines, ruler ticks along the top
+   and left edges, and a digit on every major line once the gutter is wide */
+[data-mat="a"] .mat {
+  --tick: rgb(255 255 255 / 0.3);
+  --major: rgb(255 255 255 / 0.15);
+  --minor: rgb(255 255 255 / 0.07);
+
+  background-image:
+    repeating-linear-gradient(90deg, var(--tick) 0 1px, transparent 1px 40px),
+    repeating-linear-gradient(var(--tick) 0 1px, transparent 1px 40px),
+    repeating-linear-gradient(90deg, var(--tick) 0 1px, transparent 1px 8px),
+    repeating-linear-gradient(var(--tick) 0 1px, transparent 1px 8px),
+    repeating-linear-gradient(90deg, var(--major) 0 1px, transparent 1px 40px),
+    repeating-linear-gradient(var(--major) 0 1px, transparent 1px 40px),
+    repeating-linear-gradient(90deg, var(--minor) 0 1px, transparent 1px 8px),
+    repeating-linear-gradient(var(--minor) 0 1px, transparent 1px 8px);
+  background-size: 100% 9px, 9px 100%, 100% 4px, 4px 100%, auto, auto, auto, auto;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, repeat, repeat, repeat, repeat;
+}
+
+/* The digits. Geist Mono's advance is 0.6em, so letter-spacing pads each one
+   out to exactly 40px and they land on the major lines. 0 to 9 and round
+   again, like a ruler's decimetres, because an 8px "120" would crowd the next
+   line. Sideways on the left edge, the way a mat prints them. */
+[data-mat="a"] .mat::before,
+[data-mat="a"] .mat::after {
+  content: "1234567890123456789012345678901234567890123456789012345678901234567890";
+  position: absolute;
+  font: 500 8px/1 var(--font-mono);
+  letter-spacing: calc(40px - 0.6em);
+  color: rgb(255 255 255 / 0.42);
+  white-space: nowrap;
+}
+
+/* both rows start at the first major line, so the corner stays clear */
+[data-mat="a"] .mat::before {
+  top: 12px;
+  left: 43px;
+}
+
+[data-mat="a"] .mat::after {
+  top: 43px;
+  left: 12px;
+  writing-mode: vertical-lr;
+}
+
+/* a 12px gutter has room for ticks, not numbers */
+@media (max-width: 767px) {
+  [data-mat="a"] .mat::before,
+  [data-mat="a"] .mat::after {
+    content: none;
+  }
+}
+
+/* (b) blueprint: white hairlines on the blue field, no ruler */
+[data-mat="b"] .mat {
+  background-image:
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 0.2) 0 1px, transparent 1px 40px),
+    repeating-linear-gradient(rgb(255 255 255 / 0.2) 0 1px, transparent 1px 40px),
+    repeating-linear-gradient(90deg, rgb(255 255 255 / 0.08) 0 1px, transparent 1px 8px),
+    repeating-linear-gradient(rgb(255 255 255 / 0.08) 0 1px, transparent 1px 8px);
+}
+
+/* (c) a dot on every 8px crossing */
+[data-mat="c"] .mat {
+  background-image: radial-gradient(circle at 0.5px 0.5px, rgb(255 255 255 / 0.22) 0.75px, transparent 1.25px);
+  background-size: 8px 8px;
 }
