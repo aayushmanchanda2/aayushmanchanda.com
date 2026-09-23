@@ -38,9 +38,11 @@ const jsonLd = listJsonLd({
       `data-tools-view` on `<html>`. Buttons with `aria-pressed` rather than a
       radio group or tabs: two states, one press each, no panel swapped in.
       The pre-paint script sits between the toggle and the list, so both are
-      already right on the first paint of a reload.
+      already right on the first paint of a reload. The group ships `hidden`
+      and that script unhides it: with scripting off the page is the list and
+      there is no control that does nothing.
     */}
-    <div class="views" role="group" aria-label="Tools layout">
+    <div class="views" role="group" aria-label="Tools layout" hidden>
       {
         VIEWS.map((view) => (
           <button
@@ -75,6 +77,11 @@ const jsonLd = listJsonLd({
     border-radius: var(--r-md);
   }
 
+  /* `display: flex` above outranks the UA's `[hidden] { display: none }`. */
+  .views[hidden] {
+    display: none;
+  }
+
   /* 30px drawn, 40px pressed: the `::after` reaches 5px past each edge, the
      same offset trick `.tag::after` uses for its hit floor. Inner corners are
      --r-sm inside the --r-md frame, 4 + 2px padding + 1px border ≈ 8. */
@@ -84,7 +91,7 @@ const jsonLd = listJsonLd({
     padding-inline: 0.75rem;
     border-radius: var(--r-sm);
     color: var(--muted);
-    transition-property: color, background-color;
+    transition-property: color, background-color, box-shadow;
     transition-duration: var(--dur-fast);
     transition-timing-function: var(--ease);
   }
@@ -99,8 +106,11 @@ const jsonLd = listJsonLd({
     color: var(--fg);
   }
 
+  /* Fill, ink and an inset ring: the fill alone is a faint tint that
+     disappears on a dim screen, and the ring keeps the pressed one legible. */
   .views__btn[aria-pressed="true"] {
     background: var(--hairline);
+    box-shadow: inset 0 0 0 1px var(--hairline-strong);
     color: var(--fg);
   }
 </style>

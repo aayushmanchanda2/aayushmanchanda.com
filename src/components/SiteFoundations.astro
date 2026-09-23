@@ -7,7 +7,8 @@
  * sentence-case labels, mono only for values, hairline rows on `--bg` rather
  * than rounded tinted cards (design.md §3). "Copy as DESIGN.md" stands in for
  * ui-skills' source pane. Copy and its flash are `lib/copy-flash.ts`, shared
- * with `PaletteRow.astro`, which this panel replaces when a site has tokens.
+ * with `PaletteRow.astro`, which this panel replaces once it names three
+ * colours (`pages/sites/[slug].astro`).
  *
  * `lib/design-md.ts › parseDesign` is why the inline styles below may
  * interpolate tokens: hex is `#rrggbb`, lengths are px, families are plain.
@@ -25,8 +26,10 @@ interface Props {
 const { design, title, domain } = Astro.props;
 const markdown = toDesignMd(design, { title, domain });
 
-/** ui-skills' caps: ten colours, three type styles, then "Show all N". */
-const COLOR_CAP = 10;
+/**
+ * ui-skills' type cap: three styles, then "Show all N". Its ten-colour cap is
+ * not ported: `summarize` names six colour roles at most, so it never binds.
+ */
 const TYPE_CAP = 3;
 
 /** Past this a specimen stops being a letter and starts being the page. */
@@ -42,16 +45,27 @@ const PROPERTIES = [["fontFamily", "Family"], ["fontSize", "Size"], ["fontWeight
 const groups = [
   {
     head: "Colors",
-    cap: COLOR_CAP,
+    cap: Infinity,
     visual: "swatch",
     rows: design.colors.map((c) => ({ name: c.name, value: c.hex, paint: `background-color: ${c.hex}` })),
   },
-  { head: "Typography", cap: TYPE_CAP, visual: "", rows: [] },
+  { head: "Typography", cap: TYPE_CAP, rows: [] },
   { head: "Spacing", cap: Infinity, visual: "bar", rows: design.spacing.map((t) => ({ ...t, paint: `width: ${t.value}` })) },
   { head: "Radius", cap: Infinity, visual: "shape", rows: design.radius.map((t) => ({ ...t, paint: `border-radius: ${t.value}` })) },
 ]
   .map((group) => ({ ...group, id: `found-${group.head.toLowerCase()}`, count: group.head === "Typography" ? design.type.length : group.rows.length }))
   .filter((group) => group.count > 0);
+
+/**
+ * CSS generic and system family keywords. Quoted, each becomes a family name
+ * no machine has, so they stay bare.
+ */
+const KEYWORDS = new Set(["-apple-system", "BlinkMacSystemFont", "system-ui", "ui-sans-serif", "ui-serif",
+  "ui-monospace", "ui-rounded", "serif", "sans-serif", "monospace", "cursive", "fantasy"]);
+
+/** The specimen's stack: the site's family, then the generic its role falls back to. */
+const specimenFamily = (family: string, role: string) =>
+  `${KEYWORDS.has(family) ? family : `'${family}'`}, ${role === "mono" ? "monospace" : "sans-serif"}`;
 
 const families = [...new Set(design.type.map((style) => style.fontFamily))];
 const familyList =
@@ -79,7 +93,7 @@ const familyList =
               {design.type.map((style, index) => (
                 <li class="style" data-tail={index >= group.cap ? "" : undefined}>
                   <div class="style__specimen">
-                    <span class="style__aa" aria-hidden="true" style={`font-family: '${style.fontFamily}', var(--font-sans); font-size: min(${style.fontSize}, ${SPECIMEN_MAX}); font-weight: ${style.fontWeight}; letter-spacing: ${style.letterSpacing};`}>Aa</span>
+                    <span class="style__aa" aria-hidden="true" style={`font-family: ${specimenFamily(style.fontFamily, style.name)}; font-size: min(${style.fontSize}, ${SPECIMEN_MAX}); font-weight: ${style.fontWeight}; letter-spacing: ${style.letterSpacing};`}>Aa</span>
                     <span class="style__name">{style.name}</span>
                   </div>
                   <ul class="rows">

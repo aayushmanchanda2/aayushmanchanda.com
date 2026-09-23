@@ -369,7 +369,7 @@ async function withMedia(post, slug, outDir, ctx) {
 async function shootSite(bookmark, slug, outDir, attempts, ctx) {
   // `log` so a clipped capture is reported in the run log, next to the entry it
   // explains, instead of on stderr where nothing reads it.
-  const input = { url: bookmark.url, slug, outDir, log: ctx.log };
+  const input = { url: bookmark.url, slug, outDir, log: ctx.log, date: ctx.date };
 
   try {
     return { ...(await ctx.captureSite(input)), via: null };

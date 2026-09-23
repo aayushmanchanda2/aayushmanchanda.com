@@ -71,6 +71,9 @@ const ranked = [...groups].sort(
 );
 // The current tag is exempt from the cap so the selected chip is always visible.
 const tail = (slug: string, index: number) => index >= TAG_CAP && slug !== current;
+// Counted, not inferred from `groups.length`: thirteen tags with the thirteenth
+// current leave nothing to show, and the button would toggle an empty tail.
+const hidden = ranked.filter((group, index) => tail(group.slug, index)).length;
 const showAll = `Show all ${groups.length}`;
 ---
 
@@ -96,7 +99,7 @@ const showAll = `Show all ${groups.length}`;
       ))
     }
     {
-      groups.length > TAG_CAP && (
+      hidden > 0 && (
         <li data-more hidden>
           <button
             class="tag tag--more"

@@ -10,7 +10,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { contrast, dedupeType, firstFamily, rank, summarize, toHex } from "./design.mjs";
+import { contrast, dedupeType, firstFamily, rank, readDesign, summarize, toHex } from "./design.mjs";
 
 /**
  * A sample with quiet defaults: transparent, unbordered, no text.
@@ -196,4 +196,16 @@ test("radius is named by the element it was seen on, and a pill is full", () => 
 
 test("nothing observed is null, not an empty design", () => {
   assert.equal(summarize({ body: "0,0,0,0", html: "0,0,0,0", edges: [], samples: [] }, "2026-09-22"), null);
+});
+
+test("readDesign gives up on a sampler that never answers instead of stalling the shot", async () => {
+  const stuck = { evaluate: () => new Promise(() => {}) };
+  assert.equal(await readDesign(/** @type {any} */ (stuck), "2026-09-22", 20), null);
+});
+
+test("readDesign stamps the date it is handed, not the machine's", async () => {
+  const raw = { body: WHITE, html: "0,0,0,0", edges: [], samples: [el({ tag: "p", text: 40 })] };
+  const page = { evaluate: async () => raw };
+  const design = await readDesign(/** @type {any} */ (page), "2020-01-02", 20);
+  assert.equal(design?.read_date, "2020-01-02");
 });

@@ -235,9 +235,10 @@
 }
 
 /* The entry count on a filter-row chip, TopicTag's `text-content-muted
-   tabular-nums`: quiet, and fixed-width so a row of counts does not jitter. */
+   tabular-nums`: fixed-width so a row of counts does not jitter, and at
+   --muted because it is text inside a control (design.md §4, the ink floor). */
 .tag__count {
-  color: var(--faint);
+  color: var(--muted);
   font-variant-numeric: tabular-nums;
 }
 

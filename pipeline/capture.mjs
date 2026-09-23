@@ -323,9 +323,10 @@ export async function loadPage(page, url, slug) {
  * @param {string} url
  * @param {(line: string) => void} log
  * @param {string} slug   Only so the clip notice names the entry it is about.
+ * @param {string} date   The run's ISO date, stored as the tokens' `read_date`.
  * @returns {Promise<{ png: Buffer, design: Design | null }>}
  */
-async function shoot(browser, url, log, slug) {
+async function shoot(browser, url, log, slug, date) {
   const context = await browser.newContext(CONTEXT_OPTIONS);
 
   try {
@@ -339,7 +340,7 @@ async function shoot(browser, url, log, slug) {
         // After the walk, so lazy sections are mounted and counted; back at
         // the top, so a sticky header is read in its resting state. Null on
         // any failure: a shot never fails for want of tokens.
-        const design = await readDesign(page);
+        const design = await readDesign(page, date);
 
         const height = await page.evaluate(() => {
           const { body, documentElement: root } = document;
@@ -476,6 +477,9 @@ async function finish(png, slug, outDir, log) {
  *   run: those lines go to stderr, outside the run log, so the one sentence
  *   explaining why an entry stops mid-page would land where nobody is reading.
  *   `apply.mjs` passes the run's own logger.
+ * @param {string} [options.date]
+ *   The run's ISO date, for the tokens' `read_date`. `apply.mjs` passes
+ *   `ctx.date`; the CLI defaults to today in UTC, as `publish.mjs` computes it.
  * @returns {Promise<{ shot: string, palette: string[], design?: Design }>}
  *   Absolute path of the file written, its dominant colours, and the tokens
  *   read off the live page when `readDesign` found any.
@@ -485,6 +489,7 @@ export async function captureSite({
   slug,
   outDir = DEFAULT_OUT_DIR,
   log = console.warn,
+  date = new Date().toISOString().slice(0, 10),
 }) {
   checkArgs("captureSite", url, slug);
 
@@ -493,7 +498,7 @@ export async function captureSite({
   const browser = await chromium.launch({ headless: true });
 
   try {
-    const { png, design } = await shoot(browser, url, log, slug);
+    const { png, design } = await shoot(browser, url, log, slug, date);
     const done = await finish(png, slug, outDir, log);
     return design === null ? done : { ...done, design };
   } finally {

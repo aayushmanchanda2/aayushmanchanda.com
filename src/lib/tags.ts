@@ -14,7 +14,7 @@
  * monogram (`components/TweetCard.astro`), keyed on the poster's handle.
  *
  * **The hue lives in CSS and the slot lives here.** `hueSlot` returns a number
- * in `[0, TAG_HUES)` and `styles/chip.css` decides what each of those seven
+ * in `[0, MONOGRAM_HUES)` and `styles/chip.css` decides what each of those seven
  * numbers is worth in each theme, because a colour value typed outside
  * `styles/` is the bug design.md §1 opens with.
  *
@@ -28,7 +28,7 @@
  * `[data-hue]` rules and `lib/tags.test.mjs` fails if the two ever disagree —
  * a slot with no rule in the stylesheet would render the fallback colour.
  */
-export const TAG_HUES = 7;
+export const MONOGRAM_HUES = 7;
 
 /**
  * `go-to-market` -> `go to market`.
@@ -60,5 +60,5 @@ export function hueSlot(key: string): number {
   for (let index = 0; index < key.length; index += 1) {
     hash = (Math.imul(hash, 33) + key.charCodeAt(index)) >>> 0;
   }
-  return hash % TAG_HUES;
+  return hash % MONOGRAM_HUES;
 }

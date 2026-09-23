@@ -32,6 +32,8 @@ const SITE_TIMEOUT_MS = 30_000;
 const entries = /** @type {Record<string, unknown>[]} */ (await readEntries(SITES_JSON));
 const todo = entries.filter((entry) => !("design" in entry));
 const browser = await chromium.launch({ headless: true });
+// The run's date, computed as `publish.mjs` computes `ctx.date`.
+const today = new Date().toISOString().slice(0, 10);
 
 /** @type {string[]} */
 const failed = [];
@@ -41,14 +43,18 @@ async function worker() {
   while (next < todo.length) {
     const entry = /** @type {Record<string, unknown>} */ (todo[next++]);
     const slug = String(entry["slug"]);
-    const context = await browser.newContext(CONTEXT_OPTIONS);
+    /** @type {import("playwright").BrowserContext | undefined} */
+    let context;
     try {
+      // Inside the try, so a context that fails to open fails this site only
+      // and the run still reaches `writeEntries` with everything else it read.
+      const ctx = (context = await browser.newContext(CONTEXT_OPTIONS));
       const design = await withDeadline(
         (async () => {
-          const page = await context.newPage();
+          const page = await ctx.newPage();
           page.setDefaultTimeout(SITE_TIMEOUT_MS);
           await loadPage(page, String(entry["url"]), slug);
-          return await readDesign(page);
+          return await readDesign(page, today);
         })(),
         `design of ${slug}`,
         SITE_TIMEOUT_MS,
@@ -67,7 +73,7 @@ async function worker() {
       failed.push(slug);
       console.log(`failed ${slug}: ${describe(error)}`);
     } finally {
-      await context.close().catch(() => {});
+      await context?.close().catch(() => {});
     }
   }
 }

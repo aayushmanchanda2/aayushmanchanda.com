@@ -5,8 +5,8 @@
  * and radius, off the computed styles of the page itself, so /sites/<slug> can
  * show a ui-skills design.md foundations panel for somebody else's site.
  *
- * Two halves, split on the browser boundary. `sampleStyles` runs inside the page
- * as ONE `page.evaluate` and returns raw computed values for up to
+ * Two halves, split on the browser boundary. `sampleStyles` (design-sample.mjs)
+ * runs inside the page as ONE `page.evaluate` and returns raw computed values for up to
  * `MAX_SAMPLES` visible elements. `summarize` is plain Node: it ranks those
  * samples into named tokens, and it is the half the tests pin.
  *
@@ -16,8 +16,16 @@
  * alpha hairlines has no `border`. Nothing is guessed to fill a slot.
  */
 
+import { sampleStyles } from "./design-sample.mjs";
+
 /** Elements sampled, at most. Past this a page is repeating itself. */
 const MAX_SAMPLES = 1500;
+
+/**
+ * How long the token read may take. Past it the shot goes ahead without a
+ * design panel, so a page that stalls the sampler never costs the screenshot.
+ */
+const READ_TIMEOUT_MS = 5_000;
 
 /** Below this alpha a colour is a tint over something else, not a token. */
 const MIN_ALPHA = 0.5;
@@ -68,93 +76,6 @@ const RADIUS_SIZE = 3;
  * @typedef {{ read_date: string, colors: ColorToken[], type: TypeToken[], spacing: ValueToken[], radius: ValueToken[] }} Design
  * @typedef {{ body: string, html: string, edges: string[], samples: Sample[] }} Raw
  */
-
-/**
- * Runs in the page. Self-contained: Playwright serialises the source, so it
- * can reach nothing outside its own body.
- *
- * @param {number} cap
- * @returns {Raw | null}
- */
-function sampleStyles(cap) {
-  if (document.contentType !== "text/html" || document.body === null) return null;
-
-  const ctx = document.createElement("canvas").getContext("2d", { willReadFrequently: true });
-  if (ctx === null) return null;
-  /** @type {Map<string, string>} */
-  const seen = new Map();
-  /** @param {string} css */
-  const rgba = (css) => {
-    const hit = seen.get(css);
-    if (hit !== undefined) return hit;
-    ctx.clearRect(0, 0, 1, 1);
-    ctx.fillStyle = "#000";
-    ctx.fillStyle = css;
-    ctx.fillRect(0, 0, 1, 1);
-    const out = Array.from(ctx.getImageData(0, 0, 1, 1).data).join(",");
-    seen.set(css, out);
-    return out;
-  };
-
-  /** @type {Sample[]} */
-  const samples = [];
-  for (const el of document.body.querySelectorAll("*")) {
-    if (samples.length >= cap) break;
-    if (!(el instanceof HTMLElement) || /^(SCRIPT|STYLE|NOSCRIPT|TEMPLATE|BR)$/.test(el.tagName)) continue;
-    const box = el.getBoundingClientRect();
-    if (box.width === 0 || box.height === 0) continue;
-    const s = getComputedStyle(el);
-    if (s.display === "none" || s.visibility !== "visible" || Number(s.opacity) === 0) continue;
-
-    let text = 0;
-    for (const node of el.childNodes) {
-      if (node.nodeType === Node.TEXT_NODE) text += (node.textContent ?? "").trim().length;
-    }
-    const bordered = s.borderTopStyle !== "none" && parseFloat(s.borderTopWidth) > 0;
-    const bg = rgba(s.backgroundColor);
-    samples.push({
-      tag: el.tagName.toLowerCase(),
-      nav: el.closest("nav") !== null,
-      card: bordered || !bg.endsWith(",0"),
-      area: Math.round(box.width * box.height),
-      text,
-      bg,
-      color: rgba(s.color),
-      border: bordered ? rgba(s.borderTopColor) : null,
-      font: [s.fontFamily, s.fontSize, s.fontWeight, s.lineHeight, s.letterSpacing],
-      space: [
-        s.paddingTop, s.paddingRight, s.paddingBottom, s.paddingLeft,
-        s.marginTop, s.marginRight, s.marginBottom, s.marginLeft,
-        ...(/flex|grid/.test(s.display) ? [s.rowGap, s.columnGap] : []),
-      ],
-      radius: s.borderTopLeftRadius,
-    });
-  }
-
-  // What the eye sees at the page's left and right margins: the first opaque
-  // fill behind each point, walking up from whatever is on top there. A body
-  // painted white under a full-page dark wrapper reads dark here, as it looks.
-  /** @type {string[]} */
-  const edges = [];
-  for (const x of [4, window.innerWidth - 5]) {
-    for (let y = 0.1; y < 1; y += 0.2) {
-      for (let at = document.elementFromPoint(x, window.innerHeight * y); at !== null; at = at.parentElement) {
-        const fill = rgba(getComputedStyle(at).backgroundColor);
-        if (!fill.endsWith(",0")) {
-          edges.push(fill);
-          break;
-        }
-      }
-    }
-  }
-
-  return {
-    body: rgba(getComputedStyle(document.body).backgroundColor),
-    html: rgba(getComputedStyle(document.documentElement).backgroundColor),
-    edges,
-    samples,
-  };
-}
 
 /**
  * `r,g,b,a` (0-255) to lowercase `#rrggbb`, or null when it is too transparent
@@ -405,18 +326,27 @@ export function summarize({ body, html, edges, samples }, readDate) {
 }
 
 /**
- * The tokens of whatever `page` is showing, or null. Never throws: a page that
- * breaks the sampler costs the entry its design panel and nothing else.
+ * The tokens of whatever `page` is showing, or null. Never throws and never
+ * waits past `ms`: a page that breaks or stalls the sampler costs the entry its
+ * design panel and nothing else.
  *
- * @param {import("playwright").Page} page
+ * @param {Pick<import("playwright").Page, "evaluate">} page
+ * @param {string} readDate  The run's ISO date, stored as `read_date`.
+ * @param {number} [ms]
  * @returns {Promise<Design | null>}
  */
-export async function readDesign(page) {
+export async function readDesign(page, readDate, ms = READ_TIMEOUT_MS) {
+  /** @type {ReturnType<typeof setTimeout> | undefined} */
+  let timer;
   try {
-    const raw = await page.evaluate(sampleStyles, MAX_SAMPLES);
-    // en-CA formats as YYYY-MM-DD, in the machine's local day rather than UTC's.
-    return raw === null ? null : summarize(raw, new Date().toLocaleDateString("en-CA"));
+    const raw = await Promise.race([
+      page.evaluate(sampleStyles, MAX_SAMPLES),
+      /** @type {Promise<null>} */ (new Promise((resolve) => { timer = setTimeout(resolve, ms, null); })),
+    ]);
+    return raw === null ? null : summarize(raw, readDate);
   } catch {
     return null;
+  } finally {
+    clearTimeout(timer);
   }
 }
