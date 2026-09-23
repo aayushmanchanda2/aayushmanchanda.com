@@ -4,20 +4,22 @@
  * The list pane beside it (`LibraryPane.astro`) is the index; this is what the
  * kind shows:
  *
- *   - **All**: the latest twelve saves as a compact feed (`LibraryFeed`).
+ *   - **All**: an editorial front page (QA phase 2, B6), not a second copy of
+ *     the pane: the newest article as a card with its TLDR and first
+ *     highlight, the latest four posts as compact `PostCard`s, the latest two
+ *     videos, each with a link to its kind.
  *   - **Articles**: list-detail. Beside the pane, the newest article opens here
  *     through `EntryDetail`, the entry page's own markup, the way Notes opens
  *     on the latest note; a "pick one" empty state would be a click that
  *     shows nothing. On a phone there is no pane, so the view is the list.
  *   - **Posts**: the `PostWall` grid of `PostCard`s.
- *   - **Videos**: posters at 16:9 with the title and the source under them.
- *     A tile opens the entry's page, where the play facade lives.
+ *   - **Videos**: `VideoGrid`, posters at 16:9.
  *
- * All four render at build, and the route's kind is the one not `hidden`, so
- * without scripting /library shows All and `/library/kind/<kind>` shows its
- * view. `lib/library-pane.ts › FILTER` runs at the foot of this component,
- * after the views exist: it swaps views in place on a segment press, keeps the
- * kind in `?kind=`, and replays it on Back and Forward.
+ * A route renders only its own view (B15): `/library` All, and
+ * `/library/kind/<kind>` its kind, so the other three are not shipped on every
+ * page. A segment press on these routes follows its link to the other route
+ * (`lib/library-pane.ts › FILTER`, at the foot of this component, which also
+ * runs the tag filter over the view's `[data-tags]` items).
  */
 import Mark from "./Mark.astro";
 import EntryDetail from "./EntryDetail.astro";
@@ -25,26 +27,31 @@ import KindIcon from "./KindIcon.astro";
 import LibraryFeed from "./LibraryFeed.astro";
 import LibraryToolbar from "./LibraryToolbar.astro";
 import PostWall from "./PostWall.astro";
+import VideoGrid from "./VideoGrid.astro";
 import type { Kind } from "../lib/library";
-import { KIND_BLURBS, entryHref, library } from "../lib/library";
+import { KIND_BLURBS, KIND_LABELS, entryHref, library } from "../lib/library";
 import { FILTER, PREPAINT } from "../lib/library-pane";
 import { formatDay } from "../lib/date";
 
 interface Props {
-  /** The view shown on load: the route's kind, "" for All. */
+  /** The view this route shows: its kind, "" for All. */
   start: Kind | "";
 }
 
 const { start } = Astro.props;
 
-/** How many saves the All view leads with. */
-const LATEST = 12;
-
 const of = (kind: Kind) => library.filter((entry) => entry.kind === kind);
 const articles = of("article");
 const [reading] = articles;
-/** Every video. One with no poster (`video: null`, a playlist) gets a placeholder tile. */
+const posts = of("post").filter((entry) => entry.post !== null);
 const videos = of("video");
+const highlight = reading?.highlights[0];
+
+/** The All view's sections after the lead article: kind, how many, all of that kind. */
+const more = [
+  { kind: "post" as const, entries: posts.slice(0, 4), total: of("post").length },
+  { kind: "video" as const, entries: videos.slice(0, 2), total: videos.length },
+].filter((section) => section.entries.length > 0);
 ---
 
 <h1 class="page-title"><Mark shape="underline-double" variant={3}>Library</Mark></h1>
@@ -53,62 +60,83 @@ const videos = of("video");
   <LibraryToolbar id="view-tag" />
 </div>
 
-<section class="view" data-view="" hidden={start !== ""} aria-label="Latest">
-  <p class="standfirst">
-    Articles, posts and videos I saved to read or watch. The ones I&rsquo;ve
-    read carry cliff notes and a call on whether they&rsquo;re worth your time.
-  </p>
-  <div class="view__body">
-    <LibraryFeed entries={library.slice(0, LATEST)} />
-  </div>
-</section>
-
-<section class="view" data-view="article" hidden={start !== "article"} aria-label="Articles">
-  {
-    reading && (
-      <div class="view__reader">
-        <EntryDetail entry={reading} level="h2" />
-      </div>
-    )
-  }
-  <div class="view__list">
-    <p class="standfirst">{KIND_BLURBS.article}</p>
-    <div class="view__body">
-      <LibraryFeed entries={articles} filterable />
-    </div>
-  </div>
-</section>
-
-<section class="view" data-view="post" hidden={start !== "post"} aria-label="Posts">
-  <p class="standfirst">{KIND_BLURBS.post}</p>
-  <div class="view__body">
-    <PostWall entries={of("post")} />
-  </div>
-</section>
-
-<section class="view" data-view="video" hidden={start !== "video"} aria-label="Videos">
-  <p class="standfirst">{KIND_BLURBS.video}</p>
-  <ul class="view__body vgrid">
-    {
-      videos.map((entry) => (
-        <li data-tags={entry.tags.join(" ")}>
-          <a class="vtile" href={entryHref(entry)} data-astro-prefetch="hover">
-            {entry.video ? (
-              <img class="vtile__thumb outlined" src={entry.video.thumb} alt="" loading="lazy" decoding="async" />
-            ) : (
-              <span class="vtile__thumb vtile__ph outlined" aria-hidden="true"><KindIcon kind="video" /></span>
+{
+  start === "" && (
+    <section class="view" data-view="" aria-label="Latest">
+      <p class="standfirst">
+        Articles, posts and videos I saved to read or watch. The ones I&rsquo;ve
+        read carry cliff notes and a call on whether they&rsquo;re worth your time.
+      </p>
+      <div class="view__body mix">
+        {reading && (
+          <a class="lead" href={entryHref(reading)} data-astro-prefetch="hover">
+            <span class="lead__kicker mono"><KindIcon kind="article" /> Latest article</span>
+            <b class="lead__title">{reading.title}</b>
+            {reading.tldr && <p class="lead__tldr">{reading.tldr}</p>}
+            {highlight && (
+              <blockquote class="lead__quote">
+                <mark data-color={highlight.color}>{highlight.text}</mark>
+              </blockquote>
             )}
-            <b>{entry.title}</b>
-            <small>
-              <span>{entry.domain}</span>
-              <time datetime={entry.saved_date}>{formatDay(entry.saved_date)}</time>
+            <small class="lead__meta">
+              <span>{reading.domain}</span>
+              <time datetime={reading.saved_date}>{formatDay(reading.saved_date)}</time>
             </small>
           </a>
-        </li>
-      ))
-    }
-  </ul>
-</section>
+        )}
+        {more.map((section) => (
+          <section class="mix__part" aria-labelledby={`mix-${section.kind}`}>
+            <h2 class="mix__head mono" id={`mix-${section.kind}`}>
+              <span>Latest {KIND_LABELS[section.kind].toLowerCase()}</span>
+              <a href={`/library/kind/${section.kind}`}>All {section.total}</a>
+            </h2>
+            {section.kind === "post" ? <PostWall entries={section.entries} compact /> : <VideoGrid entries={section.entries} />}
+          </section>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+{
+  start === "article" && (
+    <section class="view" data-view="article" aria-label="Articles">
+      {reading && (
+        <div class="view__reader">
+          <EntryDetail entry={reading} level="h2" />
+        </div>
+      )}
+      <div class="view__list">
+        <p class="standfirst">{KIND_BLURBS.article}</p>
+        <div class="view__body">
+          <LibraryFeed entries={articles} filterable />
+        </div>
+      </div>
+    </section>
+  )
+}
+
+{
+  start === "post" && (
+    <section class="view" data-view="post" aria-label="Posts">
+      <p class="standfirst">{KIND_BLURBS.post}</p>
+      <div class="view__body">
+        <PostWall entries={posts} />
+      </div>
+    </section>
+  )
+}
+
+{
+  start === "video" && (
+    <section class="view" data-view="video" aria-label="Videos">
+      <p class="standfirst">{KIND_BLURBS.video}</p>
+      <div class="view__body">
+        <VideoGrid entries={videos} />
+      </div>
+    </section>
+  )
+}
 
 <script is:inline set:html={FILTER} />
 <script is:inline set:html={PREPAINT} />
@@ -128,6 +156,97 @@ const videos = of("video");
 
   .view__body {
     margin-top: var(--gap-masthead);
+  }
+
+  /* All: the lead card, then one part per kind, 40px apart (design.md §2). */
+  .mix {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  /* The lead: the post card's surface (a hairline on the page, sharp
+     corners), one link to the entry. */
+  .lead {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: 48rem;
+    padding: 1.25rem;
+    border: 1px solid var(--hairline);
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  @media (hover: hover) {
+    .lead:hover {
+      border-color: var(--hairline-strong);
+    }
+
+    .lead:hover .lead__title {
+      color: var(--accent);
+    }
+  }
+
+  .lead__kicker {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-tertiary);
+  }
+
+  .lead__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+  }
+
+  .lead__tldr {
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .lead__quote {
+    margin-top: 0.5rem;
+    padding-left: 1rem;
+    border-left: 3px solid var(--hairline-strong);
+    line-height: 1.6;
+  }
+
+  .lead__meta {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.25rem;
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+  }
+
+  .lead__meta > * + *::before {
+    content: "\00b7" / "";
+    margin-right: 0.4rem;
+  }
+
+  .mix__head {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    color: var(--text-tertiary);
+  }
+
+  .mix__head a {
+    color: var(--text-secondary);
+    text-decoration: underline;
+    text-decoration-color: var(--hairline-strong);
+    text-underline-offset: 3px;
+  }
+
+  @media (hover: hover) {
+    .mix__head a:hover {
+      color: var(--accent);
+      text-decoration-color: currentColor;
+    }
   }
 
   /* Articles: the reader beside the pane, the list without one. The reader is
@@ -150,87 +269,13 @@ const videos = of("video");
 
     /* The article is the page there, as on its own: the "Library" masthead
        over it would be a second title, so it stays for a screen reader only. */
-    .page-title:has(~ .view[data-view="article"]:not([hidden])) {
+    .page-title:has(~ .view[data-view="article"]) {
       position: absolute;
       width: 1px;
       height: 1px;
       overflow: hidden;
       clip-path: inset(50%);
       white-space: nowrap;
-    }
-  }
-
-  /* Videos: posters at 16:9, 15rem at the least: three across beside the
-     pane at 1280px, four at 1600, one on a phone. */
-  .vgrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(15rem, 100%), 1fr));
-    gap: 2rem 1rem;
-  }
-
-  .vtile {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-    color: var(--text-primary);
-    text-decoration: none;
-  }
-
-  /* A poster's shape is known, so 16:9 rather than §8's 8:5 crop; a 480x360
-     fallback still lands right under `cover` (`VideoFacade.astro`). */
-  .vtile__thumb {
-    display: block;
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-    margin-bottom: 0.5rem;
-  }
-
-  /* A playlist has no single poster (`pipeline/thumb.mjs` reads one video id):
-     the tile keeps its 16:9 as a quiet surface with the play glyph. */
-  .vtile__ph {
-    display: grid;
-    place-items: center;
-    background: var(--surface-3);
-  }
-
-  .vtile__ph :global(.ki) {
-    width: 28px;
-    height: 28px;
-  }
-
-  .vtile b {
-    font-size: 0.9375rem;
-    font-weight: 500;
-    line-height: 1.45;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    overflow: hidden;
-  }
-
-  .vtile small {
-    display: flex;
-    gap: 0.4rem;
-    font-size: 0.8125rem;
-    line-height: 1.45;
-    color: var(--text-tertiary);
-  }
-
-  .vtile small > * + *::before {
-    content: "\00b7" / "";
-    margin-right: 0.4rem;
-  }
-
-  /* Instant, like every tile a pointer sweeps across (design.md §4). */
-  @media (hover: hover) {
-    .vtile:hover .vtile__thumb {
-      opacity: 0.82;
-    }
-
-    .vtile:hover b {
-      color: var(--accent);
     }
   }
 </style>

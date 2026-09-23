@@ -22,7 +22,8 @@ export interface RowIcon {
   src?: string;
   fallback?: string;
   letter: string;
-  hue: number;
+  /** A person's identity hue (`lib/tags.ts › hueSlot`); a tool's or a site's letter tile has none. */
+  hue?: number;
 }
 
 /** A row with no picture draws one of these (`styles/kind-icon.css`). */
@@ -159,6 +160,22 @@ const FIELDS = ["title", "lead", "terms", "section", "body"] as const;
 type ScoredFields = Record<(typeof FIELDS)[number], string>;
 
 /**
+ * An entry's fields, normalised once and kept for as long as the entry is (QA
+ * phase 2, B12): the index is fetched once and searched on every keystroke,
+ * and folding every post's full text per key was the whole cost of a search.
+ */
+const normalized = new WeakMap<SearchEntry, ScoredFields>();
+
+function fieldsOf(entry: SearchEntry): ScoredFields {
+  let fields = normalized.get(entry);
+  if (!fields) {
+    fields = Object.fromEntries(FIELDS.map((key) => [key, normalizeText(entry[key] ?? "")])) as ScoredFields;
+    normalized.set(entry, fields);
+  }
+  return fields;
+}
+
+/**
  * An entry's total, or `NO_MATCH` when it is out.
  *
  * Every token has to land somewhere. Typing more words narrows the list, which
@@ -167,9 +184,7 @@ type ScoredFields = Record<(typeof FIELDS)[number], string>;
  * further from what they wanted than when they started.
  */
 export function scoreEntry(entry: SearchEntry, tokens: readonly string[]): number {
-  const fields = Object.fromEntries(
-    FIELDS.map((key) => [key, normalizeText(entry[key] ?? "")]),
-  ) as ScoredFields;
+  const fields = fieldsOf(entry);
 
   let total = 0;
   for (const token of tokens) {

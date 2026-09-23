@@ -5,9 +5,10 @@
  * component so the /library redesign can use it too.
  *
  * Each segment is a link to a real page (`/library`, `/library/kind/<kind>`),
- * so a modifier click or no scripting still lands somewhere true. In the pane,
- * `lib/library-pane.ts › FILTER` takes a plain click and filters the list in
- * place through `?kind=`, marking the chosen segment `aria-current="true"`.
+ * so a modifier click or no scripting still lands somewhere true. On an entry
+ * page `lib/library-pane.ts › FILTER` takes a plain click and filters the pane
+ * in place through `?kind=`; on /library and a kind route the link is followed,
+ * carrying the tag. Either way the chosen segment is `aria-current="true"`.
  * Pass `current` where the page itself is a kind (or /library, `null`) and
  * that segment carries `aria-current="page"`. Links, never `role="tab"`: a
  * tablist promises arrow keys inside the row that nothing here implements.

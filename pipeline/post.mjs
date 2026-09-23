@@ -8,12 +8,11 @@
  * a reader's browser never asks X for anything.
  */
 
-import { access } from "node:fs/promises";
 import path from "node:path";
 
 import { pickText } from "./post-text.mjs";
 import { fetchWebp } from "./thumb.mjs";
-import { isRecord, readCapped, writeAtomic } from "./util.mjs";
+import { exists, isRecord, readCapped, writeAtomic } from "./util.mjs";
 
 /** @typedef {import("./types.js").Post} Post */
 /** @typedef {typeof globalThis.fetch} Fetch */
@@ -160,10 +159,6 @@ export function readTweet(tweet, quoting = false) {
   };
 }
 
-/** @param {string} file */
-async function exists(file) {
-  return access(file).then(() => true, () => false);
-}
 
 /**
  * A webp copy under `public/posts/<id>/`, fetched once. Returns the web path.

@@ -148,8 +148,7 @@ function appIcon(entry: { slug: string; name: string; url?: string | null; logoD
     shape: "app",
     src: mark.logo ?? mark.icon ?? undefined,
     fallback: mark.logo ? (mark.icon ?? undefined) : undefined,
-    letter: mark.letter.toUpperCase(),
-    hue: hueSlot(entry.slug),
+    letter: mark.letter,
   };
 }
 

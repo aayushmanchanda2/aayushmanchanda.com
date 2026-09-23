@@ -296,17 +296,13 @@
    The monogram: the avatar slot, with no avatar in it.
 
    A /library post card has the shape of a tweet, and the first thing in a tweet
-   is a face. This site will not fetch one: `github.com/{owner}.png` was already
-   refused on /tools for being two new third-party hosts, and x.com's avatar CDN
-   is the same refusal on a page where twenty-four cards would make twenty-four
-   requests. /privacy's list of what a page loads from elsewhere is the claim
-   that decides it — and the card being X's own embed now does not change it,
-   because this is what the *fallback* draws and the fallback is what a reader
-   with scripting off is left with.
-
-   So the slot holds an initial instead, and the colour is what does the avatar's
-   actual job: recognising who posted before reading the name. It reads the same
-   seven-hue table above, keyed on the handle.
+   is a face. Since VET-244 the face is the poster's avatar, copied once at
+   publish time into `/posts/<id>/avatar.webp`, so a page still loads nothing
+   from X. The monogram is the fallback for a post read before that: an
+   initial, and the colour does the avatar's job, recognising who posted
+   before reading the name. It reads the seven-hue table above, keyed on the
+   handle. A tool's or a site's letter tile is the same class with no hue
+   (below, QA phase 2 B2).
 
    **The tint is 0.09 in both themes, and that is the departure from `.chip`.**
    A chip deepens to 0.14 in the dark because its ink lightens and a 9% wash
@@ -336,6 +332,15 @@
   line-height: 1;
   color: hsl(var(--hue-h) var(--hue-s) var(--hue-l));
   background: hsl(var(--hue-h) var(--hue-s) var(--hue-l) / var(--monogram-tint));
+}
+
+/* A tool's or a site's letter tile (`AppIcon`, the palette's app rows) has
+   no identity hue (QA phase 2, B2): hues are for people, so a letter on a
+   tool is one neutral tile, surface-2 under tertiary ink, and a column of
+   them reads as a placeholder on purpose rather than as confetti. */
+.monogram:not([data-hue]) {
+  color: var(--text-tertiary);
+  background: var(--surface-2);
 }
 
 /* The dark tones, twice, for the reason written out at the top of the dark

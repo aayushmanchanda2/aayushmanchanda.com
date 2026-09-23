@@ -139,17 +139,17 @@ test("a tool with no icon file and no site gets its own initial, not a GitHub av
 
 test("the initial is the first letter or digit, whatever leads the name", () => {
   /**
-   * `AppIcon.astro` capitalises at render, so the stored letter keeps the name's case.
+   * The post monogram's rule (`lib/post.ts › monogram`), uppercased once here.
    *
    * @param {string} name
    */
   const initial = (name) => markFor({ slug: "no-such-tool", name }).letter;
 
-  assert.equal(initial("cloudflare-os"), "c");
-  assert.equal(initial("improve (shadcn skill)"), "i");
+  assert.equal(initial("cloudflare-os"), "C");
+  assert.equal(initial("improve (shadcn skill)"), "I");
   assert.equal(initial("  Buzz"), "B", "leading space skipped");
   assert.equal(initial("1Password"), "1", "a digit counts");
-  assert.equal(initial("λ-calc"), "λ", "any script, not Latin only");
+  assert.equal(initial("λ-calc"), "Λ", "any script, not Latin only");
   assert.equal(initial("!!!"), "", "nothing to print is an empty square, not a throw");
 });
 

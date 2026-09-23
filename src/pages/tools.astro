@@ -27,11 +27,8 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
   jsonLd={jsonLd}
   full
 >
-  {/* Title and intro share a baseline, so the table starts high on the page. */}
-  <header class="masthead">
-    <h1 class="page-title"><Mark color="green">Tools</Mark></h1>
-    <p class="intro">Software I installed and ran, with a dated verdict on each.</p>
-  </header>
+  <h1 class="page-title"><Mark color="green">Tools</Mark></h1>
+  <p class="standfirst">Software I installed and ran, with a dated verdict on each.</p>
 
   {/*
     Filters, count and layout in one row directly above the table. The
@@ -62,25 +59,14 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
 </Base>
 
 <style>
-  .masthead {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    /* the row gap holds the title's pen underline when the intro wraps */
-    gap: 0.6rem 1rem;
-  }
-
-  .intro {
-    color: var(--text-secondary);
-  }
-
   .controls {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 0.5rem;
-    margin-top: 1.25rem;
-    margin-bottom: 0.25rem;
+    /* tight under the standfirst, so the table's header starts near 300px
+       at 1280 with the title and its line stacked like every other index */
+    margin-top: 0.75rem;
   }
 
   .count {

@@ -24,7 +24,7 @@
  * or every /library article: `node pipeline/preview.mjs library [--force]`.
  */
 
-import { access, readFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -36,7 +36,7 @@ import { measureShot, shotLooksBlank } from "./challenge.mjs";
 import { siteOf } from "./icon.mjs";
 import { NOT_A_SITE } from "./readme-site.mjs";
 import { resolvePaths } from "./state.mjs";
-import { backfill, describe, writeAtomic } from "./util.mjs";
+import { backfill, describe, exists, writeAtomic } from "./util.mjs";
 
 /** The page is laid out at this size: the Open Graph card shape. */
 export const PREVIEW_VIEWPORT = { width: 1200, height: 630 };
@@ -145,7 +145,6 @@ export async function encodePreview(png) {
 }
 
 /** @param {string} file */
-const exists = (file) => access(file).then(() => true, () => false);
 
 /**
  * Shoot one tool's preview into `dir/<slug>.webp`.

@@ -59,8 +59,9 @@
  * `lib/tools.ts` and `lib/sites.ts` still use the short forms and are still
  * untested; this is the file that had a reason to move first.
  */
-import type { Fail } from "./parse.ts";
-import { SLUG, readers, routeSlug } from "./parse.ts";
+import { SLUG, routeSlug } from "./parse.ts";
+import type { Post } from "./post-schema.ts";
+import { READ, fail, readCommittedPath, readList, readPostObject } from "./post-schema.ts";
 import type { Color } from "./reader.mjs";
 import { CAPS, highlights, keyline, moments, postHighlights, prose } from "./reader.mjs";
 
@@ -106,6 +107,8 @@ export const KIND_BLURBS: Record<Kind, string> = {
  * and no verdict is a summary, and a summary was never the point — the verdict
  * and the why are what earn the entry its page.
  */
+export type { Post, PostLink, PostMedia } from "./post-schema.ts";
+
 export interface Digest {
   /** Three to five load-bearing claims from the piece, one line each. */
   bullets: string[];
@@ -130,55 +133,6 @@ export interface Digest {
 export const PROVIDERS = ["youtube"] as const;
 
 export type Provider = (typeof PROVIDERS)[number];
-
-/** A picture or a video attached to a post, copied under `/posts/<id>/`. */
-export interface PostMedia {
-  type: "photo" | "video";
-  /** The webp for a photo, the mp4 for a video. Null on a video too big to keep: poster only. */
-  src: string | null;
-  /** A video's still. Null on a photo. */
-  poster: string | null;
-  /** Source pixels, so the box is reserved before the file arrives. */
-  w: number;
-  h: number;
-}
-
-/** A link in the post, as X displays it and where it goes. */
-export interface PostLink {
-  text: string;
-  href: string;
-}
-
-/**
- * An x.com post, as `pipeline/post.mjs` stored it: X's syndication record for
- * the author, avatar, media, quoted post and Article header, and the fullest
- * text anyone has read (the Firecrawl copy on a long post).
- *
- * Every picture is a path under `/posts/`. A remote URL is refused rather than
- * stored, which is `/privacy` made structural: a page that renders this cannot
- * reach X's CDN, because there is no shape it could hold that would let it.
- */
-export interface Post {
-  /** X's numeric id, as a string. Null for a post read before syndication was. */
-  id: string | null;
-  /** Display name, spelled as the poster spells it. The handle when they have none. */
-  author: string;
-  /** The @handle, without the @. */
-  handle: string;
-  /** ISO calendar date (YYYY-MM-DD) the post was POSTED, not saved. */
-  date: string;
-  /** The post's own words, whole. Paragraph breaks where the source kept them. */
-  text: string;
-  avatar: string | null;
-  links: PostLink[];
-  media: PostMedia[];
-  /** The post this one quotes, or null. Never itself quoting: X nests one deep. */
-  quoted: Post | null;
-  /** An X Article's header. Its body is not republished here (F3 adds highlights). */
-  article: { title: string; cover: string | null } | null;
-  /** Gone on X. The saved copy is all there is. */
-  removed: boolean;
-}
 
 /** A video entry's provider, its id there, and the still we committed. */
 export interface Video {
@@ -346,9 +300,6 @@ const KIND_NAMES: readonly string[] = KINDS;
 
 const PROVIDER_NAMES: readonly string[] = PROVIDERS;
 
-const READ = readers("library.json");
-/** Annotated, or TypeScript stops treating a call as the end of control flow. */
-const fail: Fail = READ.fail;
 const { readString, readDate, readOptional, isRecord } = READ;
 
 function isKind(value: unknown): value is Kind {
@@ -429,6 +380,16 @@ function readNote(entry: Record<string, unknown>, where: string): string | null 
   return value;
 }
 
+/** A list of one-line strings (`readList`): a bullet with a newline in it would become two in markdown. */
+function readLines(value: unknown, field: string, where: string): string[] {
+  return readList(value, field, where, (line, index) => {
+    if (typeof line !== "string" || line.trim() === "" || line.includes("\n")) {
+      fail(where, `needs "${field}" entry ${index} to be one non-empty line (got ${JSON.stringify(line)})`);
+    }
+    return line;
+  });
+}
+
 /**
  * Absent, explicitly null, or the whole thing. A digest is one judgement, so a
  * partial one — bullets with no verdict, a verdict with no date — is a
@@ -448,19 +409,8 @@ function readDigest(entry: Record<string, unknown>, where: string): Digest | nul
     fail(where, `needs "digest" to be an object, null, or absent (got ${JSON.stringify(value)})`);
   }
 
-  const raw = value["bullets"];
-  if (!Array.isArray(raw) || raw.length === 0) {
-    fail(where, `needs "digest.bullets" to be a non-empty array of one-line strings`);
-  }
-  const bullets = raw.map((bullet: unknown, index): string => {
-    if (typeof bullet !== "string" || bullet.trim() === "" || bullet.includes("\n")) {
-      fail(
-        where,
-        `needs "digest.bullets" entry ${index} to be one non-empty line (got ${JSON.stringify(bullet)})`,
-      );
-    }
-    return bullet;
-  });
+  const bullets = readLines(value["bullets"], "digest.bullets", where);
+  if (bullets.length === 0) fail(where, `needs "digest.bullets" to be a non-empty array of one-line strings`);
 
   return {
     bullets,
@@ -504,127 +454,6 @@ function readTags(entry: Record<string, unknown>, where: string): string[] {
     seen.add(tag);
     return tag;
   });
-}
-
-/**
- * The one shape a picture on a /library entry may take.
- *
- * Refusing a remote URL is the whole function. A `https://pbs.twimg.com/…` in
- * this field would render as an `<img>` pointed at x.com's CDN, which hands
- * every reader of this page to a third party and breaks a promise `/privacy`
- * makes by name. There is no flag to turn that on: the parser will not carry
- * the value, so no page can render it.
- */
-function readShotPath(
-  value: unknown,
-  field: string,
-  where: string,
-): string {
-  if (typeof value !== "string" || !SHOT_PATH.test(value)) {
-    fail(
-      where,
-      `needs "${field}" to be a committed picture under /shots ` +
-        `(\`/shots/<name>.webp\`), never a remote URL (got ${JSON.stringify(value)})`,
-    );
-  }
-  return value;
-}
-
-/** A file `pipeline/post.mjs` wrote: `/posts/<id>/<name>.webp` or `.mp4`. */
-const POST_FILE = /^\/posts\/\d+\/[a-z0-9-]+\.(?:webp|mp4)$/;
-
-function readPostFile(value: unknown, field: string, where: string): string {
-  if (typeof value !== "string" || !POST_FILE.test(value)) {
-    fail(
-      where,
-      `needs "${field}" to be a copy under /posts (\`/posts/<id>/<name>.webp\`), ` +
-        `never a remote URL (got ${JSON.stringify(value)})`,
-    );
-  }
-  return value;
-}
-
-/** Absent or null reads as none; a present value is held to `POST_FILE`. */
-function readPostFileOrNull(value: unknown, field: string, where: string): string | null {
-  return value === undefined || value === null ? null : readPostFile(value, field, where);
-}
-
-/** Absent reads as none. Present means a non-empty array, as `readTags` rules. */
-function readList<T>(
-  value: unknown,
-  field: string,
-  where: string,
-  read: (item: unknown, index: number) => T,
-): T[] {
-  if (value === undefined || value === null) return [];
-  if (!Array.isArray(value) || value.length === 0) {
-    fail(where, `needs "${field}" to be a non-empty array, or to leave the key out`);
-  }
-  return value.map(read);
-}
-
-function readMedia(item: unknown, index: number, where: string): PostMedia {
-  const field = `post.media[${index}]`;
-  if (!isRecord(item)) fail(where, `needs "${field}" to be an object`);
-  const { type, w, h } = item;
-  if (type !== "photo" && type !== "video") {
-    fail(where, `needs "${field}.type" to be photo or video (got ${JSON.stringify(type)})`);
-  }
-  if (typeof w !== "number" || typeof h !== "number" || !(w > 0 && h > 0 && Number.isFinite(w * h))) {
-    fail(where, `needs "${field}.w" and ".h" to be finite numbers above 0`);
-  }
-  return type === "photo"
-    ? { type, src: readPostFile(item["src"], `${field}.src`, where), poster: null, w, h }
-    : {
-        type,
-        src: readPostFileOrNull(item["src"], `${field}.src`, where),
-        poster: readPostFile(item["poster"], `${field}.poster`, where),
-        w,
-        h,
-      };
-}
-
-/** `quoting` is true inside a quote, which may not quote again: X nests one deep. */
-function readPostObject(value: Record<string, unknown>, where: string, quoting = false): Post {
-  const at = `${where} post`;
-  const id = readOptional(value, "id", at);
-  if (id !== null && !/^\d+$/.test(id)) fail(where, `needs "post.id" to be X's numeric id (got ${JSON.stringify(id)})`);
-  const removed = value["removed"] ?? false;
-  if (typeof removed !== "boolean") fail(where, `needs "post.removed" to be true, false or absent`);
-  const article = value["article"];
-  if (article !== undefined && !isRecord(article)) {
-    fail(where, `needs "post.article" to be an object or absent`);
-  }
-  const quoted = value["quoted"];
-  if (quoted !== undefined && !isRecord(quoted)) {
-    fail(where, `needs "post.quoted" to be an object or absent`);
-  }
-  if (quoting && quoted !== undefined) fail(where, `has a quoted post that quotes another; X nests one deep`);
-
-  return {
-    id,
-    author: readString(value, "author", at),
-    handle: readString(value, "handle", at),
-    date: readDate(value, "date", at),
-    text: readString(value, "text", at),
-    avatar: readPostFileOrNull(value["avatar"], "post.avatar", where),
-    links: readList(value["links"], "post.links", where, (item) => {
-      if (!isRecord(item)) fail(where, `needs every "post.links" item to be an object`);
-      const href = readString(item, "href", at);
-      if (!/^https?:\/\//.test(href)) fail(where, `needs every "post.links" href to be http(s) (got ${JSON.stringify(href)})`);
-      return { text: readString(item, "text", at), href };
-    }),
-    media: readList(value["media"], "post.media", where, (item, index) => readMedia(item, index, where)),
-    quoted: quoted === undefined ? null : readPostObject(quoted, `${where} quoted`, true),
-    article:
-      article === undefined
-        ? null
-        : {
-            title: readString(article, "title", at),
-            cover: readPostFileOrNull(article["cover"], "post.article.cover", where),
-          },
-    removed,
-  };
 }
 
 /**
@@ -678,7 +507,7 @@ function readVideo(
   return {
     provider,
     id: readString(value, "id", `${where} video`),
-    thumb: readShotPath(value["thumb"], "video.thumb", where),
+    thumb: readCommittedPath(value["thumb"], "video.thumb", where, SHOT_PATH, "a committed picture under /shots (`/shots/<name>.webp`)"),
   };
 }
 
@@ -701,22 +530,8 @@ function readDraft(entry: Record<string, unknown>, where: string): Draft | null 
     fail(where, `needs "draft" to be an object, null, or absent (got ${JSON.stringify(value)})`);
   }
 
-  const raw = value["bullets"];
-  let bullets: string[] | null = null;
-  if (raw !== undefined && raw !== null) {
-    if (!Array.isArray(raw) || raw.length === 0) {
-      fail(where, `needs "draft.bullets" to be a non-empty array of one-line strings, or absent`);
-    }
-    bullets = raw.map((bullet: unknown, index): string => {
-      if (typeof bullet !== "string" || bullet.trim() === "" || bullet.includes("\n")) {
-        fail(
-          where,
-          `needs "draft.bullets" entry ${index} to be one non-empty line (got ${JSON.stringify(bullet)})`,
-        );
-      }
-      return bullet;
-    });
-  }
+  const lines = readLines(value["bullets"], "draft.bullets", where);
+  const bullets = lines.length > 0 ? lines : null;
 
   const why = readOptional(value, "why", `${where} draft`);
   if (bullets === null && why === null) {

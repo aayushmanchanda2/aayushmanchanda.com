@@ -9,8 +9,8 @@
  *   2. on that image's `error`, the same `<img>` swaps once to
  *      `public/icons/<slug>.webp`, the site's own icon, when the pipeline kept one
  *   3. when that fails too, or there was nothing to ask for, the image removes
- *      itself and the letter underneath shows: the initial on its identity hue
- *      (`lib/tags.ts › hueSlot`, painted by `styles/chip.css › .monogram`)
+ *      itself and the letter underneath shows: the initial on one neutral tile
+ *      (`styles/chip.css › .monogram:not([data-hue])`), the same for every entry
  *
  * The letter is always rendered, under the picture, so a failed logo costs no
  * layout shift and no script beyond the one-line handler. `letter={false}` is
@@ -32,7 +32,6 @@
  * grid view grows every row's icon from 28 to 40 that way, with no second markup.
  */
 import { markFor } from "../lib/links";
-import { hueSlot } from "../lib/tags";
 
 interface Props {
   tool: { slug: string; name: string; url?: string | null; logoDomain?: string | null };
@@ -58,7 +57,7 @@ const onerror = "this.dataset.fallback?(this.src=this.dataset.fallback,this.remo
 >
   {
     letter && (
-      <span class="app-icon__letter monogram" data-hue={hueSlot(tool.slug)}>
+      <span class="app-icon__letter monogram">
         {mark.letter}
       </span>
     )
@@ -118,7 +117,7 @@ const onerror = "this.dataset.fallback?(this.src=this.dataset.fallback,this.remo
   .app-icon img {
     inline-size: 100%;
     block-size: 100%;
-    background: #fff;
+    background: var(--logo-ground);
     -webkit-user-drag: none;
   }
 
@@ -127,13 +126,12 @@ const onerror = "this.dataset.fallback?(this.src=this.dataset.fallback,this.remo
     display: none;
   }
 
-  /* `.monogram` brings the hue fill and the ink; the box and the type scale
-     with the tile instead of its 48px circle. 0.43 is the 12-in-28 the /tools
-     letter has always been. */
+  /* `.monogram` brings the neutral fill and the ink; the box and the type
+     scale with the tile instead of its 48px circle. 0.43 is the 12-in-28 the
+     /tools letter has always been. */
   .app-icon__letter {
     --monogram-size: 100%;
     border-radius: 0;
     font-size: calc(var(--edge) * 0.43);
-    text-transform: uppercase;
   }
 </style>

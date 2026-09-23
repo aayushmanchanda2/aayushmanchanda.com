@@ -120,6 +120,31 @@ function consumersOf(rules, token) {
 }
 
 /**
+ * The attributes of a file's `<Base …>` opening tag, read the way the compiler
+ * reads them (QA phase 2, B13): the tag ends at the first `>` outside a `{…}`
+ * expression, so a `>` inside `jsonLd={…}` cannot cut it short, and line
+ * breaks and attribute order do not matter. Null when the page has no Base.
+ *
+ * @param {string} source
+ * @returns {Set<string> | null}
+ */
+function baseAttributes(source) {
+  const start = source.search(/<Base\b/);
+  if (start === -1) return null;
+  let depth = 0;
+  let plain = "";
+  for (const c of source.slice(start + "<Base".length)) {
+    if (c === "{") depth++;
+    else if (c === "}") depth--;
+    else if (depth === 0 && c === ">") break;
+    else if (depth === 0) plain += c;
+  }
+  // Values are gone with their braces; quoted ones go here, leaving names.
+  const names = plain.replace(/"[^"]*"/g, "").split(/[\s=/]+/).filter(Boolean);
+  return new Set(names);
+}
+
+/**
  * Every page that passes `full` to Base, relative to `src/pages/`.
  *
  * @returns {string[]}
@@ -128,10 +153,19 @@ function fullPages() {
   const pages = path.join(SRC, "pages");
   return walk(pages)
     .filter((full) => full.endsWith(".astro"))
-    .filter((full) => /<Base\b[^>]*\n\s+full\n/.test(readFileSync(full, "utf8")))
+    .filter((full) => baseAttributes(readFileSync(full, "utf8"))?.has("full"))
     .map((full) => path.relative(pages, full).split(path.sep).join("/"))
     .sort();
 }
+
+test("the Base tag reader sees `full` however the tag is written", () => {
+  assert.ok(baseAttributes('<Base title="x" full>')?.has("full"));
+  assert.ok(baseAttributes("<Base\n  jsonLd={a > b ? c : d}\n  full\n>")?.has("full"));
+  assert.ok(baseAttributes("<Base full title={t}>")?.has("full"));
+  assert.ok(!baseAttributes('<Base title="full width">')?.has("full"));
+  assert.ok(!baseAttributes("<Base fullBleed>")?.has("full"));
+  assert.equal(baseAttributes("<main>"), null);
+});
 
 test("the column token is declared once, in global.css", () => {
   assert.deepEqual(

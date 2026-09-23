@@ -169,28 +169,12 @@
   outline-offset: -1px;
 }
 
-/* The highlighter (VET-246), shared by the reader's pull-quotes and a post's
-   keyline (VET-264). A gradient rather than a colour so the stroke has a size
-   to sweep; `clone` (global.css › mark) gives every wrapped line its own stroke, so all the lines
-   draw at once instead of one long bar across the paragraph. */
+/* The highlighter's sweep (VET-246), on the reader's pull-quotes and a
+   post's keyline (VET-264). The stroke itself is `mark` (global.css). */
 .hl {
-  --pen: var(--highlight);
   padding: 0.05em 0.15em;
-  background: linear-gradient(var(--pen), var(--pen)) no-repeat 0 0 / 100% 100%;
   print-color-adjust: exact;
   -webkit-print-color-adjust: exact;
-}
-
-.hl[data-color="blue"] {
-  --pen: var(--highlight-blue);
-}
-
-.hl[data-color="pink"] {
-  --pen: var(--highlight-pink);
-}
-
-.hl[data-color="green"] {
-  --pen: var(--highlight-green);
 }
 
 /* Armed only on a screen, with motion allowed, where the pre-paint script set

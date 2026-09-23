@@ -53,7 +53,7 @@ function iconNode(entry: SearchEntry): HTMLElement {
 
   slot.dataset.shape = icon.shape;
   const letter = el("span", "monogram", icon.letter);
-  letter.dataset.hue = String(icon.hue);
+  if (icon.hue !== undefined) letter.dataset.hue = String(icon.hue);
   slot.append(letter);
 
   if (icon.src) {

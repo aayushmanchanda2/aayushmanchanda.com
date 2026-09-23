@@ -203,6 +203,7 @@ const { variant = "quiet" } = Astro.props;
     titleFor,
   } from "../lib/theme";
   import type { Theme } from "../lib/theme";
+  import { store } from "../lib/storage";
 
   const root = document.documentElement;
   const buttons = Array.from(
@@ -247,14 +248,7 @@ const { variant = "quiet" } = Astro.props;
 
       root.setAttribute(ATTRIBUTE, theme);
 
-      // Same guard the pre-paint script uses: `localStorage` throws outright
-      // when storage is blocked, and a reader who has it switched off should
-      // still get a working toggle for the length of the page.
-      try {
-        localStorage.setItem(STORAGE_KEY, theme);
-      } catch {
-        /* not persisted, still applied */
-      }
+      store(STORAGE_KEY, theme);
 
       const media = THEME_COLOR_MEDIA[theme];
       for (const scheme of ["light", "dark"] as const) {

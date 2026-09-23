@@ -96,7 +96,7 @@ export interface Post {
   handle: string;
   /** ISO calendar date (YYYY-MM-DD) the post was posted, in UTC. */
   date: string;
-  /** The post's own words, decoration stripped and collapsed to one line. */
+  /** The post's own words, whole, decoration stripped; paragraph breaks kept where the source had them (`post-text.mjs › pickText`). */
   text: string;
   /*
    * The rest is written by `post.mjs` from X's syndication record, and is

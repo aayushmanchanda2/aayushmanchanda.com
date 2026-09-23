@@ -136,7 +136,7 @@ test("the wall is reached from the Posts view and from nowhere else", () => {
 
   assert.match(
     code(read("components/LibraryViews.astro")),
-    /<section class="view" data-view="post"[^>]*>[^]*?<PostWall entries=\{of\("post"\)\} \/>[^]*?<\/section>/,
+    /<section class="view" data-view="post"[^>]*>[^]*?<PostWall entries=\{posts\} \/>[^]*?<\/section>/,
     "the wall left the Posts view. Keyed on the view rather than on the data: `/library/domain/x-com` is all posts too, and a page that changed shape because of what was filed into it is a page nobody can predict.",
   );
 });

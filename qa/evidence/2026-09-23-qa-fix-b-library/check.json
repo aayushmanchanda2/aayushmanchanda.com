@@ -1,0 +1,12 @@
+{
+ "viewsOnLibrary": [
+  ""
+ ],
+ "afterTag": "/library?tag=agents",
+ "afterPostPress": "/library/kind/post?tag=agents",
+ "viewsOnPost": [
+  "post"
+ ],
+ "tagKept": "agents",
+ "legacy": "/library/kind/video?tag=agents"
+}

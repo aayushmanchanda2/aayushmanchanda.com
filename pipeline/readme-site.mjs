@@ -16,6 +16,8 @@
  * the first in the file wins.
  */
 
+import { bareHost, squash } from "./util.mjs";
+
 const SITE_WORD = /\b(website|homepage|home|docs|documentation|demo|site)\b/i;
 const LABEL_BESIDE = /\b(website|homepage|home|docs|documentation|demo|site)\b[\s*_:：|—–-]*$/i;
 const SPONSOR_HEADING = /sponsor|support|donat|backer|funding|powered by|thank|acknowledg|credit/i;
@@ -41,7 +43,6 @@ export const NOT_A_SITE = new RegExp(
 const IMAGE_FILE = /\.(png|jpe?g|gif|svg|webp|avif|ico)$/i;
 
 /** @param {string} s */
-const squash = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
 
 /**
  * @typedef {{ href: string, text: string, alt: string, before: string }} Link
@@ -78,7 +79,7 @@ function judgeHost(href, owner, repo) {
   } catch {
     return { ok: false, named: false };
   }
-  const host = url.hostname.toLowerCase().replace(/^www\./, "");
+  const host = bareHost(url);
   if (NOT_A_SITE.test(host) || IMAGE_FILE.test(url.pathname)) return { ok: false, named: false };
   const labels = host.split(".");
   const path = url.pathname.split("/").filter(Boolean);

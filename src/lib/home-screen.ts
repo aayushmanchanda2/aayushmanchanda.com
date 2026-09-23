@@ -13,6 +13,8 @@
  */
 
 import { ownsKey } from "./keys.ts";
+import { reducedMotion } from "./motion.ts";
+import { readStored, store } from "./storage.ts";
 import { tick } from "./ui-sound.ts";
 
 export const DOCK_CAP = 8;
@@ -66,15 +68,10 @@ export function initHomeScreen(): void {
   const hint = document.querySelector<HTMLElement>("[data-jiggle-hint]");
   if (!home || !done || !live || !hint) return;
 
-  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
   const icons = () => home.querySelectorAll<HTMLElement>(".app-icon");
   const jiggling = () => home.hasAttribute("data-jiggle");
 
-  try {
-    hint.hidden = localStorage.getItem(HINT_KEY) === "seen";
-  } catch {
-    hint.hidden = false;
-  }
+  hint.hidden = readStored(HINT_KEY) === "seen";
   hint.textContent = hintText(matchMedia("(pointer: fine)").matches);
   // Six seconds from when the grid first shows, not from page load: list is the default view.
   let expiry = 0;
@@ -92,11 +89,7 @@ export function initHomeScreen(): void {
     live.textContent = `Jiggle mode ${on ? "on" : "off"}`;
     if (!on) return;
     hint.hidden = true;
-    try {
-      localStorage.setItem(HINT_KEY, "seen");
-    } catch {
-      /* blocked: the hint comes back next visit */
-    }
+    store(HINT_KEY, "seen");
   };
 
   done.addEventListener("click", () => {
@@ -167,7 +160,7 @@ export function initHomeScreen(): void {
     }
     const icon = link.querySelector<HTMLElement>(".app-icon");
     const modified = event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
-    if (!icon || modified || event.defaultPrevented || reduced.matches) return;
+    if (!icon || modified || event.defaultPrevented || reducedMotion()) return;
 
     tick({ rate: 0.9 });
     for (const other of icons()) other.style.viewTransitionName = "";

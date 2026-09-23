@@ -34,15 +34,15 @@ addEventListener("pagehide",s);p.addEventListener("click",s);
 })();`;
 
 /**
- * The pane's kind and tag filter, `?kind=post&tag=agents` in the URL, and on
- * /library the view it shows. The URL is the state.
+ * The pane's kind and tag filter, `?kind=post&tag=agents` in the URL. The URL
+ * is the state.
  *
  * It reads, inside the pane: rows (`[data-rows] > li`, each with `data-kind`
  * and space-separated `data-tags`) and an empty state. Anywhere on the page:
  * the kind links (`KindSegments.astro`, `[data-kind-set]`, "" is All), the tag
  * `select[data-tag-set]` and the live counts; /library draws a second toolbar
- * for phones, where the pane is hidden. A plain click on a segment filters in
- * place (a modifier click still opens the kind page). Every row link, and the
+ * for phones, where the pane is hidden. On an entry page a plain click on a
+ * segment filters in place (a modifier click still opens the kind page). Every row link, and the
  * hint row's close, prev and next, carry the query, so the filter survives a
  * click to any entry; prev and next step to the nearest shown row, and the
  * roving tabindex's one stop lands on a shown row. An unknown value reads as
@@ -50,25 +50,25 @@ addEventListener("pagehide",s);p.addEventListener("click",s);
  *
  * On an entry page a change replaces the history entry, so Back still means
  * the previous entry. On /library and `/library/kind/<kind>` the pane carries
- * `data-home="/library"` and `data-start` (the kind the route pre-selects):
- * there the kind picks which `[data-view]` shows, a kind change pushes
- * `/library?kind=…` so Back and Forward replay it, and `[data-tags]` items
- * inside the views follow the tag too, and the top bar's trail follows the
- * kind: Library as the current step for All, else Library as a link and the
- * kind (its segment's label) after it. The new steps are clones of the
- * trail's own, so they keep `Breadcrumbs.astro`'s scoped styles. It runs after the views there
- * (`LibraryViews.astro`), so a `?kind=` load paints the right view first.
+ * `data-home="/library"` and `data-start` (the kind the route shows). Each of
+ * those routes renders only its own view (QA phase 2, B15: all four used to
+ * ship on every one of them), so there a kind press is the segment's own link
+ * to that route, with the tag carried in its query, and a `/library?kind=`
+ * from before the split `location.replace`s to its route. A tag change
+ * replaces the URL on the route's own path, and `[data-tags]` items inside
+ * a kind's view follow it (All's latest few do not: a filter could empty it).
  */
 export const FILTER = `(function(){
 var root=document.querySelector("[${PANE_ATTRIBUTE}]");
 if(!root)return;
 function all(s,r){return [].slice.call((r||document).querySelectorAll(s));}
 var rows=all("[data-rows] > li",root),segs=all("[data-kind-set]"),selects=all("select[data-tag-set]"),counts=all("[data-filter-count]"),
-empty=root.querySelector("[data-filter-empty]"),home=root.dataset.home,
+empty=root.querySelector("[data-filter-empty]"),home=root.dataset.home,start=root.dataset.start||"",
 kinds=segs.map(function(g){return g.dataset.kindSet;}),tags=selects.length?[].map.call(selects[0].options,function(o){return o.value;}):[];
-function read(){var q=new URLSearchParams(location.search),k=q.has("kind")?q.get("kind"):home&&location.pathname!==home?root.dataset.start:"",t=q.get("tag")||"";
+function read(){var q=new URLSearchParams(location.search),k=q.has("kind")?q.get("kind"):home?start:"",t=q.get("tag")||"";
 return {kind:kinds.indexOf(k)<0?"":k,tag:tags.indexOf(t)<0?"":t};}
 function query(f){var q=new URLSearchParams();if(f.kind)q.set("kind",f.kind);if(f.tag)q.set("tag",f.tag);q=q.toString();return q?"?"+q:"";}
+function route(k){return k?home+"/kind/"+k:home;}
 function has(el,t){return !t||(" "+el.dataset.tags+" ").indexOf(" "+t+" ")>=0;}
 function ring(s){var nav=document.querySelector("[data-entry-nav]");if(!nav)return;
 var close=nav.querySelector('[data-nav="close"]'),cur=root.querySelector('[data-rows] > li > [aria-current="page"]'),i=rows.indexOf(cur&&cur.parentNode),n=rows.length;
@@ -83,19 +83,16 @@ segs.forEach(function(g){if(g.dataset.kindSet===f.kind)g.setAttribute("aria-curr
 selects.forEach(function(e){e.value=f.tag;});
 counts.forEach(function(c){c.textContent=n+(n===1?" entry":" entries");});
 if(empty)empty.hidden=n>0;
-all("[data-view]").forEach(function(v){v.hidden=v.dataset.view!==f.kind;});
-all("[data-view] [data-tags]").forEach(function(e){e.hidden=!has(e,f.tag);});
-ring(s);crumbs(f.kind);}
-var ol=document.querySelector(".crumbs__list"),steps=ol&&ol.children?[].slice.call(ol.children):[],top=steps[0],here=steps[steps.length-1],libName=steps[1]&&steps[1].textContent.trim();
-function label(k){var g=segs.filter(function(s){return s.dataset.kindSet===k;})[0];return g?g.firstChild.textContent.trim():k;}
-function crumbs(k){if(!home||steps.length<2)return;while(ol.children.length>1)ol.removeChild(ol.lastElementChild);
-if(k){var lib=top.cloneNode(true);lib.firstElementChild.href=home;lib.firstElementChild.textContent=libName;ol.appendChild(lib);}
-var cur=here.cloneNode(true);cur.firstElementChild.textContent=k?label(k):libName;ol.appendChild(cur);}
-function set(f,push){history[push?"pushState":"replaceState"](null,"",(home||location.pathname)+query(f));apply(f);}
-segs.forEach(function(g){g.addEventListener("click",function(e){if(e.button||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;e.preventDefault();var f=read(),k=g.dataset.kindSet,p=!!home&&f.kind!==k;f.kind=k;set(f,p);});});
-selects.forEach(function(e){e.addEventListener("change",function(){var f=read();f.tag=e.value;set(f,false);});});
-if(home)addEventListener("popstate",function(){apply(read());});
-apply(read());
+all('[data-view]:not([data-view=""]) [data-tags]').forEach(function(e){e.hidden=!has(e,f.tag);});
+ring(s);}
+function set(f){history.replaceState(null,"",location.pathname+query(home?{kind:"",tag:f.tag}:f));apply(f);}
+segs.forEach(function(g){g.addEventListener("click",function(e){if(e.button||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;var f=read(),k=g.dataset.kindSet;
+if(home){if(k===f.kind)e.preventDefault();else g.search=query({kind:"",tag:f.tag});return;}
+e.preventDefault();f.kind=k;set(f);});});
+selects.forEach(function(e){e.addEventListener("change",function(){var f=read();f.tag=e.value;set(f);});});
+var first=read();
+if(home&&first.kind!==start){location.replace(route(first.kind)+query({kind:"",tag:first.tag}));return;}
+apply(first);
 document.addEventListener("DOMContentLoaded",function(){ring(query(read()));});
 })();`;
 

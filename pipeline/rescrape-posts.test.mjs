@@ -10,4 +10,7 @@ test("a re-scrape is taken only when it is the same words with more breaks", () 
   assert.equal(rebroken(saved, scraped), scraped);
   assert.equal(rebroken(scraped, scraped), null, "nothing new to take");
   assert.equal(rebroken(saved, "Hello there.\n\nAn edited post."), null, "different words keep the saved text");
+  // A tie: the same words and as many breaks, only in other places. Nothing
+  // is gained, so the saved text stays.
+  assert.equal(rebroken(saved, "Hello there. Second para is cut here.\n\nThird."), null, "an equal count of breaks is a tie, and a tie keeps the saved text");
 });

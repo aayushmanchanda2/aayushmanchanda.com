@@ -1,0 +1,96 @@
+/* The site's one data table (QA phase 2, B5): briOS's /stack, shared by the
+   /tools table (`ToolList.astro`) and the /sites list (`SiteList.astro`).
+   Each component sets its own column widths and phone rules; everything a
+   reader would call "the table style" is here, under `.dtable`.
+
+   Edge to edge: the table bleeds out of the shell's padding and its outer
+   cells pad back by `--page-pad`, so names meet the title. 14px on a 20px
+   line, rows 12px top and bottom, `--hairline` dividers, a `--surface-2`
+   hover (instant, design.md §4). */
+.dtable {
+  width: calc(100% + 2 * var(--page-pad));
+  margin-inline: calc(-1 * var(--page-pad));
+  table-layout: fixed;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+/* Sticky under the bar. A `box-shadow` draws the rule because a collapsed
+   border stays behind when a sticky cell moves. 40px tall, the hit floor
+   (briOS's header row is 36). */
+.dtable th {
+  position: sticky;
+  top: calc(var(--frame) + var(--bar-h));
+  z-index: 1;
+  height: 40px;
+  padding: 0 1rem 0 0;
+  background: var(--surface-2);
+  box-shadow: inset 0 -1px 0 var(--hairline);
+  color: var(--text-secondary);
+  font-weight: 500;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.dtable :is(th, td):first-child {
+  padding-left: var(--page-pad);
+}
+
+.dtable :is(th, td):last-child {
+  padding-right: var(--page-pad);
+}
+
+.dtable tbody tr {
+  position: relative;
+}
+
+.dtable tbody tr:hover {
+  background: var(--surface-2);
+}
+
+/* `py-3`, briOS's 12px, and a 16px gap to the next column. */
+.dtable td {
+  padding: 0.75rem 1rem 0.75rem 0;
+  border-bottom: 1px solid var(--hairline);
+  vertical-align: middle;
+  color: var(--text-tertiary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dtable .row__name {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* One line, briOS's `truncate font-medium`. */
+.dtable .row__link {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text-primary);
+  font-weight: 500;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* The stretched link: the row is the target, the anchor is the one tab stop,
+   and the focus ring goes round the row rather than round the name. */
+.dtable .row__link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: var(--r-lg);
+}
+
+.dtable .row__link:focus-visible {
+  outline: none;
+}
+
+.dtable .row__link:focus-visible::after {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}

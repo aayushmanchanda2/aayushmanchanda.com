@@ -27,7 +27,8 @@ const globalCss = read("styles/global.css");
 /* --- half one: the tokens ------------------------------------------------- */
 
 /**
- * A declared colour as [r, g, b, alpha]: `#rrggbb` or `rgb(r g b / a)`.
+ * A declared colour as [r, g, b, alpha]: `#rrggbb`, `rgb(r g b / a)` or
+ * `oklch(L C H [/ a])` with plain numbers (substitute any `var()` first).
  *
  * @param {string} css
  * @returns {[number, number, number, number]}
@@ -35,9 +36,51 @@ const globalCss = read("styles/global.css");
 function parse(css) {
   const hex = css.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
   if (hex) return [parseInt(hex[1], 16), parseInt(hex[2], 16), parseInt(hex[3], 16), 1];
+  const ok = css.match(/^oklch\(([0-9.]+) ([0-9.]+) ([0-9.]+)(?: \/ ([0-9.]+))?\)$/);
+  if (ok) return oklch(Number(ok[1]), Number(ok[2]), Number(ok[3]), ok[4] === undefined ? 1 : Number(ok[4]));
   const rgb = css.match(/^rgb\((\d+) (\d+) (\d+) \/ ([0-9.]+)\)$/);
   assert.ok(rgb, `not a colour this test reads: ${css}`);
   return [Number(rgb[1]), Number(rgb[2]), Number(rgb[3]), Number(rgb[4])];
+}
+
+/**
+ * OKLCH to 8-bit sRGB, clipped (Björn Ottosson's matrices, the ones CSS Color 4 uses).
+ *
+ * @returns {[number, number, number, number]}
+ */
+function oklch(/** @type {number} */ L, /** @type {number} */ C, /** @type {number} */ H, /** @type {number} */ alpha) {
+  const a = C * Math.cos((H * Math.PI) / 180);
+  const b = C * Math.sin((H * Math.PI) / 180);
+  const l = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3;
+  const m = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3;
+  const s = (L - 0.0894841775 * a - 1.291485548 * b) ** 3;
+  const encode = (/** @type {number} */ v) => {
+    const c = Math.min(1, Math.max(0, v));
+    return 255 * (c <= 0.0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - 0.055);
+  };
+  return [
+    encode(4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s),
+    encode(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s),
+    encode(-0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s),
+    alpha,
+  ];
+}
+
+/**
+ * One side of a `light-dark(light, dark)` pair; any other value is returned
+ * as it is. Splits at the top-level comma, so nested `oklch(... / a)` is safe.
+ */
+function side(/** @type {string} */ css, /** @type {"light" | "dark"} */ theme) {
+  const m = css.match(/^light-dark\(([\s\S]*)\)$/);
+  if (!m) return css;
+  let depth = 0;
+  for (let i = 0; i < m[1].length; i++) {
+    const c = m[1][i];
+    if (c === "(") depth++;
+    else if (c === ")") depth--;
+    else if (c === "," && depth === 0) return (theme === "light" ? m[1].slice(0, i) : m[1].slice(i + 1)).trim().replace(/\s+/g, " ");
+  }
+  assert.fail(`light-dark() with no top-level comma: ${css}`);
 }
 
 /** @param {number[]} rgb */
@@ -118,11 +161,18 @@ function inkOnTint(/** @type {string} */ ink, /** @type {string} */ tint, /** @t
   return ratio(ink, `#${flat.map((v) => v.toString(16).padStart(2, "0")).join("")}`);
 }
 
-/** A token's value, following one `var()` hop. */
-function token(/** @type {string} */ css, /** @type {string} */ name) {
-  const v = value(css, name);
+/**
+ * A token's value in one theme: the theme's own block first, else `:root`
+ * (where a `light-dark()` pair covers both themes), following one `var()`
+ * hop and substituting the numeric tokens (`--hue-amber`) inside a colour.
+ */
+function token(/** @type {string} */ css, /** @type {string} */ name, /** @type {"light" | "dark"} */ theme = css === darkBlock ? "dark" : "light") {
+  const block = css.slice(0, css.indexOf("}"));
+  const own = (/** @type {string} */ n) => value(block.includes(`${n}:`) ? css : globalCss, n);
+  let v = side(own(name), theme);
   const ref = v.match(/^var\((--[\w-]+)\)$/);
-  return ref ? value(css, ref[1]) : v;
+  if (ref) v = side(own(ref[1]), theme);
+  return v.replace(/var\((--[\w-]+)\)/g, (_, n) => value(globalCss, n));
 }
 
 /* VET-240's pairs, each over the page and over the darkest row surface it can
@@ -155,6 +205,37 @@ test("a search match on the palette's cursor row keeps its white ink at AA", () 
   assert.ok(r >= 4.5, `the active-row mark is ${r.toFixed(2)}:1`);
   const rule = read("styles/palette.css").slice(read("styles/palette.css").indexOf(".palette__row[data-active] mark {"));
   assert.match(rule.slice(0, rule.indexOf("}")), /var\(--accent-panel-mark\)/);
+});
+
+test("the stamp's labels clear AA on the paper, on every section's mat, in both themes", () => {
+  // `--stamp-label` is a light-dark() pair over the section's `--ink-c` and
+  // `--mat-h` (styles/frame.css). Each rule's declarations are applied to the
+  // sections its selector names; `html` is every section's default.
+  const frame = read("styles/frame.css").replace(/\/\*[\s\S]*?\*\//g, "");
+  /** @type {Record<string, Record<string, string>>} */
+  const sections = { other: {} };
+  for (const [, selector, body] of frame.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+    const names = [...selector.matchAll(/data-section="(\w+)"/g)].map((m) => m[1]);
+    const targets = selector.trim() === "html" ? ["other"] : names;
+    for (const name of targets) {
+      sections[name] ??= {};
+      for (const [, prop, val] of body.matchAll(/(--[\w-]+):\s*([^;]+);/g)) sections[name][prop] = val.trim();
+    }
+  }
+  const label = sections.other["--stamp-label"];
+  assert.ok(label, "no --stamp-label on html in frame.css");
+  assert.ok(Object.keys(sections).length >= 6, "found fewer section mats than expected");
+  for (const [name, own] of Object.entries(sections)) {
+    const vars = { ...sections.other, ...own };
+    for (const theme of /** @type {const} */ (["light", "dark"])) {
+      const ink = side(label, theme).replace(/var\((--[\w-]+)\)/g, (_, n) => {
+        const v = vars[n] ?? value(globalCss, n);
+        return v.startsWith("var(") ? value(globalCss, v.slice(4, -1)) : v;
+      });
+      const r = ratio(ink, theme === "light" ? value(globalCss, "--bg") : value(darkBlock, "--bg"));
+      assert.ok(r >= 4.5, `the stamp label on ${name} is ${r.toFixed(2)}:1 in ${theme}`);
+    }
+  }
 });
 
 /* --- half two: the surfaces ------------------------------------------------ */

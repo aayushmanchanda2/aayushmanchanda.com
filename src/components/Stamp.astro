@@ -3,8 +3,7 @@
  * The window as a postage stamp (VET-262): the mat and its perforation
  * (VET-255, VET-260), the white margin band and keyline inside it, the
  * denomination printed on the keyline, and the postmark. Decorative, so all of
- * it is `aria-hidden`; `styles/frame.css` draws it and `data-stamp` on <html>
- * switches the add-ons.
+ * it is `aria-hidden`; `styles/frame.css` draws it.
  */
 import { formatDay } from "../lib/date";
 import { feedItems } from "../lib/feeds";
@@ -28,17 +27,19 @@ const updated = feed ? (await feedItems(feed)).map((item) => item.date).sort().a
 ---
 
 <div class="stamp" aria-hidden="true">
-  <span class="stamp__mark"><span>2026</span></span>
-  {denomination && <span class="stamp__mark stamp__mark--end"><span>{denomination}</span></span>}
+  <span class="stamp__mark">2026</span>
+  {denomination && <span class="stamp__mark stamp__mark--end">{denomination}</span>}
 </div>
 <div class="mat" aria-hidden="true"><div class="mat__lift"></div></div>
 {
   current && updated && (
     <svg class="postmark" viewBox="0 0 200 96" aria-hidden="true">
       <g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-        <path d="M2 30q9-7 18 0t18 0 18 0 18 0 18 0 18 0" />
-        <path d="M6 48q9-7 18 0t18 0 18 0 18 0 18 0 14 0" />
-        <path d="M2 66q9-7 18 0t18 0 18 0 18 0 18 0 18 0" />
+        <g class="postmark__waves">
+          <path d="M2 30q9-7 18 0t18 0 18 0 18 0 18 0 18 0" />
+          <path d="M6 48q9-7 18 0t18 0 18 0 18 0 18 0 14 0" />
+          <path d="M2 66q9-7 18 0t18 0 18 0 18 0 18 0 18 0" />
+        </g>
         <path d="M149 5c25-1 44 19 43 44s-20 44-45 43-43-21-42-46 19-40 46-41" />
         <path d="M148 17c17 0 31 14 31 31s-14 31-32 31-30-15-30-32 14-30 31-30" stroke-width="1.5" />
       </g>
@@ -51,3 +52,40 @@ const updated = feed ? (await feedItems(feed)).map((item) => item.date).sort().a
     </svg>
   )
 }
+
+<style>
+  /* The postmark: a cancellation struck across the stamp's top edge,
+     the circle over mat, band and bar, the waves trailing left along the bar's
+     empty stretch. Cancelling ink, not the section's: `--text-primary`, faint,
+     so it reads on the mat and on the paper and the bar under it still reads.
+     Over `.mat` to cross the edge; left of Search where Search shows. */
+  .postmark {
+    position: fixed;
+    top: 0;
+    right: calc(var(--frame) + 0.5rem);
+    z-index: 41;
+    width: clamp(7rem, 12vw, 10rem);
+    pointer-events: none;
+    color: var(--text-primary);
+    opacity: 0.2;
+    rotate: -8deg;
+    /* struck by hand, so one wear layer more than the printed marks */
+    mask: var(--ink-wear), var(--ink-wear) 71px 29px;
+    mask-composite: intersect;
+    font-family: var(--font-mono);
+  }
+
+  @media (min-width: 600px) {
+    .postmark {
+      right: calc(var(--frame) + 7rem);
+    }
+  }
+
+  /* Under 600px the trail runs to the right edge: the waves would cross it,
+     so only the ring is struck. */
+  @media (max-width: 599px) {
+    .postmark__waves {
+      display: none;
+    }
+  }
+</style>

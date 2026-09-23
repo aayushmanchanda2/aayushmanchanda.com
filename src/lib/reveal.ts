@@ -4,10 +4,12 @@
  * added, and the CSS draws the element whole. An element already being watched
  * (two components asking for the same marks) is watched once.
  */
+import { reducedMotion } from "./motion.ts";
+
 const watched = new WeakSet<Element>();
 
 export function reveal(selector: string, on: string, threshold: number): void {
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  if (reducedMotion()) return;
   const fresh = [...document.querySelectorAll(selector)].filter((el) => !watched.has(el));
   if (fresh.length === 0) return;
   const seen = new IntersectionObserver(

@@ -1,0 +1,116 @@
+---
+/**
+ * VideoGrid — video entries as posters at 16:9 with the title and the source
+ * under them. A tile opens the entry's page, where the play facade lives. The
+ * /library Videos view shows every video in it; the All view the latest two
+ * (`LibraryViews.astro`). Each tile carries its tags for the pane's tag filter.
+ */
+import KindIcon from "./KindIcon.astro";
+import type { LibraryEntry } from "../lib/library";
+import { entryHref } from "../lib/library";
+import { formatDay } from "../lib/date";
+
+interface Props {
+  /** Video-kind entries, newest first. One with no poster (a playlist) gets a placeholder tile. */
+  entries: LibraryEntry[];
+}
+
+const { entries } = Astro.props;
+---
+
+<ul class="vgrid">
+  {
+    entries.map((entry) => (
+      <li data-tags={entry.tags.join(" ")}>
+        <a class="vtile" href={entryHref(entry)} data-astro-prefetch="hover">
+          {entry.video ? (
+            <img class="vtile__thumb outlined" src={entry.video.thumb} alt="" loading="lazy" decoding="async" />
+          ) : (
+            <span class="vtile__thumb vtile__ph outlined" aria-hidden="true"><KindIcon kind="video" /></span>
+          )}
+          <b>{entry.title}</b>
+          <small>
+            <span>{entry.domain}</span>
+            <time datetime={entry.saved_date}>{formatDay(entry.saved_date)}</time>
+          </small>
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  /* Posters at 16:9, 15rem at the least: three across beside the pane at
+     1280px, four at 1600, one on a phone. */
+  .vgrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(15rem, 100%), 1fr));
+    gap: 2rem 1rem;
+  }
+
+  .vtile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  /* A poster's shape is known, so 16:9 rather than §8's 8:5 crop; a 480x360
+     fallback still lands right under `cover` (`VideoFacade.astro`). */
+  .vtile__thumb {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    margin-bottom: 0.5rem;
+  }
+
+  /* A playlist has no single poster (`pipeline/thumb.mjs` reads one video id):
+     the tile keeps its 16:9 as a quiet surface with the play glyph. */
+  .vtile__ph {
+    display: grid;
+    place-items: center;
+    background: var(--surface-3);
+  }
+
+  .vtile__ph :global(.ki) {
+    width: 28px;
+    height: 28px;
+  }
+
+  .vtile b {
+    font-size: 0.9375rem;
+    font-weight: 500;
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .vtile small {
+    display: flex;
+    gap: 0.4rem;
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--text-tertiary);
+  }
+
+  .vtile small > * + *::before {
+    content: "\00b7" / "";
+    margin-right: 0.4rem;
+  }
+
+  /* Instant, like every tile a pointer sweeps across (design.md §4). */
+  @media (hover: hover) {
+    .vtile:hover .vtile__thumb {
+      opacity: 0.82;
+    }
+
+    .vtile:hover b {
+      color: var(--accent);
+    }
+  }
+</style>

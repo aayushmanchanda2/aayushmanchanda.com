@@ -10,6 +10,8 @@
  * the release) plus keyboard activation, which arrives as a `click` with
  * `detail === 0`. Touch is left silent, as on the original.
  */
+import { reducedMotion } from "./motion.ts";
+import { readStored, store } from "./storage.ts";
 
 export const STORAGE_KEY = "ui-sound";
 export const THROTTLE_MS = 35;
@@ -65,13 +67,7 @@ let chosen: boolean | undefined;
 
 export function soundOn(): boolean {
   if (chosen !== undefined) return chosen;
-  let stored: string | null = null;
-  try {
-    stored = localStorage.getItem(STORAGE_KEY);
-  } catch {
-    /* blocked: fall through to the default */
-  }
-  return initialOn(stored, matchMedia("(prefers-reduced-motion: reduce)").matches);
+  return initialOn(readStored(STORAGE_KEY), reducedMotion());
 }
 
 /** Play one tick if a context exists. `rate` below 1 is lower and longer. */
@@ -114,11 +110,24 @@ export function tick({ rate = 1 } = {}): void {
   source.start(at);
 }
 
-/** Only called from inside a press, the one place a context may start. */
+/**
+ * Only called from inside a press, the one place a context may start. A
+ * browser that refuses one (no Web Audio, too many contexts) stays silent
+ * rather than breaking the press (QA phase 2, B12).
+ */
 function play(rate = 1): void {
   if (!soundOn()) return;
-  ctx ??= new AudioContext({ latencyHint: "interactive" });
+  try {
+    ctx ??= new AudioContext({ latencyHint: "interactive" });
+  } catch {
+    return;
+  }
   tick({ rate });
+}
+
+/** Muted or out of sight: let the audio thread sleep. `tick` resumes it. */
+function rest(): void {
+  if (ctx?.state === "running" && (!soundOn() || document.hidden)) void ctx.suspend();
 }
 
 function sync(): void {
@@ -132,13 +141,10 @@ function sync(): void {
 
 export function toggleSound(): void {
   chosen = !soundOn();
-  try {
-    localStorage.setItem(STORAGE_KEY, chosen ? "on" : "off");
-  } catch {
-    /* not persisted, still applied */
-  }
+  store(STORAGE_KEY, chosen ? "on" : "off");
   sync();
   play(); // turning it on answers with the sound it just turned on
+  rest();
 }
 
 export function initSound(): void {
@@ -163,5 +169,6 @@ export function initSound(): void {
   document.addEventListener("click", (event) => {
     if ((event.target as Element | null)?.closest?.("[data-sound-toggle]")) toggleSound();
   });
+  document.addEventListener("visibilitychange", rest);
   sync();
 }
