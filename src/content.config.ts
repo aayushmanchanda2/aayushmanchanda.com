@@ -1,5 +1,5 @@
 /**
- * The /notes data boundary.
+ * The /notes and /computer data boundary.
  *
  * Same job as `lib/tools.ts` and `lib/experiments.ts`, done by the tool that
  * already exists for it: Astro's content layer parses every markdown file
@@ -15,7 +15,8 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
 
-import { defineCollection, z } from "astro:content";
+import { defineCollection } from "astro:content";
+import { z } from "astro/zod";
 import { glob } from "astro/loaders";
 
 // The same two link shapes every other section checks against, from the module
@@ -70,4 +71,24 @@ const notes = defineCollection({
   ]),
 });
 
-export const collections = { notes };
+/**
+ * /computer: tips, in a fixed order rather than by date, because a tip is how
+ * I work now and has no publish day worth printing. The summary is the index
+ * row's second line, so it keeps the section-blurb cap (voice.md › Caps).
+ */
+const computer = defineCollection({
+  loader: glob({ base: "./src/content/computer", pattern: "**/*.md" }),
+  schema: z.object({
+    title: z.string().min(1),
+    emoji: z.string().min(1),
+    summary: z
+      .string()
+      .min(1)
+      .refine((value) => value.trim().split(/\s+/).length <= 12, {
+        message: "12 words at most (voice.md › Caps)",
+      }),
+    order: z.number().int(),
+  }),
+});
+
+export const collections = { notes, computer };

@@ -92,6 +92,14 @@ html {
   --mat-h: 298;
 }
 
+/* Slate: a blue grey, the one low-chroma section mat, with ink to match. */
+[data-section="computer"] {
+  --mat-hi: light-dark(oklch(0.6 0.045 245), oklch(0.42 0.04 248));
+  --mat: light-dark(oklch(0.47 0.05 252), oklch(0.3 0.04 256));
+  --mat-h: 250;
+  --ink-c: 0.05;
+}
+
 body {
   padding: var(--frame);
 }

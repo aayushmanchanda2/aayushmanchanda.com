@@ -1,0 +1,82 @@
+---
+/**
+ * One /computer tip: the emoji, the title, the summary as a standfirst, then
+ * the body in the shared `.prose` column (`styles/prose.css`, which also draws
+ * any `<kbd>` key chip a tip writes inline). "Read next" is the other tips.
+ */
+import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
+import { getCollection, render } from "astro:content";
+
+import Base from "../../layouts/Base.astro";
+import EntryList from "../../components/EntryList.astro";
+import { tipEntry } from "../../lib/entry-list";
+import { readNext } from "../../lib/read-next";
+import { tipJsonLd } from "../../lib/schema";
+
+export const getStaticPaths = (async () => {
+  const tips = await getCollection("computer");
+  return tips.map((tip) => ({
+    params: { slug: tip.id },
+    props: { tip, next: readNext(tip.id, tips) },
+  }));
+}) satisfies GetStaticPaths;
+
+type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
+const { tip, next } = Astro.props;
+const { Content } = await render(tip);
+const { title, emoji, summary } = tip.data;
+---
+
+<Base
+  title={`${title} · Computer · Aayush Manchanda`}
+  description={`${summary} A tip from Aayush Manchanda.`}
+  jsonLd={tipJsonLd({ slug: tip.id, title })}
+>
+  <article>
+    <header>
+      <span class="tip__emoji" aria-hidden="true">{emoji}</span>
+      <h1 class="page-title page-title--entry">{title}</h1>
+      <p class="standfirst">{summary}</p>
+    </header>
+
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+
+  {
+    next.length > 0 && (
+      <nav class="next" aria-labelledby="read-next">
+        <h2 class="accent-bar" id="read-next">Read next</h2>
+        <EntryList entries={next.map(tipEntry)} />
+      </nav>
+    )
+  }
+</Base>
+
+<style>
+  /* The index row's tile at twice the size, 24px above the title: the
+     note page's date slot. */
+  .tip__emoji {
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-bottom: 1.5rem;
+    border-radius: var(--r-md);
+    background: var(--surface-3);
+    outline: 1px solid var(--outline);
+    outline-offset: -1px;
+    font-size: 1.75rem;
+    line-height: 1;
+  }
+
+  .prose {
+    margin-top: 2rem;
+  }
+
+  .next {
+    margin-top: clamp(3rem, 8vw, 5rem);
+  }
+</style>

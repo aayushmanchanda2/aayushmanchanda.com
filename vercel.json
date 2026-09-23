@@ -107,9 +107,18 @@
         "Vary": "Accept, Accept-Encoding"
       }
     },
+    {
+      "src": "^/computer/?$",
+      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "dest": "/computer.md",
+      "headers": {
+        "Content-Type": "text/markdown; charset=utf-8",
+        "Vary": "Accept, Accept-Encoding"
+      }
+    },
 
     {
-      "src": "^/(tools|sites|library|experiments|notes)/?$",
+      "src": "^/(tools|sites|library|experiments|notes|computer)/?$",
       "headers": { "Vary": "Accept, Accept-Encoding" },
       "continue": true
     },
@@ -128,7 +137,7 @@
       "continue": true
     },
     {
-      "src": "^/(tools|sites|library|experiments|notes)\\.md$",
+      "src": "^/(tools|sites|library|experiments|notes|computer)\\.md$",
       "headers": {
         "Content-Type": "text/markdown; charset=utf-8",
         "Vary": "Accept, Accept-Encoding",

@@ -59,13 +59,14 @@ function cardSections() {
   return [...block[1].matchAll(/"([a-z-]+)"/g)].map((m) => m[1]);
 }
 
-test("the manifest still parses to the five sections the site has", () => {
+test("the manifest still parses to the six sections the site has", () => {
   assert.deepEqual(catalogueSections(), [
     "tools",
     "sites",
     "library",
     "notes",
     "experiments",
+    "computer",
   ]);
 });
 

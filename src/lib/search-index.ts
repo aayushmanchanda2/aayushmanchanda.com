@@ -1,7 +1,7 @@
 /**
  * Every destination on the site, in one list, built once per build.
  *
- * The palette is the first surface that has to know about *all* five sections
+ * The palette is the first surface that has to know about *all* the sections
  * at the same time. Every other surface is scoped — /tools reads tools, the nav
  * reads the section manifest — so this is the only place the whole site is
  * enumerated, and it is deliberately the only place: a section that ships
@@ -47,6 +47,7 @@ const SECTION = {
   library: "Library",
   notes: "Notes",
   experiments: "Experiments",
+  computer: "Computer",
   settings: "Settings",
 } as const;
 
@@ -177,6 +178,7 @@ function plain(markdown: string): string {
  */
 async function build(): Promise<SearchEntry[]> {
   const notes = await getCollection("notes");
+  const tips = await getCollection("computer");
 
   return [
     ...STATIC_PAGES.map((page) => ({ ...page, glyph: "article" as const })),
@@ -253,6 +255,17 @@ async function build(): Promise<SearchEntry[]> {
       }),
     ),
 
+    ...tips.map(
+      (tip): SearchEntry => ({
+        title: tip.data.title,
+        section: SECTION.computer,
+        href: `/computer/${tip.id}`,
+        lead: tip.data.summary,
+        body: squash(plain(tip.body ?? "")),
+        glyph: "note",
+      }),
+    ),
+
     ...experiments.map(
       (experiment): SearchEntry => ({
         title: experiment.name,
@@ -268,7 +281,7 @@ async function build(): Promise<SearchEntry[]> {
   ];
 }
 
-/** The five section indexes as palette rows. */
+/** The section indexes as palette rows. */
 async function sectionPages(): Promise<SearchEntry[]> {
   return (await getSections()).map((section) => ({
     title: section.name,

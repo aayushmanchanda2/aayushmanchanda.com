@@ -22,13 +22,14 @@ import { library } from "./library";
 import { sites } from "./sites";
 import { tools } from "./tools";
 
-/** The five sections, in the order every list of them shows them. */
+/** The sections, in the order every list of them shows them. */
 export const SECTION_HREFS = [
   "/tools",
   "/sites",
   "/library",
   "/notes",
   "/experiments",
+  "/computer",
 ] as const;
 
 export type SectionHref = (typeof SECTION_HREFS)[number];
@@ -77,9 +78,14 @@ export const CATALOGUE: Record<SectionHref, Omit<Section, "href" | "count" | "md
     name: "Experiments",
     blurb: "What's running right now, including what I killed.",
   },
+  "/computer": {
+    name: "Computer",
+    blurb: "How I work with my computer and the agents on it.",
+  },
 };
 
-/** The sections with a feed. /experiments has no per-entry pages to link. */
+/** The sections with a feed. /experiments has no per-entry pages to link, and
+ *  a /computer tip has no date for a feed to order by. */
 export const FEED_SECTIONS = ["/notes", "/library", "/tools", "/sites"] as const satisfies readonly SectionHref[];
 
 export type FeedSection = (typeof FEED_SECTIONS)[number];
@@ -101,11 +107,12 @@ export const FEEDS: readonly { title: string; path: string; href: string }[] = [
 ];
 
 /**
- * Async because the notes count comes from the content layer. Astro caches the
+ * Async because the notes and tips counts come from the content layer. Astro caches the
  * collection, so calling this from every page costs one read for the build.
  */
 export async function getSections(): Promise<Section[]> {
   const notes = await getCollection("notes");
+  const tips = await getCollection("computer");
 
   const counts: Record<SectionHref, number> = {
     "/tools": tools.length,
@@ -113,6 +120,7 @@ export async function getSections(): Promise<Section[]> {
     "/library": library.length,
     "/notes": notes.length,
     "/experiments": experiments.length,
+    "/computer": tips.length,
   };
 
   return SECTION_HREFS.map((href) => ({

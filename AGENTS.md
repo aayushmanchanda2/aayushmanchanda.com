@@ -17,7 +17,7 @@ Zero framework JS ships. Interactions are vanilla scripts inside `.astro` compon
 Run all three before calling anything done:
 
 ```
-npx astro check     # 0 errors, 0 warnings (hints: known baseline of 13)
+npx astro check     # 0 errors, 0 warnings (hints: known baseline of 1)
 npm test            # all pass
 npm run build       # clean
 ```
