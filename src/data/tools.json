@@ -792,5 +792,14 @@
     "verdict": "watching",
     "note": "An AI-native revenue platform that combines TAM building, outbound, interaction capture, and pipeline management, with agents handling follow-ups and record updates.",
     "status_date": "2026-09-22"
+  },
+  {
+    "slug": "brilliant-design-with-superpowers",
+    "name": "Brilliant — Design, With Superpowers",
+    "url": "https://brilliant.design/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "An editable vector design canvas where Claude Code, Cursor, Codex, and other MCP agents can create and refine real designs.",
+    "status_date": "2026-09-23"
   }
 ]
