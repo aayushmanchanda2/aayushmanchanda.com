@@ -939,7 +939,9 @@
         }
       ]
     },
-    "collections": []
+    "collections": [
+      "portfolios"
+    ]
   },
   {
     "slug": "tiny-ui",
@@ -977,7 +979,10 @@
       "spacing": [],
       "radius": []
     },
-    "collections": []
+    "collections": [
+      "dark-by-default",
+      "reference-libraries"
+    ]
   },
   {
     "slug": "daniel-white",
@@ -1072,7 +1077,9 @@
       ],
       "radius": []
     },
-    "collections": []
+    "collections": [
+      "personal-sites"
+    ]
   },
   {
     "slug": "barkas",
@@ -1193,7 +1200,9 @@
         }
       ]
     },
-    "collections": []
+    "collections": [
+      "landing-pages"
+    ]
   },
   {
     "slug": "ui-goodies-daily-goods",
@@ -1305,7 +1314,9 @@
         }
       ]
     },
-    "collections": []
+    "collections": [
+      "reference-libraries"
+    ]
   },
   {
     "slug": "mike-barton",
@@ -1322,7 +1333,10 @@
       "#91caf9",
       "#929090"
     ],
-    "collections": []
+    "collections": [
+      "personal-sites",
+      "portfolios"
+    ]
   },
   {
     "slug": "rauno-freiberg-note-4",
@@ -1398,7 +1412,10 @@
         }
       ]
     },
-    "collections": []
+    "collections": [
+      "design-engineering",
+      "personal-sites"
+    ]
   },
   {
     "slug": "celine-nova",
@@ -1461,7 +1478,9 @@
       ],
       "radius": []
     },
-    "collections": []
+    "collections": [
+      "portfolios"
+    ]
   },
   {
     "slug": "ana-howard",
@@ -1574,7 +1593,9 @@
         }
       ]
     },
-    "collections": []
+    "collections": [
+      "personal-sites"
+    ]
   },
   {
     "slug": "sites-brian-lovin",
@@ -1658,7 +1679,10 @@
         }
       ]
     },
-    "collections": []
+    "collections": [
+      "personal-sites",
+      "reference-libraries"
+    ]
   },
   {
     "slug": "about-brian-lovin",
@@ -1733,7 +1757,9 @@
       ],
       "radius": []
     },
-    "collections": []
+    "collections": [
+      "personal-sites"
+    ]
   },
   {
     "slug": "wall-of-portfolios",
@@ -1845,7 +1871,10 @@
         }
       ]
     },
-    "collections": []
+    "collections": [
+      "portfolios",
+      "reference-libraries"
+    ]
   },
   {
     "slug": "desengs-resources-for-design-engineers",
@@ -1957,7 +1986,11 @@
         }
       ]
     },
-    "collections": []
+    "collections": [
+      "dark-by-default",
+      "design-engineering",
+      "reference-libraries"
+    ]
   },
   {
     "slug": "assistant-benchmark",
@@ -2069,7 +2102,9 @@
         }
       ]
     },
-    "collections": []
+    "collections": [
+      "reference"
+    ]
   },
   {
     "slug": "built-by-designers-no-explanation-needed",
@@ -2144,7 +2179,9 @@
       ],
       "radius": []
     },
-    "collections": []
+    "collections": [
+      "reference-libraries"
+    ]
   },
   {
     "slug": "design-md-examples-for-ai-agents-refero-styles",
@@ -2248,7 +2285,9 @@
         }
       ]
     },
-    "collections": []
+    "collections": [
+      "reference-libraries"
+    ]
   },
   {
     "slug": "aristotle-ai-tutor",
@@ -2360,7 +2399,9 @@
         }
       ]
     },
-    "collections": []
+    "collections": [
+      "landing-pages"
+    ]
   },
   {
     "slug": "craft-a-collection-of-design-engineering-concepts",
@@ -2594,7 +2635,9 @@
         }
       ]
     },
-    "collections": []
+    "collections": [
+      "portfolios"
+    ]
   },
   {
     "slug": "ai-native-payroll-compliance-benefits-warp",
@@ -2710,7 +2753,9 @@
         }
       ]
     },
-    "collections": []
+    "collections": [
+      "landing-pages"
+    ]
   },
   {
     "slug": "ian-nuttall",
@@ -2807,7 +2852,9 @@
         }
       ]
     },
-    "collections": []
+    "collections": [
+      "personal-sites"
+    ]
   },
   {
     "slug": "the-horowitz-andreessen-academy",
@@ -2923,7 +2970,9 @@
         }
       ]
     },
-    "collections": []
+    "collections": [
+      "landing-pages"
+    ]
   },
   {
     "slug": "arc-from-the-browser-company",
@@ -3031,7 +3080,9 @@
         }
       ]
     },
-    "collections": []
+    "collections": [
+      "landing-pages"
+    ]
   },
   {
     "slug": "mother-design-brand-strategy-and-design",
@@ -3122,6 +3173,8 @@
       ],
       "radius": []
     },
-    "collections": []
+    "collections": [
+      "portfolios"
+    ]
   }
 ]

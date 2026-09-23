@@ -11,11 +11,11 @@
  */
 import "../styles/table.css";
 import AppIcon from "./AppIcon.astro";
+import CollectionChips from "./CollectionChips.astro";
 import PreviewCard from "./PreviewCard.astro";
 import { formatDay } from "../lib/date";
 import { previewAttributes } from "../lib/preview-card";
 import type { SiteGroup } from "../lib/screens";
-import { collectionLabel } from "../lib/sites";
 
 interface Props {
   groups: SiteGroup[];
@@ -54,7 +54,7 @@ const { groups } = Astro.props;
             </span>
           </td>
           <td class="cell--wide">{primary.domain}</td>
-          <td class="cell--wide">{primary.collections.map(collectionLabel).join(", ")}</td>
+          <td class="cell--wide"><CollectionChips collections={primary.collections} linked={false} /></td>
           <td class="cell--wide">
             <time datetime={primary.saved_date}>{formatDay(primary.saved_date)}</time>
           </td>
