@@ -143,7 +143,7 @@ test("a tool with no excerpt still gets a note the build will accept", async (t)
   assert.notEqual(tool.category, "");
 });
 
-test("a new tool fetches its app icon into public/icons, and only a tool does", async (t) => {
+test("a new tool or site fetches its app icon into public/icons; only a tool gets a preview", async (t) => {
   const { paths } = await makeRepo(t);
   const server = raindropServer({
     ...NESTED,
@@ -158,8 +158,13 @@ test("a new tool fetches its app icon into public/icons, and only a tool does", 
 
   assert.equal(await run([], deps({ paths, server, icon, preview, out })), 0);
 
-  assert.deepEqual(icon.calls, [{ slug: "linear", url: "https://linear.app", dir: paths.iconsDir }]);
+  assert.deepEqual(
+    icon.calls.map((call) => call.slug).sort(),
+    ["linear", "otherkind"],
+    "the /sites list draws a site's icon too",
+  );
   assert.ok(await exists(path.join(paths.iconsDir, "linear.webp")));
+  assert.ok(await exists(path.join(paths.iconsDir, "otherkind.webp")));
   assert.deepEqual(preview.calls, [{ slug: "linear", url: "https://linear.app", dir: paths.previewsDir }]);
   assert.ok(await exists(path.join(paths.previewsDir, "linear.webp")));
 });

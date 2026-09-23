@@ -18,7 +18,9 @@
  * candidate on a GitHub host is skipped. Most owners are individuals: a
  * stranger's face.
  *
- * Run directly to backfill every tool: `node pipeline/icon.mjs [--force]`.
+ * Run directly to backfill every tool and site: `node pipeline/icon.mjs [--force]`.
+ * Sites share `public/icons/` with tools: slugs are unique within a section,
+ * and a tool and a site on one slug would be the same site anyway.
  */
 
 import { access, readFile } from "node:fs/promises";
@@ -250,17 +252,20 @@ if (invokedDirectly) {
   const force = process.argv.includes("--force");
   const paths = resolvePaths(path.resolve(import.meta.dirname, ".."));
   /** @type {{ slug: string, url?: string | null, repo?: string }[]} */
-  const tools = JSON.parse(await readFile(paths.toolsJson, "utf8"));
+  const entries = [
+    ...JSON.parse(await readFile(paths.toolsJson, "utf8")),
+    ...JSON.parse(await readFile(paths.sitesJson, "utf8")),
+  ];
 
   let real = 0;
   // Eight at once: an icon is a few small fetches, no browser.
   await backfill(
-    tools,
-    async (tool) => {
-      const file = await fetchIcon({ slug: tool.slug, url: tool.url ?? tool.repo ?? null, dir: paths.iconsDir, force, log: console.log });
+    entries,
+    async (entry) => {
+      const file = await fetchIcon({ slug: entry.slug, url: entry.url ?? entry.repo ?? null, dir: paths.iconsDir, force, log: console.log });
       if (file !== null) real += 1;
     },
     8,
   );
-  console.log(`icons: ${real} real, ${tools.length - real} letter`);
+  console.log(`icons: ${real} real, ${entries.length - real} letter`);
 }
