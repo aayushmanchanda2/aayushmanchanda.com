@@ -8,6 +8,12 @@
  * the table its semantics in Safari. `html[data-tools-view="grid"]` swaps which
  * one shows (`lib/view-toggle.ts`). The tiles carry the same data attributes as
  * the rows, so the filters hide both and a sort orders both.
+ *
+ * Ruled in `--hairline` (VET-257). Every line has one owner, because two .09
+ * lines over each other read as one .17 line: a tile draws its right and bottom
+ * edges, the list draws the left, and the first visible row draws the top
+ * (`:nth-child(-n + cols of :not([hidden]))`, so a filter still gets its roof).
+ * A short last row ends in a step, with no lines round empty cells.
  */
 import AppIcon from "./AppIcon.astro";
 import PreviewCard from "./PreviewCard.astro";
@@ -19,6 +25,10 @@ interface Props {
 }
 
 const { tools } = Astro.props;
+
+/* "emilkowalski/skills" is one word to the line breaker and wider than a phone
+   cell, so it may also break after a slash or a dot, and nowhere else. */
+const breakable = (name: string) => name.split(/(?<=[/.])(?=.)/);
 ---
 
 <ul class="tiles" data-tool-rows>
@@ -27,7 +37,9 @@ const { tools } = Astro.props;
       <li class="tile" {...toolAttributes(tool)}>
         <a class="tile__link" href={`/tools/${tool.slug}`}>
           <AppIcon tool={tool} size={60} />
-          <span class="tile__name">{tool.name}</span>
+          <span class="tile__name" title={tool.name}>
+            {breakable(tool.name).map((part, i) => (<>{i > 0 && <wbr />}{part}</>))}
+          </span>
         </a>
       </li>
     ))
@@ -39,27 +51,59 @@ const { tools } = Astro.props;
 <style>
   .tiles {
     display: none;
-    grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr));
-    gap: 0.5rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     margin-top: 1rem;
+    border-left: 1px solid var(--hairline);
   }
 
   :global(html[data-tools-view="grid"]) .tiles {
     display: grid;
   }
 
+  .tile {
+    border-right: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+  }
+
   .tile[hidden] {
     display: none;
   }
 
+  /* The roof, one breakpoint per column count. Each wider rule is a superset
+     of the one before, so they stack without resetting. */
+  .tile:nth-child(-n + 3 of :not([hidden])) {
+    border-top: 1px solid var(--hairline);
+  }
+
+  @media (min-width: 600px) {
+    .tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .tile:nth-child(-n + 4 of :not([hidden])) { border-top: 1px solid var(--hairline); }
+  }
+
+  @media (min-width: 768px) {
+    .tiles { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+    .tile:nth-child(-n + 6 of :not([hidden])) { border-top: 1px solid var(--hairline); }
+  }
+
+  @media (min-width: 1024px) {
+    .tiles { grid-template-columns: repeat(8, minmax(0, 1fr)); }
+    .tile:nth-child(-n + 8 of :not([hidden])) { border-top: 1px solid var(--hairline); }
+  }
+
+  @media (min-width: 1440px) {
+    .tiles { grid-template-columns: repeat(10, minmax(0, 1fr)); }
+    .tile:nth-child(-n + 10 of :not([hidden])) { border-top: 1px solid var(--hairline); }
+  }
+
+  /* The link fills the cell inside its lines, so the hover fill and the focus
+     ring stop at the rule. */
   .tile__link {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.625rem;
     height: 100%;
-    padding: 0.75rem 0.25rem;
-    border-radius: var(--r-lg);
+    padding: 1.25rem 0.5rem;
     color: var(--text-primary);
     text-decoration: none;
   }
@@ -70,11 +114,11 @@ const { tools } = Astro.props;
 
   .tile__link:focus-visible {
     outline-offset: -2px;
-    border-radius: var(--r-lg);
   }
 
-  /* Two lines, centred, the springboard label. The full name is the h1 of the
-     page the tile opens. */
+  /* Two lines, centred, the springboard label, broken only between words (or
+     at the `<wbr>` above), never inside one. A name longer than two lines stops
+     at an ellipsis, and `title` carries it whole. The full name is also the h1 of the page the tile opens. */
   .tile__name {
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -83,8 +127,12 @@ const { tools } = Astro.props;
     overflow: hidden;
     max-width: 100%;
     font-size: 0.8125rem;
+    font-weight: 500;
     line-height: 1.3;
     text-align: center;
-    overflow-wrap: anywhere;
+    text-wrap: balance;
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: none;
   }
 </style>
