@@ -1,5 +1,5 @@
 // Leak scan (VET-274). Terms: 10 slugs and 10 titles sampled from archive rows
-// that are NOT public on main, every archive Raindrop note, and "@gmail".
+// that are NOT public on main, every archive Raindrop note, and any Gmail address.
 // Corpora: every dist/ file that is new or changed against the pre-branch
 // build, the whole .vercel/output (minus node_modules), and the branch diff
 // including untracked files. Prints counts only, never a term.
@@ -16,7 +16,7 @@ const terms = [
   ...sample.map((x) => ["slug", x.slug]),
   ...sample.map((x) => ["title", x.entry.title]),
   ...archive.filter((x) => x.raindrop_note).map((x) => ["note", x.raindrop_note]),
-  ["email", "@gmail"],
+  ["email", "@" + "gmail"],
 ];
 
 const files = (dir) =>
