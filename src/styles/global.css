@@ -76,6 +76,14 @@
   --pen-pink: light-dark(oklch(0.66 0.2 355), oklch(0.76 0.13 355));
   --pen-green: light-dark(oklch(0.64 0.16 152), oklch(0.78 0.14 152));
   --pen-ink: light-dark(oklch(0.32 0 0), oklch(0.86 0 0));
+  /* Frosted glass (VET-253): the /tools Dock and its Done pill, over
+     `backdrop-filter: blur(30px) saturate(180%)`. White glass on white paper
+     needs an edge and a lift to read; on black it is the classic 12% film. */
+  --glass: light-dark(rgb(255 255 255 / 0.6), rgb(255 255 255 / 0.12));
+  --glass-edge: light-dark(rgb(0 0 0 / 0.08), rgb(255 255 255 / 0.2));
+  --glass-shadow: light-dark(rgb(0 0 0 / 0.12), rgb(0 0 0 / 0.5));
+  /* The home screen's wallpaper: the tools section's green, barely there. */
+  --wallpaper: light-dark(oklch(0.64 0.16 156 / 0.07), oklch(0.43 0.11 158 / 0.14));
   /* Light keeps the accent at 18% under primary ink (13.58:1); briOS's blue
      pair is 4.80:1 and a second blue on a page whose links are ours. */
   --selection-bg: rgb(43 75 255 / 0.18);
@@ -682,6 +690,16 @@ mark {
   margin-bottom: 1rem;
   border-radius: var(--r-pill);
   background: var(--accent);
+}
+
+/* Frosted glass (VET-253): the /tools Dock, its hint and the Done pill. */
+.glass {
+  border: 1px solid var(--glass-edge);
+  border-radius: var(--r-pill);
+  background: var(--glass);
+  box-shadow: 0 4px 16px var(--glass-shadow);
+  /* No -webkit- copy: lightningcss adds prefixes for the build's targets. */
+  backdrop-filter: blur(30px) saturate(180%);
 }
 
 .visually-hidden {

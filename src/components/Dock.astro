@@ -1,0 +1,129 @@
+---
+/**
+ * Dock — the /tools home screen's frosted shelf of daily drivers (VET-253):
+ * the "using" tools, newest verdict first, capped at eight
+ * (`lib/home-screen.ts › dockTools`). `ToolGrid.astro` pins it to the bottom
+ * of the grid, inside the stamp's keyline.
+ *
+ * The same tools stay in the grid: filters and sorts act on the tiles, and a
+ * tile that moved to the Dock would vanish from "Using" when that filter is on.
+ * The Dock is a shortcut, the way a phone's Dock repeats nothing but reads as
+ * the apps you open most.
+ *
+ * Icons are 56px and shrink to fit a phone (`--icon-size` off the grid's
+ * width). Hovering one lifts it and, less, its neighbours: macOS's
+ * magnification in CSS, with no motion under reduced motion.
+ */
+import AppIcon from "./AppIcon.astro";
+import type { Tool } from "../lib/tools";
+
+interface Props {
+  tools: Tool[];
+}
+
+const { tools } = Astro.props;
+---
+
+{
+  tools.length > 0 && (
+    <nav class="dock glass" aria-label="Daily drivers" style={`--n: ${tools.length}`}>
+      <ul class="dock__apps">
+        {tools.map((tool) => (
+          <li class="dock__app">
+            <a class="dock__link" href={`/tools/${tool.slug}`} aria-label={tool.name} data-name={tool.name}>
+              <AppIcon tool={tool} size={60} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
+
+<style>
+  .dock {
+    --gap: min(0.75rem, 2cqi);
+    --pad-x: min(0.875rem, 3cqi);
+
+    pointer-events: auto;
+    padding: 0.625rem var(--pad-x);
+    border-radius: 1.75rem;
+    box-shadow: 0 8px 32px var(--glass-shadow);
+  }
+
+  .dock__apps {
+    display: flex;
+    align-items: flex-end;
+    gap: var(--gap);
+    /* 56px, or whatever eight across leaves on a phone */
+    --icon-size: min(3.5rem, (100cqi - 2 * var(--pad-x) - 2px - (var(--n) - 1) * var(--gap)) / var(--n));
+  }
+
+  .dock__link {
+    position: relative;
+    display: block;
+    border-radius: 22%;
+    text-decoration: none;
+    transform-origin: 50% 100%;
+    -webkit-touch-callout: none;
+  }
+
+  /* The letter tiles are tints; on glass they need the paper under them. */
+  .dock__link :global(.app-icon) {
+    background: var(--bg);
+  }
+
+  .dock__link:focus-visible {
+    outline-offset: 3px;
+  }
+
+  /* The name, above the icon, on hover or keyboard focus. */
+  .dock__link::after {
+    content: attr(data-name);
+    position: absolute;
+    bottom: calc(100% + 0.5rem);
+    left: 50%;
+    translate: -50% 0;
+    padding: 0.125rem 0.5rem;
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--r-sm);
+    background: var(--bg);
+    color: var(--text-primary);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .dock__link:focus-visible::after {
+    opacity: 1;
+  }
+
+  @media (hover: hover) {
+    .dock__link:hover::after {
+      opacity: 1;
+    }
+  }
+
+  /* Magnification: the icon under the pointer to 1.18 and 4px up, each
+     neighbour to 1.08 and 2px up. */
+  @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+    .dock__link {
+      transition-property: scale, translate;
+      transition-duration: var(--dur);
+      transition-timing-function: var(--ease);
+    }
+
+    .dock__app:hover .dock__link {
+      scale: 1.18;
+      translate: 0 -4px;
+    }
+
+    .dock__app:has(+ .dock__app:hover) .dock__link,
+    .dock__app:hover + .dock__app .dock__link {
+      scale: 1.08;
+      translate: 0 -2px;
+    }
+  }
+</style>
