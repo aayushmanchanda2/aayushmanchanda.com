@@ -44,7 +44,9 @@ export function toView(value: unknown): View {
  *
  * Only the storage read is inside the try: `localStorage` throws outright when
  * storage is blocked, and the page still gets a valid word on `<html>` and a
- * pressed button. It queries the buttons, so it must be placed after them.
+ * pressed button. It queries the buttons, so it must be placed after them, and
+ * it unhides their group, which ships `hidden` so a reader without scripting
+ * never sees a toggle that cannot work.
  */
 export const PREPAINT = `(function(){
 var V=${JSON.stringify(VIEWS)},v;
@@ -52,5 +54,5 @@ try{v=localStorage.getItem(${JSON.stringify(STORAGE_KEY)});}catch(e){}
 if(V.indexOf(v)<0)v=${JSON.stringify(DEFAULT_VIEW)};
 document.documentElement.setAttribute(${JSON.stringify(ATTRIBUTE)},v);
 var b=document.querySelectorAll("[${BUTTON_ATTRIBUTE}]");
-for(var i=0;i<b.length;i++)b[i].setAttribute("aria-pressed",String(b[i].getAttribute(${JSON.stringify(BUTTON_ATTRIBUTE)})===v));
+for(var i=0;i<b.length;i++){b[i].setAttribute("aria-pressed",String(b[i].getAttribute(${JSON.stringify(BUTTON_ATTRIBUTE)})===v));b[i].parentElement.hidden=false;}
 })();`;

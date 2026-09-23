@@ -147,6 +147,7 @@ const FLOORS = [
   ["pages/404.astro", ".agents {"],
   ["styles/palette.css", ".palette__empty {"],
   ["pages/sites.astro", ".collections a {"],
+  ["styles/chip.css", ".tag__count {"],
 ];
 
 test("every ink-floor surface still declares --muted", () => {

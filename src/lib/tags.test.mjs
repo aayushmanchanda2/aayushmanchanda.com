@@ -25,7 +25,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
 import { library, libraryTags } from "./library.ts";
-import { TAG_HUES, hueSlot, tagLabel } from "./tags.ts";
+import { MONOGRAM_HUES, hueSlot, tagLabel } from "./tags.ts";
 
 /**
  * The tags as they were when tags still wore hues, and the slot each hashed to.
@@ -77,7 +77,7 @@ test("no word can land outside the palette", () => {
   for (const word of [...words, ...Object.keys(SHIPPED)]) {
     const hue = hueSlot(word);
     assert.ok(
-      Number.isInteger(hue) && hue >= 0 && hue < TAG_HUES,
+      Number.isInteger(hue) && hue >= 0 && hue < MONOGRAM_HUES,
       `hueSlot(${JSON.stringify(word)}) returned ${hue}, which is not a slot`,
     );
   }
@@ -100,8 +100,8 @@ test("the stylesheet paints exactly as many slots as the module hands out", () =
 
   assert.deepEqual(
     [...slots].sort((a, b) => a - b),
-    Array.from({ length: TAG_HUES }, (_, index) => index),
-    `styles/chip.css paints ${slots.size} slots and lib/tags.ts hands out ${TAG_HUES}. A slot with no rule falls back to slot 0's colour.`,
+    Array.from({ length: MONOGRAM_HUES }, (_, index) => index),
+    `styles/chip.css paints ${slots.size} slots and lib/tags.ts hands out ${MONOGRAM_HUES}. A slot with no rule falls back to slot 0's colour.`,
   );
 });
 
@@ -321,4 +321,5 @@ test("the filter row caps at twelve and never hides the tag you are on", () => {
     "the current tag can fall into the collapsed tail, so a tag page can hide its own selected chip",
   );
   assert.match(source, /<li data-more hidden>/, "the button shows without scripting, where it does nothing");
+  assert.match(source, /hidden > 0 &&/, "the button renders when the tail it toggles is empty");
 });

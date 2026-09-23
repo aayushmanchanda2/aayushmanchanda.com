@@ -21,7 +21,8 @@ import {
 
 /**
  * Run the pre-paint script with `stored` in storage (or a throwing storage).
- * Returns the attribute it set on `<html>` and each button's `aria-pressed`.
+ * Returns the attribute it set on `<html>`, each button's `aria-pressed`, and
+ * whether the toggle's group is still hidden.
  *
  * @param {string | null | Error} stored
  */
@@ -29,8 +30,10 @@ function prepaint(stored) {
   /** @type {Map<string, string>} */
   const html = new Map();
   const buttons = VIEWS.map((view) => new Map([[BUTTON_ATTRIBUTE, view]]));
+  const group = { hidden: true };
   /** @param {Map<string, string>} own */
   const element = (own) => ({
+    parentElement: group,
     /** @param {string} name */
     getAttribute: (name) => own.get(name) ?? null,
     /** @param {string} name @param {string} value */
@@ -56,6 +59,7 @@ function prepaint(stored) {
   return {
     view: html.get(ATTRIBUTE),
     pressed: Object.fromEntries(buttons.map((b) => [b.get(BUTTON_ATTRIBUTE), b.get("aria-pressed")])),
+    hidden: group.hidden,
   };
 }
 
@@ -74,12 +78,12 @@ test("anything else falls back to the list", () => {
 });
 
 test("the pre-paint script applies a stored view and presses its button", () => {
-  assert.deepEqual(prepaint("grid"), { view: "grid", pressed: { list: "false", grid: "true" } });
-  assert.deepEqual(prepaint("list"), { view: "list", pressed: { list: "true", grid: "false" } });
+  assert.deepEqual(prepaint("grid"), { view: "grid", pressed: { list: "false", grid: "true" }, hidden: false });
+  assert.deepEqual(prepaint("list"), { view: "list", pressed: { list: "true", grid: "false" }, hidden: false });
 });
 
 test("the pre-paint script lands on the list for garbage, absence and blocked storage", () => {
   for (const stored of [null, "", "GRID", "cards", new Error("SecurityError")]) {
-    assert.deepEqual(prepaint(stored), { view: "list", pressed: { list: "true", grid: "false" } });
+    assert.deepEqual(prepaint(stored), { view: "list", pressed: { list: "true", grid: "false" }, hidden: false });
   }
 });

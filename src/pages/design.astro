@@ -47,7 +47,7 @@ import { KINDS, library, libraryTags } from "../lib/library";
 import { monogram } from "../lib/post";
 import { designJsonLd } from "../lib/schema";
 import { collectionGroups, sites } from "../lib/sites";
-import { TAG_HUES, hueSlot } from "../lib/tags";
+import { MONOGRAM_HUES, hueSlot } from "../lib/tags";
 import { tools } from "../lib/tools";
 import { VERDICTS } from "../lib/tools";
 
@@ -112,7 +112,7 @@ const tagSpecimen = libraryTags.slice(0, 5).map((group) => group.slug);
  */
 const posts = library.flatMap((entry) => (entry.post === null ? [] : [entry.post]));
 
-const monogramSpecimen = Array.from({ length: TAG_HUES }, (_, hue) =>
+const monogramSpecimen = Array.from({ length: MONOGRAM_HUES }, (_, hue) =>
   posts.find((post) => hueSlot(post.handle) === hue),
 ).flatMap((post) =>
   post === undefined

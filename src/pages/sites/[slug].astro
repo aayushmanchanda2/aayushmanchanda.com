@@ -10,8 +10,8 @@
  * Domain is a link, not a label — the save.design anatomy, where every field
  * value is also a way back out into the rest of the collection. The rest of
  * that anatomy is the two things a page like this is actually used for:
- * taking something away from it (the design panel or, for a site with no
- * tokens, the palette row; the shot buttons) and moving
+ * taking something away from it (the design panel, the palette row when the
+ * panel names fewer than three colours, the shot buttons) and moving
  * to the next one without going back to the gallery (the hint row at the foot,
  * which is both the keyboard legend and the links themselves).
  */
@@ -133,12 +133,13 @@ const jsonLd = siteJsonLd(site);
     </div>
 
     {/*
-      The pixel palette only when there are no tokens. A site with `design`
-      shows its colours, named, in the Design section under this table, and
-      six unnamed swatches above it would be the same colours said twice.
+      The pixel palette unless the Design section under this table names three
+      or more colours. Past that, six unnamed swatches would be the same colours
+      said twice; under it, a thin read (type and spacing, a colour or two)
+      would leave the page with less colour than the pixels show.
     */}
     {
-      site.design === undefined && (
+      (site.design?.colors.length ?? 0) < 3 && (
         <div class="fact fact--palette">
           <dt class="mono">Palette</dt>
           <dd>
