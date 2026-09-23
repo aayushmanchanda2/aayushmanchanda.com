@@ -1,0 +1,22 @@
+{
+  "base": "http://localhost:4330/",
+  "label": "qa-fix-1-footer",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-22-qa-fix-1-footer",
+  "at": "2026-09-23T04:15:26.177Z",
+  "shots": [
+    {
+      "route": "/",
+      "url": "http://localhost:4330/",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "home-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}

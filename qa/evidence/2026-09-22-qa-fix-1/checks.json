@@ -1,0 +1,109 @@
+{
+  "tabToEntry": {
+    "presses": 7,
+    "stops": [
+      {
+        "text": "Skip to content",
+        "inPane": false,
+        "inMain": false,
+        "current": null
+      },
+      {
+        "text": "Menu",
+        "inPane": false,
+        "inMain": false,
+        "current": null
+      },
+      {
+        "text": "Aayush Manchanda",
+        "inPane": false,
+        "inMain": false,
+        "current": null
+      },
+      {
+        "text": "Library",
+        "inPane": false,
+        "inMain": false,
+        "current": null
+      },
+      {
+        "text": "Search ⌘K",
+        "inPane": false,
+        "inMain": false,
+        "current": null
+      },
+      {
+        "text": "one of the best write-ups I have seen on",
+        "inPane": true,
+        "inMain": false,
+        "current": "page"
+      },
+      {
+        "text": "x.com",
+        "inPane": false,
+        "inMain": true,
+        "current": null
+      }
+    ]
+  },
+  "paneTabStops": 1,
+  "skipLinkFirst": "Skip to content",
+  "paneKeys": {
+    "start": 124,
+    "down": 125,
+    "up": 124,
+    "end": 138,
+    "home": 0,
+    "linksAtTabindex0": 1
+  },
+  "enterFollows": {
+    "want": "/library/using-claude-to-go-viral-on-x-mrbeast-s-framework",
+    "got": "/library/using-claude-to-go-viral-on-x-mrbeast-s-framework"
+  },
+  "jOnBody": {
+    "navigated": false,
+    "url": "http://localhost:4330/library/one-of-the-best-write-ups-i-have-seen-on-getting-hermes-agen"
+  },
+  "jInPane": {
+    "navigated": true,
+    "url": "http://localhost:4330/library/termius-tailscale-tmux"
+  },
+  "select390": [
+    [
+      "16px",
+      40
+    ],
+    [
+      "16px",
+      40
+    ]
+  ],
+  "chipFontSize": "12px",
+  "verdictOptions": [
+    "All verdicts",
+    "Using",
+    "Watching",
+    "On hold",
+    "Skipped"
+  ],
+  "table390": {
+    "tableRole": 1,
+    "columnheaders": 2,
+    "heads": [
+      "Name",
+      "Verdict"
+    ],
+    "firstRowCells": 2,
+    "rows": 87,
+    "snapshot": "- table:\n  - rowgroup:\n    - row \"Name Verdict\":\n      - columnheader \"Name\":\n        - button \"Name\"\n      - columnheader \"Verdict\":\n        - button \"Verdict\"\n  - rowgroup:\n    - row \"Paperclip Agent org control plane. Verified working on the overnight bench — boots clean, embedded Postgres, telemetry off. using\":\n      - cell \"Paperclip Agent org control plane. Verified working on the overnight bench — boots clean, embedded Postgres, telemetry off.\":\n        - link \"Paperclip\":\n          - /url: /tools/paperclip\n        - paragraph: Agent org control plane. Verified working on the overnight bench — boots clean, embedded Postgres, telemetry off.\n      - cell \"using\""
+  },
+  "selectCoarse": [
+    44,
+    44
+  ],
+  "hintKeyTouch": [
+    "none",
+    "none",
+    "none"
+  ]
+}

@@ -31,3 +31,24 @@ if(a&&p.clientHeight){var t=a.offsetTop;if(t<p.scrollTop||t+a.offsetHeight>p.scr
 function s(){if(p.clientHeight)try{sessionStorage.setItem(k,String(p.scrollTop));}catch(e){}}
 addEventListener("pagehide",s);p.addEventListener("click",s);
 })();`;
+
+/**
+ * Where Up, Down, Home and End move focus among the pane's `count` rows from
+ * row `from`, stopping at the ends; null for any other key. The pane is one tab
+ * stop (a roving tabindex, `LibraryPane.astro`), so these keys are how a
+ * keyboard walks it without leaving the page.
+ */
+export function paneStep(key: string, from: number, count: number): number | null {
+  switch (key) {
+    case "ArrowDown":
+      return Math.min(from + 1, count - 1);
+    case "ArrowUp":
+      return Math.max(from - 1, 0);
+    case "Home":
+      return 0;
+    case "End":
+      return count - 1;
+    default:
+      return null;
+  }
+}

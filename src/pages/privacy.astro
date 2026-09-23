@@ -114,12 +114,13 @@
  * like siblings.
  */
 import Base from "../layouts/Base.astro";
+import { privacyJsonLd } from "../lib/schema";
 import { NEWSLETTER_ACTION } from "../lib/site";
 ---
 
 <Base
   title="Privacy · Aayush Manchanda"
-  trail={[{ name: "Privacy", path: "/privacy" }]}
+  jsonLd={privacyJsonLd()}
   description="What this site collects, what it loads from elsewhere, and how to get a screenshot of your site taken down."
 >
   <header>

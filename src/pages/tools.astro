@@ -3,7 +3,7 @@ import Base from "../layouts/Base.astro";
 import ToolGrid from "../components/ToolGrid.astro";
 import ToolList from "../components/ToolList.astro";
 import { listJsonLd, pageUrl } from "../lib/schema";
-import { categories, tools, verdictGroups } from "../lib/tools";
+import { VERDICT_LABELS, categories, tools, verdictGroups } from "../lib/tools";
 import { PREPAINT, VIEWS, type View } from "../lib/tools-view";
 
 /** Sentence case on the buttons; the stored value stays the lowercase key. */
@@ -46,7 +46,7 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
     <label class="visually-hidden" for="filter-verdict">Verdict</label>
     <select class="select" id="filter-verdict" data-filter="verdict">
       <option value="">All verdicts</option>
-      {verdictGroups.map((group) => <option value={group.verdict}>{group.verdict}</option>)}
+      {verdictGroups.map((group) => <option value={group.verdict}>{VERDICT_LABELS[group.verdict]}</option>)}
     </select>
     <label class="visually-hidden" for="filter-category">Category</label>
     <select class="select" id="filter-category" data-filter="category">
@@ -99,9 +99,10 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
 
   /* Native, so the platform's own picker opens on a phone; only the closed
      box is drawn. The chevron is two gradients rather than an image. */
+  /* 40px tall, the hit floor; 44px under a finger. */
   .select {
     appearance: none;
-    min-height: 32px;
+    min-height: 40px;
     padding: 0 1.75rem 0 0.75rem;
     border: 1px solid var(--hairline-strong);
     border-radius: var(--r-md);
@@ -141,8 +142,9 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
     display: none;
   }
 
-  /* 26px drawn inside the 32px frame, 40px pressed: the `::after` reaches past
-     each edge, the offset trick `.tag::after` uses for its hit floor. */
+  /* 26px drawn inside the 32px frame, 40px pressed (44px under a finger): the
+     `::after` reaches past each edge, the offset trick `.tag::after` uses for
+     its hit floor. */
   .views__btn {
     position: relative;
     min-height: 26px;
@@ -158,6 +160,16 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
     content: "";
     position: absolute;
     inset: -7px 0;
+  }
+
+  @media (pointer: coarse) {
+    .select {
+      min-height: 44px;
+    }
+
+    .views__btn::after {
+      inset: -9px 0;
+    }
   }
 
   .views__btn:hover {
@@ -178,11 +190,13 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
     text-align: center;
   }
 
-  /* A phone gives the two selects the first line, count and layout the next. */
+  /* A phone gives the two selects the first line, count and layout the next.
+     16px text, because iOS zooms the page into any field set smaller. */
   @media (max-width: 639px) {
     .select {
       flex: 1 1 calc(50% - 0.25rem);
       min-width: 0;
+      font-size: 1rem;
     }
   }
 </style>

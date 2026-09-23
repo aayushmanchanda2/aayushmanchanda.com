@@ -2,7 +2,8 @@
 /**
  * Breadcrumbs — the trail in the top bar: `Aayush Manchanda / Tools / Notion`.
  *
- * Home is always the first link, so the name is the way home from anywhere.
+ * Home is the first link, so the name is the way home from anywhere; a
+ * three-step trail under 640px drops it, so the title is readable.
  * The last step is the page itself: plain text with `aria-current`, never a
  * link to where the reader already is. `Base.astro` works out the trail, from
  * the page's `BreadcrumbList` when it has one, so the JSON-LD and this markup
@@ -85,6 +86,18 @@ const steps = [HOME, ...Astro.props.trail];
 
   .crumbs__here {
     color: var(--text-secondary);
+  }
+
+  /* Three deep on a phone, home steps out so the page's own title has room
+     (it was a few characters at 390). The name is still one tap away in Menu. */
+  @media (max-width: 639px) {
+    .crumbs__list:has(> :nth-child(3)) > .crumbs__step:first-child {
+      display: none;
+    }
+
+    .crumbs__list:has(> :nth-child(3)) > .crumbs__step:nth-child(2)::before {
+      content: none;
+    }
   }
 
   @media (hover: hover) {

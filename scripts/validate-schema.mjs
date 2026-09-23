@@ -177,6 +177,11 @@ const EXPECTED = [
     types: ["WebPage"],
   },
   {
+    name: "privacy",
+    match: (page) => page === "privacy/index.html",
+    types: ["WebPage", "BreadcrumbList"],
+  },
+  {
     name: "site details",
     match: (page) => /^sites\/[^/]+\/index\.html$/.test(page),
     types: ["WebPage", "ImageObject", "BreadcrumbList"],
@@ -235,7 +240,7 @@ const EXPECTED = [
 ];
 
 /** Pages that carry no structured data on purpose. */
-const NO_SCHEMA = ["404.html", "privacy/index.html"];
+const NO_SCHEMA = ["404.html"];
 
 /** @type {string[]} */
 const errors = [];

@@ -1,0 +1,35 @@
+{
+  "base": "http://localhost:4330/",
+  "label": "qa-fix-1-sites",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-22-qa-fix-1-sites",
+  "at": "2026-09-23T04:15:24.689Z",
+  "shots": [
+    {
+      "route": "/sites",
+      "url": "http://localhost:4330/sites",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "sites-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/sites",
+      "url": "http://localhost:4330/sites",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "sites-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}

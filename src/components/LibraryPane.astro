@@ -52,6 +52,32 @@ const { entries, current } = Astro.props;
   </ul>
 </nav>
 <script is:inline set:html={PREPAINT} />
+<script>
+  import { PANE_ATTRIBUTE, paneStep } from "../lib/library-pane";
+
+  // A roving tabindex: 139 links are one tab stop, so Tab from the bar reaches
+  // the entry instead of walking the whole list. The stop starts on the
+  // `aria-current` row and follows focus; Up, Down, Home and End move it, and
+  // Enter is the link's own. Without this script every row is a stop again.
+  const pane = document.querySelector<HTMLElement>(`[${PANE_ATTRIBUTE}]`);
+  if (pane) {
+    const links = [...pane.querySelectorAll<HTMLAnchorElement>("a")];
+    const start = pane.querySelector('[aria-current="page"]') ?? links[0];
+    for (const link of links) link.tabIndex = link === start ? 0 : -1;
+
+    pane.addEventListener("keydown", (event) => {
+      if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+      const from = links.indexOf(event.target as HTMLAnchorElement);
+      const to = from < 0 ? null : paneStep(event.key, from, links.length);
+      const next = to === null ? undefined : links[to];
+      if (!next) return;
+      event.preventDefault();
+      (event.target as HTMLAnchorElement).tabIndex = -1;
+      next.tabIndex = 0;
+      next.focus();
+    });
+  }
+</script>
 
 <style is:global>
   .pane {
