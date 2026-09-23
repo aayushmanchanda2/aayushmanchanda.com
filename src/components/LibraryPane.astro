@@ -114,7 +114,7 @@ const index = start !== undefined;
       position: sticky;
       top: calc(var(--frame) + var(--bar-h));
       flex: 0 0 350px;
-      height: calc(100dvh - var(--bar-h) - 2 * var(--frame));
+      height: calc(100dvh - var(--bar-h) - var(--frame) - var(--frame-in));
       overflow-y: auto;
       /* Arrow-key focus scrolls a row clear of the sticky toolbar. */
       scroll-padding-top: 7rem;
