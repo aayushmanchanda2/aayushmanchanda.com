@@ -233,7 +233,12 @@ const current = normalize(pathname);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    background: var(--accent-panel);
+    /* arc.net's grain on a flat blue, the mat's recipe (VET-261), under a 35%
+       veil of the same blue: at full strength its lightest speck took white
+       ink to 4.29:1. Veiled, the lightest speck clears 4.5 (the audit). */
+    background:
+      linear-gradient(color-mix(in srgb, var(--accent-panel) 35%, transparent) 0 0),
+      var(--grain) var(--accent-panel);
     color: var(--accent-panel-ink);
     overscroll-behavior: contain;
     overflow-y: auto;
