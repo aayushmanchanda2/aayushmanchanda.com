@@ -33,6 +33,7 @@ import type { NavItem } from "../lib/sections";
 import { FEEDS, getSections } from "../lib/sections";
 import { absolute } from "../lib/site";
 import { PREPAINT, THEME_COLORS } from "../lib/theme";
+import { PREPAINT as SOUND_PREPAINT } from "../lib/ui-sound";
 
 interface Props {
   title?: string;
@@ -216,7 +217,7 @@ const markdownVariant = variant === null ? null : absolute(variant);
     />
 
     {/*
-      The theme, before the first paint.
+      The theme and the sound toggle's state, before the first paint.
 
       Blocking and inline on purpose: a deferred module runs after the browser
       has already painted, so a reader who pinned dark would get a white flash
@@ -225,7 +226,7 @@ const markdownVariant = variant === null ? null : absolute(variant);
       analytics tag at the foot of this head is the one other script Astro does
       not bundle, and it defers.
     */}
-    <script is:inline set:html={PREPAINT} />
+    <script is:inline set:html={PREPAINT + SOUND_PREPAINT} />
 
     <title>{title}</title>
     <meta name="description" content={description} />

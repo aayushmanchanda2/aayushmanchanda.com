@@ -7,6 +7,7 @@
  * reader hears one control that is on or off rather than a name that changes.
  * `lib/ui-sound.ts` owns the press and corrects `aria-pressed` on load; it
  * ships "true", the default for anyone without reduced motion or a choice.
+ * The glyph does not wait for that: it reads `<html data-sound>`, set pre-paint.
  */
 ---
 
@@ -70,8 +71,11 @@
     height: 14px;
   }
 
-  .st[aria-pressed="true"] .st__off,
-  .st[aria-pressed="false"] .st__on {
+  /* Off `<html data-sound>`, written before the first paint
+     (`lib/ui-sound.ts › PREPAINT`), so a muted reader never sees "on" first.
+     With no attribute (no script) it draws "on", as `aria-pressed` ships. */
+  :global(:root:not([data-sound="off"])) .st__off,
+  :global(:root[data-sound="off"]) .st__on {
     display: none;
   }
 </style>
