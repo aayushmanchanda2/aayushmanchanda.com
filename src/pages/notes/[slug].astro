@@ -2,7 +2,8 @@
 /**
  * One note. Two shapes, because the two note types are read differently.
  *
- * A musing is prose, so it gets a title, a date, and a 65ch column.
+ * A musing is prose, so it gets a date, a title, and the shared `.prose`
+ * column (`styles/prose.css`).
  * A scratch is a picture, so the picture comes first and the words underneath
  * are the caption. Ordering the DOM that way rather than reordering with CSS
  * keeps the reading order and the visual order the same.
@@ -18,24 +19,29 @@ import { getCollection, render } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import EntryLink from "../../components/EntryLink.astro";
 import ImageFrame from "../../components/ImageFrame.astro";
+import NoteList from "../../components/NoteList.astro";
 import { noteJsonLd } from "../../lib/schema";
 import { formatDay } from "../../lib/date";
+import { readNext } from "../../lib/read-next";
 
 export const getStaticPaths = (async () => {
   const notes = await getCollection("notes");
-  return notes.map((note) => ({ params: { slug: note.id }, props: { note } }));
+  return notes.map((note) => ({
+    params: { slug: note.id },
+    props: { note, next: readNext(note.id, notes) },
+  }));
 }) satisfies GetStaticPaths;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-const { note } = Astro.props;
+const { note, next } = Astro.props;
 const { Content } = await render(note);
 
 const day = note.data.date.toISOString().slice(0, 10);
 const links = note.data.links ?? [];
 
 /**
- * The same three things the page shows: the title, the date under it, and the
+ * The same three things the page shows: the title, the date above it, and the
  * picture when there is one. `day` rather than the `Date`, so the graph and the
  * `<time datetime>` carry one string.
  */
@@ -84,6 +90,15 @@ const jsonLd = noteJsonLd({
       )
     }
   </article>
+
+  {
+    next.length > 0 && (
+      <nav class="next" aria-labelledby="read-next">
+        <h2 class="next__head accent-bar" id="read-next">Read next</h2>
+        <NoteList notes={next} />
+      </nav>
+    )
+  }
 </Base>
 
 <style>
@@ -92,81 +107,16 @@ const jsonLd = noteJsonLd({
     margin-top: clamp(1.5rem, 4vw, 2.25rem);
   }
 
-  /* Above the title, briOS's order: when, then what. */
+  /* Above the title, briOS's order: when, then what. 24px to the title and
+     32px from the title to the body, his `gap-6` and `gap-8`. */
   .note__date {
     display: block;
-    margin-bottom: 0.5rem;
+    margin-bottom: 1.5rem;
     color: var(--text-tertiary);
   }
 
-  /* --- body ---------------------------------------------------------------- */
-
-  /* Primary ink at 18/1.6, capped in rem (Geist's ch runs wide), and
-     unsmoothed so the strokes keep their weight on macOS (VET-225). */
   .prose {
-    margin-top: clamp(2rem, 5vw, 3rem);
-    max-width: 40rem;
-    font-size: 1.125rem;
-    line-height: 1.6;
-    color: var(--text-primary);
-    -webkit-font-smoothing: auto;
-    -moz-osx-font-smoothing: auto;
-  }
-
-  .prose :global(p + p),
-  .prose :global(ul),
-  .prose :global(ol),
-  .prose :global(blockquote) {
-    margin-top: 1.35em;
-  }
-
-  .prose :global(h2),
-  .prose :global(h3) {
-    margin-top: 2em;
-    color: var(--text-primary);
-    font-weight: 700;
-    line-height: 1.25;
-    letter-spacing: -0.015em;
-  }
-
-  .prose :global(h2) {
-    font-size: 1.5rem;
-  }
-
-  .prose :global(h3) {
-    font-size: 1.25rem;
-  }
-
-  .prose :global(ul),
-  .prose :global(ol) {
-    padding-left: 1.25rem;
-    list-style: disc;
-  }
-
-  .prose :global(ol) {
-    list-style: decimal;
-  }
-
-  .prose :global(li + li) {
-    margin-top: 0.4em;
-  }
-
-  /* --text-secondary, not --text-tertiary: a quotation is prose a reader is reading, and
-     --text-tertiary is the meta level (design.md §2's three text levels). The rule and
-     the indent are what set it apart from the body around it. */
-  .prose :global(blockquote) {
-    padding-left: 1rem;
-    border-left: 1px solid var(--hairline-strong);
-    color: var(--text-secondary);
-  }
-
-  /* A link in the body is underlined in the accent, and that rule lives in
-     global.css as `.prose a` — one convention across note bodies, /privacy, the
-     standfirsts and the entry pages, rather than this file's own half of it. */
-
-  .prose :global(code) {
-    font-family: var(--font-mono);
-    font-size: 0.875em;
+    margin-top: 2rem;
   }
 
   /* --- see also ------------------------------------------------------------ */
@@ -186,5 +136,20 @@ const jsonLd = noteJsonLd({
     flex-wrap: wrap;
     gap: 0.5rem 1.25rem;
     margin-top: 0.75rem;
+  }
+
+  /* --- read next ----------------------------------------------------------- */
+
+  .next {
+    margin-top: clamp(3rem, 8vw, 5rem);
+  }
+
+  .next__head {
+    margin-bottom: 0.5rem;
+    color: var(--text-tertiary);
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: normal;
+    line-height: 1.6;
   }
 </style>

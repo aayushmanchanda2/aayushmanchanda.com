@@ -148,10 +148,11 @@ Meta at `--text-tertiary` now clears AA (it was 2.94:1 at 45% alpha and 13px). A
 |---|---|---|
 | `.page-title` | `clamp(2.25rem, 6vw, 3.5rem)`, 700, `-0.025em`, lh `1.05` | every section masthead, home included |
 | `.page-title--entry` | 30 / 36 / 40px (base, 600px, 900px), 700, `-0.02em`, lh `1.2`, `overflow-wrap: anywhere` | entry pages: a tool, not a section — **and every filter page**, whose title is a hostname or a collection name that arrived from data rather than from someone choosing a heading that fits |
-| `.page-title--mono` | `clamp(2rem, 6vw, 3rem)`, lowercase, `-0.02em` | `/notes` and the 404 |
+| `.page-title--mono` | `clamp(2rem, 6vw, 3rem)`, lowercase, `-0.02em` | the 404 and `/design` |
 | `.standfirst` | `clamp(1.0625rem, 1.6vw, 1.1875rem)` / 1.65, `--text-secondary` | one line under every title |
-| prose | `1.125rem` (18px) / 1.6, `--text-primary`, `-webkit-font-smoothing: auto` | note bodies (`notes/[slug].astro › .prose`), `.doc p` |
-| prose h2 / h3 | 24px / 20px, 700 | note bodies |
+| prose | `1.125rem` (18px) / 1.6, `--text-primary`, `-webkit-font-smoothing: auto` | `.prose` (`styles/prose.css`): note bodies now, library and /computer bodies next; `.doc p` |
+| prose h2 / h3 | 24px / 20px, 700, lh 1.3; 40 / 36px above, 12px below | any `.prose` |
+| note list title | `1.25rem` (20px) / 1.6, 500, `--text-primary`, underline on hover only | /notes and "Read next" (`components/NoteList.astro`) |
 | row note | `0.9375rem` / 1.55 | list rows, capped at two lines (§3) |
 | `.mono` | `0.875rem`, 400, normal tracking, sentence case, sans | every label; figures inside it are mono |
 
@@ -159,9 +160,11 @@ Headings are 600 / lh 1.05 / `-0.03em` with `text-wrap: balance`; paragraphs get
 
 **Prose is primary ink, unsmoothed.** The body sets `-webkit-font-smoothing: antialiased` once; prose turns it back to `auto`, because antialiasing thins Geist on macOS and prose is where stroke weight is read for minutes at a time.
 
+**`.prose` is the one class for a markdown body** (`styles/prose.css`, VET-229, values from briOS's `renderBlocks.tsx` and `globals.css › .prose`). Put it on the element that wraps `<Content />`; the page adds only its own margin. Blocks sit **16px** apart. Lists indent `1.75em`, items **8px** apart, markers at `--text-tertiary` (furniture, not words; a nested list goes to circles), so a bulleted "first impressions" note reads as ten lines rather than ten dots. A blockquote is `--text-secondary` behind a 3px `--hairline-strong` rule. Inline code is mono at `0.875em` on `--surface-3` with `--r-sm`; a `pre` is the same surface in a `--hairline-strong` box, `--r-md`, `1rem` padding, scrolling sideways rather than wrapping. **No syntax colour**: `astro.config.mjs` sets `markdown.syntaxHighlight: false`, because Shiki paints an inline `github-dark` background no stylesheet can theme. Images take `--r-md`. The link rule stays in `global.css`'s shared selector list (§5).
+
 **Measures, in rem.** Geist's `1ch` is wider than its average glyph, so a `65ch` cap ran to about 90 characters a line. Note prose and `.doc` **40rem** (about 75 characters at 18px). Standfirst **46ch** (`styles/global.css › .standfirst`). Labelled prose blocks **62ch** (`VoiceBlocks.astro › .voice`). The column itself **42rem** (`--page-max`).
 
-**The accent bar** (`styles/global.css › .accent-bar`): a 20×4px accent pill drawn above a small section heading, briOS's "Read next" marker. Put the class on the heading.
+**The accent bar** (`styles/global.css › .accent-bar`): a 20×4px accent pill drawn above a small section heading, briOS's "Read next" marker. Put the class on the heading. Its consumer is "Read next" under a note (`notes/[slug].astro › .next__head`, 16px `--text-tertiary`).
 
 Optical corrections in force: the masthead pulls `-0.04em` left so the first stem is flush with the column edge, and `--mono` sets that back to 0 because mono has no side bearing to correct for. Metadata columns take a `0.2rem` padding-top to line up with the name rather than the row box (`ToolList.astro › .row__meta`, `LibraryList.astro › .row__meta`).
 
@@ -296,6 +299,8 @@ Below 900px the column becomes a line and the row stacks title, tags, note, meta
 **Prefetch is opt-in** (`astro.config.mjs › prefetch`). `prefetchAll` stays off: a section index is forty links, and `/tools` alone is eighty-six rows that each go to a page of their own. Only markup that says `data-astro-prefetch` prefetches, which today is the four tab links and nothing else, at the default `hover` strategy — `viewport` or `load` would pull all four down for a reader crossing the row on the way to the third.
 
 **The empty-section rule.** `lib/sections.ts › getSections` filters to `count > 0`, and both nav surfaces plus the home index read it. A section with no entries is not linked, not listed, and has no page. There are no "coming soon" pages. Delete every note and `/notes` stops existing.
+
+**/notes is briOS's /writing** (VET-229). The section masthead, then one group per year, newest first: the year as a 14px `--text-tertiary` label, then plain title links (`components/NoteList.astro`), 64px between years. No rule between rows and no date on a row: the year carries the when and the note's own page has the day. A scratch note keeps its 44×30 thumbnail after the title. Each row is a 40px target by its own padding (§4), with briOS's 16px / 6px row gap made up around it. **Under a note, "Read next"** lists up to five other notes with the same component, and the section is not rendered at all when there is no other note. The five are **random per page but fixed per build** (`lib/read-next.ts`): candidates are ranked by a SHA-1 of the page's slug and theirs, so every page draws differently and a rebuild with the same notes changes nothing. A per-visit client shuffle would ship a script and swap the list after first paint for a section most readers never scroll to.
 
 **Every library entry has a page, and this paragraph used to say the opposite.** It read *"a library entry earns its page by being digested"*, and the rule under it was that a row's destination is the thing itself — no `/library/<slug>`, because a page holding one line and a button to leave is a stop on the way to the thing. A digest was what changed the answer, so two entries of forty-two had a page and everything else had no page, no stub, and a `/library#slug` anchor in the palette for a row with nowhere better to land. **Aayush reversed it in VET-63**, and it is written up here rather than quietly replaced, because the argument the old rule made was a good one and is worth knowing was considered.
 

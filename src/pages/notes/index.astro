@@ -1,29 +1,24 @@
 ---
 /**
- * /notes — the commonplace book index.
+ * /notes — briOS's /writing: the titles, grouped by year, newest first.
  *
- * The heading takes the mono masthead (`.page-title--mono` in global.css, which
- * the 404 shares): notes are the informal section, and a lowercase mono word
- * with a full stop after it says that faster than a paragraph could.
+ * The masthead is the section scale every other index uses (`.page-title`);
+ * the year is a small label over each group, and the rows are `NoteList`, the
+ * same list "Read next" draws under a note.
  */
 import { getCollection } from "astro:content";
 
 import Base from "../../layouts/Base.astro";
+import NoteList from "../../components/NoteList.astro";
 import { listJsonLd, pageUrl } from "../../lib/schema";
-import { formatDay } from "../../lib/date";
 
 const notes = (await getCollection("notes")).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime(),
 );
 
-/** Dates are stored as dates and shown as `YYYY-MM-DD`, same as /tools. */
-const day = (date: Date) => date.toISOString().slice(0, 10);
+/** Already newest first, so the years and each year's notes come out in order. */
+const years = Map.groupBy(notes, (note) => note.data.date.getUTCFullYear());
 
-/**
- * `Notes`, not the `notes.` the masthead prints. The lowercase word with a full
- * stop is a typographic treatment of this section's name, and the name itself
- * is the one the nav, the page title and every note's crumb all use.
- */
 const jsonLd = listJsonLd({
   name: "Notes",
   path: "/notes",
@@ -40,106 +35,38 @@ const jsonLd = listJsonLd({
   jsonLd={jsonLd}
 >
   <header>
-    <h1 class="page-title page-title--mono">notes.</h1>
+    <h1 class="page-title">Notes</h1>
     <p class="standfirst">
       Short things I wanted somewhere public. Some are written out, some are a
       photo of a whiteboard with one line under it.
     </p>
   </header>
 
-  <ul class="list">
+  <div class="years">
     {
-      notes.map((note) => (
-        <li>
-          <a class="row press" href={`/notes/${note.id}`}>
-            <span class="row__title">{note.data.title}</span>
-
-            <time class="row__date mono" datetime={day(note.data.date)}>
-              {formatDay(day(note.data.date))}
-            </time>
-
-            {note.data.type === "scratch" && (
-              <img
-                class="row__thumb outlined"
-                src={note.data.image}
-                alt=""
-                loading="lazy"
-                decoding="async"
-              />
-            )}
-          </a>
-        </li>
+      [...years].map(([year, group]) => (
+        <section aria-labelledby={`y${year}`}>
+          <h2 class="year mono" id={`y${year}`}>{year}</h2>
+          <NoteList notes={group} />
+        </section>
       ))
     }
-  </ul>
+  </div>
 </Base>
 
 <style>
-  .list {
+  /* briOS's /writing: 64px between years, 16px from a year to its titles
+     (8px here plus the row's own 4px padding and half-leading). */
+  .years {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
     margin-top: var(--gap-masthead);
-    border-top: 1px solid var(--hairline);
   }
 
-  .row {
-    /* a full-width row shrinking by 4% reads as a glitch, not a press */
-    --press-scale: 0.995;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto auto;
-    align-items: baseline;
-    column-gap: 1.25rem;
-    padding-block: 1rem;
-    border-bottom: 1px solid var(--hairline);
-    text-decoration: none;
-    color: inherit;
-  }
-
-  .row:hover {
-    border-bottom-color: var(--hairline-strong);
-  }
-
-  .row__title {
-    font-size: 1.0625rem;
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    line-height: 1.35;
-    transition-property: color;
-    transition-duration: var(--dur-fast);
-    transition-timing-function: var(--ease);
-  }
-
-  .row:hover .row__title {
-    color: var(--accent);
-  }
-
-  .row__date {
+  .year {
+    margin-bottom: 0.5rem;
     color: var(--text-tertiary);
-    white-space: nowrap;
-  }
-
-  .row__thumb {
-    /* sits on the baseline grid rather than the row box */
-    align-self: center;
-    width: 44px;
-    height: 30px;
-    object-fit: cover;
-    object-position: top center;
-    border-radius: 3px;
-  }
-
-  @media (max-width: 599px) {
-    .row {
-      grid-template-columns: minmax(0, 1fr) auto;
-      row-gap: 0.5rem;
-    }
-
-    .row__date {
-      grid-column: 1;
-      grid-row: 2;
-    }
-
-    .row__thumb {
-      grid-column: 2;
-      grid-row: 1 / span 2;
-    }
+    line-height: 1.6;
   }
 </style>

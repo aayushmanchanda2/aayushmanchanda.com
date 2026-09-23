@@ -478,8 +478,9 @@ ol {
 }
 
 /* Lowercase mono, for a masthead that is a terse statement rather than a
-   section name: /notes, and the 404. In that voice the page reads as the
-   machine answering plainly instead of the site announcing itself. */
+   section name: the 404 and /design. In that voice the page reads as the
+   machine answering plainly instead of the site announcing itself. /notes
+   left it for the section scale in VET-229, like every other index. */
 .page-title--mono {
   font-family: var(--font-mono);
   font-weight: 500;
@@ -509,10 +510,11 @@ ol {
    drift: a retuned measure on one page and not the other two is the kind of
    difference nobody sees until they open two tabs.
 
-   Named `.doc` rather than `.prose` on purpose. `notes/[slug].astro › .prose`
-   is a different measure at a different size for a long-form note, and it is
-   scoped, so giving these three the same class would have left two rule sets
-   fighting over one name and winning on specificity rather than on intent. */
+   Named `.doc` rather than `.prose` on purpose. `.prose` (`styles/prose.css`)
+   is a markdown body: it styles every element markdown can emit and spaces
+   blocks 16px apart. These three are sections of hand-written paragraphs under
+   labels, with their own rhythm, and sharing the class would leave two rule
+   sets fighting over one name. They share the reading size and ink instead. */
 .doc {
   margin-top: var(--gap-masthead);
   /* rem, not ch: Geist's 1ch is wider than its average glyph, so 62ch ran to

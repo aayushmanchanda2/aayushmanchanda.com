@@ -1,0 +1,1481 @@
+{
+  "base": "http://localhost:4329/",
+  "label": "vet-229-fixture",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-22-vet-229-fixture",
+  "at": "2026-09-23T03:20:12.842Z",
+  "shots": [
+    {
+      "route": "/notes",
+      "url": "http://localhost:4329/notes",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "notes-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Notes",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "36px",
+            "font-weight": "700",
+            "letter-spacing": "-0.9px",
+            "line-height": "37.8px"
+          }
+        ],
+        ".prose p": [],
+        ".prose li": [],
+        "time": [],
+        ".row__title": [
+          {
+            "text": "Building this site",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          },
+          {
+            "text": "First impressions of a new editor",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          },
+          {
+            "text": "Whiteboard from Tuesday",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          }
+        ],
+        ".year": [
+          {
+            "text": "2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "2025",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".next__head": [],
+        ".prose pre": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes/building-this-site",
+      "url": "http://localhost:4329/notes/building-this-site",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "notes_building_this_site-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Building this site",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "30px",
+            "font-weight": "700",
+            "letter-spacing": "-0.6px",
+            "line-height": "36px"
+          }
+        ],
+        ".prose p": [
+          {
+            "text": "I built this site overnight, mostly by t",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "The part I care about is the pipeline. I",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "Verdicts carry a date because opinions g",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ],
+        ".prose li": [],
+        "time": [
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".row__title": [
+          {
+            "text": "Whiteboard from Tuesday",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          },
+          {
+            "text": "First impressions of a new editor",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          }
+        ],
+        ".year": [],
+        ".next__head": [
+          {
+            "text": "Read next",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".prose pre": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes/zz-fixture-first-impressions",
+      "url": "http://localhost:4329/notes/zz-fixture-first-impressions",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "notes_zz_fixture_first_impressions-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "First impressions of a new editor",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "30px",
+            "font-weight": "700",
+            "letter-spacing": "-0.6px",
+            "line-height": "36px"
+          }
+        ],
+        ".prose p": [
+          {
+            "text": "A fixture note for VET-229 verification ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "The sidebar should remember its width. A",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "A quotation, set in secondary ink with a",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ],
+        ".prose li": [
+          {
+            "text": "Opens fast, and the first file I tried r",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "The command palette finds settings as we",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "Git blame inline is on by default and I ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ],
+        "time": [
+          {
+            "text": "Nov 4, 2025",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".row__title": [
+          {
+            "text": "Building this site",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          },
+          {
+            "text": "Whiteboard from Tuesday",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          }
+        ],
+        ".year": [],
+        ".next__head": [
+          {
+            "text": "Read next",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".prose pre": [
+          {
+            "text": "npm run check && npm test",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes/zz-fixture-scratch",
+      "url": "http://localhost:4329/notes/zz-fixture-scratch",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "notes_zz_fixture_scratch-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Whiteboard from Tuesday",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "30px",
+            "font-weight": "700",
+            "letter-spacing": "-0.6px",
+            "line-height": "36px"
+          }
+        ],
+        ".prose p": [
+          {
+            "text": "The caption under a whiteboard photo. Fi",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ],
+        ".prose li": [],
+        "time": [
+          {
+            "text": "Jun 10, 2025",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".row__title": [
+          {
+            "text": "First impressions of a new editor",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          },
+          {
+            "text": "Building this site",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          }
+        ],
+        ".year": [],
+        ".next__head": [
+          {
+            "text": "Read next",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".prose pre": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes",
+      "url": "http://localhost:4329/notes",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "notes-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Notes",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "56px",
+            "font-weight": "700",
+            "letter-spacing": "-1.4px",
+            "line-height": "58.8px"
+          }
+        ],
+        ".prose p": [],
+        ".prose li": [],
+        "time": [],
+        ".row__title": [
+          {
+            "text": "Building this site",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          },
+          {
+            "text": "First impressions of a new editor",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          },
+          {
+            "text": "Whiteboard from Tuesday",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          }
+        ],
+        ".year": [
+          {
+            "text": "2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "2025",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".next__head": [],
+        ".prose pre": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes/building-this-site",
+      "url": "http://localhost:4329/notes/building-this-site",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "notes_building_this_site-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Building this site",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "40px",
+            "font-weight": "700",
+            "letter-spacing": "-0.8px",
+            "line-height": "48px"
+          }
+        ],
+        ".prose p": [
+          {
+            "text": "I built this site overnight, mostly by t",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "The part I care about is the pipeline. I",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "Verdicts carry a date because opinions g",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ],
+        ".prose li": [],
+        "time": [
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".row__title": [
+          {
+            "text": "Whiteboard from Tuesday",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          },
+          {
+            "text": "First impressions of a new editor",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          }
+        ],
+        ".year": [],
+        ".next__head": [
+          {
+            "text": "Read next",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".prose pre": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes/zz-fixture-first-impressions",
+      "url": "http://localhost:4329/notes/zz-fixture-first-impressions",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "notes_zz_fixture_first_impressions-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "First impressions of a new editor",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "40px",
+            "font-weight": "700",
+            "letter-spacing": "-0.8px",
+            "line-height": "48px"
+          }
+        ],
+        ".prose p": [
+          {
+            "text": "A fixture note for VET-229 verification ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "The sidebar should remember its width. A",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "A quotation, set in secondary ink with a",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ],
+        ".prose li": [
+          {
+            "text": "Opens fast, and the first file I tried r",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "The command palette finds settings as we",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "Git blame inline is on by default and I ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ],
+        "time": [
+          {
+            "text": "Nov 4, 2025",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".row__title": [
+          {
+            "text": "Building this site",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          },
+          {
+            "text": "Whiteboard from Tuesday",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          }
+        ],
+        ".year": [],
+        ".next__head": [
+          {
+            "text": "Read next",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".prose pre": [
+          {
+            "text": "npm run check && npm test",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes/zz-fixture-scratch",
+      "url": "http://localhost:4329/notes/zz-fixture-scratch",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "notes_zz_fixture_scratch-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Whiteboard from Tuesday",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "40px",
+            "font-weight": "700",
+            "letter-spacing": "-0.8px",
+            "line-height": "48px"
+          }
+        ],
+        ".prose p": [
+          {
+            "text": "The caption under a whiteboard photo. Fi",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ],
+        ".prose li": [],
+        "time": [
+          {
+            "text": "Jun 10, 2025",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".row__title": [
+          {
+            "text": "First impressions of a new editor",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          },
+          {
+            "text": "Building this site",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          }
+        ],
+        ".year": [],
+        ".next__head": [
+          {
+            "text": "Read next",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".prose pre": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes",
+      "url": "http://localhost:4329/notes",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "notes-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Notes",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "36px",
+            "font-weight": "700",
+            "letter-spacing": "-0.9px",
+            "line-height": "37.8px"
+          }
+        ],
+        ".prose p": [],
+        ".prose li": [],
+        "time": [],
+        ".row__title": [
+          {
+            "text": "Building this site",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          },
+          {
+            "text": "First impressions of a new editor",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          },
+          {
+            "text": "Whiteboard from Tuesday",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          }
+        ],
+        ".year": [
+          {
+            "text": "2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "2025",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".next__head": [],
+        ".prose pre": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes/building-this-site",
+      "url": "http://localhost:4329/notes/building-this-site",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "notes_building_this_site-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Building this site",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "30px",
+            "font-weight": "700",
+            "letter-spacing": "-0.6px",
+            "line-height": "36px"
+          }
+        ],
+        ".prose p": [
+          {
+            "text": "I built this site overnight, mostly by t",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "The part I care about is the pipeline. I",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "Verdicts carry a date because opinions g",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ],
+        ".prose li": [],
+        "time": [
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".row__title": [
+          {
+            "text": "Whiteboard from Tuesday",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          },
+          {
+            "text": "First impressions of a new editor",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          }
+        ],
+        ".year": [],
+        ".next__head": [
+          {
+            "text": "Read next",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".prose pre": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes/zz-fixture-first-impressions",
+      "url": "http://localhost:4329/notes/zz-fixture-first-impressions",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "notes_zz_fixture_first_impressions-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "First impressions of a new editor",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "30px",
+            "font-weight": "700",
+            "letter-spacing": "-0.6px",
+            "line-height": "36px"
+          }
+        ],
+        ".prose p": [
+          {
+            "text": "A fixture note for VET-229 verification ",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "The sidebar should remember its width. A",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "A quotation, set in secondary ink with a",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ],
+        ".prose li": [
+          {
+            "text": "Opens fast, and the first file I tried r",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "The command palette finds settings as we",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "Git blame inline is on by default and I ",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ],
+        "time": [
+          {
+            "text": "Nov 4, 2025",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".row__title": [
+          {
+            "text": "Building this site",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          },
+          {
+            "text": "Whiteboard from Tuesday",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          }
+        ],
+        ".year": [],
+        ".next__head": [
+          {
+            "text": "Read next",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".prose pre": [
+          {
+            "text": "npm run check && npm test",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes/zz-fixture-scratch",
+      "url": "http://localhost:4329/notes/zz-fixture-scratch",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "notes_zz_fixture_scratch-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Whiteboard from Tuesday",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "30px",
+            "font-weight": "700",
+            "letter-spacing": "-0.6px",
+            "line-height": "36px"
+          }
+        ],
+        ".prose p": [
+          {
+            "text": "The caption under a whiteboard photo. Fi",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ],
+        ".prose li": [],
+        "time": [
+          {
+            "text": "Jun 10, 2025",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".row__title": [
+          {
+            "text": "First impressions of a new editor",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          },
+          {
+            "text": "Building this site",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          }
+        ],
+        ".year": [],
+        ".next__head": [
+          {
+            "text": "Read next",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".prose pre": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes",
+      "url": "http://localhost:4329/notes",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "notes-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Notes",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "56px",
+            "font-weight": "700",
+            "letter-spacing": "-1.4px",
+            "line-height": "58.8px"
+          }
+        ],
+        ".prose p": [],
+        ".prose li": [],
+        "time": [],
+        ".row__title": [
+          {
+            "text": "Building this site",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          },
+          {
+            "text": "First impressions of a new editor",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          },
+          {
+            "text": "Whiteboard from Tuesday",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          }
+        ],
+        ".year": [
+          {
+            "text": "2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "2025",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".next__head": [],
+        ".prose pre": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes/building-this-site",
+      "url": "http://localhost:4329/notes/building-this-site",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "notes_building_this_site-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Building this site",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "40px",
+            "font-weight": "700",
+            "letter-spacing": "-0.8px",
+            "line-height": "48px"
+          }
+        ],
+        ".prose p": [
+          {
+            "text": "I built this site overnight, mostly by t",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "The part I care about is the pipeline. I",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "Verdicts carry a date because opinions g",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ],
+        ".prose li": [],
+        "time": [
+          {
+            "text": "Aug 26, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".row__title": [
+          {
+            "text": "Whiteboard from Tuesday",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          },
+          {
+            "text": "First impressions of a new editor",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          }
+        ],
+        ".year": [],
+        ".next__head": [
+          {
+            "text": "Read next",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".prose pre": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes/zz-fixture-first-impressions",
+      "url": "http://localhost:4329/notes/zz-fixture-first-impressions",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "notes_zz_fixture_first_impressions-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "First impressions of a new editor",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "40px",
+            "font-weight": "700",
+            "letter-spacing": "-0.8px",
+            "line-height": "48px"
+          }
+        ],
+        ".prose p": [
+          {
+            "text": "A fixture note for VET-229 verification ",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "The sidebar should remember its width. A",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "A quotation, set in secondary ink with a",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ],
+        ".prose li": [
+          {
+            "text": "Opens fast, and the first file I tried r",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "The command palette finds settings as we",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          },
+          {
+            "text": "Git blame inline is on by default and I ",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ],
+        "time": [
+          {
+            "text": "Nov 4, 2025",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".row__title": [
+          {
+            "text": "Building this site",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          },
+          {
+            "text": "Whiteboard from Tuesday",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          }
+        ],
+        ".year": [],
+        ".next__head": [
+          {
+            "text": "Read next",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".prose pre": [
+          {
+            "text": "npm run check && npm test",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes/zz-fixture-scratch",
+      "url": "http://localhost:4329/notes/zz-fixture-scratch",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "notes_zz_fixture_scratch-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Whiteboard from Tuesday",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "40px",
+            "font-weight": "700",
+            "letter-spacing": "-0.8px",
+            "line-height": "48px"
+          }
+        ],
+        ".prose p": [
+          {
+            "text": "The caption under a whiteboard photo. Fi",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.8px"
+          }
+        ],
+        ".prose li": [],
+        "time": [
+          {
+            "text": "Jun 10, 2025",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".row__title": [
+          {
+            "text": "First impressions of a new editor",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          },
+          {
+            "text": "Building this site",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "20px",
+            "font-weight": "500",
+            "letter-spacing": "-0.2px",
+            "line-height": "32px"
+          }
+        ],
+        ".year": [],
+        ".next__head": [
+          {
+            "text": "Read next",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".prose pre": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}
