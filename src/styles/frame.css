@@ -105,13 +105,11 @@ body {
   --hole: radial-gradient(circle closest-side, #000 calc(100% - 1px), transparent);
   --solid: linear-gradient(#000 0 0);
   /* The cut (R5-4): the gutter (the window, `exclude` the page) plus four
-     rows of `--d` holes on a `--p` pitch, centred on the page's edge. The
-     rows are laid out on the padding box, the page grown by `--pad` (half a
-     pitch, plus under 1px of rounding),
-     so `space` puts the first and last hole of each edge on the corner (a
-     quarter-hole in the paper) and spreads the rest evenly: every edge ends
-     on a whole hole. Fixed px, on a window-fixed box, so no page height or
-     resize stretches a hole. */
+     rows of `--d` holes on a `--p` pitch, centred on the page's edge, laid
+     out on the page grown by `--pad` (about half a pitch), so `space` puts
+     each edge's end holes on the corners (a quarter-hole in the paper) and
+     spreads the rest evenly. Fixed px on a window-fixed box: no page height
+     or resize stretches a hole. */
   --cut:
     var(--hole) 0 calc(var(--pad) - var(--d) / 2) / var(--p) var(--d) space no-repeat padding-box border-box,
     var(--hole) 0 calc(100% - var(--pad) + var(--d) / 2) / var(--p) var(--d) space no-repeat padding-box border-box,
@@ -141,8 +139,7 @@ body {
    so the anti-aliased rim where the two masks meet is mat, not a colour. */
 .mat,
 .mat__paper {
-  /* whole px, since browsers snap a border's width; the padding takes the
-     rest, so the content box lands exactly on the page */
+  /* whole px (browsers snap borders); the padding takes the rest */
   --b: round(down, var(--mat-w) - var(--p) / 2, 1px);
   --pad: calc(var(--mat-w) - var(--b));
 
