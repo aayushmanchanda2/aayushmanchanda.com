@@ -2862,5 +2862,113 @@
       ]
     },
     "collections": []
+  },
+  {
+    "slug": "arc-from-the-browser-company",
+    "title": "Arc from The Browser Company",
+    "url": "https://arc.net/",
+    "domain": "arc.net",
+    "saved_date": "2026-09-23",
+    "shot": "/shots/arc-from-the-browser-company.webp",
+    "palette": [
+      "#fbfbf7",
+      "#484ffb",
+      "#cfd0d0",
+      "#8b8efa",
+      "#aff391",
+      "#f06a65"
+    ],
+    "design": {
+      "read_date": "2026-09-23",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#fffcec"
+        },
+        {
+          "name": "surface",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "text",
+          "hex": "#000000"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#3139fb"
+        },
+        {
+          "name": "accent",
+          "hex": "#3139fb"
+        },
+        {
+          "name": "border",
+          "hex": "#3139fb"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Marlin Soft SQ",
+          "fontSize": "45.51px",
+          "fontWeight": "700",
+          "lineHeight": "42.25px",
+          "letterSpacing": "-1.82px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "Marlin Soft SQ",
+          "fontSize": "40px",
+          "fontWeight": "700",
+          "lineHeight": "39px",
+          "letterSpacing": "-1.6px"
+        },
+        {
+          "name": "label",
+          "fontFamily": "-apple-system",
+          "fontSize": "14px",
+          "fontWeight": "600",
+          "lineHeight": "29px",
+          "letterSpacing": "-0.14px"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        },
+        {
+          "name": "6",
+          "value": "24px"
+        },
+        {
+          "name": "8",
+          "value": "32px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "8px"
+        },
+        {
+          "name": "button",
+          "value": "10px"
+        },
+        {
+          "name": "card-2",
+          "value": "22px"
+        }
+      ]
+    },
+    "collections": []
   }
 ]
