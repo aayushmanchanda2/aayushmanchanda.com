@@ -194,6 +194,7 @@ test("every row that wraps tag chips is at least as tall as their targets", () =
   const ROWS = [
     ["components/TagChips.astro", /\.tags\s*\{[^}]*gap:\s*([\d.]+)rem/, null],
     ["components/TagFilters.astro", /\.filters__row\s*\{[^}]*gap:\s*([\d.]+)rem/, null],
+    ["components/LibraryTags.astro", /\.ltags__list\s*\{[^}]*gap:\s*([\d.]+)rem/, null],
     [
       "components/EntryDetail.astro",
       /\n  \.strip\s*\{[^}]*gap:\s*([\d.]+)rem/,

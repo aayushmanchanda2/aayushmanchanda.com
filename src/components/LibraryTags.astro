@@ -1,0 +1,155 @@
+---
+/**
+ * LibraryTags — the library's tag filter (VET-267): the tags you picked as
+ * removable chips plus Clear, then a collapsible "Tags" section of checkboxes,
+ * the busiest twelve first and "Show all (N)" for the rest. Picking two means
+ * entries tagged with both (AND). It replaced the pane's tag `select`.
+ *
+ * Native `<details>` both times, so the section and the tail open without
+ * scripting. `lib/library-pane.ts › FILTER` wires every copy on the page (the
+ * pane's, and /library's phone toolbar): it ticks the boxes from `?tags=`,
+ * rewrites each count to what the current filter shows, and draws the chips.
+ * Fewer than two tags is not a filter worth a section, so it renders nothing.
+ */
+import { libraryTags } from "../lib/library";
+import { tagLabel } from "../lib/tags";
+
+/** How many tags show before "Show all". */
+const TOP = 12;
+
+/** Busiest first, ties alphabetical: fixed per build, so every page reads the same. */
+const tags = [...libraryTags]
+  .sort((a, b) => b.entries.length - a.entries.length || a.slug.localeCompare(b.slug))
+  .map((group) => ({ slug: group.slug, label: tagLabel(group.slug), count: group.entries.length }));
+const [top, rest] = [tags.slice(0, TOP), tags.slice(TOP)];
+---
+
+{
+  tags.length >= 2 && (
+    <div class="ltags" data-tag-box>
+      <div class="ltags__chips" data-tag-chips hidden />
+      <details class="ltags__box">
+        <summary class="ltags__sum mono">
+          Tags <span class="tabular-nums">{tags.length}</span>
+        </summary>
+        <fieldset class="ltags__set">
+          <legend class="visually-hidden">Show entries with every tag you tick. Each count is how many listed entries carry that tag.</legend>
+          {[top, rest].map((list, index) => {
+            const boxes = (
+              <div class="ltags__list">
+                {list.map((tag) => (
+                  <label class="tag ltags__tag">
+                    <input type="checkbox" value={tag.slug} data-tag-set data-label={tag.label} />
+                    {tag.label}
+                    <span class="tag__count" data-tag-count>{tag.count}</span>
+                  </label>
+                ))}
+              </div>
+            );
+            if (index === 0) return boxes;
+            return (
+              list.length > 0 && (
+                <details class="ltags__more">
+                  <summary class="tag tag--more">
+                    <span class="ltags__closed">Show all ({tags.length})</span>
+                    <span class="ltags__open">Show fewer</span>
+                  </summary>
+                  {boxes}
+                </details>
+              )
+            );
+          })}
+        </fieldset>
+      </details>
+    </div>
+  )
+}
+
+<style is:global>
+  /* Global and namespaced, like the pane: no scoped-style attributes on 139
+     pages. */
+  .ltags {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  /* Tag chips wrap 0.75rem apart: a 28px chip's 40px target (design.md §4). */
+  .ltags__chips,
+  .ltags__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 0.5rem;
+  }
+
+  .ltags__chips[hidden] {
+    display: none;
+  }
+
+  .ltags__sum {
+    padding: 0.625rem 0;
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+
+  .ltags__sum .tabular-nums {
+    color: var(--text-tertiary);
+  }
+
+  .ltags__set {
+    margin: 0;
+    padding: 0.25rem 0 0.5rem;
+    border: 0;
+    min-inline-size: 0;
+  }
+
+  .ltags__more {
+    margin-top: 0.75rem;
+  }
+
+  .ltags__more > summary {
+    list-style: none;
+  }
+
+  .ltags__more > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .ltags__more > .ltags__list {
+    margin-top: 0.75rem;
+  }
+
+  .ltags__more[open] .ltags__closed,
+  .ltags__more:not([open]) .ltags__open {
+    display: none;
+  }
+
+  .ltags__tag {
+    cursor: pointer;
+  }
+
+  .ltags__tag input {
+    width: 0.875rem;
+    height: 0.875rem;
+    margin: 0;
+    accent-color: var(--accent);
+  }
+
+  /* The ring goes round the chip, not the 14px box inside it. */
+  .ltags__tag:has(:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    background: var(--hairline);
+  }
+
+  .ltags__tag input:focus-visible {
+    outline: none;
+  }
+
+  /* A ticked tag reads like the tag you are standing on (chip.css). */
+  .ltags__tag:has(:checked) {
+    border-color: var(--text-primary);
+    color: var(--accent);
+  }
+</style>

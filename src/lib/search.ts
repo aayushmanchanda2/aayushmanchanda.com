@@ -27,7 +27,22 @@ export interface RowIcon {
 }
 
 /** A row with no picture draws one of these (`styles/kind-icon.css`). */
-export type Glyph = "article" | "post" | "video" | "note" | "sound";
+export type Glyph =
+  | "article"
+  | "post"
+  | "video"
+  | "note"
+  | "sound"
+  | "book"
+  | "grid"
+  | "window"
+  | "flask"
+  | "theme"
+  | "link"
+  | "search";
+
+/** A command rather than a destination: the row runs it instead of navigating. */
+export type Action = "sound" | "theme" | "copy";
 
 /** One searchable destination: an entry, or a page. */
 export interface SearchEntry {
@@ -53,8 +68,14 @@ export interface SearchEntry {
   date?: string;
   icon?: RowIcon;
   glyph?: Glyph;
-  /** A command rather than a destination: the row runs it instead of navigating. */
-  action?: "sound";
+  action?: Action;
+  /**
+   * The empty palette's heading this row sits under ("Go to", "Browse").
+   * A grouped row shows only before anything is typed (`lib/palette-home.ts`).
+   */
+  group?: string;
+  /** A "Try searching" row: pressing it types this into the field. */
+  query?: string;
 }
 
 /** A ranked entry. `score` is only meaningful relative to its siblings. */
@@ -198,10 +219,10 @@ export function scoreEntry(entry: SearchEntry, tokens: readonly string[]): numbe
 /**
  * Rank, then cap.
  *
- * An empty query is not an empty result: opening the palette and seeing the
- * first twelve destinations tells a reader what is in here, which is most of
- * why they opened it. Order in that case is the order `entries` arrives in,
- * which `lib/search-index.ts` sets deliberately.
+ * An empty query is not an empty result: it is the grouped rows (Go to,
+ * Browse, Recent saves, Actions, Try searching), all of them, in the order
+ * `lib/palette-home.ts` wrote them. Grouped rows are never ranked against a
+ * query; the same destinations are in the index ungrouped.
  *
  * One flat list, best first, across sections. Each row names its section in
  * its subline, so a heading per section would say it twice and would reorder
@@ -214,15 +235,14 @@ export function search(
 ): SearchHit[] {
   const tokens = tokenize(query);
 
-  const ranked: SearchHit[] =
-    tokens.length === 0
-      ? entries.map((entry) => ({ entry, score: 0 }))
-      : entries
-          .map((entry) => ({ entry, score: scoreEntry(entry, tokens) }))
-          .filter((hit) => hit.score > NO_MATCH)
-          .sort(compareHits);
+  if (tokens.length === 0) return entries.filter((entry) => entry.group).map((entry) => ({ entry, score: 0 }));
 
-  return ranked.slice(0, limit);
+  return entries
+    .filter((entry) => !entry.group)
+    .map((entry) => ({ entry, score: scoreEntry(entry, tokens) }))
+    .filter((hit) => hit.score > NO_MATCH)
+    .sort(compareHits)
+    .slice(0, limit);
 }
 
 /**

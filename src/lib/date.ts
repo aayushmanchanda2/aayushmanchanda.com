@@ -16,6 +16,13 @@ export function formatDay(iso: string): string {
   return DAY.format(new Date(`${iso}T00:00:00Z`));
 }
 
+const MONTH = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric", timeZone: "UTC" });
+
+/** "2026-09-22" -> "September 2026": the /library pane's month headers. */
+export function formatMonth(iso: string): string {
+  return MONTH.format(new Date(`${iso.slice(0, 7)}-01T00:00:00Z`));
+}
+
 /** A `Date` as its ISO calendar day, "2026-09-22", in UTC. */
 export function isoDay(date: Date): string {
   return date.toISOString().slice(0, 10);

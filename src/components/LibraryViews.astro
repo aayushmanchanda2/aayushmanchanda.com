@@ -25,6 +25,7 @@ import Mark from "./Mark.astro";
 import EntryDetail from "./EntryDetail.astro";
 import KindIcon from "./KindIcon.astro";
 import LibraryFeed from "./LibraryFeed.astro";
+import LibraryTags from "./LibraryTags.astro";
 import LibraryToolbar from "./LibraryToolbar.astro";
 import PostWall from "./PostWall.astro";
 import VideoGrid from "./VideoGrid.astro";
@@ -57,7 +58,8 @@ const more = [
 <h1 class="page-title"><Mark shape="underline-double" variant={3}>Library</Mark></h1>
 
 <div class="views__bar">
-  <LibraryToolbar id="view-tag" />
+  <LibraryToolbar />
+  <LibraryTags />
 </div>
 
 {
@@ -145,6 +147,9 @@ const more = [
   /* The phone toolbar: the pane (and its toolbar) hides under 48rem of the
      split (`LibraryPane.astro`), so this one shows exactly there. */
   .views__bar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
     margin-top: 1.5rem;
   }
 

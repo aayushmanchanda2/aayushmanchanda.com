@@ -1,11 +1,11 @@
 # Library
 
-/library is a notes-style view (VET-258): a list pane on the left (kind segments, tag select, count, then every entry as a row) and a main area whose layout follows the kind. All is a front page (the newest article as a card, the four newest posts as compact cards, the two newest videos), Articles opens the newest article beside the pane (a list on a phone), Posts is the PostCard grid, Videos is a poster grid (`VideoGrid.astro`). Each route renders only its own view. Each entry has its own page with the same pane beside it.
+/library is a notes-style view (VET-258): a list pane on the left (kind segments and a count, sticky; then the tag filter; then every entry as a row under sticky month headers) and a main area whose layout follows the kind. All is a front page (the newest article as a card, the four newest posts as compact cards, the two newest videos), Articles opens the newest article beside the pane (a list on a phone), Posts is the PostCard grid, Videos is a poster grid (`VideoGrid.astro`). Each route renders only its own view. Each entry has its own page with the same pane beside it.
 
 ## Sub-features
 
-- `library-pane` `nav[data-pane]` rows `[data-rows] > li` (`data-kind`, `data-tags`), toolbar `.ltools` with `[data-kind-set]` segments (`""`, `article`, `post`, `video`), `select[data-tag-set]`, `[data-filter-count]`. On /library the pane carries `data-home="/library"` and `data-start`.
-- `library-views` `section.view[data-view=""|"article"|"post"|"video"]`, exactly one per route. All: `.lead` (the article card), `.mix__part` (posts, videos, each with an "All N" link). Items: `.feed li`, `.wall li`, `.vgrid li` (tagged ones carry `data-tags`). Phone toolbar `.views__bar` (select `#view-tag`).
+- `library-pane` `nav[data-pane]` rows `[data-rows] > li` (`data-kind`, `data-tags`), month headers `[data-rows] > li[data-month]` (count in `[data-month-count]`), toolbar `.ltools` with `[data-kind-set]` segments (`""`, `article`, `post`, `video`) and `[data-filter-count]`; tag filter `.ltags` (`LibraryTags.astro`): chips `[data-tag-chips]` (buttons `Remove tag …`, `Clear tags`), `details.ltags__box > summary.ltags__sum`, checkboxes `input[data-tag-set]` (value = slug) with `[data-tag-count]`, tail under `details.ltags__more`. URL `?kind=&tags=a,b`. On /library the pane carries `data-home="/library"` and `data-start`.
+- `library-views` `section.view[data-view=""|"article"|"post"|"video"]`, exactly one per route. All: `.lead` (the article card), `.mix__part` (posts, videos, each with an "All N" link). Items: `.feed li`, `.wall li`, `.vgrid li` (tagged ones carry `data-tags`). Phone toolbar `.views__bar` (a second `.ltools` and `.ltags`).
 - `library-filters` `/library/domain/<domain>`, `/library/tag/<slug>` (rows list, `LibraryList.astro`).
 - `library-detail` `/library/<slug>`: `h1.page-title--entry`, `.strip`, then post/video/digest/draft/why (`EntryDetail.astro`).
 

@@ -34,64 +34,77 @@ addEventListener("pagehide",s);p.addEventListener("click",s);
 })();`;
 
 /**
- * The pane's kind and tag filter, `?kind=post&tag=agents` in the URL. The URL
- * is the state.
+ * The pane's kind and tag filter, `?kind=post&tags=agents,design` in the URL.
+ * The URL is the state. Tags are AND: a row shows when it carries every one.
+ * The old single `?tag=` still reads.
  *
- * It reads, inside the pane: rows (`[data-rows] > li`, each with `data-kind`
- * and space-separated `data-tags`) and an empty state. Anywhere on the page:
- * the kind links (`KindSegments.astro`, `[data-kind-set]`, "" is All), the tag
- * `select[data-tag-set]` and the live counts; /library draws a second toolbar
- * for phones, where the pane is hidden. On an entry page a plain click on a
- * segment filters in place (a modifier click still opens the kind page). Every row link, and the
- * hint row's close, prev and next, carry the query, so the filter survives a
- * click to any entry; prev and next step to the nearest shown row, and the
- * roving tabindex's one stop lands on a shown row. An unknown value reads as
- * All.
+ * It reads, inside the pane: `[data-rows] > li`, either a row (`data-kind`,
+ * space-separated `data-tags`) or a month header (`data-month-count` inside),
+ * and an empty state. Anywhere on the page: the kind links (`KindSegments.astro`,
+ * `[data-kind-set]`, "" is All), the tag checkboxes (`LibraryTags.astro`,
+ * `input[data-tag-set]`, each with a `[data-tag-count]` beside it), the chip
+ * rows (`[data-tag-chips]`) and the live counts; /library draws a second
+ * toolbar for phones, where the pane is hidden. A month header counts the rows
+ * the filter shows under it and hides at zero; a tag's count is how many shown
+ * rows carry it. On an entry page a plain click on a segment filters in place
+ * (a modifier click still opens the kind page). Every row link, and the hint
+ * row's close, prev and next, carry the query, so the filter survives a click
+ * to any entry; prev and next step to the nearest shown row, and the roving
+ * tabindex's one stop lands on a shown row. An unknown value reads as All.
  *
  * On an entry page a change replaces the history entry, so Back still means
  * the previous entry. On /library and `/library/kind/<kind>` the pane carries
  * `data-home="/library"` and `data-start` (the kind the route shows). Each of
- * those routes renders only its own view (QA phase 2, B15: all four used to
- * ship on every one of them), so there a kind press is the segment's own link
- * to that route, with the tag carried in its query, and a `/library?kind=`
- * from before the split `location.replace`s to its route. A tag change
- * replaces the URL on the route's own path, and `[data-tags]` items inside
- * a kind's view follow it (All's latest few do not: a filter could empty it).
+ * those routes renders only its own view (QA phase 2, B15), so there a kind
+ * press is the segment's own link to that route, with the tags carried in its
+ * query, and a `/library?kind=` from before the split `location.replace`s to
+ * its route. A tag change replaces the URL on the route's own path, and
+ * `[data-tags]` items inside a kind's view follow it (All's latest few do not:
+ * a filter could empty it).
  */
 export const FILTER = `(function(){
 var root=document.querySelector("[${PANE_ATTRIBUTE}]");
 if(!root)return;
 function all(s,r){return [].slice.call((r||document).querySelectorAll(s));}
-var rows=all("[data-rows] > li",root),segs=all("[data-kind-set]"),selects=all("select[data-tag-set]"),counts=all("[data-filter-count]"),
-empty=root.querySelector("[data-filter-empty]"),home=root.dataset.home,start=root.dataset.start||"",
-kinds=segs.map(function(g){return g.dataset.kindSet;}),tags=selects.length?[].map.call(selects[0].options,function(o){return o.value;}):[];
-function read(){var q=new URLSearchParams(location.search),k=q.has("kind")?q.get("kind"):home?start:"",t=q.get("tag")||"";
-return {kind:kinds.indexOf(k)<0?"":k,tag:tags.indexOf(t)<0?"":t};}
-function query(f){var q=new URLSearchParams();if(f.kind)q.set("kind",f.kind);if(f.tag)q.set("tag",f.tag);q=q.toString();return q?"?"+q:"";}
+var items=all("[data-rows] > li",root),rows=items.filter(function(li){return li.dataset.kind;}),segs=all("[data-kind-set]"),boxes=all("input[data-tag-set]"),
+counts=all("[data-filter-count]"),chips=all("[data-tag-chips]"),empty=root.querySelector("[data-filter-empty]"),home=root.dataset.home,start=root.dataset.start||"",
+kinds=segs.map(function(g){return g.dataset.kindSet;}),labels=Object.create(null);
+boxes.forEach(function(b){labels[b.value]=b.dataset.label;});
+function read(){var q=new URLSearchParams(location.search),k=q.has("kind")?q.get("kind"):home?start:"",t=(q.get("tags")||q.get("tag")||"").split(",");
+return {kind:kinds.indexOf(k)<0?"":k,tags:t.filter(function(s,i){return labels[s]&&t.indexOf(s)===i;})};}
+function query(f){var q=[];if(f.kind)q.push("kind="+f.kind);if(f.tags.length)q.push("tags="+f.tags.join(","));return q.length?"?"+q.join("&"):"";}
 function route(k){return k?home+"/kind/"+k:home;}
-function has(el,t){return !t||(" "+el.dataset.tags+" ").indexOf(" "+t+" ")>=0;}
+function has(el,t){var s=" "+el.dataset.tags+" ";return t.every(function(x){return s.indexOf(" "+x+" ")>=0;});}
 function ring(s){var nav=document.querySelector("[data-entry-nav]");if(!nav)return;
 var close=nav.querySelector('[data-nav="close"]'),cur=root.querySelector('[data-rows] > li > [aria-current="page"]'),i=rows.indexOf(cur&&cur.parentNode),n=rows.length;
 if(close)close.search=s;if(i<0)return;
 [["prev",-1,"Previous"],["next",1,"Next"]].forEach(function(d){var l=nav.querySelector('[data-nav="'+d[0]+'"]');if(!l)return;
 for(var j=1;j<n;j++){var r=rows[((i+d[1]*j)%n+n)%n];if(!r.hidden){l.href=r.firstElementChild.href;l.setAttribute("aria-label",d[2]+" entry: "+r.querySelector("b").textContent);return;}}});}
-function apply(f){var s=query(f),n=0,stop=null;
-rows.forEach(function(li){var a=li.firstElementChild,ok=(!f.kind||li.dataset.kind===f.kind)&&has(li,f.tag);
-li.hidden=!ok;if(ok)n++;a.search=s;a.tabIndex=-1;if(ok&&(!stop||a.hasAttribute("aria-current")))stop=a;});
+function chip(box,cls,text,name,next){var b=document.createElement("button");b.type="button";b.className=cls;b.textContent=text;b.setAttribute("aria-label",name);
+b.addEventListener("click",function(){var f=read();f.tags=next(f.tags);set(f);var to=box.querySelector("button")||box.parentNode.querySelector("summary");if(to)to.focus();});box.append(b);}
+function apply(f){var s=query(f),n=0,stop=null,per=Object.create(null),heads=[],head=null;
+items.forEach(function(li){if(!li.dataset.kind){head={li:li,n:0};heads.push(head);return;}
+var a=li.firstElementChild,ok=(!f.kind||li.dataset.kind===f.kind)&&has(li,f.tags);
+li.hidden=!ok;a.search=s;a.tabIndex=-1;if(!ok)return;n++;if(head)head.n++;if(!stop||a.hasAttribute("aria-current"))stop=a;
+li.dataset.tags.split(" ").forEach(function(t){per[t]=(per[t]||0)+1;});});
 if(stop)stop.tabIndex=0;
+heads.forEach(function(h){h.li.hidden=!h.n;h.li.querySelector("[data-month-count]").textContent=h.n;});
 segs.forEach(function(g){if(g.dataset.kindSet===f.kind)g.setAttribute("aria-current","true");else g.removeAttribute("aria-current");});
-selects.forEach(function(e){e.value=f.tag;});
+boxes.forEach(function(b){b.checked=f.tags.indexOf(b.value)>=0;b.parentNode.querySelector("[data-tag-count]").textContent=per[b.value]||0;});
+chips.forEach(function(box){box.replaceChildren();box.hidden=!f.tags.length;if(!f.tags.length)return;
+f.tags.forEach(function(t){chip(box,"tag",labels[t]+" \\u00d7","Remove tag "+labels[t],function(ts){return ts.filter(function(x){return x!==t;});});});
+chip(box,"tag tag--more","Clear","Clear tags",function(){return [];});});
 counts.forEach(function(c){c.textContent=n+(n===1?" entry":" entries");});
 if(empty)empty.hidden=n>0;
-all('[data-view]:not([data-view=""]) [data-tags]').forEach(function(e){e.hidden=!has(e,f.tag);});
+all('[data-view]:not([data-view=""]) [data-tags]').forEach(function(e){e.hidden=!has(e,f.tags);});
 ring(s);}
-function set(f){history.replaceState(null,"",location.pathname+query(home?{kind:"",tag:f.tag}:f));apply(f);}
+function set(f){history.replaceState(null,"",location.pathname+query(home?{kind:"",tags:f.tags}:f));apply(f);}
 segs.forEach(function(g){g.addEventListener("click",function(e){if(e.button||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;var f=read(),k=g.dataset.kindSet;
-if(home){if(k===f.kind)e.preventDefault();else g.search=query({kind:"",tag:f.tag});return;}
+if(home){if(k===f.kind)e.preventDefault();else g.search=query({kind:"",tags:f.tags});return;}
 e.preventDefault();f.kind=k;set(f);});});
-selects.forEach(function(e){e.addEventListener("change",function(){var f=read();f.tag=e.value;set(f);});});
+boxes.forEach(function(b){b.addEventListener("change",function(){var f=read();f.tags=f.tags.filter(function(t){return t!==b.value;});if(b.checked)f.tags.push(b.value);set(f);});});
 var first=read();
-if(home&&first.kind!==start){location.replace(route(first.kind)+query({kind:"",tag:first.tag}));return;}
+if(home&&first.kind!==start){location.replace(route(first.kind)+query({kind:"",tags:first.tags}));return;}
 apply(first);
 document.addEventListener("DOMContentLoaded",function(){ring(query(read()));});
 })();`;

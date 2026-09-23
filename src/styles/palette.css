@@ -243,8 +243,18 @@
   color: inherit;
 }
 
-/* --text-secondary, not tertiary: this line is the panel's whole answer to a
-   failed search, and the reader is reading it (design.md §4, the ink floor). */
+/* The empty palette's group headings (VET-267); secondary ink, like the empty
+   line below, because tertiary misses AA on the glass. */
+.palette__group {
+  padding: 0.75rem 0.5rem 0.25rem;
+  color: var(--text-secondary);
+}
+
+.palette__groupbox:first-child .palette__group {
+  padding-top: 0.25rem;
+}
+
+/* --text-secondary, not tertiary: the panel's whole answer to a failed search. */
 .palette__empty {
   color: var(--text-secondary);
   padding: 2rem 1rem;
