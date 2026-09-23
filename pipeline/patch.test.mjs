@@ -221,6 +221,26 @@ test("the source fields are held to the caps the build holds them to", async (t)
   await assert.rejects(run({ title: null }), /cannot be cleared/);
 });
 
+test("a post quotes its own words and a video's moments are timed (VET-264)", async (t) => {
+  const post = { ...SEED[1], post: { text: "Termius on the phone. Tailscale to the box. tmux keeps it alive." } };
+  const video = { slug: "talk", title: "Talk", url: "https://www.youtube.com/playlist?list=PLx", domain: "youtube.com", saved_date: "2026-07-30", kind: "video" };
+  const { paths } = await makeRepo(t, { reading: [post, video] });
+  const run = (/** @type {any} */ patch) => patchLibrary({ patch, paths, log: () => {}, commit: false });
+
+  const done = await run({ slug: post.slug, keyline: "tmux keeps it alive.", highlights: [{ text: "Tailscale to the box." }] });
+  assert.deepEqual(done.changed, ["highlights", "keyline"]);
+  await assert.rejects(run({ slug: post.slug, keyline: "tmux keeps it running." }), /not word for word/);
+  await assert.rejects(run({ slug: post.slug, highlights: Array(4).fill({ text: "tmux" }) }), /at most 3/);
+  await assert.rejects(run({ slug: "how-gumclaw-works", keyline: "x" }), /no \/library entry|needs a post/);
+
+  const moments = [{ t: 95, text: "The point.", source_video_id: "xoE_pE26yDQ" }];
+  assert.deepEqual((await run({ slug: "talk", moments })).changed, ["moments"]);
+  await assert.rejects(run({ slug: "talk", moments: [{ t: 95, text: "No id." }] }), /source_video_id/);
+  await assert.rejects(run({ slug: "talk", moments: [{ t: 1.5, text: "x", source_video_id: "xoE_pE26yDQ" }] }), /whole seconds/);
+  await assert.rejects(run({ slug: "talk", moments: Array(5).fill(moments[0]) }), /1 to 4 moments/);
+  await assert.rejects(run({ slug: post.slug, moments }), /only go on a video/);
+});
+
 /* ---------------------------------------------------------------------------
    Writing
    --------------------------------------------------------------------------- */

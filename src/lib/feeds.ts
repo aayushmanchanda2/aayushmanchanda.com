@@ -11,6 +11,7 @@ import { getCollection } from "astro:content";
 import { isoDay } from "./date";
 import { library, rowSummary } from "./library";
 import { VOICE_FIELDS, type Voice } from "./markdown";
+import { clock, watchAt } from "./reader.mjs";
 import { newestFirst, paragraphs, renderFeed, escapeXml, type FeedItem } from "./rss";
 import { CATALOGUE, FEED_SECTIONS, feedTitle, type FeedSection } from "./sections";
 import { SITE_URL } from "./site";
@@ -50,9 +51,14 @@ function libraryItems(): FeedItem[] {
     const text = entry.digest
       ? paragraphs(entry.tldr, entry.digest.verdict, entry.digest.why)
       : paragraphs(entry.why, rowSummary(entry) ?? (entry.post?.article ? null : entry.post?.text));
-    // Quoted passages only, never the piece (VET-246).
-    const quotes = entry.highlights
-      .map((highlight) => `<blockquote><p>${escapeXml(highlight.text)}</p></blockquote>`)
+    // Quoted passages only, never the piece (VET-246), and a video's moments at their time (VET-264).
+    const quotes = [
+      ...entry.highlights.map((highlight) => escapeXml(highlight.text)),
+      ...entry.moments.map(
+        (moment) => `<a href="${escapeXml(watchAt(moment.video, moment.t))}">${clock(moment.t)}</a> ${escapeXml(moment.text)}`,
+      ),
+    ]
+      .map((quote) => `<blockquote><p>${quote}</p></blockquote>`)
       .join("");
     return {
       title: entry.title,

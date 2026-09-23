@@ -1,0 +1,129 @@
+---
+/**
+ * Moments — a video's key points with the time each one starts (VET-264).
+ *
+ * Every timestamp is a real link to the moment on YouTube, so with no script,
+ * or with a modifier held, it opens there. With script, a video that has a
+ * facade on the page plays in place from that second: an idle facade is
+ * pressed with a start time, a running player is re-pointed at it. Both go
+ * through `VideoFacade.astro`, so the page still asks YouTube for nothing
+ * until a reader presses something. A playlist has no facade and keeps the
+ * plain link, timed against the playlist's first video.
+ */
+import type { Moment } from "../lib/library";
+import { clock, watchAt } from "../lib/reader.mjs";
+
+interface Props {
+  moments: Moment[];
+}
+
+const { moments } = Astro.props;
+---
+
+{
+  moments.length > 0 && (
+    <section class="block" aria-labelledby="moments">
+      <h2 class="accent-bar" id="moments">Moments</h2>
+      <ol class="moments">
+        {moments.map((moment) => (
+          <li class="moment">
+            <a
+              class="moment__t mono press"
+              href={watchAt(moment.video, moment.t)}
+              rel="noopener nofollow"
+              target="_blank"
+              data-seek={moment.t}
+              data-seek-video={moment.video}
+            >
+              <time datetime={`PT${moment.t}S`}>{clock(moment.t)}</time>
+            </a>
+            <p>{moment.text}</p>
+          </li>
+        ))}
+      </ol>
+    </section>
+  )
+}
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>("a[data-seek]").forEach((link) => {
+    link.addEventListener("click", (event) => {
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const { seek, seekVideo } = link.dataset;
+      if (!seek || !seekVideo) return;
+      const player = document.querySelector<HTMLIFrameElement>(`iframe[data-video="${seekVideo}"]`);
+      const facade = document.querySelector<HTMLAnchorElement>(`a[data-video="${seekVideo}"]`);
+      if (player) {
+        const src = new URL(player.src);
+        src.searchParams.set("start", seek);
+        src.searchParams.set("autoplay", "1");
+        player.src = src.href;
+        player.scrollIntoView({ block: "nearest" });
+      } else if (facade) {
+        facade.dataset.start = seek;
+        facade.click();
+      } else {
+        return;
+      }
+      event.preventDefault();
+    });
+  });
+</script>
+
+<style>
+  .block {
+    max-width: 40rem;
+    margin-top: 2.5rem;
+  }
+
+  .moments {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  /* The time is the control; the point reads beside it at body size. */
+  .moment {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 0.75rem;
+    align-items: baseline;
+  }
+
+  .moment p {
+    color: var(--text-primary);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
+  /* A chip: small, filled, interactive, so it takes the site's one radius. The
+     ::after reaches the 40px floor (design.md §4) without growing the box. */
+  .moment__t {
+    position: relative;
+    display: inline-flex;
+    min-width: 3.5rem;
+    justify-content: center;
+    padding: 0.125rem 0.5rem;
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--r-sm);
+    color: var(--accent);
+    font-size: 0.875rem;
+    font-variant-numeric: tabular-nums;
+    text-decoration: none;
+    transition-property: border-color, color;
+    transition-duration: var(--dur);
+    transition-timing-function: var(--ease);
+  }
+
+  .moment__t::after {
+    content: "";
+    position: absolute;
+    inset: -0.5rem 0;
+  }
+
+  @media (hover: hover) {
+    .moment__t:hover {
+      border-color: var(--accent);
+    }
+  }
+</style>

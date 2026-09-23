@@ -34,7 +34,7 @@ const cards = entries.filter(
     {
       cards.map((entry) => (
         <li data-tags={entry.tags.join(" ")}>
-          <PostCard post={entry.post} url={entry.url} mode="grid" href={entryHref(entry)} />
+          <PostCard post={entry.post} url={entry.url} mode="grid" href={entryHref(entry)} keyline={entry.keyline} />
         </li>
       ))
     }

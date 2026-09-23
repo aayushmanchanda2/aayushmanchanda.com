@@ -13,12 +13,15 @@
  *
  * An X Article renders its header only (cover, title, "Read on X"). Its body
  * is not republished; the default slot is where F3's highlights go.
+ *
+ * The words themselves are `PostText.astro`: lists, links and the keyline.
  */
 import type { Post } from "../lib/library";
 import { formatDay } from "../lib/date";
 import { hueSlot } from "../lib/tags";
-import { POST_CARD_MAX, clipText, isClipped, monogram, originalUrl, postParagraphs, runs } from "../lib/post";
+import { POST_CARD_MAX, clipText, isClipped, monogram, originalUrl } from "../lib/post";
 import PostMedia from "./PostMedia.astro";
+import PostText from "./PostText.astro";
 import XGlyph from "./XGlyph.astro";
 
 interface Props {
@@ -28,14 +31,15 @@ interface Props {
   mode: "grid" | "page" | "quoted";
   /** The entry's own page. Grid only. */
   href?: string;
+  /** The line to mark in the text, word for word (VET-264). */
+  keyline?: string | null;
 }
 
-const { post, url, mode, href } = Astro.props;
+const { post, url, mode, href, keyline = null } = Astro.props;
 const grid = mode === "grid";
 const original = originalUrl(post, url);
 const clipped = grid && isClipped(post.text, POST_CARD_MAX);
 const text = grid ? clipText(post.text, POST_CARD_MAX) : post.text;
-const paragraphs = post.article ? [] : postParagraphs(text);
 const Root = mode === "quoted" ? "div" : "article";
 const initial = monogram(post.author);
 ---
@@ -73,23 +77,7 @@ const initial = monogram(post.author);
     )
   }
 
-  {
-    paragraphs.length > 0 && (
-      <div class="pc__text">
-        {paragraphs.map((paragraph) => (
-          <p>
-            {runs(paragraph, post.links).map((run) =>
-              run.href === null ? (
-                run.text
-              ) : (
-                <a href={run.href} rel="noopener nofollow" target="_blank">{run.text}</a>
-              ),
-            )}
-          </p>
-        ))}
-      </div>
-    )
-  }
+  {!post.article && <PostText text={text} links={post.links} keyline={keyline} mode={mode} />}
 
   {post.media.length > 0 && <PostMedia media={post.media} author={post.author} original={original} />}
 
@@ -196,47 +184,15 @@ const initial = monogram(post.author);
     color: var(--text-primary);
   }
 
-  .pc__text {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75em;
-    font-size: 0.9375rem;
-    line-height: 1.5;
-    overflow-wrap: anywhere;
-  }
-
-  .pc__text p {
-    white-space: pre-line;
-  }
-
-  .pc--page .pc__text {
-    font-size: 1.0625rem;
-    line-height: 1.6;
-  }
-
-  .pc--grid .pc__text {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 7;
-    line-clamp: 7;
-    overflow: hidden;
-  }
-
-  .pc--grid .pc__text p + p {
-    margin-top: 0.75em;
-  }
-
-  .pc__text a,
   .pc__out,
   .pc__more {
     color: var(--accent);
     text-decoration: none;
-    transition-property: color, opacity;
+    transition-property: opacity;
     transition-duration: var(--dur);
     transition-timing-function: var(--ease);
   }
 
-  .pc__text a:hover,
   .pc__out:hover,
   .pc__more:hover {
     opacity: 0.75;

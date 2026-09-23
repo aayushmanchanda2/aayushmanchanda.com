@@ -3,7 +3,7 @@
  * EntryDetail — a library entry's detail: the header (title, the domain as
  * the one way out, the strip of facts whose values are filter links, the TLDR
  * as the lead), then the optional blocks in reading order: the thing itself
- * (post or video), the piece's own words (highlights, excerpt), his note, the
+ * (post or video) and a video's moments, the piece's own words (highlights, excerpt), his note, the
  * digest, the draft, his own `why`, and on an article the way out (VET-246).
  *
  * Lifted out of `pages/library/[slug].astro` (VET-258) so /library's Articles
@@ -16,6 +16,7 @@ import DigestBlocks from "./DigestBlocks.astro";
 import DraftBlock from "./DraftBlock.astro";
 import EntryLink from "./EntryLink.astro";
 import KindChip from "./KindChip.astro";
+import Moments from "./Moments.astro";
 import TagChips from "./TagChips.astro";
 import PostCard from "./PostCard.astro";
 import ReaderBlocks from "./ReaderBlocks.astro";
@@ -103,11 +104,12 @@ const Title = level;
 {
   entry.post && (
     <div class="thing">
-      <PostCard post={entry.post} url={entry.url} mode="page" />
+      <PostCard post={entry.post} url={entry.url} mode="page" keyline={entry.keyline} />
     </div>
   )
 }
 {entry.video && <VideoFacade entry={{ ...entry, video: entry.video }} />}
+<Moments moments={entry.moments} />
 
 <ReaderBlocks highlights={entry.highlights} excerpt={entry.excerpt} url={entry.url} domain={entry.domain} />
 

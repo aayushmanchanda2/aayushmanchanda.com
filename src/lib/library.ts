@@ -62,7 +62,7 @@
 import type { Fail } from "./parse.ts";
 import { SLUG, readers, routeSlug } from "./parse.ts";
 import type { Color } from "./reader.mjs";
-import { CAPS, highlights, prose } from "./reader.mjs";
+import { CAPS, highlights, keyline, moments, postHighlights, prose } from "./reader.mjs";
 
 import rawLibrary from "../data/library.json" with { type: "json" };
 
@@ -286,6 +286,17 @@ export interface LibraryEntry {
   highlights: Highlight[];
   /** The source's own opening, quoted, at most 80 words. Or null. */
   excerpt: string | null;
+  /** The one line a post marks inline, word for word from its text (VET-264). Or null. */
+  keyline: string | null;
+  /** A video's key moments, each tied to the YouTube id its time belongs to. Empty when none. */
+  moments: Moment[];
+}
+
+/** A point in a video, at `t` whole seconds into `video` (a YouTube id). */
+export interface Moment {
+  t: number;
+  text: string;
+  video: string;
 }
 
 /** A quoted passage, in the highlighter colour it was marked with (amber unless said). */
@@ -750,6 +761,12 @@ export function parseLibrary(value: unknown): LibraryEntry[] {
     }
 
     const url = readUrl(item, where);
+    const post = readPost(item, kind, where);
+    const video = readVideo(item, kind, where);
+    // A plain post quotes itself under the post caps; an X Article's body is not shown, so it keeps the article's.
+    const plain = post !== null && post.article === null;
+    const quote = (value: unknown) => (plain ? postHighlights(value, post.text) : highlights(value));
+    if (item["keyline"] != null && !plain) fail(where, `has a "keyline" but no post text to mark it in`);
 
     return {
       slug,
@@ -763,17 +780,23 @@ export function parseLibrary(value: unknown): LibraryEntry[] {
       note: readNote(item, where),
       digest: readDigest(item, where),
       tags: readTags(item, where),
-      post: readPost(item, kind, where),
-      video: readVideo(item, kind, where),
+      post,
+      video,
       draft: readDraft(item, where),
       why: readOptional(item, "why", where),
       tldr: readCapped(item, "tldr", where, (value) => prose(value, "tldr", CAPS.tldr)),
-      highlights: (readCapped(item, "highlights", where, highlights) ?? []).map((h) => ({
+      highlights: (readCapped(item, "highlights", where, quote) ?? []).map((h) => ({
         text: h.text,
         note: h.note ?? null,
         color: h.color ?? "amber",
       })),
       excerpt: readCapped(item, "excerpt", where, (value) => prose(value, "excerpt", CAPS.excerpt)),
+      keyline: readCapped(item, "keyline", where, (value) => keyline(value, post?.text ?? "")),
+      moments: (readCapped(item, "moments", where, moments) ?? []).map((m) => {
+        const id = m.source_video_id ?? video?.id;
+        if (id === undefined) fail(where, `has "moments" but no video, and no "source_video_id" to time them against`);
+        return { t: m.t, text: m.text, video: id };
+      }),
     };
   });
 

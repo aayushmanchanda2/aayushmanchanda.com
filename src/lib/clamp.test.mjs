@@ -68,17 +68,18 @@ const LISTINGS = [
 ];
 
 /**
- * The post grid card: seven lines, and only in its `grid` mode. Its "Read more"
- * and its date go to the entry page, where `page` mode renders all of it.
+ * The post grid card's text (`PostText.astro`, since VET-264): seven lines, and
+ * only in its `grid` mode. The card's "Read more" and its date go to the entry
+ * page, where `page` mode renders all of it.
  */
-const POST_CARD = "components/PostCard.astro";
+const POST_TEXT = "components/PostText.astro";
 
 test("every listing note stops at two lines, and nothing else in the build clamps", () => {
   const clamped = walk("").filter((file) => /-webkit-line-clamp/.test(code(read(file))));
 
   assert.deepEqual(
     clamped.sort(),
-    [...LISTINGS, POST_CARD].sort(),
+    [...LISTINGS, POST_TEXT].sort(),
     "the set of files clamping a line count changed. A clamp belongs on a listing row whose title goes to a page carrying the whole thing, and nowhere else — a page that is itself the overflow must render all of it (lib/post.ts says why at length).",
   );
 });
@@ -121,8 +122,8 @@ test("the pages the overflow lives on render all of it", () => {
 });
 
 test("the post card clamps its grid text and nothing else", () => {
-  const css = code(read(POST_CARD));
+  const css = code(read(POST_TEXT));
   const clamps = [...css.matchAll(/([^{}]+)\{[^}]*-webkit-line-clamp/g)].map((m) => m[1].trim());
-  assert.deepEqual(clamps, [".pc--grid .pc__text"], "PostCard clamps something other than its grid text");
-  assert.match(css, /\.pc--grid \.pc__text \{[^}]*(^|\n)\s*line-clamp:\s*7;/, "the unprefixed clamp is missing");
+  assert.deepEqual(clamps, [":global(.pc--grid) .pt"], "PostText clamps something other than its grid text");
+  assert.match(css, /:global\(\.pc--grid\) \.pt \{[^}]*(^|\n)\s*line-clamp:\s*7;/, "the unprefixed clamp is missing");
 });

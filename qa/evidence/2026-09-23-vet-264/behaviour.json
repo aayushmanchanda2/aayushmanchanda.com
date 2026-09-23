@@ -1,0 +1,171 @@
+{
+  "keyline": {
+    "text": "Swap arXiv -> quickarXiv on any paper URL to get an instant blog",
+    "on": true,
+    "size": "100% 100%",
+    "transition": "background-size",
+    "atDomReady": {
+      "on": false,
+      "size": "0% 100%"
+    },
+    "stillOnAfterScroll": true
+  },
+  "keylineReduced": {
+    "on": false,
+    "size": "100% 100%",
+    "transition": "1e-05s"
+  },
+  "grid": [
+    {
+      "text": "gives a FULL masterclass on using Jev.",
+      "static": true,
+      "size": "100% 100%"
+    },
+    {
+      "text": "here's how i shipped 2,500 PRs last mont",
+      "static": true,
+      "size": "100% 100%"
+    },
+    {
+      "text": "yesterday my \"boring\" business did $4,00",
+      "static": true,
+      "size": "100% 100%"
+    },
+    {
+      "text": "My LLM cliché highlighter is up to 38 pa",
+      "static": true,
+      "size": "100% 100%"
+    },
+    {
+      "text": "grok bot picks up the posts and pushes t",
+      "static": true,
+      "size": "100% 100%"
+    },
+    {
+      "text": "We just launched Templates in Grok Bot",
+      "static": true,
+      "size": "100% 100%"
+    },
+    {
+      "text": "his best ",
+      "static": true,
+      "size": "100% 100%"
+    },
+    {
+      "text": "@bot",
+      "static": true,
+      "size": "100% 100%"
+    },
+    {
+      "text": " workflows from Easy Mode to God Mode",
+      "static": true,
+      "size": "100% 100%"
+    },
+    {
+      "text": "Grok Bot internal best practices from 6 ",
+      "static": true,
+      "size": "100% 100%"
+    },
+    {
+      "text": "turning your coding agent from a screwdr",
+      "static": true,
+      "size": "100% 100%"
+    },
+    {
+      "text": "app pricing that makes $150 per day",
+      "static": true,
+      "size": "100% 100%"
+    },
+    {
+      "text": "the most profitable landing pages for go",
+      "static": true,
+      "size": "100% 100%"
+    },
+    {
+      "text": "mine all my conversations on disk and te",
+      "static": true,
+      "size": "100% 100%"
+    },
+    {
+      "text": "now your agents can read scanned docs fo",
+      "static": true,
+      "size": "100% 100%"
+    },
+    {
+      "text": "The reason is uncomfortable. Game Theory",
+      "static": true,
+      "size": "100% 100%"
+    },
+    {
+      "text": "Swap arXiv -> quickarXiv on any paper UR",
+      "static": true,
+      "size": "100% 100%"
+    },
+    {
+      "text": "one of the best video to start with when",
+      "static": true,
+      "size": "100% 100%"
+    },
+    {
+      "text": "It’s comfort.",
+      "static": true,
+      "size": "100% 100%"
+    }
+  ],
+  "gridReadMore": 62,
+  "momentsHostsBeforeClick": [],
+  "momentChips": [
+    "20:09",
+    "25:20",
+    "33:26",
+    "38:31"
+  ],
+  "afterFirst": "https://www.youtube-nocookie.com/embed/mR-WAvEPRwE?autoplay=1&start=1209",
+  "afterSecond": "https://www.youtube-nocookie.com/embed/mR-WAvEPRwE?autoplay=1&start=1520",
+  "iframes": 1,
+  "playlistHref": "https://www.youtube.com/watch?v=BeWUUclCin0&t=30s",
+  "playlistFacades": 0,
+  "playlistPopup": "https://www.youtube.com/watch?v=BeWUUclCin0&t=30s",
+  "lists": {
+    "matt-van-horn-agent-first-workflow": {
+      "p": 4,
+      "ol": 1,
+      "ul": 0,
+      "li": 7,
+      "fontSize": "17px",
+      "lineHeight": "27.2px",
+      "width": 544,
+      "highlights": 3
+    },
+    "how-my-parents-raised-me-to-be-confident": {
+      "p": 1,
+      "ol": 0,
+      "ul": 1,
+      "li": 15,
+      "fontSize": "17px",
+      "lineHeight": "27.2px",
+      "width": 544,
+      "highlights": 2
+    },
+    "how-pocket-fm-grew-from-zero-to-500m-arr": {
+      "p": 2,
+      "ol": 3,
+      "ul": 2,
+      "li": 15,
+      "fontSize": "17px",
+      "lineHeight": "27.2px",
+      "width": 544,
+      "highlights": 3
+    },
+    "cua-computer-history-open-source-local-memory-for-agents": {
+      "p": 1,
+      "ol": 2,
+      "ul": 0,
+      "li": 9,
+      "fontSize": "17px",
+      "lineHeight": "27.2px",
+      "width": 544,
+      "highlights": 3
+    }
+  }
+}

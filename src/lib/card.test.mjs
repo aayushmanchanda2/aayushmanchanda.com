@@ -24,7 +24,7 @@ import { fileURLToPath } from "node:url";
 import { clip } from "../../pipeline/entries.mjs";
 import { entryHref, library } from "./library.ts";
 import { libraryRowUrl } from "./schema.ts";
-import { POST_CARD_MAX, clipText, isClipped, monogram } from "./post.ts";
+import { POST_CARD_MAX, clipText, isClipped, monogram, parts, postBlocks, runs } from "./post.ts";
 
 const SRC = fileURLToPath(new URL("..", import.meta.url));
 
@@ -295,3 +295,20 @@ test("the row keeps exactly one door off the site", () => {
   assert.match(row, /target="_blank"/);
 });
 
+
+test("a long post's steps and bullets become real lists (VET-264)", () => {
+  assert.deepEqual(postBlocks("Lessons:\n\n1) Read.\nThen reread.\n\n2) Write."), [
+    { kind: "p", text: "Lessons:" },
+    { kind: "ol", items: ["Read.\nThen reread.", "Write."], start: 1 },
+  ]);
+  assert.deepEqual(postBlocks("Why: - They never compared me. - They always believed in me. - They made time. " + "x".repeat(160)).map((b) => b.kind), ["p", "ul"]);
+  assert.deepEqual(postBlocks("0:00 - Intro\n1:20 - Demo"), [{ kind: "p", text: "0:00 - Intro\n1:20 - Demo" }], "a chapter list stays put");
+  assert.deepEqual(postBlocks("1. a\n2. b\n1. c").map((b) => b.kind === "p" ? b.text : b.start), [1, 1], "a restart is a new list");
+});
+
+test("a keyline is marked word for word, and #tags link like @mentions", () => {
+  const got = parts("Ship it. #buildinpublic with @you", [], "#buildinpublic with");
+  assert.deepEqual(got.filter((part) => part.mark).map((part) => part.text), ["#buildinpublic", " with"]);
+  assert.equal(runs("#tag", [])[0]?.href, "https://x.com/hashtag/tag");
+  assert.ok(parts("no match", [], "absent").every((part) => !part.mark));
+});

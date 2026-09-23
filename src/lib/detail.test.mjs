@@ -193,7 +193,7 @@ test("the page holds the whole post, drawn from the repo, at a reading measure",
 
   assert.match(
     route,
-    /\{\s*entry\.post && \(\s*<div class="thing">\s*<PostCard post=\{entry\.post\} url=\{entry\.url\} mode="page" \/>/,
+    /\{\s*entry\.post && \(\s*<div class="thing">\s*<PostCard post=\{entry\.post\} url=\{entry\.url\} mode="page" keyline=\{entry\.keyline\} \/>/,
     "the post's page no longer draws the post in page mode, gated on the entry having one",
   );
   assert.match(route, /\.thing \{[^}]*max-width: 40rem;/, "the post lost its reading measure");
@@ -261,5 +261,7 @@ test("an article reads TLDR, highlights, excerpt, note, digest, then the way out
 
   const reader = read("components/ReaderBlocks.astro");
   assert.match(reader, /prefers-reduced-motion: reduce/, "the sweep must not run under reduced motion");
-  assert.match(reader, /@media screen and \(prefers-reduced-motion: no-preference\)/, "print and reduced motion keep the mark whole");
+  const marks = read("styles/prose.css");
+  assert.match(marks, /@media screen and \(prefers-reduced-motion: no-preference\)/, "print and reduced motion keep the mark whole");
+  assert.match(marks, /\.hl:not\(\.hl--on, \[data-static\]\)/, "a grid's static mark must never be armed");
 });

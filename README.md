@@ -83,6 +83,10 @@ rescrape-posts.yml` re-reads the ones saved before that (`pipeline/rescrape-post
 caps the build holds (`src/lib/reader.mjs`): a TLDR of 25 words or fewer that
 summarises the source, up to five verbatim quotes of 60 words or fewer each, an
 excerpt of 80 words or fewer, no em dashes. Never the full text of someone else's piece.
+A plain post's highlights are its own words: up to three of 25 words or fewer, each
+word for word from the post, plus an optional `keyline` (15 words or fewer) marked inline.
+A video takes `moments`: up to four `{t, text}` of 30 words or fewer, `t` in whole seconds,
+with `source_video_id` on each when the entry is a playlist.
 
 ```
 gh workflow run publish.yml                             # run it now

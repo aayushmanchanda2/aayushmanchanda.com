@@ -154,6 +154,10 @@ export interface Patch {
   /** The caps are `src/lib/reader.mjs`'s, the same ones the build holds. */
   tldr?: string | null;
   highlights?: { text: string; note?: string; color?: "amber" | "blue" | "pink" | "green" }[] | null;
+  /** A short post's key line, word for word from its text. */
+  keyline?: string | null;
+  /** A video's moments; `source_video_id` when the entry is a playlist. */
+  moments?: { t: number; text: string; source_video_id?: string }[] | null;
   excerpt?: string | null;
   tags?: string[] | null;
   note?: string | null;
