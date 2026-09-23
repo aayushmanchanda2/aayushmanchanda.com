@@ -26,6 +26,7 @@ import {
   section,
   table,
   newest,
+  quote,
 } from "../lib/markdown";
 import type { Kind } from "../lib/library";
 import {
@@ -120,8 +121,8 @@ export const GET: APIRoute = () => {
           [
             `### ${entry.title}`,
             ...(entry.tldr ? [`TLDR: ${entry.tldr}`] : []),
-            ...entry.highlights.map((highlight) => `> ${highlight.text}`),
-            ...entry.moments.map((moment) => `> ${link(clock(moment.t), watchAt(moment.video, moment.t))} ${moment.text}`),
+            ...entry.highlights.map((highlight) => quote(highlight.text)),
+            ...entry.moments.map((moment) => quote(`${link(clock(moment.t), watchAt(moment.video, moment.t))} ${moment.text}`)),
             `Page: ${absolute(`/library/${entry.slug}`)}`,
           ].join("\n\n"),
         ),

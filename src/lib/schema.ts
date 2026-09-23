@@ -69,6 +69,7 @@ import type { Tool } from "./tools";
  * above stay bare because they are erased before either tool sees them.
  */
 import { normalize } from "./links.ts";
+import { NEW_CATEGORY } from "./tool-copy.ts";
 import { absolute } from "./site.ts";
 
 /** One node in the graph. */
@@ -445,7 +446,7 @@ export function reviewBody(tool: Tool): string {
  * One tool: the software, and his review of it.
  *
  * `applicationCategory` is his own category string, verbatim — the same words
- * the page prints as a link. schema.org suggests a controlled vocabulary
+ * the page prints as a link — and absent while the tool is still in the inbox. schema.org suggests a controlled vocabulary
  * (`DeveloperApplication` and friends) and the property accepts free text; a
  * bench of agent tooling does not fit that vocabulary, and picking the nearest
  * official-sounding term would be a tidier claim than the true one.
@@ -467,7 +468,7 @@ export function toolJsonLd(tool: Tool): JsonLd {
       "@id": softwareId,
       name: tool.name,
       url: tool.url ?? tool.repo,
-      applicationCategory: tool.category,
+      applicationCategory: tool.category === NEW_CATEGORY ? null : tool.category,
       description: tool.description ?? null,
       sameAs: tool.url !== null && tool.repo !== null ? [tool.repo] : null,
     },

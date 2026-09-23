@@ -19,7 +19,11 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 
-import { DIGEST_LABELS, digestSection } from "./markdown.ts";
+import { DIGEST_LABELS, digestSection, quote } from "./markdown.ts";
+
+test("a quoted passage keeps every line, blank ones included, inside the blockquote", () => {
+  assert.equal(quote("One.\nTwo.\n\nThree."), "> One.\n> Two.\n>\n> Three.");
+});
 
 const COMPONENT = readFileSync(
   fileURLToPath(new URL("../components/DigestBlocks.astro", import.meta.url)),
