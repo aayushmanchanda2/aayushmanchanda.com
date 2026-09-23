@@ -21,10 +21,11 @@
  */
 import Mark from "./Mark.astro";
 import EntryDetail from "./EntryDetail.astro";
+import KindIcon from "./KindIcon.astro";
 import LibraryFeed from "./LibraryFeed.astro";
 import LibraryToolbar from "./LibraryToolbar.astro";
 import PostWall from "./PostWall.astro";
-import type { Kind, LibraryEntry, Video } from "../lib/library";
+import type { Kind } from "../lib/library";
 import { KIND_BLURBS, entryHref, library } from "../lib/library";
 import { FILTER, PREPAINT } from "../lib/library-pane";
 import { formatDay } from "../lib/date";
@@ -42,10 +43,8 @@ const LATEST = 12;
 const of = (kind: Kind) => library.filter((entry) => entry.kind === kind);
 const articles = of("article");
 const [reading] = articles;
-/** A video with no poster (`video: null`) has nothing to show; it keeps its pane row. */
-const videos = of("video").filter(
-  (entry): entry is LibraryEntry & { video: Video } => entry.video !== null,
-);
+/** Every video. One with no poster (`video: null`, a playlist) gets a placeholder tile. */
+const videos = of("video");
 ---
 
 <h1 class="page-title"><Mark shape="underline-double" variant={3}>Library</Mark></h1>
@@ -94,7 +93,11 @@ const videos = of("video").filter(
       videos.map((entry) => (
         <li data-tags={entry.tags.join(" ")}>
           <a class="vtile" href={entryHref(entry)} data-astro-prefetch="hover">
-            <img class="vtile__thumb outlined" src={entry.video.thumb} alt="" loading="lazy" decoding="async" />
+            {entry.video ? (
+              <img class="vtile__thumb outlined" src={entry.video.thumb} alt="" loading="lazy" decoding="async" />
+            ) : (
+              <span class="vtile__thumb vtile__ph outlined" aria-hidden="true"><KindIcon kind="video" /></span>
+            )}
             <b>{entry.title}</b>
             <small>
               <span>{entry.domain}</span>
@@ -181,6 +184,19 @@ const videos = of("video").filter(
     aspect-ratio: 16 / 9;
     object-fit: cover;
     margin-bottom: 0.5rem;
+  }
+
+  /* A playlist has no single poster (`pipeline/thumb.mjs` reads one video id):
+     the tile keeps its 16:9 as a quiet surface with the play glyph. */
+  .vtile__ph {
+    display: grid;
+    place-items: center;
+    background: var(--surface-3);
+  }
+
+  .vtile__ph .ki {
+    width: 28px;
+    height: 28px;
   }
 
   .vtile b {

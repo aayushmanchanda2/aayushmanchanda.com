@@ -53,7 +53,10 @@ addEventListener("pagehide",s);p.addEventListener("click",s);
  * `data-home="/library"` and `data-start` (the kind the route pre-selects):
  * there the kind picks which `[data-view]` shows, a kind change pushes
  * `/library?kind=…` so Back and Forward replay it, and `[data-tags]` items
- * inside the views follow the tag too. It runs after the views there
+ * inside the views follow the tag too, and the top bar's trail follows the
+ * kind: Library as the current step for All, else Library as a link and the
+ * kind (its segment's label) after it. The new steps are clones of the
+ * trail's own, so they keep `Breadcrumbs.astro`'s scoped styles. It runs after the views there
  * (`LibraryViews.astro`), so a `?kind=` load paints the right view first.
  */
 export const FILTER = `(function(){
@@ -82,7 +85,12 @@ counts.forEach(function(c){c.textContent=n+(n===1?" entry":" entries");});
 if(empty)empty.hidden=n>0;
 all("[data-view]").forEach(function(v){v.hidden=v.dataset.view!==f.kind;});
 all("[data-view] [data-tags]").forEach(function(e){e.hidden=!has(e,f.tag);});
-ring(s);}
+ring(s);crumbs(f.kind);}
+var ol=document.querySelector(".crumbs__list"),steps=ol&&ol.children?[].slice.call(ol.children):[],top=steps[0],here=steps[steps.length-1],libName=steps[1]&&steps[1].textContent.trim();
+function label(k){var g=segs.filter(function(s){return s.dataset.kindSet===k;})[0];return g?g.firstChild.textContent.trim():k;}
+function crumbs(k){if(!home||steps.length<2)return;while(ol.children.length>1)ol.removeChild(ol.lastElementChild);
+if(k){var lib=top.cloneNode(true);lib.firstElementChild.href=home;lib.firstElementChild.textContent=libName;ol.appendChild(lib);}
+var cur=here.cloneNode(true);cur.firstElementChild.textContent=k?label(k):libName;ol.appendChild(cur);}
 function set(f,push){history[push?"pushState":"replaceState"](null,"",(home||location.pathname)+query(f));apply(f);}
 segs.forEach(function(g){g.addEventListener("click",function(e){if(e.button||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;e.preventDefault();var f=read(),k=g.dataset.kindSet,p=!!home&&f.kind!==k;f.kind=k;set(f,p);});});
 selects.forEach(function(e){e.addEventListener("change",function(){var f=read();f.tag=e.value;set(f,false);});});
