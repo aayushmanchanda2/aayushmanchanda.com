@@ -632,3 +632,10 @@ test("every picture an entry points at is one the sweep can see", () => {
   assert.deepEqual(shotFilesOf({ slug: "s" }), [], "an entry with no pictures claims none");
   assert.deepEqual(shotFilesOf({ shot: "", video: { thumb: 4 } }), []);
 });
+
+test("a post with paragraphs still gets a one-line title and note", () => {
+  const entry = buildReadingEntry({ bookmark: saved(), slug: "s", date: "2026-08-26", post: post("One.\n\nTwo.") });
+
+  assert.equal(entry.title, "One. Two.");
+  assert.equal(entry.note, "@ephraimakanmu", "the whole post fit, paragraphs and all");
+});

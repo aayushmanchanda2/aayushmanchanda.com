@@ -545,6 +545,13 @@ export const POST_NOTE_MAX = 280;
 const HAS_WORDS = /[\p{L}\p{N}]/u;
 
 /**
+ * A post's text as one line. It keeps its paragraph breaks (VET-246), and a
+ * title or a note with a newline in it is a broken row.
+ * @param {string} text
+ */
+const oneLine = (text) => text.replace(/\s+/g, " ").trim();
+
+/**
  * `text`, or as much of it as fits, ending on a word.
  *
  * The trailing-punctuation strip is what stops "three weeks," becoming
@@ -628,7 +635,7 @@ export function buildReadingEntry({
   why = null,
 }) {
   const fallbackTitle = bookmark.title === "" ? hostnameOf(bookmark.url) : bookmark.title;
-  const headline = post === null ? "" : clip(post.article?.title ?? post.text, POST_TITLE_MAX);
+  const headline = post === null ? "" : clip(oneLine(post.article?.title ?? post.text), POST_TITLE_MAX);
   const tags = collectionsFrom(bookmark.tags);
 
   return {
@@ -791,6 +798,7 @@ function isCalendarDate(value) {
  * @param {Post} post @returns {string}
  */
 function postNote(post) {
-  const whole = clip(post.text, POST_TITLE_MAX) === post.text.trim();
-  return whole ? `@${post.handle}` : `@${post.handle}: ${clip(post.text, POST_NOTE_MAX)}`;
+  const line = oneLine(post.text);
+  const whole = clip(line, POST_TITLE_MAX) === line;
+  return whole ? `@${post.handle}` : `@${post.handle}: ${clip(line, POST_NOTE_MAX)}`;
 }

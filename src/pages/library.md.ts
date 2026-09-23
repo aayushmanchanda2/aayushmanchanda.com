@@ -67,6 +67,7 @@ export const GET: APIRoute = () => {
   // such section — the markdown twin of the honest-absence rule the HTML
   // routes follow.
   const digests = digestSection(digested);
+  const highlighted = library.filter((entry) => entry.highlights.length > 0);
 
   return markdownDocument({
     page: PAGES.library,
@@ -112,12 +113,24 @@ export const GET: APIRoute = () => {
       ),
       ...(digests === null ? [] : [digests]),
       section(
+        "Highlights",
+        "Passages quoted from the source, never the whole piece.",
+        ...highlighted.map((entry) =>
+          [
+            `### ${entry.title}`,
+            ...(entry.tldr ? [`TLDR: ${entry.tldr}`] : []),
+            ...entry.highlights.map((highlight) => `> ${highlight.text}`),
+            `Page: ${absolute(`/library/${entry.slug}`)}`,
+          ].join("\n\n"),
+        ),
+      ),
+      section(
         "Pages per entry",
         // The rule reversed with VET-63 and this is where an agent finds out.
         // The second sentence exists because the shape of a page is no longer
         // one thing: an article nobody has read yet is a catalogue card, and a
         // post carries the whole post.
-        `Every entry has a page of its own at /library/<slug>, and the Title column above links it. A page holds the kind, the host, the tags, the saved date and the note in the table, plus whatever else that entry carries: a saved post's full text, a saved video's poster, a digest where one has been written, and a draft where the pipeline has written one and Aayush has not read the piece yet. A drafted block is labelled as a draft on the page and is not his verdict. ${
+        `Every entry has a page of its own at /library/<slug>, and the Title column above links it. A page holds the kind, the host, the tags, the saved date and the note in the table, plus whatever else that entry carries: a one-sentence TLDR of the source, up to five passages quoted from it and its opening lines, a saved post's full text, a saved video's poster, a digest where one has been written, and a draft where the pipeline has written one and Aayush has not read the piece yet. A drafted block is labelled as a draft on the page and is not his verdict. ${
           digests === null
             ? "Nothing has been digested yet."
             : "The digested entries are listed in the Digests section above."

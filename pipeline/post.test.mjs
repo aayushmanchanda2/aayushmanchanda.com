@@ -168,3 +168,15 @@ test("a profile link is not asked about at all", async (t) => {
   assert.equal(await postFrom({ url: "https://x.com/sarahlevinger", saved: null, publicDir: await scratch(t), fetch }), null);
   assert.deepEqual(asked, []);
 });
+
+test("a long post saved with its own paragraph breaks keeps all of them", () => {
+  const tweet = readTweet({
+    id_str: "1",
+    text: "Hello there.\n\nSecond para is cu",
+    created_at: "2026-01-01",
+    user: { name: "A", screen_name: "a" },
+    note_tweet: { id: "x" },
+  });
+  const saved = "Hello there.\n\nSecond para is cut here.\n\nThird.";
+  assert.equal(pickText(saved, tweet), saved);
+});

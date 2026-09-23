@@ -170,6 +170,8 @@ const DIGESTED_ENTRY = {
   draft: null,
   why: null,
   tldr: null,
+  highlights: [],
+  excerpt: null,
 };
 
 /**
@@ -203,6 +205,8 @@ const SAVED_ENTRY = {
   },
   why: null,
   tldr: null,
+  highlights: [],
+  excerpt: null,
 };
 
 /** @type {import("./sites.ts").Site} */

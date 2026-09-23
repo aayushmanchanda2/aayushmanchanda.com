@@ -12,7 +12,7 @@
  * four objects an entry may carry and the kind each one belongs to, and every
  * error message.
  *
- * Six of an entry's twelve fields are optional, and every one of them reads the
+ * Ten of an entry's sixteen fields are optional, and every one of them reads the
  * same way: absent and `null` both mean nothing, and anything present has to be
  * whole. That is not a style preference. A saved link starts as a URL and a date
  * and grows the rest over months — tags when it is filed, a post or a video when
@@ -61,6 +61,8 @@
  */
 import type { Fail } from "./parse.ts";
 import { SLUG, readers, routeSlug } from "./parse.ts";
+import type { Color } from "./reader.mjs";
+import { CAPS, highlights, prose } from "./reader.mjs";
 
 import rawLibrary from "../data/library.json" with { type: "json" };
 
@@ -272,10 +274,25 @@ export interface LibraryEntry {
    */
   why: string | null;
   /**
-   * The source in a sentence, or null. Every entry carries one since VET-258,
-   * copied from `library-content.json`; F3 owns validating it.
+   * The source in a sentence, or null: what the piece says, never his opinion
+   * of it. Held to `reader.mjs › CAPS` (25 words, no em dash).
    */
   tldr: string | null;
+  /**
+   * Up to five passages quoted verbatim from the source, each with an optional
+   * note, on articles and X Articles (VET-246). Empty when there are none. The
+   * site quotes a piece and never republishes it, which is what the caps hold.
+   */
+  highlights: Highlight[];
+  /** The source's own opening, quoted, at most 80 words. Or null. */
+  excerpt: string | null;
+}
+
+/** A quoted passage, in the highlighter colour it was marked with (amber unless said). */
+export interface Highlight {
+  text: string;
+  note: string | null;
+  color: Color;
 }
 
 /** An entry somebody has actually read. What the `Review` node is built from. */
@@ -692,6 +709,22 @@ function readDraft(entry: Record<string, unknown>, where: string): Draft | null 
   return { bullets, why, drafted: readDate(value, "drafted", `${where} draft`) };
 }
 
+/** Absent or null is nothing; anything else passes `reader.mjs` or stops the build. */
+function readCapped<T>(
+  entry: Record<string, unknown>,
+  key: string,
+  where: string,
+  read: (value: unknown) => T,
+): T | null {
+  const value = entry[key];
+  if (value === undefined || value === null) return null;
+  try {
+    return read(value);
+  } catch (error) {
+    fail(where, error instanceof Error ? error.message : String(error));
+  }
+}
+
 export function parseLibrary(value: unknown): LibraryEntry[] {
   if (!Array.isArray(value)) fail("root", "must be a JSON array of library entries");
   if (value.length === 0) fail("root", "must hold at least one library entry");
@@ -734,7 +767,13 @@ export function parseLibrary(value: unknown): LibraryEntry[] {
       video: readVideo(item, kind, where),
       draft: readDraft(item, where),
       why: readOptional(item, "why", where),
-      tldr: readOptional(item, "tldr", where),
+      tldr: readCapped(item, "tldr", where, (value) => prose(value, "tldr", CAPS.tldr)),
+      highlights: (readCapped(item, "highlights", where, highlights) ?? []).map((h) => ({
+        text: h.text,
+        note: h.note ?? null,
+        color: h.color ?? "amber",
+      })),
+      excerpt: readCapped(item, "excerpt", where, (value) => prose(value, "excerpt", CAPS.excerpt)),
     };
   });
 

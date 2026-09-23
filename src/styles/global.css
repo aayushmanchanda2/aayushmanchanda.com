@@ -62,6 +62,11 @@
   --amber-bg: #fffbeb;
   /* hsl(40 95% 60% / .45) */
   --highlight: rgb(250 185 56 / 0.45);
+  /* The other three highlighter pens (VET-246), for a quote marked in a colour
+     other than the default. Tints, held to AA under primary ink by ink.test. */
+  --highlight-blue: rgb(92 116 255 / 0.22);
+  --highlight-pink: rgb(244 114 182 / 0.3);
+  --highlight-green: rgb(74 222 128 / 0.35);
   /* Light keeps the accent at 18% under primary ink (13.58:1); briOS's blue
      pair is 4.80:1 and a second blue on a page whose links are ours. */
   --selection-bg: rgb(43 75 255 / 0.18);
@@ -172,6 +177,9 @@
     --amber-ink: #fcd34d;
     --amber-bg: rgb(120 53 15 / 0.3);
     --highlight: rgb(250 185 56 / 0.3);
+    --highlight-blue: rgb(92 116 255 / 0.35);
+    --highlight-pink: rgb(244 114 182 / 0.3);
+    --highlight-green: rgb(74 222 128 / 0.25);
     /* briOS's dark pair: 6.79:1 on #000, 4.67:1 on --surface-3. */
     --selection-bg: rgb(240 104 0 / 0.1);
     --selection-ink: #ff6b01;
@@ -201,6 +209,9 @@
   --amber-ink: #fcd34d;
   --amber-bg: rgb(120 53 15 / 0.3);
   --highlight: rgb(250 185 56 / 0.3);
+  --highlight-blue: rgb(92 116 255 / 0.35);
+  --highlight-pink: rgb(244 114 182 / 0.3);
+  --highlight-green: rgb(74 222 128 / 0.25);
   /* briOS's dark pair: 6.79:1 on #000, 4.67:1 on --surface-3. */
   --selection-bg: rgb(240 104 0 / 0.1);
   --selection-ink: #ff6b01;

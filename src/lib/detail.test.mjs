@@ -204,7 +204,7 @@ test("the page holds the whole post, drawn from the repo, at a reading measure",
   );
   assert.match(
     route,
-    /\{entry\.note && !entry\.post && <p class="standfirst">/,
+    /\{entry\.note && !entry\.post && <p class="standfirst note">/,
     "a readable post shows its note as the standfirst again. For a post the note is a copy of its words.",
   );
 
@@ -244,4 +244,22 @@ test("a row offers the page and the thing, and the domain link survives both", (
     /Source<span class="visually-hidden">: \{entry\.title\}<\/span>/,
     "the `source` link lost the title only a screen reader hears. Forty links reading `source` and nothing else is a list nobody can navigate by name.",
   );
+});
+
+test("an article reads TLDR, highlights, excerpt, note, digest, then the way out (VET-246)", () => {
+  const detail = read(ROUTE);
+  const order = [
+    '<p class="lead">{entry.tldr}',
+    "<ReaderBlocks highlights={entry.highlights}",
+    '<p class="standfirst note">',
+    "<DigestBlocks",
+    'entry.kind === "article"',
+  ].map((marker) => detail.indexOf(marker));
+
+  assert.ok(order.every((at) => at > -1), `a block is missing: ${order}`);
+  assert.deepEqual([...order].sort((a, b) => a - b), order, "the reader blocks are out of order");
+
+  const reader = read("components/ReaderBlocks.astro");
+  assert.match(reader, /prefers-reduced-motion: reduce/, "the sweep must not run under reduced motion");
+  assert.match(reader, /@media screen and \(prefers-reduced-motion: no-preference\)/, "print and reduced motion keep the mark whole");
 });

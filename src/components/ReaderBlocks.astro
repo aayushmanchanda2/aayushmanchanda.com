@@ -1,0 +1,154 @@
+---
+/**
+ * ReaderBlocks — what a saved piece says in its own words (VET-246): up to five
+ * passages as pull-quotes under a highlighter, then the excerpt, quoted and
+ * cited. Never the piece itself: `lib/reader.mjs` caps both, and that cap is
+ * the copyright line.
+ *
+ * The mark is drawn whole in the markup. The CSS below arms it (0% wide) only
+ * where the pre-paint script has run and motion is allowed, and the script
+ * releases each one as it scrolls into view, once. No script, reduced motion
+ * and print all get a static, full mark.
+ */
+import EntryLink from "./EntryLink.astro";
+import type { Highlight } from "../lib/library";
+
+interface Props {
+  highlights: Highlight[];
+  excerpt: string | null;
+  url: string;
+  domain: string;
+}
+
+const { highlights, excerpt, url, domain } = Astro.props;
+---
+
+{
+  highlights.length > 0 && (
+    <section class="block" aria-labelledby="highlights">
+      <h2 class="accent-bar" id="highlights">Highlights</h2>
+      <ul class="quotes">
+        {highlights.map((highlight) => (
+          <li>
+            <blockquote class="quote" cite={url}>
+              <p>
+                <mark class="hl" data-color={highlight.color}>{highlight.text}</mark>
+              </p>
+            </blockquote>
+            {highlight.note && <p class="quote__note">{highlight.note}</p>}
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+{
+  excerpt && (
+    <figure class="block excerpt">
+      <blockquote cite={url}>
+        <p>{excerpt}</p>
+      </blockquote>
+      <figcaption class="quote__note">
+        From <cite><EntryLink href={url}>{domain}</EntryLink></cite>
+      </figcaption>
+    </figure>
+  )
+}
+
+<script>
+  // ponytail: one observer per page; the reader renders once per page today.
+  const marks = document.querySelectorAll<HTMLElement>("mark.hl");
+  if (marks.length > 0 && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const seen = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          entry.target.classList.add("hl--on");
+          seen.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.5 },
+    );
+    for (const mark of marks) seen.observe(mark);
+  }
+</script>
+
+<style>
+  .block {
+    max-width: 40rem;
+    margin-top: 2.5rem;
+  }
+
+  .quotes {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  /* A pull-quote: the reading size a step up, in primary ink. */
+  .quote p {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+  }
+
+  .quote__note {
+    margin-top: 0.5rem;
+    color: var(--text-tertiary);
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+
+  .quote__note :global(a) {
+    color: var(--text-secondary);
+  }
+
+  /* The highlighter. A gradient rather than a colour so the stroke has a size
+     to sweep; `clone` gives every wrapped line its own stroke, so all the lines
+     draw at once instead of one long bar across the paragraph. */
+  .hl {
+    --pen: var(--highlight);
+    padding: 0.05em 0.15em;
+    background: linear-gradient(var(--pen), var(--pen)) no-repeat 0 0 / 100% 100%;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+
+  .hl[data-color="blue"] {
+    --pen: var(--highlight-blue);
+  }
+
+  .hl[data-color="pink"] {
+    --pen: var(--highlight-pink);
+  }
+
+  .hl[data-color="green"] {
+    --pen: var(--highlight-green);
+  }
+
+  /* Armed only on a screen, with motion allowed, where the pre-paint script set
+     `data-theme`: the reader with no script never waits on a sweep that will
+     not come, and print gets the whole mark with no transition to catch. */
+  @media screen and (prefers-reduced-motion: no-preference) {
+    .hl {
+      transition-property: background-size;
+      transition-duration: 600ms;
+      transition-timing-function: var(--ease-out);
+    }
+
+    :global(html[data-theme]) .hl:not(.hl--on) {
+      background-size: 0% 100%;
+    }
+  }
+
+  /* The excerpt reads as the source talking: quoted body text, a hairline
+     rule on the left, the source named underneath. */
+  .excerpt blockquote {
+    padding-left: 1rem;
+    border-left: 2px solid var(--hairline-strong);
+    color: var(--text-secondary);
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+</style>

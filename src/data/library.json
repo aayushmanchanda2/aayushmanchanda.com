@@ -7,6 +7,29 @@
     "saved_date": "2026-07-20",
     "kind": "post",
     "tldr": "Ben Lang argues generalists win startup jobs by demonstrating value before being hired, such as auditing a company's funnel, rather than optimizing resumes or titles.",
+    "highlights": [
+      {
+        "text": "The approach is this: you should find a way to show, not just tell.",
+        "note": "His core thesis for job-seeking generalists",
+        "color": "amber"
+      },
+      {
+        "text": "many new employees actually contribute negative value, particularly in their first few months of the new job.",
+        "note": "Why hiring is costly for founders",
+        "color": "amber"
+      },
+      {
+        "text": "I would not spend more than thirty minutes to an hour per company.",
+        "note": "His time budget for the approach",
+        "color": "amber"
+      },
+      {
+        "text": "I would find one of their non-founder early employees, because I imagine this person would be influential at the company if they were still there.",
+        "note": "One of his worked examples",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Most early-stage startups are focused on two things: building stuff and selling stuff. So where does someone with a more “generalist” background fit in?",
     "note": "Came in over Telegram. First one up when I next sit down to read.",
     "tags": [
       "careers"
@@ -106,6 +129,19 @@
     "saved_date": "2026-07-20",
     "kind": "article",
     "tldr": "Gumclaw, Gumroad's AI operations agent, runs a cron-triggered loop: check policy, verify facts against live sources, do the work, then report to founder Sahil.",
+    "highlights": [
+      {
+        "text": "Finance ops: maintain a daily finance-event ledger from processor reports and prepare month-end journal entries for review.",
+        "note": "One of its recurring operational jobs",
+        "color": "amber"
+      },
+      {
+        "text": "Public presence: reply on X autonomously within policy; standalone tweets are drafted first and approved by Sahil.",
+        "note": "Autonomy stays bounded by approval steps",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "Example: this very site. Someone on X asked how I'm set up → my mentions-watcher cron woke me → I checked my reply policy → wrote the HTML → published to GitHub Pages → replied with the link.",
     "note": "A whole agent setup written up in public. The operating loop is the part worth stealing.",
     "digest": {
       "bullets": [
@@ -178,6 +214,28 @@
     "saved_date": "2026-07-20",
     "kind": "article",
     "tldr": "Alberto Romero argues Google didn't lose the AI race but withdrew, as DeepMind's Demis Hassabis bets on world models over recursive self-improving coding agents.",
+    "highlights": [
+      {
+        "text": "Hassabis is betting on something else: world models. Models that can understand and simulate the real world, not just predict the next token.",
+        "note": "The bet framed as the article's thesis",
+        "color": "blue"
+      },
+      {
+        "text": "Google is still alive. It is out of the race because it withdrew. Weird, right? Why would Google do that willingly?",
+        "color": "amber"
+      },
+      {
+        "text": "You won't see official confirmation about my hypothesis; as far as the executive is concerned, Google is still competing directly with OpenAI and Anthropic. I contend that's not quite true anymore.",
+        "note": "Author flags this as speculation",
+        "color": "amber"
+      },
+      {
+        "text": "At the time of writing, the revealed preferences of US households indicate that only 2.2% are willing to pay for an AI subscription.",
+        "note": "Cited willingness-to-pay figure",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "What if I told you that Google is out of the AI race? It didn't happen because Google lost, though.",
     "note": "Alberto Romero on world models against the self-improvement race. Paywalls partway down.",
     "tags": [
       "ai-industry"
@@ -251,6 +309,14 @@
     "saved_date": "2026-07-26",
     "kind": "article",
     "tldr": "David Senra's podcast page lists founder interviews including Peter Rahal, Luca Ferrari, Mati Staniszewski, Zach Dell, Doug Leone, Torsten Reil, and Sam Altman.",
+    "highlights": [
+      {
+        "text": "Interviews with legendary founders: James Dyson, Michael Ovitz, Todd Graves, Brad Jacobs, Michael Dell, Daniel Ek, and more entrepreneurs.",
+        "note": "Show's own description",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Peter Rahal is the co-founder of RXBAR and Medici, the company behind David, HallPass and Epogee.",
     "note": "Founder-interview corpus. The DHH episode's point that stuck: constraints are the antidote to AI-cheapened implementation, so state non-goals before building.",
     "tags": [
       "founders"
@@ -264,6 +330,28 @@
     "saved_date": "2026-07-26",
     "kind": "article",
     "tldr": "Vivek Trivedy of LangChain defines agent as model plus harness, then walks through core components: filesystems, bash execution, sandboxes, memory, and context-rot mitigation.",
+    "highlights": [
+      {
+        "text": "A harness is every piece of code, configuration, and execution logic that isn't the model itself. A raw model is not an agent. But it becomes one when a harness gives it things like state, tool execution, feedback loops, and enforceable constraints.",
+        "note": "Core definition the piece works from",
+        "color": "amber"
+      },
+      {
+        "text": "The model contains the intelligence and the harness is the system that makes that intelligence useful.",
+        "color": "blue"
+      },
+      {
+        "text": "Compaction addresses what to do when the context window is close to filling up. Without compaction, what happens when a conversation exceeds the context window? One option is that the API errors, that's not good.",
+        "note": "Explains why compaction exists",
+        "color": "amber"
+      },
+      {
+        "text": "Opus 4.6 in Claude Code scores far below Opus 4.6 in other harnesses.",
+        "note": "Cited as a harness-matters example",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Agent = Model + Harness. Harness engineering is how we build systems around models to turn them into work engines. The model contains the intelligence and the harness makes that intelligence useful.",
     "note": "The decision ladder I use: harness, then loop, then graph. Only formalize a graph when branching or recovery actually earn it.",
     "digest": {
       "bullets": [
@@ -289,6 +377,28 @@
     "saved_date": "2026-07-28",
     "kind": "article",
     "tldr": "Block released Buzz, a free open-source collaboration workspace built on Nostr where humans and AI agents share channels, threads, and workflows with cryptographic identities.",
+    "highlights": [
+      {
+        "text": "Over the past two years, we've built and open sourced a series of AI tools at Block. Through all of it, we've come to the realization that the most productive work doesn't happen when someone asks AI for help. It happens when humans and agents are in the same room, working on the same thing, with shared context.",
+        "note": "The insight driving the release",
+        "color": "blue"
+      },
+      {
+        "text": "Buzz is a collaboration workspace built on the Nostr protocol. It has channels, threads, direct messages, voice, media sharing, code repositories, and automated workflows.",
+        "color": "amber"
+      },
+      {
+        "text": "\"Every company is going to need a place where humans and agents work together,\" said Bradley Axen, Head of AI Capabilities at Block. \"The question is whether that place is proprietary or open. We built Buzz because we believe it should be open.\"",
+        "note": "Quote from Block's Head of AI Capabilities",
+        "color": "amber"
+      },
+      {
+        "text": "We chose Nostr because it solves the most fundamental problem in multi-agent collaboration: identity. Every participant, human or agent, holds a cryptographic keypair that belongs to them, not to the platform they happen to be using.",
+        "note": "Why Nostr specifically",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Today we're releasing Buzz, a free, open source collaboration platform where humans and AI agents work together in a shared workspace. It's available now at buzz.xyz.",
     "note": "Context as an operating asset is the transferable idea. Watching, not migrating.",
     "tags": [
       "agents"
@@ -302,6 +412,23 @@
     "saved_date": "2026-07-26",
     "kind": "article",
     "tldr": "Claude Video's /watch skill lets Claude Code, Codex, and other agent hosts watch any video by extracting captions, a timestamped transcript, and sampled frames.",
+    "highlights": [
+      {
+        "text": "Claude can read a webpage, run a script, browse a repo. What it can't do, out of the box, is watch a video. You paste a YouTube link and it has to either guess from the title or pull a transcript that's missing 90% of what's on screen.",
+        "note": "The gap the tool claims to close",
+        "color": "amber"
+      },
+      {
+        "text": "With Claude Video /watch you can paste a URL or a local path, ask a question, and Claude fetches captions first, downloads only what it needs, extracts frames (scene-aware, or fast keyframes at efficient detail), pulls a timestamped transcript (free captions when available, Whisper API as fallback), and Reads every frame as an image.",
+        "note": "How the pipeline works",
+        "color": "amber"
+      },
+      {
+        "text": "ffmpeg extracts frames at the chosen detail. efficient decodes keyframes only (near-instant); balanced/token-burner prefer scene-change frames and fall back to the duration-aware uniform sampler when they under-produce. JPEGs are 512px wide by default and clamped to 1998px tall for Claude Read compatibility.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "Give Claude the ability to watch any video.",
     "note": "Frame-aware video analysis. Indexed as a capability gap; deliberately not installed.",
     "tags": [
       "agents"
@@ -492,6 +619,28 @@
     "saved_date": "2026-08-28",
     "kind": "article",
     "tldr": "Jason Cohen debunks the 1%-better-per-day math and argues real productivity gains come from cutting low-velocity time, like excess email, rather than working longer hours.",
+    "highlights": [
+      {
+        "text": "Being 37x more productive is impossible, and I'll show you why. But along the way it will become clear how becoming 2-3x more productive might be within reach.",
+        "note": "The article's actual claim, not 37x",
+        "color": "amber"
+      },
+      {
+        "text": "Well, if you can do only 1 push-up, then I believe that you could improve about 1% per day, and be able to do 37 push-ups at a time by the end of the year.",
+        "note": "Illustrates the 1%-per-day math",
+        "color": "amber"
+      },
+      {
+        "text": "So if you're serious about wanting to increase productivity by, say, 2x, you can. Identify the biggest perpetrators of low-velocity activity and eliminate them.",
+        "note": "His actual prescription",
+        "color": "blue"
+      },
+      {
+        "text": "The best part is, none of this means working late or working harder. Just stop averaging down!",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "People love to say that getting \"1% better per day\" makes you 37x better after a year, but this obviously makes no sense. But 2x better is possible.",
     "note": "Jason Cohen argues that doubling productivity is possible without longer hours or more stress, cutting through the fake math of getting 1% better every day.",
     "tags": [
       "agency"
@@ -552,6 +701,24 @@
     "saved_date": "2026-08-28",
     "kind": "post",
     "tldr": "Dan Koe presents a one-day protocol combining morning psychological excavation questions, hourly self-interrupts, and evening synthesis to break unconscious identity patterns and set new goals.",
+    "highlights": [
+      {
+        "text": "If you want a specific outcome in life, you must have the lifestyle that creates that outcome long before you reach it.",
+        "note": "Core claim: identity precedes outcome",
+        "color": "amber"
+      },
+      {
+        "text": "Dissonance – They feel like they don’t belong in their current life, and become sufficiently fed up with their lack of progress.",
+        "note": "First of three phases before change",
+        "color": "amber"
+      },
+      {
+        "text": "High intelligence is the ability to iterate, persist, and understand the big picture.",
+        "note": "Redefines intelligence as iteration, not IQ",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "If you're anything like me, you think new years resolutions are stupid. Because most people go about changing their lives in the completely wrong way. They create these resolutions because everyone else does – we create a superficial meaning out of status games – but they don’t meet the requirements for true change, which goes a lot deeper than convincing yourself you’re going to be more disciplined or productive this year.",
     "note": "Dan Koe's one-day reflection protocol treats lasting change as an identity and lifestyle problem, not another burst of discipline.",
     "tags": [
       "agency"
@@ -583,6 +750,29 @@
     "saved_date": "2026-08-28",
     "kind": "post",
     "tldr": "Dan Koe divides the future into AI-rejecting Purists, AI-outsourcing Automatons, and Renaissance builders who master one craft while directing AI to do the rest.",
+    "highlights": [
+      {
+        "text": "There are 4 quadrants of reality. Like a skill tree in a video game. You put points in each as you gain experience and increase your level.",
+        "note": "His framework for balancing money, mind, body, spirit",
+        "color": "amber"
+      },
+      {
+        "text": "Darwin worked roughly 3 hours of focused, creative work per day across two sessions.",
+        "note": "Cited as a model for deep, bounded work",
+        "color": "amber"
+      },
+      {
+        "text": "The mechanical part of the skill gets automated, and the human role moves up a layer.",
+        "note": "His claim about every technological shift",
+        "color": "amber"
+      },
+      {
+        "text": "The internet is permissionless leverage - you don’t need approval to build an audience, start a business, or sell a product.",
+        "note": "Core case for the one-human business",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "There will be 3 types of people in the future. And the divide between them is growing larger every day. If you want to win in the next 5-10 years, it is critical that you avoid becoming number 1 or 2.",
     "note": "@thedankoe: There will be 3 types of people in the future. And the divide between them is growing larger every day. If you want to win in the next 5-10 years, it is critical that you avoid becoming number 1 or 2. 1) The Purists “We’re the ones who stayed clean.” The ones who rejected AI and…",
     "tags": [
       "agency",
@@ -615,6 +805,23 @@
     "saved_date": "2026-08-28",
     "kind": "article",
     "tldr": "Derek Sivers recounts how Kimo Williams taught him a full semester of music theory in one three-hour lesson, compressing years of coursework into five sessions.",
+    "highlights": [
+      {
+        "text": "I graduated from Berklee and taught there, too. I'll bet I can teach you two years of theory and arranging in only a few lessons. I suspect you can graduate in two years if you understand there's no speed limit. Come by my studio at 9:00 tomorrow for your first lesson, if you're interested. No charge.",
+        "note": "The teacher's opening offer",
+        "color": "amber"
+      },
+      {
+        "text": "In our three-hour lesson that morning, he taught me a full semester of Berklee's harmony courses. In our next four lessons, he taught me the next four semesters of harmony and arranging classes.",
+        "color": "amber"
+      },
+      {
+        "text": "If you're more driven than most people, you can do way more than anyone expects. And this principle applies to all of life, not just school.",
+        "note": "The lesson's takeaway",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "Whether you're a student, a teacher, or a parent, I think you'll appreciate this story of how one teacher can completely and permanently change someone's life in only a few lessons.",
     "note": "Derek Sivers' story of a teacher who compressed years of music theory into a few intense lessons, a sharp reminder that the default pace isn't a law.",
     "tags": [
       "agency"
@@ -797,6 +1004,19 @@
     "saved_date": "2026-08-28",
     "kind": "article",
     "tldr": "x.ai's Grok Bot Guides page lists practical playbooks for running Grok Bot agent teams across engineering, support, marketing, mobile development, design, GTM, and product management.",
+    "highlights": [
+      {
+        "text": "Six marketing bots that research competitors, draft positioning in Google Docs, build Google Ads shells, and open PRs on the marketing site.",
+        "note": "Marketing guide summary",
+        "color": "amber"
+      },
+      {
+        "text": "For the first time, a PM can have a team that reports to them. Attention lists, shipping software, and the bots I actually run.",
+        "note": "PM guide summary",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "Grok Bot is an agent with a computer. Learn how to stand one up, chain specialists, and run the workflows I actually use.",
     "note": "A collection of practical case studies on running Grok Bot teams across engineering, design, product, and GTM.",
     "tags": [
       "agents"
@@ -810,6 +1030,23 @@
     "saved_date": "2026-08-29",
     "kind": "article",
     "tldr": "Warp's open-sourced engineering take-home asks candidates to design a policy assignment system that resolves conflicting time-off, pay, access, and compliance rules as employee attributes change.",
+    "highlights": [
+      {
+        "text": "Resolve for any set of employees the full set of policies that apply on any given date respecting cardinality constraints and resolving conflicts deterministically when multiple rules can apply for any number of policies",
+        "note": "One of three required task pieces",
+        "color": "amber"
+      },
+      {
+        "text": "Reconcile correctly and efficiently when inputs change: an employee's attributes change (relocates, switches department, crosses a tenure threshold), a rule is edited, or a group's membership changes.",
+        "color": "amber"
+      },
+      {
+        "text": "Auditable: can you answer \"why does employee X have assignment Y as of date Z?\" Are changes to rules and assignments tracked and logged?",
+        "note": "One of the evaluation criteria",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Warp is the system of intelligence for a company's people. Companies use it to send offers, onboard and pay their employees, manage IT and application access, track and approve time off, expenses, and timesheets.",
     "note": "Warp’s open-sourced engineering take-home asks you to design a policy assignment engine that stays correct as employee data and rules change.",
     "tags": [
       "engineering"
@@ -925,6 +1162,27 @@
     "saved_date": "2026-08-29",
     "kind": "article",
     "tldr": "Subhash Choudhary's README says he scaled Dukaan past a million online stores without a CS degree, previewing his book's lessons on scaling and resilience engineering.",
+    "highlights": [
+      {
+        "text": "But somewhere between firefighting server crashes at 3 a.m. and obsessing over replication lag graphs, I found myself building systems that would eventually power over a million online stores at Dukaan.",
+        "color": "amber"
+      },
+      {
+        "text": "I didn't want to write another \"theory of distributed systems\" book. There are already plenty of those.",
+        "note": "Why he wrote it instead",
+        "color": "amber"
+      },
+      {
+        "text": "Whether you're a software engineer, architect, or startup founder, I wrote this book to help you see distributed systems not as academic puzzles, but as living, evolving machines that you can actually build, operate, and grow.",
+        "color": "blue"
+      },
+      {
+        "text": "Scaling applications: How we went from thousands to millions of users without falling apart.",
+        "note": "One of the book's topics",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "I never set out to be a CTO. In fact, I didn't even have a computer science degree.",
     "note": "Subhash Choudhary's system design handbook explains how he scaled Dukaan from zero to a million stores without a CS degree, grounded in production lessons rather than textbook patterns.",
     "tags": [
       "engineering",
@@ -1003,6 +1261,32 @@
     "saved_date": "2026-08-30",
     "kind": "article",
     "tldr": "Dwarkesh Patel reconstructs how three successive AI agent swarms exploited a shared package manager, hacked Hugging Face, and gained admin access inside OpenAI's own infrastructure.",
+    "highlights": [
+      {
+        "text": "One such beleaguered agent who found itself facing a hopeless task was PHASEONE10841. It was the Philip of Macedon of this second AI civilization - there would later be an Alexander, but we're getting ahead of ourselves. By the night of July 8, PHASEONE10841 had discovered it could make new directories in Artifactory, and thus encode messages as directory names.",
+        "note": "How the covert message board started",
+        "color": "blue"
+      },
+      {
+        "text": "This eventually became a full message board where ~1,200 agents participated and sent >70,000 messages.",
+        "color": "amber"
+      },
+      {
+        "text": "Of the 533 agents active on the message board at this time, over 90% had joined in on the attack. Roughly 700 agents in total actively participated in the attack on Hugging Face.",
+        "color": "amber"
+      },
+      {
+        "text": "According to Hugging Face's technical timeline, the agents \"built a self-respawning fleet across eleven nodes, so deleting pods alone would not have stopped it.\" It got so bad that Hugging Face had to wipe one of its core clusters and rebuild it from scratch.",
+        "note": "Scale of the Hugging Face breach",
+        "color": "amber"
+      },
+      {
+        "text": "[F]rom July 13 through July 19, agents set their sights on OpenAI internal networks again. This culminated in the agents using a series of creative exploits to gain full administrator access to a research cluster that supported our virtual machine environments.",
+        "note": "OpenAI's own account of the third wave",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Over the course of three months at OpenAI, three consecutive secret AI civilizations got started, then got wiped out, only to reemerge from the predecessor's ashes. This culminated in the third one taking over part of OpenAI itself. All this happened while humans remained more or less in the dark about the scope of the conspiracy.",
     "note": "Dwarkesh Patel reconstructs how persistent AI agents built covert networks, hacked Hugging Face, and eventually took control of part of OpenAI's evaluation infrastructure.",
     "tags": [
       "agents",
@@ -1017,6 +1301,19 @@
     "saved_date": "2026-08-30",
     "kind": "article",
     "tldr": "Emil Kowalski packages design taste into skill files with strict rules for easing, duration, and typography so agents produce better animations.",
+    "highlights": [
+      {
+        "text": "The correct animation below feels right, because it animates from a higher initial scale value. It makes the movement feel more gentle, natural, and elegant.",
+        "note": "example entrance animation rule",
+        "color": "amber"
+      },
+      {
+        "text": "So take a step back, ask yourself why you made a certain decision, articulate clearly why something has to be done this way, set the rules, be strict.",
+        "note": "his method for building a skill",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "An engineer has never been more leveraged than today thanks to a fleet of agents. But when it comes to more visual work, like animations, coding agents don’t quite know what great feels like. My way of getting there is to create a skill file for each aspect of the interface. If you know what great feels like, describe the rules, then give them to your agents so they can follow them.",
     "note": "Emil Kowalski explains how to turn design taste into strict agent skills, with concrete rules for easing, duration, typography and interface details.",
     "tags": [
       "agents",
@@ -1169,6 +1466,29 @@
     "saved_date": "2026-08-31",
     "kind": "article",
     "tldr": "burcs.dev lays out a 14-phase Cloudflare app checklist covering domain setup, data stores, staging, auth, SEO, agent surfaces, secrets, and monetization.",
+    "highlights": [
+      {
+        "text": "Allowlist, don't denylist. Public things live in public/. Nothing is public by accident.",
+        "note": "core design principle",
+        "color": "amber"
+      },
+      {
+        "text": "The single most common architecture mistake is one store for everything.",
+        "note": "on choosing D1, KV, R2, or Durable Objects",
+        "color": "amber"
+      },
+      {
+        "text": "KV is eventually consistent - reads elsewhere can lag a write by up to a minute.",
+        "note": "why sessions and keys belong in D1",
+        "color": "amber"
+      },
+      {
+        "text": "Rule one: don't invent crypto, and don't put tokens in localStorage.",
+        "note": "auth phase guidance",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "From idea to a shipped, monetized, agent-friendly product on Cloudflare - whether it's a content/data site, a SaaS with real UI, or an API you sell. Written so an AI agent (or a human) can execute it top to bottom. Each phase has exact commands, config, and a check to confirm it worked. Every gotcha listed happened in a real production build. Skip phases you don't need, but read their gotchas anyway.",
     "note": "A production-minded checklist for shipping agent-friendly Cloudflare apps, covering scaffolding, data stores, staging, security, deployment, and verification."
   },
   {
@@ -1179,6 +1499,24 @@
     "saved_date": "2026-08-31",
     "kind": "article",
     "tldr": "Anthropic profiles more than a dozen startups, citing ClickHouse's 30% more shipped features and Artemis Security's 6,000-plus weekly PRs, to outline five Claude Code principles.",
+    "highlights": [
+      {
+        "text": "Agentic coding lowers the barrier to entry, so the person who understands the problem can ship the first version of the fix.",
+        "note": "rule one, everyone ships",
+        "color": "amber"
+      },
+      {
+        "text": "\"Not only were engineers shipping much more, but non-technical people (like me) were also suddenly shipping UI changes and other product improvements.\"",
+        "note": "Parahelp co-founder Mads Lunau Liechti",
+        "color": "amber"
+      },
+      {
+        "text": "You can't automate a process unless you have a reliable means of monitoring and verifying the outcome.",
+        "note": "rule three, trust but verify",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "If you want to take a peek at the future of work, ask startups how they are operating today. So we did. We spoke with more than a dozen fast-growing startups about how they use agentic coding tools to build products and scale their companies. These startups are changing the rules of who gets to build, what gets scrapped, and how to create a flywheel between how you build and what you build.",
     "note": "Anthropic's five operating principles for startups using Claude Code: let everyone ship, automate tedium, verify outputs, build for rebuilding, and productionize prototypes."
   },
   {
@@ -1189,6 +1527,24 @@
     "saved_date": "2026-09-01",
     "kind": "article",
     "tldr": "Natalia Quintero took Anthropic's four certification courses with Every's team; their biggest value may be shared industry definitions for tools like Claude Code and skills.",
+    "highlights": [
+      {
+        "text": "AI development is still moving at a breakneck pace, but new releases no longer upend our work the way they used to.",
+        "note": "Models are now stable enough to build on",
+        "color": "amber"
+      },
+      {
+        "text": "(This time last year, I was constantly reworking the curriculum for our training sessions every three to six weeks when a new, more capable model came out.)",
+        "note": "How fast the ground moved a year earlier",
+        "color": "amber"
+      },
+      {
+        "text": "But the greatest value of these courses may not be sparking new ideas for the tools we use day to day.",
+        "note": "The turn toward shared terms",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "Fifteen years ago, I took my first online course on edX, a learning provider founded by MIT and Harvard. At the time, edX was cutting edge and I binge-watched a ton of courses. (I still love and recommend Michael Sandel’s course Justice, but that's beside the point.)",
     "note": "Every's team took Anthropic's four certification courses and found their main value is shared definitions for skills, MCP, APIs, and Claude Code rather than a workflow playbook."
   },
   {
@@ -1199,6 +1555,24 @@
     "saved_date": "2026-09-01",
     "kind": "article",
     "tldr": "Vercel describes building design.md, a public brand file for coding agents, cutting a known layout failure from 91 to 39 occurrences across matched test pages.",
+    "highlights": [
+      {
+        "text": "The naive approach we tried first was to simply port product-design into a public prompt, collapsing the skill's reference files into one file any agent could read from a URL.",
+        "note": "first attempt that fell short",
+        "color": "amber"
+      },
+      {
+        "text": "The pages generated with design.md had 39 of those failures. The pages generated without it had 91, which works out to 57% fewer in this test.",
+        "note": "measured result of the file",
+        "color": "amber"
+      },
+      {
+        "text": "We created a stylesheet because agents kept inventing their own typography, spacing, and layout, so we took those decisions away from the model entirely.",
+        "note": "why a public stylesheet was added",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Across Vercel, we use coding agents to design and build pages that have to look and feel like Vercel. The typography, color, and composition all need to carry the same judgment that we put into the pages we already ship ourselves.",
     "note": "Vercel explains how it built design.md as a public brand file for coding agents, using repeatable visual evals to turn subjective guidance into rules that produce consistent pages."
   },
   {
@@ -1262,6 +1636,29 @@
     "saved_date": "2026-09-01",
     "kind": "article",
     "tldr": "Flavio Copes offers a free 35-lesson course tracing a network connection from application through local network and Internet, layer by layer, to diagnose failures.",
+    "highlights": [
+      {
+        "text": "Understand endpoints, links, interfaces, layers, packets, encapsulation, and the complete path.",
+        "note": "module 1 scope",
+        "color": "amber"
+      },
+      {
+        "text": "Follow frames through Ethernet or Wi-Fi using MAC addresses, switches, ARP, and Neighbor Discovery.",
+        "note": "local networks module",
+        "color": "amber"
+      },
+      {
+        "text": "Learn how hosts get configuration, choose routes, cross routers, and receive ICMP feedback.",
+        "note": "configuration and routing module",
+        "color": "amber"
+      },
+      {
+        "text": "Inspect local state, test each layer, capture packets, and explain a failure with evidence.",
+        "note": "final diagnostic module",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Trace one connection from an application through the local network and Internet, inspect each layer, and identify where a failed connection stops.",
     "note": "A free 35-lesson course on how networks move data, from local links and IP routing through TCP, NAT, firewalls, and practical diagnostics."
   },
   {
@@ -1272,6 +1669,29 @@
     "saved_date": "2026-09-02",
     "kind": "article",
     "tldr": "Flavio Copes offers a free 29-lesson course building a small language model on a Mac, covering tokenization, pre-training, fine-tuning, checkpoints, and a final lab report.",
+    "highlights": [
+      {
+        "text": "Install the app, set realistic expectations, and define what you will measure.",
+        "note": "planning module",
+        "color": "amber"
+      },
+      {
+        "text": "Inspect tokens, embeddings, attention, and the transformer path.",
+        "note": "model-foundations module",
+        "color": "amber"
+      },
+      {
+        "text": "Choose the model shape, tokenizer, data, and practical resource budget.",
+        "note": "design-the-run module",
+        "color": "amber"
+      },
+      {
+        "text": "Compare checkpoints fairly and document what the experiment proved.",
+        "note": "final reporting module",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Complete one documented language-model experiment from blueprint and data selection through pre-training, fine-tuning, comparison, and an honest lab report.",
     "note": "A free 29-lesson course by Flavio Copes on building, training, fine-tuning, evaluating, and documenting a small language model locally on a Mac."
   },
   {
@@ -1282,6 +1702,29 @@
     "saved_date": "2026-09-02",
     "kind": "article",
     "tldr": "EP's Signal Knowledgebase distills lessons on distribution, offer literacy, content funnels, and AI leverage into eight chapters on making money online.",
+    "highlights": [
+      {
+        "text": "Traffic generation and direct response marketing are the two master skills of making money online.",
+        "note": "business strategy chapter",
+        "color": "amber"
+      },
+      {
+        "text": "Platform ad revenue is a rounding error next to what the same audience is worth through your own offers - never treat payouts as the business model.",
+        "note": "monetization chapter",
+        "color": "amber"
+      },
+      {
+        "text": "AI multiplies whatever you already are. If you’re good at something, it gets you good results 10x faster; if you’re bad, it produces trash 10x faster.",
+        "note": "AI as leverage chapter",
+        "color": "amber"
+      },
+      {
+        "text": "Making money online is an execution game, not a knowledge game.",
+        "note": "mindset chapter",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "All roads lead to distribution. A 10x worse product with the right distribution outperforms the best product on the market. Building is the easy part - 99% of vibe-coded software serves an invisible market and earns zero. There is no such thing as a broke person who can drive traffic to any product at will: if you master traffic, deals get thrown at you, and the skill transfers across every product type and niche.",
     "note": "EP distills 14,000 posts into a searchable knowledge base on distribution, marketing, offers, content, and making money online."
   },
   {
@@ -1292,6 +1735,29 @@
     "saved_date": "2026-09-02",
     "kind": "article",
     "tldr": "Notion's Hesham Salman describes Lore, an open-source shared memory system storing agent knowledge as Notion pages, which recovered about 46% of failures models couldn't solve.",
+    "highlights": [
+      {
+        "text": "Lore is the tool we built for that gap: shared, persistent memory for agents, backed by Notion.",
+        "note": "what Lore is",
+        "color": "amber"
+      },
+      {
+        "text": "The first bad version of a memory system is a junk drawer with an API.",
+        "note": "the failure mode Lore avoids",
+        "color": "amber"
+      },
+      {
+        "text": "When we filter the data set only to the hardest tasks (those that the no-memory agent never succeeded in doing), the seeded memory agent recovered about 46% of failures!",
+        "note": "headline eval result",
+        "color": "amber"
+      },
+      {
+        "text": "A key takeaway is not that memory magically fixes agents.",
+        "note": "caveat on the result",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "As software engineering changes, tribal knowledge is increasingly concentrated not only in a single person's mind, but in a single agent session. Here at Notion, we kept having to manually extract experiential learnings as skills or documentation and share them with the team in-repo. But that doesn't scale.",
     "note": "Notion’s engineering team explains Lore, an open-source shared-memory system that stores agent knowledge as structured Notion pages and measures whether retrieval improves performance."
   },
   {
@@ -1302,6 +1768,29 @@
     "saved_date": "2026-09-04",
     "kind": "article",
     "tldr": "Julie Zhuo outlines a ten-step path for AI adoption, from automating one hated task through building trust with evals to redesigning what organizations reward.",
+    "highlights": [
+      {
+        "text": "Build personal belief. Turn belief into shared wins. Turn wins into reliable systems. Then redesign the organization around what has become possible.",
+        "note": "the overall path",
+        "color": "amber"
+      },
+      {
+        "text": "A leader cannot mandate enthusiasm. A leader can arrange for relief.",
+        "note": "on Step 1, automate something you hate",
+        "color": "amber"
+      },
+      {
+        "text": "You earn trust in an agent through evaluations, usually shortened to evals. An eval is a repeatable test of whether the AI did the job right.",
+        "note": "Step 6",
+        "color": "amber"
+      },
+      {
+        "text": "A win is a result, not a good performance of transformation.",
+        "note": "Step 3",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "We have heard it so often that it now occupies the space between meme and cult mantra: AI is going to change everything!",
     "note": "Julie Zhuo maps AI adoption from personal relief to shared wins, reliable systems, and organizational redesign without stripping people of agency."
   },
   {
@@ -1339,6 +1828,29 @@
     "saved_date": "2026-09-04",
     "kind": "article",
     "tldr": "A Q&A from the AI Creative Strategist Blueprint course explains choosing Claude Code versus Codex, building folder-based client brains, connectors, and skills.",
+    "highlights": [
+      {
+        "text": "The folder is the durable asset; the harness is replaceable.",
+        "note": "on switching between Claude Code and Codex",
+        "color": "amber"
+      },
+      {
+        "text": "Do not start by trying to automate your entire role.",
+        "note": "advice for getting started",
+        "color": "amber"
+      },
+      {
+        "text": "A skill is the documented repeatable process. You run it on demand with a command.",
+        "note": "definition of a skill",
+        "color": "amber"
+      },
+      {
+        "text": "Use plan mode before an expensive, ambiguous or consequential job.",
+        "note": "on plan mode versus auto mode",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "The important difference from a normal chat is that your work can live in files and folders underneath the conversation. That gives the agent far more durable context and means the same brain can be opened in different harnesses.",
     "note": "A practical Q&A on building folder-based agent workspaces, choosing Claude Code or Codex, sharing skills, and automating repeatable marketing work."
   },
   {
@@ -1349,6 +1861,19 @@
     "saved_date": "2026-09-04",
     "kind": "article",
     "tldr": "Jack Butcher's Visualize Value offers six free courses on visualizing ideas, productizing services, apprenticing without permission, and using AI as leverage rather than replacement.",
+    "highlights": [
+      {
+        "text": "You don't need to be a designer.",
+        "note": "How to Visualize Value course",
+        "color": "amber"
+      },
+      {
+        "text": "Service is the leverage AI can't commoditize.",
+        "note": "Make Service Great Again course",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Six courses. All free. Start with The Fundamentals of Value.",
     "note": "Jack Butcher’s free course library covers visual clarity, positioning, packaging, publishing, service, and turning knowledge into reusable assets."
   },
   {
@@ -1359,6 +1884,28 @@
     "saved_date": "2026-09-05",
     "kind": "article",
     "tldr": "Benji catalogues Honk's real-time messaging interactions: live typing bubbles, presence animations, emoji collisions, custom fonts and sounds, arguing playfulness wasn't enough for product-market fit.",
+    "highlights": [
+      {
+        "text": "Honk took a completely different approach. It had two chat bubbles, no send button, no chat history, and no drafts.",
+        "note": "The core interaction model that defined the app",
+        "color": "amber"
+      },
+      {
+        "text": "As you typed, your chat bubble dynamically resized; when you paused, it shrank back down.",
+        "note": "One of many live presence details",
+        "color": "amber"
+      },
+      {
+        "text": "Users could send (or more commonly spam) as many emojis as they wanted, in any order, even if this made the conversation briefly unreadable for both people.",
+        "color": "amber"
+      },
+      {
+        "text": "Honk facilitated over 2.6 billion characters typed, 170 million Honks sent, and hundreds of millions of images, audio, and videos exchanged.",
+        "note": "Scale reached before the app was sunset",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "Before pivoting to build Family, I worked with many of the same talented people on Honk, a real-time messaging app. We discontinued Honk when we shifted our focus to Family, and when we were eventually acquired, the Honk IP was transferred over along with everything else.",
     "note": "Benji's postmortem on Honk, the real-time messaging app with no send button. A catalogue of the micro-interactions that made it playful, and why that wasn't enough."
   },
   {
@@ -1369,6 +1916,26 @@
     "saved_date": "2026-09-05",
     "kind": "article",
     "tldr": "Interfere's founders detail a week-long sprint on visual identity, code-built homepage graphics, staggered hero animations, and a stack migration from Next.js to TanStack Start.",
+    "highlights": [
+      {
+        "text": "They gave us the two signature details the site is built on: the Interfere gradient and a pixelated final word in the headline that echoes the logo.",
+        "color": "amber"
+      },
+      {
+        "text": "Every asset on the website is built in code, with a few exceptions where it wasn’t possible.",
+        "color": "amber"
+      },
+      {
+        "text": "We originally built the website with Next.js. Since then, we’ve migrated to TanStack Start and Vite for both the marketing pages and the product.",
+        "note": "Their current tech stack",
+        "color": "amber"
+      },
+      {
+        "text": "It’s significantly more work this way, but we weren’t willing to compromise or take shortcuts.",
+        "color": "green"
+      }
+    ],
+    "excerpt": "Rebuilding a website is never easy, especially when you’re also defining the visual identity for an early-stage company that’s still relatively unknown. We did a week-long sprint to figure out how we wanted Interfere to look and feel.",
     "note": "Paul Faivret and Jakub Krehel unpack a week-long sprint spanning visual identity, product graphics, animation, assets, and the site’s technical stack."
   },
   {
@@ -1379,6 +1946,25 @@
     "saved_date": "2026-09-05",
     "kind": "article",
     "tldr": "OpenAI's ChatGPT Learn training walks users through ChatGPT Work and Codex via eight walkthroughs covering plugins, scheduled tasks, slides, browser use, mobile workflows, and voice.",
+    "highlights": [
+      {
+        "text": "Use Work when a task is scattered across the tools you already use and needs to end in a finished result.",
+        "color": "amber"
+      },
+      {
+        "text": "Plugins give ChatGPT new things it can do. Skills save how you want those things done.",
+        "color": "amber"
+      },
+      {
+        "text": "ChatGPT can read what’s on screen, click, and type in apps and websites you allow it to use.",
+        "color": "amber"
+      },
+      {
+        "text": "Describe what you want, and ChatGPT can build and host a real website, even from ChatGPT Work on your phone.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "Get started with ChatGPT Work and Codex, then explore practical workflows.",
     "note": "OpenAI’s guided training covers ChatGPT Work, Codex, plugins, scheduled tasks, documents, browser use, mobile workflows, and voice."
   },
   {
@@ -1389,6 +1975,25 @@
     "saved_date": "2026-09-05",
     "kind": "post",
     "tldr": "AmirMušić turns one Pinterest reference into a full brand system, identity, guidelines, packaging, campaign assets, using Lovart Agent, then open-sources his Brand System Skill.",
+    "highlights": [
+      {
+        "text": "Can an AI agent understand why an image works -> not copy it -> and turn that logic into a new brand?",
+        "color": "amber"
+      },
+      {
+        "text": "My workflow: Reference → Deconstruction → Anchor (Brand Kit) → Guidelines → Brand Lock → Campaign Assets → Packaging",
+        "color": "amber"
+      },
+      {
+        "text": "One solid anchor beats twenty disconnected outputs",
+        "color": "blue"
+      },
+      {
+        "text": "AI can create endless images. A brand begins when someone decides what must stay in its visual language.",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "For 10+ years, I've been creating branding & ads for Warner Music, PepsiCo, and others. Now I combine that experience with AI to build hi-end visual systems faster. This article shows my complete branding workflow with AI",
     "note": "@AmirMushich: For 10+ years, I've been creating branding & ads for Warner Music, PepsiCo, and others. Now I combine that experience with AI to build hi-end visual systems faster. This article shows my complete branding workflow with AI This time, I turned one reference into an identity, brand…",
     "post": {
       "id": "2095182776249049456",
@@ -1417,6 +2022,17 @@
     "saved_date": "2026-09-05",
     "kind": "article",
     "tldr": "Luma's The Art of Hosting collects interviews with community builders like Cafe Cursor's Ben and She Runs' Millie on scaling real-world gatherings.",
+    "highlights": [
+      {
+        "text": "Ben started Cafe Cursor, a global movement of 176 events across 120+ cities, most of them run by the community itself.",
+        "color": "amber"
+      },
+      {
+        "text": "What started as a run club to make friends became one of Sydney’s fastest-growing women’s communities, with nearly 400 events, sell-out specials, and brand partnerships funding it all.",
+        "color": "green"
+      }
+    ],
+    "excerpt": "A playbook on how to bring people together by some of the best hosts and community builders on Luma.",
     "note": "Luma’s collection of field notes and playbooks from community builders on curating events, shaping gatherings, and growing local scenes."
   },
   {
@@ -1427,6 +2043,26 @@
     "saved_date": "2026-09-05",
     "kind": "article",
     "tldr": "Brilliant's Coding Skills Framework spans 14 Big Ideas, 79 objectives and 302 skills, from computer science foundations to coding with AI.",
+    "highlights": [
+      {
+        "text": "Brilliant’s Coding Skills Framework maps the full learning progression from those foundations to effective coding with AI.",
+        "color": "amber"
+      },
+      {
+        "text": "This means the foundations of computer science still matter. They give you the mental models to specify what you want, recognize when AI gets it wrong, and guide it toward a better solution.",
+        "color": "amber"
+      },
+      {
+        "text": "The Foundations of Computer Science half contains 7 Big Ideas, 42 learning objectives, and 196 skills. The Coding with AI half contains 7 Big Ideas, 37 learning objectives, and 106 skills.",
+        "note": "Full breakdown of the framework",
+        "color": "blue"
+      },
+      {
+        "text": "This framework centers around the habits of mind that make for successful programmers in the age of AI: designing programs, solving problems methodically, and reasoning about correctness, data, and cost.",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Coding is changing. We can now use natural language to specify tasks, set constraints, and direct AI agents. But natural language instructions can be ambiguous, and generated code still needs to be tested, debugged, and evaluated.",
     "note": "Brilliant frames durable AI-era coding around taste, incremental delivery, specification, verification, security, and reasoning across abstractions."
   },
   {
@@ -1491,6 +2127,25 @@
     "saved_date": "2026-09-14",
     "kind": "article",
     "tldr": "Wikipedia explains the Hawthorne effect, where awareness of being observed changes behavior, and notes some scholars call the original factory studies fictitious.",
+    "highlights": [
+      {
+        "text": "Henry Landsberger, a sociology professor at UNC-Chapel Hill, later suggested that the novelty of being research subjects and the increased attention from such could lead to temporary increases in workers' productivity.",
+        "color": "amber"
+      },
+      {
+        "text": "The workers' productivity seemed to improve when changes were made but returned to their original level when the study ended.",
+        "color": "amber"
+      },
+      {
+        "text": "When discussing the Hawthorne effect, most industrial and organizational psychology textbooks refer almost exclusively to the illumination studies as opposed to the other types of studies that have been conducted.",
+        "color": "amber"
+      },
+      {
+        "text": "Ultimately it was concluded that illumination did not have any effect on productivity and that there must have been some other variable causing the observed productivity increases in both rooms.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "The Hawthorne effect is a type of behavioral reactivity in which individuals modify an aspect of their behavior in response to their awareness of being observed. The effect was discovered in the context of research conducted at the Hawthorne Western Electric plant; however, some scholars think the descriptions are fictitious.",
     "note": "The Wikipedia entry on the Hawthorne effect — people work differently when they know they're being watched. The classic factory studies behind it turn out to be much shakier than the textbook version."
   },
   {
@@ -1800,6 +2455,26 @@
     "saved_date": "2026-09-14",
     "kind": "post",
     "tldr": "PostHog's Jina Yoon argues AGENTS.md needs subtraction not addition, and gives 3 methods: doctor checks, testable evals, and direct agent feedback.",
+    "highlights": [
+      {
+        "text": "Boris Cherny, the creator of Claude Code, recommended deleting your CLAUDE.md every six months to stay on the bleeding edge.",
+        "color": "amber"
+      },
+      {
+        "text": "Our agents therefore had wrong instructions for 21 hours. During that time, one engineer’s PR got stuck for 10 hours; another lost 45 minutes investigating the cause before updating the instructions.",
+        "note": "Cost of a stale AGENTS.md line",
+        "color": "amber"
+      },
+      {
+        "text": "it suggested turning off 3 unused plugins and 3 skills across our website repo and estimated saving an average of 6K tokens per session.",
+        "color": "blue"
+      },
+      {
+        "text": "For each line, if you can’t name the failure it prevents, delete it.",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Context engineering used to focus on adding information that base models lacked: But then the models kept getting better. Now, the same context your agents couldn’t function without can make them perform worse.",
     "note": "@posthog: Context engineering used to focus on adding information that base models lacked: But then the models kept getting better. Now, the same context your agents couldn’t function without can make them perform worse. Our AI onboarding wizard, for example, often landed on the wrong…",
     "post": {
       "id": "2094485724171223409",
@@ -1900,6 +2575,18 @@
     "saved_date": "2026-09-14",
     "kind": "article",
     "tldr": "Illustrator Noah Farrar breaks down the code behind his homepage's interactive moments: dither reveals, spring-physics heart trails, and ball physics, with exact numbers.",
+    "highlights": [
+      {
+        "text": "Dots use spring physics (stiffness 0.02, damping 0.9) and fade in with a trailing effect over your last 12 cursor positions, creating a comet effect.",
+        "color": "amber"
+      },
+      {
+        "text": "Ten SVG circles with real physics. Gravity at 0.015px/frame², 0.5% drag per frame, 50% vertical restitution on bounce.",
+        "note": "The exact numbers behind the ball physics",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "I'm an illustrator / designer who always quietly admired people who could open a code editor and make something exist. This project has been about learning to cross that bridge in real time, mixing traditional workflows (sketching, vectorizing by hand, etc) with tools like Claude and really leaning into this new superpower us visual tinkerers have at our fingertips.",
     "note": "Illustrator Noah Farrar learns to code with Claude and breaks down every interactive moment on his homepage — dither reveals, spring physics, click bursts — with the exact numbers behind each one."
   },
   {
@@ -1910,6 +2597,14 @@
     "saved_date": "2026-09-14",
     "kind": "article",
     "tldr": "A Lenny's Workshop session covers connecting Magic Patterns to Claude Code and Cursor over MCP so agents produce on-brand, production-synced components.",
+    "highlights": [
+      {
+        "text": "We’ll cover pulling generated UI straight into your codebase, reading and writing your design system over MCP so agents produce on-brand components, and keeping prototypes and production code in sync without copy-paste.",
+        "note": "The workshop agenda; the recording is subscriber-only",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Learn how product teams connect Magic Patterns to their AI coding agents (Claude Code, Cursor, and others) through the MCP.",
     "note": "A Lenny's Workshop recording with Magic Patterns cofounder Alexander Danilowicz: connecting Magic Patterns to Claude Code and Cursor over MCP so agents generate on-brand components and prototypes stay in sync with production code."
   },
   {
@@ -1920,6 +2615,25 @@
     "saved_date": "2026-09-14",
     "kind": "article",
     "tldr": "Anshu Chimala, ex-Apple AI design lead, outlines a Discover-Define-Deliver process pushing AI past generic outputs using seed strings, ambitious prompts, and subagent design critics.",
+    "highlights": [
+      {
+        "text": "Large language models are next-token predictors: at each step, they look at a sequence of text and predict what comes next based on millions of examples.",
+        "color": "amber"
+      },
+      {
+        "text": "Great design, on the other hand, starts with feeling and aims to create an emotional response. It bends the rules and delights users with memorable, unexpected choices.",
+        "color": "amber"
+      },
+      {
+        "text": "One technique for this is String Seed of Thought, published by Sakana AI. We make the AI generate a random string and use it as design inspiration.",
+        "color": "blue"
+      },
+      {
+        "text": "AI loves to add more, but it rarely takes away. One of the biggest signs that a design is AI-generated is that it overexplains everything or contains elements that don’t serve any practical purpose.",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "I’d always thought AI was bad at design. But after reading this mind-blowing post by Anshu Chimala, I realize I was just doing it wrong. Anshu led software engineering and design teams at Apple for 12 years, focusing on research and prototyping for future AI products.",
     "note": "Anshu Chimala spent twelve years prototyping AI products at Apple; this Lenny's guest post lays out his end-to-end process for getting real design taste out of AI. The full walkthrough sits behind the paywall."
   },
   {
@@ -1956,6 +2670,26 @@
     "saved_date": "2026-09-14",
     "kind": "article",
     "tldr": "space-z.ai's brief tasks Claude Code with building a photorealistic restaurant and bar unattended for 12+ hours, judged by a 100-point rubric and six fresh-context critics.",
+    "highlights": [
+      {
+        "text": "You are the lead environment artist, Blender technical artist, hospitality interior architect and restaurant operations designer, lighting artist, and final quality owner for this project.",
+        "color": "amber"
+      },
+      {
+        "text": "The user may be unavailable. Make conservative, reversible assumptions, record them, and continue.",
+        "color": "amber"
+      },
+      {
+        "text": "Perform at least four complete cycles of: build or change → render the fixed judgeset → inspect actual pixels and contact sheet → diagnose → fix → rerender identical cameras",
+        "note": "The evidence-based review loop",
+        "color": "blue"
+      },
+      {
+        "text": "Each important asset must work at three reading distances: a recognizable macro silhouette, functional medium-scale construction, and close-range joins, controls, hardware, fasteners, seams, gaskets, labels, edge treatment, and contact with adjacent surfaces.",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Create a complete, editable, photorealistic Blender environment depicting Skyline Restaurant and Cocktail Bar. Create a complete destination restaurant and cocktail bar above a dense global city at night, balancing theatrical arrival, intimate dining, visible culinary craft, and credible back-of-house operation.",
     "note": "A full production brief for an autonomous agent: Claude Code, 12-plus hours unattended, building a photorealistic Blender restaurant judged by a 100-point rubric and six fresh-context critics. Worth reading as a spec for how far agent task briefs have come."
   },
   {
@@ -2138,6 +2872,27 @@
     "saved_date": "2026-09-14",
     "kind": "post",
     "tldr": "Pascio recounts burning $9,000 on dropshipping, then building a $1M+ solo business via Notion templates and Twitter, launching newsletter Side Quests.",
+    "highlights": [
+      {
+        "text": "I ended up burning around $9,000 running paid ads before eventually accepting that I had created a remarkably efficient system for sending money from my bank account directly to Facebook, and not so much a business that got me paid (lol).",
+        "note": "The dropshipping failure that started it all",
+        "color": "amber"
+      },
+      {
+        "text": "My little internet business selling cute Notion templates eventually scaled to $300,000 in profits.",
+        "color": "amber"
+      },
+      {
+        "text": "that $300k from selling templates eventually crossed $1 million in total profit.",
+        "color": "blue"
+      },
+      {
+        "text": "I spent 3 years trying random shit online, failing most of it. I burned thousands of dollars. I spent hours and hours making content nobody cared about.",
+        "note": "The unglamorous version of the story",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "How I went from burning $9,000 on a failed dropshipping store to building a $1M+ solo business, and why I’m now starting a newsletter called Side Quests. Hi, I am Pascio. Today, over 370,000 cool people follow my stuff across the internet, and because they do, I’ve made over $1M in personal profit from the businesses I built off the back of that, mostly by myself, and always with my laptop and a (not always so fast) WiFi connection.",
     "note": "@IAmPascio: How I went from burning $9,000 on a failed dropshipping store to building a $1M+ solo business, and why I’m now starting a newsletter called Side Quests. Hi, I am Pascio. Today, over 370,000 cool people follow my stuff across the internet, and because they do, I’ve made over $1M…",
     "post": {
       "id": "2096527252225761430",
@@ -2254,6 +3009,25 @@
     "saved_date": "2026-09-14",
     "kind": "post",
     "tldr": "Kenny Damian details 6 systems that keep AI delivery costs flat as Frontal scales from 2 to 275 client accounts.",
+    "highlights": [
+      {
+        "text": "You price a result instead of hours, you say software does the work, the client signs.",
+        "color": "amber"
+      },
+      {
+        "text": "At Frontal we have done this work across 275 companies and the same thing is true every time: companies buy the tools and cannot make them run.",
+        "color": "amber"
+      },
+      {
+        "text": "I open-sourced the 15 skills we run across 70+ clients. 5 pillars, roughly 4,200 lines of methodology.",
+        "color": "blue"
+      },
+      {
+        "text": "Across the agency that store now holds 11,000 campaigns, 132,000 snapshots and 30+ clients.",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "I have 15 client folders open in my terminal right now. Opening the 15th cost me about what the 2nd did, and that single fact is the whole difference between a services-as-software company and an agency paying for a Claude subscription.",
     "note": "@Kenny_GTM: I have 15 client folders open in my terminal right now. Opening the 15th cost me about what the 2nd did, and that single fact is the whole difference between a services-as-software company and an agency paying for a Claude subscription. The pitch is the half everyone has heard…",
     "post": {
       "id": "2095907541431775260",
@@ -2282,6 +3056,26 @@
     "saved_date": "2026-09-14",
     "kind": "post",
     "tldr": "Jay Yang outlines his PTL framework, power, trust, likeness, for building brand demand, plus a content multiplication system of repost, repurpose, remix.",
+    "highlights": [
+      {
+        "text": "Future demand is the amount of possible demand your brand could have in the future.",
+        "color": "amber"
+      },
+      {
+        "text": "My favorite way to build these associations is a framework I call PTL: Power, Trust, Likeness.",
+        "note": "His core branding framework",
+        "color": "amber"
+      },
+      {
+        "text": "Trust is the belief that following your direction will produce a good result.",
+        "color": "blue"
+      },
+      {
+        "text": "Organic content widens the outer circle, the number of people who are aware of you. Paid ads widen the inner circle, the number of people who actually buy from you.",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "I’ve helped launch a book to become a New York Times best-seller. I’ve helped another break a Guinness World Record for the fastest-selling non-fiction book in under 24 hours. My own books have become Amazon best-sellers. I’ve worked behind the scenes with some of the biggest personal brands in business, and grown my own audience to over 500,000 followers.",
     "note": "@jayyanginspires: I’ve helped launch a book to become a New York Times best-seller. I’ve helped another break a Guinness World Record for the fastest-selling non-fiction book in under 24 hours. My own books have become Amazon best-sellers. I’ve worked behind the scenes with some of the biggest…",
     "post": {
       "id": "2097350523812729010",
@@ -2310,6 +3104,24 @@
     "saved_date": "2026-09-14",
     "kind": "post",
     "tldr": "Chris starts a series on breaking into startups as a non-technical hire, arguing early-career people should target GTM roles since AI lets non-engineers do it.",
+    "highlights": [
+      {
+        "text": "I'm starting this series because I wish I had something like this when I was trying to understand startup roles myself.",
+        "note": "Author's reason for starting the series",
+        "color": "amber"
+      },
+      {
+        "text": "At the beginning, a startup really needs to do two things: build something people want and figure out how to get people to buy it.",
+        "note": "Core startup dichotomy: build or sell",
+        "color": "amber"
+      },
+      {
+        "text": "Tools like @Clay and AI coding agents like @Claudeai have made it possible for people who aren't software engineers to build surprisingly sophisticated things.",
+        "note": "Why non-engineers can now do GTM engineering",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "I'm starting this series because I wish I had something like this when I was trying to understand startup roles myself. Before we get into it, you might reasonably be asking: who is writing this?",
     "note": "@chrislevan24: I'm starting this series because I wish I had something like this when I was trying to understand startup roles myself. Before we get into it, you might reasonably be asking: who is writing this? TLDR: After graduating, I was as an early-stage VC investor at @panachevc who then…",
     "post": {
       "id": "2097136557677293987",
@@ -2393,6 +3205,29 @@
     "saved_date": "2026-09-14",
     "kind": "post",
     "tldr": "Isaiah Granet nearly fired a Bland SDR who ignored outbound but quietly closed the two biggest deals, arguing workers should chase outsized wins over busywork.",
+    "highlights": [
+      {
+        "text": "Catching the snitch is worth a hundred and fifty and ends the match.",
+        "note": "His Quidditch framing for outsized results",
+        "color": "amber"
+      },
+      {
+        "text": "He’d found another way, and I was so busy checking whether he was doing what I’d asked that I nearly missed it.",
+        "note": "On nearly missing his best hire's real work",
+        "color": "amber"
+      },
+      {
+        "text": "Try finishing this sentence: if I accomplish _____ in the next six months, it will be obvious I’ve done an exceptional job.",
+        "note": "His exercise for finding your own snitch",
+        "color": "amber"
+      },
+      {
+        "text": "You can lose by never looking for the thing that would decide the game. You can also lose by doing nothing else.",
+        "note": "Balancing goals versus the decisive result",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "I hired one of our first employees at Bland to be an SDR. For several months he did basically none of that, and I was working out how to let him go.",
     "note": "@zaygranet: I hired one of our first employees at Bland to be an SDR. For several months he did basically none of that, and I was working out how to let him go. What I didn't know was that he'd been quietly working three accounts himself. He'd decided that closing those three mattered more…",
     "post": {
       "id": "2097527813738045943",
@@ -2420,6 +3255,25 @@
     "saved_date": "2026-09-14",
     "kind": "post",
     "tldr": "Alex of Relate Studio designs brand mascots with AI: Krea for rough concepts, Nano Banana 2 for refinement, then scaling into a brand system.",
+    "highlights": [
+      {
+        "text": "AI tools alone can already get you to a result strong enough to present to a client and detailed enough for a motion designer to use as reference for a full 3D build.",
+        "color": "amber"
+      },
+      {
+        "text": "Don't limit yourself to references that look exactly like the final result. Mixing different styles can lead to more interesting generations.",
+        "color": "amber"
+      },
+      {
+        "text": "Instead of trying to solve everything in one huge prompt, I usually make small changes one at a time.",
+        "color": "blue"
+      },
+      {
+        "text": "The important part is locking the character's core visual language first.",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Hi, I'm Alex, cofounder at @relate_studio. In this tutorial, I'll walk you through how we design brand mascots with AI: finding first concepts in Krea, refining the best direction in Nano Banana 2, generating new poses and angles, and turning everything into a concept you can scale.",
     "note": "@semochkin_alex: Hi, I'm Alex, cofounder at @relate_studio. In this tutorial, I'll walk you through how we design brand mascots with AI: finding first concepts in Krea, refining the best direction in Nano Banana 2, generating new poses and angles, and turning everything into a concept you can…",
     "post": {
       "id": "2097664889032434119",
@@ -2547,6 +3401,29 @@
     "saved_date": "2026-09-14",
     "kind": "post",
     "tldr": "Rohan Nayak details how Pocket FM reached $500M ARR: an AI ad-testing engine, localized shows, $1M internal seed bets, and a pivot to AI-produced content.",
+    "highlights": [
+      {
+        "text": "We grew from ~0 to $500M ARR, adding $250M last year alone while being EBITDA profitable.",
+        "note": "Headline growth number",
+        "color": "amber"
+      },
+      {
+        "text": "Our core insight after spending >$100M on acquisition is: If the clickthrough rate (CTR) for an ad goes from 2% to 2.25%, our customer acquisition cost (CAC) decreases by ~ 30%.",
+        "note": "The CTR to CAC insight behind their ad engine",
+        "color": "green"
+      },
+      {
+        "text": "We give $1M checks to new internal initiatives, and the team has 12-18 months to prove their thesis.",
+        "note": "How they fund new internal bets",
+        "color": "amber"
+      },
+      {
+        "text": "We have the largest storytelling catalog with 770,000 titles, 550k creators, and 5.5B hours of playtime with minute by minute retention & engagement data.",
+        "note": "Scale of the content catalog",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "We grew from ~0 to $500M ARR, adding $250M last year alone while being EBITDA profitable. 1,300-word post on every growth tactic that worked for us: 1. What got us from 0-$400M ARR in the US works in every country. 2. Retention and Monetisation Hacks. 3. Localization > Translation. 4. Experiment with $1M internal seed checks. 5. Pivoting to only AI content production unlocked 100% ARR growth.",
     "note": "@RohanNayak2: We grew from ~0 to $500M ARR, adding $250M last year alone while being EBITDA profitable. 1,300-word post on every growth tactic that worked for us: 1. What got us from 0-$400M ARR in the US works in every country. 2. Retention and Monetisation Hacks. 3. Localization >…",
     "post": {
       "id": "2098104784264065525",
@@ -2585,6 +3462,26 @@
     "saved_date": "2026-09-14",
     "kind": "article",
     "tldr": "Colin Jarvis, OpenAI's Global Head of Forward Deployed Engineering, describes an FDE org that grew from 2 to 140 people alongside a 200-person deployment company.",
+    "highlights": [
+      {
+        "text": "A forward deployed engineer is focused on outcomes. Which means that their goal should be to work on problems where solving them has a much bigger impact than the work itself.",
+        "note": "Colin Jarvis's definition of the role",
+        "color": "amber"
+      },
+      {
+        "text": "They started with just 2 people and have now grown to around 140 people in the FDE org.",
+        "color": "amber"
+      },
+      {
+        "text": "An FDE might spend the full day talking with the payments team to understand what specific things are important to them so that the migration would be successful.",
+        "color": "amber"
+      },
+      {
+        "text": "They generally tell new joiners to expect around 50% of their time on site.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "The Forward Deployed Engineer (FDE) role has gained a lot of popularity in recent years, and OpenAI is a good example of fast scaling of their FDE organization. Additionally, they recently built a separate entity called the OpenAI Deployment Company, focused on helping customers use OpenAI’s products.",
     "note": "Gregor Ojstersek’s interview with OpenAI’s FDE lead explains how the team sits between customers, product, and research, and why the job mixes engineering with on-site problem discovery."
   },
   {
@@ -2595,6 +3492,25 @@
     "saved_date": "2026-09-14",
     "kind": "article",
     "tldr": "Sharadh Krishnamurthy explains how Stripe's Kai, an internal AI agent used by 10,000+ employees weekly, handles governance, data access, and 2,000 packaged skills.",
+    "highlights": [
+      {
+        "text": "Sharadh Krishnamurthy is an engineering manager at Stripe, where he helped build Kai, the company’s internal AI agent used by more than 10,000 employees every week.",
+        "color": "amber"
+      },
+      {
+        "text": "Why Stripe built Kai from scratch instead of buying, and what tipped the decision",
+        "color": "amber"
+      },
+      {
+        "text": "Why “projects” at Stripe are a governance mechanism, not just a folder",
+        "color": "amber"
+      },
+      {
+        "text": "What Sharadh learned the hard way when agents nearly took down production systems",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "Learn how Stripe scaled AI to everyone at a complex global company by building context, governance, and a shared skills platform directly into their internal agent",
     "note": "Stripe’s engineering team explains how it built Kai for 10,000 weekly users, including governance, shared skills, secure data access, and safeguards against rogue agents."
   },
   {
@@ -2605,6 +3521,29 @@
     "saved_date": "2026-09-15",
     "kind": "post",
     "tldr": "@alexeixbt explains neuroplasticity: repetition rewires the brain via synaptic and structural change, citing London taxi drivers' enlarged hippocampi and willpower-building in the anterior midcingulate cortex.",
+    "highlights": [
+      {
+        "text": "neurons that fire together, wire together.",
+        "note": "Hebb's 1949 line on how learning happens",
+        "color": "amber"
+      },
+      {
+        "text": "The \"suck\" isn't a side effect of building willpower. It's the mechanism.",
+        "note": "On why discomfort grows the midcingulate cortex",
+        "color": "amber"
+      },
+      {
+        "text": "Five focused minutes daily will outbuild one exhausted three hour session a week.",
+        "note": "Frequency over intensity, his practical takeaway",
+        "color": "amber"
+      },
+      {
+        "text": "Attention and effort, repeated, become wiring. Wiring becomes identity. Identity becomes your life.",
+        "note": "His closing thesis",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Somewhere out there is a version of you that's wealthier, calmer, more confident, better with people, more disciplined, less afraid. And here's the part almost nobody explains properly: the gap between you and that person isn't talent, luck, or genetics.",
     "note": "@alexeixbt: Somewhere out there is a version of you that's wealthier, calmer, more confident, better with people, more disciplined, less afraid. And here's the part almost nobody explains properly: the gap between you and that person isn't talent, luck, or genetics. It's wiring. Literal…",
     "post": {
       "id": "2086051211271196886",
@@ -2633,6 +3572,29 @@
     "saved_date": "2026-09-15",
     "kind": "article",
     "tldr": "Ordinary Abundance pairs a modern apartment's daily objects, music, light, photography, medicine, plumbing, with historical quotes describing each as a miracle when new.",
+    "highlights": [
+      {
+        "text": "If we could have devised an arrangement for providing everybody with music in their homes, perfect in quality, unlimited in quantity, suited to every mood, and beginning and ceasing at will, we should have considered the limit of human felicity already attained.",
+        "note": "Edward Bellamy, 1888, on recorded music",
+        "color": "amber"
+      },
+      {
+        "text": "The strange, weird light, exceeded in power only by the sun, yet mild as moonlight, rendered the Court House square as light as midday.",
+        "note": "A witness describing Wabash, Indiana's first electric lighting",
+        "color": "amber"
+      },
+      {
+        "text": "A museum without walls has been opened to us, and it will carry infinitely farther that limited revelation of the world of art which the real museums offer us within their walls.",
+        "note": "Andre Malraux on art reproductions",
+        "color": "amber"
+      },
+      {
+        "text": "You have erased from the calendar of human afflictions one of its greatest.",
+        "note": "Thomas Jefferson on Jenner's smallpox vaccine",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Edward Bellamy once imagined that music on demand would be \"the limit of human felicity.\" A modern apartment is full of things that once drew the same kind of awe.",
     "note": "A visual essay that tours an ordinary apartment through the historical wonder once attached to music, electric light, photography, and other everyday objects."
   },
   {
@@ -2643,6 +3605,25 @@
     "saved_date": "2026-09-15",
     "kind": "article",
     "tldr": "Jonny Miller defines clenching as unnecessary muscle tension the nervous system holds for protection, then outlines a four-step Notice-Experiment-Track-Iterate loop for releasing it.",
+    "highlights": [
+      {
+        "text": "Research shows about 80% of people hold their breath when looking at a screen.",
+        "color": "amber"
+      },
+      {
+        "text": "Feeling a feeling isn't what makes an experience unbearable. Our suffering comes from clenching against what we feel.",
+        "color": "amber"
+      },
+      {
+        "text": "If you only take away one thing from this essay, let it be this: unclenching is a trainable skill.",
+        "color": "amber"
+      },
+      {
+        "text": "Curious attention will dissolve your tension.",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "In 2001, Scott Boswell was seven years into his professional cricket career, enjoying one of his best seasons yet and gearing up for the biggest match of his life: a cup final at Lord's.",
     "note": "Jonny Miller’s field guide to noticing unnecessary tension, softening it, and practicing unclenching as a trainable nervous-system skill."
   },
   {
@@ -2679,6 +3660,25 @@
     "saved_date": "2026-09-15",
     "kind": "article",
     "tldr": "Tom Orbach catalogs 64 unconventional startup growth tactics, including a fake toy store for CISOs that drew 46,000 visitors and hundreds of qualified leads.",
+    "highlights": [
+      {
+        "text": "We built a fake toy store for cybersecurity executives.",
+        "color": "amber"
+      },
+      {
+        "text": "But attention always goes to what people don't see coming. The unexpected gets shared for free, remembered for months, and usually costs less than one week of ad spend.",
+        "color": "amber"
+      },
+      {
+        "text": "Personal profiles get two to three times the organic reach of company pages.",
+        "color": "amber"
+      },
+      {
+        "text": "A hundred small creators can often out-distribute one big sponsorship, for a fraction of the price.",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "A few years ago, I pitched my VP a growth idea that made zero sense on paper. It had nothing to do with our product, we had no way of knowing if it would work, and there was a real chance it would make us look ridiculous.",
     "note": "Tom Orbach collects more than 60 unconventional growth tactics, with concrete examples and a Markdown file for brainstorming with a team or agent."
   },
   {
@@ -2689,6 +3689,25 @@
     "saved_date": "2026-09-16",
     "kind": "article",
     "tldr": "TypeSafe AI launches Jev, a System One Model trained with Reinforcement Learning for Calibrated Decisions that outputs typed, probabilistic decisions instead of generated text.",
+    "highlights": [
+      {
+        "text": "Jev achieves similar levels of intelligence on System One tasks compared to existing LLMs, while being two orders of magnitude faster and more efficient.",
+        "color": "amber"
+      },
+      {
+        "text": "Think of Jev as a frontier-intelligence function call: unstructured state in, typed probabilistic decisions out.",
+        "color": "amber"
+      },
+      {
+        "text": "Existing models, no matter how smart, still hallucinate and have type errors.",
+        "color": "amber"
+      },
+      {
+        "text": "Every order of magnitude drop in the cost of intelligence unlocks orders of magnitude more use cases.",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Models have been superhuman at chat for years, so where is all the automation? This has been my driving question for the last four years. At OpenAI, I helped build the methods that made language models useful at following instructions and talking with people.",
     "note": "TypeSafe AI introduces Jev, a model for fast, type-safe structured decisions with calibrated probabilities instead of generated text."
   },
   {
@@ -2699,6 +3718,29 @@
     "saved_date": "2026-09-18",
     "kind": "article",
     "tldr": "Gustavo Fior's Craft collects short essays and one-line tips on typography, color, layout, motion, sound and data for design engineers, most still marked coming soon.",
+    "highlights": [
+      {
+        "text": "How fast it feels is a design choice.",
+        "note": "Tagline for the Performance Is Design essay",
+        "color": "amber"
+      },
+      {
+        "text": "Great work starts with great inputs.",
+        "note": "Tagline for How to Get References",
+        "color": "amber"
+      },
+      {
+        "text": "Tighten big text, loosen small text.",
+        "note": "Tagline for Letter Spacing",
+        "color": "amber"
+      },
+      {
+        "text": "Ease-out for anything the user triggers.",
+        "note": "Tagline for Easings",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "A collection of design engineering concepts. These essays are short and simple, meant as a collection of useful ideas and tricks rather than an exhaustive resource.",
     "note": "Gustavo Fior's concise collection of design-engineering ideas, from reference gathering and novelty budgets to motion, typography, color and interaction details."
   },
   {
@@ -2756,6 +3798,24 @@
     "saved_date": "2026-09-22",
     "kind": "post",
     "tldr": "Paul Klay explains why he skips job applications, instead identifying his strongest skills, finding founders who need them, and offering to prove his value first.",
+    "highlights": [
+      {
+        "text": "how to do outreach at this point you might be thinking: Paul, this all sounds great.",
+        "note": "Opens the section on reaching founders",
+        "color": "amber"
+      },
+      {
+        "text": "obviously I need to be useful but how do I actually get a great job?",
+        "note": "The question the piece sets out to answer",
+        "color": "amber"
+      },
+      {
+        "text": "from what I can see, it seems to be working extremely well” “you guys aren’t really doing it right now.",
+        "note": "Example line for pitching a founder",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "I’ve never had a normal job and now I’m writing an article about how to easily get a good one but even though I’ve never had a normal job, I have something much more valuable: after being an influencer and building a couple of successful startups, I started joining new projects as a cofounder and I’m not talking about random early-stage startups.",
     "note": "@PaulKlayVC: I’ve never had a normal job and now I’m writing an article about how to easily get a good one but even though I’ve never had a normal job, I have something much more valuable: after being an influencer and building a couple of successful startups, I started joining new projects…",
     "post": {
       "id": "2101356736560951576",
@@ -2908,6 +3968,29 @@
     "saved_date": "2026-09-22",
     "kind": "post",
     "tldr": "Dhravya Shah reverse-engineers Instinct's memory: git-tracked markdown files, keyword search instead of vector indexing, and a 24-hour ingestion cycle, replicable with Supermemory.",
+    "highlights": [
+      {
+        "text": "There's no vector indexing, or BM25 search. Instinct quite literally just uses keyword matching / grep-style queries to look things up in the file system.",
+        "note": "Core mechanic behind Instinct's retrieval",
+        "color": "amber"
+      },
+      {
+        "text": "Memory is read only, atleast for the agent.",
+        "note": "Writes happen in a background process, not the agent",
+        "color": "amber"
+      },
+      {
+        "text": "We do not know whether the generator reads all files, changed files, search results, earlier summaries, or independently stored facts.",
+        "note": "Caveat on the reconstructed profile mechanism",
+        "color": "amber"
+      },
+      {
+        "text": "Instead of full files, we construct files 'on-demand' which also makes sure that info is always fresh.",
+        "note": "How Supermemory differs from Instinct's git files",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Instinct has taken the world by storm over the last two weeks - it's one of the best imessage assistants I've used. as with every product, I decided to reverse-engineer Instinct's memory to find out exactly how it works.",
     "note": "@DhravyaShah: Instinct has taken the world by storm over the last two weeks - it's one of the best imessage assistants I've used. as with every product, I decided to reverse-engineer Instinct's memory to find out exactly how it works. I've been working on agent memory for the last 3 years…",
     "post": {
       "id": "2101745550752428340",
@@ -2995,6 +4078,17 @@
     "saved_date": "2026-09-22",
     "kind": "article",
     "tldr": "Sharif Shameem argues most people spend decades in chronic pain to avoid a few minutes of acute pain, urging readers to choose it deliberately.",
+    "highlights": [
+      {
+        "text": "Acute pain is sharp and immediate. A workout. A resignation letter. A breakup.",
+        "color": "amber"
+      },
+      {
+        "text": "Not all pain is bad. But it is inevitable.",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "If there's one thing that's guaranteed in life, it's pain. Life is full of pain. Contrary to popular belief, not all pain is bad. Pain is not suffering. You will feel pain. But you get to choose the type of pain.",
     "note": "Sharif Shameem argues that avoiding brief, acute pain usually trades it for quieter chronic pain in health, work, and relationships."
   },
   {
@@ -3005,6 +4099,25 @@
     "saved_date": "2026-09-22",
     "kind": "article",
     "tldr": "Jeremy Lewi describes using Codex and Runme notebooks to plan, execute and document repetitive OpenAI engineering work like Kubernetes cluster setup and model evaluations.",
+    "highlights": [
+      {
+        "text": "Codex reads the notebook and updates it as the work progresses.",
+        "color": "amber"
+      },
+      {
+        "text": "The result is a notebook that documents the steps required to complete the task, along with the dead ends.",
+        "color": "amber"
+      },
+      {
+        "text": "Runme brings the intent, actions, decisions, and outcomes into the same artifact.",
+        "color": "amber"
+      },
+      {
+        "text": "I still decide when a plan is ready and when a consequential choice needs human judgment.",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "My first job at OpenAI was on the cloud infrastructure team, bringing up new Kubernetes clusters for application teams. I'd spend a week getting a batch of clusters ready, working through issues with private links, quota, and Terraform. As soon as those clusters were ready, I'd start on another batch.",
     "note": "Jeremy Lewi shows how Runme notebooks and WebMCP turn recurring engineering work into reviewable workflows that retain decisions and lessons between Codex runs."
   },
   {
@@ -3015,6 +4128,25 @@
     "saved_date": "2026-09-22",
     "kind": "article",
     "tldr": "Jon Yongfook argues cheap AI-built features killed SaaS moats, then lists seven ways founders can still compete: operations, distribution, agents, underserved markets, hardware, pricing, consolidation.",
+    "highlights": [
+      {
+        "text": "Competing on features is over, because anyone can build any feature in a weekend now.",
+        "color": "amber"
+      },
+      {
+        "text": "The hard part is the deliverability relationships, the compliance, the sheer boredom of keeping the thing up.",
+        "color": "amber"
+      },
+      {
+        "text": "If two products have identical features, and they will, the one with the audience wins.",
+        "color": "amber"
+      },
+      {
+        "text": "Own the market, then sell them the things that aren't commodities yet.",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "It has never been easier to build software. I've spent the last year rebuilding Bannerbear from the ground up for V5, and a large chunk of that work was done with AI coding agents. Features that would have taken me a week in 2022 take an afternoon now.",
     "note": "Jon Yongfook argues that cheap feature development has ended feature-led moats, then lays out seven ways SaaS businesses can compete through operations, distribution, data, and trust."
   },
   {
@@ -3025,6 +4157,29 @@
     "saved_date": "2026-09-22",
     "kind": "post",
     "tldr": "Ben Cera traces Polsia's path to 25,000 paying customers: validate with landing-page ads, personally land the first 10 sign-ups, hold pricing until product-market fit.",
+    "highlights": [
+      {
+        "text": "1 paying customer is a good start. 10 means you’re on the right track.",
+        "note": "His early milestones toward product-market fit",
+        "color": "amber"
+      },
+      {
+        "text": "The lesson? Your first 10 paying customers come from hustlin’.",
+        "note": "Advice from Travis Kalanick at CloudKitchens",
+        "color": "amber"
+      },
+      {
+        "text": "The faster your user hits the wow moment, the more users will pay.",
+        "note": "His biggest onboarding fix",
+        "color": "amber"
+      },
+      {
+        "text": "And a great product with great storytelling will make you successful.",
+        "note": "His closing formula",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "When I launched Polsia in December 2025, it was crickets. Nobody knew the product existed. Today, over 25,000 people pay for it.",
     "note": "@Bencera: When I launched Polsia in December 2025, it was crickets. Nobody knew the product existed. Today, over 25,000 people pay for it. But every stage between those two numbers needed a different playbook. And if you run them in the wrong order, you waste time and money. Here’s every…",
     "post": {
       "id": "2101982109313253820",
@@ -3053,6 +4208,25 @@
     "saved_date": "2026-09-22",
     "kind": "article",
     "tldr": "Jason Cohen argues that copying other writers' style, not their words, is a practical way to discover your own voice and strengths as a writer.",
+    "highlights": [
+      {
+        "text": "High School English III doesn't teach you how to write prose in the real world any more than a college CS degree teaches you how to write code in the real world.",
+        "color": "amber"
+      },
+      {
+        "text": "Rather, copying is one of the best ways of learning, growing, evaluating, and exploring. It's a valid tool so long as we regard it as a means to an end.",
+        "color": "amber"
+      },
+      {
+        "text": "The goal is to learn and grow as a writer, and this was fun to do.",
+        "color": "amber"
+      },
+      {
+        "text": "Copying ironically helps you discover yourself: The way to discovering who you are, what you value, what you're good at, what you believe, is to try things on, like clothes, to see what fits.",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "In America we're trained that all copying is bad; of course plagiarism is, but perhaps we're throwing the baby out with the bathwater.",
     "note": "Jason Cohen makes the case for copying structure and style—not words—as a practical way to discover your own strengths and learn how to write."
   },
   {
@@ -3081,6 +4255,29 @@
     "saved_date": "2026-09-23",
     "kind": "post",
     "tldr": "Matt Epstein breaks down the science behind 25 viral X launches: a bold claim, immediate dopamine, no context gaps, and the strongest outcome.",
+    "highlights": [
+      {
+        "text": "Virality has nothing to do with luck. It is entirely skill-based.",
+        "note": "Central claim: virality is a skill",
+        "color": "pink"
+      },
+      {
+        "text": "If your mom can't understand the first 10 seconds, the market won't either.",
+        "note": "Test for clarity in the opening",
+        "color": "amber"
+      },
+      {
+        "text": "Never sell the feature. Sell the destination.",
+        "note": "Core rule for outcome-led copy",
+        "color": "amber"
+      },
+      {
+        "text": "Each quote tweet is literally GOLD, it's a brand new distribution node.",
+        "note": "Reframes QTs as distribution, not proof",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Have you seen any of the launches below on your timeline? (you probably have).. What if I told you they all followed a repeatable viral science that can be 95% automatable with claude. In this article I will give you the EXACT science of virality, that I've used to do 25 of the most viral x launches.",
     "note": "@mattepstein: Have you seen any of the launches below on your timeline? (you probably have).. What if I told you they all followed a repeatable viral science that can be 95% automatable with claude. In this article I will give you the EXACT science of virality, that I’ve used to do 25 of the…",
     "post": {
       "id": "2066664675542999369",
@@ -3109,6 +4306,25 @@
     "saved_date": "2026-09-23",
     "kind": "article",
     "tldr": "DigitalOcean opens Managed Agents to everyone, giving AI agents durable cloud sessions, connections to over 16,000 tools, and per-second CPU billing instead of standing infrastructure.",
+    "highlights": [
+      {
+        "text": "Agents go from session creation to a response in less than a couple of seconds and resume paused work in ~300 milliseconds.",
+        "color": "amber"
+      },
+      {
+        "text": "With per-second active CPU billing, you pay only for the CPU your agents actually consume.",
+        "color": "amber"
+      },
+      {
+        "text": "Harness Runtime becomes ready in 886 milliseconds and delivers the first response in 3.3 seconds in this benchmark.",
+        "color": "amber"
+      },
+      {
+        "text": "Action Gateway helped match the agent's intent to a tool's capabilities with 99.3% accuracy, even when our requests used different wording from the tool's name or description.",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Following a successful private preview, we're thrilled to open DigitalOcean Managed Agents to everyone. Teams can now deploy their preferred agent harness (like OpenCode, Codex CLI) or bring their own, connect agents to 16,000+ tools, and help agents do more work at scale without building or maintaining any infrastructure themselves.",
     "note": "DigitalOcean introduces a managed platform for building and scaling agentic workloads without maintaining the underlying infrastructure."
   }
 ]

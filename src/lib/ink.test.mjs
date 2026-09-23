@@ -132,6 +132,9 @@ function token(/** @type {string} */ css, /** @type {string} */ name) {
 const PAIRS = [
   ["--amber-ink", "--amber-bg", 6],
   ["--text-primary", "--highlight", 4.5],
+  ["--text-primary", "--highlight-blue", 4.5],
+  ["--text-primary", "--highlight-pink", 4.5],
+  ["--text-primary", "--highlight-green", 4.5],
   ["--selection-ink", "--selection-bg", 4.5],
 ];
 

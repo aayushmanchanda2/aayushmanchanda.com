@@ -74,6 +74,15 @@ syndication endpoint (no key; `pipeline/post.mjs`) for its avatar, photos, video
 and quoted post, which are copied into `public/posts/<id>/` so no page loads
 from X. `node pipeline/backfill-posts.mjs` re-reads every saved post; it skips
 files already on disk.
+Long posts keep their paragraph breaks from Firecrawl; `gh workflow run
+rescrape-posts.yml` re-reads the ones saved before that (`pipeline/rescrape-posts.mjs`).
+
+**Changing a published entry** goes through `node pipeline/patch.mjs --slug <slug>`
+(its flags are `USAGE` in that file). It is how Hermes writes the `title`, `tldr`,
+`highlights` and `excerpt` of a new save once it has published, under the same
+caps the build holds (`src/lib/reader.mjs`): a TLDR of 25 words or fewer that
+summarises the source, up to five verbatim quotes of 60 words or fewer each, an
+excerpt of 80 words or fewer, no em dashes. Never the full text of someone else's piece.
 
 ```
 gh workflow run publish.yml                             # run it now
