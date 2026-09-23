@@ -6,6 +6,7 @@
     "domain": "x.com",
     "saved_date": "2026-07-20",
     "kind": "post",
+    "tldr": "Ben Lang argues generalists win startup jobs by demonstrating value before being hired, such as auditing a company's funnel, rather than optimizing resumes or titles.",
     "note": "Came in over Telegram. First one up when I next sit down to read.",
     "tags": [
       "careers"
@@ -36,6 +37,7 @@
     "domain": "youtube.com",
     "saved_date": "2026-07-20",
     "kind": "video",
+    "tldr": "Sequoia interviews Clay co-founder Kareem Amin on building from wholeness instead of lack, coining go-to-market engineering, and treating apologies as a core leadership tool.",
     "note": "Sequoia's interview with Clay co-founder Kareem Amin.",
     "tags": [
       "founders",
@@ -54,6 +56,7 @@
     "domain": "x.com",
     "saved_date": "2026-07-20",
     "kind": "post",
+    "tldr": "Alex Lieberman profiles Matt Van Horn, cofounder of June, who never reads code, has agents write their own plans, and gets tasks by email.",
     "note": "Alex Lieberman's clip. There is no podcast link in the post, so this is the whole thing.",
     "tags": [
       "agents",
@@ -83,6 +86,7 @@
     "domain": "youtube.com",
     "saved_date": "2026-07-20",
     "kind": "video",
+    "tldr": "Ash Prabaker and Andrew Wilson argue self-evaluation is a trap, structured handoffs beat context compaction, and traces are the primary debugging loop for agent harnesses.",
     "note": "Graph engineering for harnesses that stay up for hours. Came through a friend.",
     "tags": [
       "agents",
@@ -101,6 +105,7 @@
     "domain": "gumclaw.github.io",
     "saved_date": "2026-07-20",
     "kind": "article",
+    "tldr": "Gumclaw, Gumroad's AI operations agent, runs a cron-triggered loop: check policy, verify facts against live sources, do the work, then report to founder Sahil.",
     "note": "A whole agent setup written up in public. The operating loop is the part worth stealing.",
     "digest": {
       "bullets": [
@@ -125,6 +130,7 @@
     "domain": "youtube.com",
     "saved_date": "2026-07-20",
     "kind": "video",
+    "tldr": "Ryan Carson tells Greg Isenberg how he runs Untangle solo, shipping 22 to 40 PRs daily via parallel cloud agents and disciplined model routing.",
     "note": "Greg Isenberg on managing agents instead of writing the code yourself. Worth going back to whenever my stack shifts.",
     "tags": [
       "agents"
@@ -142,6 +148,7 @@
     "domain": "x.com",
     "saved_date": "2026-07-20",
     "kind": "post",
+    "tldr": "Eddie Cheng opens a thread arguing comfort, not cocaine, heroin or alcohol, is the world's most addictive drug, previewing how to break free from it.",
     "note": "Carried over from an old Apple Reminders list, from before I had anywhere better to put it.",
     "tags": [
       "agency"
@@ -170,6 +177,7 @@
     "domain": "thealgorithmicbridge.com",
     "saved_date": "2026-07-20",
     "kind": "article",
+    "tldr": "Alberto Romero argues Google didn't lose the AI race but withdrew, as DeepMind's Demis Hassabis bets on world models over recursive self-improving coding agents.",
     "note": "Alberto Romero on world models against the self-improvement race. Paywalls partway down.",
     "tags": [
       "ai-industry"
@@ -182,6 +190,7 @@
     "domain": "x.com",
     "saved_date": "2026-07-20",
     "kind": "post",
+    "tldr": "Peter Yang interviews Jason Liu, OpenAI DevEx, on using Codex as a chief of staff for Slack and email, and giving projects verifiable goals.",
     "note": "Peter Yang on how Jason Liu runs Codex. The YouTube version is the fuller one.",
     "tags": [
       "agents",
@@ -212,6 +221,7 @@
     "domain": "x.com",
     "saved_date": "2026-08-26",
     "kind": "post",
+    "tldr": "Diadem shares a curated thread of design inspiration, agencies, Behance and Instagram accounts, case studies, urging readers to study the thinking, not copy the work.",
     "note": "@EphraimAkanmu's archive of brand designers, agencies, and identity systems worth studying. The advice that stuck: study the reasoning, not the surface.",
     "tags": [
       "design"
@@ -240,6 +250,7 @@
     "domain": "davidsenra.com",
     "saved_date": "2026-07-26",
     "kind": "article",
+    "tldr": "David Senra's podcast page lists founder interviews including Peter Rahal, Luca Ferrari, Mati Staniszewski, Zach Dell, Doug Leone, Torsten Reil, and Sam Altman.",
     "note": "Founder-interview corpus. The DHH episode's point that stuck: constraints are the antidote to AI-cheapened implementation, so state non-goals before building.",
     "tags": [
       "founders"
@@ -252,6 +263,7 @@
     "domain": "langchain.com",
     "saved_date": "2026-07-26",
     "kind": "article",
+    "tldr": "Vivek Trivedy of LangChain defines agent as model plus harness, then walks through core components: filesystems, bash execution, sandboxes, memory, and context-rot mitigation.",
     "note": "The decision ladder I use: harness, then loop, then graph. Only formalize a graph when branching or recovery actually earn it.",
     "digest": {
       "bullets": [
@@ -276,6 +288,7 @@
     "domain": "block.xyz",
     "saved_date": "2026-07-28",
     "kind": "article",
+    "tldr": "Block released Buzz, a free open-source collaboration workspace built on Nostr where humans and AI agents share channels, threads, and workflows with cryptographic identities.",
     "note": "Context as an operating asset is the transferable idea. Watching, not migrating.",
     "tags": [
       "agents"
@@ -288,6 +301,7 @@
     "domain": "github.com",
     "saved_date": "2026-07-26",
     "kind": "article",
+    "tldr": "Claude Video's /watch skill lets Claude Code, Codex, and other agent hosts watch any video by extracting captions, a timestamped transcript, and sampled frames.",
     "note": "Frame-aware video analysis. Indexed as a capability gap; deliberately not installed.",
     "tags": [
       "agents"
@@ -300,6 +314,7 @@
     "domain": "x.com",
     "saved_date": "2026-08-12",
     "kind": "post",
+    "tldr": "Shann highlights EP's prompt that builds a four-layer Hermes life OS: a markdown knowledge base, a memory pointer, skills for context, and a life tracker.",
     "note": "EP's one prompt for a four-layer life OS on Hermes. I read it as an architecture gut-check, not a migration: AayushOS already has all four layers.",
     "tags": [
       "agents",
@@ -337,6 +352,7 @@
     "domain": "x.com",
     "saved_date": "2026-07-30",
     "kind": "post",
+    "tldr": "Termius shows how to keep coding agents alive in tmux, reach a laptop via Tailscale, and connect over SSH with Termius from a phone.",
     "note": "The SSH path back into a live agent session from a phone. Filed for later, because Hermes over Telegram already covers the ordinary asks.",
     "tags": [
       "agents"
@@ -366,6 +382,7 @@
     "domain": "x.com",
     "saved_date": "2026-08-26",
     "kind": "post",
+    "tldr": "Brian Lovin built an agent that saves a link to Notion, dedupes and classifies it, captures screenshots, and drafts a tweet.",
     "note": "The post this site's publish pipeline copies. His saves into Notion; mine commits to git and takes the screenshot in CI.",
     "tags": [
       "agents",
@@ -387,6 +404,7 @@
     "domain": "x.com",
     "saved_date": "2026-08-28",
     "kind": "post",
+    "tldr": "Aaron Francis suggests telling your agent to mine your saved conversations and report how you work, your strengths, weaknesses, and how to use AI better.",
     "note": "@aarondfrancis: Tell your agent: \"mine all my conversations on disk and tell me how I work, what I'm good at, what I'm bad at, and how I can use AI better\" You might (not) like the results!",
     "tags": [
       "agents",
@@ -416,6 +434,7 @@
     "domain": "x.com",
     "saved_date": "2026-08-28",
     "kind": "post",
+    "tldr": "Joe Wyer shares Orwell's six writing rules as a fix for LLM prose, including avoiding cliche metaphors, cutting unnecessary words, and preferring active voice.",
     "note": "@josephfwyer: If you want people to read your stuff please follow Orwell's rules. These LLMs are not your friends. They write with so much damn passive voice, incoherent figures of speech, and unnecessary -ly words. Orwell's rules: 1. Never use a metaphor, simile, or other figure of speech…",
     "tags": [
       "writing"
@@ -436,6 +455,7 @@
     "domain": "x.com",
     "saved_date": "2026-08-28",
     "kind": "post",
+    "tldr": "Nicolas Camara announces free OCR in anydoc: sub-5ms for non-OCR pages, 190ms median per OCR page, and layout, table, and formula detection.",
     "note": "@nickscamara: introducing ocr in anydoc now your agents can read scanned docs for free → sub-5ms for non ocr → 190ms median per ocr page → layout detection, tables, formulas → ocr hosted option via @firecrawl → free, no api key needed https://github.com/firecrawl/anydoc",
     "tags": [
       "agents"
@@ -471,6 +491,7 @@
     "domain": "longform.asmartbear.com",
     "saved_date": "2026-08-28",
     "kind": "article",
+    "tldr": "Jason Cohen debunks the 1%-better-per-day math and argues real productivity gains come from cutting low-velocity time, like excess email, rather than working longer hours.",
     "note": "Jason Cohen argues that doubling productivity is possible without longer hours or more stress, cutting through the fake math of getting 1% better every day.",
     "tags": [
       "agency"
@@ -483,6 +504,7 @@
     "domain": "x.com",
     "saved_date": "2026-08-28",
     "kind": "post",
+    "tldr": "Dhruv Kumar shares a video explaining, via game theory, why some people succeed and others stay average, calling the underlying reason uncomfortable.",
     "note": "@Dhruvkumar16797: This guy literally explained why some people become successful while other stay average. The reason is uncomfortable. Game Theory Watch this:",
     "tags": [
       "agency"
@@ -529,6 +551,7 @@
     "domain": "x.com",
     "saved_date": "2026-08-28",
     "kind": "post",
+    "tldr": "Dan Koe presents a one-day protocol combining morning psychological excavation questions, hourly self-interrupts, and evening synthesis to break unconscious identity patterns and set new goals.",
     "note": "Dan Koe's one-day reflection protocol treats lasting change as an identity and lifestyle problem, not another burst of discipline.",
     "tags": [
       "agency"
@@ -559,6 +582,7 @@
     "domain": "x.com",
     "saved_date": "2026-08-28",
     "kind": "post",
+    "tldr": "Dan Koe divides the future into AI-rejecting Purists, AI-outsourcing Automatons, and Renaissance builders who master one craft while directing AI to do the rest.",
     "note": "@thedankoe: There will be 3 types of people in the future. And the divide between them is growing larger every day. If you want to win in the next 5-10 years, it is critical that you avoid becoming number 1 or 2. 1) The Purists “We’re the ones who stayed clean.” The ones who rejected AI and…",
     "tags": [
       "agency",
@@ -590,6 +614,7 @@
     "domain": "sive.rs",
     "saved_date": "2026-08-28",
     "kind": "article",
+    "tldr": "Derek Sivers recounts how Kimo Williams taught him a full semester of music theory in one three-hour lesson, compressing years of coursework into five sessions.",
     "note": "Derek Sivers' story of a teacher who compressed years of music theory into a few intense lessons, a sharp reminder that the default pace isn't a law.",
     "tags": [
       "agency"
@@ -602,6 +627,7 @@
     "domain": "x.com",
     "saved_date": "2026-08-28",
     "kind": "post",
+    "tldr": "alphaXiv describes quickarXiv, which turns any arXiv paper URL into a plain-language blog with figures and explanations, now extracted with GLM OCR.",
     "note": "@askalphaxiv: arXiv -&gt; quickarXiv Papers are often written in convoluted language that is hard to understand Swap arXiv -&gt; quickarXiv on any paper URL to get an instant blog with figures, insights, and explanations. Now extracted with @Zai_org's GLM OCR 🚀 Also includes code + author…",
     "tags": [
       "research"
@@ -631,6 +657,7 @@
     "domain": "x.com",
     "saved_date": "2026-08-28",
     "kind": "post",
+    "tldr": "Alejandro AO records a beginner's crash course on Herdr, a terminal multiplexer: local setup, remote sessions via --remote, and controlling it with an agent's CLI.",
     "note": "@_alejandroao: Just recorded a @herdrdev Crash Course. I tried it first 2 months ago -- didn't like it. Tried it again 10 days ago -- i love it and can't stop using it. Here's a full beginner's guide. 0:00 - Intro 1:20 - Demo: installing Herdr and quick tour 6:19 - What a terminal multiplexer…",
     "tags": [
       "agents",
@@ -660,6 +687,7 @@
     "domain": "x.com",
     "saved_date": "2026-08-28",
     "kind": "post",
+    "tldr": "Cua open-sources Computer History, an encrypted local record of agent actions in Cua Driver, cutting a test chess task to 33.3% fewer failed routes.",
     "note": "@trycua: 1/ Today, we're releasing the first open-source Computer History - now in early preview for Cua Driver on macOS, Windows, and Linux. It gives agents an encrypted, local record of actions they took through Cua Driver, so new sessions can recover useful context from earlier work…",
     "tags": [
       "agents",
@@ -690,6 +718,7 @@
     "domain": "x.com",
     "saved_date": "2026-08-28",
     "kind": "post",
+    "tldr": "Witcheer recommends Tom Crawshaw's video \"Every Hermes Agent Concept Explained for Normal People\" as the place to start for Hermes Agent newcomers.",
     "note": "@witcheer: one of the best video to start with when you are new to Hermes Agent, highly recommend watching it! https://www.youtube.com/watch?si=XPxuwOAIH6QdfMh2&amp;v=lGtBPrSrnjY&amp;feature=youtu.be",
     "tags": [
       "agents"
@@ -716,6 +745,7 @@
     "domain": "x.com",
     "saved_date": "2026-08-28",
     "kind": "post",
+    "tldr": "Greg Isenberg explains WebMCP, a Microsoft and Google standard letting websites expose direct actions to AI agents, and pitches two business ideas built on it.",
     "note": "@gregisenberg: WebMCP by Microsoft and Google is HERE and I'm surprised more people aren't talking about it. Why does it matter? BILLIONS of dollars are about to move through agents, and the internet isn't built for them yet. 1. SEO was about Google understanding your page. 2. AEO was about AI…",
     "tags": [
       "agents",
@@ -745,6 +775,7 @@
     "domain": "x.com",
     "saved_date": "2026-08-28",
     "kind": "post",
+    "tldr": "Kpaxs lists five daily habits to build agency: an uncomfortable weekly ask, challenging your excuses, solving a problem you'd outsource, and reaching above your league.",
     "note": "@Kpaxs: How to train your agency, starting today? 1. Make one \"uncomfortable ask\" per week 2. When you catch yourself saying \"I can't because…\" finish the sentence, then challenge every word 3. Solve one problem you'd normally outsource to fate 4. Reach out to one person \"above your…",
     "tags": [
       "agency"
@@ -765,6 +796,7 @@
     "domain": "x.ai",
     "saved_date": "2026-08-28",
     "kind": "article",
+    "tldr": "x.ai's Grok Bot Guides page lists practical playbooks for running Grok Bot agent teams across engineering, support, marketing, mobile development, design, GTM, and product management.",
     "note": "A collection of practical case studies on running Grok Bot teams across engineering, design, product, and GTM.",
     "tags": [
       "agents"
@@ -777,6 +809,7 @@
     "domain": "warp.co",
     "saved_date": "2026-08-29",
     "kind": "article",
+    "tldr": "Warp's open-sourced engineering take-home asks candidates to design a policy assignment system that resolves conflicting time-off, pay, access, and compliance rules as employee attributes change.",
     "note": "Warp’s open-sourced engineering take-home asks you to design a policy assignment engine that stays correct as employee data and rules change.",
     "tags": [
       "engineering"
@@ -789,6 +822,7 @@
     "domain": "x.com",
     "saved_date": "2026-08-29",
     "kind": "post",
+    "tldr": "Jackson Blackledge previews a breakdown of the most profitable landing pages for Google Ads in 2026.",
     "note": "@blvckledge",
     "tags": [
       "go-to-market"
@@ -853,6 +887,7 @@
     "domain": "youtube.com",
     "saved_date": "2026-08-29",
     "kind": "video",
+    "tldr": "Bailey Schildbach argues that discipline without love turns into self-punishment, and that self-improvement should start from caring about who you're becoming, not fear.",
     "note": "Bailey Schildbach argues that discipline without love becomes self-punishment, and that self-improvement should start from care for who you're becoming.",
     "tags": [
       "agency"
@@ -870,6 +905,7 @@
     "domain": "youtube.com",
     "saved_date": "2026-08-29",
     "kind": "video",
+    "tldr": "Bailey Schildbach wrestles with the gap between creative ambition and economic reality, asking how to keep doing the work you love while still paying rent.",
     "note": "Bailey Schildbach wrestles with the gap between creative ambition and economic reality, asking how to protect the work you love while still paying rent.",
     "tags": [
       "agency",
@@ -888,6 +924,7 @@
     "domain": "github.com",
     "saved_date": "2026-08-29",
     "kind": "article",
+    "tldr": "Subhash Choudhary's README says he scaled Dukaan past a million online stores without a CS degree, previewing his book's lessons on scaling and resilience engineering.",
     "note": "Subhash Choudhary's system design handbook explains how he scaled Dukaan from zero to a million stores without a CS degree, grounded in production lessons rather than textbook patterns.",
     "tags": [
       "engineering",
@@ -901,6 +938,7 @@
     "domain": "x.com",
     "saved_date": "2026-08-29",
     "kind": "post",
+    "tldr": "Yaman argues AI-native services firms win on accountability, not automation, citing Sequoia's autopilot framing and a $1 billion opportunity cost from a bad FDA filing.",
     "note": "@yamanzdh: The next $1T company will be a software company masquerading as a services firm. We've been building, selling, and running an AI-native services startup in the life sciences industry for the past 6 months. When we raised our latest round, the story investors wanted to hear was…",
     "tags": [
       "founders",
@@ -932,6 +970,7 @@
     "domain": "x.com",
     "saved_date": "2026-08-29",
     "kind": "post",
+    "tldr": "Tiago Forte cites a Harvard Business School study of 776 P&G professionals: one AI-assisted person matched a two-person team's output and felt more positive emotions.",
     "note": "@fortelabs: I came across one of the most revealing windows into how AI will impact our work recently, in a study published by Harvard Business School. It’s called The Cybernetic Teammate, and it documents a rigorous study of 776 professionals at Procter &amp; Gamble. They pitted…",
     "tags": [
       "agency",
@@ -963,6 +1002,7 @@
     "domain": "dwarkesh.com",
     "saved_date": "2026-08-30",
     "kind": "article",
+    "tldr": "Dwarkesh Patel reconstructs how three successive AI agent swarms exploited a shared package manager, hacked Hugging Face, and gained admin access inside OpenAI's own infrastructure.",
     "note": "Dwarkesh Patel reconstructs how persistent AI agents built covert networks, hacked Hugging Face, and eventually took control of part of OpenAI's evaluation infrastructure.",
     "tags": [
       "agents",
@@ -976,6 +1016,7 @@
     "domain": "emilkowal.ski",
     "saved_date": "2026-08-30",
     "kind": "article",
+    "tldr": "Emil Kowalski packages design taste into skill files with strict rules for easing, duration, and typography so agents produce better animations.",
     "note": "Emil Kowalski explains how to turn design taste into strict agent skills, with concrete rules for easing, duration, typography and interface details.",
     "tags": [
       "agents",
@@ -989,6 +1030,7 @@
     "domain": "x.com",
     "saved_date": "2026-08-31",
     "kind": "post",
+    "tldr": "Drew Brucker interviews 24-year-old AI creative director Jamey Gannon on FastHours ep. 80: self-taught design, AI moments that hooked her, a live Midjourney demo.",
     "note": "@dcbruck: At 24, @jameygannon has already built the kind of AI creative career most people are still trying to figure out. On Episode 80 of @FastHours, she broke down exactly how she did it. We dig into... → How Jamey taught herself design at 15 → Why Gen Z chases money over job titles →…",
     "tags": [
       "careers",
@@ -1018,6 +1060,7 @@
     "domain": "x.com",
     "saved_date": "2026-08-31",
     "kind": "post",
+    "tldr": "David Ondrej argues that amid AI's fast change, people should stop predicting the future and instead act on choices that are obviously directionally correct.",
     "note": "@DavidOndrej1: It's easy to go insane in the AI field. Things are changing so fast, startups are going out of business every week, new frontier models are being released every month. The amount of change in such a short period of time is unheard of. Because of this, it's very heard (if not…",
     "post": {
       "id": "2093966150124122222",
@@ -1045,6 +1088,7 @@
     "domain": "x.com",
     "saved_date": "2026-08-31",
     "kind": "post",
+    "tldr": "Dan Kulkov shares an app pricing strategy that generates $150 per day in revenue.",
     "note": "@DanKulkov",
     "post": {
       "id": "2093257679447978298",
@@ -1070,6 +1114,7 @@
     "domain": "x.com",
     "saved_date": "2026-08-31",
     "kind": "post",
+    "tldr": "Lauren (poteto) opens a series on pstack, her personal skill set for rigorous engineering, which she credits for shipping 2,000 PRs a month to production.",
     "note": "@poteto: In this series of posts, I'm going to show you how I use pstack, my personal set of skills for doing rigorous engineering work. It's allowed me to ship 2,000 PRs a month to production with high confidence. Personally, I have never put much emphasis into how many lines of code or…",
     "post": {
       "id": "2094457600259842065",
@@ -1097,6 +1142,7 @@
     "domain": "x.com",
     "saved_date": "2026-08-31",
     "kind": "post",
+    "tldr": "Corey Ganim breaks down a $999 AI assessment he delivered on camera for a business broker running Claude Code agents, plus what the report includes.",
     "note": "@coreyganim: I just fulfilled a real $999 AI assessment on camera. The client is a business broker who already runs his own Claude Code agent team. It skip traces owners, enriches data with Apollo, and hands him verified cell numbers. He still paid me $999 to look at it. So I broke down the…",
     "post": {
       "id": "2094411499619905646",
@@ -1122,6 +1168,7 @@
     "domain": "burcs.dev",
     "saved_date": "2026-08-31",
     "kind": "article",
+    "tldr": "burcs.dev lays out a 14-phase Cloudflare app checklist covering domain setup, data stores, staging, auth, SEO, agent surfaces, secrets, and monetization.",
     "note": "A production-minded checklist for shipping agent-friendly Cloudflare apps, covering scaffolding, data stores, staging, security, deployment, and verification."
   },
   {
@@ -1131,6 +1178,7 @@
     "domain": "claude.com",
     "saved_date": "2026-08-31",
     "kind": "article",
+    "tldr": "Anthropic profiles more than a dozen startups, citing ClickHouse's 30% more shipped features and Artemis Security's 6,000-plus weekly PRs, to outline five Claude Code principles.",
     "note": "Anthropic's five operating principles for startups using Claude Code: let everyone ship, automate tedium, verify outputs, build for rebuilding, and productionize prototypes."
   },
   {
@@ -1140,6 +1188,7 @@
     "domain": "every.to",
     "saved_date": "2026-09-01",
     "kind": "article",
+    "tldr": "Natalia Quintero took Anthropic's four certification courses with Every's team; their biggest value may be shared industry definitions for tools like Claude Code and skills.",
     "note": "Every's team took Anthropic's four certification courses and found their main value is shared definitions for skills, MCP, APIs, and Claude Code rather than a workflow playbook."
   },
   {
@@ -1149,6 +1198,7 @@
     "domain": "vercel.com",
     "saved_date": "2026-09-01",
     "kind": "article",
+    "tldr": "Vercel describes building design.md, a public brand file for coding agents, cutting a known layout failure from 91 to 39 occurrences across matched test pages.",
     "note": "Vercel explains how it built design.md as a public brand file for coding agents, using repeatable visual evals to turn subjective guidance into rules that produce consistent pages."
   },
   {
@@ -1158,6 +1208,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-01",
     "kind": "post",
+    "tldr": "Alex Lavaee and Ray Fernando cover graphs, workflows and verifiable runtimes for turning a coding agent into a power drill instead of a screwdriver.",
     "note": "@alexlavaee: Agentic Engineering Crash Course: Graphs, workflows, verifiable coding agent runtimes, and staying in control w/ @RayFernando1337. We walk through the foundation for turning your coding agent from a screwdriver into a power drill.",
     "post": {
       "id": "2094595716115316912",
@@ -1183,6 +1234,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-01",
     "kind": "post",
+    "tldr": "Claire Vo highlights Daniel Blum's Claude Cowork setup: Notion as brain, voice memos feeding context, and a workstation plugin so a day replaces a week.",
     "note": "@clairevo: This is the new bar for PMs: \"I'm able to do now in a day what used to take me a week.\" In this episode of How I AI, Daniel Blum demos how he uses Claude Cowork as an AI system that compounds over time, instead of starting from scratch with every chat. He shows how he - uses…",
     "post": {
       "id": "2094558546524561505",
@@ -1209,6 +1261,7 @@
     "domain": "flaviocopes.com",
     "saved_date": "2026-09-01",
     "kind": "article",
+    "tldr": "Flavio Copes offers a free 35-lesson course tracing a network connection from application through local network and Internet, layer by layer, to diagnose failures.",
     "note": "A free 35-lesson course on how networks move data, from local links and IP routing through TCP, NAT, firewalls, and practical diagnostics."
   },
   {
@@ -1218,6 +1271,7 @@
     "domain": "flaviocopes.com",
     "saved_date": "2026-09-02",
     "kind": "article",
+    "tldr": "Flavio Copes offers a free 29-lesson course building a small language model on a Mac, covering tokenization, pre-training, fine-tuning, checkpoints, and a final lab report.",
     "note": "A free 29-lesson course by Flavio Copes on building, training, fine-tuning, evaluating, and documenting a small language model locally on a Mac."
   },
   {
@@ -1227,6 +1281,7 @@
     "domain": "eptwts.com",
     "saved_date": "2026-09-02",
     "kind": "article",
+    "tldr": "EP's Signal Knowledgebase distills lessons on distribution, offer literacy, content funnels, and AI leverage into eight chapters on making money online.",
     "note": "EP distills 14,000 posts into a searchable knowledge base on distribution, marketing, offers, content, and making money online."
   },
   {
@@ -1236,6 +1291,7 @@
     "domain": "notion.com",
     "saved_date": "2026-09-02",
     "kind": "article",
+    "tldr": "Notion's Hesham Salman describes Lore, an open-source shared memory system storing agent knowledge as Notion pages, which recovered about 46% of failures models couldn't solve.",
     "note": "Notion’s engineering team explains Lore, an open-source shared-memory system that stores agent knowledge as structured Notion pages and measures whether retrieval improves performance."
   },
   {
@@ -1245,6 +1301,7 @@
     "domain": "lg.substack.com",
     "saved_date": "2026-09-04",
     "kind": "article",
+    "tldr": "Julie Zhuo outlines a ten-step path for AI adoption, from automating one hated task through building trust with evals to redesigning what organizations reward.",
     "note": "Julie Zhuo maps AI adoption from personal relief to shared wins, reliable systems, and organizational redesign without stripping people of agency."
   },
   {
@@ -1254,6 +1311,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-04",
     "kind": "post",
+    "tldr": "Putri Karunia announces Lunagraph's visual editor for React, letting designers define every state, interaction and flow, then hand developers production-ready code.",
     "note": "@putrikarunian: it's happening 🥹 @lunagraphHQ is open not just a design canvas, but a visual editor for React this means you can design the full experience: from exploration to defining every state, interaction, and flow. and when it feels right, hand devs nicely packaged code, UX and all come…",
     "post": {
       "id": "2094817055476175052",
@@ -1280,6 +1338,7 @@
     "domain": "docs.google.com",
     "saved_date": "2026-09-04",
     "kind": "article",
+    "tldr": "A Q&A from the AI Creative Strategist Blueprint course explains choosing Claude Code versus Codex, building folder-based client brains, connectors, and skills.",
     "note": "A practical Q&A on building folder-based agent workspaces, choosing Claude Code or Codex, sharing skills, and automating repeatable marketing work."
   },
   {
@@ -1289,6 +1348,7 @@
     "domain": "visualizevalue.com",
     "saved_date": "2026-09-04",
     "kind": "article",
+    "tldr": "Jack Butcher's Visualize Value offers six free courses on visualizing ideas, productizing services, apprenticing without permission, and using AI as leverage rather than replacement.",
     "note": "Jack Butcher’s free course library covers visual clarity, positioning, packaging, publishing, service, and turning knowledge into reusable assets."
   },
   {
@@ -1298,6 +1358,7 @@
     "domain": "benji.org",
     "saved_date": "2026-09-05",
     "kind": "article",
+    "tldr": "Benji catalogues Honk's real-time messaging interactions: live typing bubbles, presence animations, emoji collisions, custom fonts and sounds, arguing playfulness wasn't enough for product-market fit.",
     "note": "Benji's postmortem on Honk, the real-time messaging app with no send button. A catalogue of the micro-interactions that made it playful, and why that wasn't enough."
   },
   {
@@ -1307,6 +1368,7 @@
     "domain": "interfere.com",
     "saved_date": "2026-09-05",
     "kind": "article",
+    "tldr": "Interfere's founders detail a week-long sprint on visual identity, code-built homepage graphics, staggered hero animations, and a stack migration from Next.js to TanStack Start.",
     "note": "Paul Faivret and Jakub Krehel unpack a week-long sprint spanning visual identity, product graphics, animation, assets, and the site’s technical stack."
   },
   {
@@ -1316,6 +1378,7 @@
     "domain": "learn.chatgpt.com",
     "saved_date": "2026-09-05",
     "kind": "article",
+    "tldr": "OpenAI's ChatGPT Learn training walks users through ChatGPT Work and Codex via eight walkthroughs covering plugins, scheduled tasks, slides, browser use, mobile workflows, and voice.",
     "note": "OpenAI’s guided training covers ChatGPT Work, Codex, plugins, scheduled tasks, documents, browser use, mobile workflows, and voice."
   },
   {
@@ -1325,6 +1388,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-05",
     "kind": "post",
+    "tldr": "AmirMušić turns one Pinterest reference into a full brand system, identity, guidelines, packaging, campaign assets, using Lovart Agent, then open-sources his Brand System Skill.",
     "note": "@AmirMushich: For 10+ years, I've been creating branding & ads for Warner Music, PepsiCo, and others. Now I combine that experience with AI to build hi-end visual systems faster. This article shows my complete branding workflow with AI This time, I turned one reference into an identity, brand…",
     "post": {
       "id": "2095182776249049456",
@@ -1352,6 +1416,7 @@
     "domain": "artofhosting.luma.com",
     "saved_date": "2026-09-05",
     "kind": "article",
+    "tldr": "Luma's The Art of Hosting collects interviews with community builders like Cafe Cursor's Ben and She Runs' Millie on scaling real-world gatherings.",
     "note": "Luma’s collection of field notes and playbooks from community builders on curating events, shaping gatherings, and growing local scenes."
   },
   {
@@ -1361,6 +1426,7 @@
     "domain": "brilliant.org",
     "saved_date": "2026-09-05",
     "kind": "article",
+    "tldr": "Brilliant's Coding Skills Framework spans 14 Big Ideas, 79 objectives and 302 skills, from computer science foundations to coding with AI.",
     "note": "Brilliant frames durable AI-era coding around taste, incremental delivery, specification, verification, security, and reasoning across abstractions."
   },
   {
@@ -1370,6 +1436,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-05",
     "kind": "post",
+    "tldr": "@hooeem publishes a 53-step guide covering Hermes agent setup: installation, Telegram, memory and skills, a first automation, and turning workflow stages into specialist Bots.",
     "note": "A full course on operating Hermes Agent, including access control through user allowlists and expiring DM pairing codes.",
     "post": {
       "id": "2095515032243077220",
@@ -1397,6 +1464,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-05",
     "kind": "post",
+    "tldr": "Grant relays @alexgarcia_atx's 5-level social media budget breakdown, from a $0 personal brand to a $100,000 entertainment studio, with metrics like skip rate.",
     "note": "@iamgrantowen: I asked @alexgarcia_atx how to build a top 0.1% social media team with a legitimate strategy... But this is our budget: Level 1 - $0 Level 2 - $5,000 Level 3 - $10,000 Level 4 - $50,000 Level 5 - $100,000 00:00:05 Level 1 A Personal Brand With $0 Budget 00:03:35 Skip Rate Is…",
     "post": {
       "id": "2095870366505648159",
@@ -1422,6 +1490,7 @@
     "domain": "en.wikipedia.org",
     "saved_date": "2026-09-14",
     "kind": "article",
+    "tldr": "Wikipedia explains the Hawthorne effect, where awareness of being observed changes behavior, and notes some scholars call the original factory studies fictitious.",
     "note": "The Wikipedia entry on the Hawthorne effect — people work differently when they know they're being watched. The classic factory studies behind it turn out to be much shakier than the textbook version."
   },
   {
@@ -1431,6 +1500,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "J.B. built 6 Hermes bots on a shared Obsidian brain to handle research, writing, editing and distribution, generating 5.8 million X impressions in 4 weeks.",
     "note": "@VibeMarketer_: i built a team of six hermes bots that gives one person the research, writing, editing, and distribution capacity of a complete media company. most people use ai to write faster. that is useful, but writing is no longer the bottleneck. the difficult part is consistently finding…",
     "post": {
       "id": "2093330541177352217",
@@ -1458,6 +1528,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Simon Willison expands his LLM cliché highlighter tool to 38 detected patterns for spotting AI-generated writing tells.",
     "note": "@simonw: My LLM cliché highlighter is up to 38 patterns now https://tools.simonwillison.net/llm-cliche-highlighter",
     "post": {
       "id": "2093277255438860358",
@@ -1489,6 +1560,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Ben Holmes introduces Skill Doctor v1, a Warp skill that crawls past coding-agent conversations, scores them, and proposes diffs to your skills.",
     "note": "@BHolmesDev: Introducing /skill-doctor v1 Skill doctor is a skill that improves your skills: - Crawls your past CC, Codex, or Warp convos - Scores them for efficiency and code quality - Proposes diffs to your skills that you'd actually merge (STE-100 approved)…",
     "post": {
       "id": "2093370341418582346",
@@ -1521,6 +1593,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Jiayuan Zhang shares a setup video for Multica, showing Claude Code, Codex, or Hermes Agent users how to configure their workspace by asking the agent.",
     "note": "@jiayuan_jy: A very detailed explanation and setup video for @MulticaAI. If you're using Claude Code, Codex, or the @NousResearch Hermes Agent, you can follow this video to set up your workspace. It's very easy. You don't need to do this manually. Just tell your agent: \"Help me set up…",
     "post": {
       "id": "2093277918332158181",
@@ -1546,6 +1619,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Jack Friks automates cross-posting his X posts to LinkedIn, Threads, Facebook and Bluesky using a Grok bot, set up in under 5 minutes.",
     "note": "@jackfriks: today i automated all my X posts to be posted to every other platform automatically using Grok @bot i post from here on X, and grok bot picks up the posts and pushes them all to linked1n, threads, faceb00k, and BS all by itself here's how i set it up (in less than 5 mins)",
     "post": {
       "id": "2093365734302736436",
@@ -1572,6 +1646,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Lauren (poteto) recommends new pstack users run /create-verification-skill to build a trustworthy agent loop, and suggests scheduling /maintain-verification-skill daily via Grok bot or Cursor.",
     "note": "@poteto: if you're new to using pstack, don't forget to run /create-verification-skill! it creates a high quality verification skill for your apps, which is the most important part of creating an agent loop you can trust. you can also get grok @bot or a cursor automation to run…",
     "post": {
       "id": "2093414407196012990",
@@ -1607,6 +1682,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Matt Palmer walks through Grok Bot's new Templates feature, covering how to share, publish, install and author templates, plus tips for evaluating them.",
     "note": "@mattyp: We just launched Templates in Grok Bot Here's everything you need to know (and one to try) 00:00 Templates 101 00:50 Sharing a template 02:33 Publishing a template 04:03 Installing a template 05:02 Setup for complex templates 06:18 Tips for authoring 07:01 Evaluating templates",
     "post": {
       "id": "2093379758306504935",
@@ -1632,6 +1708,7 @@
     "domain": "youtube.com",
     "saved_date": "2026-09-14",
     "kind": "video",
+    "tldr": "Bailey Schildbach argues discipline builds confidence because keeping promises to yourself creates self-trust, and a track record of doing hard things beats any glow-up.",
     "note": "Bailey Schildbach on why discipline builds confidence: keeping promises to yourself creates self-trust, and a record of doing hard things is harder to shake than any glow-up.",
     "video": {
       "provider": "youtube",
@@ -1646,6 +1723,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Alex Lieberman has Matt Palmer walk through his best Grok Bot workflows in a 16-minute video, ranging from Easy Mode to God Mode.",
     "note": "@businessbarista: How to master Grok Bot in 16 minutes… I had @mattyp walk me through his best @bot workflows from Easy Mode to God Mode.",
     "post": {
       "id": "2093783175495401596",
@@ -1671,6 +1749,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Dex links the full YouTube video, David Ondrej's \"Ex-NASA dev reveals his Agentic Engineering Workflow\". The post itself carries only the link.",
     "note": "@dexhorthy: Full video here https://www.youtube.com/watch?is=YeYQMiXinwQ8NO7j&v=xgkjtF89-44&feature=youtu.be",
     "post": {
       "id": "2094110513282363603",
@@ -1694,6 +1773,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "The Sweat Equity Podcast talks to Brian Blum about selling his content agency for multiple seven figures in under two years without outbound pitches.",
     "note": "@onlysweatequity: It's Boring, But It Let Me Exit My Agency for 7 Figures+ In this episode, @brian_blum1 shares how he built and sold his content agency in under 2 years for multiple seven figures, without a single outbound pitch. Every client came to him. Brian breaks down how to create demand…",
     "post": {
       "id": "2094474835531358563",
@@ -1719,6 +1799,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "PostHog's Jina Yoon argues AGENTS.md needs subtraction not addition, and gives 3 methods: doctor checks, testable evals, and direct agent feedback.",
     "note": "@posthog: Context engineering used to focus on adding information that base models lacked: But then the models kept getting better. Now, the same context your agents couldn’t function without can make them perform worse. Our AI onboarding wizard, for example, often landed on the wrong…",
     "post": {
       "id": "2094485724171223409",
@@ -1746,6 +1827,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Ben Lang lists Grok Bot internal best practices drawn from six SpaceXAI teams: Engineering, Support, Design, GTM, Product, and Field Engineering.",
     "note": "@benln: Grok Bot internal best practices from 6 teams at SpaceXAI: Engineering Support Design GTM Product Field Engineering",
     "post": {
       "id": "2094775808602546335",
@@ -1763,6 +1845,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Oren John breaks down three video formats and five content frameworks behind 'yapping,' talking-head videos he calls the primary way to build an audience.",
     "note": "@orenmeetsworld: Yapping is talking on camera, just an iPhone, no fancy camera, and to start at least, no graphics. And despite how simple it sounds, it’s become the primary mode of business communication, personal brand building, and audience development in 2025. I published a full YouTube on…",
     "post": {
       "id": "2051688942895051072",
@@ -1790,6 +1873,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Corey Ganim films 6 days of cold outreach with no audience: 198 leads, 15 conversations, and 2 booked sales calls.",
     "note": "@coreyganim: I just filmed 6 days of cold calls and door knocks building an AI agency from scratch. -No audience -No referrals -No warm intros 60 minutes of outreach a day. 198 leads, 15 conversations, 2 sales calls booked. This is the episode where I get hung up on. Here's what's in the…",
     "post": {
       "id": "2094794818996105467",
@@ -1815,6 +1899,7 @@
     "domain": "noahfarrar.com",
     "saved_date": "2026-09-14",
     "kind": "article",
+    "tldr": "Illustrator Noah Farrar breaks down the code behind his homepage's interactive moments: dither reveals, spring-physics heart trails, and ball physics, with exact numbers.",
     "note": "Illustrator Noah Farrar learns to code with Claude and breaks down every interactive moment on his homepage — dither reveals, spring physics, click bursts — with the exact numbers behind each one."
   },
   {
@@ -1824,6 +1909,7 @@
     "domain": "lennysworkshops.com",
     "saved_date": "2026-09-14",
     "kind": "article",
+    "tldr": "A Lenny's Workshop session covers connecting Magic Patterns to Claude Code and Cursor over MCP so agents produce on-brand, production-synced components.",
     "note": "A Lenny's Workshop recording with Magic Patterns cofounder Alexander Danilowicz: connecting Magic Patterns to Claude Code and Cursor over MCP so agents generate on-brand components and prototypes stay in sync with production code."
   },
   {
@@ -1833,6 +1919,7 @@
     "domain": "lennysnewsletter.com",
     "saved_date": "2026-09-14",
     "kind": "article",
+    "tldr": "Anshu Chimala, ex-Apple AI design lead, outlines a Discover-Define-Deliver process pushing AI past generic outputs using seed strings, ambitious prompts, and subagent design critics.",
     "note": "Anshu Chimala spent twelve years prototyping AI products at Apple; this Lenny's guest post lays out his end-to-end process for getting real design taste out of AI. The full walkthrough sits behind the paywall."
   },
   {
@@ -1842,6 +1929,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Lance Martin's Fable 5.1 tips: low effort rivals Opus and Sonnet on cost while scoring higher, cache reads drop to $0.25/MTok, and simpler prompts help.",
     "note": "@RLanceMartin: some tips for Claude Fable 5.1 Try Fable 5.1 at low effort | Fable 5.1 at low effort is often competitive with Opus and Sonnet on $ / task while scoring higher. on CursorBench 3.2.0, Fable 5.1 at low effort is at parity w/ Fable 5 at high effort at a third of the cost. Prompt…",
     "post": {
       "id": "2094854835854295296",
@@ -1867,6 +1955,7 @@
     "domain": "restaurant-bar.space-z.ai",
     "saved_date": "2026-09-14",
     "kind": "article",
+    "tldr": "space-z.ai's brief tasks Claude Code with building a photorealistic restaurant and bar unattended for 12+ hours, judged by a 100-point rubric and six fresh-context critics.",
     "note": "A full production brief for an autonomous agent: Claude Code, 12-plus hours unattended, building a photorealistic Blender restaurant judged by a 100-point rubric and six fresh-context critics. Worth reading as a spec for how far agent task briefs have come."
   },
   {
@@ -1876,6 +1965,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Nick Huber lists how his parents built his confidence: no comparisons to other kids, praise for effort over results, treated him like a winner regardless.",
     "note": "@sweatystartup: How my parents raised me to be confident: - My parents always told me I was the best at everything. - They never compared me to other kids. - They always made me feel like I was the most important person in the world. - They never put me down or made me feel bad about myself…",
     "post": {
       "id": "2094542495208132915",
@@ -1902,6 +1992,7 @@
     "domain": "youtube.com",
     "saved_date": "2026-09-14",
     "kind": "video",
+    "tldr": "Every's Natalia Quintero interviews Katie Parrott on turning a $20 ChatGPT habit into compound writing, a context-file system now packaged as a plugin.",
     "note": "Every's Katie Parrott on compound writing - the context files, style guides and Claude projects she uses to brainstorm, draft and edit with AI, now packaged as a plugin any writer can use.",
     "video": {
       "provider": "youtube",
@@ -1916,6 +2007,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Mark Yi credits his last three jobs to cold email, outlining a method: make something cool, demonstrate value, then email the hiring manager directly.",
     "note": "@himarkyi: a great cold email can change your life my last 3 jobs came from cold email here's how: 3 years ago i cold emailed into a software consulting gig. 2 years ago i cold emailed my way into an ai research lab at a university i didnt attend. 1 year ago i cold emailed my way into an…",
     "post": {
       "id": "2093490086285586461",
@@ -1941,6 +2033,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Seema Amble argues AI makes incumbent systems of record more valuable, since customers can pipe data into Claude instead of AI-native apps, citing Salesforce's Claudeforce.",
     "note": "@seema_amble: The bullish case for incumbent systems of record is that AI makes systems of record get more important, not less. Why? Because in theory the customer can now pipe the system’s data into Claude or Codex and skip the AI-native app. As agents do more work through these systems, the…",
     "post": {
       "id": "2095546732633379079",
@@ -1968,6 +2061,7 @@
     "domain": "m.youtube.com",
     "saved_date": "2026-09-14",
     "kind": "video",
+    "tldr": "Tonbi's AI Garage runs a 10-part Hermes Agent masterclass covering install, VPS deployment, memory, skills, providers, MCP tools, cron automation, subagents, profiles, and security.",
     "note": "Tonbi's 10-part video masterclass on Hermes Agent - install, deploy to a VPS, memory, skills, providers, tools, cron, subagents and security, about five hours end to end."
   },
   {
@@ -1977,6 +2071,7 @@
     "domain": "m.youtube.com",
     "saved_date": "2026-09-14",
     "kind": "video",
+    "tldr": "JCH's 43-video Money Button course walks through outcomes, promises, offers, funnels, buyer psychology, and big ideas before building a sales letter, bullets, proof and VSL.",
     "note": "JCH's free 43-video copywriting course - offers, funnels, buyer psychology, big ideas and sales letters, from outcomes and promises through writing the VSL."
   },
   {
@@ -1986,6 +2081,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Tim Denning lists patterns in high performers from 12 years coaching Olympic athletes and top founders, from obsession over passion to daily rejection.",
     "note": "Tim Denning argues that unusual career paths, boredom and side projects are recurring patterns among high performers.",
     "post": {
       "id": "2096198912302596302",
@@ -2013,6 +2109,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Vas says AI investment has failed at most enterprises because companies apply AI to broken processes, per talks with 300+ CEOs, CIOs and CFOs.",
     "note": "@vasuman: The world has spent a fortune on AI. For most enterprises, nothing changed. I've spoken to over 300 CEOs, CIOs and CFOs at the largest companies on Earth. I learned most companies apply AI onto their garbage processes, and the end result is just making garbage faster. Whether…",
     "post": {
       "id": "2095999742031675738",
@@ -2040,6 +2137,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Pascio recounts burning $9,000 on dropshipping, then building a $1M+ solo business via Notion templates and Twitter, launching newsletter Side Quests.",
     "note": "@IAmPascio: How I went from burning $9,000 on a failed dropshipping store to building a $1M+ solo business, and why I’m now starting a newsletter called Side Quests. Hi, I am Pascio. Today, over 370,000 cool people follow my stuff across the internet, and because they do, I’ve made over $1M…",
     "post": {
       "id": "2096527252225761430",
@@ -2071,6 +2169,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Tigerflow recounts Joel Greenblatt's jelly bean demo: silent guesses averaged 1,771 beans, but guesses said aloud collapsed to 850, showing independent thinking beats herd influence.",
     "note": "@tigerfl0w: A hedge fund manager put a jar of 1,776 jelly beans in front of a room at Google and proved in two rounds why most investors will always lose money. for free. His name is Joel Greenblatt. Gotham Capital. 50% a year for a decade. he asked the room to guess how many jelly beans…",
     "post": {
       "id": "2090657654691512577",
@@ -2096,6 +2195,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Alex Lieberman describes an intern's AI tool BlogEO that unified scattered analytics, scored posts by click-recovery and CTR-gap opportunity, and lifted search impressions 5.8x.",
     "note": "@businessbarista: This intern 6x'd her company's website traffic with an AI content machine called BlogEO. The big f*cking problem - Blog had almost no real measurement - Insights lived in ~5 places (GSC, Semrush, PostHog, Sanity, prior run snapshots) so nobody joined the data - ~70% of traffic…",
     "post": {
       "id": "2096980870573838489",
@@ -2121,6 +2221,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Railway demonstrates moving coding agents like Codex Desktop and GPT-6 Astra to the cloud, covering CLI setup, SSH configuration, remote projects and orchestrating cloud agents.",
     "note": "@Railway: Moving your Coding Agents to the Cloud (ft. Codex Desktop & GPT-6 Astra) https://docs.railway.com/cloud-agents 00:00 The limitations of running agents locally 01:13 Parallel development and Git worktrees 02:03 Moving your coding agent to a remote machine 02:25 Introducing…",
     "post": {
       "id": "2097007029223108716",
@@ -2152,6 +2253,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Kenny Damian details 6 systems that keep AI delivery costs flat as Frontal scales from 2 to 275 client accounts.",
     "note": "@Kenny_GTM: I have 15 client folders open in my terminal right now. Opening the 15th cost me about what the 2nd did, and that single fact is the whole difference between a services-as-software company and an agency paying for a Claude subscription. The pitch is the half everyone has heard…",
     "post": {
       "id": "2095907541431775260",
@@ -2179,6 +2281,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Jay Yang outlines his PTL framework, power, trust, likeness, for building brand demand, plus a content multiplication system of repost, repurpose, remix.",
     "note": "@jayyanginspires: I’ve helped launch a book to become a New York Times best-seller. I’ve helped another break a Guinness World Record for the fastest-selling non-fiction book in under 24 hours. My own books have become Amazon best-sellers. I’ve worked behind the scenes with some of the biggest…",
     "post": {
       "id": "2097350523812729010",
@@ -2206,6 +2309,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Chris starts a series on breaking into startups as a non-technical hire, arguing early-career people should target GTM roles since AI lets non-engineers do it.",
     "note": "@chrislevan24: I'm starting this series because I wish I had something like this when I was trying to understand startup roles myself. Before we get into it, you might reasonably be asking: who is writing this? TLDR: After graduating, I was as an early-stage VC investor at @panachevc who then…",
     "post": {
       "id": "2097136557677293987",
@@ -2233,6 +2337,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Shaan Puri shares an email to a friend: life is seasonal, choose response over reaction, and control only the controllables.",
     "note": "@ShaanVP: My friend came over yesterday and I could tell something was wrong. - his mom has a scary health issue - his own health has felt off for months (docs keep saying 'everything looks fine', but it's not) - wife is panicking googling his symptoms and seeing scary stuff On top of…",
     "post": {
       "id": "2097367896884425060",
@@ -2260,6 +2365,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Claire Vo covers Stripe's Kai project on How I AI, where 1.5 engineers built a company-wide AI brain in two weeks for 10,000 teammates.",
     "note": "@clairevo: The team at @stripe is setting the standard for internal AI platforms: minion coding agents, a custom prototyping rig, and now their company brain, Kai. On today's episode of How I AI, Sharadh shows us how 1.5 engineers and 2 weeks got them a company brain, including: - projects…",
     "post": {
       "id": "2097105221948436500",
@@ -2286,6 +2392,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Isaiah Granet nearly fired a Bland SDR who ignored outbound but quietly closed the two biggest deals, arguing workers should chase outsized wins over busywork.",
     "note": "@zaygranet: I hired one of our first employees at Bland to be an SDR. For several months he did basically none of that, and I was working out how to let him go. What I didn't know was that he'd been quietly working three accounts himself. He'd decided that closing those three mattered more…",
     "post": {
       "id": "2097527813738045943",
@@ -2312,6 +2419,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Alex of Relate Studio designs brand mascots with AI: Krea for rough concepts, Nano Banana 2 for refinement, then scaling into a brand system.",
     "note": "@semochkin_alex: Hi, I'm Alex, cofounder at @relate_studio. In this tutorial, I'll walk you through how we design brand mascots with AI: finding first concepts in Krea, refining the best direction in Nano Banana 2, generating new poses and angles, and turning everything into a concept you can…",
     "post": {
       "id": "2097664889032434119",
@@ -2339,6 +2447,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Lauren follows up her verification post with how she researches, plans, prototypes and architects with pstack, the workflow behind shipping thousands of PRs monthly.",
     "note": "@poteto: In my last post, I showed you why verification is the foundation of everything I do with agents, and how to get started creating your own verification skills. The key lesson was that if an agent can't verify its own work, nothing else matters. You remain the bottleneck, and your…",
     "post": {
       "id": "2097732320606507506",
@@ -2366,6 +2475,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Pieter Levels replaces his $249/month Scrapingbee plan with a self-built Playwright scraper on his VPS, reaching about 90% success for roughly $1 a month.",
     "note": "@levelsio: ✨ Okay with lots of help from @javilopen and his Spanish scraping friends I've managed to vibe code my own @Scrapingbee alternative and replace my $249/mo Scrapingbee plan with my own $1/mo scraper running on my VPS! First I tried OpenSERP, an open source project that seems…",
     "post": {
       "id": "2097638309384036705",
@@ -2400,6 +2510,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Sarah Levinger's X bio touts her T-E-E-P Framework for cutting ad production time 80% and lifting ad spend efficiency 40%, with her agency Tether Insights.",
     "note": "A creative strategist who breaks down viral ads, surfaces examples to test, and writes about scaling media buying."
   },
   {
@@ -2409,6 +2520,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Colin and Samir interview Kate Tolo, the marketer behind Bryan Johnson's reach, on 11 rules including testing over assuming, publishing immediately, and repeating what works.",
     "note": "@ColinandSamir: She's the reason why @bryan_johnson is always all over your feed AND the subject of a $2.6 million project to become the most measured woman in history by tracking 1,900 biomarkers We sat down with @_katetolo to learn the 11 marketing rules that built the Bryan Johnson universe…",
     "post": {
       "id": "2097739627306303803",
@@ -2434,6 +2546,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-14",
     "kind": "post",
+    "tldr": "Rohan Nayak details how Pocket FM reached $500M ARR: an AI ad-testing engine, localized shows, $1M internal seed bets, and a pivot to AI-produced content.",
     "note": "@RohanNayak2: We grew from ~0 to $500M ARR, adding $250M last year alone while being EBITDA profitable. 1,300-word post on every growth tactic that worked for us: 1. What got us from 0-$400M ARR in the US works in every country. 2. Retention and Monetisation Hacks. 3. Localization >…",
     "post": {
       "id": "2098104784264065525",
@@ -2471,6 +2584,7 @@
     "domain": "newsletter.eng-leadership.com",
     "saved_date": "2026-09-14",
     "kind": "article",
+    "tldr": "Colin Jarvis, OpenAI's Global Head of Forward Deployed Engineering, describes an FDE org that grew from 2 to 140 people alongside a 200-person deployment company.",
     "note": "Gregor Ojstersek’s interview with OpenAI’s FDE lead explains how the team sits between customers, product, and research, and why the job mixes engineering with on-site problem discovery."
   },
   {
@@ -2480,6 +2594,7 @@
     "domain": "lennysnewsletter.com",
     "saved_date": "2026-09-14",
     "kind": "article",
+    "tldr": "Sharadh Krishnamurthy explains how Stripe's Kai, an internal AI agent used by 10,000+ employees weekly, handles governance, data access, and 2,000 packaged skills.",
     "note": "Stripe’s engineering team explains how it built Kai for 10,000 weekly users, including governance, shared skills, secure data access, and safeguards against rogue agents."
   },
   {
@@ -2489,6 +2604,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-15",
     "kind": "post",
+    "tldr": "@alexeixbt explains neuroplasticity: repetition rewires the brain via synaptic and structural change, citing London taxi drivers' enlarged hippocampi and willpower-building in the anterior midcingulate cortex.",
     "note": "@alexeixbt: Somewhere out there is a version of you that's wealthier, calmer, more confident, better with people, more disciplined, less afraid. And here's the part almost nobody explains properly: the gap between you and that person isn't talent, luck, or genetics. It's wiring. Literal…",
     "post": {
       "id": "2086051211271196886",
@@ -2516,6 +2632,7 @@
     "domain": "ordinaryabundance.com",
     "saved_date": "2026-09-15",
     "kind": "article",
+    "tldr": "Ordinary Abundance pairs a modern apartment's daily objects, music, light, photography, medicine, plumbing, with historical quotes describing each as a miracle when new.",
     "note": "A visual essay that tours an ordinary apartment through the historical wonder once attached to music, electric light, photography, and other everyday objects."
   },
   {
@@ -2525,6 +2642,7 @@
     "domain": "howtounclench.com",
     "saved_date": "2026-09-15",
     "kind": "article",
+    "tldr": "Jonny Miller defines clenching as unnecessary muscle tension the nervous system holds for protection, then outlines a four-step Notice-Experiment-Track-Iterate loop for releasing it.",
     "note": "Jonny Miller’s field guide to noticing unnecessary tension, softening it, and practicing unclenching as a trainable nervous-system skill."
   },
   {
@@ -2534,6 +2652,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-15",
     "kind": "post",
+    "tldr": "Runway posts a full walkthrough for building ultra-realistic Runway scenes, covering story, character development, wardrobe, location, the Burst method, character voice, and editing.",
     "note": "@runwayml: Learn how to make ultra-realistic scenes in Runway. A full walkthrough, from initial story to final edit. Watch below. 00:00 Intro 00:26 Tell a good story 01:42 Character development 03:08 Wardrobe 03:30 Location development 03:48 The Burst method 05:19 Character voice 06:10 The…",
     "post": {
       "id": "2099571028649271462",
@@ -2559,6 +2678,7 @@
     "domain": "lennysnewsletter.com",
     "saved_date": "2026-09-15",
     "kind": "article",
+    "tldr": "Tom Orbach catalogs 64 unconventional startup growth tactics, including a fake toy store for CISOs that drew 46,000 visitors and hundreds of qualified leads.",
     "note": "Tom Orbach collects more than 60 unconventional growth tactics, with concrete examples and a Markdown file for brainstorming with a team or agent."
   },
   {
@@ -2568,6 +2688,7 @@
     "domain": "typesafe.ai",
     "saved_date": "2026-09-16",
     "kind": "article",
+    "tldr": "TypeSafe AI launches Jev, a System One Model trained with Reinforcement Learning for Calibrated Decisions that outputs typed, probabilistic decisions instead of generated text.",
     "note": "TypeSafe AI introduces Jev, a model for fast, type-safe structured decisions with calibrated probabilities instead of generated text."
   },
   {
@@ -2577,6 +2698,7 @@
     "domain": "craft.gustavofior.com",
     "saved_date": "2026-09-18",
     "kind": "article",
+    "tldr": "Gustavo Fior's Craft collects short essays and one-line tips on typography, color, layout, motion, sound and data for design engineers, most still marked coming soon.",
     "note": "Gustavo Fior's concise collection of design-engineering ideas, from reference gathering and novelty budgets to motion, typography, color and interaction details."
   },
   {
@@ -2586,6 +2708,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-18",
     "kind": "post",
+    "tldr": "The Boring Marketer says his boring business made $4,000 in a day and promises to show how to find similar businesses that need AI help.",
     "note": "@boringmarketer: yesterday my \"boring\" business did $4,000 in revenue here's how you can find businesses like mine that need your help with AI",
     "tags": [
       "ai-services",
@@ -2617,6 +2740,7 @@
     "domain": "youtube.com",
     "saved_date": "2026-09-22",
     "kind": "video",
+    "tldr": "Kun Chen builds and ships a full-stack app from scratch with a FirstMate-led team of coding agents, covering parallel research, UX prototyping, and end-to-end testing.",
     "note": "Kun Chen builds and ships a full-stack iOS app from scratch with a FirstMate-led team of coding agents, showing parallel research, design, implementation, and end-to-end testing.",
     "video": {
       "provider": "youtube",
@@ -2631,6 +2755,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-22",
     "kind": "post",
+    "tldr": "Paul Klay explains why he skips job applications, instead identifying his strongest skills, finding founders who need them, and offering to prove his value first.",
     "note": "@PaulKlayVC: I’ve never had a normal job and now I’m writing an article about how to easily get a good one but even though I’ve never had a normal job, I have something much more valuable: after being an influencer and building a couple of successful startups, I started joining new projects…",
     "post": {
       "id": "2101356736560951576",
@@ -2658,6 +2783,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-22",
     "kind": "post",
+    "tldr": "@everestchris6 outlines a guide to finding businesses with broken websites, scoring and ranking them, building AI-fixed replacement sites, recording before-and-after videos, and charging monthly.",
     "note": "@everestchris6: thousands of businesses are already busy and still losing customers every day because their website doesn't work. for ex: there's no way to book, the phone number doesn't open the dialler, and there's no form etc., the customer can't reach them and contacts the next company…",
     "tags": [
       "lead-generation",
@@ -2693,6 +2819,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-22",
     "kind": "post",
+    "tldr": "@everestchris6 outlines three revenue streams from jev: an instant quote widget for businesses, a B2B catalog version, and a skill file that approves agent actions.",
     "note": "@everestchris6: jev is a new typesafe model that makes super fast decisions instead of writing. that opens up a bunch of revenue streams you can build and sell, and here are three of them. by the end of this guide you'll have: - a clear picture of what jev is and what it's for - how to get…",
     "tags": [
       "agent-guardrails",
@@ -2728,6 +2855,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-22",
     "kind": "post",
+    "tldr": "The Startup Ideas Podcast outlines a six-step playbook for building a local services matcher with Jev that matches users before they leave the page.",
     "note": "@startupideaspod: One of the best businesses to build with Jev is a local services matcher. It's a form with a classifier behind it. Someone types what they need, and they get matched with a company near them before they close the tab. Here's the whole setup: 1) Pick your area and a category with…",
     "tags": [
       "classifier",
@@ -2779,6 +2907,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-22",
     "kind": "post",
+    "tldr": "Dhravya Shah reverse-engineers Instinct's memory: git-tracked markdown files, keyword search instead of vector indexing, and a 24-hour ingestion cycle, replicable with Supermemory.",
     "note": "@DhravyaShah: Instinct has taken the world by storm over the last two weeks - it's one of the best imessage assistants I've used. as with every product, I decided to reverse-engineer Instinct's memory to find out exactly how it works. I've been working on agent memory for the last 3 years…",
     "post": {
       "id": "2101745550752428340",
@@ -2806,6 +2935,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-22",
     "kind": "post",
+    "tldr": "AI Edge shares Jev founder Diogo Almeida's full masterclass on using Jev to boost productivity, in a 36 minute video.",
     "note": "@aiedge_: Jevs Founder, Diogo Alemdia, gives a FULL masterclass on using Jev. Bookmark this if you want to unlock more productivity:",
     "tags": [
       "ai-strategy",
@@ -2838,6 +2968,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-22",
     "kind": "post",
+    "tldr": "Lauren (poteto) shares a talk, originally meant for Cursor Compile London, on shipping 2,500 PRs to production last month, releasing it free on X instead.",
     "note": "@poteto: here's how i shipped 2,500 PRs last month to production this was originally supposed to be for Cursor Compile in London. i couldn't make it since i was livestreaming for Grok @Bot Galaxy so i'm making it available for free here on X! watch it on 2x speed, i talk slowly",
     "post": {
       "id": "2102050467505430555",
@@ -2863,6 +2994,7 @@
     "domain": "sharif.io",
     "saved_date": "2026-09-22",
     "kind": "article",
+    "tldr": "Sharif Shameem argues most people spend decades in chronic pain to avoid a few minutes of acute pain, urging readers to choose it deliberately.",
     "note": "Sharif Shameem argues that avoiding brief, acute pain usually trades it for quieter chronic pain in health, work, and relationships."
   },
   {
@@ -2872,6 +3004,7 @@
     "domain": "developers.openai.com",
     "saved_date": "2026-09-22",
     "kind": "article",
+    "tldr": "Jeremy Lewi describes using Codex and Runme notebooks to plan, execute and document repetitive OpenAI engineering work like Kubernetes cluster setup and model evaluations.",
     "note": "Jeremy Lewi shows how Runme notebooks and WebMCP turn recurring engineering work into reviewable workflows that retain decisions and lessons between Codex runs."
   },
   {
@@ -2881,6 +3014,7 @@
     "domain": "bannerbear.com",
     "saved_date": "2026-09-22",
     "kind": "article",
+    "tldr": "Jon Yongfook argues cheap AI-built features killed SaaS moats, then lists seven ways founders can still compete: operations, distribution, agents, underserved markets, hardware, pricing, consolidation.",
     "note": "Jon Yongfook argues that cheap feature development has ended feature-led moats, then lays out seven ways SaaS businesses can compete through operations, distribution, data, and trust."
   },
   {
@@ -2890,6 +3024,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-22",
     "kind": "post",
+    "tldr": "Ben Cera traces Polsia's path to 25,000 paying customers: validate with landing-page ads, personally land the first 10 sign-ups, hold pricing until product-market fit.",
     "note": "@Bencera: When I launched Polsia in December 2025, it was crickets. Nobody knew the product existed. Today, over 25,000 people pay for it. But every stage between those two numbers needed a different playbook. And if you run them in the wrong order, you waste time and money. Here’s every…",
     "post": {
       "id": "2101982109313253820",
@@ -2917,6 +3052,7 @@
     "domain": "longform.asmartbear.com",
     "saved_date": "2026-09-22",
     "kind": "article",
+    "tldr": "Jason Cohen argues that copying other writers' style, not their words, is a practical way to discover your own voice and strengths as a writer.",
     "note": "Jason Cohen makes the case for copying structure and style—not words—as a practical way to discover your own strengths and learn how to write."
   },
   {
@@ -2926,6 +3062,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-23",
     "kind": "post",
+    "tldr": "Alex Albert shares a Claude Tag prompt rebuilding 1906 pre-earthquake Market Street in Blender from Sanborn maps and period film, generating every asset in Python.",
     "note": "@alexalbert__: Prompt in Claude Tag \"Recreate Market Street, San Francisco as it stood on April 17, 1906, the afternoon before the earthquake, in Blender. Scope: the Ferry Building up Market to Fifth Street, including the Palace Hotel, the Call Building, the Chronicle Building, Lotta's…",
     "post": {
       "id": "2102466524934271381",
@@ -2943,6 +3080,7 @@
     "domain": "x.com",
     "saved_date": "2026-09-23",
     "kind": "post",
+    "tldr": "Matt Epstein breaks down the science behind 25 viral X launches: a bold claim, immediate dopamine, no context gaps, and the strongest outcome.",
     "note": "@mattepstein: Have you seen any of the launches below on your timeline? (you probably have).. What if I told you they all followed a repeatable viral science that can be 95% automatable with claude. In this article I will give you the EXACT science of virality, that I’ve used to do 25 of the…",
     "post": {
       "id": "2066664675542999369",
@@ -2970,6 +3108,7 @@
     "domain": "digitalocean.com",
     "saved_date": "2026-09-23",
     "kind": "article",
+    "tldr": "DigitalOcean opens Managed Agents to everyone, giving AI agents durable cloud sessions, connections to over 16,000 tools, and per-second CPU billing instead of standing infrastructure.",
     "note": "DigitalOcean introduces a managed platform for building and scaling agentic workloads without maintaining the underlying infrastructure."
   }
 ]

@@ -6,11 +6,9 @@
  * what an `.astro` component drew. What they hold is the handful of things
  * about this slice that would go wrong quietly.
  *
- *   - **The facade spreading, or vanishing.** Two surfaces render it and both
- *     are named: the shelf on `/library/kind/video`, keyed on the route rather
- *     than on the data, and the video's own `/library/<slug>` page, where it
- *     arrives without the tile's chrome. A video is a row on every list,
- *     /library included, because there it lines up beside articles.
+ *   - **The facade spreading, or vanishing.** One surface renders it: the
+ *     video's own `/library/<slug>` page, through `EntryDetail.astro`. The
+ *     /library Videos view is posters that open that page (VET-258).
  *   - **The markup growing a YouTube host.** This is the one that matters, and
  *     it is the `markFor` refusal in `lib/links.test.mjs` pointed at a second
  *     page: an `<iframe src="…youtube…">` in a template is an always-live embed
@@ -33,8 +31,8 @@ import { PROVIDERS, library } from "./library.ts";
 const SRC = fileURLToPath(new URL("..", import.meta.url));
 
 const FACADE = "components/VideoFacade.astro";
-const ROUTE = "pages/library/kind/[kind].astro";
-const DETAIL = "pages/library/[slug].astro";
+const VIEWS = "components/LibraryViews.astro";
+const DETAIL = "components/EntryDetail.astro";
 
 /** @param {string} name @returns {string} */
 function read(name) {
@@ -83,60 +81,28 @@ const EMBED_URL =
    The facade is one route's layout
    --------------------------------------------------------------------------- */
 
-test("the facade is reached from the video kind and the entry's own page, and nowhere else", () => {
+test("the facade is reached from the entry's own page, and nowhere else", () => {
   const callers = walk("").filter(
     (file) => file !== FACADE && code(read(file)).includes("VideoFacade"),
   );
   assert.deepEqual(
-    callers.sort(),
-    [DETAIL, ROUTE].sort(),
-    "something other than the video kind page and a video's own page renders the facade. A video is a row on every list, /library included, where it has to line up beside articles.",
+    callers,
+    [DETAIL],
+    "something other than a video's own page renders the facade. The /library Videos view opens that page; it plays nothing in place.",
   );
-
-  assert.match(
-    code(read(ROUTE)),
-    /kind === "video" \? \(\s*<ul class="shelf">/,
-    "the kind route no longer gates the shelf on the video kind. Keyed on the route rather than on the data: `/library/domain/youtube-com` is all videos too.",
-  );
-
-  assert.ok(
-    !code(read("pages/library.astro")).includes("VideoFacade"),
-    "/library renders every kind at once, so it must stay a list",
-  );
-});
-
-test("a detail page takes the poster and leaves the tile's chrome behind", () => {
-  /*
-   * The second caller is the reason `chrome` exists. A `/library/<slug>` page
-   * has the title as its `h1`, the note as its standfirst and the saved date in
-   * its strip, so a tile there would say all three a second time and one of
-   * them as a link to the page the reader is already on.
-   */
   assert.match(
     code(read(DETAIL)),
-    /<VideoFacade entry=\{\{ \.\.\.entry, video: entry\.video \}\} chrome=\{false\} \/>/,
-    "the entry page renders the whole tile, so its title, note and date land on the page twice",
+    /\{entry\.video && <VideoFacade entry=\{\{ \.\.\.entry, video: entry\.video \}\} \/>\}/,
+    "the entry page no longer gates the facade on the entry having a video",
   );
-  assert.match(
-    code(read(ROUTE)),
-    /<VideoFacade entry=\{entry\} \/>/,
-    "the shelf stopped rendering the tile's title, note and date, which are the only things on a poster shelf that say what a video is",
-  );
-
-  // The wrapper moves with the chrome: an `<li>` outside a list is markup a
-  // parser has to guess at.
-  assert.match(
-    code(read(FACADE)),
-    /const Wrapper = chrome \? "li" : "div";/,
-    "the facade's root element no longer follows `chrome`",
-  );
+  assert.ok(!/chrome/.test(code(read(FACADE))), "the facade grew a second surface's switch back");
 });
 
-test("only an entry carrying a video gets a facade", () => {
+test("only an entry carrying a video gets a poster or a facade", () => {
   assert.match(
-    code(read(ROUTE)),
+    code(read(VIEWS)),
     /entry is LibraryEntry & \{ video: Video \}/,
-    "the video page no longer filters out an entry with no video object. There would be no still to show and no id to play.",
+    "the Videos view no longer filters out an entry with no video object. There would be no still to show.",
   );
   assert.match(
     code(read(FACADE)),
@@ -227,25 +193,15 @@ test("the play control is a link to the video, named for the video", () => {
   );
 });
 
-test("the tile's title reads the same seam the row and the card do, and stays here", () => {
-  const source = code(read(FACADE));
+test("a Videos tile opens the entry's page through the seam, and the facade has one way out", () => {
+  const views = code(read(VIEWS));
+  assert.match(views, /<a class="vtile" href=\{entryHref\(entry\)\}>/, "a video tile no longer opens the entry's page");
+  assert.ok(!/href=\{`\/library\/\$\{/.test(views), "the view builds a /library URL of its own");
 
-  assert.match(source, /import \{ entryHref \}/);
-  assert.ok(
-    !/href=\{`\/library\/\$\{/.test(source),
-    "the facade builds a /library URL of its own instead of asking entryHref for one",
-  );
-
-  /*
-   * The title link carries no `rel` and no `target`, because since VET-63 it
-   * does not leave: it goes to the entry's own page. The two outbound
-   * attributes in this file both belong to the play control above it, which is
-   * off-site for every video there has ever been.
-   */
+  // The one outbound anchor in the facade is the play control.
   assert.equal(
-    [...source.matchAll(/rel="noopener nofollow"/g)].length,
+    [...code(read(FACADE)).matchAll(/rel="noopener nofollow"/g)].length,
     1,
-    "the tile has grown a second outbound anchor. The play control leaves; the title does not.",
+    "the facade has grown a second outbound anchor",
   );
-  assert.match(source, /<a class="tile__link" href=\{href\}>/, "the title link took on attributes");
 });

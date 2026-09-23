@@ -8,7 +8,7 @@
  *   - **Nothing reaches X.** The card is drawn from the repo (VET-244). No
  *     component names an outside host, no page loads X's script, and every
  *     picture an entry points at is a file under `public/`.
- *   - **The grid belongs to one route**, `/library/kind/post`.
+ *   - **The grid belongs to one view**, /library's Posts.
  *   - **The two copies.** `lib/post.ts › clipText` is a copy of
  *     `pipeline/entries.mjs › clip`, and `lib/library.ts › entryHref` is the
  *     markup's half of `lib/schema.ts › libraryRowUrl`.
@@ -128,21 +128,17 @@ test("nothing lays content out in columns", () => {
   }
 });
 
-test("the wall is reached from the post kind and from nowhere else", () => {
+test("the wall is reached from the Posts view and from nowhere else", () => {
   // The component does not name itself outside its own comments, so the sweep
   // finds callers and nothing else. One caller is the whole point.
   const callers = walk("").filter((file) => code(read(file)).includes("PostWall"));
-  assert.deepEqual(callers, ["pages/library/kind/[kind].astro"]);
+  assert.deepEqual(callers, ["components/LibraryViews.astro"]);
 
-  const route = code(read("pages/library/kind/[kind].astro"));
   assert.match(
-    route,
-    /kind === "post" \? \(\s*<PostWall/,
-    "the kind route no longer gates the wall on the post kind. Keyed on the route rather than on the data: `/library/domain/x-com` is all posts too, and a page that changed shape because of what was filed into it is a page nobody can predict.",
+    code(read("components/LibraryViews.astro")),
+    /<section class="view" data-view="post"[^>]*>[^]*?<PostWall entries=\{of\("post"\)\} \/>[^]*?<\/section>/,
+    "the wall left the Posts view. Keyed on the view rather than on the data: `/library/domain/x-com` is all posts too, and a page that changed shape because of what was filed into it is a page nobody can predict.",
   );
-
-  // /library itself renders every kind at once, so it must stay a list.
-  assert.ok(!code(read("pages/library.astro")).includes("PostWall"));
 });
 
 /* ---------------------------------------------------------------------------
@@ -262,10 +258,11 @@ test("nothing builds a /library URL of its own", () => {
   for (const name of [
     "components/PostWall.astro",
     "components/LibraryList.astro",
-    "components/VideoFacade.astro",
+    "components/LibraryFeed.astro",
+    "components/LibraryViews.astro",
   ]) {
     const source = code(read(name));
-    assert.match(source, /import \{ entryHref \}/, `${name} no longer reads the seam`);
+    assert.match(source, /import \{[^}]*\bentryHref\b[^}]*\}/, `${name} no longer reads the seam`);
     assert.ok(
       !/href=\{`\/library\/\$\{/.test(source),
       `${name} builds a /library URL of its own instead of asking entryHref for one`,

@@ -1,36 +1,28 @@
 # Library
 
-/library lists saved articles, posts and videos with their domain, tags, source link and saved date. Kind tabs filter to one kind; domain and tag chips filter further. Each entry has its own page, and saved X posts render as live X embeds (with a local fallback card) on the posts wall and on each post's page.
+/library is a notes-style view (VET-258): a list pane on the left (kind segments, tag select, count, then every entry as a row) and a main area whose layout follows the kind. All is the latest twelve saves, Articles opens the newest article beside the pane (a list on a phone), Posts is the PostCard grid, Videos is a poster grid. Each entry has its own page with the same pane beside it.
 
 ## Sub-features
 
-- `library-list` rows `.row` (`id` = slug) with `.row__link`, `.row__tags`, `.row__domain`, `.row__source`, `.row__date`.
-- `library-kind-tabs` `nav[aria-label="Filter the library by kind"]`, `.tabs__tab` with `aria-current="page"` on the active tab; kinds `article`, `post`, `video`.
-- `library-filters` `/library/domain/<domain>`, `/library/tag/<slug>`.
-- `library-detail` `/library/<slug>`: crumb, `h1.page-title--entry`, `.strip` (kind chip, domain, Saved/Digested/Drafted dates, tags), `.source`.
-- `library-x-embeds` `/library/kind/post` wall and post detail pages: `blockquote.twitter-tweet[data-dnt="true"]` fallback cards (`.card__quote`) that X's `widgets.js` replaces with `iframe[id^="twitter-widget"]`.
+- `library-pane` `nav[data-pane]` rows `[data-rows] > li` (`data-kind`, `data-tags`), toolbar `.ltools` with `[data-kind-set]` segments (`""`, `article`, `post`, `video`), `select[data-tag-set]`, `[data-filter-count]`. On /library the pane carries `data-home="/library"` and `data-start`.
+- `library-views` `section.view[data-view=""|"article"|"post"|"video"]`, one not `hidden`. Items: `.feed li`, `.wall li`, `.vgrid li` (tagged ones carry `data-tags`). Phone toolbar `.views__bar` (select `#view-tag`).
+- `library-filters` `/library/domain/<domain>`, `/library/tag/<slug>` (rows list, `LibraryList.astro`).
+- `library-detail` `/library/<slug>`: `h1.page-title--entry`, `.strip`, then post/video/digest/draft/why (`EntryDetail.astro`).
 
 ## How to get to it (user POV)
 
 - Library in the Menu panel or the top bar trail, or `/library`.
-- Tabs `All`, `Articles`/`Posts`/`Videos` at the top of /library.
-- Domain link or tag chip on any row.
-- A row's title for its detail page.
+- The segments All / Articles / Posts / Videos at the top of the pane (under the masthead on a phone). `/library/kind/<kind>` loads with that kind selected.
+- A row, a card, a poster or a feed item for its detail page.
 
 ## Driving it with shoot.mjs
 
-Preconditions:
-
-- Doctor passes. Post slugs: `grep -l platform.twitter.com dist/library/*/index.html` (e.g. `a-post-from-ephraimakanmu`).
-
-- **List and tabs.** `node .claude/skills/verify-site/shoot.mjs --base http://localhost:4329 --routes /library,/library/kind/post,/library/kind/video --label library --styles '.tabs__tab[aria-current="page"],.row__link'`. Active tab text matches the route (`All...`, `Posts...`).
+- **Views.** `node .claude/skills/verify-site/shoot.mjs --base http://localhost:4329 --routes /library,/library/kind/article,/library/kind/post,/library/kind/video --label library --sizes 390x844,1280x800,1600x1000`.
+- **In-place switch.** `... --routes /library --label library-switch --sizes 1280x800 --click '.pane [data-kind-set="post"]'` shows the Posts view with the URL at `/library?kind=post`. Back/forward needs a script (Playwright `page.goBack()`); see `qa/evidence/*-vet-258/check.mjs`.
 - **Detail.** `... --routes /library/a-post-from-ephraimakanmu --label library-detail --styles '.page-title--entry,.strip'`.
-- **X embeds hydrate.** `... --routes /library/a-post-from-ephraimakanmu --label library-x --sizes 1280x800 --hover '.page-title' --expect 'iframe[id^="twitter-widget"]' --wait 3000`. The hover is only a timer here: `visibleBefore:false`, `visibleAfter:true` proves the embed stood up within 3 s. Verified 2026-09-22.
-- **Embed hosts.** Posts pages list `platform.twitter.com`, `syndication.twitter.com`, `cdn.syndication.twimg.com` (+ `pbs.twimg.com` with media). /library itself (all kinds tab) lists none.
+- **Hosts.** No page under /library lists a third-party host: posts are drawn from `/posts/`, videos load nothing until a play press on the detail page.
 
 ## Gotchas
 
-- X embeds need network access to X; offline or rate-limited, only the fallback `.card__quote` shows. That is intended behavior, not a failure, but say which you saw.
-- The dark theme is stamped on the blockquotes before the factory loads; the embed keeps the theme it loaded with. Test dark embeds with `--themes dark` on a fresh load, not by toggling.
-- `scripts/validate-schema.mjs` fails the build if an X host appears on a page that did not declare an embed (or vice versa); run `npm run validate:schema` when touching embeds.
-- Kind tabs carry `data-astro-prefetch` (hover strategy): hovering a tab fetches that page, which shows up as a same-origin request, not a third-party one.
+- `FILTER` runs inline at the foot of the views on /library and after the pane on entry pages. A `?kind=` load must paint the right view with no flash.
+- A kind change pushes history on /library and replaces it on entry pages (Back there means the previous entry).

@@ -81,11 +81,12 @@ test("Up, Down, Home and End walk the pane rows and stop at the ends", () => {
 
 /**
  * `FILTER` against a fake pane: four rows, the kind links, the tag select, a
- * count, an empty state and the entry's hint row.
+ * count, an empty state and the entry's hint row; with `home`, the /library
+ * shell's four views and two tagged items in them.
  *
- * @param {{ search?: string, current?: number }} options
+ * @param {{ search?: string, current?: number, home?: string, start?: string, pathname?: string }} options
  */
-function filter({ search = "", current = 1 }) {
+function filter({ search = "", current = 1, home, start, pathname = "/library/e1" }) {
   /** @param {Record<string, string>} attrs */
   const el = (attrs = {}) => {
     /** @type {Record<string, (event: object) => void>} */
@@ -130,9 +131,12 @@ function filter({ search = "", current = 1 }) {
   const empty = el();
   /** @type {Record<string, ReturnType<typeof el>>} */
   const nav = { prev: el(), next: el(), close: el() };
+  const views = ["", "article", "post", "video"].map((view) => Object.assign(el(), { dataset: { view } }));
+  const items = ["agents", "design"].map((tags) => Object.assign(el(), { dataset: { tags } }));
   const pane = {
+    dataset: { home, start },
     /** @param {string} s */
-    querySelectorAll: (s) => (s.includes("data-rows") ? rows : segs),
+    querySelectorAll: (s) => (s.includes("data-rows") ? rows : []),
     /** @param {string} s */
     querySelector: (s) =>
       s.startsWith("select") ? select
@@ -143,14 +147,34 @@ function filter({ search = "", current = 1 }) {
   const hints = { querySelector: (/** @type {string} */ s) => nav[s.match(/"(\w+)"/)?.[1] ?? ""] };
   /** @type {string[]} */
   const replaced = [];
+  /** @type {string[]} */
+  const pushed = [];
   const document = {
     querySelector: (/** @type {string} */ s) => (s.includes("entry-nav") ? hints : pane),
+    /** @param {string} s */
+    querySelectorAll: (s) =>
+      s.includes("kind-set") ? segs
+      : s.includes("tag-set") ? [select]
+      : s.includes("count") ? [count]
+      : s.includes("data-tags") ? items
+      : s.includes("data-view") ? views
+      : [],
     addEventListener: () => {},
   };
-  const location = { search, pathname: "/library/e1" };
-  const history = { replaceState: (/** @type {unknown} */ _, /** @type {string} */ __, /** @type {string} */ url) => replaced.push(url) };
-  new Function("document", "location", "history", FILTER)(document, location, history);
-  return { rows, segs, select, count, empty, nav, replaced };
+  const location = { search, pathname };
+  /** @param {string[]} log */
+  const record = (log) => (/** @type {unknown} */ _, /** @type {string} */ __, /** @type {string} */ url) => {
+    log.push(url);
+    const at = new URL(url, "https://x.test");
+    location.pathname = at.pathname;
+    location.search = at.search;
+  };
+  const history = { replaceState: record(replaced), pushState: record(pushed) };
+  /** @type {Record<string, () => void>} */
+  const on = {};
+  const addEventListener = (/** @type {string} */ type, /** @type {() => void} */ fn) => (on[type] = fn);
+  new Function("document", "location", "history", "addEventListener", FILTER)(document, location, history, addEventListener);
+  return { rows, segs, select, count, empty, nav, replaced, pushed, views, items, location, on };
 }
 
 const shown = (/** @type {{ hidden: boolean }[]} */ rows) => rows.map((row) => (row.hidden ? 0 : 1)).join("");
@@ -197,4 +221,45 @@ test("the tag select narrows, and close, prev and next follow the rows it shows"
   assert.equal(pane.nav.next?.href, "/library/e3");
   assert.equal(pane.nav.prev?.href, "/library/e0");
   assert.equal(pane.nav.next?.attrs["aria-label"], "Next entry: Entry 3");
+});
+
+const view = (/** @type {{ hidden: boolean, dataset: { view: string } }[]} */ views) =>
+  views.find((v) => !v.hidden)?.dataset.view;
+
+test("on /library the kind picks the view, pushes ?kind=, and Back replays it", () => {
+  const index = filter({ home: "/library", start: "", pathname: "/library", current: -1 });
+  assert.equal(view(index.views), "");
+  assert.equal(shown(index.rows), "1111");
+
+  index.segs[2]?.on.click?.({ button: 0, preventDefault: () => {} });
+  assert.deepEqual(index.pushed, ["/library?kind=post"]);
+  assert.equal(view(index.views), "post");
+  assert.equal(shown(index.rows), "0110");
+
+  // A tag narrows the rows and the tagged items in the views, and replaces.
+  index.select.value = "design";
+  index.select.on.change?.({});
+  assert.deepEqual(index.replaced, ["/library?kind=post&tag=design"]);
+  assert.deepEqual(index.items.map((item) => item.hidden), [true, false]);
+
+  // Back to /library: All again, every item shown.
+  Object.assign(index.location, { pathname: "/library", search: "" });
+  index.on.popstate?.();
+  assert.equal(view(index.views), "");
+  assert.deepEqual(index.items.map((item) => item.hidden), [false, false]);
+});
+
+test("a kind route starts on its kind and swaps to /library?kind=", () => {
+  const route = filter({ home: "/library", start: "video", pathname: "/library/kind/video", current: -1 });
+  assert.equal(view(route.views), "video");
+  assert.equal(route.rows[0]?.firstElementChild.search, "?kind=video");
+
+  route.segs[0]?.on.click?.({ button: 0, preventDefault: () => {} });
+  assert.deepEqual(route.pushed, ["/library"]);
+  assert.equal(view(route.views), "");
+
+  // Back lands on the kind route with no query: its own kind again.
+  Object.assign(route.location, { pathname: "/library/kind/video", search: "" });
+  route.on.popstate?.();
+  assert.equal(view(route.views), "video");
 });

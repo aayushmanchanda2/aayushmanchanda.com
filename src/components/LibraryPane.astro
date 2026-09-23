@@ -5,10 +5,14 @@
  * surface with a 12px radius. The layout it sits in is `layouts/Base.astro`'s
  * `pane` slot; the container query that hides it under 48rem is here.
  *
- * A sticky toolbar sits on top (VET-245): the kind segmented control
- * (`KindSegments`), a tag select and a live count. `lib/library-pane.ts › FILTER`
- * runs inline after the list, so a filtered pane paints filtered, and it
- * writes the filter onto every row link so it carries from entry to entry.
+ * A sticky toolbar sits on top (VET-245, `LibraryToolbar.astro`): the kind
+ * segmented control, a tag select and a live count. `lib/library-pane.ts ›
+ * FILTER` runs inline after the list, so a filtered pane paints filtered, and
+ * it writes the filter onto every row link so it carries from entry to entry.
+ *
+ * /library and `/library/kind/<kind>` render it too (VET-258), with no current
+ * row and `start` set to the kind the route pre-selects. There the two inline
+ * scripts run from `LibraryViews.astro` instead, after the views they switch.
  *
  * It repeats on all 139 entry pages, so the row is kept small on purpose:
  * three bare elements plus the kind glyph, no scoped-style attributes (the
@@ -17,38 +21,34 @@
  * VET-231 audit.
  */
 import KindIcon from "./KindIcon.astro";
-import KindSegments from "./KindSegments.astro";
-import type { LibraryEntry } from "../lib/library";
-import { entryHref, kindGroups, libraryTags, rowSummary } from "../lib/library";
+import LibraryToolbar from "./LibraryToolbar.astro";
+import type { Kind, LibraryEntry } from "../lib/library";
+import { entryHref, rowSummary } from "../lib/library";
 import { FILTER, PREPAINT } from "../lib/library-pane";
 import { clipText } from "../lib/post";
-import { tagLabel } from "../lib/tags";
 
 interface Props {
   entries: LibraryEntry[];
   /** The slug of the entry on this page; its row gets `aria-current`. */
-  current: string;
+  current?: string;
+  /** On /library and the kind routes: the kind shown on load, "" for All. */
+  start?: Kind | "";
 }
 
-const { entries, current } = Astro.props;
-
-/** Busiest first, ties alphabetical: `TagFilters.astro`'s order. */
-const tags = [...libraryTags].sort(
-  (a, b) => b.entries.length - a.entries.length || a.slug.localeCompare(b.slug),
-);
+const { entries, current, start } = Astro.props;
+const index = start !== undefined;
 ---
 
-<nav class="pane" aria-label="Library list" data-pane data-mnav-inert>
+<nav
+  class="pane"
+  aria-label="Library list"
+  data-pane
+  data-mnav-inert
+  data-home={index ? "/library" : undefined}
+  data-start={start}
+>
   <div class="pane__bar">
-    <KindSegments groups={kindGroups} total={entries.length} />
-    <div class="pane__row">
-      <label class="visually-hidden" for="pane-tag">Tag</label>
-      <select class="select" id="pane-tag" data-tag-set>
-        <option value="">All tags</option>
-        {tags.map((group) => <option value={group.slug}>{tagLabel(group.slug)} ({group.entries.length})</option>)}
-      </select>
-      <p class="pane__count tabular-nums" aria-live="polite" data-filter-count>{entries.length} entries</p>
-    </div>
+    <LibraryToolbar id="pane-tag" />
   </div>
   <ul data-rows>
     {
@@ -73,11 +73,11 @@ const tags = [...libraryTags].sort(
     }
   </ul>
   <p class="pane__empty" data-filter-empty hidden>
-    No entries match both filters. <a href={`/library/${current}`}>Show all</a>
+    No entries match both filters. <a href={current ? `/library/${current}` : "/library"}>Show all</a>
   </p>
 </nav>
-<script is:inline set:html={FILTER} />
-<script is:inline set:html={PREPAINT} />
+{!index && <script is:inline set:html={FILTER} />}
+{!index && <script is:inline set:html={PREPAINT} />}
 <script>
   import { PANE_ATTRIBUTE, paneStep } from "../lib/library-pane";
 
@@ -129,33 +129,9 @@ const tags = [...libraryTags].sort(
     position: sticky;
     top: 0;
     z-index: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
     padding: 0.75rem;
     background: var(--bg);
     border-bottom: 1px solid var(--hairline);
-  }
-
-  .pane .seg {
-    width: 100%;
-  }
-
-  .pane__row {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .pane__row .select {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .pane__count {
-    font-size: 0.875rem;
-    color: var(--text-tertiary);
-    white-space: nowrap;
   }
 
   .pane__empty {
