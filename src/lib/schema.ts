@@ -195,6 +195,7 @@ export function person(full = false): JsonLdNode {
     name: NAME,
     url: absolute("/"),
     description: full ? PERSON_DESCRIPTION : null,
+    image: full ? absolute("/aayush.jpg") : null,
     sameAs: SAME_AS,
   });
 }

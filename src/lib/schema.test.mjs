@@ -458,6 +458,7 @@ test("home is a WebSite authored and published by the Person it names", () => {
 
 test("the Person is long-form on home and compact everywhere else", () => {
   assert.ok(person(true)["description"], "home carries the description its hero states");
+  assert.ok(String(person(true)["image"]).endsWith("/aayush.jpg"), "the long form carries the photo /about shows");
   assert.ok(
     !("description" in person()),
     "a tool page carries no biography, because it shows none",

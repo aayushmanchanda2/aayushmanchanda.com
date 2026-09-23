@@ -1,117 +1,215 @@
 ---
 /**
- * /about — the long version of the home page's hero.
+ * /about: the photo, the bio, the work, the site's sections, the profiles.
  *
- * The hero is two sentences because a masthead cannot carry more than that.
- * This page is the same claims at length: what he builds, what the five
- * sections actually hold, and where a verdict on this site comes from before
- * anyone decides how much to trust one.
+ * The bio is the home page's hero at length, so this is the one page besides
+ * home that emits the long-form `Person` (`lib/schema.ts › person`), photo
+ * included. The Orbis line is exactly "co-founded Orbis, an AI healthcare
+ * company" plus what it does: no title, no years (design.md §6).
  *
- * The copy states what is true and stops there. "I co-founded Orbis" carries
- * the whole fact; a disclaimer about what he does not run is liability
- * management, not accuracy, and it does not belong on a page whose job is to
- * build a reader's confidence. See `design.md` §6 and `PURPOSE.md`.
+ * Work logos are `AppIcon` (live from img.logo.dev, which /privacy names for
+ * this page). Projects are the sections that have entries, from the same
+ * manifest the home index reads.
  *
- * It is the only page other than the home page that emits the long-form
- * `Person`, because it is the only other page whose visible copy makes those
- * claims. See `lib/schema.ts › person`.
- *
- * Not in the nav or the section manifest on purpose: it is a footer page, and
- * the main nav is the five content sections. It sits in the colophon row beside
- * /contact and /privacy.
+ * Not in the nav: a footer page beside /contact and /privacy.
  */
+import AppIcon from "../components/AppIcon.astro";
+import Avatar from "../components/Avatar.astro";
 import Base from "../layouts/Base.astro";
 import { aboutJsonLd } from "../lib/schema";
+import { getSections } from "../lib/sections";
 
 const jsonLd = aboutJsonLd();
+const sections = await getSections();
+
+const work = [
+  {
+    slug: "orbis",
+    name: "Orbis",
+    url: "https://orbisassist.co",
+    what: "Voice receptionist for dental clinics",
+    role: null,
+  },
+  {
+    slug: "vetted",
+    name: "Vetted",
+    url: "https://vetted.tools",
+    what: "AI consulting practice",
+    role: "Founder",
+  },
+];
+
+const elsewhere = [
+  { name: "X", handle: "@amanchanda7", href: "https://x.com/amanchanda7" },
+  { name: "GitHub", handle: "aayushmanchanda2", href: "https://github.com/aayushmanchanda2" },
+  { name: "Email", handle: "/contact", href: "/contact" },
+];
 ---
 
 <Base
   title="About · Aayush Manchanda"
   trail={[{ name: "About", path: "/about" }]}
-  description="Who Aayush Manchanda is, what this site is, and where everything on it comes from."
+  description="Aayush Manchanda co-founded Orbis, an AI healthcare company, and runs Vetted, an AI consulting practice. His work, the site's sections, and where to find him."
   jsonLd={jsonLd}
 >
   <header>
+    <Avatar size={64} class="about__avatar" />
     <h1 class="page-title">About</h1>
-    <p class="standfirst">
-      Who I am, what this site is, and where the things on it come from.
+    <p class="bio">
+      I co-founded Orbis, an AI healthcare company, and I run Vetted, my AI
+      consulting practice, from Canada. Between the two I&rsquo;m shipping with
+      agents every week, which is where every verdict on this site comes from.
     </p>
   </header>
 
-  <div class="doc">
-    <section>
-      <h2 class="doc__head mono">Who I am</h2>
-      <p>
-        I co-founded Orbis, an AI healthcare company, and I run Vetted, my AI
-        consulting practice. Between them I am building with this stuff every
-        week, and that is where everything on this site comes from.
-      </p>
-      <p>
-        Part entrepreneur, part marketer, part operator is the closest I get to
-        an honest job title. I build things on the internet with AI, from
-        Canada. I stopped trying to pick one of those three words a while ago.
-      </p>
+  <div class="parts">
+    <section aria-labelledby="work-head">
+      <h2 class="doc__head mono" id="work-head">Work</h2>
+      <ul class="rows">
+        {
+          work.map((company) => (
+            <li class="line">
+              <AppIcon tool={company} size={32} />
+              <span class="line__body">
+                <span class="line__name">{company.name}</span>
+                <span class="line__what">{company.what}</span>
+              </span>
+              {company.role && <span class="line__meta mono">{company.role}</span>}
+            </li>
+          ))
+        }
+      </ul>
     </section>
 
-    <section>
-      <h2 class="doc__head mono">What this site is</h2>
-      <p>
-        My mindscape, in public. Five sections, each holding a kind of thing I
-        would otherwise lose track of.
-      </p>
-      {/*
-        Every anchor keeps its neighbouring space on its own line. A line break
-        between a word and a tag is not whitespace to Astro, it is nothing at
-        all, and the sentence ships as "last true.Sites is other people's".
-        See the note in `design.md` §6.
-      */}
-      <p>
-        <a href="/tools">Tools</a> is software I installed and actually ran, with
-        a verdict and the date that verdict was last true. <a
-          href="/sites">Sites</a> is other people&rsquo;s websites, saved for how
-        they look, each with a full-page screenshot of the day I saved it. <a
-          href="/library">Library</a> is what I read and watch, kept for the
-        record rather than as a list of recommendations. <a
-          href="/notes">Notes</a> is short writing. <a
-          href="/experiments">Experiments</a> is what is running right now, with
-        the ones I killed still on the page.
-      </p>
-      <p>
-        A section only exists here if it has something in it. There are no
-        coming-soon pages and no drafts folder.
-      </p>
+    <section aria-labelledby="projects-head">
+      <h2 class="doc__head mono" id="projects-head">Projects</h2>
+      <ul class="rows">
+        {
+          sections.map((section) => (
+            <li>
+              <a class="line line--link press" href={section.href}>
+                <span class="line__body">
+                  <span class="line__name">{section.name}</span>
+                  <span class="line__what">{section.blurb}</span>
+                </span>
+                <span class="line__meta mono tabular-nums">{section.count}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
     </section>
 
-    <section>
-      <h2 class="doc__head mono">Where the data comes from</h2>
-      <p>
-        Me, on my own work. I test this software on my companies and on client
-        projects, so a verdict here is one I formed while trying to ship
-        something rather than while reading a launch post. That is also the
-        limit of it: my use case is agent tooling and small-team software, and a
-        tool that lost a head-to-head on my work might win on yours.
-      </p>
-      <p>
-        Every opinion carries the date it was last true. An old date is a
-        warning, not a badge.
-      </p>
-      <p>
-        The site publishes itself. I save a link on my phone, and a few hours
-        later a run puts it here with a screenshot beside it. Some rows say
-        nothing more than that I saved the thing and have not tested it yet,
-        which is the truth on that date.
-      </p>
-    </section>
-
-    <section>
-      <h2 class="doc__head mono">Elsewhere</h2>
-      <p>
-        GitHub and X are in the footer of every page. If you want to write to
-        me, <a href="/contact">/contact</a> has the address and what I answer. <a
-          href="/privacy">/privacy</a> covers what this site collects, which is
-        nothing, and how to get a screenshot of your own site taken down.
-      </p>
+    <section aria-labelledby="elsewhere-head">
+      <h2 class="doc__head mono" id="elsewhere-head">Elsewhere</h2>
+      <ul class="rows">
+        {
+          elsewhere.map((link) => {
+            const external = link.href.startsWith("https://");
+            return (
+              <li>
+                <a
+                  class="line line--link press"
+                  href={link.href}
+                  rel={external ? "me noopener" : undefined}
+                  target={external ? "_blank" : undefined}
+                >
+                  <span class="line__name">{link.name}</span>
+                  <span class:list={["line__meta mono", { ext: external }]}>{link.handle}</span>
+                </a>
+              </li>
+            );
+          })
+        }
+      </ul>
     </section>
   </div>
 </Base>
+
+<style>
+  .about__avatar {
+    margin-bottom: 1.5rem;
+  }
+
+  /* briOS's bio: 24px (20px on a phone), medium, secondary ink. */
+  .bio {
+    margin-top: clamp(1.25rem, 3vw, 1.75rem);
+    max-width: 40rem;
+    font-size: clamp(1.25rem, 3vw, 1.5rem);
+    font-weight: 500;
+    letter-spacing: -0.015em;
+    line-height: 1.35;
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  /* The `.doc` rhythm (global.css) without its prose-link rule: every link
+     here is a row, so the rows sit outside `.doc` rather than override it. */
+  .parts {
+    margin-top: var(--gap-masthead);
+    max-width: 40rem;
+  }
+
+  .parts section + section {
+    margin-top: clamp(2rem, 5vw, 2.75rem);
+  }
+
+  .rows {
+    margin-top: 0.75rem;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .line {
+    --press-scale: 0.995;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.25rem 1rem;
+    padding-block: 0.9rem;
+    border-bottom: 1px solid var(--hairline);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .line--link {
+    grid-template-columns: 1fr auto;
+  }
+
+  .line__body {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.15rem 0.75rem;
+    min-width: 0;
+  }
+
+  .line__name {
+    font-weight: 500;
+  }
+
+  .line__what {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+  }
+
+  .line__meta {
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+    text-align: right;
+  }
+
+  .line--link:hover {
+    border-bottom-color: var(--hairline-strong);
+  }
+
+  .line--link:hover .line__name {
+    color: var(--accent);
+  }
+
+  @media (max-width: 599px) {
+    .line__body {
+      flex-direction: column;
+      gap: 0.15rem;
+    }
+  }
+</style>

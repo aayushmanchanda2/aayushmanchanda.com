@@ -1,0 +1,40 @@
+---
+/**
+ * Avatar: Aayush's photo, round, not draggable. Used on /about and the home
+ * hero, the two pages whose `Person` carries it as `image` (`lib/schema.ts`).
+ * `public/aayush.jpg` is the fallback; the webp pair covers 1x to 3x.
+ */
+interface Props {
+  size: number;
+  class?: string;
+}
+
+// `rest` carries the caller's scope attribute, so its `class` styles land here.
+const { size, class: className, ...rest } = Astro.props;
+---
+
+<picture>
+  <source
+    type="image/webp"
+    srcset="/aayush-240.webp 240w, /aayush-400.webp 400w"
+    sizes={`${size}px`}
+  />
+  <img
+    class:list={["avatar outlined", className]}
+    src="/aayush.jpg"
+    alt="Aayush Manchanda"
+    width={size}
+    height={size}
+    draggable="false"
+    decoding="async"
+    {...rest}
+  />
+</picture>
+
+<style>
+  .avatar {
+    border-radius: 50%;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+</style>

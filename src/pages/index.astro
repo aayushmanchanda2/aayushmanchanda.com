@@ -1,4 +1,5 @@
 ---
+import Avatar from "../components/Avatar.astro";
 import EntryList from "../components/EntryList.astro";
 import NewsletterSignup from "../components/NewsletterSignup.astro";
 import Base from "../layouts/Base.astro";
@@ -27,6 +28,7 @@ const jsonLd = homeJsonLd();
 
 <Base jsonLd={jsonLd}>
   <header class="hero">
+    <Avatar size={56} class="hero__avatar" />
     <h1 class="page-title">Hey, I&rsquo;m Aayush.</h1>
     <p class="standfirst hero__intro">
       I co-founded Orbis, run Vetted, and build things with AI from Canada.
@@ -111,6 +113,10 @@ const jsonLd = homeJsonLd();
      One real difference survives: the intro sits a step further from the title
      than a section standfirst does, because the title above it is a sentence
      rather than a single word, and the tighter gap crowded it. */
+  .hero__avatar {
+    margin-bottom: 1.25rem;
+  }
+
   .hero__intro {
     margin-top: clamp(1.75rem, 4vw, 2.5rem);
   }
