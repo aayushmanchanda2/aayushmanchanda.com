@@ -23,7 +23,7 @@
  * Run directly to backfill every tool: `node pipeline/icon.mjs [--force]`.
  */
 
-import { access, mkdir, readFile, rename, writeFile } from "node:fs/promises";
+import { access, readFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -31,7 +31,7 @@ import sharp from "sharp";
 
 import { repoFrom } from "./entries.mjs";
 import { resolvePaths } from "./state.mjs";
-import { describe, isRecord } from "./util.mjs";
+import { backfill, describe, isRecord, writeAtomic } from "./util.mjs";
 
 /** The stored square. The largest mark is 60px, 120 device pixels at 2x. */
 export const ICON_SIZE = 256;
@@ -251,9 +251,7 @@ export async function fetchIcon({ slug, url, dir, fetch = globalThis.fetch, forc
       const webp = await encodeIcon(await download(candidate, fetch));
       if (webp === null) continue;
 
-      await mkdir(dir, { recursive: true });
-      await writeFile(`${file}.tmp`, webp);
-      await rename(`${file}.tmp`, file);
+      await writeAtomic(file, webp);
       log(`icon: ${slug} <- ${candidate.split("?")[0]}`);
       return file;
     } catch (error) {
@@ -275,15 +273,14 @@ if (invokedDirectly) {
   const tools = JSON.parse(await readFile(paths.toolsJson, "utf8"));
 
   let real = 0;
-  // ponytail: fixed batches of 8, not a pool; fine for ~100 tools once.
-  for (let index = 0; index < tools.length; index += 8) {
-    const batch = tools.slice(index, index + 8);
-    const got = await Promise.all(
-      batch.map((tool) =>
-        fetchIcon({ slug: tool.slug, url: tool.url ?? tool.repo ?? null, dir: paths.iconsDir, force, log: console.log }),
-      ),
-    );
-    real += got.filter((file) => file !== null).length;
-  }
+  // Eight at once: an icon is a few small fetches, no browser.
+  await backfill(
+    tools,
+    async (tool) => {
+      const file = await fetchIcon({ slug: tool.slug, url: tool.url ?? tool.repo ?? null, dir: paths.iconsDir, force, log: console.log });
+      if (file !== null) real += 1;
+    },
+    8,
+  );
   console.log(`icons: ${real} real, ${tools.length - real} letter`);
 }

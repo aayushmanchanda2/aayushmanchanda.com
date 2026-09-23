@@ -30,11 +30,11 @@
  *     `RESERVED_TAGS` below.
  */
 
-import { readFile, rename, writeFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
 
 import { thumbWebPath } from "./thumb.mjs";
-import { isRecord } from "./util.mjs";
+import { isRecord, writeAtomic } from "./util.mjs";
 
 /** @typedef {import("./types.js").Bookmark} Bookmark */
 /** @typedef {import("./types.js").Draft} Draft */
@@ -147,19 +147,13 @@ export async function readEntries(file) {
 }
 
 /**
- * Replace a gallery file in one step.
- *
- * Write-then-rename, because a torn JSON file would fail every later build and
- * there is no reconcile rule that can repair one. `rename` within a directory
- * is atomic on every filesystem this runs on.
+ * Replace a gallery file in one step (`util.mjs › writeAtomic`).
  *
  * @param {string} file
  * @param {readonly unknown[]} entries
  */
 export async function writeEntries(file, entries) {
-  const staging = `${file}.staging`;
-  await writeFile(staging, `${JSON.stringify(entries, null, 2)}\n`, "utf8");
-  await rename(staging, file);
+  await writeAtomic(file, `${JSON.stringify(entries, null, 2)}\n`);
 }
 
 /* ---------------------------------------------------------------------------
