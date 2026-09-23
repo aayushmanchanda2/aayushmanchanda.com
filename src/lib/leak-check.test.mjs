@@ -1,7 +1,7 @@
 /**
  * Leak check: nothing from the private setup behind this site reaches a page.
  *
- * Every word a reader sees comes from `src/content/` (notes, /computer tips)
+ * Every word a reader sees comes from `src/content/` (notes, and the tips /notes lists)
  * or `src/data/` (the pipeline's JSON). A tip about how Aayush works is the
  * likeliest place for a local address, a path on his machine or a ticket id to
  * slip in, so all of it is scanned for the markers below on every `npm test`.
@@ -72,7 +72,7 @@ export function leaks(file, text) {
 
 test("no private setup detail in any published content", () => {
   const files = [...walk(path.join(ROOT, "src/content")), ...walk(path.join(ROOT, "src/data"))];
-  assert.ok(files.some((file) => file.includes("/content/computer/")), "the /computer tips are scanned");
+  assert.ok(files.some((file) => file.includes("/content/computer/")), "the tips are scanned");
   const hits = files.flatMap((file) => {
     const rel = path.relative(ROOT, file);
     return leaks(rel, readFileSync(file, "utf8"));

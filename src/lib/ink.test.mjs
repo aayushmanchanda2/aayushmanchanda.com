@@ -224,7 +224,7 @@ test("the stamp's labels clear AA on the paper, on every section's mat, in both 
   }
   const label = sections.other["--stamp-label"];
   assert.ok(label, "no --stamp-label on html in frame.css");
-  assert.ok(Object.keys(sections).length >= 6, "found fewer section mats than expected");
+  assert.ok(Object.keys(sections).length >= 5, "found fewer section mats than expected");
   for (const [name, own] of Object.entries(sections)) {
     const vars = { ...sections.other, ...own };
     for (const theme of /** @type {const} */ (["light", "dark"])) {

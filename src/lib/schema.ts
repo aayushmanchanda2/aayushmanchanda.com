@@ -679,11 +679,11 @@ export function noteJsonLd(note: {
 }
 
 /**
- * One /computer tip. A `WebPage`, not a note's `Article`: a tip has no publish
+ * One tip, under /notes. A `WebPage`, not a note's `Article`: a tip has no publish
  * date, and an `Article` without one is a claim the validator rejects.
  */
 export function tipJsonLd(tip: { slug: string; title: string }): JsonLd {
-  const url = pageUrl(`/computer/${tip.slug}`);
+  const url = pageUrl(`/notes/${tip.slug}`);
 
   return graph(
     {
@@ -694,7 +694,7 @@ export function tipJsonLd(tip: { slug: string; title: string }): JsonLd {
       author: ref(PERSON_ID),
     },
     person(),
-    breadcrumb({ name: "Computer", path: "/computer" }, { name: tip.title, path: `/computer/${tip.slug}` }),
+    breadcrumb({ name: "Notes", path: "/notes" }, { name: tip.title, path: `/notes/${tip.slug}` }),
   );
 }
 

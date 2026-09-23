@@ -166,7 +166,7 @@ const EXPECTED = [
   {
     name: "section index",
     match: (page) =>
-      ["tools", "sites", "library", "experiments", "notes", "computer"].some(
+      ["tools", "sites", "library", "experiments", "notes"].some(
         (section) => page === `${section}/index.html`,
       ),
     types: ["ItemList"],
@@ -200,10 +200,12 @@ const EXPECTED = [
     name: "note",
     match: (page) => /^notes\/[^/]+\/index\.html$/.test(page),
     types: ["Article", "Person", "BreadcrumbList"],
+    when: (types) => types.includes("Article"),
   },
   {
+    // A tip shares /notes/<slug> with the notes and has no date, so no Article.
     name: "tip",
-    match: (page) => /^computer\/[^/]+\/index\.html$/.test(page),
+    match: (page) => /^notes\/[^/]+\/index\.html$/.test(page),
     types: ["WebPage", "Person", "BreadcrumbList"],
   },
   {

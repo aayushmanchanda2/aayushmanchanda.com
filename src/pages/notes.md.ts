@@ -1,5 +1,6 @@
 /**
- * /notes.md — every note in full, for an agent that asked for markdown.
+ * /notes.md — every tip, then every note, in full, for an agent that asked for
+ * markdown.
  *
  * The other four variants summarise a section into a table. This one does not,
  * because a note has no fields worth tabulating: the text is the note. They are
@@ -23,6 +24,17 @@ import { absolute } from "../lib/site";
 export const GET: APIRoute = async () => {
   const notes = (await getCollection("notes")).sort(
     (a, b) => b.data.date.getTime() - a.data.date.getTime(),
+  );
+
+  const tips = (await getCollection("computer")).sort((a, b) => a.data.order - b.data.order);
+  const tipBlocks = tips.map((tip) =>
+    [
+      `## ${tip.data.emoji} ${tip.data.title}`,
+      [tip.data.summary, `Page: ${absolute(`/notes/${tip.id}`)}`].join("\n"),
+      tip.body?.trim() ?? "",
+    ]
+      .filter((part) => part !== "")
+      .join("\n\n"),
   );
 
   const blocks = notes.map((note) => {
@@ -54,12 +66,13 @@ export const GET: APIRoute = async () => {
     page: PAGES.notes,
     title: "Notes",
     description:
-      "Every note Aayush Manchanda has published, newest first, with the full text of each one.",
+      "How Aayush Manchanda works with his computer and the AI agents on it, then every note he has published, newest first, each in full.",
     updated: newest(notes.map((note) => isoDay(note.data.date))),
     blocks:
-      blocks.length === 0
+      blocks.length + tipBlocks.length === 0
         ? ["No notes yet."]
         : [
+            ...tipBlocks,
             // The bodies are verbatim, so their links are the site paths Aayush
             // wrote. Out here there is no page for those to resolve against.
             "Note bodies are reproduced as written. A link inside one that starts with a slash is a path on this site, so resolve it against the Source URL above.",

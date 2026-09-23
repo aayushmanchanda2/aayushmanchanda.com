@@ -143,7 +143,7 @@ const ICON_96 = "favicon-96x96.png";
  * five. The header's "re-run after changing the section list" was the only
  * thing holding it, and an instruction is not a mechanism.
  */
-const SECTIONS = ["tools", "sites", "library", "notes", "experiments", "computer"];
+const SECTIONS = ["tools", "sites", "library", "notes", "experiments"];
 
 /** Only the latin subset is needed: the card renders two fixed ASCII strings. */
 const FONTS = {

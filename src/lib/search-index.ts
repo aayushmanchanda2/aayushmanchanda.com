@@ -47,7 +47,6 @@ const SECTION = {
   library: "Library",
   notes: "Notes",
   experiments: "Experiments",
-  computer: "Computer",
   settings: "Settings",
 } as const;
 
@@ -258,8 +257,8 @@ async function build(): Promise<SearchEntry[]> {
     ...tips.map(
       (tip): SearchEntry => ({
         title: tip.data.title,
-        section: SECTION.computer,
-        href: `/computer/${tip.id}`,
+        section: SECTION.notes,
+        href: `/notes/${tip.id}`,
         lead: tip.data.summary,
         body: squash(plain(tip.body ?? "")),
         glyph: "note",

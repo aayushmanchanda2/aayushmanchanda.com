@@ -1,5 +1,5 @@
 /**
- * The /notes and /computer data boundary.
+ * The /notes data boundary: the notes, and the tips /notes lists above them.
  *
  * Same job as `lib/tools.ts` and `lib/experiments.ts`, done by the tool that
  * already exists for it: Astro's content layer parses every markdown file
@@ -72,7 +72,8 @@ const notes = defineCollection({
 });
 
 /**
- * /computer: tips, in a fixed order rather than by date, because a tip is how
+ * Tips (the "How I work" group on /notes, each at /notes/<slug>), in a fixed
+ * order rather than by date, because a tip is how
  * I work now and has no publish day worth printing. The summary is the index
  * row's second line, so it keeps the section-blurb cap (voice.md › Caps).
  */

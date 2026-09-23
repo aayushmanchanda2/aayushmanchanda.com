@@ -18,6 +18,21 @@
       "headers": { "Location": "/library/$1" }
     },
     {
+      "src": "^/computer/?$",
+      "status": 308,
+      "headers": { "Location": "/notes" }
+    },
+    {
+      "src": "^/computer\\.md$",
+      "status": 308,
+      "headers": { "Location": "/notes.md" }
+    },
+    {
+      "src": "^/computer/(.*)$",
+      "status": 308,
+      "headers": { "Location": "/notes/$1" }
+    },
+    {
       "src": "^/(feed|rss)/?$",
       "status": 308,
       "headers": { "Location": "/rss.xml" }
@@ -107,18 +122,9 @@
         "Vary": "Accept, Accept-Encoding"
       }
     },
-    {
-      "src": "^/computer/?$",
-      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
-      "dest": "/computer.md",
-      "headers": {
-        "Content-Type": "text/markdown; charset=utf-8",
-        "Vary": "Accept, Accept-Encoding"
-      }
-    },
 
     {
-      "src": "^/(tools|sites|library|experiments|notes|computer)/?$",
+      "src": "^/(tools|sites|library|experiments|notes)/?$",
       "headers": { "Vary": "Accept, Accept-Encoding" },
       "continue": true
     },
@@ -137,7 +143,7 @@
       "continue": true
     },
     {
-      "src": "^/(tools|sites|library|experiments|notes|computer)\\.md$",
+      "src": "^/(tools|sites|library|experiments|notes)\\.md$",
       "headers": {
         "Content-Type": "text/markdown; charset=utf-8",
         "Vary": "Accept, Accept-Encoding",

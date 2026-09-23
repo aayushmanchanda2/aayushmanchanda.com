@@ -1,6 +1,8 @@
 ---
 /**
- * One /computer tip: the emoji, the title, the summary as a standfirst, then
+ * One tip, at /notes/<slug> beside the notes (`[slug].astro` builds those;
+ * the slugs never collide, and a tip has no date for that template's
+ * byline): the emoji, the title, the summary as a standfirst, then
  * the body in the shared `.prose` column (`styles/prose.css`, which also draws
  * any `<kbd>` key chip a tip writes inline). "Read next" is the other tips.
  */
@@ -17,7 +19,7 @@ import { tipJsonLd } from "../../lib/schema";
 export const getStaticPaths = (async () => {
   const tips = await getCollection("computer");
   return tips.map((tip) => ({
-    params: { slug: tip.id },
+    params: { tip: tip.id },
     props: { tip, next: readNext(tip.id, tips) },
   }));
 }) satisfies GetStaticPaths;
@@ -30,7 +32,7 @@ const { title, emoji, summary } = tip.data;
 ---
 
 <Base
-  title={`${title} · Computer · Aayush Manchanda`}
+  title={`${title} · Notes · Aayush Manchanda`}
   description={`${summary} A tip from Aayush Manchanda.`}
   jsonLd={tipJsonLd({ slug: tip.id, title })}
 >

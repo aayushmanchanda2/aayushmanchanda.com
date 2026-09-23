@@ -59,14 +59,13 @@ function cardSections() {
   return [...block[1].matchAll(/"([a-z-]+)"/g)].map((m) => m[1]);
 }
 
-test("the manifest still parses to the six sections the site has", () => {
+test("the manifest still parses to the five sections the site has", () => {
   assert.deepEqual(catalogueSections(), [
     "tools",
     "sites",
     "library",
     "notes",
     "experiments",
-    "computer",
   ]);
 });
 
@@ -86,4 +85,20 @@ test("the card renders that list rather than a second hand-typed one", () => {
     /class="sections">\$\{SECTIONS\.join\(/,
     "the .sections paragraph must interpolate SECTIONS, not spell the sections out",
   );
+});
+
+test("the retired /computer section 308s into /notes", () => {
+  /** @type {{ routes: { src: string, status?: number, headers?: Record<string, string> }[] }} */
+  const { routes } = JSON.parse(read("../../vercel.json"));
+  const to = (/** @type {string} */ path) => {
+    for (const route of routes) {
+      const hit = new RegExp(route.src).exec(path);
+      if (hit && route.status === 308) return route.headers?.Location?.replace("$1", hit[1] ?? "");
+    }
+    return undefined;
+  };
+  assert.equal(to("/computer"), "/notes");
+  assert.equal(to("/computer/"), "/notes");
+  assert.equal(to("/computer.md"), "/notes.md");
+  assert.equal(to("/computer/save-a-link"), "/notes/save-a-link");
 });

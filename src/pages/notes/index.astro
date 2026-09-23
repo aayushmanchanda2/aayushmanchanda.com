@@ -1,6 +1,7 @@
 ---
 /**
- * /notes — briOS's /writing: the titles, grouped by year, newest first.
+ * /notes — briOS's /writing: the titles, grouped by year, newest first, under
+ * a "How I work" group of tips in their set order (what /computer was).
  *
  * The masthead is the section scale every other index uses (`.page-title`);
  * the year is a small label over each group, and the rows are `EntryList`, the
@@ -11,12 +12,14 @@ import { getCollection } from "astro:content";
 
 import Base from "../../layouts/Base.astro";
 import EntryList from "../../components/EntryList.astro";
-import { noteEntry } from "../../lib/entry-list";
+import { noteEntry, tipEntry } from "../../lib/entry-list";
 import { listJsonLd, pageUrl } from "../../lib/schema";
 
 const notes = (await getCollection("notes")).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime(),
 );
+
+const tips = (await getCollection("computer")).sort((a, b) => a.data.order - b.data.order);
 
 /** Already newest first, so the years and each year's notes come out in order. */
 const years = Map.groupBy(notes, (note) => note.data.date.getUTCFullYear());
@@ -24,27 +27,35 @@ const years = Map.groupBy(notes, (note) => note.data.date.getUTCFullYear());
 const jsonLd = listJsonLd({
   name: "Notes",
   path: "/notes",
-  entries: notes.map((note) => ({
-    name: note.data.title,
-    url: pageUrl(`/notes/${note.id}`),
+  entries: [...tips, ...notes].map((entry) => ({
+    name: entry.data.title,
+    url: pageUrl(`/notes/${entry.id}`),
   })),
 });
 ---
 
 <Base
   title="Notes · Aayush Manchanda"
-  description="Short notes from Aayush Manchanda. Some are typed out, some are a whiteboard photo with one line under it."
+  description="How Aayush Manchanda works with his computer and the AI agents on it, each tip with the exact steps, then his short notes."
   jsonLd={jsonLd}
 >
   <header>
     <h1 class="page-title"><Mark color="pink" variant={3}>Notes</Mark></h1>
     <p class="standfirst">
-      Short writing. Some typed out, some a whiteboard photo with one line
-      under it.
+      How I work with my computer and the agents on it, each tip with the
+      exact steps. Then short writing, some of it a whiteboard photo.
     </p>
   </header>
 
   <div class="years">
+    {
+      tips.length > 0 && (
+        <section aria-labelledby="how-i-work">
+          <h2 class="year mono" id="how-i-work">How I work</h2>
+          <EntryList entries={tips.map(tipEntry)} />
+        </section>
+      )
+    }
     {
       [...years].map(([year, group]) => (
         <section aria-labelledby={`y${year}`}>
