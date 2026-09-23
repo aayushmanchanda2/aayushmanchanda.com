@@ -492,7 +492,7 @@ Applies to everything a reader sees: data notes, standfirsts, blurbs, labels, al
 
 **Caps.** Tool description 7 words, fragment, no period. Tool note 20 words. Both fail the build (`lib/tool-copy.ts`). Library TLDR 25 words. Section standfirst 25 words. Section blurb 12 words. About bio 120 words. Notes 400 words. Tips 80 words. Meta description 160 characters. Microcopy 4 words. `voice.md` has the formula for each.
 
-**Facts only.** Nothing is invented for rhythm. The Orbis line is exactly "co-founded Orbis, an AI healthcare company", plus what it does. No titles, years or legal detail.
+**Facts only.** Nothing is invented for rhythm. The Orbis line is exactly "co-founded Orbis, an AI healthcare company", plus what it does. No titles, years or legal detail. About's Work rows run Vetted, Orbis, IDFusion Software, Web Wizards Inc.: the two past employers carry only the role and years Aayush approved, none of the four links out, and Canada sits on the Vetted and Orbis rows and nowhere else on the site.
 
 **Dates are printed, never editorialised.** `status_date`, `saved_date`, `started` and `digested` render beside the thing they date, as `Aug 13, 2026` in a `<time>` (`lib/date.ts`). The page says "As of", "Saved", "Since", "Digested". It does not say what an old date means.
 

@@ -7,8 +7,10 @@
  * included. The Orbis line is exactly "co-founded Orbis, an AI healthcare
  * company" plus what it does: no title, no years (design.md §6).
  *
- * Work logos are `AppIcon` (live from img.logo.dev, which /privacy names for
- * this page). Projects are the sections that have entries, from the same
+ * Work rows, Vetted first: role and years only as Aayush approved them, no
+ * links, and Canada on the two current companies only. Logos are `AppIcon`
+ * (live from img.logo.dev, which /privacy names for this page; the two past
+ * employers have no URL, so they show the letter). Projects are the sections that have entries, from the same
  * manifest the home index reads.
  *
  * Not in the nav: a footer page beside /contact and /privacy.
@@ -25,19 +27,15 @@ const sections = await getSections();
 
 const work = [
   {
-    slug: "orbis",
-    name: "Orbis",
-    url: "https://orbisassist.co",
-    what: "Voice receptionist for dental clinics",
-    role: null,
-  },
-  {
     slug: "vetted",
     name: "Vetted",
     url: "https://vetted.tools",
-    what: "AI transformation partner",
-    role: "Founder",
+    what: "AI transformation partner. I'm hiring and building the team.",
+    meta: "Founder · Canada",
   },
+  { slug: "orbis", name: "Orbis", url: "https://orbisassist.co", what: "Voice receptionist for dental clinics", meta: "Canada" },
+  { slug: "idfusion", name: "IDFusion Software", url: null, what: "Senior Project Manager", meta: "2021 to 2022" },
+  { slug: "web-wizards", name: "Web Wizards Inc.", url: null, what: "Project Manager", meta: "2017 to 2021" },
 ];
 
 const elsewhere = [
@@ -63,6 +61,7 @@ const elsewhere = [
       I run Vetted, an AI transformation partner, and I co-founded Orbis, an
       AI healthcare company. Between the two I&rsquo;m shipping with
       agents every week, which is where every verdict on this site comes from.
+      I&rsquo;ve also advised 50+ small and mid-sized businesses.
     </p>
   </header>
 
@@ -78,7 +77,7 @@ const elsewhere = [
                 <span class="line__name">{company.name}</span>
                 <span class="line__what">{company.what}</span>
               </span>
-              {company.role && <span class="line__meta mono">{company.role}</span>}
+              <span class="line__meta mono">{company.meta}</span>
             </li>
           ))
         }
