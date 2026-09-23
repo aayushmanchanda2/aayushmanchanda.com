@@ -443,11 +443,6 @@ export function shotFilesOf(entry) {
   const video = entry["video"];
   if (isRecord(video) && typeof video["thumb"] === "string") paths.push(video["thumb"]);
 
-  const post = entry["post"];
-  if (isRecord(post) && Array.isArray(post["media"])) {
-    for (const item of post["media"]) if (typeof item === "string") paths.push(item);
-  }
-
   return paths.filter((value) => value !== "").map((value) => path.basename(value));
 }
 
@@ -633,7 +628,7 @@ export function buildReadingEntry({
   why = null,
 }) {
   const fallbackTitle = bookmark.title === "" ? hostnameOf(bookmark.url) : bookmark.title;
-  const headline = post === null ? "" : clip(post.text, POST_TITLE_MAX);
+  const headline = post === null ? "" : clip(post.article?.title ?? post.text, POST_TITLE_MAX);
   const tags = collectionsFrom(bookmark.tags);
 
   return {
@@ -654,25 +649,11 @@ export function buildReadingEntry({
     // gave us no excerpt for.
     note: post !== null ? postNote(post) : bookmark.excerpt === "" ? null : bookmark.excerpt,
     ...(tags.length === 0 ? {} : { tags }),
-    ...(post === null ? {} : { post: postFields(post) }),
+    ...(post === null ? {} : { post }),
     ...(video === null ? {} : { video: { ...video, thumb: thumbWebPath(slug) } }),
     ...(draft === null ? {} : { draft }),
     ...(why === null ? {} : { why }),
   };
-}
-
-/**
- * The post, minus the media array when there is nothing in it.
- *
- * `library.ts › readPost` refuses `"media": []` on the same reasoning it
- * refuses an empty note: a blank means somebody wrote a blank. So the empty
- * case — which is every case today, because Firecrawl's markdown carries no
- * media — is the key not being there.
- *
- * @param {Post} post @returns {Record<string, unknown>}
- */
-function postFields({ media, ...rest }) {
-  return media.length === 0 ? rest : { ...rest, media };
 }
 
 /* ---------------------------------------------------------------------------

@@ -57,7 +57,7 @@ import {
 import { isOutOfCredits } from "./firecrawl.mjs";
 import { tagBookmark } from "./raindrop.mjs";
 import { MAX_ATTEMPTS, galleryFor, saveState } from "./state.mjs";
-import { captureMedia, mediaFileName, thumbFileName, videoFrom } from "./thumb.mjs";
+import { thumbFileName, videoFrom } from "./thumb.mjs";
 import { describe, isRecord } from "./util.mjs";
 
 /** @typedef {import("./types.js").Bookmark} Bookmark */
@@ -103,8 +103,9 @@ import { describe, isRecord } from "./util.mjs";
  *   the two Firecrawl bindings this needs no key and no account, so there is no
  *   environment in which it is unavailable and a local run gets the same
  *   pictures CI does.
- * @property {(input: { media: readonly string[], slug: string, outDir: string }) => Promise<{ files: string[], paths: string[] }>} captureMedia
- *   The same, for a post's photos. Never null, for the same reason.
+ * @property {(input: { url: string, saved: Post | null }) => Promise<Post | null>} readPost
+ *   X's own record for a post (`post.mjs › postFrom`), with its avatar, media
+ *   and quoted post copied into `public/posts/`. Never null: no key needed.
  * @property {(input: { slug: string, url: string, dir: string }) => Promise<string | null>} fetchIcon
  *   A new tool's app icon into `dir`, or null for the letter. Always bound,
  *   never null, for the same reason as the two above.
@@ -327,8 +328,7 @@ async function thumbFor(bookmark, slug, outDir, ctx) {
  * @returns {Promise<Reading>}
  */
 async function readingFor(bookmark, slug, outDir, ctx) {
-  const read = await postFor(bookmark, ctx);
-  const post = read === null ? null : await withMedia(read, slug, outDir, ctx);
+  const post = await syndicated(bookmark, await postFor(bookmark, ctx), ctx);
   const video = await thumbFor(bookmark, slug, outDir, ctx);
   const { draft, why } = draftFrom(bookmark.note, ctx.date);
 
@@ -336,30 +336,22 @@ async function readingFor(bookmark, slug, outDir, ctx) {
 }
 
 /**
- * The post, with its photos fetched and its remote URLs replaced by the local
- * paths they were written to.
+ * The post as X's syndication record has it, over what Firecrawl read.
  *
- * The substitution is the point rather than a formatting step. `library.ts`
- * refuses a `pbs.twimg.com` URL in this field, so a post that reached the
- * gallery still holding one would fail the build — which is the right failure,
- * and this is the step that makes sure it never has to happen.
+ * Quiet on failure, like `postFor`: an X outage costs the card its pictures
+ * and nothing else, and the row publishes with whatever Firecrawl read.
  *
- * @param {Post} post @param {string} slug @param {string} outDir
- * @param {ApplyContext} ctx
- * @returns {Promise<Post>}
+ * @param {Bookmark} bookmark @param {Post | null} saved @param {ApplyContext} ctx
+ * @returns {Promise<Post | null>}
  */
-async function withMedia(post, slug, outDir, ctx) {
-  if (post.media.length === 0) return post;
-
-  await mkdir(outDir, { recursive: true });
-  const { files, paths } = await ctx.captureMedia({ media: post.media, slug, outDir });
-
-  await mkdir(ctx.paths.shotsDir, { recursive: true });
-  for (const [index, file] of files.entries()) {
-    await moveShot(file, path.join(ctx.paths.shotsDir, mediaFileName(slug, index)));
+async function syndicated(bookmark, saved, ctx) {
+  if (deriveKind(bookmark.url) !== "post") return saved;
+  try {
+    return await ctx.readPost({ url: bookmark.url, saved });
+  } catch (error) {
+    ctx.log(`warn: X syndication could not read ${bookmark.url} — ${describe(error)}`);
+    return saved;
   }
-
-  return { ...post, media: paths };
 }
 
 /**

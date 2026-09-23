@@ -1,0 +1,96 @@
+---
+/**
+ * PostMedia — a post's photos and videos, from our copies under `/posts/`.
+ *
+ * One to four in a 2px-gap grid (three: the first spans both rows). A video we
+ * kept plays here with native controls and `preload="none"`, so nothing is
+ * fetched until it is pressed. One too big to keep (`pipeline/post.mjs ›
+ * VIDEO_MAX_BYTES`) is its poster with a "Watch on X" link out.
+ */
+import type { PostMedia } from "../lib/library";
+
+interface Props {
+  media: PostMedia[];
+  author: string;
+  /** The post on X, for a video we only have the poster of. */
+  original: string;
+}
+
+const { media, author, original } = Astro.props;
+const label = (index: number) =>
+  media.length === 1
+    ? `attached to the post by ${author}`
+    : `${index + 1} of ${media.length} attached to the post by ${author}`;
+---
+
+<div class="pm" data-count={media.length}>
+  {
+    media.map((item, index) =>
+      item.type === "photo" ? (
+        <img class="outlined" src={item.src} alt={`Picture ${label(index)}`} width={item.w} height={item.h} loading="lazy" decoding="async" />
+      ) : item.src ? (
+        <video src={item.src} poster={item.poster ?? undefined} width={item.w} height={item.h} controls preload="none" playsinline aria-label={`Video ${label(index)}`} />
+      ) : (
+        <a class="pm__poster" href={original} rel="noopener nofollow" target="_blank">
+          <img class="outlined" src={item.poster} alt="" width={item.w} height={item.h} loading="lazy" decoding="async" />
+          <span class="pm__watch ext">Watch on X<span class="visually-hidden">: video {label(index)}</span></span>
+        </a>
+      ),
+    )
+  }
+</div>
+
+<style>
+  .pm {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2px;
+  }
+
+  .pm[data-count="1"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .pm[data-count="3"],
+  .pm[data-count="4"] {
+    grid-template-rows: 1fr 1fr;
+  }
+
+  .pm[data-count="3"] > :first-child {
+    grid-row: span 2;
+  }
+
+  .pm > * {
+    display: block;
+    position: relative;
+    min-width: 0;
+  }
+
+  .pm img,
+  .pm video {
+    display: block;
+    width: 100%;
+    height: auto;
+    background: var(--surface-2);
+    object-fit: cover;
+  }
+
+  .pm:not([data-count="1"]) :is(img, video) {
+    height: 100%;
+    aspect-ratio: 1;
+  }
+
+  .pm__poster {
+    height: 100%;
+  }
+
+  .pm__watch {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    background: rgb(0 0 0 / 0.72);
+    color: #fff;
+    font-size: 0.8125rem;
+  }
+</style>

@@ -1,0 +1,169 @@
+{
+  "__typename": "Tweet",
+  "favorite_count": 323,
+  "lang": "en",
+  "possibly_sensitive": false,
+  "created_at": "2026-07-26T14:15:10.000Z",
+  "display_text_range": [
+    0,
+    275
+  ],
+  "entities": {
+    "media": [
+      {
+        "display_url": "pic.x.com/0l91Ul5fqt",
+        "expanded_url": "https://x.com/petergyang/status/2081382827548148091/video/1",
+        "indices": [
+          276,
+          299
+        ],
+        "url": "https://t.co/0l91Ul5fqt"
+      }
+    ],
+    "user_mentions": [
+      {
+        "id_str": "17203692",
+        "indices": [
+          122,
+          129
+        ],
+        "name": "jason",
+        "screen_name": "jxnlco"
+      }
+    ]
+  },
+  "id_str": "2081382827548148091",
+  "text": "“The only job left is to understand what you don't like, put it into words, and tell the AI.”\n\nHere’s my new episode with @jxnlco (DevEx at OpenAI) where he showed me how he uses Codex throughout his workday, including how to:\n\n→ Set up a chief of staff for Slack and email\n→ https://t.co/0l91Ul5fqt",
+  "user": {
+    "id_str": "84490044",
+    "name": "Peter Yang",
+    "screen_name": "petergyang",
+    "is_blue_verified": true,
+    "profile_image_shape": "Circle",
+    "verified": false,
+    "profile_image_url_https": "https://pbs.twimg.com/profile_images/1454103621516206083/_klMwpkk_normal.jpg"
+  },
+  "edit_control": {
+    "edit_tweet_ids": [
+      "2081382827548148091"
+    ],
+    "editable_until_msecs": "1785078910000",
+    "edits_remaining": "5",
+    "is_edit_eligible": false
+  },
+  "mediaDetails": [
+    {
+      "additional_media_info": {},
+      "display_url": "pic.x.com/0l91Ul5fqt",
+      "expanded_url": "https://x.com/petergyang/status/2081382827548148091/video/1",
+      "ext_media_availability": {
+        "status": "Available"
+      },
+      "indices": [
+        276,
+        299
+      ],
+      "media_url_https": "https://pbs.twimg.com/amplify_video_thumb/2081382785286332416/img/FgA648-WEhq9gVkW.jpg",
+      "original_info": {
+        "focus_rects": [],
+        "height": 1080,
+        "width": 1920
+      },
+      "sizes": {
+        "large": {
+          "h": 1080,
+          "resize": "fit",
+          "w": 1920
+        },
+        "medium": {
+          "h": 675,
+          "resize": "fit",
+          "w": 1200
+        },
+        "small": {
+          "h": 383,
+          "resize": "fit",
+          "w": 680
+        },
+        "thumb": {
+          "h": 150,
+          "resize": "crop",
+          "w": 150
+        }
+      },
+      "type": "video",
+      "url": "https://t.co/0l91Ul5fqt",
+      "video_info": {
+        "aspect_ratio": [
+          16,
+          9
+        ],
+        "duration_millis": 30730,
+        "variants": [
+          {
+            "content_type": "application/x-mpegURL",
+            "url": "https://video.twimg.com/amplify_video/2081382785286332416/pl/nkbWELR0Kk2BOftu.m3u8?tag=14&v=a0a"
+          },
+          {
+            "bitrate": 288000,
+            "content_type": "video/mp4",
+            "url": "https://video.twimg.com/amplify_video/2081382785286332416/vid/avc1/480x270/nOmrwurmU8ZlgjJ3.mp4?tag=14"
+          },
+          {
+            "bitrate": 832000,
+            "content_type": "video/mp4",
+            "url": "https://video.twimg.com/amplify_video/2081382785286332416/vid/avc1/640x360/LtcnOck63lJU6Ar9.mp4?tag=14"
+          },
+          {
+            "bitrate": 2176000,
+            "content_type": "video/mp4",
+            "url": "https://video.twimg.com/amplify_video/2081382785286332416/vid/avc1/1280x720/up1vhUdqohDohFCI.mp4?tag=14"
+          }
+        ]
+      }
+    }
+  ],
+  "photos": [],
+  "video": {
+    "aspectRatio": [
+      16,
+      9
+    ],
+    "contentType": "media_entity",
+    "durationMs": 30730,
+    "mediaAvailability": {
+      "status": "available"
+    },
+    "poster": "https://pbs.twimg.com/amplify_video_thumb/2081382785286332416/img/FgA648-WEhq9gVkW.jpg",
+    "variants": [
+      {
+        "type": "application/x-mpegURL",
+        "src": "https://video.twimg.com/amplify_video/2081382785286332416/pl/nkbWELR0Kk2BOftu.m3u8?tag=14&v=a0a"
+      },
+      {
+        "type": "video/mp4",
+        "src": "https://video.twimg.com/amplify_video/2081382785286332416/vid/avc1/480x270/nOmrwurmU8ZlgjJ3.mp4?tag=14"
+      },
+      {
+        "type": "video/mp4",
+        "src": "https://video.twimg.com/amplify_video/2081382785286332416/vid/avc1/640x360/LtcnOck63lJU6Ar9.mp4?tag=14"
+      },
+      {
+        "type": "video/mp4",
+        "src": "https://video.twimg.com/amplify_video/2081382785286332416/vid/avc1/1280x720/up1vhUdqohDohFCI.mp4?tag=14"
+      }
+    ],
+    "videoId": {
+      "type": "tweet",
+      "id": "2081382827548148091"
+    },
+    "viewCount": 0
+  },
+  "conversation_count": 29,
+  "news_action_type": "conversation",
+  "isEdited": false,
+  "isStaleEdit": false,
+  "note_tweet": {
+    "id": "Tm90ZVR3ZWV0UmVzdWx0czoyMDgxMzgyODI3Mzg0NTczOTUy"
+  }
+}

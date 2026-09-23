@@ -1,0 +1,166 @@
+{
+  "__typename": "Tweet",
+  "favorite_count": 9665,
+  "lang": "en",
+  "possibly_sensitive": false,
+  "created_at": "2024-02-07T13:10:51.000Z",
+  "display_text_range": [
+    0,
+    140
+  ],
+  "entities": {
+    "media": [
+      {
+        "display_url": "pic.x.com/jTdBbJXHuw",
+        "expanded_url": "https://x.com/ecomEddie/status/1755217559312269550/photo/1",
+        "indices": [
+          141,
+          164
+        ],
+        "url": "https://t.co/jTdBbJXHuw"
+      }
+    ]
+  },
+  "id_str": "1755217559312269550",
+  "text": "The most addictive drug in the world isn’t cocaine, heroin, or alcohol. \n\nIt’s comfort. \n\nHow to break free (and reach your true potential): https://t.co/jTdBbJXHuw",
+  "user": {
+    "id_str": "2225494903",
+    "name": "EDDIE CHENG",
+    "screen_name": "ecomEddie",
+    "is_blue_verified": true,
+    "profile_image_shape": "Circle",
+    "verified": false,
+    "profile_image_url_https": "https://pbs.twimg.com/profile_images/2017807867722510336/cPu904t2_normal.jpg"
+  },
+  "edit_control": {
+    "edit_tweet_ids": [
+      "1755217559312269550"
+    ],
+    "editable_until_msecs": "1707315051000",
+    "edits_remaining": "5",
+    "is_edit_eligible": false
+  },
+  "mediaDetails": [
+    {
+      "display_url": "pic.x.com/jTdBbJXHuw",
+      "expanded_url": "https://x.com/ecomEddie/status/1755217559312269550/photo/1",
+      "ext_media_availability": {
+        "status": "Available"
+      },
+      "indices": [
+        141,
+        164
+      ],
+      "media_url_https": "https://pbs.twimg.com/media/GFvJEP8WUAAQVYj.png",
+      "original_info": {
+        "focus_rects": [
+          {
+            "h": 504,
+            "w": 900,
+            "x": 0,
+            "y": 0
+          },
+          {
+            "h": 505,
+            "w": 505,
+            "x": 174,
+            "y": 0
+          },
+          {
+            "h": 505,
+            "w": 443,
+            "x": 205,
+            "y": 0
+          },
+          {
+            "h": 505,
+            "w": 253,
+            "x": 300,
+            "y": 0
+          },
+          {
+            "h": 505,
+            "w": 900,
+            "x": 0,
+            "y": 0
+          }
+        ],
+        "height": 505,
+        "width": 900
+      },
+      "sizes": {
+        "large": {
+          "h": 505,
+          "resize": "fit",
+          "w": 900
+        },
+        "medium": {
+          "h": 505,
+          "resize": "fit",
+          "w": 900
+        },
+        "small": {
+          "h": 382,
+          "resize": "fit",
+          "w": 680
+        },
+        "thumb": {
+          "h": 150,
+          "resize": "crop",
+          "w": 150
+        }
+      },
+      "type": "photo",
+      "url": "https://t.co/jTdBbJXHuw"
+    }
+  ],
+  "photos": [
+    {
+      "backgroundColor": {
+        "red": 204,
+        "green": 214,
+        "blue": 221
+      },
+      "cropCandidates": [
+        {
+          "h": 504,
+          "w": 900,
+          "x": 0,
+          "y": 0
+        },
+        {
+          "h": 505,
+          "w": 505,
+          "x": 174,
+          "y": 0
+        },
+        {
+          "h": 505,
+          "w": 443,
+          "x": 205,
+          "y": 0
+        },
+        {
+          "h": 505,
+          "w": 253,
+          "x": 300,
+          "y": 0
+        },
+        {
+          "h": 505,
+          "w": 900,
+          "x": 0,
+          "y": 0
+        }
+      ],
+      "expandedUrl": "https://x.com/ecomEddie/status/1755217559312269550/photo/1",
+      "url": "https://pbs.twimg.com/media/GFvJEP8WUAAQVYj.png",
+      "width": 900,
+      "height": 505
+    }
+  ],
+  "conversation_count": 90,
+  "news_action_type": "conversation",
+  "isEdited": false,
+  "isStaleEdit": false
+}

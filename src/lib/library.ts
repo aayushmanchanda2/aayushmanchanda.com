@@ -122,51 +122,53 @@ export const PROVIDERS = ["youtube"] as const;
 
 export type Provider = (typeof PROVIDERS)[number];
 
+/** A picture or a video attached to a post, copied under `/posts/<id>/`. */
+export interface PostMedia {
+  type: "photo" | "video";
+  /** The webp for a photo, the mp4 for a video. Null on a video too big to keep: poster only. */
+  src: string | null;
+  /** A video's still. Null on a photo. */
+  poster: string | null;
+  /** Source pixels, so the box is reserved before the file arrives. */
+  w: number;
+  h: number;
+}
+
+/** A link in the post, as X displays it and where it goes. */
+export interface PostLink {
+  text: string;
+  href: string;
+}
+
 /**
- * An x.com post, as the pipeline read it back off the page.
+ * An x.com post, as `pipeline/post.mjs` stored it: X's syndication record for
+ * the author, avatar, media, quoted post and Article header, and the fullest
+ * text anyone has read (the Firecrawl copy on a long post).
  *
- * Present only on a `post` entry, and only when Firecrawl could actually read
- * the post: a login wall, a deleted tweet or a document shaped differently than
- * it was leaves this null, and the row falls back to what Raindrop saw. Null is
- * the ordinary answer for every post saved before this field existed.
- *
- * All five fields are required once the object is there, on the same reasoning
- * as `Digest`. This is what a post card renders, and a card with no author or
- * no date is a card with a hole in it — so a half-read post is no post.
- *
- * `text` is the whole thing. `title` and `note` hold clipped copies, because
- * those two are a row and this is a card.
+ * Every picture is a path under `/posts/`. A remote URL is refused rather than
+ * stored, which is `/privacy` made structural: a page that renders this cannot
+ * reach X's CDN, because there is no shape it could hold that would let it.
  */
 export interface Post {
+  /** X's numeric id, as a string. Null for a post read before syndication was. */
+  id: string | null;
   /** Display name, spelled as the poster spells it. The handle when they have none. */
   author: string;
   /** The @handle, without the @. */
   handle: string;
-  /**
-   * ISO calendar date (YYYY-MM-DD) the post was POSTED.
-   *
-   * Deliberately not `saved_date`, which is the day the link reached this site.
-   * A post from 2024 saved last week is two different facts, and a card that
-   * showed the second one where the first belongs would misdate the quote.
-   */
+  /** ISO calendar date (YYYY-MM-DD) the post was POSTED, not saved. */
   date: string;
-  /** The post's own words, markdown decoration flattened out, whole. */
+  /** The post's own words, whole. Paragraph breaks where the source kept them. */
   text: string;
-  /**
-   * Pictures and video stills belonging to the post, as local paths under
-   * `/shots/`. A remote URL is refused rather than stored, which is the privacy
-   * rule made structural: a page that renders this array cannot reach x.com's
-   * CDN, because there is no shape it could hold that would let it.
-   *
-   * Empty on every entry today, and that is a measurement rather than a plan.
-   * Firecrawl's `x-twitter` post-processor was probed against three real posts
-   * that carry media — an image thread, a demo video, a screen recording — and
-   * its markdown holds no image references and no `pbs.twimg.com` links in any
-   * of them. Attached media arrives as an opaque `t.co` shortlink inside the
-   * text, indistinguishable from a link the poster typed. So the field is the
-   * shape a fuller source would fill, and nothing fills it yet.
-   */
-  media: string[];
+  avatar: string | null;
+  links: PostLink[];
+  media: PostMedia[];
+  /** The post this one quotes, or null. Never itself quoting: X nests one deep. */
+  quoted: Post | null;
+  /** An X Article's header. Its body is not republished here (F3 adds highlights). */
+  article: { title: string; cover: string | null } | null;
+  /** Gone on X. The saved copy is all there is. */
+  removed: boolean;
 }
 
 /** A video entry's provider, its id there, and the still we committed. */
@@ -493,13 +495,103 @@ function readShotPath(
   return value;
 }
 
+/** A file `pipeline/post.mjs` wrote: `/posts/<id>/<name>.webp` or `.mp4`. */
+const POST_FILE = /^\/posts\/\d+\/[a-z0-9-]+\.(?:webp|mp4)$/;
+
+function readPostFile(value: unknown, field: string, where: string): string {
+  if (typeof value !== "string" || !POST_FILE.test(value)) {
+    fail(
+      where,
+      `needs "${field}" to be a copy under /posts (\`/posts/<id>/<name>.webp\`), ` +
+        `never a remote URL (got ${JSON.stringify(value)})`,
+    );
+  }
+  return value;
+}
+
+/** Absent or null reads as none; a present value is held to `POST_FILE`. */
+function readPostFileOrNull(value: unknown, field: string, where: string): string | null {
+  return value === undefined || value === null ? null : readPostFile(value, field, where);
+}
+
+/** Absent reads as none. Present means a non-empty array, as `readTags` rules. */
+function readList<T>(
+  value: unknown,
+  field: string,
+  where: string,
+  read: (item: unknown, index: number) => T,
+): T[] {
+  if (value === undefined || value === null) return [];
+  if (!Array.isArray(value) || value.length === 0) {
+    fail(where, `needs "${field}" to be a non-empty array, or to leave the key out`);
+  }
+  return value.map(read);
+}
+
+function readMedia(item: unknown, index: number, where: string): PostMedia {
+  const field = `post.media[${index}]`;
+  if (!isRecord(item)) fail(where, `needs "${field}" to be an object`);
+  const { type, w, h } = item;
+  if (type !== "photo" && type !== "video") {
+    fail(where, `needs "${field}.type" to be photo or video (got ${JSON.stringify(type)})`);
+  }
+  if (typeof w !== "number" || typeof h !== "number") {
+    fail(where, `needs "${field}.w" and ".h" to be numbers`);
+  }
+  return type === "photo"
+    ? { type, src: readPostFile(item["src"], `${field}.src`, where), poster: null, w, h }
+    : {
+        type,
+        src: readPostFileOrNull(item["src"], `${field}.src`, where),
+        poster: readPostFile(item["poster"], `${field}.poster`, where),
+        w,
+        h,
+      };
+}
+
+function readPostObject(value: Record<string, unknown>, where: string): Post {
+  const at = `${where} post`;
+  const article = value["article"];
+  if (article !== undefined && !isRecord(article)) {
+    fail(where, `needs "post.article" to be an object or absent`);
+  }
+  const quoted = value["quoted"];
+  if (quoted !== undefined && !isRecord(quoted)) {
+    fail(where, `needs "post.quoted" to be an object or absent`);
+  }
+
+  return {
+    id: readOptional(value, "id", at),
+    author: readString(value, "author", at),
+    handle: readString(value, "handle", at),
+    date: readDate(value, "date", at),
+    text: readString(value, "text", at),
+    avatar: readPostFileOrNull(value["avatar"], "post.avatar", where),
+    links: readList(value["links"], "post.links", where, (item) => {
+      if (!isRecord(item)) fail(where, `needs every "post.links" item to be an object`);
+      const href = readString(item, "href", at);
+      if (!/^https?:\/\//.test(href)) fail(where, `needs every "post.links" href to be http(s) (got ${JSON.stringify(href)})`);
+      return { text: readString(item, "text", at), href };
+    }),
+    media: readList(value["media"], "post.media", where, (item, index) => readMedia(item, index, where)),
+    quoted: quoted === undefined ? null : readPostObject(quoted, `${where} quoted`),
+    article:
+      article === undefined
+        ? null
+        : {
+            title: readString(article, "title", at),
+            cover: readPostFileOrNull(article["cover"], "post.article.cover", where),
+          },
+    removed: value["removed"] === true,
+  };
+}
+
 /**
  * Absent, explicitly null, or a whole post. Only on a `post` entry.
  *
  * The kind cross-check is the same rule `readDomain` applies to the URL: a
  * field that describes something the entry is not means two edits disagreed,
- * and the second one to be written is not necessarily the right one — so
- * neither wins and the build stops.
+ * so neither wins and the build stops.
  */
 function readPost(
   entry: Record<string, unknown>,
@@ -515,25 +607,7 @@ function readPost(
   if (!isRecord(value)) {
     fail(where, `needs "post" to be an object, null, or absent (got ${JSON.stringify(value)})`);
   }
-
-  const raw = value["media"];
-  const media =
-    raw === undefined || raw === null
-      ? []
-      : Array.isArray(raw) && raw.length > 0
-        ? raw.map((item: unknown, index) => readShotPath(item, `post.media[${index}]`, where))
-        : fail(
-            where,
-            `needs "post.media" to be a non-empty array of /shots paths, or to leave the key out`,
-          );
-
-  return {
-    author: readString(value, "author", `${where} post`),
-    handle: readString(value, "handle", `${where} post`),
-    date: readDate(value, "date", `${where} post`),
-    text: readString(value, "text", `${where} post`),
-    media,
-  };
+  return readPostObject(value, where);
 }
 
 /** Absent, explicitly null, or a whole video. Only on a `video` entry. */
@@ -685,7 +759,7 @@ export function parseLibrary(value: unknown): LibraryEntry[] {
  * entry linked its page and an undigested one linked straight out, and the
  * branch lived here so the four surfaces that need the answer could not
  * disagree — the row on every list page (`components/LibraryList.astro`), the
- * card on the posts wall (`components/TweetCard.astro`), the title on a video
+ * card on the posts grid (`components/PostWall.astro`), the title on a video
  * tile (`components/VideoFacade.astro`), and the `ItemList` node describing
  * all three (`lib/schema.ts › libraryRowUrl`). Every entry has a page now, so
  * there is one answer, and it is still spelled once here rather than four

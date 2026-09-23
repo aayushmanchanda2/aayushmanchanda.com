@@ -26,10 +26,8 @@ import sharp from "sharp";
 import { SHOT_FILE } from "./entries.mjs";
 import {
   ThumbError,
-  captureMedia,
   captureThumb,
-  mediaFileName,
-  mediaWebPath,
+  fetchWebp,
   thumbFileName,
   thumbWebPath,
   videoFrom,
@@ -263,91 +261,30 @@ test("an unreachable CDN is a ThumbError, not a raw fetch failure", async (t) =>
    A post's photos
    --------------------------------------------------------------------------- */
 
-const PHOTOS = [
-  "https://pbs.twimg.com/media/HQxwm3nbMAAeX0W.jpg",
-  "https://pbs.twimg.com/media/HQxwnHsbcAA4YrV.jpg",
-];
+const PHOTO = "https://pbs.twimg.com/media/HQxwm3nbMAAeX0W.jpg";
 
-test("photo filenames are numbered from one, in the order the post showed them", () => {
-  // The order is the only thing about a set of photos a card has to preserve: a
-  // three-photo post reads differently if the second one leads. Named after the
-  // position rather than the source, because the source name is a CDN hash.
-  assert.equal(mediaFileName("s", 0), "s-media-1.webp");
-  assert.equal(mediaWebPath("s", 1), "/shots/s-media-2.webp");
-  assert.match(mediaFileName("a-long-slug", 3), SHOT_FILE, "the sweep can see them too");
-});
-
-test("every photo is fetched, re-encoded and named in order", async (t) => {
+test("a photo is fetched and re-encoded to webp at the width asked for", async () => {
   const { asked, fetch } = cdn({ "pbs.twimg.com": () => new Response(jpeg, { status: 200 }) });
-  const outDir = await scratch(t);
-
-  const { files, paths } = await captureMedia({ media: PHOTOS, slug: "s", outDir, fetch });
-
-  assert.deepEqual(asked, PHOTOS, "asked for exactly what the document named");
-  assert.deepEqual(paths, ["/shots/s-media-1.webp", "/shots/s-media-2.webp"]);
-  assert.deepEqual(
-    files.map((file) => path.basename(file)),
-    ["s-media-1.webp", "s-media-2.webp"],
-  );
-  assert.equal((await sharp(await readFile(files[0])).metadata()).format, "webp");
+  const webp = await fetchWebp(PHOTO, 600, fetch);
+  const meta = await sharp(webp).metadata();
+  assert.deepEqual(asked, [PHOTO]);
+  assert.equal(meta.format, "webp");
+  assert.equal(meta.width, 600);
 });
 
-test("a post with no photos costs no requests", async (t) => {
-  const { asked, fetch } = cdn({});
-  const outDir = await scratch(t);
-
-  assert.deepEqual(await captureMedia({ media: [], slug: "s", outDir, fetch }), {
-    files: [],
-    paths: [],
-  });
-  assert.deepEqual(asked, []);
-});
-
-test("more photos than x.com allows means the parse was wrong, so four is the cap", async (t) => {
-  const { asked, fetch } = cdn({ "pbs.twimg.com": () => new Response(jpeg, { status: 200 }) });
-  const outDir = await scratch(t);
-
-  const many = Array.from({ length: 7 }, (_, i) => `https://pbs.twimg.com/media/photo-${i}.jpg`);
-  const { paths } = await captureMedia({ media: many, slug: "s", outDir, fetch });
-
-  assert.equal(paths.length, 4);
-  assert.equal(asked.length, 4, "and the other three are not fetched either");
-});
-
-test("a photo that will not come back fails the set rather than shortening it", async (t) => {
-  // Three of four photos is a card that quietly says something the post did
-  // not, so a partial set is never returned.
-  const outDir = await scratch(t);
-  const gone = cdn({ "HQxwm3nb": () => new Response(jpeg, { status: 200 }) });
-
-  await assert.rejects(
-    captureMedia({ media: PHOTOS, slug: "s", outDir, fetch: gone.fetch }),
-    (error) => {
-      assert.ok(error instanceof ThumbError);
-      assert.match(error.message, /is gone \(HTTP 404\)/);
-      return true;
-    },
-  );
-});
-
-test("a PNG photo is as acceptable as a JPEG one", async (t) => {
+test("a PNG photo is as acceptable as a JPEG one", async () => {
   const png = await sharp({ create: { width: 600, height: 400, channels: 3, background: "#abc" } })
     .png()
     .toBuffer();
   const { fetch } = cdn({ "pbs.twimg.com": () => new Response(png, { status: 200 }) });
-  const outDir = await scratch(t);
-
-  const { paths } = await captureMedia({ media: [PHOTOS[0]], slug: "s", outDir, fetch });
-
-  assert.deepEqual(paths, ["/shots/s-media-1.webp"]);
+  assert.equal((await sharp(await fetchWebp(PHOTO, 1200, fetch)).metadata()).width, 600);
 });
 
-test("an error page where a photo should be is refused before the encoder sees it", async (t) => {
-  const { fetch } = cdn({ "pbs.twimg.com": () => new Response("<html>nope</html>", { status: 200 }) });
-  const outDir = await scratch(t);
+test("a photo that is gone throws rather than returning nothing", async () => {
+  await assert.rejects(fetchWebp(PHOTO, 600, cdn({}).fetch), /is gone \(HTTP 404\)/);
+});
 
-  await assert.rejects(
-    captureMedia({ media: [PHOTOS[0]], slug: "s", outDir, fetch }),
-    /did not answer with an image/,
-  );
+test("an error page where a photo should be is refused before the encoder sees it", async () => {
+  const { fetch } = cdn({ "pbs.twimg.com": () => new Response("<html>nope</html>", { status: 200 }) });
+  await assert.rejects(fetchWebp(PHOTO, 600, fetch), /did not answer with an image/);
 });

@@ -634,76 +634,23 @@ const EMBEDS = [
 ];
 
 /*
- * The pages allowed to talk to X: the posts wall, plus the page of every
- * saved post the pipeline could read.
- *
- * `/library/kind/post` renders every saved post as X's own embed
- * (`components/XEmbeds.astro`), so opening it fetches `widgets.js` and turns
- * each card into an iframe of theirs. Since VET-221 each post's own page does
- * the same for its one post, above the saved copy. /privacy names both, which
- * is a claim that has to be checked from both ends, so this is checked from
- * both ends. The post pages come from `src/data/library.json` rather than from
- * a pattern, because `/library/<slug>` is also every article and video, and
- * those must stay clean. A page not on this list
- * that carries a Twitter host has quietly added a third party; the page on it
- * that carries none has quietly lost the feature while /privacy still confesses
- * to it, which is the more embarrassing of the two.
- *
- * **The scan is of the whole document, scripts included, and that is the
- * difference from the YouTube check above.** That one deliberately cuts script
- * bodies out, because the facade's embed origin lives in a string that nothing
- * runs until a reader presses play, and a URL in an attribute is a request the
- * browser makes on load. This one is not press-gated: the script runs on load
- * and fetches the host, so a string here *is* a request. It is the reason
- * `XEmbeds.astro` ships its script `is:inline` rather than letting Astro lift
- * it into a hashed module — bundled, the host would not appear in any page's
- * HTML and there would be nothing here to check.
- *
- * The pattern matches a URL rather than a bare word, the same call the YouTube
- * one makes: /privacy names these hosts in prose on purpose, and a host in a
- * sentence fetches nothing. The post's own permalink is deliberately not on the
- * list either — `x.com/<handle>/status/<id>` is a link a reader may choose to
- * follow, not a request the page makes, exactly as `youtube.com/watch` is.
+ * No page talks to X (VET-244). Posts are drawn from the repo and every
+ * picture and video is a copy under `/posts/`, so X's widget hosts may not
+ * appear anywhere in a page, scripts included, and X's media CDN may not appear
+ * in anything the browser fetches on load. A link to a post on x.com is fine:
+ * that is a request a reader chooses to make.
  */
-const X_EMBED_PAGES = [
-  "library/kind/post/index.html",
-  ...JSON.parse(readFileSync(path.join(process.cwd(), "src/data/library.json"), "utf8"))
-    .filter((/** @type {{ post?: unknown }} */ entry) => entry.post)
-    .map((/** @type {{ slug: string }} */ entry) => `library/${entry.slug}/index.html`),
-];
-
 const X_HOSTS =
   /(?:https?:)?\/\/[\w.-]*(?:platform\.twitter\.com|syndication\.twitter\.com|platform\.x\.com|syndication\.twimg\.com)/g;
+const X_MEDIA = /\b(?:src|srcset|poster)="[^"]*twimg\.com/g;
 
 for (const page of pages) {
   const html = readFileSync(path.join(DIST, page), "utf8");
   const markup = html.replace(/<script[\s\S]*?<\/script>/gi, "");
 
-  const declares = X_EMBED_PAGES.includes(page);
-  const widgets = [...html.matchAll(X_HOSTS)];
-
-  if (declares) {
-    if (widgets.length === 0) {
-      fail(
-        page,
-        "declares X embeds but ships no widget host. /privacy names this page as the one that loads from X; either the embeds came out or that page is now confessing to something the site does not do",
-      );
-    }
-    if (!/class="[^"]*twitter-tweet/.test(html)) {
-      fail(
-        page,
-        "loads X's widget factory but ships no `blockquote.twitter-tweet` for it to find, so the request buys the reader nothing",
-      );
-    }
-  } else if (widgets.length > 0) {
-    const near = html.slice(
-      Math.max(0, (widgets[0]?.index ?? 0) - 40),
-      (widgets[0]?.index ?? 0) + 40,
-    );
-    fail(
-      page,
-      `loads from X and is not a page that declares embeds. /privacy says only the posts wall and the post pages do: ...${near.replace(/\s+/g, " ")}...`,
-    );
+  for (const match of [...html.matchAll(X_HOSTS), ...html.matchAll(X_MEDIA)]) {
+    const near = html.slice(Math.max(0, match.index - 40), match.index + 40);
+    fail(page, `loads from X. Posts are drawn from the repo and /privacy says so: ...${near.replace(/\s+/g, " ")}...`);
   }
 
   if (html.includes(ADDRESS)) {

@@ -49,7 +49,7 @@ function libraryItems(): FeedItem[] {
     // A digest is his call on the piece, so it leads when there is one.
     const text = entry.digest
       ? paragraphs(entry.digest.verdict, entry.digest.why)
-      : paragraphs(entry.why, rowSummary(entry) ?? entry.post?.text);
+      : paragraphs(entry.why, rowSummary(entry) ?? (entry.post?.article ? null : entry.post?.text));
     return {
       title: entry.title,
       path: `/library/${entry.slug}`,

@@ -297,7 +297,7 @@ test("the whole card comes out of a post document", () => {
   assert.equal(post?.text, POST_TEXT);
   assert.equal(post?.author, "Diadem", "the display name off the Author line");
   assert.equal(post?.date, "2026-07-26", "the day it was POSTED, not the day it was saved");
-  assert.deepEqual(post?.media, []);
+  assert.equal("media" in Object(post), false, "media comes from X syndication, not here");
 });
 
 test("a handle with an underscore survives the markdown escaping", () => {
@@ -367,62 +367,19 @@ test("an author line with no display name falls back to the handle", () => {
   assert.equal(parsePost(markdown, POST_URL)?.author, "EphraimAkanmu");
 });
 
-test("a post's photos come through as the URLs the document named, in order", () => {
-  // The probe's real answer, and it took widening the sample to find. Photos
-  // arrive as ordinary markdown images pointed at pbs.twimg.com, one per photo;
-  // the first three posts sampled happened to have video attachments, which
-  // carry nothing, and that looked like "the markdown has no media at all".
+test("images are out of the text, which is a row and not a card", () => {
   const withPhotos = postMarkdown({
     text: [
       "here’s a breakdown of the most profitable landing pages:",
       "",
       "![Image 1](https://pbs.twimg.com/media/HQxwm3nbMAAeX0W.jpg)",
-      "",
-      "![Image 2](https://pbs.twimg.com/media/HQxwnHsbcAA4YrV.jpg)",
     ].join("\n"),
   });
 
-  const post = parsePost(withPhotos, POST_URL);
-
-  assert.deepEqual(post?.media, [
-    "https://pbs.twimg.com/media/HQxwm3nbMAAeX0W.jpg",
-    "https://pbs.twimg.com/media/HQxwnHsbcAA4YrV.jpg",
-  ]);
   assert.equal(
-    post?.text,
+    parsePost(withPhotos, POST_URL)?.text,
     "here’s a breakdown of the most profitable landing pages:",
-    "and the images are still out of the text, which is a row and not a card",
   );
-});
-
-test("a video attachment leaves media empty, which is an answer and not a gap", () => {
-  // The other half of the probe. A post whose attachment is a clip carries a
-  // t.co shortlink inside the text and no frame anywhere, so there is nothing
-  // to fetch and nothing to be clever about.
-  const withVideo = postMarkdown({
-    text: "Termius + Tailscale + tmux. Start at your desk, continue on the go. https://t.co/FJoD3DIiFD",
-  });
-
-  assert.deepEqual(parsePost(withVideo, POST_URL)?.media, []);
-});
-
-test("only x.com's own photo host counts as the post's media", () => {
-  // The section is not only the poster's. A quoted post, a link card or an
-  // emoji served as an image all arrive as image syntax too, and each is either
-  // somebody else's picture or not a picture at all.
-  const mixed = postMarkdown({
-    text: [
-      "Look at this",
-      "![emoji](https://abs.twimg.com/emoji/v2/1f9f5.png)",
-      "![card](https://example.com/og.png)",
-      "![mine](https://pbs.twimg.com/media/HQxwm3nbMAAeX0W.jpg)",
-      "![mine again](https://pbs.twimg.com/media/HQxwm3nbMAAeX0W.jpg)",
-    ].join("\n\n"),
-  });
-
-  assert.deepEqual(parsePost(mixed, POST_URL)?.media, [
-    "https://pbs.twimg.com/media/HQxwm3nbMAAeX0W.jpg",
-  ]);
 });
 
 test("a saved thread stops at the end of the post that was saved", () => {

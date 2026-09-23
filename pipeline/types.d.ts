@@ -98,19 +98,18 @@ export interface Post {
   date: string;
   /** The post's own words, decoration stripped and collapsed to one line. */
   text: string;
-  /**
-   * The photos attached to the post, as REMOTE `pbs.twimg.com` URLs, in order.
-   *
-   * Not the same field `library.ts › Post.media` holds, and deliberately so.
-   * This is what the document said; that is what the repo committed. The write
-   * side fetches each of these and swaps in a `/shots` path, which is the same
-   * split `Video` makes about its thumbnail — a boundary reports, a writer
-   * decides what ends up on disk.
-   *
-   * Empty for a post whose attachment is a video: the clip arrives as a `t.co`
-   * shortlink with no frame behind it.
+  /*
+   * The rest is written by `post.mjs` from X's syndication record, and is
+   * absent on a post only Firecrawl read. Every path is a local copy under
+   * `/posts/<id>/`; `library.ts` refuses anything else.
    */
-  media: string[];
+  id?: string;
+  avatar?: string;
+  links?: { text: string; href: string }[];
+  media?: { type: "photo" | "video"; src?: string; poster?: string; w: number; h: number }[];
+  quoted?: Post;
+  article?: { title: string; cover?: string };
+  removed?: boolean;
 }
 
 /**

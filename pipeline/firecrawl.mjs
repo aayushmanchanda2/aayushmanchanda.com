@@ -381,26 +381,8 @@ function checkPng(bytes, url, raw) {
  * `brian`, which is a real person who did not write the post. Everything below
  * therefore runs against an unescaped copy.
  *
- * Media comes through for photos and not for video, which is a distinction the
- * probe only found by widening its sample. A post with photos carries them as
- * ordinary markdown images — `![Image 1](https://pbs.twimg.com/media/….jpg)` —
- * one per photo, in the order the post shows them. A post whose attachment is a
- * video carries nothing: the clip arrives as an opaque `t.co` shortlink inside
- * the text, no different from a link the poster typed, and there is no frame to
- * be had. So `media` is the photo URLs when there are photos and empty
- * otherwise, and "empty" is a real answer rather than a missing feature.
- *
- * The URLs that leave here are the REMOTE ones the document named. Turning them
- * into committed local paths is `thumb.mjs`'s job and `apply.mjs`'s ordering
- * problem, which is the same split `Video` already makes: this boundary reports
- * what it read, and the write side decides what the repo ends up holding.
- *
- * The parse is deliberately loose about where it finds the handle and strict
- * about everything else. A handle can be recovered from the URL if the heading
- * changes shape; the words, the author and the date have no second source, so
- * their absence returns null rather than a guess. Null is a supported answer
- * all the way up: the row publishes with Raindrop's own title, exactly as it
- * did before this existed.
+ * Media is not read here. `post.mjs` takes a post's pictures, video and
+ * avatar from X's syndication record, which carries all of them.
  */
 
 /** x.com handles: letters, digits, underscore, 15 at most. */
@@ -545,35 +527,6 @@ function flatten(body) {
 const HAS_WORDS = /[\p{L}\p{N}]/u;
 
 /**
- * A markdown image whose target is x.com's own media host.
- *
- * Held to that host rather than taking every image in the section, because the
- * section is not only the poster's: a quoted post, a link card or an emoji
- * served as an image would all arrive as image syntax too, and each of those is
- * either somebody else's picture or not a picture at all. `pbs.twimg.com/media/`
- * is the path x.com serves an attached photo from and nothing else.
- */
-const MEDIA = /!\[[^\]]*\]\((https:\/\/pbs\.twimg\.com\/media\/[^)\s]+)\)/g;
-
-/**
- * The photos attached to a post, as the document named them, in order.
- *
- * @param {string} body  The post section, before flattening strips the images.
- * @returns {string[]}
- */
-function mediaFrom(body) {
-  const seen = new Set();
-  for (const match of body.matchAll(MEDIA)) {
-    const url = match[1];
-    // Deduped: the same photo can appear twice when a document repeats the post
-    // in a thread section, and a card showing it twice would be the parse's
-    // fault rather than the poster's.
-    if (url !== undefined) seen.add(url);
-  }
-  return [...seen];
-}
-
-/**
  * What the post says, or null if this markdown does not contain a post.
  *
  * @param {unknown} rawMarkdown  Whatever came back; a non-string is a null answer.
@@ -611,5 +564,5 @@ export function parsePost(rawMarkdown, url) {
 
   const name = AUTHOR_NAME.exec(markdown)?.[1]?.trim() ?? "";
 
-  return { author: name === "" ? handle : name, handle, date, text, media: mediaFrom(body) };
+  return { author: name === "" ? handle : name, handle, date, text };
 }

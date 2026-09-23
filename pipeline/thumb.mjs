@@ -68,9 +68,6 @@ const MAGIC = [
   Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
 ];
 
-/** x.com's own ceiling on photos in one post. */
-const MAX_MEDIA = 4;
-
 /**
  * Poster frames, best first.
  *
@@ -165,25 +162,6 @@ export function thumbFileName(slug) {
 /** @param {string} slug @returns {string} */
 export function thumbWebPath(slug) {
   return `/shots/${thumbFileName(slug)}`;
-}
-
-/**
- * `<slug>-media-1.webp`, `-2`, and so on.
- *
- * Numbered from one rather than named after the source, because the source name
- * is a CDN hash that says nothing, and because the order is the only thing about
- * a post's photos that a card has to preserve: a three-photo post reads
- * differently if the second one leads.
- *
- * @param {string} slug @param {number} index  Zero-based.
- */
-export function mediaFileName(slug, index) {
-  return `${slug}-media-${index + 1}.webp`;
-}
-
-/** @param {string} slug @param {number} index @returns {string} */
-export function mediaWebPath(slug, index) {
-  return `/shots/${mediaFileName(slug, index)}`;
 }
 
 /* ---------------------------------------------------------------------------
@@ -319,56 +297,24 @@ export async function captureThumb({ video, slug, outDir, fetch = globalThis.fet
 }
 
 /**
- * The widest a stored post photo gets. A tweet card is 550px at its measure, so
- * this is the retina copy of one and no more: these are somebody else's
- * pictures being kept for a card, not archived at source resolution.
+ * One picture from a CDN, re-encoded to webp at most `width` wide.
+ *
+ * What `post.mjs` stores a post's avatar, photos, posters and cover through: the
+ * same fetch and magic check the poster frame gets, so an error page where a
+ * picture should be fails here and not inside sharp. A 404 throws, because every
+ * caller asked for a picture the post says exists.
+ *
+ * @param {string} url @param {number} width @param {typeof globalThis.fetch} [fetch]
+ * @returns {Promise<Buffer>}
  */
-const MEDIA_WIDTH = 1200;
-
-/**
- * Fetch a post's photos, re-encode them, and write them into `outDir`.
- *
- * Returns the files it wrote AND the web paths for them, in the order the post
- * put them in. That order is the only thing about a set of photos a card has to
- * preserve, and it is why a failure part-way through throws rather than
- * returning what it managed: three of four photos is a card that quietly says
- * something the post did not.
- *
- * Capped at four, which is x.com's own limit. A document claiming more is a
- * document this parser has misread, and fetching them all would be believing it.
- *
- * @param {object} input
- * @param {readonly string[]} input.media  Source URLs, as the document named them.
- * @param {string} input.slug
- * @param {string} input.outDir
- * @param {typeof globalThis.fetch} [input.fetch]
- * @returns {Promise<{ files: string[], paths: string[] }>}
- */
-export async function captureMedia({ media, slug, outDir, fetch = globalThis.fetch }) {
-  /** @type {string[]} */
-  const files = [];
-  /** @type {string[]} */
-  const paths = [];
-
-  for (const [index, url] of media.slice(0, MAX_MEDIA).entries()) {
-    const answer = await fetchImage(url, fetch);
-    if ("missing" in answer) throw new ThumbError(`${url} is gone (HTTP 404)`);
-
-    /** @type {Buffer} */
-    let webp;
-    try {
-      webp = await encode(answer.bytes, MEDIA_WIDTH);
-    } catch (error) {
-      throw new ThumbError(
-        `${url} would not encode — ${error instanceof Error ? error.message.split("\n")[0] : String(error)}`,
-      );
-    }
-
-    const file = path.join(outDir, mediaFileName(slug, index));
-    await writeFile(file, webp);
-    files.push(file);
-    paths.push(mediaWebPath(slug, index));
+export async function fetchWebp(url, width, fetch = globalThis.fetch) {
+  const answer = await fetchImage(url, fetch);
+  if ("missing" in answer) throw new ThumbError(`${url} is gone (HTTP 404)`);
+  try {
+    return await encode(answer.bytes, width);
+  } catch (error) {
+    throw new ThumbError(
+      `${url} would not encode — ${error instanceof Error ? error.message.split("\n")[0] : String(error)}`,
+    );
   }
-
-  return { files, paths };
 }

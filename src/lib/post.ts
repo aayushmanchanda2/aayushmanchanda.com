@@ -1,60 +1,19 @@
 /**
- * How a /library post is shown on a card.
+ * How a /library post is shown on a card (`components/PostCard.astro`).
  *
- * `lib/library.ts` owns what a post *is* — five fields, all of them required
- * once the object exists — and stops there. This is the presentation half, the
- * same split `lib/tags.ts` makes for a tag, and it is separate for the same
- * reason: the data boundary is already the longest module in `src/lib`, and
- * nothing here needs to see an entry to do its job.
- *
- * Two functions, and both exist because a card has an edge and a post does not.
- *
- * ## The budget
- *
- * `Post.text` is the whole post, and on x.com a post can be twenty-five
- * thousand characters. Two of the twenty-four saved here are: 31,007 and
- * 19,673. Rendered whole in a masonry column that is one of them alone is a
- * fifteen-thousand-pixel card, and the wall stops being a wall.
- *
- * So the card shows the post up to a budget and the rest is one press away, at
- * the post itself. Three things were considered and this is why it is a cut in
- * the component rather than either of the others:
- *
- *   - **A CSS `line-clamp`** hides the overflow from the eye and from nothing
- *     else. The full 31,000 characters still ship, still get read out by a
- *     screen reader, and still sit inside the card's own anchor, whose
- *     accessible name is its text. Clamping visually while announcing endlessly
- *     is a page that says two different things to two readers, which is
- *     design.md §7's parity rule pointing the other way.
- *   - **A "show more" control** would be a second target inside a card that is
- *     already one link, so a press near it is a coin toss between expanding and
- *     leaving. This site has no disclosure idiom and does not need its first one
- *     here: the whole post is at the destination the card already points at.
- *   - **The cut**, which ships what it shows. The card's own link is the way to
- *     the rest, and the ellipsis is what says there is a rest.
- *
- * The budget is 700 code points. That is two and a half times the 280 the row's
- * note already carries (`pipeline/entries.mjs › POST_NOTE_MAX`, X's own free
- * limit), so a card is worth opening over a row; and it is about twelve lines
- * in the wall's widest column and eighteen in its narrowest, which keeps the
- * tallest card inside two thirds of a phone screen. Ten of the twenty-four
- * posts are cut by it today.
- *
- * ## The monogram
- *
- * A tweet opens with a face and this site will not fetch one, so the slot holds
- * an initial. Which letter is the only thing decided here; the circle and the
- * colour are `styles/chip.css › .monogram`, keyed by `lib/tags.ts › hueSlot`.
+ * `lib/library.ts` owns what a post *is*; this is the presentation half: how
+ * much text a grid card ships, how the text becomes paragraphs and links, the
+ * link out to X, and the initial that stands in for a missing avatar.
  */
+import type { Post, PostLink } from "./library";
 
 /**
- * How much of a post a card shows, in code points.
- *
- * A twin of `pipeline/entries.mjs › POST_NOTE_MAX` at a different grain: that
- * one is how much of a post fits on a row, this one is how much fits on a card,
- * and a card that showed the row's 280 would be a card worth nothing.
+ * How much of a post a grid card ships, in code points: X's own 280. The cut
+ * happens here rather than only in CSS so a 31,000-character post does not
+ * ship whole inside a card that shows seven lines of it. The detail page
+ * renders the rest.
  */
-export const POST_CARD_MAX = 700;
+export const POST_CARD_MAX = 280;
 
 /**
  * `text`, or as much of it as fits, ending on a word.
@@ -111,4 +70,55 @@ export function isClipped(text: string, max = POST_CARD_MAX): boolean {
 export function monogram(author: string): string {
   const first = [...author.trim()].find((point) => /[\p{L}\p{N}]/u.test(point));
   return first === undefined ? "" : first.toUpperCase();
+}
+
+/** A run of post text, linked or not. */
+export interface Run {
+  text: string;
+  href: string | null;
+}
+
+function escapeRe(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/**
+ * The text as runs: X's own links by their displayed text, then bare URLs,
+ * then @mentions. Longest displayed text first, so `x.com/a/b` wins over `x.com/a`.
+ */
+export function runs(text: string, links: readonly PostLink[]): Run[] {
+  const shown = links
+    .map((link) => link.text)
+    .filter((shownText) => shownText !== "")
+    .sort((a, b) => b.length - a.length)
+    .map(escapeRe);
+  const pattern = new RegExp([...shown, "https?://\\S*[^\\s.,;:!?)\"']", "(?<![\\w@])@[A-Za-z0-9_]{1,15}"].join("|"), "g");
+
+  const out: Run[] = [];
+  let last = 0;
+  for (const match of text.matchAll(pattern)) {
+    const found = match[0];
+    const at = match.index;
+    if (at > last) out.push({ text: text.slice(last, at), href: null });
+    const href =
+      links.find((link) => link.text === found)?.href ??
+      (found.startsWith("@") ? `https://x.com/${found.slice(1)}` : found);
+    out.push({ text: found, href });
+    last = at + found.length;
+  }
+  if (last < text.length) out.push({ text: text.slice(last), href: null });
+  return out;
+}
+
+/** Blank-line separated paragraphs. A single newline stays inside one (CSS `pre-line`). */
+export function postParagraphs(text: string): string[] {
+  return text
+    .split(/\n[ \t]*\n/)
+    .map((paragraph) => paragraph.trim())
+    .filter((paragraph) => paragraph !== "");
+}
+
+/** The post on X, or the saved URL when there is no id to build it from. */
+export function originalUrl(post: Pick<Post, "id" | "handle">, fallback: string): string {
+  return post.id === null ? fallback : `https://x.com/${post.handle}/status/${post.id}`;
 }

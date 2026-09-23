@@ -43,12 +43,10 @@ import EntryLink from "../../components/EntryLink.astro";
 import EntryNav from "../../components/EntryNav.astro";
 import LibraryPane from "../../components/LibraryPane.astro";
 import KindChip from "../../components/KindChip.astro";
-import PostBody from "../../components/PostBody.astro";
 import TagChips from "../../components/TagChips.astro";
-import TweetCard from "../../components/TweetCard.astro";
+import PostCard from "../../components/PostCard.astro";
 import VideoFacade from "../../components/VideoFacade.astro";
 import VoiceBlocks from "../../components/VoiceBlocks.astro";
-import XEmbeds from "../../components/XEmbeds.astro";
 import { library } from "../../lib/library";
 import { libraryJsonLd } from "../../lib/schema";
 import { formatDay } from "../../lib/date";
@@ -109,13 +107,7 @@ const description =
   <LibraryPane slot="pane" entries={library} current={entry.slug} />
 
   <header>
-    {/*
-      A post's title is its own words cut short, and the whole post is right
-      below, so it stops at two lines. Every other title renders whole.
-    */}
-    <h1 class:list={["page-title page-title--entry", entry.post && "title--post"]}>
-      {entry.title}
-    </h1>
+    <h1 class="page-title page-title--entry">{entry.title}</h1>
     <p class="out">
       <EntryLink class="ext" href={entry.url}>{entry.domain}</EntryLink>
     </p>
@@ -180,22 +172,17 @@ const description =
   </header>
 
   {/*
-    The thing itself, when the site has it. A post's own words in full, because
-    the card that pointed here cut them at 700 characters; a video's poster,
-    because pressing it is the whole point of having saved it. An article has
-    neither and renders neither: there is nothing here to embed and a box
-    saying so would be the stub this page exists not to be.
-
-    A post is X's own embed first, the same one the posts wall shows, and the
-    saved copy under it (VET-221). The embed is how the post looks anywhere it
-    is pasted; the copy is the whole text from this repository, still here if
-    the post is deleted or X does not answer. `XEmbeds` is gated on the same
-    field because it is what puts X's host on the page, and
-    `scripts/validate-schema.mjs` fails a page that carries it without a post.
+    The thing itself, when the site has it: the post drawn from the repo in
+    full (`PostCard.astro`, no embed, so the page is final on first paint), or
+    the video's poster. An article has neither and renders neither.
   */}
-  {entry.post && <TweetCard entry={{ ...entry, post: entry.post }} standalone />}
-  {entry.post && <XEmbeds />}
-  {entry.post && <PostBody entry={{ ...entry, post: entry.post }} />}
+  {
+    entry.post && (
+      <div class="thing">
+        <PostCard post={entry.post} url={entry.url} mode="page" />
+      </div>
+    )
+  }
   {entry.video && <VideoFacade entry={{ ...entry, video: entry.video }} chrome={false} />}
 
   {entry.digest && <DigestBlocks digest={entry.digest} />}
@@ -340,11 +327,9 @@ const description =
     color: var(--accent);
   }
 
-  .title--post {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    overflow: hidden;
+  /* The post at reading width, 40px under the header like every block after it. */
+  .thing {
+    max-width: 40rem;
+    margin-top: 2.5rem;
   }
 </style>
