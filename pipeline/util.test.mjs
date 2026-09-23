@@ -19,6 +19,18 @@ test("writeAtomic replaces the file, creates its directory, and leaves no .tmp",
   }
 });
 
+test("two writes of one file at once each stage their own .tmp, so neither fails", async () => {
+  const dir = await mkdtemp(path.join(tmpdir(), "util-"));
+  try {
+    const file = path.join(dir, "x.json");
+    await Promise.all(Array.from({ length: 8 }, (_, i) => writeAtomic(file, String(i))));
+    assert.match(await readFile(file, "utf8"), /^[0-7]$/);
+    assert.deepEqual(await readdir(dir), ["x.json"]);
+  } finally {
+    await rm(dir, { recursive: true, force: true });
+  }
+});
+
 test("a failed writeAtomic removes its .tmp and keeps nothing half-written", async () => {
   const dir = await mkdtemp(path.join(tmpdir(), "util-"));
   try {

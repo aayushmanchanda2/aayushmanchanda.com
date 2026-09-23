@@ -33,6 +33,8 @@ import path from "node:path";
 
 import sharp from "sharp";
 
+import { readCapped } from "./util.mjs";
+
 /** @typedef {import("./types.js").Video} Video */
 
 /**
@@ -212,15 +214,8 @@ async function fetchImage(url, fetch) {
   if (response.status === 404) return { missing: true };
   if (!response.ok) throw new ThumbError(`${url} returned HTTP ${response.status}`);
 
-  const declared = Number(response.headers.get("content-length"));
-  if (Number.isFinite(declared) && declared > MAX_THUMB_BYTES) {
-    throw new ThumbError(`${url} declares ${declared} bytes — too large to commit`);
-  }
-
-  const bytes = Buffer.from(await response.arrayBuffer());
-  if (bytes.length > MAX_THUMB_BYTES) {
-    throw new ThumbError(`${url} is ${bytes.length} bytes — too large to commit`);
-  }
+  const bytes = await readCapped(response, MAX_THUMB_BYTES);
+  if (bytes === null) throw new ThumbError(`${url} is over ${MAX_THUMB_BYTES} bytes — too large to commit`);
   if (!MAGIC.some((magic) => bytes.subarray(0, magic.length).equals(magic))) {
     throw new ThumbError(`${url} did not answer with an image`);
   }

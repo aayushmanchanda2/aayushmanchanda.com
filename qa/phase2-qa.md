@@ -8,7 +8,7 @@ Reviewers, all read-only:
 
 ## Fix A: blockers and correctness (one PR)
 - [x] **A1. CI never commits new X-post media.** Add `public/posts` to `COMMITTED` in `pipeline/publish.mjs:183-191` and to the `paths` array in `.github/workflows/publish.yml`. Add a test.
-- [ ] **A2. `pipeline/post.mjs` robustness.**
+- [x] **A2. `pipeline/post.mjs` robustness.**
   - A 200 response that isn't JSON must throw; only a 404 or a real `TweetTombstone` counts as removed.
   - Catch per media item: drop the item, or fall back to poster-only.
   - Stream downloads with a byte cap, since a missing content-length currently reads as 0.
