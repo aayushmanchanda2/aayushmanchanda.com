@@ -27,6 +27,12 @@
  * enrichments have no files and slot in at step 3, where `readingFor` gathers
  * them.
  *
+ * A new tool fetches its app icon after step 4 (`pipeline/icon.mjs`). The icon
+ * is optional, since the site draws the tool's initial without one, so it goes
+ * last on purpose: a crash before it leaves a tool that draws its letter,
+ * never an icon nothing names, and a failed fetch is a log line, not a failed
+ * item.
+ *
  * Steps 3 and 4 each land through a write-then-rename, so neither file is ever
  * half-written even if the process dies mid-call.
  */
@@ -98,6 +104,9 @@ import { describe, isRecord } from "./util.mjs";
  *   pictures CI does.
  * @property {(input: { media: readonly string[], slug: string, outDir: string }) => Promise<{ files: string[], paths: string[] }>} captureMedia
  *   The same, for a post's photos. Never null, for the same reason.
+ * @property {(input: { slug: string, url: string, dir: string }) => Promise<string | null>} fetchIcon
+ *   A new tool's app icon into `dir`, or null for the letter. Always bound,
+ *   never null, for the same reason as the two above.
  */
 
 /**
@@ -462,6 +471,13 @@ async function captureAndPublish(bookmark, attempts, ctx) {
   }
 
   await rm(scratch, { recursive: true, force: true });
+  if (section === "tools") {
+    try {
+      await ctx.fetchIcon({ slug, url: bookmark.url, dir: ctx.paths.iconsDir });
+    } catch (error) {
+      ctx.log(`icon: ${slug} — ${describe(error)}, letter`);
+    }
+  }
   await tagQuietly(bookmark, PUBLISHED_TAG, ctx);
   ctx.log(`published ${section}/${slug} — ${bookmark.url}`);
   return "published";

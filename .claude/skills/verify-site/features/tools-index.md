@@ -8,7 +8,7 @@
 - `tools-grid` switches to cards when the reader presses Grid; persists after reload.
 - `tools-filter-category` /tools/category/<slug> shows one category.
 - `tools-filter-verdict` /tools/verdict/<verdict> shows one verdict.
-- `tools-marks` row marks (`.row__mark`) load logos; initials (`.row__mark--initial`) where there is none.
+- `tools-marks` row icons (`.row__mark.app-icon`): an `<img src="/icons/<slug>.webp">`, or `.app-icon__letter` where there is none.
 
 ## How to get to it (user POV)
 
@@ -25,7 +25,7 @@ Preconditions:
 - **List baseline.** `node .claude/skills/verify-site/shoot.mjs --base http://localhost:4329 --routes /tools --label tools-list --styles '.row__name,.group__head,[data-tools-view-set][aria-pressed="true"]'`. Pressed button text is `List`; screenshots show rows.
 - **Grid via the button.** `... --routes /tools --label tools-grid --click '[data-tools-view-set="grid"]' --styles '[data-tools-view-set][aria-pressed="true"]'`. Pressed button text is `Grid`; screenshots show bordered cards, two per row at 1280.
 - **Filters.** `... --routes /tools/category/agent-infra,/tools/verdict/using --label tools-filters --styles '.page-title'`. Both `200`; `.page-title` text is the category/verdict.
-- **Third-party hosts.** Every run above records `thirdPartyHosts`; today /tools and its filters request `img.logo.dev` for row marks. A change that self-hosts marks is proven when that host is absent on all three routes at both sizes.
+- **Third-party hosts.** Every run above records `thirdPartyHosts`; since VET-226 the icons are self-hosted, so /tools and its filters must show no third-party host at all, on all three routes at both sizes.
 
 ## Gotchas
 

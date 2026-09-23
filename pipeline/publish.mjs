@@ -27,6 +27,7 @@ import { POST_HOSTS, hostIsOneOf, readEntries, repoFrom, urlKey } from "./entrie
 import { firecrawlFrom, parsePost } from "./firecrawl.mjs";
 import { RaindropError, createClient, fetchBookmarks, resolveCollections } from "./raindrop.mjs";
 import { MAX_ATTEMPTS, SECTIONS, reconcile, resolvePaths } from "./state.mjs";
+import { fetchIcon } from "./icon.mjs";
 import { captureMedia, captureThumb } from "./thumb.mjs";
 import { describe } from "./util.mjs";
 
@@ -181,6 +182,7 @@ const COMMITTED = [
   "src/data/tools.json",
   "src/data/library.json",
   "public/shots",
+  "public/icons",
   "pipeline/state.json",
 ];
 
@@ -230,6 +232,7 @@ function baseDeps() {
     captureWithFirecrawl,
     captureThumb,
     captureMedia,
+    fetchIcon,
     /**
      * Firecrawl, or null. A function rather than a client so the decision is
      * made from the run's own `env` — a test that hands in a different
@@ -339,6 +342,7 @@ export async function run(argv = [], overrides = {}) {
       // Raindrop through, and nothing in `apply.mjs` learns there is a CDN.
       captureThumb: (input) => deps.captureThumb({ ...input, fetch: deps.fetch }),
       captureMedia: (input) => deps.captureMedia({ ...input, fetch: deps.fetch }),
+      fetchIcon: (input) => deps.fetchIcon({ ...input, fetch: deps.fetch, log }),
     };
 
     /** @type {Summary} */

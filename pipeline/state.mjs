@@ -64,6 +64,7 @@ export function resolvePaths(root) {
     toolsJson: path.join(root, "src", "data", "tools.json"),
     libraryJson: path.join(root, "src", "data", "library.json"),
     shotsDir: path.join(root, "public", "shots"),
+    iconsDir: path.join(root, "public", "icons"),
     tmpDir: path.join(root, "pipeline", "tmp"),
   };
 }

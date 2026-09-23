@@ -11,7 +11,7 @@
  * (`lib/tools-view.ts`), and `grid` turns each group's rows into cards. The
  * verdict and category pages never set it, so they are always the list.
  */
-import { markFor } from "../lib/links";
+import AppIcon from "./AppIcon.astro";
 import type { Tool } from "../lib/tools";
 import { groupByCategory } from "../lib/tools";
 import VerdictBadge from "./VerdictBadge.astro";
@@ -47,7 +47,6 @@ const groups = grouped
 
         <ul class="group__rows">
           {group.tools.map((tool) => {
-            const mark = markFor(tool);
             /*
               The product when there is one, the repository when there is not.
               A row is one link, and the one it should be is the place a reader
@@ -58,27 +57,7 @@ const groups = grouped
 
             return (
             <li class="row">
-              {mark.kind === "logo" ? (
-                <img
-                  class="row__mark outlined"
-                  src={mark.src}
-                  alt=""
-                  width="28"
-                  height="28"
-                  loading="lazy"
-                  decoding="async"
-                  referrerpolicy="no-referrer"
-                />
-              ) : (
-                /*
-                  Decorative, so `aria-hidden`: the letter is the first letter
-                  of the name sitting immediately beside it, and reading it out
-                  would announce that letter twice.
-                */
-                <span class="row__mark row__mark--initial outlined mono" aria-hidden="true">
-                  {mark.letter}
-                </span>
-              )}
+              <AppIcon tool={tool} size={28} class="row__mark" />
 
               <span class="row__name">
                 {href ? (
@@ -159,37 +138,13 @@ const groups = grouped
     border-bottom-color: var(--hairline-strong);
   }
 
-  /* 28px, up from 16: ui-skills pairs a 40px logo with 14px text, and at 16
-     beside a 17px name the logo was a speck. Centred on the name's first line
-     box (17px × 1.35): the negative margins overhang it equally above and
-     below, so the mark takes exactly one line of the track and the note under
-     the name does not move down to make room for it. */
+  /* The icon is 28px (AppIcon), centred on the name's first line box
+     (17px × 1.35): the negative margins overhang it equally above and below,
+     so it takes exactly one line of the track and the note under the name
+     does not move down to make room for it. */
   .row__mark {
     grid-area: mark;
-    width: 28px;
-    height: 28px;
     margin-block: calc((1.0625rem * 1.35 - 28px) / 2);
-    border-radius: 6px;
-  }
-
-  /* The mark for a tool with no product site: its own initial, not a borrowed
-     logo. A repository-only row could show its GitHub owner's avatar instead,
-     and deliberately does not — `lib/links.ts › markFor` has the reasoning and
-     /privacy is the reason.
-
-     The letter is stored in the name's own case (`lib/links.ts › markFor`)
-     and capitalised here: an initial is a mark, not a word in the label voice,
-     so it keeps the capital the uppercase mono label used to give it. */
-  .row__mark--initial {
-    display: grid;
-    place-items: center;
-    background: var(--dot);
-    color: var(--text-secondary);
-    /* 12px in a 28px box: the 9-in-16 it was, scaled with the box, and still
-       well under the 17px name beside it. */
-    font-size: 0.75rem;
-    line-height: 1;
-    text-transform: uppercase;
   }
 
   .row__name {
@@ -321,17 +276,13 @@ const groups = grouped
     border-color: var(--hairline-strong);
   }
 
-  /* 40px and --r-md: the 6-on-28 of the list, scaled, lands on the 8px token
-     rather than a new radius. */
-  :global(html[data-tools-view="grid"]) .row__mark {
-    width: 40px;
-    height: 40px;
-    margin: 0 0 0.25rem;
-    border-radius: var(--r-md);
+  /* 40px in a card: `--icon-size` is the one knob AppIcon reads over its prop. */
+  :global(html[data-tools-view="grid"]) .row {
+    --icon-size: 40px;
   }
 
-  :global(html[data-tools-view="grid"]) .row__mark--initial {
-    font-size: 1rem;
+  :global(html[data-tools-view="grid"]) .row__mark {
+    margin: 0 0 0.25rem;
   }
 
   /* SiteGrid's card title size: a card is narrower than a row. */

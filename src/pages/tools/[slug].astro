@@ -24,6 +24,7 @@ import Base from "../../layouts/Base.astro";
 import EntryLink from "../../components/EntryLink.astro";
 import VerdictBadge from "../../components/VerdictBadge.astro";
 import VoiceBlocks from "../../components/VoiceBlocks.astro";
+import AppIcon from "../../components/AppIcon.astro";
 import { linkLabel, markFor } from "../../lib/links";
 import { toolJsonLd } from "../../lib/schema";
 import { categorySlug, tools } from "../../lib/tools";
@@ -57,11 +58,10 @@ const jsonLd = toolJsonLd(tool);
 const source = tool.url ?? tool.repo;
 const alsoRepo = tool.url === null ? null : tool.repo;
 
-/* Only the logo, never the initial. The initial is how a 16px row tells twenty
-   tools apart; here the name is already set at 3rem directly above it, so a
+/* Only the icon, never the initial. The initial is how a /tools row tells
+   twenty tools apart; here the name is already set at 3rem directly above it, so a
    letter in a box would be furniture repeating what the masthead just said. */
-const mark = markFor(tool);
-const logo = mark.kind === "logo" ? mark.src : null;
+const hasIcon = markFor(tool).kind === "logo";
 ---
 
 <Base
@@ -114,17 +114,7 @@ const logo = mark.kind === "logo" ? mark.src : null;
     source && (
       <p class="source">
         <span class="source__label mono">Source</span>
-        {logo && (
-          <img
-            class="source__favicon outlined"
-            src={logo}
-            alt=""
-            width="16"
-            height="16"
-            decoding="async"
-            referrerpolicy="no-referrer"
-          />
-        )}
+        {hasIcon && <AppIcon tool={tool} size={16} class="source__favicon" />}
         <EntryLink class="ext" href={source}>{linkLabel(source)}</EntryLink>
 
         {/*
@@ -243,7 +233,6 @@ const logo = mark.kind === "logo" ? mark.src : null;
   .source__favicon {
     /* baseline alignment moves the box, so nudge it back onto the text */
     align-self: center;
-    border-radius: 3px;
   }
 
   /* The wrapper exists for the separator and nothing else. The `·` is a

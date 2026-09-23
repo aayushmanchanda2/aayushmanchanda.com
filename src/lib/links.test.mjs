@@ -10,10 +10,9 @@
  *     `url`. Both are build-stopping rules, so the shape they test for has to
  *     be exact: `github.com/block/buzz` is a repository, and a profile, a
  *     branch, a file, a gist and a release are not.
- *   - **`markFor`** is where the decision *not* to fetch GitHub avatars lives.
- *     It is one branch, and the reason a test guards it is that the branch is
- *     easy to add back without noticing that /privacy would then be wrong. See
- *     the note on that function.
+ *   - **`markFor`** draws a self-hosted icon or a letter, and nothing that
+ *     loads from another host. /privacy says so, and the test below is the
+ *     cheapest check that the sentence is still true of the code.
  *
  * The last test in the file is the one that could not live anywhere else: the
  * publish pipeline keeps its own copy of the repository rule, because it runs
@@ -22,7 +21,7 @@
  * `repoFrom` writes into a gallery, `githubRepo` accepts unchanged.
  *
  * Importable from Node because `lib/links.ts` imports only `lib/site.ts`, which
- * is two constants and a `new URL`. `lib/tools.ts` reads JSON at module load
+ * is two constants and a `new URL`, and `node:fs` for the icon check. `lib/tools.ts` reads JSON at module load
  * and is still not testable this way; see the header of `parse.test.mjs`.
  */
 import test from "node:test";
@@ -31,7 +30,6 @@ import assert from "node:assert/strict";
 import { repoFrom } from "../../pipeline/entries.mjs";
 import {
   absolutize,
-  faviconUrl,
   githubRepo,
   isInternal,
   linkLabel,
@@ -114,32 +112,26 @@ test("repoOwner is the owner, and empty for anything that is not a repo", () => 
    markFor
    --------------------------------------------------------------------------- */
 
-test("a tool with a product site gets that site's logo", () => {
-  assert.deepEqual(markFor({ name: "Eve", url: "https://eve.dev" }), {
+test("a tool with an icon in public/icons gets that file, from this domain", () => {
+  // `agent-reach` is repo-only with no homepage; `firecrawl` has a fetched icon.
+  assert.deepEqual(markFor({ slug: "firecrawl", name: "Firecrawl" }), {
     kind: "logo",
-    src: faviconUrl("https://eve.dev"),
+    src: "/icons/firecrawl.webp",
   });
 });
 
-test("a tool with no product site gets its own initial, not a GitHub avatar", () => {
-  /*
-   * The assertion that matters is the second one. A repository-only row could
-   * show `github.com/{owner}.png`, and the reason it does not is a privacy
-   * decision written down in `markFor` and depended on by /privacy, which
-   * claims logo.dev is the only third party the site touches. If somebody adds
-   * that branch, this fails and sends them to the page they have to edit.
-   */
-  const mark = markFor({ name: "Papercuts", url: null });
+test("a tool with no icon file gets its own initial, not a GitHub avatar", () => {
+  const mark = markFor({ slug: "no-such-tool", name: "Papercuts" });
   assert.deepEqual(mark, { kind: "initial", letter: "P" });
 });
 
 test("the initial is the first letter or digit, whatever leads the name", () => {
   /**
-   * `.row__mark--initial` capitalises at render, so the stored letter keeps the name's case.
+   * `AppIcon.astro` capitalises at render, so the stored letter keeps the name's case.
    *
    * @param {string} name
    */
-  const initial = (name) => markFor({ name, url: null });
+  const initial = (name) => markFor({ slug: "no-such-tool", name });
 
   assert.deepEqual(initial("cloudflare-os"), { kind: "initial", letter: "c" });
   assert.deepEqual(initial("improve (shadcn skill)"), { kind: "initial", letter: "i" });
@@ -149,7 +141,7 @@ test("the initial is the first letter or digit, whatever leads the name", () => 
 });
 
 test("a name with nothing to print asks for an empty square rather than throwing", () => {
-  assert.deepEqual(markFor({ name: "!!!", url: null }), { kind: "initial", letter: "" });
+  assert.deepEqual(markFor({ slug: "no-such-tool", name: "!!!" }), { kind: "initial", letter: "" });
 });
 
 /* ---------------------------------------------------------------------------
@@ -162,26 +154,18 @@ test("linkLabel drops the protocol noise and keeps the path", () => {
   assert.equal(linkLabel("https://eve.dev"), "eve.dev");
 });
 
-test("faviconUrl asks logo.dev for the host, and only the host", () => {
-  const src = faviconUrl("https://www.trysynara.com/pricing?ref=x");
-  assert.ok(src.startsWith("https://img.logo.dev/trysynara.com?"), src);
-  assert.ok(!src.includes("pricing"), "a path is not part of a logo lookup");
-});
-
-test("logo.dev is still the only third-party host a mark can name", () => {
+test("no mark the site can draw names another host", () => {
   /*
-   * /privacy says so in a section titled "The one outside request". This is the
-   * cheapest possible check that the sentence is still true of the code: every
-   * mark the site can draw either points at logo.dev or is a letter.
+   * /privacy says the tool pages load nothing from anyone else. This is the
+   * cheapest check that the sentence is still true of the code: every mark is
+   * a path on this site or a letter.
    */
   for (const entry of [
-    { name: "Eve", url: "https://eve.dev" },
-    { name: "Buzz", url: null },
+    { slug: "firecrawl", name: "Firecrawl" },
+    { slug: "agent-reach", name: "Agent Reach" },
   ]) {
     const mark = markFor(entry);
-    if (mark.kind === "logo") {
-      assert.equal(new URL(mark.src).hostname, "img.logo.dev", entry.name);
-    }
+    if (mark.kind === "logo") assert.ok(mark.src.startsWith("/icons/"), entry.name);
   }
 });
 

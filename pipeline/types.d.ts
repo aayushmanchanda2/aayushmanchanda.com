@@ -182,6 +182,7 @@ export interface Paths {
   toolsJson: string;
   libraryJson: string;
   shotsDir: string;
+  iconsDir: string;
   tmpDir: string;
 }
 

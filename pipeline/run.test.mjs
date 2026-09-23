@@ -27,6 +27,7 @@ import {
   fakeCapture,
   fakeFirecrawl,
   fakeFirecrawlShot,
+  fakeIcon,
   fakeThumb,
   makeRepo,
   raindropServer,
@@ -138,6 +139,40 @@ test("a tool with no excerpt still gets a note the build will accept", async (t)
   const [tool] = await readJson(paths.toolsJson);
   assert.notEqual(tool.note, "");
   assert.notEqual(tool.category, "");
+});
+
+test("a new tool fetches its app icon into public/icons, and only a tool does", async (t) => {
+  const { paths } = await makeRepo(t);
+  const server = raindropServer({
+    ...NESTED,
+    raindrops: {
+      [SITES_ID]: [bookmark(200, "https://otherkind.design", { title: "Otherkind" })],
+      [TOOLS_ID]: [bookmark(201, "https://linear.app", { title: "Linear" })],
+    },
+  });
+  const icon = fakeIcon();
+  const out = recorder();
+
+  assert.equal(await run([], deps({ paths, server, icon, out })), 0);
+
+  assert.deepEqual(icon.calls, [{ slug: "linear", url: "https://linear.app", dir: paths.iconsDir }]);
+  assert.ok(await exists(path.join(paths.iconsDir, "linear.webp")));
+});
+
+test("an icon that will not fetch costs the tool nothing: published, and the letter draws", async (t) => {
+  const { paths } = await makeRepo(t);
+  const server = raindropServer({
+    ...NESTED,
+    raindrops: { [TOOLS_ID]: [bookmark(201, "https://linear.app", { title: "Linear" })] },
+  });
+  const out = recorder();
+
+  assert.equal(await run([], deps({ paths, server, icon: fakeIcon({ fail: "disk full" }), out })), 0);
+
+  assert.equal((await readJson(paths.toolsJson)).length, 1);
+  assert.equal((await loadState(paths))["201"]?.kind, "published");
+  assert.ok(out.out.some((line) => line.startsWith("icon: linear") && line.includes("disk full")));
+  assert.equal(out.summary, "published=1 failed=0 skipped=0 pending=0");
 });
 
 test("a reading save is published without opening a browser", async (t) => {

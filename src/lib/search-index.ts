@@ -95,7 +95,7 @@ const STATIC_PAGES: readonly SearchEntry[] = [
     section: SECTION.pages,
     href: "/privacy",
     terms:
-      "cookies tracking analytics vercel page views data logo.dev takedown",
+      "cookies tracking analytics vercel page views data icons takedown",
   },
 ];
 

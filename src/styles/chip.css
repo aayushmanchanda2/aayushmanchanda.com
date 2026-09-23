@@ -327,7 +327,7 @@
   font-size: 1.125rem;
   font-weight: 500;
   /* A single centred glyph: label tracking here is padding on one side only,
-     the same correction `ToolList.astro › .row__mark--initial` makes. */
+     and the /tools letter tile (`AppIcon.astro`) is this class, so it inherits it. */
   letter-spacing: 0;
   line-height: 1;
   color: hsl(var(--hue-h) var(--hue-s) var(--hue-l));

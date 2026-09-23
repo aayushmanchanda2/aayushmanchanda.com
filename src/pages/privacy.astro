@@ -2,13 +2,13 @@
 /**
  * /privacy — the trust anchor.
  *
- * Every claim on this page was checked against the code before it was written,
- * and the page says so about the one exception rather than rounding down to
- * "no third parties": `faviconUrl()` in `lib/links.ts` is rendered by
- * `components/ToolList.astro` and `pages/tools/[slug].astro`, so the tool pages
- * really do hit logo.dev. A privacy page that is wrong about its own build is
- * worth less than no page at all; changing the logo host means changing this
- * page in the same commit.
+ * Every claim on this page was checked against the code before it was written.
+ * The tool icons used to be the first exception: `faviconUrl()` rendered a live
+ * logo.dev URL on every tool page. Since VET-226 `pipeline/icon.mjs` fetches
+ * each icon once and `lib/links.ts › markFor` only ever names `/icons/`, so the
+ * exception is gone and the section below says so. A privacy page that is
+ * wrong about its own build is worth less than no page at all; adding an image
+ * host means changing this page in the same commit.
  *
  * The storage paragraph is the same rule applied a second time. This page used
  * to say the site "writes nothing to local storage", which stopped being true
@@ -207,19 +207,16 @@ import { NEWSLETTER_ACTION } from "../lib/site";
     <section>
       <h2 class="doc__head mono">The pages that load from somewhere else</h2>
       <p>
-        The tool pages are the exception and I would rather name it than claim a
-        clean sweep. Each tool row shows the logo of that tool&rsquo;s own
-        website, and those come from <a href="https://logo.dev" rel="noopener nofollow"
-        >logo.dev</a>, a logo API, instead of my server. So loading <a
-          href="/tools">/tools</a> or any tool page makes a request to logo.dev
-        with the tool&rsquo;s domain in the URL, and logo.dev sees your IP
-        address the way any host does when your browser fetches an image. The
-        request is sent with no referrer, so it does not carry which page you
-        were on. The URL carries a publishable key that identifies my logo.dev
-        account for quota, not you.
+        Two things here load from somewhere else, and I&rsquo;d rather name them
+        than claim a clean sweep. The tool icons used to be a third. They came
+        from <a href="https://logo.dev" rel="noopener nofollow">logo.dev</a>, a
+        logo API, so opening <a href="/tools">/tools</a> told them your IP
+        address. Now each icon is fetched once, when I add the tool, and saved
+        into this site&rsquo;s own files. Your browser gets it from this domain,
+        like everything else on those pages.
       </p>
       <p>
-        The saved posts are the other exception, and the heavier one. Every post
+        The saved posts are the first, and the heavier one. Every post
         on <a href="/library/kind/post">the posts page</a> is X&rsquo;s own
         embed, and so is the post at the top of each saved post&rsquo;s own
         page. Opening either loads a script from X and turns each post into a
@@ -255,8 +252,8 @@ import { NEWSLETTER_ACTION } from "../lib/site";
         nothing to load.
       </p>
       <p>
-        That is the whole list: logo.dev on the tool pages, X on the posts page
-        and each saved post&rsquo;s page, YouTube if you press play. Every other page here loads nothing from
+        That is the whole list: X on the posts page and each saved post&rsquo;s
+        page, YouTube if you press play. Every other page here loads nothing from
         anyone, and a third host would be named in this section on the commit
         that added it.
       </p>
