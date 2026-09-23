@@ -6,9 +6,12 @@
  * `pane` slot; the container query that hides it under 48rem is here.
  *
  * A sticky toolbar sits on top (VET-245, `LibraryToolbar.astro`): the kind
- * segmented control, a tag select and a live count. `lib/library-pane.ts ›
- * FILTER` runs inline after the list, so a filtered pane paints filtered, and
- * it writes the filter onto every row link so it carries from entry to entry.
+ * segmented control and a live count. The tag filter scrolls under it
+ * (`LibraryTags.astro`), and the rows are grouped under sticky month headers
+ * by `saved_date`, newest first (VET-267). `lib/library-pane.ts › FILTER` runs
+ * inline after the list, so a filtered pane paints filtered (headers recount,
+ * empty months hide), and it writes the filter onto every row link so it
+ * carries from entry to entry.
  *
  * /library and `/library/kind/<kind>` render it too (VET-258), with no current
  * row and `start` set to the kind the route pre-selects. There the two inline
@@ -21,6 +24,7 @@
  * VET-231 audit.
  */
 import KindIcon from "./KindIcon.astro";
+import LibraryTags from "./LibraryTags.astro";
 import LibraryToolbar from "./LibraryToolbar.astro";
 import PreviewCard from "./PreviewCard.astro";
 import type { Kind, LibraryEntry } from "../lib/library";
@@ -28,6 +32,7 @@ import { entryHref, rowSummary } from "../lib/library";
 import { FILTER, PREPAINT } from "../lib/library-pane";
 import { clipText } from "../lib/post";
 import { libraryPreview } from "../lib/assets";
+import { formatMonth } from "../lib/date";
 
 interface Props {
   entries: LibraryEntry[];
@@ -39,6 +44,11 @@ interface Props {
 
 const { entries, current, start } = Astro.props;
 const index = start !== undefined;
+
+/** Month headers: "2026-09" -> its label and how many entries it holds. */
+const months = new Map<string, number>();
+for (const entry of entries) months.set(entry.saved_date.slice(0, 7), (months.get(entry.saved_date.slice(0, 7)) ?? 0) + 1);
+const opens = (i: number) => i === 0 || entries[i]!.saved_date.slice(0, 7) !== entries[i - 1]!.saved_date.slice(0, 7);
 ---
 
 <nav
@@ -50,13 +60,20 @@ const index = start !== undefined;
   data-start={start}
 >
   <div class="pane__bar">
-    <LibraryToolbar id="pane-tag" />
+    <LibraryToolbar />
   </div>
+  <div class="pane__tags"><LibraryTags /></div>
   <ul data-rows>
     {
-      entries.map((entry) => {
+      entries.map((entry, i) => {
         const summary = rowSummary(entry);
         return (
+          <>
+          {opens(i) && (
+            <li class="pane__month mono" data-month>
+              {formatMonth(entry.saved_date)} · <span class="tabular-nums" data-month-count>{months.get(entry.saved_date.slice(0, 7))}</span>
+            </li>
+          )}
           <li data-kind={entry.kind} data-tags={entry.tags.join(" ")}>
             <a
               href={entryHref(entry)}
@@ -72,12 +89,13 @@ const index = start !== undefined;
               {summary && <span>{clipText(summary, 110)}</span>}
             </a>
           </li>
+          </>
         );
       })
     }
   </ul>
   <p class="pane__empty" data-filter-empty hidden>
-    No entries match both filters. <a href={current ? `/library/${current}` : "/library"}>Show all</a>
+    No entries match these filters. <a href={current ? `/library/${current}` : "/library"}>Show all</a>
   </p>
 </nav>
 <PreviewCard />
@@ -91,13 +109,19 @@ const index = start !== undefined;
   // the entry instead of walking the whole list. `FILTER` puts the stop on the
   // `aria-current` row, or the first shown one, every time the filter changes;
   // Up, Down, Home and End move it among the rows the filter shows, and Enter
-  // is the link's own. Without scripting every row is a stop again.
+  // is the link's own. Month headers hold no link, so no key lands on one.
+  // Without scripting every row is a stop again. On /library and the kind
+  // routes j and k move the stop too; on an entry page they are EntryNav's
+  // next and prev.
+  const ALIAS: Record<string, string> = { j: "ArrowDown", k: "ArrowUp" };
   const pane = document.querySelector<HTMLElement>(`[${PANE_ATTRIBUTE}]`);
+  const entryPage = document.querySelector("[data-entry-nav]") !== null;
   pane?.addEventListener("keydown", (event) => {
     if (!ownsKey(event) || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
     const links = [...pane.querySelectorAll<HTMLAnchorElement>("[data-rows] > li:not([hidden]) > a")];
     const from = links.indexOf(event.target as HTMLAnchorElement);
-    const to = from < 0 ? null : paneStep(event.key, from, links.length);
+    const key = entryPage ? event.key : (ALIAS[event.key] ?? event.key);
+    const to = from < 0 ? null : paneStep(key, from, links.length);
     const next = to === null ? undefined : links[to];
     if (!next) return;
     event.preventDefault();
@@ -105,6 +129,11 @@ const index = start !== undefined;
     next.tabIndex = 0;
     next.focus();
   });
+
+  // The month headers stick under the toolbar, whose height is the page's
+  // type and zoom rather than a number worth hard-coding.
+  const bar = pane?.querySelector<HTMLElement>(".pane__bar");
+  if (pane && bar) new ResizeObserver(() => pane.style.setProperty("--pane-bar", `${bar.offsetHeight}px`)).observe(bar);
 </script>
 
 <style is:global>
@@ -122,8 +151,8 @@ const index = start !== undefined;
       flex: 0 0 350px;
       height: calc(100dvh - var(--bar-h) - var(--frame) - var(--frame-in));
       overflow-y: auto;
-      /* Arrow-key focus scrolls a row clear of the sticky toolbar. */
-      scroll-padding-top: 7rem;
+      /* Arrow-key focus scrolls a row clear of the toolbar and a month header. */
+      scroll-padding-top: calc(var(--pane-bar, 5.375rem) + 2.25rem);
       border-right: 1px solid var(--hairline);
     }
   }
@@ -138,6 +167,28 @@ const index = start !== undefined;
     padding: 0.75rem;
     background: var(--bg);
     border-bottom: 1px solid var(--hairline);
+  }
+
+  .pane__tags {
+    padding: 0.25rem 0.75rem 0;
+  }
+
+  /* Apple Notes' month headers: sticky under the toolbar, on the page colour
+     so rows pass under, the next month sliding over the last. Not a link and
+     not a stop: the roving tabindex walks rows only. */
+  .pane .pane__month {
+    position: sticky;
+    top: var(--pane-bar, 5.375rem);
+    z-index: 1;
+    padding: 0.625rem 0.875rem 0.375rem;
+    background: var(--bg);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+
+  .pane .pane__month .tabular-nums {
+    color: var(--text-tertiary);
   }
 
   .pane__empty {

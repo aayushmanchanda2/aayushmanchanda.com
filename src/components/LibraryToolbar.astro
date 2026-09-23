@@ -1,37 +1,18 @@
 ---
 /**
- * LibraryToolbar — the kind segments, a tag select and a live count (VET-245).
- * It tops the list pane on every library page, and /library draws a second one
- * above its view for phones, where the pane is hidden (VET-258).
- * `lib/library-pane.ts › FILTER` wires every copy on the page; `id` keeps the
- * two selects' labels apart.
+ * LibraryToolbar — the kind segments and a live count (VET-245). It tops the
+ * list pane on every library page, and /library draws a second one above its
+ * view for phones, where the pane is hidden (VET-258). The tag filter sits
+ * under it (`LibraryTags.astro`, VET-267). `lib/library-pane.ts › FILTER`
+ * wires every copy on the page.
  */
 import KindSegments from "./KindSegments.astro";
-import { kindGroups, library, libraryTags } from "../lib/library";
-import { tagLabel } from "../lib/tags";
-
-interface Props {
-  id: string;
-}
-
-const { id } = Astro.props;
-
-/** Busiest first, ties alphabetical: `TagFilters.astro`'s order. */
-const tags = [...libraryTags].sort(
-  (a, b) => b.entries.length - a.entries.length || a.slug.localeCompare(b.slug),
-);
+import { kindGroups, library } from "../lib/library";
 ---
 
 <div class="ltools">
   <KindSegments groups={kindGroups} total={library.length} />
-  <div class="ltools__row">
-    <label class="visually-hidden" for={id}>Tag</label>
-    <select class="select" id={id} data-tag-set>
-      <option value="">All tags</option>
-      {tags.map((group) => <option value={group.slug}>{tagLabel(group.slug)} ({group.entries.length})</option>)}
-    </select>
-    <p class="ltools__count tabular-nums" aria-live="polite" data-filter-count>{library.length} entries</p>
-  </div>
+  <p class="ltools__count tabular-nums" aria-live="polite" data-filter-count>{library.length} entries</p>
 </div>
 
 <style is:global>
@@ -48,17 +29,6 @@ const tags = [...libraryTags].sort(
 
   .ltools .seg {
     width: 100%;
-  }
-
-  .ltools__row {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .ltools__row .select {
-    flex: 1;
-    min-width: 0;
   }
 
   .ltools__count {
