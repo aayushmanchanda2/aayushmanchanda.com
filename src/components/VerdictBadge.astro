@@ -8,16 +8,18 @@
  * What is left is the only thing that was ever specific to /tools: which
  * tone a verdict earns.
  *
- * Rendered output is unchanged — same element shape, same words, same hues.
+ * The mapping is briOS's (VET-225): using is green, watching is blue, on hold
+ * is amber, skipped is neutral. Skipped was red, which read as a warning about
+ * the tool rather than a note that he passed on it.
  */
 import type { Verdict } from "../lib/tools";
 
 /** Exhaustive by type: a new verdict will not compile until it has a tone. */
 const TONES: Record<Verdict, string> = {
   using: "green",
-  watching: "amber",
-  "on-hold": "gray",
-  skipped: "red",
+  watching: "blue",
+  "on-hold": "amber",
+  skipped: "gray",
 };
 
 interface Props {

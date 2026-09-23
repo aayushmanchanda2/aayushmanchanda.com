@@ -113,7 +113,7 @@ const { palette, title } = Astro.props;
     font-size: 0.625rem;
     letter-spacing: 0;
     line-height: 1;
-    color: var(--faint);
+    color: var(--text-tertiary);
     /* "#rrggbb" is 7 characters, and in a monospace face 7ch is exactly that
        wide — so swapping in the shorter "copied" cannot shift the row. */
     min-width: 7ch;
@@ -125,7 +125,7 @@ const { palette, title } = Astro.props;
 
   .swatch:hover .swatch__hex,
   .swatch:focus-visible .swatch__hex {
-    color: var(--fg);
+    color: var(--text-primary);
   }
 </style>
 

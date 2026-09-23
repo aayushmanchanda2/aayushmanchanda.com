@@ -66,6 +66,7 @@
  * closed is right in that state too.
  */
 import type { LibraryEntry, Post } from "../lib/library";
+import { formatDay } from "../lib/date";
 
 interface Props {
   /** A post entry the pipeline could actually read. */
@@ -82,7 +83,7 @@ const { post } = entry;
     <span class="post__author">{post.author}</span>
     <span class="post__meta mono">
       <span class="post__handle">@{post.handle}</span>
-      <span class="post__posted tabular-nums">{post.date}</span>
+      <time class="post__posted" datetime={post.date}>{formatDay(post.date)}</time>
     </span>
   </div>
 
@@ -115,7 +116,7 @@ const { post } = entry;
   }
 
   /* The digest's label voice (`DigestBlocks.astro › .digest__label`), but it
-     is a control, so `--muted` rather than `--faint` (design.md §4, the ink
+     is a control, so `--text-secondary` rather than `--text-tertiary` (design.md §4, the ink
      floor) and 40px tall: 0.7rem above and below a 17.6px line. Left as a
      list item so the native disclosure marker stays; the focus ring is the
      global `:focus-visible` one. `fit-content` keeps the target and the ring
@@ -123,7 +124,7 @@ const { post } = entry;
   .post__label {
     width: fit-content;
     padding-block: 0.7rem;
-    color: var(--muted);
+    color: var(--text-secondary);
     line-height: 1.6;
     cursor: pointer;
     transition-property: color;
@@ -169,7 +170,7 @@ const { post } = entry;
     flex-wrap: wrap;
     align-items: baseline;
     gap: 0 0.4rem;
-    color: var(--faint);
+    color: var(--text-tertiary);
   }
 
   /* Drawn, never typed into the content: design.md §6. Keyed to the item after
@@ -205,7 +206,7 @@ const { post } = entry;
     max-width: 65ch;
     font-size: 1.0625rem;
     line-height: 1.7;
-    color: var(--muted);
+    color: var(--text-secondary);
     overflow-wrap: anywhere;
   }
 

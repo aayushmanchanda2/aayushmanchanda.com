@@ -385,27 +385,39 @@ export function listJsonLd(options: {
   );
 }
 
+/** The first step of every trail: the top bar's home link. */
+export const HOME: Crumb = { name: "Aayush Manchanda", path: "/" };
+
 /**
- * The crumb trail, which is exactly the crumb the page draws.
+ * The crumb trail, which is exactly the trail the top bar draws.
  *
- * Two items, not three. Every details and filter page on this site renders one
- * visible crumb — `← Tools` — and then its own title. There is no `Home ›`
- * anywhere in the markup, so putting one in the graph would be describing a
- * trail the reader is not offered. The site mark is a home link, but a
- * persistent logo is navigation, not a breadcrumb.
+ * Three items on an entry page: home, the section, the page. The bar in
+ * `Base.astro` prints `Aayush Manchanda / Tools / Notion`, and it reads this
+ * node back through `trailOf` rather than being handed a second copy, so the
+ * graph and the visible trail cannot disagree. Home is in it because the bar
+ * draws it as the first link, not as a logo.
  */
 function breadcrumb(...steps: Crumb[]): JsonLdNode {
-  const here = steps[steps.length - 1];
+  const trail = [HOME, ...steps];
+  const here = trail[trail.length - 1];
   return {
     "@type": "BreadcrumbList",
     "@id": `${pageUrl(here!.path)}#breadcrumb`,
-    itemListElement: steps.map((step, index) => ({
+    itemListElement: trail.map((step, index) => ({
       "@type": "ListItem",
       position: index + 1,
       name: step.name,
       item: pageUrl(step.path),
     })),
   };
+}
+
+/** The steps after home in a document's `BreadcrumbList`, or null without one. */
+export function trailOf(doc: JsonLd | undefined): Crumb[] | null {
+  const list = doc?.["@graph"].find((node) => node["@type"] === "BreadcrumbList");
+  if (!list) return null;
+  const items = list["itemListElement"] as { name: string; item: string }[];
+  return items.slice(1).map((step) => ({ name: step.name, path: new URL(step.item).pathname }));
 }
 
 /**

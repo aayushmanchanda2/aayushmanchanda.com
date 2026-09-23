@@ -1,15 +1,15 @@
 ---
 /**
- * MobileNav — the emblemo flourish below 900px.
+ * MobileNav — the section nav, at every width.
  *
- * A rotated vertical "MENU" label welded to the left edge; tapping it slides a
+ * A "Menu" button at the left of the top bar; pressing it slides a
  * full-height electric-blue panel in from the left, white items in Geist Mono,
  * entering on a ~70ms stagger. Every transition is a CSS transition (never a
  * keyframe animation) so an interrupted open/close reverses from wherever it
  * happens to be, rather than snapping.
  *
- * "below 900px", not "< 900px", and that is not a style preference. A bare `<`
- * anywhere in the frontmatter — inside a comment included — makes the Astro
+ * Never type the less-than sign in this frontmatter. A bare one
+ * anywhere in it — inside a comment included — makes the Astro
  * compiler lose the `Props` interface when it generates TSX, so `Astro.props`
  * degrades to `Record<string, any>` and every prop on this component silently
  * stops being typed. `npm run check` is what caught it. Write the word.
@@ -89,7 +89,7 @@ const current = normalize(pathname);
     {/*
       The two controls a touch reader cannot get to any other way: the palette,
       which has no Cmd+K to press here, and the theme, whose only other home is
-      a footer that is a long scroll away below 900px.
+      a footer that is a long scroll away.
 
       Deliberately quieter than the section links and set below them: these are
       ways to work the site, not a sixth and seventh section. They enter
@@ -116,32 +116,15 @@ const current = normalize(pathname);
 </div>
 
 <style>
-  .mnav {
-    display: block;
-  }
+  /* --- trigger --------------------------------------------------------- */
 
-  @media (min-width: 900px) {
-    .mnav {
-      display: none;
-    }
-  }
-
-  /* --- edge label -------------------------------------------------------- */
-
+  /* The first thing in the top bar (`layouts/Base.astro`), at every width:
+     with the dash rail gone (VET-225), this panel is the section nav on
+     desktop too. 40px tall, like the crumbs beside it. */
   .mnav__trigger {
-    position: fixed;
-    top: 50%;
-    /* Welded to the left edge, which in landscape on a notched phone is the
-       edge the notch is on. Inert until `viewport-fit=cover`; see the panel
-       below and design.md §3. */
-    left: env(safe-area-inset-left);
-    translate: 0 -50%;
-    z-index: 60;
-    /* reads bottom-to-top, like the emblemo edge label */
-    writing-mode: vertical-rl;
-    rotate: 180deg;
-    padding: 1rem 0.75rem;
-    color: var(--muted);
+    display: block;
+    padding: 0.625rem 0.5rem;
+    color: var(--text-secondary);
     cursor: pointer;
     /* a tap must open the menu, not select the word "Menu" */
     user-select: none;
@@ -394,7 +377,6 @@ const current = normalize(pathname);
     const close = root.querySelector<HTMLButtonElement>("[data-mnav-close]");
     if (!toggle || !panel || !scrim || !close) return;
 
-    const desktop = window.matchMedia("(min-width: 900px)");
     let open = false;
 
     // A const arrow rather than a function declaration, so the four non-null
@@ -414,7 +396,7 @@ const current = normalize(pathname);
        * keyboard: without it, Tab walks off the last control in here and into
        * the page behind the scrim — focusable, invisible, pointer-dead. The
        * marked surfaces are the shell, the skip link and the site mark
-       * (`layouts/Base.astro`, `SiteMark.astro`); the theme live region is
+       * (`layouts/Base.astro`, `Breadcrumbs.astro`); the theme live region is
        * deliberately unmarked so the panel's own toggle still announces. The
        * trigger goes inert too — it sits under the scrim while the panel is
        * up — and comes back before focus returns to it below.
@@ -485,12 +467,6 @@ const current = normalize(pathname);
 
       e.preventDefault();
       setOpen(false);
-    });
-
-    // Rotating a phone into the desktop breakpoint hides the panel via CSS —
-    // make sure the scroll lock and focus state go with it.
-    desktop.addEventListener("change", (e) => {
-      if (e.matches) setOpen(false);
     });
   }
 

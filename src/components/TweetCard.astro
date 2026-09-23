@@ -90,6 +90,7 @@ import type { LibraryEntry, Post } from "../lib/library";
 import { entryHref } from "../lib/library";
 import { hueSlot } from "../lib/tags";
 import { POST_CARD_MAX, clipText, monogram } from "../lib/post";
+import { formatDay } from "../lib/date";
 
 interface Props {
   /** The entry the card links to. Its `post` is what the card draws. */
@@ -158,7 +159,7 @@ const body = clipText(post.text, POST_CARD_MAX);
           <span class="card__author">{post.author}</span>
           <span class="card__meta mono">
             <span class="card__handle">@{post.handle}</span>
-            <span class="card__date tabular-nums">{post.date}</span>
+            <time class="card__date" datetime={post.date}>{formatDay(post.date)}</time>
           </span>
         </span>
       </span>
@@ -404,7 +405,7 @@ const body = clipText(post.text, POST_CARD_MAX);
     flex-wrap: wrap;
     align-items: baseline;
     gap: 0 0.4rem;
-    color: var(--faint);
+    color: var(--text-tertiary);
   }
 
   /* Drawn, never typed into the content: design.md §6. Keyed to the item after
@@ -425,7 +426,7 @@ const body = clipText(post.text, POST_CARD_MAX);
   .card__text {
     font-size: 0.9375rem;
     line-height: 1.55;
-    color: var(--muted);
+    color: var(--text-secondary);
     /* A post arrives flattened to one paragraph, so nothing here has to survive
        a newline. `overflow-wrap` is for the other thing a post is full of: a
        t.co shortlink with no word boundary in it, which would otherwise run out
@@ -434,11 +435,11 @@ const body = clipText(post.text, POST_CARD_MAX);
   }
 
   /* The quiet pattern, the same one `LibraryList.astro › .row__source` takes:
-     `--muted` because it is a control and design.md §4 is the floor, and its
+     `--text-secondary` because it is a control and design.md §4 is the floor, and its
      own underline because on touch there is no hover to reveal one. */
   .card__source {
     align-self: flex-start;
-    color: var(--muted);
+    color: var(--text-secondary);
     text-decoration-line: underline;
     text-decoration-color: var(--hairline-strong);
     transition-property: color, text-decoration-color;
@@ -481,7 +482,7 @@ const body = clipText(post.text, POST_CARD_MAX);
     gap: 0.4rem;
     min-height: 40px;
     padding-inline: 1rem;
-    color: var(--muted);
+    color: var(--text-secondary);
     text-decoration: none;
     /* `.press` used to carry this. It moved to the card, so the ink names its
        own transition — one property, never `all`. */

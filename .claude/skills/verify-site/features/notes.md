@@ -9,7 +9,7 @@
 
 ## How to get to it (user POV)
 
-- Notes link in the rail, or `/notes`.
+- Notes in the Menu panel or the top bar trail, or `/notes`.
 - A row in the list; directly at `/notes/<slug>` (slugs from `ls dist/notes`, e.g. `building-this-site`).
 
 ## Driving it with shoot.mjs

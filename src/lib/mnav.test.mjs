@@ -21,7 +21,7 @@ const SRC = fileURLToPath(new URL("..", import.meta.url));
 const read = (/** @type {string} */ rel) => readFileSync(SRC + rel, "utf8");
 
 const base = read("layouts/Base.astro");
-const mark = read("components/SiteMark.astro");
+const crumbs = read("components/Breadcrumbs.astro");
 const mnav = read("components/MobileNav.astro");
 
 test("the background surfaces carry the inert marker", () => {
@@ -34,8 +34,12 @@ test("the background surfaces carry the inert marker", () => {
     "the skip link no longer carries data-mnav-inert",
   );
   assert.ok(
-    /data-mnav-inert/.test(mark),
-    "the site mark no longer carries data-mnav-inert — it is a focusable control sitting behind the open panel",
+    /<nav class="crumbs"[^>]*data-mnav-inert/.test(crumbs),
+    "the top bar's trail no longer carries data-mnav-inert — its links sit behind the open panel",
+  );
+  assert.ok(
+    /class="bar__search[^"]*"[^>]*data-mnav-inert/.test(base.replace(/\s+/g, " ")),
+    "the top bar's search button no longer carries data-mnav-inert",
   );
 });
 
@@ -56,7 +60,7 @@ test("setOpen flips inert both ways", () => {
   );
   assert.ok(
     script.includes("el.inert = true") && script.includes("el.inert = false"),
-    "MobileNav no longer sets and clears inert on the background — the markers in Base.astro and SiteMark.astro are decoration without it",
+    "MobileNav no longer sets and clears inert on the background — the markers in Base.astro and Breadcrumbs.astro are decoration without it",
   );
   assert.ok(
     script.includes("toggle.inert = true") &&

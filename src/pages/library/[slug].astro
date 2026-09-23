@@ -50,6 +50,7 @@ import { linkLabel } from "../../lib/links";
 import { library } from "../../lib/library";
 import { routeSlug } from "../../lib/parse";
 import { libraryJsonLd } from "../../lib/schema";
+import { formatDay } from "../../lib/date";
 
 /**
  * Neighbours resolved at build time, the way /sites resolves its gallery. The
@@ -103,7 +104,6 @@ const description =
   description={description}
   jsonLd={jsonLd}
 >
-  <p class="crumb mono"><a href="/library">&larr; Library</a></p>
 
   <header>
     <h1 class="page-title page-title--entry">{entry.title}</h1>
@@ -137,19 +137,19 @@ const description =
         <a href={`/library/domain/${routeSlug(entry.domain)}`}>{entry.domain}</a>
       </li>
       <li class="strip__item">
-        Saved <span class="tabular-nums">{entry.saved_date}</span>
+        Saved <time datetime={entry.saved_date}>{formatDay(entry.saved_date)}</time>
       </li>
       {
         entry.digest && (
           <li class="strip__item">
-            Digested <span class="tabular-nums">{entry.digest.digested}</span>
+            Digested <time datetime={entry.digest.digested}>{formatDay(entry.digest.digested)}</time>
           </li>
         )
       }
       {
         entry.draft && (
           <li class="strip__item">
-            Drafted <span class="tabular-nums">{entry.draft.drafted}</span>
+            Drafted <time datetime={entry.draft.drafted}>{formatDay(entry.draft.drafted)}</time>
           </li>
         )
       }
@@ -251,7 +251,7 @@ const description =
     /* title to meta strip is 16px, and so is strip to standfirst: §2's rhythm,
        8 within a group, 16 between groups, 40 between sections */
     margin-top: 1rem;
-    color: var(--faint);
+    color: var(--text-tertiary);
   }
 
   .strip + .standfirst {
@@ -296,9 +296,9 @@ const description =
      box painted by `styles/chip.css`, and an underline would be a second
      line inside it. */
   .strip a:not(.strip__chip):not(.tag) {
-    /* --muted, never the strip's --faint: a quiet anchor inside a metadata
+    /* --text-secondary, never the strip's --text-tertiary: a quiet anchor inside a metadata
        container states its own ink (design.md §4, the ink floor). */
-    color: var(--muted);
+    color: var(--text-secondary);
     text-decoration-line: underline;
     text-decoration-color: var(--hairline-strong);
     text-underline-offset: 0.25em;
@@ -365,6 +365,6 @@ const description =
   }
 
   .source__label {
-    color: var(--faint);
+    color: var(--text-tertiary);
   }
 </style>

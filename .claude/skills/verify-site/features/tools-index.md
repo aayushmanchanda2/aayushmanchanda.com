@@ -12,7 +12,7 @@
 
 ## How to get to it (user POV)
 
-- Left rail / nav link to Tools, or open `/tools` directly.
+- Tools in the Menu panel or the top bar trail, or open `/tools` directly.
 - Press `List` or `Grid` in the `Tools layout` group, top right above the first category.
 - From a tool detail page, the verdict chip (`/tools/verdict/<verdict>`) or category link (`/tools/category/<slug>`).
 

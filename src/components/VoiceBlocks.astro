@@ -82,7 +82,7 @@ const blocks: Block[] = VOICE_FIELDS.flatMap(({ key, label, code }) => {
 
 <style>
   /* Measured against /privacy, which is the site's other block of labelled
-     prose: same label at --faint, same muted body at 1.7. Two pages that
+     prose: same label at --text-tertiary, same muted body at 1.7. Two pages that
      are both "a label and a paragraph" should not be two typographic systems.
 
      What is different is the rules. /privacy hairlines every section because it
@@ -98,7 +98,7 @@ const blocks: Block[] = VOICE_FIELDS.flatMap(({ key, label, code }) => {
   }
 
   .voice__label {
-    color: var(--faint);
+    color: var(--text-tertiary);
     /* the label is metadata; the paragraph under it carries the reading size */
     line-height: 1.6;
   }
@@ -107,7 +107,7 @@ const blocks: Block[] = VOICE_FIELDS.flatMap(({ key, label, code }) => {
     margin-top: 0.5rem;
     font-size: 1rem;
     line-height: 1.7;
-    color: var(--muted);
+    color: var(--text-secondary);
   }
 
   .voice__body--code {
@@ -115,7 +115,7 @@ const blocks: Block[] = VOICE_FIELDS.flatMap(({ key, label, code }) => {
     /* mono runs wide, so it steps down to sit level with the prose around it */
     font-size: 0.875rem;
     /* full ink: this is the one line on the page a reader is meant to copy */
-    color: var(--fg);
+    color: var(--text-primary);
     /* a long install command must wrap rather than push the column sideways */
     overflow-wrap: anywhere;
   }

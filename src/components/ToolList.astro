@@ -15,6 +15,7 @@ import { markFor } from "../lib/links";
 import type { Tool } from "../lib/tools";
 import { groupByCategory } from "../lib/tools";
 import VerdictBadge from "./VerdictBadge.astro";
+import { formatDay } from "../lib/date";
 
 interface Props {
   tools: Tool[];
@@ -97,7 +98,7 @@ const groups = grouped
 
               <span class="row__meta">
                 <span class="row__date mono">
-                  As of <span class="tabular-nums">{tool.status_date}</span>
+                  As of <time datetime={tool.status_date}>{formatDay(tool.status_date)}</time>
                 </span>
                 <a class="row__more mono" href={`/tools/${tool.slug}`}>
                   Details<span class="visually-hidden"> for {tool.name}</span>
@@ -126,7 +127,7 @@ const groups = grouped
     display: flex;
     align-items: baseline;
     gap: 0.5rem;
-    color: var(--faint);
+    color: var(--text-tertiary);
   }
 
   .group__rows {
@@ -183,7 +184,7 @@ const groups = grouped
     display: grid;
     place-items: center;
     background: var(--dot);
-    color: var(--muted);
+    color: var(--text-secondary);
     /* 12px in a 28px box: the 9-in-16 it was, scaled with the box, and still
        well under the 17px name beside it. */
     font-size: 0.75rem;
@@ -233,7 +234,7 @@ const groups = grouped
     overflow: hidden;
     font-size: 0.9375rem;
     line-height: 1.55;
-    color: var(--muted);
+    color: var(--text-secondary);
   }
 
   .row__meta {
@@ -247,15 +248,15 @@ const groups = grouped
   }
 
   .row__date {
-    color: var(--faint);
+    color: var(--text-tertiary);
     white-space: nowrap;
   }
 
   /* Carries its own underline: on touch there is no hover to reveal one, and
-     a bare word next to the date would read as a second label. --muted,
-     not the date's --faint: this is a control (design.md §4, the ink floor). */
+     a bare word next to the date would read as a second label. --text-secondary,
+     not the date's --text-tertiary: this is a control (design.md §4, the ink floor). */
   .row__more {
-    color: var(--muted);
+    color: var(--text-secondary);
     text-decoration-line: underline;
     text-decoration-color: var(--hairline-strong);
   }

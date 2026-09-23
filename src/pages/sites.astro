@@ -87,7 +87,7 @@ const jsonLd = listJsonLd({
     /* 8px inside the group, 16px below the standfirst (design.md §2) */
     gap: 0.5rem;
     margin-top: 1rem;
-    color: var(--faint);
+    color: var(--text-tertiary);
   }
 
   /* The label is sentence case, the voice every `dt` in a facts table speaks.
@@ -124,11 +124,11 @@ const jsonLd = listJsonLd({
     color: var(--hairline-strong);
   }
 
-  /* --muted, not the row's --faint: these are controls, and interactive ink
-     never sits below --muted (design.md §4, the ink floor). They inherited the
-     label's --faint until VET-223's audit. */
+  /* --text-secondary, not the row's --text-tertiary: these are controls, and interactive ink
+     never sits below --text-secondary (design.md §4, the ink floor). They inherited the
+     label's --text-tertiary until VET-223's audit. */
   .collections a {
-    color: var(--muted);
+    color: var(--text-secondary);
     text-decoration: none;
     transition-property: color;
     transition-duration: var(--dur-fast);

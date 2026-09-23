@@ -69,7 +69,7 @@ export const THEME_COLOR_MEDIA = {
 } as const;
 
 /** `--bg` per scheme, as the `theme-color` metas carry it. */
-export const THEME_COLORS = { light: "#FFFFFF", dark: "#09090B" } as const;
+export const THEME_COLORS = { light: "#FFFFFF", dark: "#000000" } as const;
 
 /**
  * The button's accessible name: what the theme is now, and what pressing does

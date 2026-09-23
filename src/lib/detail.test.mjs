@@ -169,8 +169,8 @@ test("the draft block says what it is, at full ink, and dates itself", () => {
   );
   assert.match(
     source,
-    /\.draft__label \{[^}]*color: var\(--fg\)/,
-    "the draft's label dropped to a metadata colour. Every other label on an entry page is `--faint`; this one is louder on purpose.",
+    /\.draft__label \{[^}]*color: var\(--text-primary\)/,
+    "the draft's label dropped to a metadata colour. Every other label on an entry page is `--text-tertiary`; this one is louder on purpose.",
   );
   assert.match(
     source,
@@ -179,8 +179,8 @@ test("the draft block says what it is, at full ink, and dates itself", () => {
   );
   assert.match(
     drawn,
-    /Drafted <span class="tabular-nums">\{draft\.drafted\}<\/span>/,
-    "the draft stopped printing its own date, or its date stopped being a figure (mono inside the label voice, design.md §2)",
+    /Drafted <time datetime=\{draft\.drafted\}>\{formatDay\(draft\.drafted\)\}<\/time>/,
+    "the draft stopped printing its own date, or stopped printing it as a `<time>` (design.md §2)",
   );
 });
 

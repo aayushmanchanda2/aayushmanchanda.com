@@ -61,9 +61,12 @@ import { VERDICTS } from "../lib/tools";
  */
 const SURFACES = [
   { name: "--bg", note: "the page" },
-  { name: "--fg", note: "body ink, and the mark" },
-  { name: "--muted", note: "prose, and every paragraph on this page" },
-  { name: "--faint", note: "metadata: dates, counts, labels" },
+  { name: "--text-primary", note: "titles, long-form prose, and the mark" },
+  { name: "--text-secondary", note: "standfirsts, controls, and every paragraph on this page" },
+  { name: "--text-tertiary", note: "metadata: dates, counts, labels" },
+  { name: "--text-quaternary", note: "decoration only: the crumb divider" },
+  { name: "--surface-2", note: "a raised surface" },
+  { name: "--surface-3", note: "a hovered or selected one" },
   { name: "--hairline", note: "every border on the site" },
   { name: "--hairline-strong", note: "a hovered row border, a swatch edge" },
   { name: "--outline", note: "the 1px inset on imagery" },
@@ -128,6 +131,7 @@ const jsonLd = designJsonLd();
 
 <Base
   title="Design · Aayush Manchanda"
+  trail={[{ name: "Design", path: "/design" }]}
   description="The design language of this site: the mark, the colour tokens, the type scale, the chip palette and the interaction rules, rendered by the components themselves."
   jsonLd={jsonLd}
 >
@@ -147,9 +151,8 @@ const jsonLd = designJsonLd();
       <p>
         My initials on a 16-unit grid, one stroke weight, every diagonal at the
         same angle. Nothing in it touches anything: the crossbar sits half a unit
-        off the legs and the M sits half a unit off the A. That is the left rail
-        of every page carried into a glyph, a monogram held together by
-        proximity rather than by contact.
+        off the legs and the M sits half a unit off the A, a monogram held
+        together by proximity rather than by contact.
       </p>
 
       <div class="lockup">
@@ -337,9 +340,9 @@ const jsonLd = designJsonLd();
           <dd><div class="mono spec__label">Cliff notes</div></dd>
         </div>
         <div class="spec__row">
-          <dt class="code">mono .tabular-nums</dt>
+          <dt class="code">mono + time</dt>
           <dd>
-            <div class="mono spec__label">Saved <span class="tabular-nums">2026-09-22</span></div>
+            <div class="mono spec__label">Saved <time datetime="2026-09-22">Sep 22, 2026</time></div>
           </dd>
         </div>
       </dl>
@@ -349,9 +352,9 @@ const jsonLd = designJsonLd();
         under it is the standfirst, so two of those rows are already in front of
         you at full size, in the elements they normally ship as. The class
         called <span class="code">mono</span> is the label voice, and it is not
-        mono any more: 13px sans, weight 500, normal tracking, sentence case,
-        for section heads, field labels, crumbs, tabs and footer items. The big
-        titles keep their size and everything under them stays quiet.
+        mono any more: 14px sans, weight 400, normal tracking, sentence case,
+        for section heads, field labels, tabs and footer items. The titles are
+        bold rather than big, and everything under them stays quiet.
       </p>
       <p>
         Two rules are global and are not in the table because nothing sets them:
@@ -360,28 +363,33 @@ const jsonLd = designJsonLd();
         redeclares them.
       </p>
       <p>
-        Mono is for what you might retype: a date, a count, a clock, a hex, a
+        Mono is for what you might retype: a count, a clock, a hex, a
         key cap like <span class="code">esc</span>, a token name. Inside a label
         the figure switches to mono by itself, because every figure already
         carries tabular numbers.
       </p>
 
       <p>
-        Text comes in three levels, and each piece of text is one of them.
+        Text comes in four levels, and each piece of text is one of them. The
+        fourth never carries a word; it draws the slash between crumbs.
       </p>
 
       <dl class="spec">
         <div class="spec__row">
-          <dt class="code">--fg</dt>
+          <dt class="code">--text-primary</dt>
           <dd><div class="level level--fg">Titles, names, links</div></dd>
         </div>
         <div class="spec__row">
-          <dt class="code">--muted</dt>
+          <dt class="code">--text-secondary</dt>
           <dd><div class="level level--muted">Prose, notes, and every control</div></dd>
         </div>
         <div class="spec__row">
-          <dt class="code">--faint</dt>
+          <dt class="code">--text-tertiary</dt>
           <dd><div class="level level--faint">Labels, dates, counts</div></dd>
+        </div>
+        <div class="spec__row">
+          <dt class="code">--text-quaternary</dt>
+          <dd><div class="level level--quaternary" aria-hidden="true">/</div></dd>
         </div>
       </dl>
 
@@ -536,12 +544,11 @@ const jsonLd = designJsonLd();
     <section>
       <h2 class="sheet__head mono">Links</h2>
       <p>
-        A link inside a sentence is bold and underlined, like <a href="/about"
-        >this one</a>. Body text here is set at 75% ink, so a blue word at weight
-        400 in a muted paragraph is a colour difference and nothing else, and
-        that is the one signal that goes missing on a bad screen, in bright sun,
-        or for a reader who cannot separate those two hues at all. Weight and a
-        line are two more, and neither depends on seeing colour.
+        A link inside a sentence is blue with a 2px underline in the same blue
+        at 40%, like <a href="/about">this one</a>, and the line goes solid on
+        hover. It stays at body weight: prose is near-black now, and a bold blue
+        word in it shouts. The line is the cue that does not depend on seeing
+        colour.
       </p>
       <p>
         A link that leaves the site takes an arrow, and the arrow comes from CSS
@@ -554,10 +561,10 @@ const jsonLd = designJsonLd();
       </p>
       <p>
         Everything else is exempt, and exempt structurally rather than by an
-        override. Nav dashes, chips, footer items, index rows, tool and library
-        rows, tabs, crumbs and metadata strips are simply not in that rule, and
+        override. The top bar, chips, footer items, index rows, tool and library
+        rows, tabs and metadata strips are simply not in that rule, and
         each sets its own <span class="code">text-decoration: none</span>.
-        Bolding and underlining them would turn navigation into a paragraph of
+        Underlining them would turn navigation into a paragraph of
         shouting.
       </p>
       <p>
@@ -681,7 +688,7 @@ const jsonLd = designJsonLd();
   }
 
   .sheet__head {
-    color: var(--faint);
+    color: var(--text-tertiary);
     /* the head is the label; the paragraph under it carries the reading size */
     line-height: 1.6;
   }
@@ -690,7 +697,7 @@ const jsonLd = designJsonLd();
     margin-top: 0.85rem;
     font-size: 1rem;
     line-height: 1.7;
-    color: var(--muted);
+    color: var(--text-secondary);
   }
 
   /* The prose-link treatment is not restated here. `.sheet p a` is in the
@@ -716,7 +723,7 @@ const jsonLd = designJsonLd();
     font-size: 0.8125rem;
     letter-spacing: 0;
     line-height: 1.4;
-    color: var(--faint);
+    color: var(--text-tertiary);
   }
 
   /* --- the specimen table ----------------------------------------------- */
@@ -757,27 +764,32 @@ const jsonLd = designJsonLd();
     }
   }
 
-  /* A label specimen at the ink labels ship at: `--faint`, the meta level. */
+  /* A label specimen at the ink labels ship at: `--text-tertiary`, the meta level. */
   .spec__label {
-    color: var(--faint);
+    color: var(--text-tertiary);
   }
 
-  /* The three text levels, each at the size it most often ships at. */
+  /* The four text levels, each at the size it most often ships at. */
   .level--fg {
     font-size: 1.0625rem;
     font-weight: 500;
-    color: var(--fg);
+    color: var(--text-primary);
   }
 
   .level--muted {
     font-size: 1rem;
-    color: var(--muted);
+    color: var(--text-secondary);
   }
 
   .level--faint {
-    font-size: 0.8125rem;
+    font-size: 0.875rem;
+    color: var(--text-tertiary);
+  }
+
+  .level--quaternary {
+    font-size: 0.875rem;
     font-weight: 500;
-    color: var(--faint);
+    color: var(--text-quaternary);
   }
 
   /* --- chips ------------------------------------------------------------ */
@@ -806,7 +818,7 @@ const jsonLd = designJsonLd();
        20px and 24px, and neither is large enough to see a miter at. */
     --mark-size: clamp(3rem, 13vw, 4.5rem);
     margin-top: 1.75rem;
-    color: var(--fg);
+    color: var(--text-primary);
   }
 
   .icons {
@@ -869,13 +881,13 @@ const jsonLd = designJsonLd();
   }
 
   .tok__head .code:first-child {
-    color: var(--fg);
+    color: var(--text-primary);
   }
 
   .tok__note {
     font-size: 0.8125rem;
     line-height: 1.45;
-    color: var(--faint);
+    color: var(--text-tertiary);
   }
 
   /* Held at the vivid blue in both themes, which is the point it is making. */
@@ -905,7 +917,7 @@ const jsonLd = designJsonLd();
   .figures {
     font-size: 1.25rem;
     line-height: 1.3;
-    color: var(--fg);
+    color: var(--text-primary);
   }
 
   /* --- interactions ----------------------------------------------------- */
@@ -939,7 +951,7 @@ const jsonLd = designJsonLd();
   .pressbox__note {
     font-size: 0.875rem;
     line-height: 1.4;
-    color: var(--muted);
+    color: var(--text-secondary);
   }
 
   /* --- links ------------------------------------------------------------ */
@@ -959,7 +971,7 @@ const jsonLd = designJsonLd();
   .sheet p.rule {
     font-size: 1.0625rem;
     line-height: 1.55;
-    color: var(--fg);
+    color: var(--text-primary);
   }
 </style>
 

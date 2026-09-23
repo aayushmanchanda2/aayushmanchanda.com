@@ -12,6 +12,7 @@ import EntryLink from "../components/EntryLink.astro";
 import StatusChip from "../components/StatusChip.astro";
 import { experiments } from "../lib/experiments";
 import { anchorUrl, listJsonLd } from "../lib/schema";
+import { formatDay } from "../lib/date";
 
 /**
  * Rows point at themselves.
@@ -62,7 +63,7 @@ const jsonLd = listJsonLd({
           </span>
 
           <span class="row__date mono">
-            Since <span class="tabular-nums">{experiment.started}</span>
+            Since <time datetime={experiment.started}>{formatDay(experiment.started)}</time>
           </span>
 
           <p class="row__note">{experiment.one_liner}</p>
@@ -130,12 +131,12 @@ const jsonLd = listJsonLd({
     grid-area: note;
     font-size: 0.9375rem;
     line-height: 1.55;
-    color: var(--muted);
+    color: var(--text-secondary);
   }
 
   .row__date {
     grid-area: meta;
-    color: var(--faint);
+    color: var(--text-tertiary);
     white-space: nowrap;
     text-align: right;
     /* optical: line the date up with the name, not the row box */
@@ -155,10 +156,10 @@ const jsonLd = listJsonLd({
      the way through: the rule still cannot escape this page.
 
      Carries its own underline: on touch there is no hover to reveal one.
-     --muted, not the date's --faint: these are controls (design.md §4, the
+     --text-secondary, not the date's --text-tertiary: these are controls (design.md §4, the
      ink floor). */
   .row__links :global(.row__link) {
-    color: var(--muted);
+    color: var(--text-secondary);
     text-decoration-line: underline;
     text-decoration-color: var(--hairline-strong);
   }

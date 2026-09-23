@@ -102,11 +102,11 @@ const { groups, total, current } = Astro.props;
        theme toggle reach it: the hit floor without a toolbar's height in the
        row. */
     min-height: 40px;
-    /* `--muted`, not the `--faint` the row metadata uses. A date is metadata
+    /* `--text-secondary`, not the `--text-tertiary` the row metadata uses. A date is metadata
        and a tab is a control, and an unselected control that a reader is meant
        to press has to clear AA on its own rather than lean on the one beside
        it being brighter. */
-    color: var(--muted);
+    color: var(--text-secondary);
     text-decoration: none;
     white-space: nowrap;
     transition-property: color;
@@ -115,7 +115,7 @@ const { groups, total, current } = Astro.props;
   }
 
   .tabs__tab:hover {
-    color: var(--fg);
+    color: var(--text-primary);
   }
 
   /* The accent as ink, never as a panel: `aria-current` is one of the four

@@ -1,24 +1,18 @@
 /**
- * The ink floor: interactive ink never sits below `--muted`.
+ * The four text levels, measured, and the ink floor.
  *
- * design.md §4. `--faint` is metadata's colour, and composited over the page it
- * measures 2.94:1 on the light theme — under the 4.5:1 the 13px label voice
- * owes and under even the 3:1 a non-text control owes. §3's kind tabs wrote the
- * principle down first ("a control has to clear AA on its own"); this test is
- * what keeps the rest of the site's quiet controls from drifting back.
+ * design.md §2 and §4. Two halves, both parsed from source the way
+ * `theme.test.mjs` reads the stylesheets, because there is no runtime here:
  *
- * Two halves, both parsed from source the way `theme.test.mjs` reads the
- * stylesheets, because there is no runtime here to ask:
+ *  1. The tokens. Recompute every text level over its own page background in
+ *     both themes. Primary, secondary and tertiary hold AA (4.5:1), so a
+ *     retuned token cannot quietly take metadata or controls under it.
+ *     Quaternary sits under 3:1, which is why it is decoration only.
  *
- *  1. The tokens themselves. `--muted` is an alpha over the page background,
- *     so its rendered contrast moves whenever `--bg`, `--fg-channels` or the
- *     alpha moves. Recompute the composite in both themes and hold it at AA,
- *     so a retuned token cannot quietly take every quiet control down with it.
- *
- *  2. The surfaces. Every selector the ink floor names in design.md §4 must
- *     still declare `--muted`. A regression to `--faint` (or to `inherit`
- *     inside a faint container) is exactly the one-word edit nobody catches
- *     in review.
+ *  2. The ink floor. Controls sit on `--text-secondary`, a level above the
+ *     metadata beside them, so a control never reads as a label. Every
+ *     selector design.md §4 names must still declare it: a slide back to
+ *     `--text-tertiary` is the one-word edit nobody catches in review.
  */
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -33,16 +27,20 @@ const globalCss = read("styles/global.css");
 /* --- half one: the tokens ------------------------------------------------- */
 
 /**
- * @param {string} hex six-digit #rrggbb
- * @returns {[number, number, number]}
+ * A declared colour as [r, g, b, alpha]: `#rrggbb` or `rgb(r g b / a)`.
+ *
+ * @param {string} css
+ * @returns {[number, number, number, number]}
  */
-function channels(hex) {
-  const m = hex.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
-  assert.ok(m, `not a six-digit hex: ${hex}`);
-  return [parseInt(m[1], 16), parseInt(m[2], 16), parseInt(m[3], 16)];
+function parse(css) {
+  const hex = css.match(/^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i);
+  if (hex) return [parseInt(hex[1], 16), parseInt(hex[2], 16), parseInt(hex[3], 16), 1];
+  const rgb = css.match(/^rgb\((\d+) (\d+) (\d+) \/ ([0-9.]+)\)$/);
+  assert.ok(rgb, `not a colour this test reads: ${css}`);
+  return [Number(rgb[1]), Number(rgb[2]), Number(rgb[3]), Number(rgb[4])];
 }
 
-/** @param {[number, number, number]} rgb */
+/** @param {number[]} rgb */
 function luminance(rgb) {
   const [r, g, b] = rgb.map((v) => {
     const s = v / 255;
@@ -51,78 +49,50 @@ function luminance(rgb) {
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
 
-/**
- * WCAG ratio of fg-at-alpha composited over bg, against bg.
- *
- * @param {[number, number, number]} fg
- * @param {number} alpha
- * @param {[number, number, number]} bg
- */
-function ratio(fg, alpha, bg) {
-  const blend = /** @type {[number, number, number]} */ (
-    fg.map((v, i) => v * alpha + bg[i] * (1 - alpha))
-  );
-  const a = luminance(blend) + 0.05;
-  const b = luminance(bg) + 0.05;
-  return Math.max(a, b) / Math.min(a, b);
+/** WCAG ratio of a (possibly translucent) ink composited over an opaque bg. */
+function ratio(/** @type {string} */ ink, /** @type {string} */ bg) {
+  const [r, g, b, a] = parse(ink);
+  const ground = parse(bg);
+  const blend = [r, g, b].map((v, i) => v * a + ground[i] * (1 - a));
+  const x = luminance(blend) + 0.05;
+  const y = luminance(ground) + 0.05;
+  return Math.max(x, y) / Math.min(x, y);
 }
 
-/**
- * Pull one declaration's value out of a CSS slice.
- *
- * @param {string} css
- * @param {string} property
- */
-function value(css, property) {
+/** One declaration's value out of a CSS slice. */
+function value(/** @type {string} */ css, /** @type {string} */ property) {
   const m = css.match(new RegExp(`${property}:\\s*([^;]+);`));
   assert.ok(m, `no ${property} declaration found`);
   return m[1].trim();
 }
 
 const darkBlock = globalCss.slice(globalCss.indexOf(':root[data-theme="dark"]'));
-assert.ok(darkBlock.length > 0, "the pinned-dark block has moved");
+const themes = { light: globalCss, dark: darkBlock };
 
-const themes = {
-  light: {
-    bg: channels(value(globalCss, "--bg")),
-    fg: /** @type {[number, number, number]} */ (
-      value(globalCss, "--fg-channels").split(/\s+/).map(Number)
-    ),
-  },
-  dark: {
-    bg: channels(value(darkBlock, "--bg")),
-    fg: /** @type {[number, number, number]} */ (
-      value(darkBlock, "--fg-channels").split(/\s+/).map(Number)
-    ),
-  },
-};
+for (const level of ["primary", "secondary", "tertiary"]) {
+  test(`--text-${level} clears AA over both page backgrounds`, () => {
+    for (const [name, css] of Object.entries(themes)) {
+      const r = ratio(value(css, `--text-${level}`), value(css, "--bg"));
+      assert.ok(r >= 4.5, `--text-${level} is ${r.toFixed(2)}:1 on the ${name} theme, under AA`);
+    }
+  });
+}
 
-const alpha = (/** @type {string} */ name) => {
-  const m = globalCss.match(
-    new RegExp(`${name}: rgb\\(var\\(--fg-channels\\) / ([0-9.]+)\\)`),
-  );
-  assert.ok(m, `${name} is no longer an alpha over --fg-channels`);
-  return Number(m[1]);
-};
-
-test("--muted clears AA over both page backgrounds", () => {
-  for (const [name, t] of Object.entries(themes)) {
-    const r = ratio(t.fg, alpha("--muted"), t.bg);
+test("--text-quaternary stays under 3:1, so it never carries words", () => {
+  for (const [name, css] of Object.entries(themes)) {
+    const r = ratio(value(css, "--text-quaternary"), value(css, "--bg"));
     assert.ok(
-      r >= 4.5,
-      `--muted composites to ${r.toFixed(2)}:1 on the ${name} theme — under AA. ` +
-        "Every quiet control on the site sits on this token (design.md §4, the ink floor).",
+      r < 3,
+      `--text-quaternary is ${r.toFixed(2)}:1 on the ${name} theme. If it is meant to carry text now, ` +
+        "design.md §2 changes in the same commit as this assertion.",
     );
   }
 });
 
-test("--faint is still below AA, which is why the floor exists", () => {
-  const r = ratio(themes.light.fg, alpha("--faint"), themes.light.bg);
-  assert.ok(
-    r < 4.5,
-    "--faint now clears AA on the light theme. That is not a failure of the site — " +
-      "it is a failure of this test's premise, and design.md §4's ink-floor paragraph " +
-      "needs rewriting in the same commit as this assertion.",
+test("dark text levels are briOS's alpha whites", () => {
+  assert.deepEqual(
+    ["primary", "secondary", "tertiary", "quaternary"].map((l) => value(darkBlock, `--text-${l}`)),
+    ["rgb(255 255 255 / 0.9)", "rgb(255 255 255 / 0.7)", "rgb(255 255 255 / 0.5)", "rgb(255 255 255 / 0.32)"],
   );
 });
 
@@ -130,11 +100,10 @@ test("--faint is still below AA, which is why the floor exists", () => {
 
 /**
  * Every surface design.md §4 names, as (file, selector) pairs. The block that
- * follows the selector must declare `var(--muted)`.
+ * follows the selector must declare `var(--text-secondary)`.
  */
 const FLOORS = [
   ["layouts/Base.astro", ".foot__quiet {"],
-  ["styles/global.css", ".crumb {"],
   ["components/ThemeToggle.astro", ".tt {"],
   ["components/ShotActions.astro", ".act {"],
   ["components/ToolList.astro", ".row__more {"],
@@ -150,7 +119,7 @@ const FLOORS = [
   ["styles/chip.css", ".tag__count {"],
 ];
 
-test("every ink-floor surface still declares --muted", () => {
+test("every ink-floor surface still declares --text-secondary", () => {
   for (const [file, selector] of FLOORS) {
     // Comments out first: a brace inside one (`a { color: ... }` quoted in
     // prose) would otherwise end the block slice early.
@@ -159,9 +128,9 @@ test("every ink-floor surface still declares --muted", () => {
     assert.ok(at !== -1, `${file}: selector "${selector}" has moved — update FLOORS and design.md §4 together`);
     const block = source.slice(at, source.indexOf("}", at));
     assert.ok(
-      block.includes("var(--muted)"),
-      `${file} › ${selector.replace(" {", "")} no longer sits on --muted. ` +
-        "It is a control, and interactive ink never sits below --muted (design.md §4, the ink floor).",
+      block.includes("var(--text-secondary)"),
+      `${file} › ${selector.replace(" {", "")} no longer sits on --text-secondary. ` +
+        "It is a control, and controls sit a level above metadata (design.md §4, the ink floor).",
     );
   }
 });

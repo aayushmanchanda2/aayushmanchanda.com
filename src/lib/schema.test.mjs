@@ -43,6 +43,7 @@ import {
   reviewBody,
   serialize,
   siteJsonLd,
+  trailOf,
   toolJsonLd,
 } from "./schema.ts";
 
@@ -604,11 +605,22 @@ test("only a filter page gets a crumb, because only a filter page draws one", ()
       step["item"],
     ]),
     [
-      [1, "Tools", `${ORIGIN}/tools/`],
-      [2, "agent infra", `${ORIGIN}/tools/category/agent-infra/`],
+      [1, "Aayush Manchanda", `${ORIGIN}/`],
+      [2, "Tools", `${ORIGIN}/tools/`],
+      [3, "agent infra", `${ORIGIN}/tools/category/agent-infra/`],
     ],
-    "two steps: the crumb the page prints, then the page itself",
+    "three steps, as the top bar prints them: home, the section, the page",
   );
+
+  assert.deepEqual(
+    trailOf(filter),
+    [
+      { name: "Tools", path: "/tools/" },
+      { name: "agent infra", path: "/tools/category/agent-infra/" },
+    ],
+    "the bar reads the same trail back, minus the home link it always draws",
+  );
+  assert.equal(trailOf(section), null);
 });
 
 // --- tools -----------------------------------------------------------------

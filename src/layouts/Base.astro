@@ -1,6 +1,6 @@
 ---
 /**
- * Base — the site shell: fonts, tokens, both nav surfaces, footer.
+ * Base — the site shell: fonts, tokens, the top bar, footer.
  *
  * Fonts are bundled from npm (@fontsource-variable/*) and served from our own
  * origin. The site loads nothing from a third-party CDN.
@@ -18,16 +18,15 @@ import "../styles/global.css";
 import "../styles/chip.css";
 import "../styles/palette.css";
 
+import Breadcrumbs from "../components/Breadcrumbs.astro";
 import CommandPalette from "../components/CommandPalette.astro";
-import ProximitySidebar from "../components/ProximitySidebar.astro";
 import MobileNav from "../components/MobileNav.astro";
-import SiteMark from "../components/SiteMark.astro";
 import ThemeToggle from "../components/ThemeToggle.astro";
 import XGlyph from "../components/XGlyph.astro";
 import { normalize } from "../lib/links";
 import { markdownVariantFor } from "../lib/markdown";
-import type { JsonLd } from "../lib/schema";
-import { serialize } from "../lib/schema";
+import type { Crumb, JsonLd } from "../lib/schema";
+import { serialize, trailOf } from "../lib/schema";
 import type { NavItem } from "../lib/sections";
 import { getSections } from "../lib/sections";
 import { absolute } from "../lib/site";
@@ -80,6 +79,12 @@ interface Props {
    * whatever the page above it is doing. `lib/wide.test.mjs` holds that scope.
    */
   wide?: boolean;
+  /**
+   * The top bar's trail after home, for a page with no `BreadcrumbList` in
+   * its JSON-LD and no nav section of its own (the footer pages). Everything
+   * else leaves it out and gets the trail worked out below.
+   */
+  trail?: Crumb[];
 }
 
 const {
@@ -142,6 +147,18 @@ const clocks = [
 
 const pathname = Astro.url.pathname;
 const year = new Date().getFullYear();
+
+/**
+ * The top bar's trail, in order of authority: the page's own `BreadcrumbList`
+ * (so the JSON-LD and the visible trail are one list), then an explicit
+ * `trail`, then the nav section this path sits in. Home gets an empty trail.
+ */
+const section = navItems.find(
+  (item) => item.href !== "/" && `${normalize(pathname)}/`.startsWith(`${item.href}/`),
+);
+const trail: Crumb[] = trailOf(jsonLd) ??
+  Astro.props.trail ??
+  (section ? [{ name: section.label, path: section.href }] : []);
 
 /**
  * The canonical URL for this page.
@@ -325,9 +342,24 @@ const markdownVariant = variant === null ? null : absolute(variant);
     */}
     <span class="visually-hidden" aria-live="polite" data-theme-live></span>
 
-    <SiteMark />
-    <ProximitySidebar items={navItems} pathname={pathname} />
-    <MobileNav items={navItems} pathname={pathname} />
+    {/*
+      The top bar: menu, trail, search. Sticky, 56px, the page colour behind
+      it, and no backdrop filter on purpose: a filter would make this the
+      containing block for the menu panel's `position: fixed` and clip it to
+      the bar. A press on its empty stretch scrolls to the top (script below).
+    */}
+    <header class="bar" data-bar>
+      <MobileNav items={navItems} pathname={pathname} />
+      <Breadcrumbs trail={trail} />
+      <button
+        class="bar__search mono press"
+        type="button"
+        data-palette-open
+        data-mnav-inert
+      >
+        Search <kbd data-palette-hint>&#8984;K</kbd>
+      </button>
+    </header>
     <CommandPalette />
 
     <div class="shell" data-mnav-inert>
@@ -445,6 +477,14 @@ const markdownVariant = variant === null ? null : absolute(variant);
       import { startTicker } from "../lib/clock";
 
       startTicker("data-clock");
+
+      // A press on the bar's empty stretch goes back to the top. Controls in
+      // it keep their own job. `html { scroll-behavior }` decides smooth or
+      // instant, so reduced motion is already honoured.
+      document.querySelector("[data-bar]")?.addEventListener("click", (event) => {
+        if ((event.target as Element).closest("a, button")) return;
+        window.scrollTo({ top: 0 });
+      });
     </script>
 
     <style>
@@ -469,23 +509,58 @@ const markdownVariant = variant === null ? null : absolute(variant);
         left: 0;
       }
 
-      .shell {
-        min-height: 100svh;
+      .bar {
+        position: sticky;
+        top: 0;
+        z-index: 30;
         display: flex;
-        flex-direction: column;
-        /* clears the fixed vertical MENU label on mobile */
-        padding-left: calc(var(--page-pad) + 2.5rem);
-        padding-right: var(--page-pad);
-        padding-top: clamp(4.5rem, 14vh, 9rem);
-        padding-bottom: clamp(2.5rem, 6vh, 4rem);
+        align-items: center;
+        gap: 0.25rem;
+        height: var(--bar-h);
+        padding-inline: max(0.5rem, env(safe-area-inset-left))
+          max(0.5rem, env(safe-area-inset-right));
+        background: var(--bg);
       }
 
-      @media (min-width: 900px) {
-        .shell {
-          /* clears the fixed dash rail */
-          padding-left: clamp(17rem, 24vw, 21rem);
-          padding-right: clamp(2rem, 6vw, 5rem);
+      .bar__search {
+        flex-shrink: 0;
+        margin-left: auto;
+        padding: 0.625rem 0.5rem;
+        color: var(--text-secondary);
+        cursor: pointer;
+      }
+
+      .bar__search kbd {
+        font: inherit;
+        font-family: var(--font-mono);
+        margin-left: 0.35rem;
+        padding: 0.1rem 0.35rem;
+        border: 1px solid var(--hairline-strong);
+        border-radius: var(--r-sm);
+      }
+
+      @media (hover: hover) {
+        .bar__search:hover {
+          color: var(--accent);
         }
+      }
+
+      /* A phone's bar is the trail's: search is one press away in the menu. */
+      @media (max-width: 599px) {
+        .bar__search {
+          display: none;
+        }
+      }
+
+      /* One centred column under the bar. */
+      .shell {
+        min-height: calc(100svh - var(--bar-h));
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-inline: var(--page-pad);
+        padding-top: clamp(2.5rem, 8vw, 5rem);
+        padding-bottom: clamp(2.5rem, 6vh, 4rem);
       }
 
       .shell__main {
@@ -498,7 +573,7 @@ const markdownVariant = variant === null ? null : absolute(variant);
          `.foot` below keeps `--page-max` on purpose: the colophon closes every
          page the same way, and a footer that changed width with the content
          above it would read as two different sites. Above 900px only, because
-         below it the shell's own padding already keeps the column under 44rem
+         below it the shell's own padding already keeps the column under 42rem
          and the row this width exists for is not a three-column row yet
          (`LibraryList.astro`). */
       @media (min-width: 900px) {
@@ -539,7 +614,7 @@ const markdownVariant = variant === null ? null : absolute(variant);
 
       .foot__link {
         display: inline-block;
-        color: var(--muted);
+        color: var(--text-secondary);
         text-decoration: none;
       }
 
@@ -563,8 +638,8 @@ const markdownVariant = variant === null ? null : absolute(variant);
         }
       }
 
-      /* The glyph row is a 14px target, so it takes the 40px hit area the rail
-         dashes and the theme toggle take, by the same trick: an absolutely
+      /* The glyph row is a 14px target, so it takes the 40px hit area the
+         theme toggle takes, by the same trick: an absolutely
          positioned `::before`, so a toolbar's worth of height never lands in
          the footer row. The text links beside it are text and stay text —
          design.md §4's stated exception, for the same reason the /sites hint
@@ -594,12 +669,12 @@ const markdownVariant = variant === null ? null : absolute(variant);
         display: flex;
         gap: 0.5rem;
         align-items: baseline;
-        color: var(--faint);
+        color: var(--text-tertiary);
       }
 
       .foot__clock dd {
         margin: 0;
-        color: var(--muted);
+        color: var(--text-secondary);
       }
 
       /* The gap that makes the two halves read as two things rather than as one
@@ -611,7 +686,7 @@ const markdownVariant = variant === null ? null : absolute(variant);
          retunable by opening one file. */
       .foot__meta {
         margin: 2rem 0 0;
-        color: var(--faint);
+        color: var(--text-tertiary);
         display: flex;
         align-items: baseline;
         justify-content: center;
@@ -640,16 +715,15 @@ const markdownVariant = variant === null ? null : absolute(variant);
          line of air against the block of it above. */
       .foot__legal {
         margin: 0.85rem 0 0;
-        color: var(--faint);
+        color: var(--text-tertiary);
       }
 
-      /* Quieter than the social links, but at --muted, never the row's --faint:
-         these are controls, and a control has to clear AA on its own (§4's ink
-         floor — --faint is 2.94:1 on the light theme). The separators and the
-         copyright are the metadata here and keep the faint. */
+      /* Quieter than the social links, but at --text-secondary, never the
+         row's --text-tertiary: these are controls, and controls sit a level
+         above metadata (§4's ink floor). The copyright is metadata. */
       .foot__quiet {
         display: inline-block;
-        color: var(--muted);
+        color: var(--text-secondary);
         text-decoration: none;
       }
 
@@ -667,8 +741,7 @@ const markdownVariant = variant === null ? null : absolute(variant);
       }
 
       @media (max-width: 599px) {
-        /* The column here is 287px — `--page-pad` either side plus the 2.5rem
-           the shell clears for the fixed MENU label — and three things sharing
+        /* The column here is narrow, and three things sharing
            one wrapped row inside it centre as *pairs* rather than individually:
            the clocks came out left of centre because the theme toggle was
            riding beside them.

@@ -10,6 +10,7 @@ import { getCollection } from "astro:content";
 
 import Base from "../../layouts/Base.astro";
 import { listJsonLd, pageUrl } from "../../lib/schema";
+import { formatDay } from "../../lib/date";
 
 const notes = (await getCollection("notes")).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime(),
@@ -53,8 +54,8 @@ const jsonLd = listJsonLd({
           <a class="row press" href={`/notes/${note.id}`}>
             <span class="row__title">{note.data.title}</span>
 
-            <time class="row__date mono tabular-nums" datetime={day(note.data.date)}>
-              {day(note.data.date)}
+            <time class="row__date mono" datetime={day(note.data.date)}>
+              {formatDay(day(note.data.date))}
             </time>
 
             {note.data.type === "scratch" && (
@@ -111,7 +112,7 @@ const jsonLd = listJsonLd({
   }
 
   .row__date {
-    color: var(--faint);
+    color: var(--text-tertiary);
     white-space: nowrap;
   }
 

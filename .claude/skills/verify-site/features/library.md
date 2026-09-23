@@ -12,7 +12,7 @@
 
 ## How to get to it (user POV)
 
-- Library link in the rail, or `/library`.
+- Library in the Menu panel or the top bar trail, or `/library`.
 - Tabs `All`, `Articles`/`Posts`/`Videos` at the top of /library.
 - Domain link or tag chip on any row.
 - A row's title for its detail page.

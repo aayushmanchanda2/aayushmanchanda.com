@@ -1,0 +1,1037 @@
+{
+  "base": "http://localhost:4329/",
+  "label": "vet-225-before",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-22-vet-225-before",
+  "at": "2026-09-23T02:03:51.770Z",
+  "shots": [
+    {
+      "route": "/",
+      "url": "http://localhost:4329/",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "home-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Hey, I’m Aayush.",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "44px",
+            "font-weight": "600",
+            "letter-spacing": "-1.98px",
+            "line-height": "43.12px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4329/tools",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "tools-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Tools",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "44px",
+            "font-weight": "600",
+            "letter-spacing": "-1.98px",
+            "line-height": "43.12px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools/agent-browser",
+      "url": "http://localhost:4329/tools/agent-browser",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "tools_agent_browser-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "agent-browser",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "32px",
+            "font-weight": "600",
+            "letter-spacing": "-1.12px",
+            "line-height": "31.36px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/library",
+      "url": "http://localhost:4329/library",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "library-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Library",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "44px",
+            "font-weight": "600",
+            "letter-spacing": "-1.98px",
+            "line-height": "43.12px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/a-great-cold-email-can-change-your-life",
+      "url": "http://localhost:4329/library/a-great-cold-email-can-change-your-life",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "library_a_great_cold_email_can_change_your_life-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "a great cold email can change your life ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "32px",
+            "font-weight": "600",
+            "letter-spacing": "-1.12px",
+            "line-height": "31.36px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [
+        "platform.twitter.com",
+        "syndication.twitter.com"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes/building-this-site",
+      "url": "http://localhost:4329/notes/building-this-site",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "notes_building_this_site-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Building this site",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "32px",
+            "font-weight": "600",
+            "letter-spacing": "-1.12px",
+            "line-height": "31.36px"
+          }
+        ],
+        ".prose p": [
+          {
+            "text": "I built this site overnight, mostly by t",
+            "color": "rgba(23, 23, 23, 0.75)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.9px"
+          },
+          {
+            "text": "The part I care about is the pipeline. I",
+            "color": "rgba(23, 23, 23, 0.75)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.9px"
+          },
+          {
+            "text": "Verdicts carry a date because opinions g",
+            "color": "rgba(23, 23, 23, 0.75)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.9px"
+          }
+        ],
+        "time": [
+          {
+            "text": "2026-08-26",
+            "color": "rgba(23, 23, 23, 0.45)",
+            "font-size": "13px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "20.8px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/about",
+      "url": "http://localhost:4329/about",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "about-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "About",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "44px",
+            "font-weight": "600",
+            "letter-spacing": "-1.98px",
+            "line-height": "43.12px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/sites",
+      "url": "http://localhost:4329/sites",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "sites-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Sites",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "44px",
+            "font-weight": "600",
+            "letter-spacing": "-1.98px",
+            "line-height": "43.12px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/",
+      "url": "http://localhost:4329/",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "home-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Hey, I’m Aayush.",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "84px",
+            "font-weight": "600",
+            "letter-spacing": "-3.78px",
+            "line-height": "82.32px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4329/tools",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "tools-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Tools",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "84px",
+            "font-weight": "600",
+            "letter-spacing": "-3.78px",
+            "line-height": "82.32px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools/agent-browser",
+      "url": "http://localhost:4329/tools/agent-browser",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "tools_agent_browser-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "agent-browser",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "52px",
+            "font-weight": "600",
+            "letter-spacing": "-1.82px",
+            "line-height": "50.96px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/library",
+      "url": "http://localhost:4329/library",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Library",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "84px",
+            "font-weight": "600",
+            "letter-spacing": "-3.78px",
+            "line-height": "82.32px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/a-great-cold-email-can-change-your-life",
+      "url": "http://localhost:4329/library/a-great-cold-email-can-change-your-life",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library_a_great_cold_email_can_change_your_life-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "a great cold email can change your life ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "52px",
+            "font-weight": "600",
+            "letter-spacing": "-1.82px",
+            "line-height": "50.96px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [
+        "platform.twitter.com",
+        "syndication.twitter.com"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes/building-this-site",
+      "url": "http://localhost:4329/notes/building-this-site",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "notes_building_this_site-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Building this site",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "52px",
+            "font-weight": "600",
+            "letter-spacing": "-1.82px",
+            "line-height": "50.96px"
+          }
+        ],
+        ".prose p": [
+          {
+            "text": "I built this site overnight, mostly by t",
+            "color": "rgba(23, 23, 23, 0.75)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.9px"
+          },
+          {
+            "text": "The part I care about is the pipeline. I",
+            "color": "rgba(23, 23, 23, 0.75)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.9px"
+          },
+          {
+            "text": "Verdicts carry a date because opinions g",
+            "color": "rgba(23, 23, 23, 0.75)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.9px"
+          }
+        ],
+        "time": [
+          {
+            "text": "2026-08-26",
+            "color": "rgba(23, 23, 23, 0.45)",
+            "font-size": "13px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "20.8px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/about",
+      "url": "http://localhost:4329/about",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "about-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "About",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "84px",
+            "font-weight": "600",
+            "letter-spacing": "-3.78px",
+            "line-height": "82.32px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/sites",
+      "url": "http://localhost:4329/sites",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "sites-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Sites",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "84px",
+            "font-weight": "600",
+            "letter-spacing": "-3.78px",
+            "line-height": "82.32px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/",
+      "url": "http://localhost:4329/",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "home-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(9, 9, 11)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Hey, I’m Aayush.",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "44px",
+            "font-weight": "600",
+            "letter-spacing": "-1.98px",
+            "line-height": "43.12px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4329/tools",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "tools-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(9, 9, 11)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Tools",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "44px",
+            "font-weight": "600",
+            "letter-spacing": "-1.98px",
+            "line-height": "43.12px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools/agent-browser",
+      "url": "http://localhost:4329/tools/agent-browser",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "tools_agent_browser-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(9, 9, 11)",
+      "styles": {
+        "h1": [
+          {
+            "text": "agent-browser",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "32px",
+            "font-weight": "600",
+            "letter-spacing": "-1.12px",
+            "line-height": "31.36px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/library",
+      "url": "http://localhost:4329/library",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "library-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(9, 9, 11)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Library",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "44px",
+            "font-weight": "600",
+            "letter-spacing": "-1.98px",
+            "line-height": "43.12px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/a-great-cold-email-can-change-your-life",
+      "url": "http://localhost:4329/library/a-great-cold-email-can-change-your-life",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "library_a_great_cold_email_can_change_your_life-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(9, 9, 11)",
+      "styles": {
+        "h1": [
+          {
+            "text": "a great cold email can change your life ",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "32px",
+            "font-weight": "600",
+            "letter-spacing": "-1.12px",
+            "line-height": "31.36px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [
+        "platform.twitter.com",
+        "syndication.twitter.com"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes/building-this-site",
+      "url": "http://localhost:4329/notes/building-this-site",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "notes_building_this_site-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(9, 9, 11)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Building this site",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "32px",
+            "font-weight": "600",
+            "letter-spacing": "-1.12px",
+            "line-height": "31.36px"
+          }
+        ],
+        ".prose p": [
+          {
+            "text": "I built this site overnight, mostly by t",
+            "color": "rgba(250, 250, 250, 0.75)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.9px"
+          },
+          {
+            "text": "The part I care about is the pipeline. I",
+            "color": "rgba(250, 250, 250, 0.75)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.9px"
+          },
+          {
+            "text": "Verdicts carry a date because opinions g",
+            "color": "rgba(250, 250, 250, 0.75)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.9px"
+          }
+        ],
+        "time": [
+          {
+            "text": "2026-08-26",
+            "color": "rgba(250, 250, 250, 0.45)",
+            "font-size": "13px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "20.8px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/about",
+      "url": "http://localhost:4329/about",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "about-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(9, 9, 11)",
+      "styles": {
+        "h1": [
+          {
+            "text": "About",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "44px",
+            "font-weight": "600",
+            "letter-spacing": "-1.98px",
+            "line-height": "43.12px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/sites",
+      "url": "http://localhost:4329/sites",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "sites-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(9, 9, 11)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Sites",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "44px",
+            "font-weight": "600",
+            "letter-spacing": "-1.98px",
+            "line-height": "43.12px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/",
+      "url": "http://localhost:4329/",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "home-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(9, 9, 11)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Hey, I’m Aayush.",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "84px",
+            "font-weight": "600",
+            "letter-spacing": "-3.78px",
+            "line-height": "82.32px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4329/tools",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "tools-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(9, 9, 11)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Tools",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "84px",
+            "font-weight": "600",
+            "letter-spacing": "-3.78px",
+            "line-height": "82.32px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools/agent-browser",
+      "url": "http://localhost:4329/tools/agent-browser",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "tools_agent_browser-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(9, 9, 11)",
+      "styles": {
+        "h1": [
+          {
+            "text": "agent-browser",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "52px",
+            "font-weight": "600",
+            "letter-spacing": "-1.82px",
+            "line-height": "50.96px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/library",
+      "url": "http://localhost:4329/library",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(9, 9, 11)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Library",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "84px",
+            "font-weight": "600",
+            "letter-spacing": "-3.78px",
+            "line-height": "82.32px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/a-great-cold-email-can-change-your-life",
+      "url": "http://localhost:4329/library/a-great-cold-email-can-change-your-life",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library_a_great_cold_email_can_change_your_life-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(9, 9, 11)",
+      "styles": {
+        "h1": [
+          {
+            "text": "a great cold email can change your life ",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "52px",
+            "font-weight": "600",
+            "letter-spacing": "-1.82px",
+            "line-height": "50.96px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [
+        "platform.twitter.com",
+        "syndication.twitter.com"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes/building-this-site",
+      "url": "http://localhost:4329/notes/building-this-site",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "notes_building_this_site-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(9, 9, 11)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Building this site",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "52px",
+            "font-weight": "600",
+            "letter-spacing": "-1.82px",
+            "line-height": "50.96px"
+          }
+        ],
+        ".prose p": [
+          {
+            "text": "I built this site overnight, mostly by t",
+            "color": "rgba(250, 250, 250, 0.75)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.9px"
+          },
+          {
+            "text": "The part I care about is the pipeline. I",
+            "color": "rgba(250, 250, 250, 0.75)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.9px"
+          },
+          {
+            "text": "Verdicts carry a date because opinions g",
+            "color": "rgba(250, 250, 250, 0.75)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.9px"
+          }
+        ],
+        "time": [
+          {
+            "text": "2026-08-26",
+            "color": "rgba(250, 250, 250, 0.45)",
+            "font-size": "13px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "20.8px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/about",
+      "url": "http://localhost:4329/about",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "about-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(9, 9, 11)",
+      "styles": {
+        "h1": [
+          {
+            "text": "About",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "84px",
+            "font-weight": "600",
+            "letter-spacing": "-3.78px",
+            "line-height": "82.32px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/sites",
+      "url": "http://localhost:4329/sites",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "sites-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(9, 9, 11)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Sites",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "84px",
+            "font-weight": "600",
+            "letter-spacing": "-3.78px",
+            "line-height": "82.32px"
+          }
+        ],
+        ".prose p": [],
+        "time": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}

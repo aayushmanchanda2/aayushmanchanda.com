@@ -41,8 +41,9 @@
   --chip-line: 0.2;
 
   display: inline-block;
-  padding: 0.3rem 0.45rem 0.28rem;
-  border-radius: var(--r-sm);
+  padding: 0.3rem 0.5rem 0.28rem;
+  /* A pill, briOS's shape for a status (VET-225). */
+  border-radius: var(--r-pill);
   font-family: var(--font-mono);
   font-size: 0.6875rem;
   font-weight: 500;
@@ -109,6 +110,11 @@
 .chip--link:focus-visible {
   --chip-tint: 0.2;
   --chip-line: 0.45;
+}
+
+/* The focus ring takes the element's radius; the global one is --r-sm. */
+.chip--link:focus-visible {
+  border-radius: var(--r-pill);
 }
 
 /* --------------------------------------------------------------------------
@@ -198,7 +204,7 @@
 
    ibelick/ui-skills' TopicTag (`src/ui/topic-tag.astro`), one step down: that
    is `h-8 px-2.5 rounded-lg border text-sm font-medium tracking-normal` and a
-   `--faint` count at `gap-1.5`; this is 28px rather than 32 because a library
+   `--text-tertiary` count at `gap-1.5`; this is 28px rather than 32 because a library
    row is denser than a topic index. Aayush's call (2026-09-22): the dotted
    seven-hue outline and the drawn mark inside it read as decoration, and the
    mark table was a hand edit every time Raindrop sent a new word — it held the
@@ -227,7 +233,7 @@
   letter-spacing: normal;
   line-height: 1;
   white-space: nowrap;
-  color: var(--fg);
+  color: var(--text-primary);
   text-decoration: none;
   transition-property: background-color, border-color;
   transition-duration: var(--dur-fast);
@@ -236,9 +242,9 @@
 
 /* The entry count on a filter-row chip, TopicTag's `text-content-muted
    tabular-nums`: fixed-width so a row of counts does not jitter, and at
-   --muted because it is text inside a control (design.md §4, the ink floor). */
+   --text-secondary because it is text inside a control (design.md §4, the ink floor). */
 .tag__count {
-  color: var(--muted);
+  color: var(--text-secondary);
   font-variant-numeric: tabular-nums;
 }
 
@@ -268,17 +274,17 @@
 /* The tag you are standing on: the border closes to ink and the word takes the
    accent, the same colour §1 gives `aria-current` on a tab. */
 .tag[aria-current="page"] {
-  border-color: var(--fg);
+  border-color: var(--text-primary);
   color: var(--accent);
 }
 
 /* "Show all N" on the filter row (`TagFilters.astro`): a tag's box with the
-   border dropped and the word at `--muted`, so it reads as a control on the row
+   border dropped and the word at `--text-secondary`, so it reads as a control on the row
    rather than one more subject. Same 28px, same hit area, same hover fill. */
 .tag--more {
   border-color: transparent;
   background: none;
-  color: var(--muted);
+  color: var(--text-secondary);
   cursor: pointer;
 }
 
@@ -377,7 +383,7 @@
   }
 
   /* Hue and saturation are the light theme's; only the lightness moves, and it
-     moves to whatever holds 7:1 against #09090b. */
+     moves to whatever holds 7:1 against #000000. */
   :root:not([data-theme="light"]) [data-hue] {
     --hue-l: 65.5%;
   }
@@ -454,7 +460,7 @@
 }
 
 /* Hue and saturation are the light theme's; only the lightness moves, and it
-   moves to whatever holds 7:1 against #09090b. */
+   moves to whatever holds 7:1 against #000000. */
 :root[data-theme="dark"] [data-hue] {
   --hue-l: 65.5%;
 }
