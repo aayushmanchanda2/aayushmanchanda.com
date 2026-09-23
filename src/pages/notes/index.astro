@@ -3,13 +3,14 @@
  * /notes — briOS's /writing: the titles, grouped by year, newest first.
  *
  * The masthead is the section scale every other index uses (`.page-title`);
- * the year is a small label over each group, and the rows are `NoteList`, the
+ * the year is a small label over each group, and the rows are `EntryList`, the
  * same list "Read next" draws under a note.
  */
 import { getCollection } from "astro:content";
 
 import Base from "../../layouts/Base.astro";
-import NoteList from "../../components/NoteList.astro";
+import EntryList from "../../components/EntryList.astro";
+import { noteEntry } from "../../lib/entry-list";
 import { listJsonLd, pageUrl } from "../../lib/schema";
 
 const notes = (await getCollection("notes")).sort(
@@ -47,7 +48,7 @@ const jsonLd = listJsonLd({
       [...years].map(([year, group]) => (
         <section aria-labelledby={`y${year}`}>
           <h2 class="year mono" id={`y${year}`}>{year}</h2>
-          <NoteList notes={group} />
+          <EntryList entries={group.map(noteEntry)} />
         </section>
       ))
     }

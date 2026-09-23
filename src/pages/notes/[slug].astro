@@ -19,9 +19,10 @@ import { getCollection, render } from "astro:content";
 import Base from "../../layouts/Base.astro";
 import EntryLink from "../../components/EntryLink.astro";
 import ImageFrame from "../../components/ImageFrame.astro";
-import NoteList from "../../components/NoteList.astro";
+import EntryList from "../../components/EntryList.astro";
 import { noteJsonLd } from "../../lib/schema";
 import { formatDay } from "../../lib/date";
+import { noteEntry } from "../../lib/entry-list";
 import { readNext } from "../../lib/read-next";
 
 export const getStaticPaths = (async () => {
@@ -94,8 +95,8 @@ const jsonLd = noteJsonLd({
   {
     next.length > 0 && (
       <nav class="next" aria-labelledby="read-next">
-        <h2 class="next__head accent-bar" id="read-next">Read next</h2>
-        <NoteList notes={next} />
+        <h2 class="accent-bar" id="read-next">Read next</h2>
+        <EntryList entries={next.map(noteEntry)} />
       </nav>
     )
   }
@@ -142,14 +143,5 @@ const jsonLd = noteJsonLd({
 
   .next {
     margin-top: clamp(3rem, 8vw, 5rem);
-  }
-
-  .next__head {
-    margin-bottom: 0.5rem;
-    color: var(--text-tertiary);
-    font-size: 1rem;
-    font-weight: 400;
-    letter-spacing: normal;
-    line-height: 1.6;
   }
 </style>

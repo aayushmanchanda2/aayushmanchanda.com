@@ -588,8 +588,18 @@ ol {
   }
 }
 
-/* A 20×4px accent pill above a small section heading, briOS's "Read next"
-   marker. Put the class on the heading; the pill is drawn, not markup. */
+/* A small section heading under a 20×4px accent pill, briOS's "Read next"
+   marker: "Read next" under a note and "Latest" on home. Put the class on the
+   heading; the pill is drawn, not markup. */
+.accent-bar {
+  margin-bottom: 0.5rem;
+  color: var(--text-tertiary);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1.6;
+}
+
 .accent-bar::before {
   content: "";
   display: block;
