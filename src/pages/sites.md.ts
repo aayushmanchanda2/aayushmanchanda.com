@@ -66,6 +66,10 @@ export const GET: APIRoute = () => {
         "The palette is read off the pixels of that screenshot, most-used colour first. It is measured, not chosen, so it is a description of the capture rather than the designer's own swatches.",
       ),
       section(
+        "About the pages",
+        "Every row is one saved page. Pages saved from the same domain share one card on /sites and are listed together on each of their pages; each still has its own /sites/<slug>.",
+      ),
+      section(
         "About the collections",
         "Collections are groupings I made by hand. They overlap: a site can be in several of them, or in none, and the column is empty for most entries.",
         "Each one is browsable at /sites/collection/<slug>, using the slug exactly as it appears in the column.",

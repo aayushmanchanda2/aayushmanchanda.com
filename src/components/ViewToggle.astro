@@ -1,0 +1,124 @@
+---
+/**
+ * ViewToggle — the List / Grid pair on /tools and /sites.
+ *
+ * Two `aria-pressed` buttons. The group ships `hidden` and the pre-paint pass
+ * (`lib/view-toggle.ts › prepaint`), inlined straight after it, unhides it and
+ * writes the stored view onto `<html>` before the list below is parsed, so a
+ * reload paints the stored layout on its first frame and a reader without
+ * scripting never sees a control that does nothing.
+ */
+import { prepaint, type ViewConfig } from "../lib/view-toggle";
+
+interface Props {
+  config: ViewConfig;
+  /** The group's accessible name, e.g. "Tools layout". */
+  label: string;
+}
+
+const { config, label } = Astro.props;
+
+/**
+ * Sentence case on the buttons; the stored value stays the lowercase key.
+ * `data-view-set` below is `lib/view-toggle.ts › BUTTON_ATTRIBUTE`.
+ */
+const LABELS: Record<string, string> = { list: "List", grid: "Grid" };
+---
+
+<div
+  class="views"
+  role="group"
+  aria-label={label}
+  data-view-attribute={config.attribute}
+  data-view-key={config.storageKey}
+  hidden
+>
+  {
+    config.views.map((view) => (
+      <button
+        class="views__btn mono"
+        type="button"
+        data-view-set={view}
+        aria-pressed={view === config.defaultView ? "true" : "false"}
+      >
+        {LABELS[view] ?? view}
+      </button>
+    ))
+  }
+</div>
+<script is:inline set:html={prepaint(config)} />
+
+<style>
+  .views {
+    display: flex;
+    margin-left: auto;
+    padding: 2px;
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-md);
+  }
+
+  /* `display: flex` above outranks the UA's `[hidden] { display: none }`. */
+  .views[hidden] {
+    display: none;
+  }
+
+  /* 26px drawn inside the 32px frame, 40px pressed (44px under a finger): the
+     `::after` reaches past each edge, the offset trick `.tag::after` uses for
+     its hit floor. */
+  .views__btn {
+    position: relative;
+    min-height: 26px;
+    padding-inline: 0.75rem;
+    border-radius: var(--r-sm);
+    color: var(--text-secondary);
+    transition-property: color, background-color, box-shadow;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .views__btn::after {
+    content: "";
+    position: absolute;
+    inset: -7px 0;
+  }
+
+  @media (pointer: coarse) {
+    .views__btn::after {
+      inset: -9px 0;
+    }
+  }
+
+  .views__btn:hover {
+    color: var(--text-primary);
+  }
+
+  /* Fill, ink and an inset ring: the fill alone is a faint tint that
+     disappears on a dim screen, and the ring keeps the pressed one legible. */
+  .views__btn[aria-pressed="true"] {
+    background: var(--hairline);
+    box-shadow: inset 0 0 0 1px var(--hairline-strong);
+    color: var(--text-primary);
+  }
+</style>
+
+<script>
+  import { BUTTON_ATTRIBUTE } from "../lib/view-toggle";
+
+  for (const group of document.querySelectorAll<HTMLElement>("[data-view-attribute]")) {
+    const buttons = group.querySelectorAll<HTMLButtonElement>(`[${BUTTON_ATTRIBUTE}]`);
+    for (const button of buttons) {
+      button.addEventListener("click", () => {
+        const view = button.getAttribute(BUTTON_ATTRIBUTE) ?? "";
+        document.documentElement.setAttribute(group.dataset.viewAttribute ?? "", view);
+        for (const other of buttons) other.setAttribute("aria-pressed", String(other === button));
+        // Same guard as the pre-paint read: blocked storage still gets the
+        // layout for the length of the page, just not across a reload.
+        try {
+          localStorage.setItem(group.dataset.viewKey ?? "", view);
+        } catch {
+          /* not persisted, still applied */
+        }
+      });
+    }
+  }
+</script>

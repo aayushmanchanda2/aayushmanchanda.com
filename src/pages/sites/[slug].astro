@@ -1,33 +1,19 @@
 ---
 /**
- * One site: the whole page of it, in a window you scroll.
+ * One site, as its own page: `SiteDetail.astro` plus the hint row.
  *
- * The gallery card shows the masthead, which answers "which site is this". This
- * page has to answer "how is it built", and that lives below the fold of the
- * site being shown — so the capture is full-page and the frame is a viewport
- * onto it rather than a thumbnail of it.
- *
- * Domain is a link, not a label — the save.design anatomy, where every field
- * value is also a way back out into the rest of the collection. The rest of
- * that anatomy is the two things a page like this is actually used for:
- * taking something away from it (the design panel, the palette row when the
- * panel names fewer than three colours, the shot buttons) and moving
- * to the next one without going back to the gallery (the hint row at the foot,
- * which is both the keyboard legend and the links themselves).
+ * The /sites gallery opens the same content in a slide-over panel and pushes
+ * this URL, so a reload, a shared link or a reader without scripting lands
+ * here and gets the whole page (VET-242). The panel fetches this page and
+ * lifts the `article` out; nothing but the hint row is page-only.
  */
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 
 import Base from "../../layouts/Base.astro";
-import CollectionChips from "../../components/CollectionChips.astro";
 import EntryNav from "../../components/EntryNav.astro";
-import PaletteRow from "../../components/PaletteRow.astro";
-import SiteFoundations from "../../components/SiteFoundations.astro";
-import ShotActions from "../../components/ShotActions.astro";
-import ShotFrame from "../../components/ShotFrame.astro";
-import VoiceBlocks from "../../components/VoiceBlocks.astro";
+import SiteDetail from "../../components/SiteDetail.astro";
 import { siteJsonLd } from "../../lib/schema";
-import { domainSlug, sites } from "../../lib/sites";
-import { formatDay } from "../../lib/date";
+import { sites } from "../../lib/sites";
 
 /**
  * Neighbours are resolved here rather than in the browser: the build already
@@ -75,92 +61,7 @@ const jsonLd = siteJsonLd(site);
   jsonLd={jsonLd}
 >
 
-  <header>
-    <h1 class="page-title page-title--entry">{site.title}</h1>
-  </header>
-
-  <figure class="shot">
-    <ShotFrame src={site.shot} alt={`Full page of ${site.title}`} scroll eager />
-
-    {/*
-      The caption IS the bar. `figcaption` has to be the first or last child of
-      its `figure`, so wrapping it and the buttons in a div together would be
-      invalid; putting the buttons inside it keeps the markup honest and the
-      two things on one line.
-    */}
-    <figcaption class="shot__bar">
-      <span class="shot__caption mono">Full page. Scroll inside the frame</span>
-      <ShotActions src={site.shot} title={site.title} slug={site.slug} />
-    </figcaption>
-  </figure>
-
-  {/*
-    Under the picture and above the table, because that is the order the
-    question comes in: here is the site, here is what I thought of it, here is
-    the metadata if you want it. Renders nothing at all when the entry carries
-    neither sentence, which is most of them.
-  */}
-  <VoiceBlocks like={site.like} dislike={site.dislike} />
-
-  <dl class="facts">
-    <div class="fact">
-      <dt class="mono">Domain</dt>
-      <dd>
-        <a href={`/sites/domain/${domainSlug(site.domain)}`}>{site.domain}</a>
-      </dd>
-    </div>
-
-    {/*
-      Straight after the domain, because the two rows do the same job: both are
-      a way out of this page and back into the rest of the gallery. Absent
-      entirely when the site is in no collections — an empty row would be a
-      field admitting it has no value, and most entries have none.
-    */}
-    {
-      site.collections.length > 0 && (
-        <div class="fact fact--collections">
-          <dt class="mono">Collections</dt>
-          <dd>
-            <CollectionChips collections={site.collections} />
-          </dd>
-        </div>
-      )
-    }
-
-    <div class="fact">
-      <dt class="mono">Saved</dt>
-      <dd><time datetime={site.saved_date}>{formatDay(site.saved_date)}</time></dd>
-    </div>
-
-    {/*
-      The pixel palette unless the Design section under this table names three
-      or more colours. Past that, six unnamed swatches would be the same colours
-      said twice; under it, a thin read (type and spacing, a colour or two)
-      would leave the page with less colour than the pixels show.
-    */}
-    {
-      (site.design?.colors.length ?? 0) < 3 && (
-        <div class="fact fact--palette">
-          <dt class="mono">Palette</dt>
-          <dd>
-            <PaletteRow palette={site.palette} title={site.title} />
-          </dd>
-        </div>
-      )
-    }
-
-    {/* Last, because it is the way out. */}
-    <div class="fact">
-      <dt class="mono">Link</dt>
-      <dd>
-        <a class="ext" href={site.url} rel="noopener nofollow" target="_blank">
-          Visit {site.domain}
-        </a>
-      </dd>
-    </div>
-  </dl>
-
-  {site.design && <SiteFoundations design={site.design} title={site.title} domain={site.domain} />}
+  <SiteDetail site={site} />
 
   {/*
     The hint row is the keyboard legend and the links themselves — EntryNav
@@ -174,42 +75,3 @@ const jsonLd = siteJsonLd(site);
     next={next && { href: next.href, aria: `Next site: ${next.title}` }}
   />
 </Base>
-
-<style>
-  .shot {
-    margin: 2.5rem 0 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .shot__bar {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.25rem 1rem;
-  }
-
-  .shot__caption {
-    color: var(--text-tertiary);
-  }
-
-  /* The field table itself (`.facts`, `.fact`) is in global.css — /tools ends
-     in the same one. What is left here is the one row that is not a line of
-     text, and the foot of the page. */
-
-  /* A swatch row is a block of colour, not a line of type: baseline alignment
-     would drop the label onto the hex captions three rows down, so both columns
-     start at the top instead. A chip has the same problem for the same reason —
-     its baseline sits inside a tinted box, so the label would ride low against
-     it, and lower still once the row wraps. */
-  .fact--palette dt,
-  .fact--palette dd,
-  .fact--collections dt,
-  .fact--collections dd {
-    align-self: start;
-  }
-
-  /* The hint row at the foot — markup, CSS and keys — is EntryNav.astro. */
-</style>

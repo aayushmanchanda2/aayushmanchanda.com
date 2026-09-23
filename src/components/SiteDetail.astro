@@ -1,0 +1,214 @@
+---
+/**
+ * SiteDetail — one saved site: its screens, the whole page of it in a window
+ * you scroll, what he thought, the facts, and the design tokens.
+ *
+ * Rendered by `pages/sites/[slug].astro`, and fetched from that page by the
+ * /sites slide-over panel (`SitePanel.astro`), which lifts this `article` out
+ * by `data-site-detail`. One markup for both, so the panel and the page cannot
+ * drift. Behaviour is `lib/site-detail.ts`, wired here on load and by the
+ * panel on each insert.
+ *
+ * Domain is a link, not a label — the save.design anatomy, where every field
+ * value is also a way back out into the rest of the collection.
+ */
+import type { Site } from "../lib/sites";
+import { domainSlug, screensOf } from "../lib/sites";
+import { formatDay } from "../lib/date";
+import CollectionChips from "./CollectionChips.astro";
+import PaletteRow from "./PaletteRow.astro";
+import ShotActions from "./ShotActions.astro";
+import ShotFrame from "./ShotFrame.astro";
+import SiteFoundations from "./SiteFoundations.astro";
+import VoiceBlocks from "./VoiceBlocks.astro";
+
+interface Props {
+  site: Site;
+}
+
+const { site } = Astro.props;
+
+/** Every saved page of this domain when there is more than one (`lib/screens.ts`). */
+const screens = screensOf(site.slug);
+---
+
+<article class="detail" data-site-detail data-slug={site.slug}>
+  <header>
+    <h1 class="page-title page-title--entry" data-detail-title>{site.title}</h1>
+  </header>
+
+  {
+    screens.length > 0 && (
+      <nav class="screens" aria-label={`Saved pages of ${site.domain}`}>
+        <ul class="screens__row">
+          {screens.map((screen) => (
+            <li>
+              <a
+                class="screen"
+                href={`/sites/${screen.site.slug}`}
+                aria-current={screen.site.slug === site.slug ? "page" : undefined}
+                data-site-screen
+              >
+                <img class="screen__shot" src={screen.site.shot} alt="" loading="lazy" decoding="async" />
+                <span class="screen__label">{screen.label}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    )
+  }
+
+  <figure class="shot">
+    <ShotFrame src={site.shot} alt={`Full page of ${site.title}`} eager />
+
+    {/*
+      The caption IS the bar. `figcaption` has to be the first or last child of
+      its `figure`, so the buttons go inside it to keep both on one line.
+    */}
+    <figcaption class="shot__bar">
+      <span class="shot__caption mono">Full page. Scroll inside the frame</span>
+      <ShotActions src={site.shot} title={site.title} slug={site.slug} />
+    </figcaption>
+  </figure>
+
+  {/* Here is the site, here is what I thought of it, here is the metadata. */}
+  <VoiceBlocks like={site.like} dislike={site.dislike} />
+
+  <dl class="facts">
+    <div class="fact">
+      <dt class="mono">Domain</dt>
+      <dd>
+        <a href={`/sites/domain/${domainSlug(site.domain)}`}>{site.domain}</a>
+      </dd>
+    </div>
+
+    {/* Absent entirely when the site is in no collections, which is most. */}
+    {
+      site.collections.length > 0 && (
+        <div class="fact fact--collections">
+          <dt class="mono">Collections</dt>
+          <dd>
+            <CollectionChips collections={site.collections} />
+          </dd>
+        </div>
+      )
+    }
+
+    <div class="fact">
+      <dt class="mono">Saved</dt>
+      <dd><time datetime={site.saved_date}>{formatDay(site.saved_date)}</time></dd>
+    </div>
+
+    {/*
+      The pixel palette unless the Design section names three or more colours:
+      past that, six unnamed swatches would say the same colours twice.
+    */}
+    {
+      (site.design?.colors.length ?? 0) < 3 && (
+        <div class="fact fact--palette">
+          <dt class="mono">Palette</dt>
+          <dd>
+            <PaletteRow palette={site.palette} title={site.title} />
+          </dd>
+        </div>
+      )
+    }
+
+    {/* Last, because it is the way out. */}
+    <div class="fact">
+      <dt class="mono">Link</dt>
+      <dd>
+        <a class="ext" href={site.url} rel="noopener nofollow" target="_blank">
+          Visit {site.domain}
+        </a>
+      </dd>
+    </div>
+  </dl>
+
+  {site.design && <SiteFoundations design={site.design} title={site.title} domain={site.domain} />}
+</article>
+
+<style>
+  /* briOS's thumbnails at a strip's size: 40:21, top of the page, 8rem wide. */
+  .screens {
+    margin-top: 1.5rem;
+  }
+
+  .screens__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 0;
+  }
+
+  .screen {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    width: 8rem;
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    text-decoration: none;
+  }
+
+  .screen__shot {
+    display: block;
+    width: 100%;
+    aspect-ratio: 40 / 21;
+    object-fit: cover;
+    object-position: top;
+    border: 1px solid var(--hairline);
+    background: var(--surface-3);
+  }
+
+  /* Hover is instant (design.md §4). */
+  .screen:hover {
+    color: var(--text-primary);
+  }
+
+  .screen[aria-current="page"] {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .screen[aria-current="page"] .screen__shot {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+
+  .shot {
+    margin: 2.5rem 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .shot__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+  }
+
+  .shot__caption {
+    color: var(--text-tertiary);
+  }
+
+  /* The field table itself (`.facts`, `.fact`) is in global.css. A swatch row
+     and a chip row are blocks, not lines of type, so both columns start at the
+     top instead of on a baseline. */
+  .fact--palette dt,
+  .fact--palette dd,
+  .fact--collections dt,
+  .fact--collections dd {
+    align-self: start;
+  }
+</style>
+
+<script>
+  import { enhanceSiteDetail } from "../lib/site-detail";
+
+  enhanceSiteDetail(document);
+</script>

@@ -1,7 +1,7 @@
 /**
  * tools-table.ts — what the /tools table sorts and filters on, in one module.
  *
- * Like `tools-view.ts`: no imports and no DOM, so `tools-table.test.mjs` runs
+ * Like `view-toggle.ts`: no imports and no DOM, so `tools-table.test.mjs` runs
  * it under `node --experimental-strip-types`, and the scripts in
  * `ToolList.astro` (sorting) and `pages/tools.astro` (filters) only wire it up.
  *

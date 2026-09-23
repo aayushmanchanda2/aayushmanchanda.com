@@ -27,6 +27,7 @@ import type { SiteDesign } from "./design-md";
 import { parseDesign } from "./design-md";
 import type { Fail } from "./parse";
 import { SLUG, readers, routeSlug } from "./parse";
+import { groupByDomain, type Screen, type SiteGroup } from "./screens";
 
 import rawSites from "../data/sites.json";
 
@@ -426,3 +427,12 @@ export const domains: DomainGroup[] = (() => {
 
   return [...groups.values()];
 })();
+
+/** The /sites gallery: one card per domain (`lib/screens.ts`). */
+export const siteGroups: SiteGroup[] = groupByDomain(sites);
+
+/** The screens of the group `slug` belongs to, or [] when it stands alone. */
+export function screensOf(slug: string): Screen[] {
+  const group = siteGroups.find((g) => g.screens.some((screen) => screen.site.slug === slug));
+  return group && group.screens.length > 1 ? group.screens : [];
+}

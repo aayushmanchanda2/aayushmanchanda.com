@@ -1,8 +1,12 @@
 ---
 import Base from "../layouts/Base.astro";
 import SiteGrid from "../components/SiteGrid.astro";
+import SiteList from "../components/SiteList.astro";
+import SitePanel from "../components/SitePanel.astro";
+import ViewToggle from "../components/ViewToggle.astro";
 import { listJsonLd, pageUrl } from "../lib/schema";
-import { collectionGroups, sites } from "../lib/sites";
+import { collectionGroups, siteGroups, sites } from "../lib/sites";
+import { SITES_VIEW } from "../lib/view-toggle";
 
 /**
  * The line renders at two collections, not at one.
@@ -17,9 +21,9 @@ import { collectionGroups, sites } from "../lib/sites";
 const showCollections = collectionGroups.length >= 2;
 
 /**
- * The gallery, in the order the grid renders it — which is the order
- * `sites/[slug].astro` walks with the arrow keys, so the list a machine reads
- * and the ring a keyboard walks are the same sequence.
+ * Every entry page, in the order `sites/[slug].astro` walks with the arrow
+ * keys. The grid folds several pages of one domain into one card
+ * (`lib/screens.ts`); a machine still gets every page.
  */
 const jsonLd = listJsonLd({
   name: "Sites",
@@ -44,36 +48,42 @@ const jsonLd = listJsonLd({
       saved it, top to bottom. Open one to scroll the whole page.
     </p>
 
-    {/*
-      A line of text, and not the tab row /library uses either. Two reasons, and
-      the second is the one that settles it. A control sitting over a wall of
-      screenshots competes with the one thing this page is for, so the
-      collections get the label voice the crumb and the keyboard hints already
-      use: present, findable, quiet enough that the pictures still go first. And
-      a tab row draws a partition. Kinds are one, because every entry has exactly
-      one and the tabs add up to the list; collections are not, because a site
-      can be in three of them or in none, so tabs here would claim a shape the
-      data does not have.
-    */}
-    {
-      showCollections && (
-        <nav class="collections mono" aria-label="Filter sites by collection">
-          <span class="collections__label">Collections</span>
-          <ul class="collections__row">
-            {collectionGroups.map((group) => (
-              <li>
-                <a href={`/sites/collection/${group.slug}`}>{group.label}</a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      )
-    }
+    <div class="controls">
+      {/*
+        A line of text, and not the tab row /library uses either. Two reasons, and
+        the second is the one that settles it. A control sitting over a wall of
+        screenshots competes with the one thing this page is for, so the
+        collections get the label voice the crumb and the keyboard hints already
+        use: present, findable, quiet enough that the pictures still go first. And
+        a tab row draws a partition. Kinds are one, because every entry has exactly
+        one and the tabs add up to the list; collections are not, because a site
+        can be in three of them or in none, so tabs here would claim a shape the
+        data does not have.
+      */}
+      {
+        showCollections && (
+          <nav class="collections mono" aria-label="Filter sites by collection">
+            <span class="collections__label">Collections</span>
+            <ul class="collections__row">
+              {collectionGroups.map((group) => (
+                <li>
+                  <a href={`/sites/collection/${group.slug}`}>{group.label}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        )
+      }
+      <ViewToggle config={SITES_VIEW} label="Sites layout" />
+    </div>
   </header>
 
   <div class="body">
-    <SiteGrid sites={sites} />
+    <SiteGrid groups={siteGroups} />
+    <SiteList groups={siteGroups} />
   </div>
+
+  <SitePanel />
 </Base>
 
 <style>
@@ -81,13 +91,22 @@ const jsonLd = listJsonLd({
     margin-top: var(--gap-masthead);
   }
 
+  /* Collections on the left, the layout toggle on the right, 16px below the
+     standfirst (design.md §2). */
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1rem;
+    margin-top: 1rem;
+  }
+
   .collections {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
-    /* 8px inside the group, 16px below the standfirst (design.md §2) */
+    /* 8px inside the group */
     gap: 0.5rem;
-    margin-top: 1rem;
     color: var(--text-tertiary);
   }
 
