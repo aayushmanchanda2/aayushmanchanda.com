@@ -107,7 +107,7 @@ const ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" st
   </svg>`;
 
 /**
- * The five sections, in the order `src/lib/sections.ts › CATALOGUE` lists them.
+ * The sections, in the order `src/lib/sections.ts › CATALOGUE` lists them.
  *
  * A hand-kept copy, and it has to be: this script runs under plain node, while
  * `sections.ts` imports `astro:content` and only resolves inside a build. So
@@ -121,7 +121,7 @@ const ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" st
  * five. The header's "re-run after changing the section list" was the only
  * thing holding it, and an instruction is not a mechanism.
  */
-const SECTIONS = ["tools", "sites", "library", "notes", "experiments"];
+const SECTIONS = ["tools", "sites", "library", "notes", "experiments", "computer"];
 
 /** Only the latin subset is needed: the card renders two fixed ASCII strings. */
 const FONTS = {
@@ -184,11 +184,13 @@ async function html() {
     margin: 40px 0 28px;
   }
 
+  /* 26px, not 30: six sections have to fit one line of the card. */
   .sections {
     font-family: "Geist Mono", monospace;
-    font-size: 30px;
+    font-size: 26px;
     font-weight: 500;
     letter-spacing: 0.02em;
+    white-space: nowrap;
     color: ${FAINT};
   }
 

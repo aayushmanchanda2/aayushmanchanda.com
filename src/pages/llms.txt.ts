@@ -56,8 +56,8 @@ export const GET: APIRoute = async () => {
   const body = `# Aayush Manchanda
 
 > Aayush Manchanda's site: software he installed and ran, websites saved for
-> their design, links he read and watched, short notes, and running
-> experiments.
+> their design, links he read and watched, short notes, running experiments,
+> and tips on how he works with his computer.
 
 Aayush co-founded Orbis, an AI healthcare company, runs Vetted, an AI
 consulting practice, and builds things with AI from Canada.
@@ -89,7 +89,8 @@ Come here when you need any of the following.
   reader, posts as cards, videos as posters). A saved row isn't an
   endorsement; a digest is his verdict.
 - /notes is short writing. /experiments is what's running, including what he
-  killed and when.
+  killed and when. /computer holds tips on how he works with his computer and
+  AI agents, each with the exact steps.
 
 Not here: product documentation, an API, or anything about Orbis or Vetted as
 companies.
@@ -116,7 +117,7 @@ A block labelled as a draft was written by his pipeline and isn't his verdict.
 ## Pages
 
 - [Home](${absolute(PAGES.home.html)}) (markdown: ${absolute(PAGES.home.md)}): who he is and
-  an index of the five sections.
+  an index of the sections.
 ${sectionList}
 - [About](${absolute("/about")}): who Aayush is, his work, and what the
   sections hold.

@@ -9,6 +9,8 @@
  * with an optional thumbnail after it (`lib/entry-list.ts › noteEntry`). A list
  * whose entries carry `meta` stacks an 18px title over the section and day, at
  * every width: side by side went ragged when a long title wrapped anyway.
+ * A /computer tip row puts its emoji in a tile on the left and its summary
+ * under the title, briOS's /computer index.
  */
 import { formatDay } from "../lib/date";
 import type { Entry } from "../lib/entry-list";
@@ -25,8 +27,10 @@ const stacked = entries.some((entry) => entry.meta !== undefined);
   {
     entries.map((entry) => (
       <li>
-        <a class="row press" href={entry.href}>
+        <a class:list={["row press", entry.tip && "row--tip"]} href={entry.href}>
+          {entry.tip && <span class="row__emoji" aria-hidden="true">{entry.tip.emoji}</span>}
           <span class="row__title">{entry.title}</span>
+          {entry.tip && <span class="row__summary">{entry.tip.summary}</span>}
           {entry.meta && (
             <span class="row__meta">
               <span>{entry.meta.label}</span>
@@ -124,6 +128,43 @@ const stacked = entries.some((entry) => entry.meta !== undefined);
   .row__meta {
     font-size: 0.875rem;
     color: var(--text-tertiary);
+  }
+
+  /* Tip rows: a 40px emoji tile spanning the title and the summary, top
+     aligned so a title that wraps at 390 keeps the tile beside its first line. */
+  .row--tip {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: 0.125rem 0.875rem;
+    align-items: start;
+    padding-block: 0.5rem;
+  }
+
+  .row__emoji {
+    grid-row: span 2;
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: var(--r-md);
+    background: var(--surface-3);
+    outline: 1px solid var(--outline);
+    outline-offset: -1px;
+    font-size: 1.25rem;
+    line-height: 1;
+  }
+
+  .row--tip .row__title {
+    font-size: 1.125rem;
+    line-height: 1.4;
+    text-wrap: pretty;
+  }
+
+  .row__summary {
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    color: var(--text-secondary);
+    text-wrap: pretty;
   }
 
   .row__meta > * + *::before {
