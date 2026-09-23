@@ -52,6 +52,8 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
     </select>
     <p class="count tabular-nums" aria-live="polite" data-filter-count>{count(tools.length)}</p>
     <ViewToggle config={TOOLS_VIEW} label="Tools layout" />
+    {/* Grid only, until the first jiggle or 6 seconds of grid (`lib/home-screen.ts`). */}
+    <p class="jiggle-hint" data-jiggle-hint hidden>Long-press an icon</p>
   </div>
 
   <ToolList tools={tools} />
@@ -85,6 +87,16 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
     margin-left: 0.25rem;
     color: var(--text-tertiary);
     font-size: 0.875rem;
+  }
+
+  .jiggle-hint {
+    color: var(--text-tertiary);
+    font-size: 0.75rem;
+  }
+
+  .jiggle-hint[hidden],
+  :global(html:not([data-tools-view="grid"])) .jiggle-hint {
+    display: none;
   }
 
   .empty {
