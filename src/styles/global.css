@@ -127,7 +127,9 @@
   /* The reading column. Index pages drop the cap with Base's `full` prop
      (`.shell__main--full`); the footer keeps it everywhere. */
   --page-max: 42rem;
-  --page-pad: clamp(1rem, 5vw, 3rem);
+  /* 1.5rem floor: at a phone the reading pages' text starts where the index
+     pages' does (`Base.astro › .shell--full`), not 4.5px left of it. */
+  --page-pad: clamp(1.5rem, 5vw, 3rem);
   /* The sticky top bar in `layouts/Base.astro`. */
   --bar-h: 3.5rem;
   /* The stamp (`styles/frame.css`, VET-262): `--mat-w` is the mat showing
