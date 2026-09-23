@@ -98,11 +98,11 @@ test("the facade is reached from the entry's own page, and nowhere else", () => 
   assert.ok(!/chrome/.test(code(read(FACADE))), "the facade grew a second surface's switch back");
 });
 
-test("only an entry carrying a video gets a poster or a facade", () => {
+test("only an entry carrying a video gets a poster or a facade; a playlist gets a placeholder tile", () => {
   assert.match(
     code(read(VIEWS)),
-    /entry is LibraryEntry & \{ video: Video \}/,
-    "the Videos view no longer filters out an entry with no video object. There would be no still to show.",
+    /\{entry\.video \? \(\s*<img class="vtile__thumb[^]*?\) : \(\s*<span class="vtile__thumb vtile__ph/,
+    "the Videos view no longer gates the poster on a video object, or dropped the placeholder for one with none",
   );
   assert.match(
     code(read(FACADE)),
