@@ -52,15 +52,12 @@ const form = newsletterForm(NEWSLETTER_ACTION);
       </h2>
 
       <p class="news__line">
-        New tools ship faster than anyone can test them. I test them anyway, on
-        real work at my own companies, and send you the short list: what
-        survived, what didn't, and why. Plain language, only when there's
-        something worth sending.
+        Which tools survived real work and which didn't. Sent only when
+        there's something worth sending.
       </p>
 
       <p class="news__done" role="status" tabindex="-1" hidden>
-        You're in. Buttondown just emailed you a confirmation link. One click
-        there and it's done.
+        You're in. Buttondown has emailed you a confirmation link.
       </p>
 
       <form class="news__form" action={form.action} method={form.method}>
@@ -81,11 +78,6 @@ const form = newsletterForm(NEWSLETTER_ACTION);
           Subscribe
         </button>
       </form>
-
-      <p class="news__fine">
-        Unsubscribe at the bottom of every issue. Buttondown runs the list;
-        nobody else sees it.
-      </p>
     </section>
   )
 }
@@ -225,13 +217,5 @@ const form = newsletterForm(NEWSLETTER_ACTION);
 
   .news__submit:hover {
     color: var(--accent);
-  }
-
-  .news__fine {
-    margin-top: 0.85rem;
-    max-width: 52ch;
-    font-size: 0.8125rem;
-    line-height: 1.55;
-    color: var(--text-secondary);
   }
 </style>
