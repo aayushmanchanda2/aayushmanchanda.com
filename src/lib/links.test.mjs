@@ -135,7 +135,7 @@ test("a tool with no product site gets its own initial, not a GitHub avatar", ()
 
 test("the initial is the first letter or digit, whatever leads the name", () => {
   /**
-   * `.mono` uppercases at render, so the stored letter keeps the name's case.
+   * `.row__mark--initial` capitalises at render, so the stored letter keeps the name's case.
    *
    * @param {string} name
    */

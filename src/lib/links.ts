@@ -163,7 +163,7 @@ export type Mark =
   | { kind: "logo"; src: string }
   | { kind: "initial"; letter: string };
 
-/** The first character worth printing, uppercased by `.mono` at render time. */
+/** The first character worth printing, capitalised by `ToolList.astro › .row__mark--initial` at render time. */
 const FIRST_GLYPH = /[\p{L}\p{N}]/u;
 
 /**

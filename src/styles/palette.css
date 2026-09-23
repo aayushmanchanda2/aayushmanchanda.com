@@ -159,6 +159,8 @@
    one radius this site has — no fourth value enters the scale for this. */
 .palette__esc {
   flex: none;
+  /* a key cap is a literal, so it keeps mono (design.md §2) */
+  font-family: var(--font-mono);
   color: var(--faint);
   background: var(--bg);
   border: 1px solid var(--hairline);
@@ -246,9 +248,6 @@
 .palette__row-where {
   flex: none;
   color: var(--faint);
-  /* undo the uppercasing `.mono` applies — a path is not a label */
-  text-transform: none;
-  letter-spacing: 0.02em;
 }
 
 .palette__row[data-active] .palette__row-where {

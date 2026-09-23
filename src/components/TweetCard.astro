@@ -197,7 +197,7 @@ const body = clipText(post.text, POST_CARD_MAX);
         rel="noopener nofollow"
         target="_blank"
       >
-        source<span class="visually-hidden">: the post by {post.author}</span>
+        Source<span class="visually-hidden">: the post by {post.author}</span>
       </a>
     </blockquote>
   </div>
@@ -212,7 +212,7 @@ const body = clipText(post.text, POST_CARD_MAX);
     !standalone && (
       <p class="card__notes">
         <a class="card__link mono" href={href}>
-          notes<span class="visually-hidden"> on {entry.title}</span>
+          Notes<span class="visually-hidden"> on {entry.title}</span>
         </a>
       </p>
     )
@@ -305,7 +305,7 @@ const body = clipText(post.text, POST_CARD_MAX);
      the embed is up, X's frame is the only frame. */
   .card--solo {
     max-width: 550px;
-    margin: clamp(2.5rem, 8vh, 4rem) 0 0;
+    margin: 2.5rem 0 0;
     border: 0;
   }
 

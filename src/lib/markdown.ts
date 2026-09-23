@@ -156,7 +156,7 @@ export interface Voice {
 /** One voice field: what it is called, and whether its value is machine text. */
 export interface VoiceField {
   key: keyof Voice;
-  /** Title case. `.mono` does the shouting in CSS; markdown prints it as-is. */
+  /** Sentence case, printed as written on the page and in markdown alike. */
   label: string;
   /**
    * The value is a command to paste or a bare URL, not prose. The HTML sets it

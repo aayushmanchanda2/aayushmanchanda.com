@@ -78,8 +78,9 @@ const hints: Hint[] = [
 </nav>
 
 <style>
+  /* A section of its own at the foot of the page: 2.5rem (design.md §2). */
   .hints {
-    margin-top: clamp(2rem, 6vh, 3rem);
+    margin-top: 2.5rem;
   }
 
   .hints__row {
@@ -88,16 +89,14 @@ const hints: Hint[] = [
     align-items: center;
     /* Matches the gap inside an item, so the separator sits centred between two
        hints rather than welded to the end of the one before it. */
-    gap: 0 0.75rem;
+    gap: 0 0.5rem;
     margin: 0;
-    font-family: var(--font-mono);
+    /* The label voice (`global.css › .mono`), stated rather than borrowed
+       because the row is the component's own. The words are written lowercase
+       in `hints` on purpose: each hint opens on a key cap, and the key is
+       printed `esc` on the keyboard the reader is looking at. */
+    font-size: 0.8125rem;
     font-weight: 500;
-    font-size: 0.6875rem;
-    letter-spacing: 0.06em;
-    /* Lowercase, against the site's uppercase mono label voice. These are key
-       caps, and the key is printed `esc` on the keyboard the reader is looking
-       at — shouting it would be naming a different key. */
-    text-transform: lowercase;
     /* --muted, not --faint: every word in this row is a link a reader is meant
        to press (design.md §4, the ink floor). */
     color: var(--muted);
@@ -106,7 +105,7 @@ const hints: Hint[] = [
   .hints__item {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
   }
 
   /* The separator sits in the list item, outside the anchor, so it is never
@@ -137,8 +136,10 @@ const hints: Hint[] = [
     color: var(--accent);
   }
 
+  /* Mono: a key cap is a literal, like a hex or a path (design.md §2). */
   .hint__key {
     font: inherit;
+    font-family: var(--font-mono);
     color: var(--muted);
   }
 </style>

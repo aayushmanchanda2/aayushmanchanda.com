@@ -66,7 +66,7 @@ const { draft } = Astro.props;
 
   {draft.why && <p class="draft__body">{draft.why}</p>}
 
-  <p class="draft__date mono tabular-nums">Drafted {draft.drafted}</p>
+  <p class="draft__date mono">Drafted <span class="tabular-nums">{draft.drafted}</span></p>
 </section>
 
 <style>
@@ -76,7 +76,7 @@ const { draft } = Astro.props;
      border on a page of prose is the quiet one and this box exists to be
      noticed. */
   .draft {
-    margin-top: clamp(2.5rem, 8vh, 4rem);
+    margin-top: 2.5rem;
     padding: clamp(1rem, 3vw, 1.35rem);
     border: 1px solid var(--hairline-strong);
     border-radius: 0;
@@ -87,8 +87,6 @@ const { draft } = Astro.props;
      word is to stop a reader taking the box as his verdict. */
   .draft__label {
     color: var(--fg);
-    font-weight: 500;
-    letter-spacing: 0.1em;
     line-height: 1.6;
   }
 
@@ -131,8 +129,6 @@ const { draft } = Astro.props;
   .draft__date {
     margin-top: 1rem;
     color: var(--faint);
-    text-transform: none;
-    letter-spacing: 0.02em;
   }
 
   @media (max-width: 599px) {

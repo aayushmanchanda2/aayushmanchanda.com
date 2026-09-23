@@ -140,9 +140,9 @@ const showAll = `Show all ${groups.length}`;
 <style>
   /* The gap to the tab row above, owned here rather than by the pages that
      render this. `--gap-masthead` is the lesson: one number written out in
-     three scoped blocks is a number nobody can retune. It is tighter than the
-     1.25rem under it because the tabs and these chips are both filters and the
-     list below is the thing being filtered.
+     three scoped blocks is a number nobody can retune. 16px, the same as the
+     gap under it: the tabs, the chips and the list are three groups, and §2's
+     rhythm puts groups 1rem apart.
 
      A custom property with a default, because on a tag page there is no tab row
      to sit under — a tag cuts across all three kinds — and the row is the first
@@ -152,7 +152,7 @@ const showAll = `Show all ${groups.length}`;
      scoping; a `:global` override would be the other way to do it and it is
      the one design.md §5 keeps telling us not to reach for. */
   .filters {
-    margin-top: var(--filters-gap, 0.9rem);
+    margin-top: var(--filters-gap, 1rem);
   }
 
   /* Wraps rather than scrolls, the call `.tabs__row` and `.foot__meta` both

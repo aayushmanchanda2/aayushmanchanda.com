@@ -300,8 +300,8 @@ const jsonLd = designJsonLd();
     <section>
       <h2 class="sheet__head mono">Type</h2>
       <p>
-        Geist Sans for prose, Geist Mono for labels, display and metadata. Both
-        are variable fonts bundled into the build and served from this domain, so
+        Geist Sans for prose and labels, Geist Mono for data: dates, counts,
+        clocks, hex values and code. Both are variable fonts bundled into the build and served from this domain, so
         reading a page here does not tell a font CDN that you were reading it.
       </p>
 
@@ -334,16 +334,24 @@ const jsonLd = designJsonLd();
         </div>
         <div class="spec__row">
           <dt class="code">mono</dt>
-          <dd><div class="mono">Section head</div></dd>
+          <dd><div class="mono spec__label">Cliff notes</div></dd>
+        </div>
+        <div class="spec__row">
+          <dt class="code">mono .tabular-nums</dt>
+          <dd>
+            <div class="mono spec__label">Saved <span class="tabular-nums">2026-09-22</span></div>
+          </dd>
         </div>
       </dl>
 
       <p>
         The masthead at the top of this page is the mono variant and the line
-        under it is the standfirst, so two of those five are already in front of
-        you at full size, in the elements they normally ship as. The mono voice
-        is 11px, weight 500, wide tracking, uppercase, and it is the site's label
-        voice: section heads, field labels, dates, footer items, key caps.
+        under it is the standfirst, so two of those rows are already in front of
+        you at full size, in the elements they normally ship as. The class
+        called <span class="code">mono</span> is the label voice, and it is not
+        mono any more: 13px sans, weight 500, normal tracking, sentence case,
+        for section heads, field labels, crumbs, tabs and footer items. The big
+        titles keep their size and everything under them stays quiet.
       </p>
       <p>
         Two rules are global and are not in the table because nothing sets them:
@@ -352,12 +360,36 @@ const jsonLd = designJsonLd();
         redeclares them.
       </p>
       <p>
-        Four places undo the uppercase and each says why in place. A file path is
-        not a label. A hex is a value you are about to paste, so it has to read
-        exactly as it will arrive. A key cap is printed <span class="code"
-        >esc</span> on the keyboard you are looking at, so shouting it would name
-        a different key. And a token name on this page is code for the same
-        reason a hex is.
+        Mono is for what you might retype: a date, a count, a clock, a hex, a
+        key cap like <span class="code">esc</span>, a token name. Inside a label
+        the figure switches to mono by itself, because every figure already
+        carries tabular numbers.
+      </p>
+
+      <p>
+        Text comes in three levels, and each piece of text is one of them.
+      </p>
+
+      <dl class="spec">
+        <div class="spec__row">
+          <dt class="code">--fg</dt>
+          <dd><div class="level level--fg">Titles, names, links</div></dd>
+        </div>
+        <div class="spec__row">
+          <dt class="code">--muted</dt>
+          <dd><div class="level level--muted">Prose, notes, and every control</div></dd>
+        </div>
+        <div class="spec__row">
+          <dt class="code">--faint</dt>
+          <dd><div class="level level--faint">Labels, dates, counts</div></dd>
+        </div>
+      </dl>
+
+      <p>
+        Spacing runs on three numbers: 8px inside a group, 16px between groups,
+        40px between sections. On an entry page the title, its metadata and its
+        one-line summary sit 16px apart, and the notes under them start a new
+        section.
       </p>
 
       <p>
@@ -650,8 +682,6 @@ const jsonLd = designJsonLd();
 
   .sheet__head {
     color: var(--faint);
-    font-weight: 500;
-    letter-spacing: 0.1em;
     /* the head is the label; the paragraph under it carries the reading size */
     line-height: 1.6;
   }
@@ -677,11 +707,9 @@ const jsonLd = designJsonLd();
     }
   }
 
-  /* Code, not a label. The mono voice is uppercase with wide tracking, which is
-     right for a field label and wrong for a token name, a property or a key cap
-     — those read exactly as they are written or they name a different thing.
-     The same call `palette.css › .palette__row-where` and `PaletteRow.astro ›
-     .swatch__hex` already make. */
+  /* Code, not a label. A token name, a property or a key cap reads exactly as
+     it is written or it names a different thing, so it is mono at the label's
+     13px, the same call `PaletteRow.astro › .swatch__hex` makes for a hex. */
   .code {
     font-family: var(--font-mono);
     font-weight: 500;
@@ -727,6 +755,29 @@ const jsonLd = designJsonLd();
     .spec__row {
       grid-template-columns: minmax(0, 1fr);
     }
+  }
+
+  /* A label specimen at the ink labels ship at: `--faint`, the meta level. */
+  .spec__label {
+    color: var(--faint);
+  }
+
+  /* The three text levels, each at the size it most often ships at. */
+  .level--fg {
+    font-size: 1.0625rem;
+    font-weight: 500;
+    color: var(--fg);
+  }
+
+  .level--muted {
+    font-size: 1rem;
+    color: var(--muted);
+  }
+
+  .level--faint {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--faint);
   }
 
   /* --- chips ------------------------------------------------------------ */

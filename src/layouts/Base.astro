@@ -412,12 +412,12 @@ const markdownVariant = variant === null ? null : absolute(variant);
                 footer is where this site already keeps its housekeeping. The
                 key cap is corrected to Ctrl off macOS by `lib/palette.ts`. */}
             {/* `mono` sits on the button itself rather than being inherited
-                from the list, which is what every other mono button on the site
-                does and is not a style preference: the UA stylesheet sets
-                `text-transform: none` and `letter-spacing: normal` on form
-                controls, so a button inside a `.mono` container silently drops
-                out of the label voice. This one had — "Search" was the only
-                item in the colophon not shouting like its four neighbours. */}
+                from the list, which is what every other label-voice button on
+                the site does and is not a style preference: `button` resets
+                `font` to inherit but the UA stylesheet still owns a control's
+                other text properties, so a button inside a `.mono` container
+                can drop out of the label voice. This one did once — "Search"
+                was the only item in the colophon not matching its neighbours. */}
             <button
               class="foot__quiet foot__search mono press"
               type="button"
@@ -433,8 +433,9 @@ const markdownVariant = variant === null ? null : absolute(variant);
         </ul>
 
         {/* Its own line, and his name on it. The year is `tabular-nums` like
-            every other digit that changes in place. */}
-        <p class="foot__legal mono tabular-nums">&copy; {year} Aayush Manchanda</p>
+            every other digit that changes in place, which also sets it in mono
+            inside the label voice; the name stays a name. */}
+        <p class="foot__legal mono">&copy; <span class="tabular-nums">{year}</span> Aayush Manchanda</p>
       </footer>
     </div>
 
@@ -656,8 +657,10 @@ const markdownVariant = variant === null ? null : absolute(variant);
         cursor: pointer;
       }
 
+      /* Mono: a key cap is a literal (design.md §2). */
       .foot__search kbd {
         font: inherit;
+        font-family: var(--font-mono);
         margin-left: 0.35rem;
         padding: 0.1rem 0.35rem;
         border: 1px solid var(--hairline);

@@ -50,27 +50,25 @@ const { digest } = Astro.props;
 </div>
 
 <style>
-  /* Measured against VoiceBlocks, which is the other "mono label over muted
+  /* Measured against VoiceBlocks, which is the other "label over muted
      prose" surface on an entry page: same gaps, same 62ch, same label voice.
      Two blocks that read as siblings must not be two typographic systems. */
   .digest {
-    margin-top: clamp(2.5rem, 8vh, 4rem);
+    margin-top: 2.5rem;
     display: flex;
     flex-direction: column;
-    gap: clamp(1.5rem, 4vw, 2rem);
+    gap: 1rem;
     max-width: 62ch;
   }
 
   .digest__label {
     color: var(--faint);
-    font-weight: 500;
-    letter-spacing: 0.1em;
     /* the label is metadata; the text under it carries the reading size */
     line-height: 1.6;
   }
 
   .digest__body {
-    margin-top: 0.4rem;
+    margin-top: 0.5rem;
     font-size: 1rem;
     line-height: 1.7;
     color: var(--muted);
@@ -80,7 +78,7 @@ const { digest } = Astro.props;
      bullet is what says "this is what it holds", against the paragraphs below
      that are him talking. */
   .digest__bullets {
-    margin-top: 0.4rem;
+    margin-top: 0.5rem;
     padding-left: 1.1rem;
     list-style: disc;
     display: flex;

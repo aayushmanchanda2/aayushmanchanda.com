@@ -111,7 +111,7 @@ const { post } = entry;
 
 <style>
   .post {
-    margin-top: clamp(2.5rem, 8vh, 4rem);
+    margin-top: 2.5rem;
   }
 
   /* The digest's label voice (`DigestBlocks.astro › .digest__label`), but it
@@ -124,8 +124,6 @@ const { post } = entry;
     width: fit-content;
     padding-block: 0.7rem;
     color: var(--muted);
-    font-weight: 500;
-    letter-spacing: 0.1em;
     line-height: 1.6;
     cursor: pointer;
     transition-property: color;
@@ -200,8 +198,8 @@ const { post } = entry;
     /* 1.25rem before, when the head was a 48px circle and needed the air to
        clear it. The head is two lines of small type now, and it is this
        paragraph's byline rather than a block above it, so it closes up towards
-       the 0.4rem every other block on this page puts between its label and its
-       body without going all the way there — those labels are one line of 11px
+       the 0.5rem every other block on this page puts between its label and its
+       body without going all the way there — those labels are one line of 13px
        and this is a name over a date. */
     margin-top: 0.85rem;
     max-width: 65ch;

@@ -3,7 +3,10 @@ import Base from "../layouts/Base.astro";
 import ToolList from "../components/ToolList.astro";
 import { listJsonLd, pageUrl } from "../lib/schema";
 import { tools } from "../lib/tools";
-import { PREPAINT, VIEWS } from "../lib/tools-view";
+import { PREPAINT, VIEWS, type View } from "../lib/tools-view";
+
+/** Sentence case on the buttons; the stored value stays the lowercase key. */
+const VIEW_LABELS: Record<View, string> = { list: "List", grid: "Grid" };
 
 /** Every row on the page, pointing where the row points: its details page. */
 const jsonLd = listJsonLd({
@@ -46,7 +49,7 @@ const jsonLd = listJsonLd({
             data-tools-view-set={view}
             aria-pressed={view === "list" ? "true" : "false"}
           >
-            {view}
+            {VIEW_LABELS[view]}
           </button>
         ))
       }

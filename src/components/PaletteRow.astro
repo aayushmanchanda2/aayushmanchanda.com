@@ -101,9 +101,8 @@ const { palette, title } = Astro.props;
   }
 
   .swatch__hex {
-    /* Not the `.mono` utility: that voice is uppercase with wide tracking, which
-       is right for a field label and wrong for a value you are about to paste.
-       A hex is a code — it should read exactly as it will arrive. */
+    /* Not the `.mono` utility: that is the sans label voice, and a hex is a
+       value you are about to paste. A code reads exactly as it will arrive. */
     font-family: var(--font-mono);
     font-weight: 500;
     font-size: 0.625rem;
