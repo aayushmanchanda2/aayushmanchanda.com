@@ -154,7 +154,7 @@ const hints: Hint[] = [
 </style>
 
 <script>
-  import { ownsKey } from "../lib/keys";
+  import { inField, ownsKey } from "../lib/keys";
   import { PANE_ATTRIBUTE } from "../lib/library-pane";
 
   /**
@@ -190,18 +190,9 @@ const hints: Hint[] = [
       const role = KEYS[event.key];
       if (!role) return;
 
-      // Typing beats navigating. There is no field on this page today, but a
-      // bare arrow key belongs to whatever is taking text.
+      // Typing beats navigating: a bare arrow key belongs to whatever takes text.
+      if (inField(event)) return;
       const target = event.target;
-      if (
-        target instanceof HTMLElement &&
-        (target.isContentEditable ||
-          target instanceof HTMLInputElement ||
-          target instanceof HTMLTextAreaElement ||
-          target instanceof HTMLSelectElement)
-      ) {
-        return;
-      }
 
       // A bare letter only counts inside the list pane (WCAG 2.1.4). On /sites,
       // which has no pane, j and k are never ours.

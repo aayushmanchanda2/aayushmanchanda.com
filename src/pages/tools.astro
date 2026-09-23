@@ -1,6 +1,8 @@
 ---
 import Mark from "../components/Mark.astro";
 import Base from "../layouts/Base.astro";
+import DetailPanel from "../components/DetailPanel.astro";
+import ToolDetail from "../components/ToolDetail.astro";
 import ToolGrid from "../components/ToolGrid.astro";
 import ToolList from "../components/ToolList.astro";
 import { listJsonLd, pageUrl } from "../lib/schema";
@@ -18,6 +20,10 @@ const jsonLd = listJsonLd({
   })),
 });
 
+// Imported for its styles, never rendered here: the panel fetches the entry
+// (`DetailPanel.astro`). An unused import is elided, hence the `void`.
+void ToolDetail;
+
 const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
 ---
 
@@ -31,10 +37,11 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
   <p class="standfirst">Software I installed and ran, with a dated verdict on each.</p>
 
   {/*
-    Filters, count and layout in one row directly above the table. The
+    Filters, layout and count in one row directly above the table. The
     filters are native selects synced to `?verdict=&category=` (script below).
     The layout toggle is `ViewToggle.astro`, which also carries the pre-paint
-    pass, so it sits before the table.
+    pass, so it sits before the table. All of it sits at the left, inside the
+    520px the open panel leaves the list, so it stays usable beside it.
   */}
   <div class="controls">
     <label class="visually-hidden" for="filter-verdict">Verdict</label>
@@ -47,8 +54,8 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
       <option value="">All categories</option>
       {categories.map((group) => <option value={group.slug}>{group.category}</option>)}
     </select>
-    <p class="count tabular-nums" aria-live="polite" data-filter-count>{count(tools.length)}</p>
     <ViewToggle config={TOOLS_VIEW} label="Tools layout" />
+    <p class="count tabular-nums" aria-live="polite" data-filter-count>{count(tools.length)}</p>
     {/* Grid only, until the first jiggle or 6 seconds of grid (`lib/home-screen.ts`). */}
     <p class="jiggle-hint" data-jiggle-hint hidden>Long-press an icon</p>
   </div>
@@ -56,6 +63,7 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
   <ToolList tools={tools} />
   <ToolGrid tools={tools} />
   <p class="empty" data-filter-empty hidden>No tools match both filters. <a href="/tools">Show all</a></p>
+  <DetailPanel base="/tools" listWidth="min(520px, 45vw)" />
 </Base>
 
 <style>
@@ -64,9 +72,17 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
     flex-wrap: wrap;
     align-items: center;
     gap: 0.5rem;
-    /* tight under the standfirst, so the table's header starts near 300px
+    /* tight under the standfirst, so the table's header starts near 320px
        at 1280 with the title and its line stacked like every other index */
     margin-top: 0.75rem;
+    /* 16px to the table's header or the grid's roof (design.md §2, between
+       groups): the selects used to sit on the header's top edge (R5-2). */
+    margin-bottom: 1rem;
+  }
+
+  /* ViewToggle pushes itself right on /sites; here the panel would cover it. */
+  .controls > :global(.views) {
+    margin-left: 0;
   }
 
   .count {
@@ -110,6 +126,7 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
 </style>
 
 <script>
+  import { initDetailPanel } from "../lib/detail-panel";
   import { filterSearch, matches, readFilters, type Filters } from "../lib/tools-table";
 
   /* --- filters: the URL is the state ------------------------------------- */
@@ -152,4 +169,6 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
     window.addEventListener("popstate", fromUrl);
     fromUrl();
   }
+
+  initDetailPanel();
 </script>

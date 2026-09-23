@@ -11,12 +11,13 @@
 - `tools-filter-category` /tools/category/<slug>: table without the Category column.
 - `tools-filter-verdict` /tools/verdict/<verdict>: table without the Verdict column.
 - `tools-marks` `.app-icon`: an `<img src="/icons/<slug>.webp">`, or `.app-icon__letter` where there is none.
+- `tools-panel` on /tools a row or tile (`a[data-panel-open]`) opens `[data-detail-panel][data-open]` (`DetailPanel.astro`), URL `/tools/<slug>`; filters and the toggle stay usable beside it. Scripted proof: `qa/evidence/2026-09-23-r5-2/check.mjs`.
 - `tools-preview` rows and tiles carry `data-preview` (`/previews/<slug>.webp`, empty for the icon-only card) and `data-preview-name|domain|description|note`. The shared card is `.preview-card`, built on first hover; open is `[data-open]`, icon-only is `[data-no-image]`, flipped is `[data-side="top"]`.
 
 ## How to get to it (user POV)
 
 - Tools in the Menu panel or the top bar trail, or open `/tools` directly.
-- Pick a Verdict or Category in the selects above the table; press a column header to sort; press `List` or `Grid` at the right of the same row.
+- Pick a Verdict or Category in the selects above the table; press a column header to sort; press `List` or `Grid` after the selects.
 - From a tool detail page, the verdict chip (`/tools/verdict/<verdict>`) or category link (`/tools/category/<slug>`).
 
 ## Driving it with shoot.mjs

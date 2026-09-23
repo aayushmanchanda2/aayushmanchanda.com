@@ -6,7 +6,8 @@
  * focus in the grid to start it, Escape or the Done pill to stop. Clicks still
  * open the tool.
  *
- * Opening an icon names it `app-open` and lets the browser navigate, so the
+ * A grid tile opens the slide-over (`lib/detail-panel.ts`, R5-2). Opening a
+ * Dock icon names it `app-open` and lets the browser navigate, so the
  * cross-document View Transition in `tools/[slug].astro` grows it into the
  * page. Every other navigation off /tools skips the transition in `pageswap`.
  * A browser without one gets a 160ms scale and fade, then the navigation.
@@ -158,6 +159,8 @@ export function initHomeScreen(): void {
       event.preventDefault();
       return;
     }
+    // A tile is the panel's (`lib/detail-panel.ts`): no zoom, no navigation.
+    if (link.hasAttribute("data-panel-open")) return;
     const icon = link.querySelector<HTMLElement>(".app-icon");
     const modified = event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey;
     if (!icon || modified || event.defaultPrevented || reducedMotion()) return;

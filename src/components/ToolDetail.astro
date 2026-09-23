@@ -1,0 +1,234 @@
+---
+/**
+ * ToolDetail — one tool, in the swipe.md shape: a strip of metadata up top,
+ * the opinion in the middle, and the source at the foot.
+ *
+ * Rendered by `pages/tools/[slug].astro`, and fetched from that page by the
+ * /tools slide-over (`DetailPanel.astro`), which lifts this `article` out by
+ * `data-detail`. One markup for both, so the panel and the page cannot drift.
+ *
+ * This page used to end in the `.facts` table that /sites still ends in, and
+ * the two pages are not the same page. A site entry has rows worth tabulating —
+ * a palette, a set of collections, a picture — so a label column earns its
+ * keep there. A tool has four facts, three of them one word long, and setting
+ * them as a table put a 7rem label column and four hairlines around about
+ * twelve characters of content, then pushed the part a reader came for below
+ * all of it.
+ *
+ * So the same four facts are still here and still linked; they are just
+ * arranged as the reference arranges them. Category and verdict stay links
+ * rather than labels — the save.design anatomy, where every field value is also
+ * a way back out into the rest of the collection — and the URL becomes the
+ * Source line at the bottom, which is where a reader looks for it after
+ * reading rather than before.
+ */
+import EntryLink from "./EntryLink.astro";
+import VerdictBadge from "./VerdictBadge.astro";
+import VoiceBlocks from "./VoiceBlocks.astro";
+import AppIcon from "./AppIcon.astro";
+import { assetFor } from "../lib/assets";
+import { linkLabel, markFor } from "../lib/links";
+import { previewAttributes } from "../lib/preview-card";
+import { categorySlug, type Tool } from "../lib/tools";
+import { formatDay } from "../lib/date";
+
+interface Props {
+  tool: Tool;
+}
+
+const { tool } = Astro.props;
+
+/** The Source line: the product's site first, then the repository, each named by what it is. */
+const repoLabel = tool.repo_moved ? "GitHub (moved)" : "GitHub";
+
+/* Only a picture, never the initial (`letter={false}`). The initial is how a
+   /tools row tells twenty tools apart; here the name is already set at 3rem
+   directly above it, so a letter in a box would repeat what the masthead said. */
+const mark = markFor(tool);
+const hasIcon = mark.logo !== null || mark.icon !== null;
+// The hover card on the way out, only with a picture (else it repeats the page).
+// The file is of the product's own site, so GitHub gets it only as the sole link.
+const shot = assetFor("previews", tool.slug);
+const outCard = (href: string) =>
+  shot === null ? {} : previewAttributes({ image: shot, name: tool.name, domain: linkLabel(href) });
+---
+
+<article data-detail data-slug={tool.slug}>
+  <header>
+    <h1 class="page-title page-title--entry" data-detail-title>{tool.name}</h1>
+    {tool.description && <p class="dek">{tool.description}</p>}
+
+    {/*
+      A `ul`, so three facts are three items to anything reading the page out
+      loud rather than one run-on line with dots in it. The dots are separators
+      drawn by CSS between the items, never characters in the content.
+    */}
+    <ul class="strip mono">
+      <li class="strip__item">
+        <a class="strip__chip" href={`/tools/verdict/${tool.verdict}`}>
+          <VerdictBadge verdict={tool.verdict} />
+        </a>
+      </li>
+      <li class="strip__item">
+        <a href={`/tools/category/${categorySlug(tool.category)}`}>
+          {tool.category}
+        </a>
+      </li>
+      <li class="strip__item">
+        As of <time datetime={tool.status_date}>{formatDay(tool.status_date)}</time>
+      </li>
+    </ul>
+
+    <p class="standfirst">{tool.note}</p>
+  </header>
+
+  <VoiceBlocks
+    why={tool.why}
+    like={tool.like}
+    dislike={tool.dislike}
+    try={tool.try}
+  />
+
+  {
+    /*
+      Skipped entirely when there is nothing to point at, rather than printing a
+      row that admits it has no value. Same call as the collections row on a
+      site page: most of the reason a field is optional is so that its absence
+      costs the reader nothing.
+    */
+    (tool.url || tool.repo) && (
+      <p class="source">
+        <span class="source__label mono">Source</span>
+        {hasIcon && <AppIcon tool={tool} size={16} letter={false} class="source__favicon" />}
+        {tool.url && (
+          <span class="source__link">
+            <EntryLink class="ext" href={tool.url} {...outCard(tool.url)}>Website</EntryLink>
+          </span>
+        )}
+        {tool.repo && (
+          <span class="source__link">
+            <EntryLink class="ext" href={tool.repo} {...(tool.url ? {} : outCard(tool.repo))}>{repoLabel}</EntryLink>
+          </span>
+        )}
+      </p>
+    )
+  }
+</article>
+
+<style>
+  /* --- the metadata strip --------------------------------------------------- */
+
+  /* Between the title and the standfirst, not under it: the strip is what the
+     title is, and the standfirst is the first thing said about it. */
+  .strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    /* Matches the gap inside an item, so a separator sits centred between two
+       facts rather than welded to the end of the one before it. Same idiom as
+       the hint row at the foot of a site page. */
+    gap: 0 0.5rem;
+    /* title to strip and strip to standfirst are both 16px: design.md §2's
+       rhythm, 8 within a group, 16 between groups, 40 between sections */
+    margin-top: 1rem;
+    color: var(--text-tertiary);
+  }
+
+  /* What the tool is, in its own site's words, 8px under the name: one group
+     with the title. The standfirst below the strip is his verdict on it. */
+  .dek {
+    margin-top: 0.5rem;
+    font-size: 1.0625rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+  }
+
+  .strip + .standfirst {
+    margin-top: 1rem;
+  }
+
+  .strip__item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* The separator lives in the list item, outside the anchor, so it is never
+     part of a link's text or its target. The alt-text form gives it no
+     accessible name, as on the /library strip (design.md §6). */
+  .strip__item + .strip__item::before {
+    content: "\00b7" / "";
+    color: var(--hairline-strong);
+  }
+
+  /* Quiet by default and accent on hover, like the crumb and the hint row —
+     this is navigation furniture, not prose, so it is deliberately outside the
+     bold-and-underlined treatment prose links get in global.css. The hairline
+     underline is the compromise: enough to say "this is a link" at a glance,
+     not enough to make a metadata strip look like a paragraph. */
+  /* `:not(.strip__chip)` because the verdict anchor is a box, not a word: an
+     underline under a tinted chip would draw a second line across the row. */
+  .strip a:not(.strip__chip) {
+    /* --text-secondary, never the strip's --text-tertiary: a quiet anchor inside a metadata
+       container states its own ink (design.md §4, the ink floor). */
+    color: var(--text-secondary);
+    text-decoration-line: underline;
+    text-decoration-color: var(--hairline-strong);
+    text-underline-offset: 0.25em;
+    transition-property: color, text-decoration-color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .strip a:not(.strip__chip):hover {
+    color: var(--accent);
+    text-decoration-color: var(--accent);
+  }
+
+  /* the badge does the talking; the anchor only carries the target */
+  .strip__chip {
+    display: inline-flex;
+    text-decoration: none;
+  }
+
+  .strip__chip:hover {
+    opacity: 0.75;
+  }
+
+  /* --- the source line ------------------------------------------------------ */
+
+  .source {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.6rem;
+    margin-top: 2.5rem;
+    padding-top: 1.1rem;
+    border-top: 1px solid var(--hairline);
+    /* a URL has no spaces to break at, so it must be allowed to break anywhere */
+    overflow-wrap: anywhere;
+  }
+
+  .source__label {
+    color: var(--text-tertiary);
+  }
+
+  .source__favicon {
+    /* baseline alignment moves the box, so nudge it back onto the text */
+    align-self: center;
+  }
+
+  /* The wrapper exists for the separator between two links. The `·` is a
+     `::before` on the span rather than on the anchor, so it is never part of
+     the link's text or its target, the same rule as the metadata strip. */
+  .source__link {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.6rem;
+  }
+
+  .source__link + .source__link::before {
+    content: "\00b7" / "";
+    color: var(--hairline-strong);
+  }
+</style>
