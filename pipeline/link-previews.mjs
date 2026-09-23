@@ -25,7 +25,7 @@ import { pathToFileURL } from "node:url";
 import { chromium } from "playwright";
 
 import { capturePreview, readMeta } from "./preview.mjs";
-import { backfill, writeAtomic } from "./util.mjs";
+import { backfill, bareHost, writeAtomic } from "./util.mjs";
 
 const ROOT = path.resolve(import.meta.dirname, "..");
 const SOURCES = ["src/content", "src/pages/about.astro"];
@@ -100,7 +100,7 @@ if (process.argv[1] !== undefined && import.meta.url === pathToFileURL(process.a
         const meta = kept ? undefined : await readMeta(url);
         const got = await capturePreview({ slug: hash, url, meta, dir: DIR, browser, force, og: true, log: console.log });
         if (got === null) return void missing.push(url);
-        manifest[hash] = { url, title: kept ? kept.title : (meta?.title ?? null), domain: new URL(url).hostname.replace(/^www\./, "") };
+        manifest[hash] = { url, title: kept ? kept.title : (meta?.title ?? null), domain: bareHost(url) };
       },
       3,
     );

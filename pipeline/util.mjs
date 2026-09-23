@@ -4,7 +4,8 @@
  * Deliberately the only module in `pipeline/` that knows nothing about
  * bookmarks, galleries, shots or state. Everything here is about JavaScript or
  * the filesystem, not about publishing: a plain-object check, a thrown thing as
- * a line of text, a file replaced in one step, and a bounded worker pool. That
+ * a line of text, a file replaced in one step, a bounded worker pool, and the
+ * string and host helpers at the bottom (QA phase 2, B11). That
  * is why `raindrop.mjs` is allowed to import them without breaking its own rule
  * about staying a boundary — importing a `typeof` check is not importing the
  * domain.
@@ -14,7 +15,7 @@
  */
 
 import { randomUUID } from "node:crypto";
-import { mkdir, rename, rm, writeFile } from "node:fs/promises";
+import { access, mkdir, rename, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 
 /**
@@ -115,3 +116,19 @@ export async function backfill(items, fn, n) {
   };
   await Promise.all(Array.from({ length: Math.min(n, items.length) }, worker));
 }
+
+/** @param {string} file @returns {Promise<boolean>} */
+export const exists = (file) => access(file).then(() => true, () => false);
+
+/** Whitespace runs to one space, trimmed. @param {string} text */
+export const oneLine = (text) => text.replace(/\s+/g, " ").trim();
+
+/** Lowercase letters and digits only, for comparing names. @param {string} s */
+export const squash = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+/**
+ * The hostname without `www.`. Throws on a URL that does not parse.
+ * @param {string | URL} url
+ */
+export const bareHost = (url) => new URL(url).hostname.replace(/^www\./, "");
+

@@ -5,10 +5,9 @@
  * once on the static page's load, and again each time the /sites panel
  * (`SitePanel.astro`) inserts a fetched entry.
  */
-import { wireAllCopy } from "./copy-flash";
+import { FLASH_MS, wireAllCopy } from "./copy-flash";
+import { showAll } from "./show-all";
 
-/** How long a confirmation holds before the button goes back to normal. */
-const FLASH_MS = 1200;
 /** A failure is something to read, so it stays up longer. */
 const FAIL_MS = 2400;
 
@@ -117,25 +116,12 @@ function initShotActions(root: HTMLElement) {
   });
 }
 
-/**
- * "Show all N": the tail is in the HTML, so with scripting off every token
- * shows and the button never does. TagFilters.astro's toggle, per group.
- */
-function initShowAll(button: HTMLButtonElement) {
-  const tail = button.parentElement?.querySelectorAll<HTMLElement>("[data-tail]") ?? [];
-  const set = (open: boolean) => {
-    tail.forEach((item) => item.toggleAttribute("hidden", !open));
-    button.setAttribute("aria-expanded", String(open));
-    button.textContent = open ? "Show fewer" : (button.dataset.label ?? "Show all");
-  };
-  set(false);
-  button.hidden = false;
-  button.addEventListener("click", () => set(button.getAttribute("aria-expanded") !== "true"));
-}
-
 /** Wire everything under `root`. Call once per inserted entry. */
 export function enhanceSiteDetail(root: ParentNode): void {
   wireAllCopy();
   root.querySelectorAll<HTMLElement>("[data-shot-actions]").forEach(initShotActions);
-  root.querySelectorAll<HTMLButtonElement>(".found [data-more]").forEach(initShowAll);
+  root.querySelectorAll<HTMLButtonElement>(".found [data-more]").forEach((button) => {
+    showAll(button, button.parentElement?.querySelectorAll("[data-tail]") ?? []);
+    button.hidden = false;
+  });
 }

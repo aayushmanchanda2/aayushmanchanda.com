@@ -58,15 +58,7 @@ export async function readJson(file) {
   return JSON.parse(await readFile(file, "utf8"));
 }
 
-/** @param {string} file @returns {Promise<boolean>} */
-export async function exists(file) {
-  try {
-    await readFile(file);
-    return true;
-  } catch {
-    return false;
-  }
-}
+export { exists } from "./util.mjs";
 
 /* ---------------------------------------------------------------------------
    Raindrop, in a literal

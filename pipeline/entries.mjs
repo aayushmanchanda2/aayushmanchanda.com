@@ -35,7 +35,7 @@ import path from "node:path";
 
 import { cleanName } from "./names.mjs";
 import { thumbWebPath } from "./thumb.mjs";
-import { isRecord, writeAtomic } from "./util.mjs";
+import { bareHost, isRecord, oneLine, writeAtomic } from "./util.mjs";
 
 /** @typedef {import("./types.js").Bookmark} Bookmark */
 /** @typedef {import("./types.js").Draft} Draft */
@@ -247,7 +247,7 @@ export function uniqueSlug(base, taken) {
 /** @param {string} url @returns {string} `""` when the URL does not parse. */
 export function hostnameOf(url) {
   try {
-    return new URL(url).hostname.replace(/^www\./, "");
+    return bareHost(url);
   } catch {
     return "";
   }
@@ -396,7 +396,7 @@ export function urlKey(url) {
     }
     const search = query.toString();
 
-    const host = parsed.hostname.replace(/^www\./, "");
+    const host = bareHost(parsed);
     return `${host}${pathname}${search === "" ? "" : `?${search}`}`.toLowerCase();
   } catch {
     return url.trim().toLowerCase();
@@ -549,7 +549,6 @@ const HAS_WORDS = /[\p{L}\p{N}]/u;
  * title or a note with a newline in it is a broken row.
  * @param {string} text
  */
-const oneLine = (text) => text.replace(/\s+/g, " ").trim();
 
 /**
  * `text`, or as much of it as fits, ending on a word.

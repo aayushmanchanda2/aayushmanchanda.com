@@ -10,11 +10,12 @@
  * side (at most 4 words, none of `| : — ·`); anything this returns passes it.
  */
 
+import { bareHost, squash } from "./util.mjs";
+
 const SEP = /\s+(?:\||—|–|-|·|›)\s+|:\s+/;
 const GENERIC = new Set(["home", "official site", "pricing", "components", "about", "docs", "github"]);
 const FORBIDDEN = /[|:—·]/;
 /** @param {string} s */
-const squash = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
 /** @param {string} s */
 const words = (s) => s.split(/\s+/).length;
 
@@ -32,7 +33,7 @@ const words = (s) => s.split(/\s+/).length;
 export function cleanName(title, url) {
   let host = "";
   try {
-    host = new URL(url).hostname.replace(/^www\./, "");
+    host = bareHost(url);
   } catch {}
   const label = host ? squash(host.split(".")[0] ?? "") : "";
   const labels = host.split(".").slice(0, -1).filter((l) => l.length >= 4).map(squash);

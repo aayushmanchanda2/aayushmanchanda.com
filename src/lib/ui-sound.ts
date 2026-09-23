@@ -10,6 +10,8 @@
  * the release) plus keyboard activation, which arrives as a `click` with
  * `detail === 0`. Touch is left silent, as on the original.
  */
+import { reducedMotion } from "./motion.ts";
+import { readStored, store } from "./storage.ts";
 
 export const STORAGE_KEY = "ui-sound";
 export const THROTTLE_MS = 35;
@@ -65,13 +67,7 @@ let chosen: boolean | undefined;
 
 export function soundOn(): boolean {
   if (chosen !== undefined) return chosen;
-  let stored: string | null = null;
-  try {
-    stored = localStorage.getItem(STORAGE_KEY);
-  } catch {
-    /* blocked: fall through to the default */
-  }
-  return initialOn(stored, matchMedia("(prefers-reduced-motion: reduce)").matches);
+  return initialOn(readStored(STORAGE_KEY), reducedMotion());
 }
 
 /** Play one tick if a context exists. `rate` below 1 is lower and longer. */
@@ -132,11 +128,7 @@ function sync(): void {
 
 export function toggleSound(): void {
   chosen = !soundOn();
-  try {
-    localStorage.setItem(STORAGE_KEY, chosen ? "on" : "off");
-  } catch {
-    /* not persisted, still applied */
-  }
+  store(STORAGE_KEY, chosen ? "on" : "off");
   sync();
   play(); // turning it on answers with the sound it just turned on
 }

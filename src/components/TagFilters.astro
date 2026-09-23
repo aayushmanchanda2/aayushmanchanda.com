@@ -76,6 +76,7 @@ const tail = (slug: string, index: number) => index >= TAG_CAP && slug !== curre
 // current leave nothing to show, and the button would toggle an empty tail.
 const hidden = ranked.filter((group, index) => tail(group.slug, index)).length;
 const showAll = `Show all ${groups.length}`;
+import { showAll as toggleTail } from "../lib/show-all";
 ---
 
 {/*
@@ -122,24 +123,17 @@ const showAll = `Show all ${groups.length}`;
   and the tail is hidden before the first paint. No `.js` class exists on this
   site to hang a CSS rule on, and one would be a second prepaint for one row.
 */}
-<script is:inline>
-  (() => {
-    const row = document.getElementById("tag-filters");
-    const more = row && row.querySelector("li[data-more]");
-    const button = more && more.querySelector("button");
-    if (!row || !more || !button) return;
-    const tail = row.querySelectorAll("li[data-tail]");
-    /** @param {boolean} open */
-    const set = (open) => {
-      tail.forEach((li) => li.toggleAttribute("hidden", !open));
-      button.setAttribute("aria-expanded", String(open));
-      button.textContent = open ? "Show fewer" : button.dataset.label || "Show all";
-    };
-    set(false);
-    more.removeAttribute("hidden");
-    button.addEventListener("click", () => set(button.getAttribute("aria-expanded") !== "true"));
-  })();
-</script>
+<script
+  is:inline
+  set:html={`(() => {
+  const row = document.getElementById("tag-filters");
+  const more = row && row.querySelector("li[data-more]");
+  const button = more && more.querySelector("button");
+  if (!button) return;
+  (${toggleTail})(button, row.querySelectorAll("li[data-tail]"));
+  more.removeAttribute("hidden");
+})();`}
+/>
 
 <style>
   /* The gap to the tab row above, owned here rather than by the pages that

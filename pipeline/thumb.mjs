@@ -33,7 +33,7 @@ import path from "node:path";
 
 import sharp from "sharp";
 
-import { readCapped } from "./util.mjs";
+import { bareHost, readCapped } from "./util.mjs";
 
 /** @typedef {import("./types.js").Video} Video */
 
@@ -117,7 +117,7 @@ export function videoFrom(url) {
     return null;
   }
 
-  const host = parsed.hostname.toLowerCase().replace(/^www\./, "");
+  const host = bareHost(parsed);
   const segments = parsed.pathname.split("/").filter((segment) => segment !== "");
 
   // youtu.be/<id> — the whole path is the id.

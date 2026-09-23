@@ -4,9 +4,10 @@
  * Split out of `post.mjs`, which is the fetching half.
  */
 
+import { oneLine } from "./util.mjs";
+
 /** @typedef {import("./post.mjs").Tweet} Tweet */
 
-const flat = (/** @type {string} */ text) => text.replace(/\s+/g, " ").trim();
 
 /**
  * The saved text with X's paragraph breaks put back over the part X returned.
@@ -18,7 +19,7 @@ const flat = (/** @type {string} */ text) => text.replace(/\s+/g, " ").trim();
  * @param {string} saved @param {string} x @returns {string}
  */
 function withBreaks(saved, x) {
-  const whole = flat(saved);
+  const whole = oneLine(saved);
   let at = 0;
   let out = "";
   for (const run of x.trim().split(/(\s+)/)) {
@@ -49,7 +50,7 @@ export function pickText(saved, tweet) {
   if (tweet.article) return saved;
   // A saved copy with its own breaks (Firecrawl keeps them since VET-246) is
   // already whole; `withBreaks` would flatten everything past X's 280.
-  if (tweet.long || flat(saved).length > flat(tweet.text).length) {
+  if (tweet.long || oneLine(saved).length > oneLine(tweet.text).length) {
     return saved.includes("\n") ? saved : withBreaks(saved, tweet.text);
   }
   return tweet.text;

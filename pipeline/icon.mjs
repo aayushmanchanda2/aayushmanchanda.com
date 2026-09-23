@@ -23,7 +23,7 @@
  * and a tool and a site on one slug would be the same site anyway.
  */
 
-import { access, readFile } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 
@@ -32,7 +32,7 @@ import sharp from "sharp";
 import { repoFrom } from "./entries.mjs";
 import { NOT_A_SITE, siteInReadme } from "./readme-site.mjs";
 import { resolvePaths } from "./state.mjs";
-import { backfill, describe, isRecord, writeAtomic } from "./util.mjs";
+import { backfill, describe, exists, isRecord, writeAtomic } from "./util.mjs";
 
 /** The stored square. The largest mark is 60px, 120 device pixels at 2x. */
 export const ICON_SIZE = 256;
@@ -207,7 +207,6 @@ async function download(url, fetch) {
 }
 
 /** @param {string} file */
-const exists = (file) => access(file).then(() => true, () => false);
 
 /**
  * Fetch one tool's icon into `dir/<slug>.webp`.

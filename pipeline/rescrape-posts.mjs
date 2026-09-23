@@ -15,21 +15,20 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 
 import { readEntries, writeEntries } from "./entries.mjs";
 import { firecrawlFrom, parsePost } from "./firecrawl.mjs";
-import { backfill, describe } from "./util.mjs";
+import { backfill, describe, oneLine } from "./util.mjs";
 
 const LIBRARY_JSON = fileURLToPath(new URL("../src/data/library.json", import.meta.url));
 
 /** Past this X has cut the text and its breaks with it. */
 const LONG = 280;
 
-const flat = (/** @type {string} */ text) => text.replace(/\s+/g, " ").trim();
 
 /**
  * The scraped text when it is the saved words with more paragraph breaks, else null.
  * @param {string} saved @param {string} scraped @returns {string | null}
  */
 export function rebroken(saved, scraped) {
-  if (flat(saved) !== flat(scraped)) return null;
+  if (oneLine(saved) !== oneLine(scraped)) return null;
   const breaks = (/** @type {string} */ text) => text.split("\n\n").length;
   return breaks(scraped) > breaks(saved) ? scraped : null;
 }
@@ -57,7 +56,7 @@ async function main() {
           entry.post.text = text;
           tally.fixed += 1;
           console.log(`fixed   ${entry.slug}`);
-        } else if (scraped !== null && flat(scraped.text) === flat(entry.post.text)) {
+        } else if (scraped !== null && oneLine(scraped.text) === oneLine(entry.post.text)) {
           tally.same += 1;
         } else {
           tally.differs += 1;

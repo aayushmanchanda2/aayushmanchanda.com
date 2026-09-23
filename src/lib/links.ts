@@ -32,6 +32,7 @@
  * shared with the publish pipeline, so it has to be testable outside a bundler.
  */
 import { assetFor } from "./assets.ts";
+import { monogram } from "./post.ts";
 import { absolute } from "./site.ts";
 
 /**
@@ -148,8 +149,7 @@ export interface Mark {
   letter: string;
 }
 
-/** The first character worth printing, capitalised by `AppIcon.astro` at render time. */
-const FIRST_GLYPH = /[\p{L}\p{N}]/u;
+/** The initial: the post monogram's rule (`lib/post.ts › monogram`), so a tool and a poster spell a letter one way. */
 
 /** The publishable half of the logo.dev key pair; it is meant to be public. */
 const LOGO_DEV_TOKEN = "pk_YsFOVGNeRx6b1C0u0e0yTw";
@@ -212,7 +212,7 @@ export function markFor(entry: {
         ? null
         : `https://img.logo.dev/${encodeURIComponent(domain)}?token=${LOGO_DEV_TOKEN}&size=64&retina=true&fallback=404`,
     icon: assetFor("icons", entry.slug),
-    letter: [...entry.name].find((glyph) => FIRST_GLYPH.test(glyph)) ?? "",
+    letter: monogram(entry.name),
   };
 }
 
