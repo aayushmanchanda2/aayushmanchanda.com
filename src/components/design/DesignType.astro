@@ -1,0 +1,173 @@
+---
+/** /design, the type: the real classes on specimen words, and the ticking figures. */
+import { tools } from "../../lib/tools";
+
+/** A real tool name, so the entry-title specimen is set in a word that ships. */
+const entryTitle = tools[0]?.name ?? "Tools";
+---
+
+<section>
+  <h2 class="sheet__head mono">Type</h2>
+  <p>
+    Geist Sans for prose and labels, Geist Mono for data: dates, counts,
+    clocks, hex values and code. Both are variable fonts served from this
+    domain.
+  </p>
+
+  {/*
+    Every specimen is a `div` and not a `p`, which is the difference between
+    showing the class and showing this page's prose rule. `.sheet p` sets a
+    reading size, and Astro scopes it with the page's own class, so it
+    outranks `.page-title` and every specimen would have come out at 1rem
+    wearing the right letter-spacing. A specimen of a heading treatment is
+    not a paragraph anyway.
+  */}
+  <dl class="spec">
+    <div class="spec__row">
+      <dt class="code">page-title</dt>
+      <dd><div class="page-title">Aa</div></dd>
+    </div>
+    <div class="spec__row">
+      <dt class="code">page-title--entry</dt>
+      <dd><div class="page-title page-title--entry">{entryTitle}</div></dd>
+    </div>
+    <div class="spec__row">
+      <dt class="code">page-title--mono</dt>
+      <dd><div class="page-title page-title--mono">design.</div></dd>
+    </div>
+    <div class="spec__row">
+      <dt class="code">standfirst</dt>
+      <dd>
+        <div class="standfirst">One line under every title, and never two.</div>
+      </dd>
+    </div>
+    <div class="spec__row">
+      <dt class="code">mono</dt>
+      <dd><div class="mono spec__label">Cliff notes</div></dd>
+    </div>
+    <div class="spec__row">
+      <dt class="code">mono + time</dt>
+      <dd>
+        <div class="mono spec__label">Saved <time datetime="2026-09-22">Sep 22, 2026</time></div>
+      </dd>
+    </div>
+  </dl>
+
+  <p>
+    The masthead at the top of this page is the mono variant and the line
+    under it is the standfirst, so two of those rows are already in front of
+    you at full size, in the elements they normally ship as. The class
+    called <span class="code">mono</span> is the label voice, and it is not
+    mono any more: 14px sans, weight 400, normal tracking, sentence case,
+    for section heads, field labels, tabs and footer items. The titles are
+    bold rather than big, and everything under them stays quiet.
+  </p>
+  <p>
+    Two rules are global and are not in the table because nothing sets them:
+    every heading balances its line breaks and every paragraph gets the
+    prettier ones. Both are declared once, for the elements, and no component
+    redeclares them.
+  </p>
+  <p>
+    Mono is for what you might retype: a count, a clock, a hex, a
+    key cap like <span class="code">esc</span>, a token name. Inside a label
+    the figure switches to mono by itself, because every figure already
+    carries tabular numbers.
+  </p>
+
+  <p>
+    Text comes in four levels, and each piece of text is one of them. The
+    fourth never carries a word; it draws the slash between crumbs.
+  </p>
+
+  <dl class="spec">
+    <div class="spec__row">
+      <dt class="code">--text-primary</dt>
+      <dd><div class="level level--fg">Titles, names, links</div></dd>
+    </div>
+    <div class="spec__row">
+      <dt class="code">--text-secondary</dt>
+      <dd><div class="level level--muted">Prose, notes, and every control</div></dd>
+    </div>
+    <div class="spec__row">
+      <dt class="code">--text-tertiary</dt>
+      <dd><div class="level level--faint">Labels, dates, counts</div></dd>
+    </div>
+    <div class="spec__row">
+      <dt class="code">--text-quaternary</dt>
+      <dd><div class="level level--quaternary" aria-hidden="true">/</div></dd>
+    </div>
+  </dl>
+
+  <p>
+    Spacing runs on three numbers: 8px inside a group, 16px between groups,
+    40px between sections. On an entry page the title, its metadata and its
+    one-line summary sit 16px apart, and the notes under them start a new
+    section.
+  </p>
+
+  <p>
+    Tabular numbers are not optional. Any digit that changes in place, or
+    sits in a column, gets them. Here is the same clock twice, the second one
+    without.
+  </p>
+
+  <dl class="spec">
+    <div class="spec__row">
+      <dt class="code">tabular-nums</dt>
+      <dd><span class="figures tabular-nums" data-tick>--:--:--</span></dd>
+    </div>
+    <div class="spec__row">
+      <dt class="code">default</dt>
+      <dd><span class="figures" data-tick>--:--:--</span></dd>
+    </div>
+  </dl>
+
+  <p>
+    Watch the right edge of the second one. Every time a digit changes width
+    the whole string re-lays-out, which is a twitch in the corner of your eye
+    on a page with forty dated rows on it.
+  </p>
+</section>
+
+<style>
+
+  /* The four text levels, each at the size it most often ships at. */
+  .level--fg {
+    font-size: 1.0625rem;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+
+  .level--muted {
+    font-size: 1rem;
+    color: var(--text-secondary);
+  }
+
+
+  .level--faint {
+    font-size: 0.875rem;
+    color: var(--text-tertiary);
+  }
+
+
+  .level--quaternary {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-quaternary);
+  }
+
+
+  /* --- type ------------------------------------------------------------- */
+
+  /* The figures specimen is set in the sans at reading size, because Geist Mono
+     is monospaced and would make the comparison meaningless: both rows would
+     hold still and the point would be invisible. This is where the site actually
+     spends the feature, on sans digits in a column. */
+  .figures {
+    font-size: 1.25rem;
+    line-height: 1.3;
+    color: var(--text-primary);
+  }
+</style>

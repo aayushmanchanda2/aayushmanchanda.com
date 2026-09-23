@@ -46,7 +46,7 @@ const OG = read("../../scripts/og.mjs");
 
 /** Every file that renders the lockup without being allowed to draw it. */
 const CONSUMERS = [
-  ["design.astro", read("../pages/design.astro")],
+  ["DesignMark.astro", read("../components/design/DesignMark.astro")],
 ];
 
 /**

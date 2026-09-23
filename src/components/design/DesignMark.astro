@@ -1,0 +1,107 @@
+---
+/** /design, the mark: the lockup and the favicon at the sizes a browser asks for. */
+import MarkGlyph from "../MarkGlyph.astro";
+
+/** The three sizes a browser asks the favicon for, largest first. */
+const ICONS = [64, 32, 16];
+---
+
+<section>
+  <h2 class="sheet__head mono">The mark</h2>
+  <p>
+    My initials on a 16-unit grid, one stroke weight, every diagonal at the
+    same angle. Nothing in it touches anything: the crossbar sits half a unit
+    off the legs and the M sits half a unit off the A, a monogram held
+    together by proximity rather than by contact.
+  </p>
+
+  <div class="lockup">
+    <MarkGlyph label="The AM lockup, drawn large" />
+  </div>
+
+  <p>
+    It is also what makes the A separable, which is what the tab strip needs.
+    At 16 by 16 the lockup has no fully inked pixel in it at all. Its strokes
+    land at 0.81 device pixels and peak at 87% ink, against eighteen solid
+    pixels for the A on its own. So the page and the social card get both
+    letters and the favicon gets one, and the A lifts out whole rather than
+    as a fragment.
+  </p>
+
+  <ul class="icons">
+    {
+      ICONS.map((size, index) => (
+        <li class="icon" style={`--icon: ${size}px`}>
+          {/*
+            One number per icon, spent three times: the two attributes that
+            reserve the box before the file lands, and the custom property
+            the scoped rule below sizes it with. The rule is needed because
+            `global.css` sets `height: auto` on every image, which beats an
+            HTML `height` attribute and leaves a viewBox-only SVG at whatever
+            default height the browser picks.
+
+            Only the first one is described. All three are the same picture,
+            and a screen reader being told about the A three times learns
+            nothing on the second and third.
+          */}
+          <img
+            src="/favicon.svg"
+            width={size}
+            height={size}
+            alt={
+              index === 0
+                ? "The favicon: the A from the lockup, on its own"
+                : ""
+            }
+          />
+          <span class="code tabular-nums">{size}</span>
+        </li>
+      ))
+    }
+  </ul>
+
+  <p>
+    The favicon at the three sizes a browser asks for. Its colours follow
+    your browser&rsquo;s light or dark setting, not the theme button in the
+    footer, because it sits in the tab strip.
+  </p>
+</section>
+
+<style>
+
+  /* --- the mark --------------------------------------------------------- */
+
+  .lockup {
+    /* The one size on this page that is not a shipped one: the mark ships at
+       20px and 24px, and neither is large enough to see a miter at. */
+    --mark-size: clamp(3rem, 13vw, 4.5rem);
+    margin-top: 1.75rem;
+    color: var(--text-primary);
+  }
+
+
+  .icons {
+    display: flex;
+    align-items: flex-end;
+    gap: 1.5rem;
+    margin-top: 1.75rem;
+  }
+
+
+  .icon {
+    display: grid;
+    justify-items: center;
+    gap: 0.6rem;
+  }
+
+
+  /* `global.css` sets `height: auto` on every image, which outranks an HTML
+     `height` attribute — and `favicon.svg` carries a viewBox and no intrinsic
+     size, so `auto` leaves the browser to invent one. Both dimensions come off
+     the same custom property, so the box the attributes reserve and the box the
+     icon paints in are one number. */
+  .icon img {
+    width: var(--icon);
+    height: var(--icon);
+  }
+</style>

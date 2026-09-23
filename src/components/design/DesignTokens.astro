@@ -1,0 +1,194 @@
+---
+/**
+ * /design, the tokens: surfaces and accents painted from `var(--name)`, their
+ * values read back from the live stylesheet by the page script, and a real
+ * capture's palette row.
+ */
+import PaletteRow from "../PaletteRow.astro";
+import { sites } from "../../lib/sites";
+
+/**
+ * The surface tokens, by name only.
+ *
+ * No values here. A value typed into this file would be the copy the page
+ * exists to not have: the swatch is painted `var(--name)` and the string beside
+ * it is read out of the live stylesheet on load, so both halves answer to
+ * `styles/global.css` and to whichever theme the reader is in.
+ */
+const SURFACES = [
+  { name: "--bg", note: "the page" },
+  { name: "--text-primary", note: "titles, long-form prose, and the mark" },
+  { name: "--text-secondary", note: "standfirsts, controls, and every paragraph on this page" },
+  { name: "--text-tertiary", note: "metadata: dates, counts, labels" },
+  { name: "--text-quaternary", note: "decoration only: the crumb divider" },
+  { name: "--surface-2", note: "a raised surface" },
+  { name: "--surface-3", note: "a deeper one: code, the menu's hover" },
+  { name: "--surface-selected", note: "the selected row in a list" },
+  { name: "--hairline", note: "every border on the site" },
+  { name: "--hairline-strong", note: "a hovered row border, a swatch edge" },
+  { name: "--outline", note: "the 1px inset on imagery" },
+  { name: "--dot", note: "the dotted grid behind a framed screenshot" },
+];
+
+/** The accent, and the pair that exists because white on it fails AA. */
+const ACCENTS = [
+  { name: "--accent", note: "ink only: links, hover, aria-current, focus" },
+  { name: "--accent-panel", note: "the accent as a background with text on it" },
+  { name: "--accent-panel-ink", note: "that text" },
+  { name: "--amber-ink", note: "the second accent: the on-hold pill's word" },
+  { name: "--amber-bg", note: "the pill behind it" },
+  { name: "--highlight", note: "a highlighter mark behind words" },
+  { name: "--selection-bg", note: "selected text: blue in light, orange in dark" },
+];
+
+/** The newest capture in the gallery, so the palette row below is a real one. */
+const capture = sites[0]!;
+---
+
+<section>
+  <h2 class="sheet__head mono">Tokens</h2>
+  <p>
+    Every colour on the site is one of these. Light is the base. Dark is
+    written twice: once for a reader following their OS, once for a reader
+    who pinned it.
+  </p>
+  <p>
+    The values beside the swatches are read from the live stylesheet, so
+    they follow the theme button in the footer. They&rsquo;re the shipped
+    strings, so the minifier has shortened some hexes to three digits and
+    folded alpha in where it could.
+  </p>
+
+  <ul class="tokens">
+    {
+      SURFACES.map((token) => (
+        <li class="tok">
+          <span
+            class="tok__chip"
+            style={`background: var(${token.name})`}
+            aria-hidden="true"
+          />
+          <span class="tok__head">
+            <span class="code">{token.name}</span>
+            <span class="code tok__value" data-token={token.name}>
+              ----
+            </span>
+          </span>
+          <span class="tok__note">{token.note}</span>
+        </li>
+      ))
+    }
+  </ul>
+
+  <p>
+    The accent is one hue at two lightnesses. The hue is identical in both
+    themes and lightness is the only difference, because no single lightness
+    clears 4.5:1 against both a white page and a near-black one. Amber is
+    the second accent. It marks things and is never a link.
+  </p>
+
+  <ul class="tokens">
+    {
+      ACCENTS.map((token) => (
+        <li class="tok">
+          <span
+            class="tok__chip"
+            style={`background: var(${token.name})`}
+            aria-hidden="true"
+          />
+          <span class="tok__head">
+            <span class="code">{token.name}</span>
+            <span class="code tok__value" data-token={token.name}>
+              ----
+            </span>
+          </span>
+          <span class="tok__note">{token.note}</span>
+        </li>
+      ))
+    }
+  </ul>
+
+  <p class="panel">
+    The moment the accent becomes a background with text on it, it switches
+    to the panel pair. White on the dark theme's accent is 3.89:1 and fails
+    AA; white on this blue is 5.91:1 in either theme, which is why this block
+    is the same blue whichever theme you are reading it in.
+  </p>
+
+  <p>
+    The palette row that sits under every screenshot in the gallery. Every
+    swatch is a button that copies its hex. These six were measured off the <a
+    href={`/sites/${capture.slug}`}>{capture.title}</a> screenshot.
+  </p>
+
+  <div class="capture">
+    <PaletteRow palette={capture.palette} title={capture.title} />
+  </div>
+</section>
+
+<style>
+
+  /* --- tokens ----------------------------------------------------------- */
+
+  .tokens {
+    margin-top: 1.5rem;
+    border-top: 1px solid var(--hairline);
+  }
+
+
+  .tok {
+    display: grid;
+    grid-template-columns: 2.75rem minmax(0, 1fr);
+    gap: 0.15rem 0.9rem;
+    align-items: center;
+    padding-block: 0.7rem;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+
+  .tok__chip {
+    grid-row: span 2;
+    align-self: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    /* Sharp, like every other swatch on the site: a 4px corner marks a token you
+       could pick up, and this is a surface you look at. Inset, so a --bg swatch
+       on a light page is a chip rather than a hole, and so the eight-percent
+       tokens below are visible at all. */
+    border-radius: 0;
+    box-shadow: inset 0 0 0 1px var(--hairline-strong);
+  }
+
+
+  .tok__head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+  }
+
+
+  .tok__head .code:first-child {
+    color: var(--text-primary);
+  }
+
+
+  .tok__note {
+    font-size: 0.8125rem;
+    line-height: 1.45;
+    color: var(--text-tertiary);
+  }
+
+
+  /* Held at the vivid blue in both themes, which is the point it is making. */
+  .panel {
+    margin-top: 1.75rem;
+    padding: 1rem 1.15rem;
+    background: var(--accent-panel);
+  }
+
+
+  .capture {
+    margin-top: 1.5rem;
+  }
+</style>

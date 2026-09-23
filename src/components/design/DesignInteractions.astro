@@ -1,0 +1,125 @@
+---
+/** /design, the interactions: the three press scales, pressable. */
+
+
+/**
+ * The three press scales, and where each one is in force.
+ *
+ * Typed once here and interpolated into the buttons, rather than three rules in
+ * the stylesheet below, so the section's copy and the buttons cannot disagree
+ * about which number is which.
+ */
+const PRESSES = [
+  { scale: "0.96", where: "the default: a chip, a button, the mark" },
+  { scale: "0.985", where: "a gallery card on /sites" },
+  { scale: "0.995", where: "a full-bleed row on the index and /notes" },
+];
+---
+
+<section>
+  <h2 class="sheet__head mono">Interactions</h2>
+  <p>
+    Everything presses. The default is a 4% squeeze over 120ms, and wide
+    elements dial it back rather than shrinking by 4%, because a full-width
+    row losing 4% of its width reads as a glitch and not as a press. Hold
+    each of these down.
+  </p>
+
+  <ul class="presses">
+    {
+      PRESSES.map((press) => (
+        <li>
+          <button
+            class="pressbox press"
+            type="button"
+            style={`--press-scale: ${press.scale}`}
+          >
+            <span class="code tabular-nums">{press.scale}</span>
+            <span class="pressbox__note">{press.where}</span>
+          </button>
+        </li>
+      ))
+    }
+  </ul>
+
+  <p>
+    They do nothing else.
+  </p>
+  <p>
+    Every transition names its properties. There is no <span class="code"
+    >transition: all</span> anywhere, without exception, and an element that
+    already presses does not get a second transition declaration, because
+    the two race depending on stylesheet order.
+  </p>
+  <p>
+    Reduced motion flattens every animation and transition to almost nothing,
+    zeroes delays, kills smooth scrolling and disables the press scale. What
+    the global brake cannot do is two things, so components handle both:
+    anything that rests on a transform restates that transform under reduced
+    motion, and a staggered entrance is gated on the preference rather than
+    shortened, because a shortened delay still leaves a card sitting
+    invisible and then popping in.
+  </p>
+  <p>
+    The command palette opens on Cmd or Ctrl K from anywhere. Arrows move
+    with wrap, Home and End jump, Enter follows, Escape closes, and Tab is
+    swallowed: the field is the only focusable control in an open palette, so
+    swallowing Tab is the focus trap. Focus never leaves the input, and the
+    highlighted row is a virtual cursor rather than a focused element. Three
+    surfaces listen for keys on the document and none of them may depend on
+    running first, so every other one asks the document whether a palette is
+    open before acting.
+  </p>
+  <p>
+    Scroll chaining is contained in modals and nowhere else. Containing it on
+    a page whose main content is itself a scroller is a trap: you reach the
+    bottom of the picture, keep scrolling to read the notes under it, and
+    nothing happens until you physically move the pointer off the frame.
+  </p>
+  <p>
+    Focus is a 2px accent ring at a 3px offset. It flips to white on the blue
+    panel, and on the screenshot scroller the frame itself is the ring. Every hit area clears 40px, most
+    of them through a pseudo-element, so a control with a toolbar's target
+    does not put a toolbar's height into the row it sits in.
+  </p>
+</section>
+
+<style>
+
+  /* --- interactions ----------------------------------------------------- */
+
+  .presses {
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+  }
+
+
+  .pressbox {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem 0.85rem;
+    width: 100%;
+    /* 40px floor without a pseudo-element: this box is already taller. */
+    min-height: 40px;
+    padding: 0.7rem 0.9rem;
+    text-align: left;
+    cursor: pointer;
+    box-shadow: inset 0 0 0 1px var(--hairline);
+    /* No `transition-property` here: `.press` already declares one, and a second
+       would race it depending on stylesheet order. */
+  }
+
+
+  .pressbox:hover {
+    box-shadow: inset 0 0 0 1px var(--hairline-strong);
+  }
+
+
+  .pressbox__note {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--text-secondary);
+  }
+</style>

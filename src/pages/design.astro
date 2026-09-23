@@ -33,100 +33,19 @@
  * quiet furniture link in §Links, and it says so in place: that pattern is a
  * rule rather than a class, and the three surfaces that implement it each keep
  * their own colour and alignment.
+ *
+ * Each section is a partial in `components/design/` with its own styles; the
+ * sheet's shared rules (section rhythm, heads, paragraphs, `.code`, `.spec`)
+ * stay here and reach into them as `.sheet :global(…)`.
  */
-import CollectionChips from "../components/CollectionChips.astro";
-import KindChip from "../components/KindChip.astro";
-import MarkGlyph from "../components/MarkGlyph.astro";
-import PaletteRow from "../components/PaletteRow.astro";
-import StatusChip from "../components/StatusChip.astro";
-import TagChips from "../components/TagChips.astro";
-import VerdictBadge from "../components/VerdictBadge.astro";
+import DesignChips from "../components/design/DesignChips.astro";
+import DesignInteractions from "../components/design/DesignInteractions.astro";
+import DesignLinks from "../components/design/DesignLinks.astro";
+import DesignMark from "../components/design/DesignMark.astro";
+import DesignTokens from "../components/design/DesignTokens.astro";
+import DesignType from "../components/design/DesignType.astro";
 import Base from "../layouts/Base.astro";
-import { STATUSES } from "../lib/experiments";
-import { KINDS, library, libraryTags } from "../lib/library";
-import { monogram } from "../lib/post";
 import { designJsonLd } from "../lib/schema";
-import { collectionGroups, sites } from "../lib/sites";
-import { MONOGRAM_HUES, hueSlot } from "../lib/tags";
-import { tools } from "../lib/tools";
-import { VERDICTS } from "../lib/tools";
-
-/**
- * The surface tokens, by name only.
- *
- * No values here. A value typed into this file would be the copy the page
- * exists to not have: the swatch is painted `var(--name)` and the string beside
- * it is read out of the live stylesheet on load, so both halves answer to
- * `styles/global.css` and to whichever theme the reader is in.
- */
-const SURFACES = [
-  { name: "--bg", note: "the page" },
-  { name: "--text-primary", note: "titles, long-form prose, and the mark" },
-  { name: "--text-secondary", note: "standfirsts, controls, and every paragraph on this page" },
-  { name: "--text-tertiary", note: "metadata: dates, counts, labels" },
-  { name: "--text-quaternary", note: "decoration only: the crumb divider" },
-  { name: "--surface-2", note: "a raised surface" },
-  { name: "--surface-3", note: "a deeper one: code, the menu's hover" },
-  { name: "--surface-selected", note: "the selected row in a list" },
-  { name: "--hairline", note: "every border on the site" },
-  { name: "--hairline-strong", note: "a hovered row border, a swatch edge" },
-  { name: "--outline", note: "the 1px inset on imagery" },
-  { name: "--dot", note: "the dotted grid behind a framed screenshot" },
-];
-
-/** The accent, and the pair that exists because white on it fails AA. */
-const ACCENTS = [
-  { name: "--accent", note: "ink only: links, hover, aria-current, focus" },
-  { name: "--accent-panel", note: "the accent as a background with text on it" },
-  { name: "--accent-panel-ink", note: "that text" },
-  { name: "--amber-ink", note: "the second accent: the on-hold pill's word" },
-  { name: "--amber-bg", note: "the pill behind it" },
-  { name: "--highlight", note: "a highlighter mark behind words" },
-  { name: "--selection-bg", note: "selected text: blue in light, orange in dark" },
-];
-
-/**
- * The three press scales, and where each one is in force.
- *
- * Typed once here and interpolated into the buttons, rather than three rules in
- * the stylesheet below, so the section's copy and the buttons cannot disagree
- * about which number is which.
- */
-const PRESSES = [
-  { scale: "0.96", where: "the default: a chip, a button, the mark" },
-  { scale: "0.985", where: "a gallery card on /sites" },
-  { scale: "0.995", where: "a full-bleed row on the index and /notes" },
-];
-
-/** The three sizes a browser asks the favicon for, largest first. */
-const ICONS = [64, 32, 16];
-
-/** The newest capture in the gallery, so the palette row below is a real one. */
-const capture = sites[0]!;
-
-/** A real tool name, so the entry-title specimen is set in a word that ships. */
-const entryTitle = tools[0]?.name ?? "Tools";
-
-/** Three real collections, for the chip in its filter-link form. */
-const collections = collectionGroups.slice(0, 3).map((group) => group.slug);
-
-/** Five real tags. Tags are plain grey, so any five show the whole chip. */
-const tagSpecimen = libraryTags.slice(0, 5).map((group) => group.slug);
-
-/**
- * The identity palette's seven slots, as the monogram wears them, off real
- * posters (`styles/chip.css › [data-hue]`). A slot no saved post lands on has
- * no specimen, which is the honest thing for a page that renders shipped data.
- */
-const posts = library.flatMap((entry) => (entry.post === null ? [] : [entry.post]));
-
-const monogramSpecimen = Array.from({ length: MONOGRAM_HUES }, (_, hue) =>
-  posts.find((post) => hueSlot(post.handle) === hue),
-).flatMap((post) =>
-  post === undefined
-    ? []
-    : [{ hue: hueSlot(post.handle), initial: monogram(post.author), author: post.author }],
-);
 
 const CONTRACT =
   "https://github.com/aayushmanchanda2/aayushmanchanda.com/blob/main/design.md";
@@ -149,493 +68,12 @@ const jsonLd = designJsonLd();
   </header>
 
   <div class="sheet">
-    <!-- ------------------------------------------------------------------ -->
-
-    <section>
-      <h2 class="sheet__head mono">The mark</h2>
-      <p>
-        My initials on a 16-unit grid, one stroke weight, every diagonal at the
-        same angle. Nothing in it touches anything: the crossbar sits half a unit
-        off the legs and the M sits half a unit off the A, a monogram held
-        together by proximity rather than by contact.
-      </p>
-
-      <div class="lockup">
-        <MarkGlyph label="The AM lockup, drawn large" />
-      </div>
-
-      <p>
-        It is also what makes the A separable, which is what the tab strip needs.
-        At 16 by 16 the lockup has no fully inked pixel in it at all. Its strokes
-        land at 0.81 device pixels and peak at 87% ink, against eighteen solid
-        pixels for the A on its own. So the page and the social card get both
-        letters and the favicon gets one, and the A lifts out whole rather than
-        as a fragment.
-      </p>
-
-      <ul class="icons">
-        {
-          ICONS.map((size, index) => (
-            <li class="icon" style={`--icon: ${size}px`}>
-              {/*
-                One number per icon, spent three times: the two attributes that
-                reserve the box before the file lands, and the custom property
-                the scoped rule below sizes it with. The rule is needed because
-                `global.css` sets `height: auto` on every image, which beats an
-                HTML `height` attribute and leaves a viewBox-only SVG at whatever
-                default height the browser picks.
-
-                Only the first one is described. All three are the same picture,
-                and a screen reader being told about the A three times learns
-                nothing on the second and third.
-              */}
-              <img
-                src="/favicon.svg"
-                width={size}
-                height={size}
-                alt={
-                  index === 0
-                    ? "The favicon: the A from the lockup, on its own"
-                    : ""
-                }
-              />
-              <span class="code tabular-nums">{size}</span>
-            </li>
-          ))
-        }
-      </ul>
-
-      <p>
-        The favicon at the three sizes a browser asks for. Its colours follow
-        your browser&rsquo;s light or dark setting, not the theme button in the
-        footer, because it sits in the tab strip.
-      </p>
-    </section>
-
-    <!-- ------------------------------------------------------------------ -->
-
-    <section>
-      <h2 class="sheet__head mono">Tokens</h2>
-      <p>
-        Every colour on the site is one of these. Light is the base. Dark is
-        written twice: once for a reader following their OS, once for a reader
-        who pinned it.
-      </p>
-      <p>
-        The values beside the swatches are read from the live stylesheet, so
-        they follow the theme button in the footer. They&rsquo;re the shipped
-        strings, so the minifier has shortened some hexes to three digits and
-        folded alpha in where it could.
-      </p>
-
-      <ul class="tokens">
-        {
-          SURFACES.map((token) => (
-            <li class="tok">
-              <span
-                class="tok__chip"
-                style={`background: var(${token.name})`}
-                aria-hidden="true"
-              />
-              <span class="tok__head">
-                <span class="code">{token.name}</span>
-                <span class="code tok__value" data-token={token.name}>
-                  ----
-                </span>
-              </span>
-              <span class="tok__note">{token.note}</span>
-            </li>
-          ))
-        }
-      </ul>
-
-      <p>
-        The accent is one hue at two lightnesses. The hue is identical in both
-        themes and lightness is the only difference, because no single lightness
-        clears 4.5:1 against both a white page and a near-black one. Amber is
-        the second accent. It marks things and is never a link.
-      </p>
-
-      <ul class="tokens">
-        {
-          ACCENTS.map((token) => (
-            <li class="tok">
-              <span
-                class="tok__chip"
-                style={`background: var(${token.name})`}
-                aria-hidden="true"
-              />
-              <span class="tok__head">
-                <span class="code">{token.name}</span>
-                <span class="code tok__value" data-token={token.name}>
-                  ----
-                </span>
-              </span>
-              <span class="tok__note">{token.note}</span>
-            </li>
-          ))
-        }
-      </ul>
-
-      <p class="panel">
-        The moment the accent becomes a background with text on it, it switches
-        to the panel pair. White on the dark theme's accent is 3.89:1 and fails
-        AA; white on this blue is 5.91:1 in either theme, which is why this block
-        is the same blue whichever theme you are reading it in.
-      </p>
-
-      <p>
-        The palette row that sits under every screenshot in the gallery. Every
-        swatch is a button that copies its hex. These six were measured off the <a
-        href={`/sites/${capture.slug}`}>{capture.title}</a> screenshot.
-      </p>
-
-      <div class="capture">
-        <PaletteRow palette={capture.palette} title={capture.title} />
-      </div>
-    </section>
-
-    <!-- ------------------------------------------------------------------ -->
-
-    <section>
-      <h2 class="sheet__head mono">Type</h2>
-      <p>
-        Geist Sans for prose and labels, Geist Mono for data: dates, counts,
-        clocks, hex values and code. Both are variable fonts served from this
-        domain.
-      </p>
-
-      {/*
-        Every specimen is a `div` and not a `p`, which is the difference between
-        showing the class and showing this page's prose rule. `.sheet p` sets a
-        reading size, and Astro scopes it with the page's own class, so it
-        outranks `.page-title` and every specimen would have come out at 1rem
-        wearing the right letter-spacing. A specimen of a heading treatment is
-        not a paragraph anyway.
-      */}
-      <dl class="spec">
-        <div class="spec__row">
-          <dt class="code">page-title</dt>
-          <dd><div class="page-title">Aa</div></dd>
-        </div>
-        <div class="spec__row">
-          <dt class="code">page-title--entry</dt>
-          <dd><div class="page-title page-title--entry">{entryTitle}</div></dd>
-        </div>
-        <div class="spec__row">
-          <dt class="code">page-title--mono</dt>
-          <dd><div class="page-title page-title--mono">design.</div></dd>
-        </div>
-        <div class="spec__row">
-          <dt class="code">standfirst</dt>
-          <dd>
-            <div class="standfirst">One line under every title, and never two.</div>
-          </dd>
-        </div>
-        <div class="spec__row">
-          <dt class="code">mono</dt>
-          <dd><div class="mono spec__label">Cliff notes</div></dd>
-        </div>
-        <div class="spec__row">
-          <dt class="code">mono + time</dt>
-          <dd>
-            <div class="mono spec__label">Saved <time datetime="2026-09-22">Sep 22, 2026</time></div>
-          </dd>
-        </div>
-      </dl>
-
-      <p>
-        The masthead at the top of this page is the mono variant and the line
-        under it is the standfirst, so two of those rows are already in front of
-        you at full size, in the elements they normally ship as. The class
-        called <span class="code">mono</span> is the label voice, and it is not
-        mono any more: 14px sans, weight 400, normal tracking, sentence case,
-        for section heads, field labels, tabs and footer items. The titles are
-        bold rather than big, and everything under them stays quiet.
-      </p>
-      <p>
-        Two rules are global and are not in the table because nothing sets them:
-        every heading balances its line breaks and every paragraph gets the
-        prettier ones. Both are declared once, for the elements, and no component
-        redeclares them.
-      </p>
-      <p>
-        Mono is for what you might retype: a count, a clock, a hex, a
-        key cap like <span class="code">esc</span>, a token name. Inside a label
-        the figure switches to mono by itself, because every figure already
-        carries tabular numbers.
-      </p>
-
-      <p>
-        Text comes in four levels, and each piece of text is one of them. The
-        fourth never carries a word; it draws the slash between crumbs.
-      </p>
-
-      <dl class="spec">
-        <div class="spec__row">
-          <dt class="code">--text-primary</dt>
-          <dd><div class="level level--fg">Titles, names, links</div></dd>
-        </div>
-        <div class="spec__row">
-          <dt class="code">--text-secondary</dt>
-          <dd><div class="level level--muted">Prose, notes, and every control</div></dd>
-        </div>
-        <div class="spec__row">
-          <dt class="code">--text-tertiary</dt>
-          <dd><div class="level level--faint">Labels, dates, counts</div></dd>
-        </div>
-        <div class="spec__row">
-          <dt class="code">--text-quaternary</dt>
-          <dd><div class="level level--quaternary" aria-hidden="true">/</div></dd>
-        </div>
-      </dl>
-
-      <p>
-        Spacing runs on three numbers: 8px inside a group, 16px between groups,
-        40px between sections. On an entry page the title, its metadata and its
-        one-line summary sit 16px apart, and the notes under them start a new
-        section.
-      </p>
-
-      <p>
-        Tabular numbers are not optional. Any digit that changes in place, or
-        sits in a column, gets them. Here is the same clock twice, the second one
-        without.
-      </p>
-
-      <dl class="spec">
-        <div class="spec__row">
-          <dt class="code">tabular-nums</dt>
-          <dd><span class="figures tabular-nums" data-tick>--:--:--</span></dd>
-        </div>
-        <div class="spec__row">
-          <dt class="code">default</dt>
-          <dd><span class="figures" data-tick>--:--:--</span></dd>
-        </div>
-      </dl>
-
-      <p>
-        Watch the right edge of the second one. Every time a digit changes width
-        the whole string re-lays-out, which is a twitch in the corner of your eye
-        on a page with forty dated rows on it.
-      </p>
-    </section>
-
-    <!-- ------------------------------------------------------------------ -->
-
-    <section>
-      <h2 class="sheet__head mono">Chips</h2>
-      <p>
-        A soft tint, never a solid fill, so twenty rows read as one page rather
-        than as a traffic light. A tone sets three numbers and the tint, the
-        hairline and the ink all derive from them, which is how light and dark
-        stay in step without a second palette.
-      </p>
-      <p>
-        Every ink clears 6:1 over its own tint. Not over the page behind it: over
-        the colour the tint actually composites to, which is the lower of the two
-        numbers and the one you are subject to. Measuring against the page
-        flatters every tone by about eight tenths of a point.
-      </p>
-
-      <dl class="spec">
-        <div class="spec__row">
-          <dt class="code">verdict</dt>
-          <dd>
-            <ul class="chips">
-              {VERDICTS.map((verdict) => (
-                <li>
-                  <VerdictBadge verdict={verdict} />
-                </li>
-              ))}
-            </ul>
-          </dd>
-        </div>
-        <div class="spec__row">
-          <dt class="code">status</dt>
-          <dd>
-            <ul class="chips">
-              {STATUSES.map((status) => (
-                <li>
-                  <StatusChip status={status} />
-                </li>
-              ))}
-            </ul>
-          </dd>
-        </div>
-        <div class="spec__row">
-          <dt class="code">kind</dt>
-          <dd>
-            <ul class="chips">
-              {KINDS.map((kind) => (
-                <li>
-                  <KindChip kind={kind} />
-                </li>
-              ))}
-            </ul>
-          </dd>
-        </div>
-        <div class="spec__row">
-          <dt class="code">chip--link</dt>
-          <dd><CollectionChips collections={collections} /></dd>
-        </div>
-        <div class="spec__row">
-          <dt class="code">tag</dt>
-          <dd><TagChips tags={tagSpecimen} /></dd>
-        </div>
-        <div class="spec__row">
-          <dt class="code">monogram</dt>
-          <dd>
-            <ul class="chips chips--monogram">
-              {monogramSpecimen.map((one) => (
-                <li>
-                  <span class="monogram" data-hue={one.hue} title={one.author}>
-                    {one.initial}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </dd>
-        </div>
-      </dl>
-
-      <p>
-        The tag is the one chip that is not a tint. A verdict and a status sit
-        somewhere on a scale, and the fill is what says so; a library tag names
-        a subject, and one subject is not better than another. So it takes no
-        colour at all: a grey outlined box with the word in it.
-      </p>
-
-      <p>
-        The monogram row is the site&rsquo;s seven identity hues. A saved post on <a
-          href="/library/kind/post">/library</a> opens with the poster&rsquo;s
-        profile picture, or without one, a circle holding their initial,
-        coloured by hashing their handle into one of seven slots.
-      </p>
-
-      <p>
-        Those are every verdict on <a href="/tools">/tools</a>, every status on <a
-        href="/experiments">/experiments</a> and every kind on <a
-        href="/library">/library</a>, read from the same lists those pages
-        use.
-      </p>
-      <p>
-        The chip--link row is the filter form: same tone, same size, plus a
-        pointer cursor and a tint that deepens on hover. Hover one. That state
-        holds AA rather than 6:1, the one place the vocabulary spends contrast
-        on purpose.
-      </p>
-      <p>
-        Blue is the accent hue held back from the accent lightness, because an
-        inline link and a shipped chip must not be the same blue on the same
-        page. It is held back by two dials in the light theme and by lightness
-        alone in the dark one, where nothing darker survives the tint.
-      </p>
-    </section>
-
-    <!-- ------------------------------------------------------------------ -->
-
-    <section>
-      <h2 class="sheet__head mono">Links</h2>
-      <p>
-        A link inside a sentence is blue with a 2px underline in the same blue
-        at 40%, like <a href="/about">this one</a>, and the line goes solid on
-        hover. It stays at body weight: prose is near-black now, and a bold blue
-        word in it shouts. The line is the cue that does not depend on seeing
-        colour.
-      </p>
-      <p>
-        A link that leaves the site takes an arrow, drawn by CSS: <a class="ext"
-        href="https://rareui.com" rel="noopener nofollow"
-        target="_blank">rareui.com</a>. It has an empty accessible name, so a
-        screen reader announces the link and not &ldquo;north east arrow&rdquo;
-        after it.
-      </p>
-      <p>
-        Everything else is exempt, and exempt structurally rather than by an
-        override. The top bar, chips, footer items, index rows, tool and library
-        rows, tabs and metadata strips are simply not in that rule, and
-        each sets its own <span class="code">text-decoration: none</span>.
-        Underlining them would turn navigation into a paragraph of
-        shouting.
-      </p>
-      <p>
-        Furniture that still has to read as a link uses the quiet pattern: it
-        keeps its ink and carries a permanent underline in the hairline colour,
-        going accent on hover. <span class="quiet">It looks like this.</span> The
-        underline is permanent because a touchscreen has no hover to reveal one.
-      </p>
-    </section>
-
-    <!-- ------------------------------------------------------------------ -->
-
-    <section>
-      <h2 class="sheet__head mono">Interactions</h2>
-      <p>
-        Everything presses. The default is a 4% squeeze over 120ms, and wide
-        elements dial it back rather than shrinking by 4%, because a full-width
-        row losing 4% of its width reads as a glitch and not as a press. Hold
-        each of these down.
-      </p>
-
-      <ul class="presses">
-        {
-          PRESSES.map((press) => (
-            <li>
-              <button
-                class="pressbox press"
-                type="button"
-                style={`--press-scale: ${press.scale}`}
-              >
-                <span class="code tabular-nums">{press.scale}</span>
-                <span class="pressbox__note">{press.where}</span>
-              </button>
-            </li>
-          ))
-        }
-      </ul>
-
-      <p>
-        They do nothing else.
-      </p>
-      <p>
-        Every transition names its properties. There is no <span class="code"
-        >transition: all</span> anywhere, without exception, and an element that
-        already presses does not get a second transition declaration, because
-        the two race depending on stylesheet order.
-      </p>
-      <p>
-        Reduced motion flattens every animation and transition to almost nothing,
-        zeroes delays, kills smooth scrolling and disables the press scale. What
-        the global brake cannot do is two things, so components handle both:
-        anything that rests on a transform restates that transform under reduced
-        motion, and a staggered entrance is gated on the preference rather than
-        shortened, because a shortened delay still leaves a card sitting
-        invisible and then popping in.
-      </p>
-      <p>
-        The command palette opens on Cmd or Ctrl K from anywhere. Arrows move
-        with wrap, Home and End jump, Enter follows, Escape closes, and Tab is
-        swallowed: the field is the only focusable control in an open palette, so
-        swallowing Tab is the focus trap. Focus never leaves the input, and the
-        highlighted row is a virtual cursor rather than a focused element. Three
-        surfaces listen for keys on the document and none of them may depend on
-        running first, so every other one asks the document whether a palette is
-        open before acting.
-      </p>
-      <p>
-        Scroll chaining is contained in modals and nowhere else. Containing it on
-        a page whose main content is itself a scroller is a trap: you reach the
-        bottom of the picture, keep scrolling to read the notes under it, and
-        nothing happens until you physically move the pointer off the frame.
-      </p>
-      <p>
-        Focus is a 2px accent ring at a 3px offset. It flips to white on the blue
-        panel, and on the screenshot scroller the frame itself is the ring. Every hit area clears 40px, most
-        of them through a pseudo-element, so a control with a toolbar's target
-        does not put a toolbar's height into the row it sits in.
-      </p>
-    </section>
+    <DesignMark />
+    <DesignTokens />
+    <DesignType />
+    <DesignChips />
+    <DesignLinks />
+    <DesignInteractions />
 
     <!-- ------------------------------------------------------------------ -->
 
@@ -667,23 +105,27 @@ const jsonLd = designJsonLd();
     border-top: 1px solid var(--hairline);
   }
 
-  .sheet section {
+
+  .sheet :global(section) {
     padding-block: clamp(1.75rem, 4vw, 2.25rem);
     border-bottom: 1px solid var(--hairline);
   }
 
-  .sheet__head {
+
+  .sheet :global(.sheet__head) {
     color: var(--text-tertiary);
     /* the head is the label; the paragraph under it carries the reading size */
     line-height: 1.6;
   }
 
-  .sheet p {
+
+  .sheet :global(section > p) {
     margin-top: 0.85rem;
     font-size: 1rem;
     line-height: 1.7;
     color: var(--text-secondary);
   }
+
 
   /* The prose-link treatment is not restated here. `.sheet p a` is in the
      selector list in `styles/global.css` beside `.doc a` and `.prose a`, so a
@@ -699,10 +141,11 @@ const jsonLd = designJsonLd();
     }
   }
 
+
   /* Code, not a label. A token name, a property or a key cap reads exactly as
      it is written or it names a different thing, so it is mono at the label's
      13px, the same call `PaletteRow.astro › .swatch__hex` makes for a hex. */
-  .code {
+  .sheet :global(.code) {
     font-family: var(--font-mono);
     font-weight: 500;
     font-size: 0.8125rem;
@@ -711,16 +154,18 @@ const jsonLd = designJsonLd();
     color: var(--text-tertiary);
   }
 
+
   /* --- the specimen table ----------------------------------------------- */
 
   /* The label-and-value anatomy of `global.css › .fact`, at this page's own
      spacing. A specimen sheet is a field table where the value is a rendering. */
-  .spec {
+  .sheet :global(.spec) {
     margin-top: 1.5rem;
     border-top: 1px solid var(--hairline);
   }
 
-  .spec__row {
+
+  .sheet :global(.spec__row) {
     display: grid;
     grid-template-columns: 9.5rem minmax(0, 1fr);
     gap: 0.5rem 1rem;
@@ -729,227 +174,43 @@ const jsonLd = designJsonLd();
     border-bottom: 1px solid var(--hairline);
   }
 
-  .spec dd {
+
+  .sheet :global(.spec dd) {
     margin: 0;
     min-width: 0;
   }
+
 
   /* The specimens bring their own type with them. The one thing they must not
      bring is the margin that positions them on a real page: `.standfirst` sets a
      top margin because it sits under a masthead, and in a table row that is a
      gap rather than a relationship. This is the only respect in which a specimen
      here is not the shipped element. */
-  .spec dd > * {
+  .sheet :global(.spec dd > *) {
     margin: 0;
   }
 
+
   @media (max-width: 599px) {
-    .spec__row {
+    .sheet :global(.spec__row) {
       grid-template-columns: minmax(0, 1fr);
     }
   }
 
+
   /* A label specimen at the ink labels ship at: `--text-tertiary`, the meta level. */
-  .spec__label {
+  .sheet :global(.spec__label) {
     color: var(--text-tertiary);
   }
 
-  /* The four text levels, each at the size it most often ships at. */
-  .level--fg {
-    font-size: 1.0625rem;
-    font-weight: 500;
-    color: var(--text-primary);
-  }
-
-  .level--muted {
-    font-size: 1rem;
-    color: var(--text-secondary);
-  }
-
-  .level--faint {
-    font-size: 0.875rem;
-    color: var(--text-tertiary);
-  }
-
-  .level--quaternary {
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--text-quaternary);
-  }
-
-  /* --- chips ------------------------------------------------------------ */
-
-  /* The same row `CollectionChips.astro › .collections` uses, at the same gap,
-     because the chip in its label form and the chip in its link form are one
-     vocabulary and a row of them should not be two spacings. A list, so four
-     verdicts are four items to anything reading the page out loud. */
-  .chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    margin: 0;
-  }
-
-  /* Seven 48px circles need more air between them than a row of chips does,
-     and they need it in both directions once the row wraps. */
-  .chips--monogram {
-    gap: 0.6rem;
-  }
-
-  /* --- the mark --------------------------------------------------------- */
-
-  .lockup {
-    /* The one size on this page that is not a shipped one: the mark ships at
-       20px and 24px, and neither is large enough to see a miter at. */
-    --mark-size: clamp(3rem, 13vw, 4.5rem);
-    margin-top: 1.75rem;
-    color: var(--text-primary);
-  }
-
-  .icons {
-    display: flex;
-    align-items: flex-end;
-    gap: 1.5rem;
-    margin-top: 1.75rem;
-  }
-
-  .icon {
-    display: grid;
-    justify-items: center;
-    gap: 0.6rem;
-  }
-
-  /* `global.css` sets `height: auto` on every image, which outranks an HTML
-     `height` attribute — and `favicon.svg` carries a viewBox and no intrinsic
-     size, so `auto` leaves the browser to invent one. Both dimensions come off
-     the same custom property, so the box the attributes reserve and the box the
-     icon paints in are one number. */
-  .icon img {
-    width: var(--icon);
-    height: var(--icon);
-  }
-
-  /* --- tokens ----------------------------------------------------------- */
-
-  .tokens {
-    margin-top: 1.5rem;
-    border-top: 1px solid var(--hairline);
-  }
-
-  .tok {
-    display: grid;
-    grid-template-columns: 2.75rem minmax(0, 1fr);
-    gap: 0.15rem 0.9rem;
-    align-items: center;
-    padding-block: 0.7rem;
-    border-bottom: 1px solid var(--hairline);
-  }
-
-  .tok__chip {
-    grid-row: span 2;
-    align-self: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    /* Sharp, like every other swatch on the site: a 4px corner marks a token you
-       could pick up, and this is a surface you look at. Inset, so a --bg swatch
-       on a light page is a chip rather than a hole, and so the eight-percent
-       tokens below are visible at all. */
-    border-radius: 0;
-    box-shadow: inset 0 0 0 1px var(--hairline-strong);
-  }
-
-  .tok__head {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 0.25rem 1rem;
-  }
-
-  .tok__head .code:first-child {
-    color: var(--text-primary);
-  }
-
-  .tok__note {
-    font-size: 0.8125rem;
-    line-height: 1.45;
-    color: var(--text-tertiary);
-  }
-
-  /* Held at the vivid blue in both themes, which is the point it is making. */
-  .panel {
-    margin-top: 1.75rem;
-    padding: 1rem 1.15rem;
-    background: var(--accent-panel);
-  }
 
   /* `.sheet p` sets the prose colour; this one is on the panel, so it takes the
      panel's ink instead. Not an override of a link rule, an ink colour for a
      paragraph that is not on the page background. */
-  .sheet p.panel {
+  .sheet :global(p.panel) {
     color: var(--accent-panel-ink);
   }
 
-  .capture {
-    margin-top: 1.5rem;
-  }
-
-  /* --- type ------------------------------------------------------------- */
-
-  /* The figures specimen is set in the sans at reading size, because Geist Mono
-     is monospaced and would make the comparison meaningless: both rows would
-     hold still and the point would be invisible. This is where the site actually
-     spends the feature, on sans digits in a column. */
-  .figures {
-    font-size: 1.25rem;
-    line-height: 1.3;
-    color: var(--text-primary);
-  }
-
-  /* --- interactions ----------------------------------------------------- */
-
-  .presses {
-    display: grid;
-    gap: 0.5rem;
-    margin-top: 1.5rem;
-  }
-
-  .pressbox {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.35rem 0.85rem;
-    width: 100%;
-    /* 40px floor without a pseudo-element: this box is already taller. */
-    min-height: 40px;
-    padding: 0.7rem 0.9rem;
-    text-align: left;
-    cursor: pointer;
-    box-shadow: inset 0 0 0 1px var(--hairline);
-    /* No `transition-property` here: `.press` already declares one, and a second
-       would race it depending on stylesheet order. */
-  }
-
-  .pressbox:hover {
-    box-shadow: inset 0 0 0 1px var(--hairline-strong);
-  }
-
-  .pressbox__note {
-    font-size: 0.875rem;
-    line-height: 1.4;
-    color: var(--text-secondary);
-  }
-
-  /* --- links ------------------------------------------------------------ */
-
-  /* The quiet pattern, as a specimen. It is a `span` rather than an anchor on
-     purpose: it demonstrates a treatment and has nowhere to go, and a link that
-     goes nowhere is worse than a drawing of one. */
-  .quiet {
-    color: inherit;
-    text-decoration-line: underline;
-    text-decoration-color: var(--hairline-strong);
-    text-underline-offset: 0.18em;
-  }
 
   /* --- the rule --------------------------------------------------------- */
 
