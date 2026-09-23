@@ -54,3 +54,17 @@ export function groupByDomain(list: Site[]): SiteGroup[] {
   });
 }
 
+
+/**
+ * The cards either side of the one `slug` sits in, wrapping: ← and → on a
+ * /sites page walk the gallery's cards, not every saved page, so a site's
+ * extra screens are one step, not three. Null on a one-card gallery.
+ */
+export function neighbours(groups: SiteGroup[], slug: string): { prev: Site | null; next: Site | null } {
+  const at = groups.findIndex((g) => g.screens.some((screen) => screen.site.slug === slug));
+  const step = (offset: number) => {
+    const group = groups[(at + offset + groups.length) % groups.length];
+    return at === -1 || groups.length < 2 || !group ? null : group.primary;
+  };
+  return { prev: step(-1), next: step(1) };
+}

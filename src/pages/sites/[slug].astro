@@ -13,33 +13,27 @@ import Base from "../../layouts/Base.astro";
 import EntryNav from "../../components/EntryNav.astro";
 import SiteDetail from "../../components/SiteDetail.astro";
 import { siteJsonLd } from "../../lib/schema";
-import { sites } from "../../lib/sites";
+import { neighbours } from "../../lib/screens";
+import type { Site } from "../../lib/sites";
+import { siteGroups, sites } from "../../lib/sites";
 
 /**
  * Neighbours are resolved here rather than in the browser: the build already
- * knows the whole gallery and its order, so the page can ship the two hrefs as
- * markup instead of shipping the gallery as data and computing them again on
- * every load.
+ * knows the gallery, so the page ships the two hrefs as markup.
  *
- * The order is `sites` — the same array `/sites` renders, so pressing the right
- * arrow moves the way the eye moved through the grid.
+ * The ring is the gallery's cards (`siteGroups`, one per domain), in the order
+ * /sites renders them, so pressing → moves the way the eye moved through the
+ * grid and a site saved as three screens is one step (`lib/screens.ts ›
+ * neighbours`). Each step lands on the neighbouring card's primary page.
  */
 export const getStaticPaths = (() =>
-  sites.map((site, index) => {
-    const step = (offset: number) => {
-      // Wraps: the gallery is a ring, so walking it with the arrow keys never
-      // dead-ends on the first or last entry.
-      const neighbour = sites[(index + offset + sites.length) % sites.length];
-      // A one-entry gallery would otherwise offer prev and next links pointing
-      // at the page you are already on.
-      return neighbour === undefined || neighbour.slug === site.slug
-        ? null
-        : { href: `/sites/${neighbour.slug}`, title: neighbour.title };
-    };
-
+  sites.map((site) => {
+    const link = (neighbour: Site | null) =>
+      neighbour && { href: `/sites/${neighbour.slug}`, title: neighbour.title };
+    const { prev, next } = neighbours(siteGroups, site.slug);
     return {
       params: { slug: site.slug },
-      props: { site, prev: step(-1), next: step(1) },
+      props: { site, prev: link(prev), next: link(next) },
     };
   })) satisfies GetStaticPaths;
 
