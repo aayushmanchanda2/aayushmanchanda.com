@@ -4,8 +4,8 @@
  * you scroll, what he thought, the facts, and the design tokens.
  *
  * Rendered by `pages/sites/[slug].astro`, and fetched from that page by the
- * /sites slide-over panel (`SitePanel.astro`), which lifts this `article` out
- * by `data-site-detail`. One markup for both, so the panel and the page cannot
+ * /sites slide-over panel (`DetailPanel.astro`), which lifts this `article` out
+ * by `data-detail`. One markup for both, so the panel and the page cannot
  * drift. Behaviour is `lib/site-detail.ts`, wired here on load and by the
  * panel on each insert.
  *
@@ -34,7 +34,7 @@ const { site } = Astro.props;
 const screens = screensOf(site.slug);
 ---
 
-<article class="detail" data-site-detail data-slug={site.slug}>
+<article class="detail" data-detail data-slug={site.slug}>
   <header>
     <h1 class="page-title page-title--entry" data-detail-title>{site.title}</h1>
   </header>
@@ -49,7 +49,6 @@ const screens = screensOf(site.slug);
                 class="screen"
                 href={`/sites/${screen.site.slug}`}
                 aria-current={screen.site.slug === site.slug ? "page" : undefined}
-                data-site-screen
               >
                 <img class="screen__shot" src={screen.site.shot} alt="" loading="lazy" decoding="async" />
                 <span class="screen__label">{screen.label}</span>

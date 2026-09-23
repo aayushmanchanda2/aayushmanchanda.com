@@ -3,7 +3,7 @@
  * (`SiteDetail.astro`): the shot's copy button, the design panel's copy rows
  * and its "Show all N". One entry point, because the content is wired twice:
  * once on the static page's load, and again each time the /sites panel
- * (`SitePanel.astro`) inserts a fetched entry.
+ * (`DetailPanel.astro`) inserts a fetched entry.
  */
 import { FLASH_MS, wireAllCopy } from "./copy-flash";
 import { showAll } from "./show-all";

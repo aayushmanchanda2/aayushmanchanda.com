@@ -4,11 +4,16 @@ import Base from "../layouts/Base.astro";
 import CollectionChips from "../components/CollectionChips.astro";
 import SiteGrid from "../components/SiteGrid.astro";
 import SiteList from "../components/SiteList.astro";
-import SitePanel from "../components/SitePanel.astro";
+import DetailPanel from "../components/DetailPanel.astro";
+import SiteDetail from "../components/SiteDetail.astro";
 import ViewToggle from "../components/ViewToggle.astro";
 import { listJsonLd, pageUrl } from "../lib/schema";
 import { collectionGroups, siteGroups, sites } from "../lib/sites";
 import { SITES_VIEW } from "../lib/view-toggle";
+
+// Imported for its styles, never rendered here: the panel fetches the entry
+// (`DetailPanel.astro`). An unused import is elided, hence the `void`.
+void SiteDetail;
 
 /**
  * The line renders at two collections, not at one.
@@ -73,8 +78,15 @@ const jsonLd = listJsonLd({
     <SiteList groups={siteGroups} />
   </div>
 
-  <SitePanel />
+  <DetailPanel base="/sites" listWidth="min(460px, 50vw)" />
 </Base>
+
+<script>
+  import { initDetailPanel } from "../lib/detail-panel";
+  import { enhanceSiteDetail } from "../lib/site-detail";
+
+  initDetailPanel(enhanceSiteDetail);
+</script>
 
 <style>
   .body {

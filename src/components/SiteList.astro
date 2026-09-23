@@ -7,7 +7,7 @@
  *
  * The rows carry the hover preview card (`lib/preview-card.ts`): here the row
  * is words, so the picture is what the card adds. Each row is one stretched
- * link to `/sites/<slug>`, which `SitePanel.astro` opens in the slide-over.
+ * link to `/sites/<slug>`, which `DetailPanel.astro` opens in the slide-over.
  */
 import "../styles/table.css";
 import AppIcon from "./AppIcon.astro";
@@ -44,7 +44,7 @@ const { groups } = Astro.props;
                 <a
                   class="row__link"
                   href={`/sites/${primary.slug}`} data-astro-prefetch="hover"
-                  data-site-open
+                  data-panel-open
                   data-slugs={screens.map((screen) => screen.site.slug).join(" ")}
                 >
                   {primary.title}

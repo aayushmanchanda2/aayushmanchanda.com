@@ -9,7 +9,7 @@
 - `sites-filters` `nav.collections[aria-label="Filter sites by collection"]` links to `/sites/collection/<slug>`; `/sites/domain/<domain>`.
 - `sites-detail` `/sites/<slug>`: `figure.shot` (ShotFrame, `.shot__caption`), `[data-shot-actions]` with Copy/Download buttons (`aria-label="Copy the <title> screenshot to the clipboard"`, `"Download the <title> screenshot"`), `dl.facts`.
 - `sites-list` the list view (`[data-view-set="list"]`): `table.dtable[data-sites-list]` (`SiteList.astro`, `styles/table.css`), headers Name / Domain / Collections (gray chip pills, unlinked) / Saved; each `tr` carries `data-preview` and one `a.row__link[data-site-open]`. Under 640px only Name shows, the domain under it (`.row__phone`).
-- `sites-panel` a click on a tile or row opens `[data-site-panel][data-open]` (`SitePanel.astro`); over 48rem it casts a left-edge shadow and dims the gallery 5% light, 8% dark (a `box-shadow` spread, so it takes no clicks). Drive with `--click '[data-site-open]'`.
+- `sites-panel` a click on a tile or row opens `[data-detail-panel][data-open]` (`DetailPanel.astro`, shared with /tools); over 48rem it casts a left-edge shadow and dims the gallery 5% light, 8% dark (a `box-shadow` spread, so it takes no clicks). Drive with `--click 'a[data-panel-open]'`.
 - `sites-design-panel` `.found` (`.found__head`, `.found__title`, `.found__note`, `.found__md`) on sites with a captured `design`.
 
 ## How to get to it (user POV)

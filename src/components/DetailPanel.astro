@@ -1,44 +1,49 @@
 ---
 /**
- * SitePanel — /sites' slide-over detail. builtbydesigners' `.details-panel`:
- * fixed right under the bar, `calc(100% - min(460px, 50vw))` wide, a hairline
- * on its left edge, sliding in on translateX. Under 48rem it is a full-width
- * sheet.
+ * DetailPanel — the slide-over detail on /sites and /tools, one component for
+ * both (`lib/detail-panel.ts` is the behaviour; each page's script calls
+ * `initDetailPanel`). builtbydesigners' `.details-panel`: fixed right under
+ * the bar, leaving `listWidth` of the index beside it, a hairline on its left
+ * edge, sliding in on translateX. At 48rem and below it is a full-width sheet.
  *
  * Its content is the static page's: a click on a tile or a row fetches
- * `/sites/<slug>`, lifts `SiteDetail.astro`'s `article` out of it and wires it
- * (`lib/site-detail.ts`). The tile's href is untouched, so a modifier click,
- * a reload or no scripting at all gets the full static page.
+ * `<base>/<slug>`, lifts its `[data-detail]` article out and wires it. The
+ * href is untouched, so a modifier click, a reload or no scripting at all gets
+ * the full static page. The page imports the detail component (`SiteDetail`,
+ * `ToolDetail`) without rendering it, so Astro ships its CSS there.
  *
- * **A non-modal dialog** (`role="dialog"`, `aria-modal="false"`). The gallery
- * beside it stays visible and live: a click on another tile switches the
- * panel, a click on the gallery's empty canvas closes it. On a desktop it
- * lifts off the gallery with a layered shadow on its left edge and dims it
- * by a few percent (QA phase 2, B3); the dim is a shadow, so it takes no clicks.
- * Modal semantics would hide that live half from a screen reader while a
- * pointer can still use it. Focus moves in on open and Tab wraps inside, so a
- * keyboard reader stays with what just opened; Escape (or the close button)
- * leaves and puts focus back on the tile that opened it.
+ * **A non-modal dialog** (`role="dialog"`, `aria-modal="false"`). The index
+ * beside it stays visible and live: a click on another tile or row switches
+ * the panel, the filters and the layout toggle keep working, and a click on
+ * the empty canvas closes it. On a desktop it lifts off the index with a
+ * layered shadow on its left edge and dims it by a few percent (QA phase 2,
+ * B3); the dim is a shadow, so it takes no clicks. Modal semantics would hide
+ * that live half from a screen reader while a pointer can still use it. Focus
+ * moves in on open and Tab wraps inside, so a keyboard reader stays with what
+ * just opened; Escape (or the close button) leaves and puts focus back on the
+ * tile that opened it.
  *
- * History: opening pushes `/sites/<slug>`, closing pushes `/sites`, switching
- * between screens of one site replaces; back and forward replay all three.
+ * History: opening pushes `<base>/<slug>` (the filter query rides along),
+ * switching replaces, closing steps back off the entry it pushed.
  */
-/*
- * Imported for its styles, never rendered here. The content arrives fetched,
- * and Astro ships a component's CSS (and its children's) only on pages whose
- * module graph holds it; an unused import is elided, hence the `void`.
- */
-import SiteDetail from "./SiteDetail.astro";
-void SiteDetail;
+interface Props {
+  /** The index path the entries live under: "/sites", "/tools". */
+  base: string;
+  /** How much of the index stays visible beside the panel. */
+  listWidth: string;
+}
+
+const { base, listWidth } = Astro.props;
 ---
 
 <div
   class="panel"
   role="dialog"
   aria-modal="false"
-  aria-labelledby="site-panel-title"
+  aria-labelledby="detail-panel-title"
   tabindex="-1"
-  data-site-panel
+  data-detail-panel={base}
+  style={`--list-width: ${listWidth}`}
   inert
 >
   <div class="panel__bar">
@@ -53,8 +58,6 @@ void SiteDetail;
 
 <style>
   .panel {
-    --list-width: min(460px, 50vw);
-
     position: fixed;
     top: calc(var(--frame) + var(--bar-h));
     right: var(--frame);
@@ -82,9 +85,9 @@ void SiteDetail;
     outline: none;
   }
 
-  /* Beside the gallery: two shadow layers off the left edge, then a spread
+  /* Beside the index: two shadow layers off the left edge, then a spread
      the size of the window, which is the dim. Under the bar (30) and the
-     mat (40), so only the gallery takes it. */
+     mat (40), so only the index takes it. */
   @media (width > 48rem) {
     .panel[data-open] {
       box-shadow:
@@ -148,9 +151,3 @@ void SiteDetail;
     opacity: 0.5;
   }
 </style>
-
-<script>
-  import { initSitePanel } from "../lib/site-panel";
-
-  initSitePanel();
-</script>

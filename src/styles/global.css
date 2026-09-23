@@ -89,7 +89,7 @@
   --glass: light-dark(rgb(255 255 255 / 0.6), rgb(255 255 255 / 0.12));
   --glass-edge: light-dark(rgb(0 0 0 / 0.08), rgb(255 255 255 / 0.2));
   --glass-shadow: light-dark(rgb(0 0 0 / 0.12), rgb(0 0 0 / 0.5));
-  /* The /sites panel over the gallery (`SitePanel.astro`): its edge shadow,
+  /* The /sites panel over the gallery (`DetailPanel.astro`): its edge shadow,
      and the few percent it dims the gallery by. */
   --panel-shadow: light-dark(rgb(0 0 0 / 0.08), rgb(0 0 0 / 0.6));
   --panel-dim: light-dark(rgb(0 0 0 / 0.05), rgb(0 0 0 / 0.08));

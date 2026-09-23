@@ -10,7 +10,7 @@
    (`layouts/Base.astro`).
 
    Body padding makes the room; everything sticky or fixed under the bar reads
-   `--frame` too (`TopBar`, `ToolList`, `SitePanel`, `LibraryPane`, the shell's
+   `--frame` too (`TopBar`, `ToolList`, `DetailPanel`, `LibraryPane`, the shell's
    min-height in `Base.astro`). One fixed, click-through layer (`.mat`) draws
    it: a full-window sheet of mat, masked down to the gutter plus four rows of
    half-circles along the page's edge, which are the perforation. The mat shows

@@ -44,7 +44,7 @@ const breakable = (name: string) => name.split(/(?<=[/.])(?=.)/);
     {
       tools.map((tool) => (
         <li class="tile" {...toolAttributes(tool)}>
-          <a class="tile__link" href={`/tools/${tool.slug}`} data-astro-prefetch="hover">
+          <a class="tile__link" href={`/tools/${tool.slug}`} data-astro-prefetch="hover" data-panel-open>
             <AppIcon tool={tool} size={60} />
             <span class="tile__name" title={tool.description ? `${tool.name}: ${tool.description}` : tool.name}>
               {breakable(tool.name).map((part, i) => (<>{i > 0 && <wbr />}{part}</>))}
