@@ -21,6 +21,7 @@ import {
   POST_TITLE_MAX,
   PUBLISHED_TAG,
   SWEEP_HOLD_TAG,
+  VETTED_TAG,
   buildReadingEntry,
   buildSiteEntry,
   buildToolEntry,
@@ -86,6 +87,10 @@ test("the sweep's hold tag is bookkeeping, not a topic", () => {
   // pipeline without teaching the site a word that means nothing to a reader.
   assert.deepEqual(collectionsFrom([SWEEP_HOLD_TAG, "design"]), ["design"]);
   assert.deepEqual(collectionsFrom(["Sweep-Hold", " sweep hold "]), []);
+});
+
+test("the vetted triage mark is bookkeeping, not a topic", () => {
+  assert.deepEqual(collectionsFrom([VETTED_TAG, "Vetted", "agents"]), ["agents"]);
 });
 
 test("two spellings of one tag are one collection", () => {

@@ -30,7 +30,7 @@ const updated = feed ? (await feedItems(feed)).map((item) => item.date).sort().a
   <span class="stamp__mark">2026</span>
   {denomination && <span class="stamp__mark stamp__mark--end">{denomination}</span>}
 </div>
-<div class="mat" aria-hidden="true"><div class="mat__lift"></div></div>
+<div class="mat" aria-hidden="true"><div class="mat__shade"><div class="mat__paper"></div></div></div>
 {
   current && updated && (
     <svg class="postmark" viewBox="0 0 200 96" aria-hidden="true">

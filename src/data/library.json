@@ -4546,8 +4546,7 @@
       "local-agency",
       "outbound",
       "playwright",
-      "site-audit",
-      "vetted"
+      "site-audit"
     ],
     "post": {
       "id": "2101031650981474496",
@@ -4593,8 +4592,7 @@
       "jev",
       "local-trades",
       "quoting",
-      "typesafe",
-      "vetted"
+      "typesafe"
     ],
     "post": {
       "id": "2101697429192286312",
@@ -4638,8 +4636,7 @@
       "classifier",
       "jev",
       "lead-routing",
-      "local-services",
-      "vetted"
+      "local-services"
     ],
     "post": {
       "id": "2101724612086395008",

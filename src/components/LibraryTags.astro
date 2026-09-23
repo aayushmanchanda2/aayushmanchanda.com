@@ -147,6 +147,12 @@ const [top, rest] = [tags.slice(0, TOP), tags.slice(TOP)];
     outline: none;
   }
 
+  /* A tag the current filter leaves at 0 (library-pane.ts): no press, no hover. */
+  .ltags__tag:has(:disabled) {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
   /* A ticked tag reads like the tag you are standing on (chip.css). */
   .ltags__tag:has(:checked) {
     border-color: var(--text-primary);
