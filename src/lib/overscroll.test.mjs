@@ -36,7 +36,7 @@ const SRC = fileURLToPath(new URL("..", import.meta.url));
  * third entry needs the reasoning written into design.md §4 first — it is the
  * document that makes this list mean something.
  */
-const MODALS = ["styles/palette.css", "components/MobileNav.astro"];
+const MODALS = ["styles/palette.css", "components/MobileNavPanel.astro"];
 
 /**
  * Every shipped file under `src/`, so a new surface cannot land outside the

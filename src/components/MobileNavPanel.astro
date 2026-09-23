@@ -1,0 +1,296 @@
+---
+/**
+ * MobileNavPanel: the blue sheet `MobileNav.astro` opens, `lib/mnav.ts` flips
+ * `data-open`. No less-than sign in this frontmatter (`MobileNav.astro`).
+ */
+import ThemeToggle from "./ThemeToggle.astro";
+import { normalize } from "../lib/links";
+import type { NavItem } from "../lib/sections";
+
+interface Props {
+  items: NavItem[];
+  pathname: string;
+}
+
+const { items, pathname } = Astro.props;
+
+const current = normalize(pathname);
+---
+
+<div
+  class="mnav__panel"
+  id="mobile-nav-panel"
+  data-mnav-panel
+  role="dialog"
+  aria-modal="true"
+  aria-label="Site navigation"
+  style={`--search-i:${items.length}`}
+>
+  <button
+    type="button"
+    class="mnav__close press"
+    data-mnav-close
+    aria-label="Close menu"
+  >
+    <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false">
+      <path
+        d="M3 3 L13 13 M13 3 L3 13"
+        stroke="currentColor"
+        stroke-width="1.25"
+        stroke-linecap="square"></path>
+    </svg>
+  </button>
+
+  <nav aria-label="Primary">
+    <ul class="mnav__list">
+      {
+        items.map((item, i) => (
+          <li class="mnav__item" style={`--i:${i}`}>
+            <a
+              class="mnav__link"
+              href={item.href}
+              data-mnav-link
+              aria-current={
+                normalize(item.href) === current ? "page" : undefined
+              }
+            >
+              {item.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+
+  {/*
+    The two controls a touch reader cannot get to any other way: the palette,
+    which has no Cmd+K to press here, and the theme, whose only other home is
+    a footer that is a long scroll away.
+
+    Deliberately quieter than the section links and set below them: these are
+    ways to work the site, not a sixth and seventh section. They enter
+    together on the beat after the last link, continuing the same stagger.
+  */}
+  <div class="mnav__actions">
+    {/*
+      `data-mnav-search` is what `lib/mnav.ts` hangs the "close this panel
+      first" behaviour on; `data-palette-open` is what `lib/palette.ts`
+      listens for.
+    */}
+    <button
+      class="mnav__search mono press"
+      type="button"
+      data-mnav-search
+      data-palette-open
+    >
+      Search
+    </button>
+
+    <ThemeToggle variant="panel" />
+  </div>
+</div>
+
+<style>
+  /* --- panel ------------------------------------------------------------- */
+
+  .mnav__panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 80;
+    width: min(86vw, 380px);
+    height: 100%;
+    height: 100svh;
+
+    /* A full-height sheet against the left edge: in portrait its foot is under
+       the home indicator, in landscape its whole left side is under the notch.
+       `max()` rather than adding the inset to the padding — the panel's own
+       padding is already larger than every inset on every current device, so
+       adding would double-pad it; `max()` only ever takes over when an inset is
+       genuinely bigger than the breathing room the design already asked for.
+
+       Inert today. `env()` is `0px` until the viewport meta says
+       `viewport-fit=cover`, and `layouts/Base.astro` does not say it, so iOS
+       letterboxes the page and there is nothing under a notch to fix. Written
+       now because the padding is the thing that would be wrong first, and
+       because `max()` degrades to exactly the old `clamp()` while the insets
+       are zero — this is a no-op on today's build by construction, not by
+       luck. design.md §3 carries the note and the audit that flipping the meta
+       would need. */
+    --mnav-pad: clamp(1.5rem, 6vw, 2.5rem);
+    padding-top: max(var(--mnav-pad), env(safe-area-inset-top));
+    padding-right: max(var(--mnav-pad), env(safe-area-inset-right));
+    padding-bottom: max(var(--mnav-pad), env(safe-area-inset-bottom));
+    padding-left: max(var(--mnav-pad), env(safe-area-inset-left));
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    /* arc.net's grain on a flat blue, the mat's recipe (VET-261), under a 35%
+       veil of the same blue: at full strength its lightest speck took white
+       ink to 4.29:1. Veiled, the lightest speck clears 4.5 (the audit). */
+    background:
+      linear-gradient(color-mix(in srgb, var(--accent-panel) 35%, transparent) 0 0),
+      var(--grain) var(--accent-panel);
+    color: var(--accent-panel-ink);
+    overscroll-behavior: contain;
+    overflow-y: auto;
+
+    visibility: hidden;
+    transform: translateX(-100%);
+    /* transform animates; visibility flips only after the slide-out finishes */
+    transition-property: transform, visibility;
+    transition-duration: var(--dur-slow), 0s;
+    transition-delay: 0s, var(--dur-slow);
+    transition-timing-function: var(--ease-out);
+  }
+
+  .mnav__panel[data-open] {
+    visibility: visible;
+    transform: translateX(0);
+    transition-delay: 0s, 0s;
+  }
+
+  .mnav__close {
+    position: absolute;
+    top: clamp(0.75rem, 4vw, 1.25rem);
+    right: clamp(0.75rem, 4vw, 1.25rem);
+    width: 44px;
+    height: 44px;
+    display: grid;
+    place-items: center;
+    color: var(--accent-panel-ink);
+    cursor: pointer;
+    opacity: 0.75;
+  }
+
+  .mnav__close:hover {
+    opacity: 1;
+  }
+
+  .mnav__close svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .mnav__close:focus-visible,
+  .mnav__link:focus-visible {
+    outline: 2px solid var(--accent-panel-ink);
+    outline-offset: 4px;
+  }
+
+  /* --- items ------------------------------------------------------------- */
+
+  .mnav__list {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(0.35rem, 2vw, 0.75rem);
+    margin: 0;
+  }
+
+  .mnav__item {
+    opacity: 0;
+    transform: translateX(-14px);
+    transition-property: opacity, transform;
+    transition-duration: var(--dur);
+    transition-timing-function: var(--ease-out);
+    /* closing: everything leaves together, no stagger to sit through */
+    transition-delay: 0s;
+  }
+
+  .mnav__panel[data-open] .mnav__item {
+    opacity: 1;
+    transform: translateX(0);
+    transition-delay: calc(80ms + var(--i) * 70ms);
+  }
+
+  .mnav__link {
+    display: inline-block;
+    position: relative;
+    font-family: var(--font-mono);
+    font-size: clamp(1.75rem, 8.5vw, 2.5rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    line-height: 1.25;
+    color: var(--accent-panel-ink);
+    text-decoration: none;
+    padding-block: 0.15em;
+    transition-property: opacity;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .mnav__link:not([aria-current]) {
+    opacity: 0.62;
+  }
+
+  .mnav__link:hover,
+  .mnav__link:active {
+    opacity: 1;
+  }
+
+  /* current page marker — a hairline under the label */
+  .mnav__link[aria-current="page"]::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0.1em;
+    height: 1px;
+    background: currentColor;
+  }
+
+  /* --- actions ------------------------------------------------------------ */
+
+  /* The row is what enters, not the controls in it: one delay to keep in step
+     with the links above instead of one per control. */
+  .mnav__actions {
+    align-self: start;
+    margin-top: clamp(1.5rem, 6vw, 2.25rem);
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    opacity: 0;
+    transform: translateX(-14px);
+    transition-property: opacity, transform;
+    transition-duration: var(--dur);
+    transition-timing-function: var(--ease-out);
+    transition-delay: 0s;
+  }
+
+  .mnav__panel[data-open] .mnav__actions {
+    opacity: 1;
+    transform: translateX(0);
+    /* Lands after the last section link, continuing the same stagger. */
+    transition-delay: calc(80ms + var(--search-i, 6) * 70ms);
+  }
+
+  /* No `transition-property` here: this button carries `.press`, which already
+     names `border-color`, and a second declaration would race it depending on
+     stylesheet order. The entrance belongs to the row above. */
+  .mnav__search {
+    padding: 0.5rem 0.9rem;
+    color: var(--accent-panel-ink);
+    border: 1px solid rgb(255 255 255 / 0.4);
+    cursor: pointer;
+  }
+
+  .mnav__search:hover {
+    border-color: var(--accent-panel-ink);
+  }
+
+  .mnav__search:focus-visible {
+    outline: 2px solid var(--accent-panel-ink);
+    outline-offset: 4px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mnav__item,
+    .mnav__actions {
+      transform: none;
+    }
+    .mnav__panel {
+      transition-delay: 0s, 0s;
+    }
+  }
+</style>

@@ -314,7 +314,7 @@ const markdownVariant = variant === null ? null : absolute(variant);
       a keyboard could Tab straight out of it into content sitting behind the
       scrim. The theme live region below deliberately does not carry it — the
       panel's own theme toggle announces through it while the panel is open.
-      `MobileNav.astro › setOpen` flips the property; `lib/mnav.test.mjs` holds
+      `lib/mnav.ts › setOpen` flips the property; `lib/mnav.test.mjs` holds
       the wiring.
     */}
     <a class="skip mono" href="#main" data-mnav-inert>Skip to content</a>

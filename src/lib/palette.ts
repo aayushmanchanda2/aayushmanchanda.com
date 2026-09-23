@@ -17,7 +17,7 @@
  *
  *   - /sites entry pages already bail on `[aria-modal="true"][data-open]`,
  *     which this palette matches when open. That code needed no change.
- *   - `MobileNav.astro` bails on `[data-palette][data-open]` for the same
+ *   - `lib/mnav.ts` bails on `[data-palette][data-open]` for the same
  *     reason, added alongside this.
  *   - The palette itself can never be open underneath the mobile panel,
  *     because the panel's search control closes the panel on its way in.
@@ -65,7 +65,7 @@ export function initPalette(root: HTMLElement): void {
   /* --- rendering --------------------------------------------------------- */
 
   // Const arrows, not `function`s: a hoisted function would lose the guard's
-  // non-null narrowing (`MobileNav.astro › setOpen` has the same note).
+  // non-null narrowing (`lib/mnav.ts › setOpen` has the same note).
   const render = (query: string): void => {
     if (!entries) return;
     const hits = search(entries, query, RESULT_LIMIT);
