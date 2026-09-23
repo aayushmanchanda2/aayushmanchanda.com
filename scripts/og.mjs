@@ -1,6 +1,7 @@
 /**
  * og.mjs — generates the raster brand assets: the one social card
- * (`public/og.png`) and the fallback icon (`public/favicon.ico`).
+ * (`public/og.png`), the fallback icon (`public/favicon.ico`), and the
+ * home-screen icons `layouts/Base.astro` and `public/site.webmanifest` name.
  *
  * This is a build *tool*, not a build *step*. It is run by hand (`npm run og`)
  * and its output is committed, for one reason: the card has to be set in Geist,
@@ -105,6 +106,26 @@ const MARK_SVG = `<svg class="mark" viewBox="0 0 29.75 16" stroke="currentColor"
 const ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" stroke="${FG}">
     ${A_PATHS}
   </svg>`;
+
+/**
+ * The home-screen icons: the A centred on a white plate. Opaque because iOS
+ * paints a transparent apple-touch-icon's ground black. The 22-unit box leaves
+ * the ink about half the tile, clear of iOS's corner mask and Android's
+ * circle. The A's ink centre is (8, 8.6), so the box is centred there.
+ */
+const PLATE_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="-3 -2.4 22 22" stroke="${FG}">
+    <rect x="-3" y="-2.4" width="22" height="22" fill="${BG}" stroke="none"/>
+    ${A_PATHS}
+  </svg>`;
+
+const PLATES = [
+  ["apple-touch-icon.png", 180],
+  ["icon-192.png", 192],
+  ["icon-512.png", 512],
+];
+
+/** Google's search result icon wants a multiple of 48; transparent like the .ico. */
+const ICON_96 = "favicon-96x96.png";
 
 /**
  * The sections, in the order `src/lib/sections.ts › CATALOGUE` lists them.
@@ -262,6 +283,17 @@ async function main() {
   console.log(
     `favicon.ico  ${ICON_SIZE}x${ICON_SIZE}  ${(icon.length / 1024).toFixed(1)}KB`,
   );
+
+  const raster = async (svg, name, size) => {
+    const png = await sharp(Buffer.from(svg), { density: 72 * (size / 16) })
+      .resize(size, size)
+      .png({ compressionLevel: 9 })
+      .toBuffer();
+    await writeFile(fileURLToPath(new URL(`../public/${name}`, import.meta.url)), png);
+    console.log(`${name}  ${size}x${size}  ${(png.length / 1024).toFixed(1)}KB`);
+  };
+  for (const [name, size] of PLATES) await raster(PLATE_SVG, name, size);
+  await raster(ICON_SVG, ICON_96, 96);
 }
 
 await main();
