@@ -114,6 +114,13 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
       font-size: 1rem;
     }
   }
+
+  /* Under 360 two selects side by side cut "All categories" short: one each. */
+  @media (max-width: 359px) {
+    .select {
+      flex-basis: 100%;
+    }
+  }
 </style>
 
 <script>
