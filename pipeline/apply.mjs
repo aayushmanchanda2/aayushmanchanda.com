@@ -109,9 +109,9 @@ import { describe, isRecord } from "./util.mjs";
  * @property {(input: { slug: string, url: string, dir: string }) => Promise<string | null>} fetchIcon
  *   A new tool's app icon into `dir`, or null for the letter. Always bound,
  *   never null, for the same reason as the two above.
- * @property {(input: { slug: string, url: string, dir: string }) => Promise<string | null>} capturePreview
+ * @property {(input: { slug: string, url: string, dir: string, og?: boolean }) => Promise<string | null>} capturePreview
  *   A new tool's 1200x630 hover preview into `dir`, or null for the icon-only
- *   card. Always bound, like the icon.
+ *   card; with `og`, a /library article's (its og:image first). Always bound, like the icon.
  * @property {(repo: string) => Promise<string | null>} siteOf
  *   A repository save's own site (`icon.mjs › siteOf`: the repo's homepage or
  *   the site its README names), written to `url`. Null keeps `url` null.
@@ -481,9 +481,17 @@ async function captureAndPublish(bookmark, attempts, ctx) {
       ctx.log(`icon: ${slug} — ${describe(error)}, letter`);
     }
   }
-  if (section === "tools") {
+  // A tool's hover card shows its site; a /library article's shows its og:image
+  // or its first screen (VET-248). A post renders whole on its page, a video
+  // already has its poster.
+  const article = section === "reading" && deriveKind(bookmark.url) === "article";
+  if (section === "tools" || article) {
     try {
-      await ctx.capturePreview({ slug, url: bookmark.url, dir: ctx.paths.previewsDir });
+      await ctx.capturePreview(
+        article
+          ? { slug, url: bookmark.url, dir: path.join(ctx.paths.previewsDir, "library"), og: true }
+          : { slug, url: bookmark.url, dir: ctx.paths.previewsDir },
+      );
     } catch (error) {
       ctx.log(`preview: ${slug} — ${describe(error)}, icon only`);
     }

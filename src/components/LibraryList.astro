@@ -36,10 +36,12 @@
  * this list, including the posts on the index.
  */
 import KindChip from "./KindChip.astro";
+import PreviewCard from "./PreviewCard.astro";
 import TagChips from "./TagChips.astro";
 import { routeSlug } from "../lib/parse";
 import type { LibraryEntry } from "../lib/library";
 import { entryHref } from "../lib/library";
+import { libraryPreview } from "../lib/assets";
 import { formatDay } from "../lib/date";
 
 interface Props {
@@ -123,6 +125,7 @@ const anyTags = entries.some((entry) => entry.tags.length > 0);
             href={entry.url}
             rel="noopener nofollow"
             target="_blank"
+            {...libraryPreview(entry)}
           >
             Source<span class="visually-hidden">: {entry.title}</span>
           </a>
@@ -134,6 +137,7 @@ const anyTags = entries.some((entry) => entry.tags.length > 0);
     ))
   }
 </ul>
+<PreviewCard />
 
 <style>
   .list {

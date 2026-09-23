@@ -22,10 +22,12 @@
  */
 import KindIcon from "./KindIcon.astro";
 import LibraryToolbar from "./LibraryToolbar.astro";
+import PreviewCard from "./PreviewCard.astro";
 import type { Kind, LibraryEntry } from "../lib/library";
 import { entryHref, rowSummary } from "../lib/library";
 import { FILTER, PREPAINT } from "../lib/library-pane";
 import { clipText } from "../lib/post";
+import { libraryPreview } from "../lib/assets";
 
 interface Props {
   entries: LibraryEntry[];
@@ -59,6 +61,7 @@ const index = start !== undefined;
             <a
               href={entryHref(entry)}
               aria-current={entry.slug === current ? "page" : undefined}
+              {...libraryPreview(entry)}
             >
               <b>{entry.title}</b>
               <small>
@@ -76,6 +79,7 @@ const index = start !== undefined;
     No entries match both filters. <a href={current ? `/library/${current}` : "/library"}>Show all</a>
   </p>
 </nav>
+<PreviewCard />
 {!index && <script is:inline set:html={FILTER} />}
 {!index && <script is:inline set:html={PREPAINT} />}
 <script>

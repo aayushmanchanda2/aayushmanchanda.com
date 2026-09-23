@@ -231,11 +231,17 @@ test("a reading save is published without opening a browser", async (t) => {
     },
   });
   const capture = fakeCapture();
+  const preview = fakePreview();
   const out = recorder();
 
-  assert.equal(await run([], deps({ paths, server, capture, out })), 0);
+  assert.equal(await run([], deps({ paths, server, capture, preview, out })), 0);
 
   assert.equal(capture.calls.length, 0, "a reading row is metadata, not a picture");
+  assert.deepEqual(
+    preview.calls,
+    [{ slug: "how-gumclaw-works", url: "https://gumclaw.github.io/how-i-work/", dir: path.join(paths.previewsDir, "library") }],
+    "an article gets its hover-card picture",
+  );
   assert.deepEqual(await readJson(paths.libraryJson), [
     {
       slug: "how-gumclaw-works",

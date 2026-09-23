@@ -130,6 +130,13 @@ jobs:
             echo '`'"${line}"'`'
           } >> "$GITHUB_STEP_SUMMARY"
 
+      # Hover-card pictures for the outbound links written by hand in notes and
+      # /about (VET-248). Idempotent, so a run with no new link fetches nothing;
+      # optional like every preview, so it never fails the publish.
+      - name: Link previews
+        continue-on-error: true
+        run: node pipeline/link-previews.mjs
+
       # `publish.mjs` stages and commits exactly these paths and nothing else,
       # so a clean tree here is the normal case, not an error. This step exists
       # for the run where it left something behind — and it stages the same

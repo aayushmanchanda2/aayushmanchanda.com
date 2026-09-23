@@ -16,7 +16,12 @@
  * page:** the site comes from `icon.mjs › siteOf`, so a repository-only tool is
  * shot at its repo's `homepage` or not at all.
  *
- * Run directly to backfill every tool: `node pipeline/preview.mjs [--force]`.
+ * A /library article or a prose link (`og: true`) tries the page's own
+ * og:image first, fetched once and kept here like the shot, and falls back to
+ * the viewport shot of the link itself. A GitHub link is never shot.
+ *
+ * Run directly to backfill every tool: `node pipeline/preview.mjs [--force]`,
+ * or every /library article: `node pipeline/preview.mjs library [--force]`.
  */
 
 import { access, readFile } from "node:fs/promises";
@@ -29,6 +34,7 @@ import sharp from "sharp";
 import { CONTEXT_OPTIONS, loadPage, withDeadline } from "./capture.mjs";
 import { measureShot, shotLooksBlank } from "./challenge.mjs";
 import { siteOf } from "./icon.mjs";
+import { NOT_A_SITE } from "./readme-site.mjs";
 import { resolvePaths } from "./state.mjs";
 import { backfill, describe, writeAtomic } from "./util.mjs";
 
@@ -43,6 +49,72 @@ export const PREVIEW_MAX_BYTES = 60_000;
 const QUALITIES = [80, 70, 60, 50, 40];
 
 const TIMEOUT_MS = 30_000;
+const HEADERS = { "user-agent": "Mozilla/5.0 (compatible; aayushmanchanda.com preview fetch)" };
+/** An og:image bigger than this is not a card picture. */
+const MAX_IMAGE_BYTES = 8_000_000;
+
+/** @type {Record<string, string>} */
+const ENTITIES = { amp: "&", quot: '"', lt: "<", gt: ">", "#39": "'", "#x27": "'" };
+/** @param {string} text */
+const unescape = (text) => text.replace(/&(amp|quot|#39|#x27|lt|gt);/g, (_, /** @type {string} */ name) => ENTITIES[name] ?? "");
+
+/**
+ * The og:image (else twitter:image) and the title a page declares in its head.
+ *
+ * @param {string} html
+ * @param {string} base  The page's URL, for a relative image path.
+ * @returns {{ image: string | null, title: string | null }}
+ */
+export function metaFrom(html, base) {
+  /** @type {Record<string, string>} */
+  const meta = {};
+  for (const [tag] of html.matchAll(/<meta\b[^>]*>/gi)) {
+    const key = /\b(?:property|name)\s*=\s*["']([^"']+)["']/i.exec(tag)?.[1]?.toLowerCase();
+    const content = /\bcontent\s*=\s*("([^"]*)"|'([^']*)')/i.exec(tag);
+    if (key && content && !(key in meta)) meta[key] = unescape((content[2] ?? content[3] ?? "").trim());
+  }
+  const raw = meta["og:image"] || meta["og:image:url"] || meta["twitter:image"] || null;
+  let image = null;
+  try {
+    image = raw === null ? null : new URL(raw, base).href;
+  } catch {}
+  if (image !== null && !/^https?:/.test(image)) image = null;
+  const title = meta["og:title"] || unescape(/<title[^>]*>([^<]*)<\/title>/i.exec(html)?.[1]?.trim() ?? "") || null;
+  return { image, title };
+}
+
+/**
+ * `metaFrom` for a live page, or nulls when it will not load.
+ *
+ * @param {string} url @param {typeof globalThis.fetch} [fetch]
+ */
+export async function readMeta(url, fetch = globalThis.fetch) {
+  try {
+    const response = await fetch(url, { headers: HEADERS, redirect: "follow", signal: AbortSignal.timeout(15_000) });
+    if (!response.ok) return { image: null, title: null };
+    return metaFrom(await response.text(), response.url || url);
+  } catch {
+    return { image: null, title: null };
+  }
+}
+
+/**
+ * An og:image as the stored preview: cropped to the card's 40:21 (1200×630 is
+ * the og size, so most need no crop), then `encodePreview`. Null when it will
+ * not download or decode.
+ *
+ * @param {string} src @param {typeof globalThis.fetch} fetch
+ */
+async function ogPreview(src, fetch) {
+  const response = await fetch(src, { headers: HEADERS, signal: AbortSignal.timeout(15_000) });
+  if (!response.ok || !(response.headers.get("content-type") ?? "").startsWith("image/")) return null;
+  const bytes = Buffer.from(await response.arrayBuffer());
+  if (bytes.length > MAX_IMAGE_BYTES) return null;
+  const png = await sharp(bytes).resize(PREVIEW_VIEWPORT.width, PREVIEW_VIEWPORT.height, { fit: "cover" }).png().toBuffer();
+  const webp = await encodePreview(png);
+  // A flat card (one colour, a lone word) says less than the page does.
+  return shotLooksBlank(await measureShot(webp)) ? null : webp;
+}
 
 /**
  * A cookie banner is not the site. Hidden rather than answered: nothing is
@@ -88,13 +160,27 @@ const exists = (file) => access(file).then(() => true, () => false);
  * @param {import("playwright").Browser} [input.browser]
  * @param {typeof globalThis.fetch} [input.fetch]
  * @param {boolean} [input.force]
+ * @param {boolean} [input.og]  The page's og:image first, and the link itself rather than its site.
  * @param {(line: string) => void} [input.log]
  * @returns {Promise<string | null>} The file, or null for the icon-only card.
  */
-export async function capturePreview({ slug, url: given, dir, browser, fetch, force = false, log = () => {} }) {
+export async function capturePreview({ slug, url: given, dir, browser, fetch = globalThis.fetch, force = false, og = false, log = () => {} }) {
   const file = path.join(dir, `${slug}.webp`);
   if (!force && (await exists(file))) return file;
-  const url = await siteOf(given, fetch);
+  if (og) {
+    const shootable = given !== null && URL.canParse(given) && !NOT_A_SITE.test(new URL(given).hostname.replace(/^www\./, ""));
+    const { image } = given === null ? { image: null } : await readMeta(given, fetch);
+    const webp = image === null ? null : await ogPreview(image, fetch).catch(() => null);
+    if (webp !== null && (await writeAtomic(file, webp).then(() => true, () => false))) {
+      log(`preview: ${slug} <- og:image ${image} (${Math.round(webp.length / 1000)}KB)`);
+      return file;
+    }
+    if (!shootable) {
+      log(`preview: ${slug} has no og:image and is not shot — none`);
+      return null;
+    }
+  }
+  const url = og ? given : await siteOf(given, fetch);
   if (url === null) {
     log(`preview: ${slug} has no site of its own — icon only`);
     return null;
@@ -146,9 +232,12 @@ const invokedDirectly =
 
 if (invokedDirectly) {
   const force = process.argv.includes("--force");
+  const library = process.argv.includes("library");
   const paths = resolvePaths(path.resolve(import.meta.dirname, ".."));
-  /** @type {{ slug: string, url?: string | null, repo?: string | null }[]} */
-  const tools = JSON.parse(await readFile(paths.toolsJson, "utf8"));
+  /** @type {{ slug: string, kind?: string, url?: string | null, repo?: string | null }[]} */
+  const entries = JSON.parse(await readFile(library ? paths.libraryJson : paths.toolsJson, "utf8"));
+  const tools = library ? entries.filter((entry) => entry.kind === "article") : entries;
+  const dir = library ? path.join(paths.previewsDir, "library") : paths.previewsDir;
   const browser = await chromium.launch({ headless: true });
 
   /** @type {string[]} */
@@ -159,7 +248,7 @@ if (invokedDirectly) {
       tools,
       async (tool) => {
         const url = tool.url ?? tool.repo ?? null;
-        const got = await capturePreview({ slug: tool.slug, url, dir: paths.previewsDir, browser, force, log: console.log });
+        const got = await capturePreview({ slug: tool.slug, url, dir, browser, force, og: library, log: console.log });
         if (got === null) missing.push(tool.slug);
       },
       3,

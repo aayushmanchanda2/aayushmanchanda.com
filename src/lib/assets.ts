@@ -6,8 +6,12 @@
  * a filesystem call per row. The check is still a file on disk at build time,
  * which is what keeps every mark and preview on this domain (/privacy).
  */
-import { existsSync, readdirSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
+
+import type { LibraryEntry } from "./library";
+import { previewAttributes } from "./preview-card.ts";
 
 /**
  * `public/` — the web root, so a `/shots/…` path resolves by joining here.
@@ -26,12 +30,47 @@ if (!existsSync(PUBLIC_DIR)) {
   );
 }
 
-const FILES = {
-  icons: new Set(readdirSync(path.join(PUBLIC_DIR, "icons"))),
-  previews: new Set(readdirSync(path.join(PUBLIC_DIR, "previews"))),
+const list = (dir: string) => {
+  const full = path.join(PUBLIC_DIR, dir);
+  return new Set(existsSync(full) ? readdirSync(full) : []);
 };
 
-/** `/icons/<slug>.webp` or `/previews/<slug>.webp` when the pipeline wrote one, else null. */
+const FILES = {
+  icons: list("icons"),
+  previews: list("previews"),
+  "previews/library": list("previews/library"),
+  "previews/links": list("previews/links"),
+};
+
+/** `/<dir>/<slug>.webp` when the pipeline wrote one, else null. */
 export function assetFor(dir: keyof typeof FILES, slug: string): string | null {
   return FILES[dir].has(`${slug}.webp`) ? `/${dir}/${slug}.webp` : null;
+}
+
+/**
+ * The hover card on a link to a /library entry or out to its source: an
+ * article's captured og:image or shot (`pipeline/preview.mjs library`), a
+ * video's poster. Nothing for a post, which renders in full on its page, or an
+ * article with no picture: a card of words would repeat the row.
+ */
+export function libraryPreview(entry: LibraryEntry): Record<string, string> {
+  const image = entry.kind === "video" ? (entry.video?.thumb ?? null) : entry.kind === "article" ? assetFor("previews/library", entry.slug) : null;
+  return image === null ? {} : previewAttributes({ image, name: entry.title, domain: entry.domain });
+}
+
+type LinkRow = { url: string; title: string | null; domain: string };
+const LINKS: Record<string, LinkRow> = JSON.parse(readFileSync(path.join(process.cwd(), "src", "data", "link-previews.json"), "utf8"));
+
+/** Same rule as `pipeline/link-previews.mjs › linkHash`: the link as written. */
+const linkHash = (url: string) => createHash("sha1").update(url).digest("hex").slice(0, 12);
+
+/**
+ * The hover card for a link written by hand in a note or on /about, from
+ * `pipeline/link-previews.mjs`'s manifest and file. Nothing when it has none.
+ */
+export function linkPreview(url: string): Record<string, string> {
+  const hash = linkHash(url);
+  const row = LINKS[hash];
+  const image = assetFor("previews/links", hash);
+  return row === undefined || image === null ? {} : previewAttributes({ image, name: row.title ?? row.domain, domain: row.domain });
 }

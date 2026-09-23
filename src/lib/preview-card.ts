@@ -9,7 +9,8 @@
  * Timing is briOS's: opens 300ms after the pointer arrives, closes 100ms after
  * it leaves, and while one card is open the next trigger swaps in at once.
  * Keyboard focus opens it the same way; Escape, blur, a press or a scroll close
- * it. Only a fine pointer that can hover ever sees one: on touch nothing runs.
+ * it (a keyboard card rides out the scroll that brings its trigger into view).
+ * Only a fine pointer that can hover ever sees one: on touch nothing runs.
  *
  * The card is `aria-hidden`: every word on it is already in the row, so a
  * screen reader would hear the row twice.
@@ -197,6 +198,15 @@ export function initPreviewCard(): void {
     hide();
   });
   document.addEventListener("pointerdown", hide);
-  addEventListener("scroll", hide, { passive: true, capture: true });
+  // Tabbing to a link below the fold scrolls it into view: a keyboard card
+  // (no cursor) follows its trigger instead of closing before it opens.
+  addEventListener(
+    "scroll",
+    () => {
+      if (active === null || cursorX !== null) return hide();
+      if (card && isOpen()) place(active, card);
+    },
+    { passive: true, capture: true },
+  );
   media.addEventListener("change", hide);
 }

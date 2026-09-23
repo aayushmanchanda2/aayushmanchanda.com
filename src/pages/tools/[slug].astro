@@ -25,7 +25,10 @@ import EntryLink from "../../components/EntryLink.astro";
 import VerdictBadge from "../../components/VerdictBadge.astro";
 import VoiceBlocks from "../../components/VoiceBlocks.astro";
 import AppIcon from "../../components/AppIcon.astro";
-import { markFor } from "../../lib/links";
+import PreviewCard from "../../components/PreviewCard.astro";
+import { assetFor } from "../../lib/assets";
+import { linkLabel, markFor } from "../../lib/links";
+import { previewAttributes } from "../../lib/preview-card";
 import { toolJsonLd } from "../../lib/schema";
 import { categorySlug, tools } from "../../lib/tools";
 import { formatDay } from "../../lib/date";
@@ -55,6 +58,11 @@ const repoLabel = tool.repo_moved ? "GitHub (moved)" : "GitHub";
    directly above it, so a letter in a box would repeat what the masthead said. */
 const mark = markFor(tool);
 const hasIcon = mark.logo !== null || mark.icon !== null;
+// The hover card on the way out, only with a picture (else it repeats the page).
+// The file is of the product's own site, so GitHub gets it only as the sole link.
+const shot = assetFor("previews", tool.slug);
+const outCard = (href: string) =>
+  shot === null ? {} : previewAttributes({ image: shot, name: tool.name, domain: linkLabel(href) });
 ---
 
 <Base
@@ -110,17 +118,18 @@ const hasIcon = mark.logo !== null || mark.icon !== null;
         {hasIcon && <AppIcon tool={tool} size={16} letter={false} class="source__favicon" />}
         {tool.url && (
           <span class="source__link">
-            <EntryLink class="ext" href={tool.url}>Website</EntryLink>
+            <EntryLink class="ext" href={tool.url} {...outCard(tool.url)}>Website</EntryLink>
           </span>
         )}
         {tool.repo && (
           <span class="source__link">
-            <EntryLink class="ext" href={tool.repo}>{repoLabel}</EntryLink>
+            <EntryLink class="ext" href={tool.repo} {...(tool.url ? {} : outCard(tool.repo))}>{repoLabel}</EntryLink>
           </span>
         )}
       </p>
     )
   }
+  {shot && <PreviewCard />}
 </Base>
 
 <style>
