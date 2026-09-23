@@ -34,7 +34,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { collectionsFrom, readEntries, urlKey, writeEntries } from "./entries.mjs";
 import { resolvePaths } from "./state.mjs";
 import { isRecord } from "./util.mjs";
-import { CAPS, highlights, prose } from "../src/lib/reader.mjs";
+import { CAPS, highlights, keyline, moments, postHighlights, prose } from "../src/lib/reader.mjs";
 
 /** @typedef {import("./types.js").Paths} Paths */
 /** @typedef {import("./types.js").Patch} Patch */
@@ -42,7 +42,7 @@ import { CAPS, highlights, prose } from "../src/lib/reader.mjs";
 const REPO_ROOT = fileURLToPath(new URL("..", import.meta.url));
 
 /** Every field a patch may touch, in the order the entry writes them. */
-const FIELDS = ["title", "tldr", "highlights", "excerpt", "tags", "note", "why", "draft", "digest"];
+const FIELDS = ["title", "tldr", "highlights", "keyline", "moments", "excerpt", "tags", "note", "why", "draft", "digest"];
 
 /**
  * A patch that cannot be applied: no such entry, two entries, a field that is
@@ -119,9 +119,12 @@ function findEntry(entries, patch) {
  * note", and collapsing the two is how a patch that only meant to add a tag
  * silently blanks a sentence.
  *
- * @param {string} field @param {unknown} value @returns {unknown}
+ * `entry` is the row as it stands: a post's highlights and keyline are checked
+ * against its own text, and moments against the video they time.
+ *
+ * @param {string} field @param {unknown} value @param {Record<string, unknown>} entry @returns {unknown}
  */
-function normalise(field, value) {
+function normalise(field, value, entry) {
   if (value === undefined) return undefined;
   // Every entry has a title, so there is nothing to clear it to.
   if (value === null && field === "title") throw new PatchError("a title cannot be cleared");
@@ -133,8 +136,17 @@ function normalise(field, value) {
     case "tldr":
     case "excerpt":
       return capped(() => prose(value, field, CAPS[field]));
-    case "highlights":
-      return capped(() => highlights(value));
+    case "highlights": {
+      const text = plainPostText(entry);
+      return capped(() => (text === null ? highlights(value) : postHighlights(value, text)));
+    }
+    case "keyline": {
+      const text = plainPostText(entry);
+      if (text === null) throw new PatchError(`"keyline" needs a post with text to mark it in`);
+      return capped(() => keyline(value, text));
+    }
+    case "moments":
+      return normaliseMoments(value, entry);
     case "tags":
       return normaliseTags(value);
     case "note":
@@ -147,6 +159,23 @@ function normalise(field, value) {
     default:
       throw new PatchError(`"${field}" is not a field a patch can set`);
   }
+}
+
+/** A plain post's text, or null on anything else (an X Article quotes a body it does not show). */
+function plainPostText(/** @type {Record<string, unknown>} */ entry) {
+  const post = entry["post"];
+  if (!isRecord(post) || post["article"] != null || typeof post["text"] !== "string") return null;
+  return post["text"];
+}
+
+/** Moments on a video, each timed against the entry's video or its own `source_video_id`. */
+function normaliseMoments(/** @type {unknown} */ value, /** @type {Record<string, unknown>} */ entry) {
+  if (entry["kind"] !== "video") throw new PatchError(`"moments" only go on a video entry`);
+  const list = capped(() => moments(value));
+  if (entry["video"] == null && list.some((moment) => moment.source_video_id === undefined)) {
+    throw new PatchError(`this entry has no video of its own; every moment needs a "source_video_id"`);
+  }
+  return list;
 }
 
 /** @param {unknown} value @returns {string[] | null} */
@@ -171,7 +200,7 @@ function normaliseSentence(field, value) {
 }
 
 /**
- * The source fields (`tldr`, `highlights`, `excerpt`) under the caps
+ * The source fields (`tldr`, `highlights`, `keyline`, `moments`, `excerpt`) under the caps
  * `library.ts` builds with, so a patch the build would refuse is refused here.
  * @template T @param {() => T} read @returns {T}
  */
@@ -370,7 +399,7 @@ export async function patchLibrary({
   const changed = [];
 
   for (const field of FIELDS) {
-    const value = normalise(field, /** @type {Record<string, unknown>} */ (patch)[field]);
+    const value = normalise(field, /** @type {Record<string, unknown>} */ (patch)[field], before);
     if (value === undefined) continue;
 
     // Cleared fields lose the key rather than gaining a `null`, which is how
@@ -421,6 +450,8 @@ const USAGE = [
   "  --title <text>    replace the title (one line)",
   "  --tldr <text>     the source in 25 words or fewer; --tldr '' removes it",
   "  --highlights <json>  [{\"text\":\"…\",\"note\":\"…\",\"color\":\"amber\"}], 1-5 verbatim quotes of 60 words or fewer",
+  "  --keyline <text>  a short post's key line, word for word, 15 words or fewer; '' removes it",
+  "  --moments <json>  [{\"t\":95,\"text\":\"…\"}], 1-4 video moments of 30 words or fewer",
   "  --excerpt <text>  the source's opening, quoted, 80 words or fewer",
   "  --tags a,b,c      replace the tags; --tags '' removes them",
   "  --note <text>     replace the note; --note '' removes it",
@@ -474,12 +505,14 @@ export function parseArgs(argv) {
       case "--note":
       case "--why":
       case "--tldr":
+      case "--keyline":
       case "--excerpt":
         patch[flag.slice(2)] = value.trim() === "" ? null : value;
         break;
       case "--draft":
       case "--digest":
       case "--highlights":
+      case "--moments":
         patch[flag.slice(2)] = jsonArg(value, flag);
         break;
       default:

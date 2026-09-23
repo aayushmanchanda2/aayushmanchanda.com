@@ -1,0 +1,1421 @@
+{
+  "base": "http://localhost:4329/",
+  "label": "vet-264",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-23-vet-264",
+  "at": "2026-09-23T12:20:11.587Z",
+  "shots": [
+    {
+      "route": "/library/matt-van-horn-agent-first-workflow",
+      "url": "http://localhost:4329/library/matt-van-horn-agent-first-workflow",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "library_matt_van_horn_agent_first_workflow-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".pt--page": [
+          {
+            "text": "One of the most productive engineers I k",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".pt--page li": [
+          {
+            "text": "He never reads code. He does not have an",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "Every project starts with the agent writ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "His CLIs leave notes for themselves. Eac",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".moment p": [],
+        ".moment__t": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/how-my-parents-raised-me-to-be-confident",
+      "url": "http://localhost:4329/library/how-my-parents-raised-me-to-be-confident",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "library_how_my_parents_raised_me_to_be_confident-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".pt--page": [
+          {
+            "text": "How my parents raised me to be confident",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".pt--page li": [
+          {
+            "text": "My parents always told me I was the best",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "They never compared me to other kids.",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "They always made me feel like I was the ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".moment p": [],
+        ".moment__t": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/cua-computer-history-open-source-local-memory-for-agents",
+      "url": "http://localhost:4329/library/cua-computer-history-open-source-local-memory-for-agents",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "library_cua_computer_history_open_source_local_memory_for_agents-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".pt--page": [
+          {
+            "text": "Today, we're releasing the first open-so",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".pt--page li": [
+          {
+            "text": "Today, we're releasing the first open-so",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "An agent's chat history helps within one",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "Test prompt on macOS: “Move the white pa",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".moment p": [],
+        ".moment__t": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/arxiv-quickarxiv",
+      "url": "http://localhost:4329/library/arxiv-quickarxiv",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "library_arxiv_quickarxiv-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".pt--page": [
+          {
+            "text": "arXiv -> quickarXivPapers are often writ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".pt--page li": [],
+        ".moment p": [],
+        ".moment__t": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/tell-your-agent-to-mine-your-conversations",
+      "url": "http://localhost:4329/library/tell-your-agent-to-mine-your-conversations",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "library_tell_your_agent_to_mine_your_conversations-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".pt--page": [
+          {
+            "text": "Tell your agent: \"mine all my conversati",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".pt--page li": [],
+        ".moment p": [],
+        ".moment__t": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/anthropic-agents-that-run-for-hours",
+      "url": "http://localhost:4329/library/anthropic-agents-that-run-for-hours",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "library_anthropic_agents_that_run_for_hours-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".pt--page": [],
+        ".pt--page li": [],
+        ".moment p": [
+          {
+            "text": "Tuning a standalone critic to be harsh i",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "Before any code, the generator and evalu",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "The main debugging loop was reading trac",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".moment__t": [
+          {
+            "text": "20:09",
+            "color": "rgb(43, 75, 255)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "25:20",
+            "color": "rgb(43, 75, 255)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "33:26",
+            "color": "rgb(43, 75, 255)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/hermes-agent-masterclass",
+      "url": "http://localhost:4329/library/hermes-agent-masterclass",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "library_hermes_agent_masterclass-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".pt--page": [],
+        ".pt--page li": [],
+        ".moment p": [
+          {
+            "text": "Install with the one-line command from t",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "All messaging goes through the gateway. ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "A skill is a package of instructions. Yo",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".moment__t": [
+          {
+            "text": "0:30",
+            "color": "rgb(43, 75, 255)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "2:03",
+            "color": "rgb(43, 75, 255)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "6:12",
+            "color": "rgb(43, 75, 255)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/matt-van-horn-agent-first-workflow",
+      "url": "http://localhost:4329/library/matt-van-horn-agent-first-workflow",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library_matt_van_horn_agent_first_workflow-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".pt--page": [
+          {
+            "text": "One of the most productive engineers I k",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".pt--page li": [
+          {
+            "text": "He never reads code. He does not have an",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "Every project starts with the agent writ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "His CLIs leave notes for themselves. Eac",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".moment p": [],
+        ".moment__t": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/how-my-parents-raised-me-to-be-confident",
+      "url": "http://localhost:4329/library/how-my-parents-raised-me-to-be-confident",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library_how_my_parents_raised_me_to_be_confident-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".pt--page": [
+          {
+            "text": "How my parents raised me to be confident",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".pt--page li": [
+          {
+            "text": "My parents always told me I was the best",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "They never compared me to other kids.",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "They always made me feel like I was the ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".moment p": [],
+        ".moment__t": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/cua-computer-history-open-source-local-memory-for-agents",
+      "url": "http://localhost:4329/library/cua-computer-history-open-source-local-memory-for-agents",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library_cua_computer_history_open_source_local_memory_for_agents-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".pt--page": [
+          {
+            "text": "Today, we're releasing the first open-so",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".pt--page li": [
+          {
+            "text": "Today, we're releasing the first open-so",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "An agent's chat history helps within one",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "Test prompt on macOS: “Move the white pa",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".moment p": [],
+        ".moment__t": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/arxiv-quickarxiv",
+      "url": "http://localhost:4329/library/arxiv-quickarxiv",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library_arxiv_quickarxiv-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".pt--page": [
+          {
+            "text": "arXiv -> quickarXivPapers are often writ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".pt--page li": [],
+        ".moment p": [],
+        ".moment__t": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/tell-your-agent-to-mine-your-conversations",
+      "url": "http://localhost:4329/library/tell-your-agent-to-mine-your-conversations",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library_tell_your_agent_to_mine_your_conversations-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".pt--page": [
+          {
+            "text": "Tell your agent: \"mine all my conversati",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".pt--page li": [],
+        ".moment p": [],
+        ".moment__t": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/anthropic-agents-that-run-for-hours",
+      "url": "http://localhost:4329/library/anthropic-agents-that-run-for-hours",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library_anthropic_agents_that_run_for_hours-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".pt--page": [],
+        ".pt--page li": [],
+        ".moment p": [
+          {
+            "text": "Tuning a standalone critic to be harsh i",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "Before any code, the generator and evalu",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "The main debugging loop was reading trac",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".moment__t": [
+          {
+            "text": "20:09",
+            "color": "rgb(43, 75, 255)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "25:20",
+            "color": "rgb(43, 75, 255)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "33:26",
+            "color": "rgb(43, 75, 255)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/hermes-agent-masterclass",
+      "url": "http://localhost:4329/library/hermes-agent-masterclass",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library_hermes_agent_masterclass-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".pt--page": [],
+        ".pt--page li": [],
+        ".moment p": [
+          {
+            "text": "Install with the one-line command from t",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "All messaging goes through the gateway. ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "A skill is a package of instructions. Yo",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".moment__t": [
+          {
+            "text": "0:30",
+            "color": "rgb(43, 75, 255)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "2:03",
+            "color": "rgb(43, 75, 255)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "6:12",
+            "color": "rgb(43, 75, 255)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/matt-van-horn-agent-first-workflow",
+      "url": "http://localhost:4329/library/matt-van-horn-agent-first-workflow",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "library_matt_van_horn_agent_first_workflow-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".pt--page": [
+          {
+            "text": "One of the most productive engineers I k",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".pt--page li": [
+          {
+            "text": "He never reads code. He does not have an",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "Every project starts with the agent writ",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "His CLIs leave notes for themselves. Eac",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".moment p": [],
+        ".moment__t": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/how-my-parents-raised-me-to-be-confident",
+      "url": "http://localhost:4329/library/how-my-parents-raised-me-to-be-confident",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "library_how_my_parents_raised_me_to_be_confident-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".pt--page": [
+          {
+            "text": "How my parents raised me to be confident",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".pt--page li": [
+          {
+            "text": "My parents always told me I was the best",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "They never compared me to other kids.",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "They always made me feel like I was the ",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".moment p": [],
+        ".moment__t": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/cua-computer-history-open-source-local-memory-for-agents",
+      "url": "http://localhost:4329/library/cua-computer-history-open-source-local-memory-for-agents",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "library_cua_computer_history_open_source_local_memory_for_agents-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".pt--page": [
+          {
+            "text": "Today, we're releasing the first open-so",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".pt--page li": [
+          {
+            "text": "Today, we're releasing the first open-so",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "An agent's chat history helps within one",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "Test prompt on macOS: “Move the white pa",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".moment p": [],
+        ".moment__t": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/arxiv-quickarxiv",
+      "url": "http://localhost:4329/library/arxiv-quickarxiv",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "library_arxiv_quickarxiv-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".pt--page": [
+          {
+            "text": "arXiv -> quickarXivPapers are often writ",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".pt--page li": [],
+        ".moment p": [],
+        ".moment__t": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/tell-your-agent-to-mine-your-conversations",
+      "url": "http://localhost:4329/library/tell-your-agent-to-mine-your-conversations",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "library_tell_your_agent_to_mine_your_conversations-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".pt--page": [
+          {
+            "text": "Tell your agent: \"mine all my conversati",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".pt--page li": [],
+        ".moment p": [],
+        ".moment__t": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/anthropic-agents-that-run-for-hours",
+      "url": "http://localhost:4329/library/anthropic-agents-that-run-for-hours",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "library_anthropic_agents_that_run_for_hours-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".pt--page": [],
+        ".pt--page li": [],
+        ".moment p": [
+          {
+            "text": "Tuning a standalone critic to be harsh i",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "Before any code, the generator and evalu",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "The main debugging loop was reading trac",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".moment__t": [
+          {
+            "text": "20:09",
+            "color": "rgb(92, 116, 255)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "25:20",
+            "color": "rgb(92, 116, 255)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "33:26",
+            "color": "rgb(92, 116, 255)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/hermes-agent-masterclass",
+      "url": "http://localhost:4329/library/hermes-agent-masterclass",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "library_hermes_agent_masterclass-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".pt--page": [],
+        ".pt--page li": [],
+        ".moment p": [
+          {
+            "text": "Install with the one-line command from t",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "All messaging goes through the gateway. ",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "A skill is a package of instructions. Yo",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".moment__t": [
+          {
+            "text": "0:30",
+            "color": "rgb(92, 116, 255)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "2:03",
+            "color": "rgb(92, 116, 255)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "6:12",
+            "color": "rgb(92, 116, 255)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/matt-van-horn-agent-first-workflow",
+      "url": "http://localhost:4329/library/matt-van-horn-agent-first-workflow",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library_matt_van_horn_agent_first_workflow-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".pt--page": [
+          {
+            "text": "One of the most productive engineers I k",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".pt--page li": [
+          {
+            "text": "He never reads code. He does not have an",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "Every project starts with the agent writ",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "His CLIs leave notes for themselves. Eac",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".moment p": [],
+        ".moment__t": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/how-my-parents-raised-me-to-be-confident",
+      "url": "http://localhost:4329/library/how-my-parents-raised-me-to-be-confident",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library_how_my_parents_raised_me_to_be_confident-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".pt--page": [
+          {
+            "text": "How my parents raised me to be confident",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".pt--page li": [
+          {
+            "text": "My parents always told me I was the best",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "They never compared me to other kids.",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "They always made me feel like I was the ",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".moment p": [],
+        ".moment__t": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/cua-computer-history-open-source-local-memory-for-agents",
+      "url": "http://localhost:4329/library/cua-computer-history-open-source-local-memory-for-agents",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library_cua_computer_history_open_source_local_memory_for_agents-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".pt--page": [
+          {
+            "text": "Today, we're releasing the first open-so",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".pt--page li": [
+          {
+            "text": "Today, we're releasing the first open-so",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "An agent's chat history helps within one",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "Test prompt on macOS: “Move the white pa",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".moment p": [],
+        ".moment__t": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/arxiv-quickarxiv",
+      "url": "http://localhost:4329/library/arxiv-quickarxiv",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library_arxiv_quickarxiv-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".pt--page": [
+          {
+            "text": "arXiv -> quickarXivPapers are often writ",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".pt--page li": [],
+        ".moment p": [],
+        ".moment__t": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/tell-your-agent-to-mine-your-conversations",
+      "url": "http://localhost:4329/library/tell-your-agent-to-mine-your-conversations",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library_tell_your_agent_to_mine_your_conversations-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".pt--page": [
+          {
+            "text": "Tell your agent: \"mine all my conversati",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".pt--page li": [],
+        ".moment p": [],
+        ".moment__t": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/anthropic-agents-that-run-for-hours",
+      "url": "http://localhost:4329/library/anthropic-agents-that-run-for-hours",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library_anthropic_agents_that_run_for_hours-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".pt--page": [],
+        ".pt--page li": [],
+        ".moment p": [
+          {
+            "text": "Tuning a standalone critic to be harsh i",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "Before any code, the generator and evalu",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "The main debugging loop was reading trac",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".moment__t": [
+          {
+            "text": "20:09",
+            "color": "rgb(92, 116, 255)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "25:20",
+            "color": "rgb(92, 116, 255)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "33:26",
+            "color": "rgb(92, 116, 255)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/hermes-agent-masterclass",
+      "url": "http://localhost:4329/library/hermes-agent-masterclass",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library_hermes_agent_masterclass-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".pt--page": [],
+        ".pt--page li": [],
+        ".moment p": [
+          {
+            "text": "Install with the one-line command from t",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "All messaging goes through the gateway. ",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          },
+          {
+            "text": "A skill is a package of instructions. Yo",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "27.2px"
+          }
+        ],
+        ".moment__t": [
+          {
+            "text": "0:30",
+            "color": "rgb(92, 116, 255)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "2:03",
+            "color": "rgb(92, 116, 255)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "6:12",
+            "color": "rgb(92, 116, 255)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}

@@ -36,6 +36,7 @@ import {
   libraryDomains,
   libraryTags,
 } from "../lib/library";
+import { clock, watchAt } from "../lib/reader.mjs";
 import { absolute } from "../lib/site";
 
 /**
@@ -67,7 +68,7 @@ export const GET: APIRoute = () => {
   // such section — the markdown twin of the honest-absence rule the HTML
   // routes follow.
   const digests = digestSection(digested);
-  const highlighted = library.filter((entry) => entry.highlights.length > 0);
+  const highlighted = library.filter((entry) => entry.highlights.length + entry.moments.length > 0);
 
   return markdownDocument({
     page: PAGES.library,
@@ -114,12 +115,13 @@ export const GET: APIRoute = () => {
       ...(digests === null ? [] : [digests]),
       section(
         "Highlights",
-        "Passages quoted from the source, never the whole piece.",
+        "Passages quoted from the source, never the whole piece. Videos list their moments, each linked to the second it starts.",
         ...highlighted.map((entry) =>
           [
             `### ${entry.title}`,
             ...(entry.tldr ? [`TLDR: ${entry.tldr}`] : []),
             ...entry.highlights.map((highlight) => `> ${highlight.text}`),
+            ...entry.moments.map((moment) => `> ${link(clock(moment.t), watchAt(moment.video, moment.t))} ${moment.text}`),
             `Page: ${absolute(`/library/${entry.slug}`)}`,
           ].join("\n\n"),
         ),

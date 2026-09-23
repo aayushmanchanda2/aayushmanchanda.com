@@ -84,7 +84,7 @@ function escapeRe(text: string): string {
 
 /**
  * The text as runs: X's own links by their displayed text, then bare URLs,
- * then @mentions. Longest displayed text first, so `x.com/a/b` wins over `x.com/a`.
+ * then @mentions and #tags. Longest displayed text first, so `x.com/a/b` wins over `x.com/a`.
  */
 export function runs(text: string, links: readonly PostLink[]): Run[] {
   const shown = links
@@ -92,7 +92,7 @@ export function runs(text: string, links: readonly PostLink[]): Run[] {
     .filter((shownText) => shownText !== "")
     .sort((a, b) => b.length - a.length)
     .map(escapeRe);
-  const pattern = new RegExp([...shown, "https?://\\S*[^\\s.,;:!?)\"']", "(?<![\\w@])@[A-Za-z0-9_]{1,15}"].join("|"), "g");
+  const pattern = new RegExp([...shown, "https?://\\S*[^\\s.,;:!?)\"']", "(?<![\\w@])@[A-Za-z0-9_]{1,15}", "(?<![\\w#&])#[A-Za-z][A-Za-z0-9_]{0,49}"].join("|"), "g");
 
   const out: Run[] = [];
   let last = 0;
@@ -102,7 +102,11 @@ export function runs(text: string, links: readonly PostLink[]): Run[] {
     if (at > last) out.push({ text: text.slice(last, at), href: null });
     const href =
       links.find((link) => link.text === found)?.href ??
-      (found.startsWith("@") ? `https://x.com/${found.slice(1)}` : found);
+      (found.startsWith("@")
+        ? `https://x.com/${found.slice(1)}`
+        : found.startsWith("#")
+          ? `https://x.com/hashtag/${found.slice(1)}`
+          : found);
     out.push({ text: found, href });
     last = at + found.length;
   }
@@ -116,6 +120,84 @@ export function postParagraphs(text: string): string[] {
     .split(/\n[ \t]*\n/)
     .map((paragraph) => paragraph.trim())
     .filter((paragraph) => paragraph !== "");
+}
+
+/** A paragraph, or a run of numbered or bulleted lines as a real list (VET-264). */
+export type Block = { kind: "p"; text: string } | { kind: "ol" | "ul"; items: string[]; start: number };
+
+const STEP = /^(\d{1,2})[.)/]\s+/;
+const BULLET = /^[-•]\s+/;
+/** A list marker a scrape flattened into the middle of a line: " - Next" and ". 2) Next". */
+const INLINE_BULLET = /(?<=\S) [-•] (?=[A-Z@#"“])/g;
+const INLINE_STEP = /(?<=[.!?:"”)]) (?=\d{1,2}[.)/] \S)/g;
+
+/**
+ * Line breaks back where a scrape lost them, only when the post plainly is a
+ * list: two or more markers counting the ones already on their own line, and
+ * bullets only inside a line long enough to be several lines run together.
+ * ponytail: a heuristic; a rescrape that keeps the breaks makes it a no-op.
+ */
+function unflatten(text: string): string {
+  const count = (re: RegExp, lineStart: RegExp) => (text.match(re) ?? []).length + (text.match(lineStart) ?? []).length;
+  let out = text;
+  // Only a long line is a flattened one; "0:00 - Intro" on its own line is a chapter, not a list.
+  if (count(INLINE_BULLET, /^[-•]\s/gm) >= 2) {
+    out = out.replace(/^.{200,}$/gm, (line) => line.replace(INLINE_BULLET, "\n- "));
+  }
+  if (count(INLINE_STEP, /^\d{1,2}[.)/]\s/gm) >= 2) out = out.replace(INLINE_STEP, "\n");
+  return out;
+}
+
+/**
+ * The post as blocks. Lines starting "1.", "1)" or "1/" become an `ol`, lines
+ * starting "-" or "•" a `ul`; a plain line right under an item belongs to it
+ * (steps often carry a line of detail). A list split by blank lines is still
+ * one list, and an `ol` keeps the number it started on.
+ */
+export function postBlocks(text: string): Block[] {
+  const out: Block[] = [];
+  for (const paragraph of postParagraphs(unflatten(text))) {
+    let prose: string[] = [];
+    const flush = () => {
+      if (prose.length > 0) out.push({ kind: "p", text: prose.join("\n") });
+      prose = [];
+    };
+    paragraph.split("\n").forEach((line, index) => {
+      const step = STEP.exec(line);
+      const kind = step ? "ol" : BULLET.test(line) ? "ul" : null;
+      const last = out.at(-1);
+      if (kind === null) {
+        if (index > 0 && prose.length === 0 && last !== undefined && last.kind !== "p") {
+          last.items[last.items.length - 1] += `\n${line}`;
+        } else prose.push(line);
+        return;
+      }
+      flush();
+      const item = line.replace(step ? STEP : BULLET, "");
+      const start = step ? Number(step[1]) : 1;
+      const prev = out.at(-1);
+      // A list runs on across blank lines while its numbers do; "1." again starts a new one.
+      if (prev?.kind === kind && (kind === "ul" || start === prev.start + prev.items.length)) prev.items.push(item);
+      else out.push({ kind, items: [item], start });
+    });
+    flush();
+  }
+  return out;
+}
+
+/** A run with the keyline flag: `mark` is true inside the post's key line. */
+export type Part = Run & { mark: boolean };
+
+/** `text` as runs, with the first exact `keyline` in it marked. */
+export function parts(text: string, links: readonly PostLink[], keyline: string | null): Part[] {
+  const at = keyline ? text.indexOf(keyline) : -1;
+  if (keyline === null || at === -1) return runs(text, links).map((run) => ({ ...run, mark: false }));
+  const end = at + keyline.length;
+  return [
+    ...runs(text.slice(0, at), links).map((run) => ({ ...run, mark: false })),
+    ...runs(text.slice(at, end), links).map((run) => ({ ...run, mark: true })),
+    ...runs(text.slice(end), links).map((run) => ({ ...run, mark: false })),
+  ];
 }
 
 /** The post on X, or the saved URL when there is no id to build it from. */

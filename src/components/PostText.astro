@@ -1,0 +1,126 @@
+---
+/**
+ * PostText — a post's words inside a `PostCard` (VET-264): paragraphs with
+ * their single line breaks kept, numbered steps and bullets as real lists,
+ * X's links, @mentions and #tags linked, and the post's keyline under the
+ * highlighter. Split out of `PostCard.astro` so the card stays a layout.
+ *
+ * The keyline is `.hl` from `styles/prose.css`, the reader's own mark. On the
+ * entry page it sweeps once as it scrolls in (`ReaderBlocks.astro`'s script);
+ * on a grid tile it is `data-static` and drawn whole.
+ */
+import type { PostLink } from "../lib/library";
+import { parts, postBlocks } from "../lib/post";
+
+interface Props {
+  text: string;
+  links: PostLink[];
+  keyline: string | null;
+  mode: "grid" | "page" | "quoted";
+}
+
+const { text, links, keyline, mode } = Astro.props;
+const still = mode === "grid" ? "" : undefined;
+const blocks = postBlocks(text).map((block) =>
+  block.kind === "p"
+    ? { ...block, parts: parts(block.text, links, keyline) }
+    : { ...block, rows: block.items.map((item) => parts(item, links, keyline)) },
+);
+---
+
+{
+  blocks.length > 0 && (
+    <div class:list={["pt", `pt--${mode}`]}>
+      {blocks.map((block) => {
+        const lines = "parts" in block ? [block.parts] : block.rows;
+        const inner = lines.map((line) =>
+          line.map((part) => {
+            const body =
+              part.href === null ? (
+                part.text
+              ) : (
+                <a href={part.href} rel="noopener nofollow" target="_blank">{part.text}</a>
+              );
+            return part.mark ? <mark class="hl" data-static={still}>{body}</mark> : body;
+          }),
+        );
+        if (block.kind === "p") return <p>{inner[0]}</p>;
+        const items = inner.map((line) => <li>{line}</li>);
+        return block.kind === "ol" ? <ol start={block.start}>{items}</ol> : <ul>{items}</ul>;
+      })}
+    </div>
+  )
+}
+
+<style>
+  .pt {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75em;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+  }
+
+  .pt :is(p, li) {
+    white-space: pre-line;
+  }
+
+  /* The entry page reads it like an article: 17px at 1.6, about 65 characters
+     a line (rem, not ch: `styles/prose.css` has why). */
+  .pt--page {
+    max-width: 34rem;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+
+  .pt :is(ol, ul) {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375em;
+    padding-left: 1.5em;
+  }
+
+  .pt ol {
+    list-style: decimal;
+  }
+
+  .pt ul {
+    list-style: disc;
+  }
+
+  .pt li::marker {
+    color: var(--text-tertiary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* A tile clamps at seven lines, and so does a post it quotes; the entry has
+     the rest ("Read more"). Keyed to the card so the nested quote is caught. */
+  :global(.pc--grid) .pt {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 7;
+    line-clamp: 7;
+    overflow: hidden;
+  }
+
+  :global(.pc--grid) .pt > * + * {
+    margin-top: 0.75em;
+  }
+
+  :global(.pc--grid) .pt :is(ol, ul) {
+    display: block;
+  }
+
+  .pt a {
+    color: var(--accent);
+    text-decoration: none;
+    transition-property: opacity;
+    transition-duration: var(--dur);
+    transition-timing-function: var(--ease);
+  }
+
+  .pt a:hover {
+    opacity: 0.75;
+  }
+</style>

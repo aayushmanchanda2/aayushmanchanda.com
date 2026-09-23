@@ -70,7 +70,25 @@
       "provider": "youtube",
       "id": "xoE_pE26yDQ",
       "thumb": "/shots/philosopher-ceo-kareem-amin-thumb.webp"
-    }
+    },
+    "moments": [
+      {
+        "t": 233,
+        "text": "He builds from wholeness instead of lack. A chip on your shoulder can build great things, but it does damage along the way."
+      },
+      {
+        "t": 1672,
+        "text": "You can't create a category. You can take something that is happening and name it."
+      },
+      {
+        "t": 1793,
+        "text": "Clay's fixed calls: technical users, power and flexibility over simplicity, a data marketplace, and usage pricing instead of seats."
+      },
+      {
+        "t": 2803,
+        "text": "His head of people says he's the only CEO she's worked with who apologizes. He uses it to calm things before fixing the real problem."
+      }
+    ]
   },
   {
     "slug": "matt-van-horn-agent-first-workflow",
@@ -100,7 +118,23 @@
           "h": 1080
         }
       ]
-    }
+    },
+    "highlights": [
+      {
+        "text": "He never reads code. He does not have an IDE installed.",
+        "note": "The whole premise in one line",
+        "color": "amber"
+      },
+      {
+        "text": "Each run records what it learned in a markdown file, so the next run starts where the last one ended.",
+        "note": "Self-healing CLIs, cheap to copy",
+        "color": "green"
+      },
+      {
+        "text": "He feeds whole transcripts, not summaries.",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "anthropic-agents-that-run-for-hours",
@@ -119,7 +153,25 @@
       "provider": "youtube",
       "id": "mR-WAvEPRwE",
       "thumb": "/shots/anthropic-agents-that-run-for-hours-thumb.webp"
-    }
+    },
+    "moments": [
+      {
+        "t": 1209,
+        "text": "Tuning a standalone critic to be harsh is tractable. Tuning a builder to be self-critical isn't."
+      },
+      {
+        "t": 1520,
+        "text": "Before any code, the generator and evaluator negotiate what done means in files on disk. The evaluator grades against that contract."
+      },
+      {
+        "t": 2006,
+        "text": "The main debugging loop was reading traces to find where the agent's judgment diverged from theirs, then fixing the prompt."
+      },
+      {
+        "t": 2311,
+        "text": "The five takeaways: self-evaluation is a trap, compaction isn't coherence, use structured handoffs, write taste down as a rubric, read the traces."
+      }
+    ]
   },
   {
     "slug": "how-gumclaw-works",
@@ -175,7 +227,25 @@
       "provider": "youtube",
       "id": "vJEy3nP2_C8",
       "thumb": "/shots/most-valuable-skill-2026-managing-ai-agents-thumb.webp"
-    }
+    },
+    "moments": [
+      {
+        "t": 637,
+        "text": "Move to cloud agents. Each session gets its own VM, so five to ten run at once with no code conflicts."
+      },
+      {
+        "t": 912,
+        "text": "Expect 10 to 20 important decisions by lunch. Pin the threads that matter and check agents about every 25 minutes."
+      },
+      {
+        "t": 1832,
+        "text": "A 9am production watchdog summarizes what every paying customer did, with links to see each action."
+      },
+      {
+        "t": 2075,
+        "text": "He spent about $20k on tokens last month and calls it unsustainable. Cheaper tuned models now run his improvement loops."
+      }
+    ]
   },
   {
     "slug": "ecom-eddie-post",
@@ -204,7 +274,8 @@
           "h": 505
         }
       ]
-    }
+    },
+    "keyline": "It’s comfort."
   },
   {
     "slug": "google-fell-out-of-the-ai-race",
@@ -270,7 +341,18 @@
           "h": 1080
         }
       ]
-    }
+    },
+    "highlights": [
+      {
+        "text": "The only job left is to understand what you don't like, put it into words, and tell the AI.",
+        "color": "amber"
+      },
+      {
+        "text": "Turn this thread into a heartbeat. I want you to check my emails, my Slack, my Linear, and tell me what I need to prioritize.",
+        "note": "A heartbeat prompt worth stealing",
+        "color": "blue"
+      }
+    ]
   },
   {
     "slug": "a-post-from-ephraimakanmu",
@@ -299,7 +381,18 @@
         "text": "I study 10-20 case study from agencies and very good designers daily. I mean. I just love to see their thinking process. It would look like a crazy project. Just let me spend more time. I’ll find myself understanding their decision and judgement. \n\nThis routine has helped me so",
         "avatar": "/posts/2080990588837539852/avatar.webp"
       }
-    }
+    },
+    "highlights": [
+      {
+        "text": "please do not just scroll looking for something to copy. STUDY.",
+        "color": "amber"
+      },
+      {
+        "text": "Even study projects you do not like and ask yourself WHY.",
+        "note": "The useful half of the thread",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "david-senra-podcast",
@@ -470,7 +563,18 @@
         "text": "as promised, this prompt will change your life... \n\n(send it to your hermes agent & thank me later)\n\n----------------------------------------------\n\ncreate this system - a generic, durable, private, file-based knowledge base and synchronized life tracker that works across",
         "avatar": "/posts/2086811795084202439/avatar.webp"
       }
-    }
+    },
+    "highlights": [
+      {
+        "text": "a markdown knowledge base that is your source of truth",
+        "color": "amber"
+      },
+      {
+        "text": "a persistent memory pointer so every future session knows where it lives",
+        "note": "The layer most setups skip",
+        "color": "green"
+      }
+    ]
   },
   {
     "slug": "termius-tailscale-tmux",
@@ -500,7 +604,17 @@
           "h": 1080
         }
       ]
-    }
+    },
+    "highlights": [
+      {
+        "text": "Run your agent inside tmux to keep the session alive",
+        "color": "amber"
+      },
+      {
+        "text": "Connect with Termius over SSH from iPhone, iPad, or Android",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "built-a-little-agent-automation-where-i-paste-a-link-to-a-co",
@@ -522,7 +636,18 @@
       "date": "2026-08-22",
       "text": "Built a little agent automation where I paste a link to a cool website I want to save:\n\n→ checks for duplicates in my notion db → extracts metadata (favicon, x handle, title) → ai classifies as personal site or company/product → pings a small endpoint to capture light and dark mode screenshots → adds the site + all details to my notion db → purges the cache on my /sites page → replies with a tweet draft (in case I want to share)\n\nIt's probably slightly inefficient compared to making this fully deterministic, but I like having an agent take care of it because I can say things like:\n\n- oh, that site you captured has a weird loading state, recapture after waiting 3 seconds - review all sites I've saved in the notion db and see if we accidentally captured loading states/403 errors and re-process\n\nYesterday I tried to save a link that 403d so I had my agent wire up a rotating residential proxy to get around it. Look ma no hands!\n\n→ https://t.co/FJoD3DIiFD\n\n(most recently saved https://t.co/cYP0qqWvTk by @shedsgns)",
       "avatar": "/posts/2091209219609628826/avatar.webp"
-    }
+    },
+    "highlights": [
+      {
+        "text": "It's probably slightly inefficient compared to making this fully deterministic, but I like having an agent take care of it",
+        "note": "The tradeoff, stated plainly",
+        "color": "amber"
+      },
+      {
+        "text": "Yesterday I tried to save a link that 403d so I had my agent wire up a rotating residential proxy to get around it.",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "tell-your-agent-to-mine-your-conversations",
@@ -552,7 +677,8 @@
           "h": 276
         }
       ]
-    }
+    },
+    "keyline": "mine all my conversations on disk and tell me how I work"
   },
   {
     "slug": "orwell-s-rules-for-writing-with-llms",
@@ -573,7 +699,22 @@
       "date": "2026-08-27",
       "text": "If you want people to read your stuff please follow Orwell's rules. These LLMs are not your friends. They write with so much damn passive voice, incoherent figures of speech, and unnecessary -ly words. \n\nOrwell's rules:\n1. Never use a metaphor, simile, or other figure of speech which you are used to seeing in print. 2. Never use a long word where a short one will do. 3. If it is possible to cut a word out, always cut it out. 4. Never use the passive where you can use the active. 5. Never use a foreign phrase, a scientific word, or a jargon word if you can think of an everyday English equivalent. 6. Break any of these rules sooner than say anything outright barbarous.",
       "avatar": "/posts/2092819538505273544/avatar.webp"
-    }
+    },
+    "highlights": [
+      {
+        "text": "They write with so much damn passive voice, incoherent figures of speech, and unnecessary -ly words.",
+        "note": "The LLM tells, named",
+        "color": "amber"
+      },
+      {
+        "text": "If it is possible to cut a word out, always cut it out.",
+        "color": "amber"
+      },
+      {
+        "text": "Never use the passive where you can use the active.",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "introducing-ocr-in-anydoc",
@@ -609,7 +750,8 @@
           "h": 1044
         }
       ]
-    }
+    },
+    "keyline": "now your agents can read scanned docs for free"
   },
   {
     "slug": "double-your-productivity-without-more-work-or-stress",
@@ -691,7 +833,8 @@
           "cover": "/posts/2010751592346030461/cover.webp"
         }
       }
-    }
+    },
+    "keyline": "The reason is uncomfortable. Game Theory"
   },
   {
     "slug": "how-to-fix-your-entire-life-in-1-day",
@@ -855,7 +998,8 @@
           "h": 1080
         }
       ]
-    }
+    },
+    "keyline": "Swap arXiv -> quickarXiv on any paper URL to get an instant blog"
   },
   {
     "slug": "herdr-crash-course-a-beginner-s-guide",
@@ -885,7 +1029,14 @@
           "h": 1080
         }
       ]
-    }
+    },
+    "highlights": [
+      {
+        "text": "Tried it again 10 days ago -- i love it and can't stop using it.",
+        "note": "A second try flipped his verdict",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "cua-computer-history-open-source-local-memory-for-agents",
@@ -916,7 +1067,22 @@
           "h": 676
         }
       ]
-    }
+    },
+    "highlights": [
+      {
+        "text": "With history on, it reused the successful route, completed the task with 33.3% fewer actions, and had no failed routes.",
+        "color": "amber"
+      },
+      {
+        "text": "It excludes screenshots, typed text, keystrokes, clipboard contents, window titles, URLs, raw arguments and results, accessibility trees, and paths.",
+        "note": "What it deliberately doesn't keep",
+        "color": "green"
+      },
+      {
+        "text": "Computer History is off by default.",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "every-hermes-agent-concept-explained-for-normal-people",
@@ -943,7 +1109,8 @@
           "href": "https://youtu.be/lGtBPrSrnjY?si=XPxuwOAIH6QdfMh2"
         }
       ]
-    }
+    },
+    "keyline": "one of the best video to start with when you are new to Hermes Agent"
   },
   {
     "slug": "webmcp-by-microsoft-and-google-is-here",
@@ -973,7 +1140,22 @@
           "h": 720
         }
       ]
-    }
+    },
+    "highlights": [
+      {
+        "text": "WebMCP is basically websites with agent buttons.",
+        "color": "amber"
+      },
+      {
+        "text": "Make boring business websites agent-ready. Law firms, HVAC, med spas, dentists.",
+        "color": "amber"
+      },
+      {
+        "text": "sell the setup for $2k, then charge a few hundred a month to monitor and improve it.",
+        "note": "The pricing for idea one",
+        "color": "blue"
+      }
+    ]
   },
   {
     "slug": "how-to-train-your-agency-starting-today",
@@ -994,7 +1176,17 @@
       "date": "2026-08-28",
       "text": "How to train your agency, starting today?\n\n1. Make one \"uncomfortable ask\" per week\n2. When you catch yourself saying \"I can't because…\" finish the sentence, then challenge every word\n3. Solve one problem you'd normally outsource to fate\n4. Reach out to one person \"above your league\" 5. Ship something before it's ready",
       "avatar": "/posts/2093186259325694127/avatar.webp"
-    }
+    },
+    "highlights": [
+      {
+        "text": "When you catch yourself saying \"I can't because…\" finish the sentence, then challenge every word",
+        "color": "amber"
+      },
+      {
+        "text": "Ship something before it's ready",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "grok-bot-guides",
@@ -1115,7 +1307,8 @@
           "cover": "/posts/2042233511382589831/cover.webp"
         }
       }
-    }
+    },
+    "keyline": "the most profitable landing pages for google ads in 2026"
   },
   {
     "slug": "you-don-t-need-more-discipline-you-need-more-love",
@@ -1133,7 +1326,25 @@
       "provider": "youtube",
       "id": "4ofWHPtxJC8",
       "thumb": "/shots/you-don-t-need-more-discipline-you-need-more-love-thumb.webp"
-    }
+    },
+    "moments": [
+      {
+        "t": 151,
+        "text": "A hospice worker says dying patients never ask for trophies or certificates. They ask for the people they love."
+      },
+      {
+        "t": 370,
+        "text": "discipline without love turns to self-punishment"
+      },
+      {
+        "t": 432,
+        "text": "I'm not pushing myself because I hate where I am. I'm pushing because I love who I'm becoming."
+      },
+      {
+        "t": 492,
+        "text": "fear pushes, love pulls"
+      }
+    ]
   },
   {
     "slug": "everyone-is-an-artist-till-rent-is-due",
@@ -1152,7 +1363,25 @@
       "provider": "youtube",
       "id": "1z8RKvVi9gA",
       "thumb": "/shots/everyone-is-an-artist-till-rent-is-due-thumb.webp"
-    }
+    },
+    "moments": [
+      {
+        "t": 63,
+        "text": "It takes at least $200 just to wake up in the morning, and that pressure shapes every choice."
+      },
+      {
+        "t": 94,
+        "text": "Everyone is an artist until rent is due."
+      },
+      {
+        "t": 341,
+        "text": "Her conclusion so far: passion and hard work aren't enough. Some share of who makes it comes down to luck."
+      },
+      {
+        "t": 524,
+        "text": "A possible middle path: a stable job that pays rent while she stays patient with the creative pursuit."
+      }
+    ]
   },
   {
     "slug": "the-accidental-cto",
@@ -1219,7 +1448,22 @@
         "title": "Services: The New Software (6 months later)",
         "cover": "/posts/2093504999158600161/cover.webp"
       }
-    }
+    },
+    "highlights": [
+      {
+        "text": "No one would ever trust anything that has nothing to lose, and AI agents have nothing to lose.",
+        "color": "amber"
+      },
+      {
+        "text": "The pilot isn't there for the 10,000 normal flights; he's there for the abnormal one.",
+        "color": "amber"
+      },
+      {
+        "text": "Sell the capabilities of an agent behind the accountability of a credible human",
+        "note": "The business model in one line",
+        "color": "green"
+      }
+    ]
   },
   {
     "slug": "one-person-with-ai-outperformed-an-entire-team",
@@ -1251,7 +1495,18 @@
         "title": "One person with AI outperformed an entire team",
         "cover": "/posts/2093396426302656811/cover.webp"
       }
-    }
+    },
+    "highlights": [
+      {
+        "text": "a single person working with AI on real product innovation challenges could match the performance of a two-person team",
+        "note": "The headline P&G finding",
+        "color": "amber"
+      },
+      {
+        "text": "AI assistance essentially erased the performance gap between specialists and generalists",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "the-rise-and-fall-of-agent-civilizations",
@@ -1348,7 +1603,17 @@
           "h": 2160
         }
       ]
-    }
+    },
+    "highlights": [
+      {
+        "text": "What top AI creatives do differently",
+        "color": "amber"
+      },
+      {
+        "text": "How to build brand mood boards",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "directionally-correct",
@@ -1376,7 +1641,22 @@
         "title": "Directionally correct.",
         "cover": "/posts/2093966150124122222/cover.webp"
       }
-    }
+    },
+    "highlights": [
+      {
+        "text": "Stop focusing on a single clear outcome.",
+        "color": "amber"
+      },
+      {
+        "text": "You need to look for the AI version of \"improving your cardio\" in order to not go insane.",
+        "note": "The analogy that carries the post",
+        "color": "amber"
+      },
+      {
+        "text": "Get very clear about what your goals are, and it will become obvious what things are, and what things aren't, directionally correct.",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "app-pricing-that-makes-150-per-day",
@@ -1402,7 +1682,8 @@
           "h": 1080
         }
       ]
-    }
+    },
+    "keyline": "app pricing that makes $150 per day"
   },
   {
     "slug": "the-complete-guide-to-pstack-pt-1",
@@ -1430,7 +1711,18 @@
         "title": "The Complete Guide to pstack Pt. 1",
         "cover": "/posts/2094457600259842065/cover.webp"
       }
-    }
+    },
+    "highlights": [
+      {
+        "text": "It's allowed me to ship 2,000 PRs a month to production with high confidence.",
+        "color": "amber"
+      },
+      {
+        "text": "volume does matter, especially when you are able to maintain or even increase the level of quality of the product with agents",
+        "note": "He used to call PR counts vanity",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "i-just-fulfilled-a-real-999-ai-assessment-on-camera",
@@ -1456,7 +1748,17 @@
           "h": 2160
         }
       ]
-    }
+    },
+    "highlights": [
+      {
+        "text": "He still paid me $999 to look at it.",
+        "color": "amber"
+      },
+      {
+        "text": "Why I never prescribe on the first call (and the one thing I do instead)",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "the-modern-app-starter-checklist",
@@ -1599,7 +1901,8 @@
           "h": 1080
         }
       ]
-    }
+    },
+    "keyline": "turning your coding agent from a screwdriver into a power drill"
   },
   {
     "slug": "this-is-the-new-bar-for-pms-i-m-able-to-do-now-in-a-day-what",
@@ -1626,7 +1929,18 @@
           "h": 1080
         }
       ]
-    }
+    },
+    "highlights": [
+      {
+        "text": "I'm able to do now in a day what used to take me a week.",
+        "color": "amber"
+      },
+      {
+        "text": "built a \"workstation\" plugin to bootstrap everyone else onto the same system",
+        "note": "How one person's setup spreads",
+        "color": "blue"
+      }
+    ]
   },
   {
     "slug": "networking-foundations-course-free-course-flavio-copes",
@@ -1818,7 +2132,17 @@
           "h": 1080
         }
       ]
-    }
+    },
+    "highlights": [
+      {
+        "text": "not just a design canvas, but a visual editor for React",
+        "color": "amber"
+      },
+      {
+        "text": "hand devs nicely packaged code, UX and all",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "claude-code-codex-for-marketers-q-a",
@@ -2117,7 +2441,21 @@
           "h": 2160
         }
       ]
-    }
+    },
+    "highlights": [
+      {
+        "text": "Skip Rate Is Your Most Important Metric",
+        "color": "amber"
+      },
+      {
+        "text": "You Should Post When You Feel Embarrassed",
+        "color": "amber"
+      },
+      {
+        "text": "Organic Content Is the Nucleus of Your Brand",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "hawthorne-effect",
@@ -2174,7 +2512,18 @@
         "title": "How to Build a One-Person Media Company With Hermes Bots",
         "cover": "/posts/2093330541177352217/cover.webp"
       }
-    }
+    },
+    "highlights": [
+      {
+        "text": "most people use ai to write faster. that is useful, but writing is no longer the bottleneck.",
+        "color": "amber"
+      },
+      {
+        "text": "every bot is trained on the same obsidian content brain: my voice, audience, offers, proof, hooks, platform playbooks, and lessons from previous posts.",
+        "note": "One shared brain, six bots",
+        "color": "green"
+      }
+    ]
   },
   {
     "slug": "my-llm-cliche-highlighter-is-up-to-38-patterns-now",
@@ -2206,7 +2555,8 @@
           "h": 2015
         }
       ]
-    }
+    },
+    "keyline": "My LLM cliché highlighter is up to 38 patterns now"
   },
   {
     "slug": "introducing-skill-doctor-v1",
@@ -2239,7 +2589,17 @@
           "h": 1080
         }
       ]
-    }
+    },
+    "highlights": [
+      {
+        "text": "Crawls your past CC, Codex, or Warp convos",
+        "color": "amber"
+      },
+      {
+        "text": "Proposes diffs to your skills that you'd actually merge",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "a-detailed-explanation-and-setup-video-for-multica",
@@ -2265,7 +2625,13 @@
           "h": 1440
         }
       ]
-    }
+    },
+    "highlights": [
+      {
+        "text": "You don't need to do this manually. Just tell your agent:",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "automating-x-posts-to-every-other-platform-with-grok-bot",
@@ -2292,7 +2658,8 @@
           "h": 720
         }
       ]
-    }
+    },
+    "keyline": "grok bot picks up the posts and pushes them all to linked1n, threads, faceb00k"
   },
   {
     "slug": "pstack-run-create-verification-skill",
@@ -2328,7 +2695,17 @@
           }
         ]
       }
-    }
+    },
+    "highlights": [
+      {
+        "text": "it creates a high quality verification skill for your apps, which is the most important part of creating an agent loop you can trust.",
+        "color": "amber"
+      },
+      {
+        "text": "run /maintain-verification skill on a daily basis so your verification skill stays sharp",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "templates-in-grok-bot",
@@ -2354,7 +2731,8 @@
           "h": 1350
         }
       ]
-    }
+    },
+    "keyline": "We just launched Templates in Grok Bot"
   },
   {
     "slug": "why-discipline-builds-actual-confidence",
@@ -2369,7 +2747,25 @@
       "provider": "youtube",
       "id": "INQn-WRkDeU",
       "thumb": "/shots/why-discipline-builds-actual-confidence-thumb.webp"
-    }
+    },
+    "moments": [
+      {
+        "t": 60,
+        "text": "And I truly believe that discipline breeds confidence."
+      },
+      {
+        "t": 302,
+        "text": "Ballet changed her self-concept. Getting better at something hard proved she could do hard things."
+      },
+      {
+        "t": 457,
+        "text": "A glow-up of makeup, skincare and a new outfit doesn't build confidence. Finishing something she doubted she could do does."
+      },
+      {
+        "t": 609,
+        "text": "Keeping promises to yourself builds self-trust, and that makes the small chores easier too."
+      }
+    ]
   },
   {
     "slug": "how-to-master-grok-bot-in-16-minutes",
@@ -2395,7 +2791,8 @@
           "h": 720
         }
       ]
-    }
+    },
+    "keyline": "his best @bot workflows from Easy Mode to God Mode"
   },
   {
     "slug": "ex-nasa-dev-reveals-his-agentic-engineering-workflow",
@@ -2445,7 +2842,17 @@
           "h": 1080
         }
       ]
-    }
+    },
+    "highlights": [
+      {
+        "text": "without a single outbound pitch. Every client came to him.",
+        "color": "amber"
+      },
+      {
+        "text": "why you should never gatekeep your knowledge",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "your-agents-md-is-holding-you-back",
@@ -2511,7 +2918,8 @@
       "date": "2026-09-01",
       "text": "Grok Bot internal best practices from 6 teams at SpaceXAI: Engineering Support Design GTM Product Field Engineering",
       "avatar": "/posts/2094775808602546335/avatar.webp"
-    }
+    },
+    "keyline": "Grok Bot internal best practices from 6 teams at SpaceXAI"
   },
   {
     "slug": "how-to-yap-on-the-internet",
@@ -2539,7 +2947,22 @@
         "title": "How to yap on the internet",
         "cover": "/posts/2051688942895051072/cover.webp"
       }
-    }
+    },
+    "highlights": [
+      {
+        "text": "The number one benefit I got from starting to make content wasn’t the followers or the revenue. It was becoming a better communicator.",
+        "color": "amber"
+      },
+      {
+        "text": "Shoot for one visual roughly every two seconds.",
+        "color": "amber"
+      },
+      {
+        "text": "Redo your opening at the end of the session.",
+        "note": "The tactic most people skip",
+        "color": "green"
+      }
+    ]
   },
   {
     "slug": "i-just-filmed-6-days-of-cold-calls-and-door-knocks",
@@ -2565,7 +2988,18 @@
           "h": 2160
         }
       ]
-    }
+    },
+    "highlights": [
+      {
+        "text": "60 minutes of outreach a day. 198 leads, 15 conversations, 2 sales calls booked.",
+        "color": "amber"
+      },
+      {
+        "text": "Why 2 door knocks booked 2 calls while 13 cold-call conversations booked zero",
+        "note": "Door knocks beat the phone here",
+        "color": "blue"
+      }
+    ]
   },
   {
     "slug": "the-bridge",
@@ -2660,7 +3094,22 @@
           "h": 1182
         }
       ]
-    }
+    },
+    "highlights": [
+      {
+        "text": "on CursorBench 3.2.0, Fable 5.1 at low effort is at parity w/ Fable 5 at high effort at a third of the cost.",
+        "color": "amber"
+      },
+      {
+        "text": "cache hits dropped from $1.00 to $0.25 / MTok.",
+        "color": "amber"
+      },
+      {
+        "text": "remove verification rituals, emphasis boosters, scratchpad scaffolds, stale few-shot examples, or contradictory rules.",
+        "note": "Prompt habits to drop",
+        "color": "green"
+      }
+    ]
   },
   {
     "slug": "skyline-restaurant-and-cocktail-bar-a-blender-production-bri",
@@ -2717,7 +3166,17 @@
           "h": 1080
         }
       ]
-    }
+    },
+    "highlights": [
+      {
+        "text": "They never compared me to other kids.",
+        "color": "amber"
+      },
+      {
+        "text": "They always praised my efforts and not just my results.",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "how-a-professional-writer-writes-with-ai",
@@ -2732,7 +3191,25 @@
       "provider": "youtube",
       "id": "vey_dBnDTAU",
       "thumb": "/shots/how-a-professional-writer-writes-with-ai-thumb.webp"
-    }
+    },
+    "moments": [
+      {
+        "t": 486,
+        "text": "Turning AI into a content agency of one."
+      },
+      {
+        "t": 659,
+        "text": "Building the context files and style guides that make AI output useful."
+      },
+      {
+        "t": 1947,
+        "text": "What compounding means, and how it became the Compound Writing plugin."
+      },
+      {
+        "t": 2280,
+        "text": "Borrowing Vonnegut, Hitchcock and Sorkin as AI editing skills."
+      }
+    ]
   },
   {
     "slug": "a-great-cold-email-can-change-your-life",
@@ -2758,7 +3235,22 @@
         "text": "You can cold email nearly anyone, but nearly everyone overlooks how powerful it can be. \n\nSending one email each week that feels like a stretch can change your life. Will you get turned down? Sure, most of the time. But you only need one to pay off for something amazing to",
         "avatar": "/posts/2093441032201584686/avatar.webp"
       }
-    }
+    },
+    "highlights": [
+      {
+        "text": "1. make something cool 2. demonstrate value 3. cold email the hiring manager",
+        "color": "amber"
+      },
+      {
+        "text": "one i gave a list of 1000+ leads and the other a content growth strategy both replied within 24 hrs.",
+        "color": "amber"
+      },
+      {
+        "text": "no more than 200 words",
+        "note": "His length cap",
+        "color": "blue"
+      }
+    ]
   },
   {
     "slug": "the-incumbents-are-coming",
@@ -2786,7 +3278,17 @@
         "title": "The Incumbents Are Coming",
         "cover": "/posts/2095546732633379079/cover.webp"
       }
-    }
+    },
+    "highlights": [
+      {
+        "text": "The interface and the system of record look like they're unbundling, creating an opening for AI-native startups to rebundle around the job.",
+        "color": "amber"
+      },
+      {
+        "text": "The vertical AI-native company has to win through focus.",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "hermes-agent-masterclass",
@@ -2796,7 +3298,29 @@
     "saved_date": "2026-09-14",
     "kind": "video",
     "tldr": "Tonbi's AI Garage runs a 10-part Hermes Agent masterclass covering install, VPS deployment, memory, skills, providers, MCP tools, cron automation, subagents, profiles, and security.",
-    "note": "Tonbi's 10-part video masterclass on Hermes Agent - install, deploy to a VPS, memory, skills, providers, tools, cron, subagents and security, about five hours end to end."
+    "note": "Tonbi's 10-part video masterclass on Hermes Agent - install, deploy to a VPS, memory, skills, providers, tools, cron, subagents and security, about five hours end to end.",
+    "moments": [
+      {
+        "t": 30,
+        "text": "Install with the one-line command from the Hermes Agent GitHub repo, then run the quick setup wizard.",
+        "source_video_id": "BeWUUclCin0"
+      },
+      {
+        "t": 123,
+        "text": "All messaging goes through the gateway. Installing it as a background service keeps it running after reboots.",
+        "source_video_id": "BeWUUclCin0"
+      },
+      {
+        "t": 372,
+        "text": "A skill is a package of instructions. You can ask the agent to install one for you.",
+        "source_video_id": "BeWUUclCin0"
+      },
+      {
+        "t": 495,
+        "text": "Cron jobs are scheduled tasks. Ask the agent for a daily 9:30 text with sports scores and AI news.",
+        "source_video_id": "BeWUUclCin0"
+      }
+    ]
   },
   {
     "slug": "the-money-button-v1",
@@ -2806,7 +3330,29 @@
     "saved_date": "2026-09-14",
     "kind": "video",
     "tldr": "JCH's 43-video Money Button course walks through outcomes, promises, offers, funnels, buyer psychology, and big ideas before building a sales letter, bullets, proof and VSL.",
-    "note": "JCH's free 43-video copywriting course - offers, funnels, buyer psychology, big ideas and sales letters, from outcomes and promises through writing the VSL."
+    "note": "JCH's free 43-video copywriting course - offers, funnels, buyer psychology, big ideas and sales letters, from outcomes and promises through writing the VSL.",
+    "moments": [
+      {
+        "t": 0,
+        "text": "The same principles took his business from about $20 to $25 million in revenue to about $400 million over ten years.",
+        "source_video_id": "w6JINrK3m_o"
+      },
+      {
+        "t": 549,
+        "text": "Markets respond differently. Men's dating advice responded to shame; women buying skincare wanted hope, curiosity and secrets.",
+        "source_video_id": "w6JINrK3m_o"
+      },
+      {
+        "t": 612,
+        "text": "Put a nightmare story and a dream story at the start of two ads and see which gets more clicks.",
+        "source_video_id": "w6JINrK3m_o"
+      },
+      {
+        "t": 672,
+        "text": "a good VSL can't save you from a bad product or market",
+        "source_video_id": "w6JINrK3m_o"
+      }
+    ]
   },
   {
     "slug": "patterns-i-ve-seen-in-every-high-performer-i-know-that-are-r",
@@ -2862,7 +3408,17 @@
         "title": "Applied AI Doesn't Work",
         "cover": "/posts/2095999742031675738/cover.webp"
       }
-    }
+    },
+    "highlights": [
+      {
+        "text": "most companies apply AI onto their garbage processes, and the end result is just making garbage faster.",
+        "color": "amber"
+      },
+      {
+        "text": "I've spoken to over 300 CEOs, CIOs and CFOs at the largest companies on Earth.",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "welcome-to-side-quests",
@@ -2941,7 +3497,22 @@
           "h": 480
         }
       ]
-    }
+    },
+    "highlights": [
+      {
+        "text": "the average was 1,771. five off. almost perfect.",
+        "color": "amber"
+      },
+      {
+        "text": "the average collapsed to 850.",
+        "note": "Same room, after hearing each other",
+        "color": "amber"
+      },
+      {
+        "text": "the cheapest 20% of stocks averaged 38% a year.",
+        "color": "blue"
+      }
+    ]
   },
   {
     "slug": "how-an-intern-6x-d-website-traffic-with-blogeo",
@@ -2967,7 +3538,22 @@
           "h": 1080
         }
       ]
-    }
+    },
+    "highlights": [
+      {
+        "text": "~70% of traffic came from 14 posts; ~50% from just 5",
+        "color": "amber"
+      },
+      {
+        "text": "Agent has no write path to live content until a human clicks",
+        "note": "The guardrail that keeps it honest",
+        "color": "green"
+      },
+      {
+        "text": "Search impressions: +5.8x Page-one queries: +9.8x",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "moving-your-coding-agents-to-the-cloud-railway",
@@ -2999,7 +3585,17 @@
           "h": 2160
         }
       ]
-    }
+    },
+    "highlights": [
+      {
+        "text": "Long-running tasks and remote execution",
+        "color": "amber"
+      },
+      {
+        "text": "Orchestrating multiple cloud agents",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "how-to-build-a-services-as-software-delivery-stack",
@@ -3168,7 +3764,22 @@
         "title": "what to do when you feel overwhelmed",
         "cover": "/posts/2097367896884425060/cover.webp"
       }
-    }
+    },
+    "highlights": [
+      {
+        "text": "Am I going to have a common reaction or uncommon response?",
+        "color": "amber"
+      },
+      {
+        "text": "Your job is to control the controllables: your actions.",
+        "color": "amber"
+      },
+      {
+        "text": "Change the body first, then think.",
+        "note": "The P.S. is the practical part",
+        "color": "green"
+      }
+    ]
   },
   {
     "slug": "how-stripe-built-its-company-brain-kai",
@@ -3195,7 +3806,17 @@
           "h": 1080
         }
       ]
-    }
+    },
+    "highlights": [
+      {
+        "text": "how 1.5 engineers and 2 weeks got them a company brain",
+        "color": "amber"
+      },
+      {
+        "text": "a skills platform that works for 10k teammates",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "the-golden-snitch",
@@ -3320,7 +3941,17 @@
         "title": "The Complete Guide to pstack Pt. 2",
         "cover": "/posts/2097732320606507506/cover.webp"
       }
-    }
+    },
+    "highlights": [
+      {
+        "text": "if an agent can't verify its own work, nothing else matters.",
+        "color": "amber"
+      },
+      {
+        "text": "You remain the bottleneck, and your whole day will be spent babysitting your agents.",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "how-i-replaced-a-249-month-scrapingbee-plan-with-a-1-month-s",
@@ -3355,7 +3986,22 @@
         "text": "I've tried for weeks now to build my own @ScrapingBee and repeatedly AI has now told me that it can't do it\n\n80% of my scraping is Google SERP results for Hotelist and even with residential IP proxies and solve CAPTCHA services and OpenSERP scraper it won't do it well for",
         "avatar": "/posts/2095950432883368091/avatar.webp"
       }
-    }
+    },
+    "highlights": [
+      {
+        "text": "plain curl got 7% blocked but OpenSERP's headless browser got 100% blocked",
+        "color": "amber"
+      },
+      {
+        "text": "built my own with Playwright and a real Google Chrome on my VPS, headful and persistent context",
+        "note": "What finally worked",
+        "color": "green"
+      },
+      {
+        "text": "Now I'm at about 90% success rate, which is similar or better than Scrapingbee",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "sarah-sarahlevinger-on-x",
@@ -3391,7 +4037,21 @@
           "h": 1080
         }
       ]
-    }
+    },
+    "highlights": [
+      {
+        "text": "The Nightclub Theory of Going Viral",
+        "color": "amber"
+      },
+      {
+        "text": "Start With Text First",
+        "color": "amber"
+      },
+      {
+        "text": "If It Works, Say It Again",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "how-pocket-fm-grew-from-zero-to-500m-arr",
@@ -3408,18 +4068,13 @@
         "color": "amber"
       },
       {
-        "text": "Our core insight after spending >$100M on acquisition is: If the clickthrough rate (CTR) for an ad goes from 2% to 2.25%, our customer acquisition cost (CAC) decreases by ~ 30%.",
+        "text": "If the clickthrough rate (CTR) for an ad goes from 2% to 2.25%, our customer acquisition cost (CAC) decreases by ~ 30%.",
         "note": "The CTR to CAC insight behind their ad engine",
         "color": "green"
       },
       {
         "text": "We give $1M checks to new internal initiatives, and the team has 12-18 months to prove their thesis.",
         "note": "How they fund new internal bets",
-        "color": "amber"
-      },
-      {
-        "text": "We have the largest storytelling catalog with 770,000 titles, 550k creators, and 5.5B hours of playtime with minute by minute retention & engagement data.",
-        "note": "Scale of the content catalog",
         "color": "amber"
       }
     ],
@@ -3650,7 +4305,17 @@
           "h": 1080
         }
       ]
-    }
+    },
+    "highlights": [
+      {
+        "text": "The Burst method",
+        "color": "amber"
+      },
+      {
+        "text": "Full prompts and skill available at the link below.",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "60-new-creative-growth-ideas",
@@ -3773,7 +4438,8 @@
           "h": 1080
         }
       ]
-    }
+    },
+    "keyline": "yesterday my \"boring\" business did $4,000 in revenue"
   },
   {
     "slug": "l8-principal-building-a-full-stack-app-with-agentic-engineer",
@@ -3788,7 +4454,25 @@
       "provider": "youtube",
       "id": "kPN564Kol14",
       "thumb": "/shots/l8-principal-building-a-full-stack-app-with-agentic-engineer-thumb.webp"
-    }
+    },
+    "moments": [
+      {
+        "t": 61,
+        "text": "FirstMate: he talks to one agent, which hands work to crewmate agents, so he isn't juggling tabs and context."
+      },
+      {
+        "t": 1858,
+        "text": "The model's VPS estimate of about $30 a month was wrong. He pushed it toward a roughly $5 Hetzner box."
+      },
+      {
+        "t": 3658,
+        "text": "Secrets live in Atomic Vault. He approves every command that touches a production key instead of using .env files."
+      },
+      {
+        "t": 4964,
+        "text": "GPT models, especially the 5.6, has this tendency to over-engineer."
+      }
+    ]
   },
   {
     "slug": "how-to-get-a-great-job-without-applying-for-one",
@@ -3870,7 +4554,18 @@
         "title": "how to run a local ai agency (FULL GUIDE)",
         "cover": "/posts/2101031650981474496/cover.webp"
       }
-    }
+    },
+    "highlights": [
+      {
+        "text": "there's no way to book, the phone number doesn't open the dialler, and there's no form",
+        "color": "amber"
+      },
+      {
+        "text": "recording a walkthrough that clicks through the old site and then the new one, and charging them monthly for it.",
+        "note": "The sales asset and the pricing",
+        "color": "blue"
+      }
+    ]
   },
   {
     "slug": "how-to-make-money-with-jev-full-guide-instant-quote-widgets",
@@ -3906,7 +4601,17 @@
         "title": "how to make money with jev (FULL GUIDE)",
         "cover": "/posts/2101697429192286312/cover.webp"
       }
-    }
+    },
+    "highlights": [
+      {
+        "text": "jev is a new typesafe model that makes super fast decisions instead of writing.",
+        "color": "amber"
+      },
+      {
+        "text": "a skill file that approves or blocks your agent's actions",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "jev-as-a-local-services-matcher-startup-ideas-podcast",
@@ -3958,7 +4663,22 @@
           "cover": "/posts/2101029801821941933/cover.webp"
         }
       }
-    }
+    },
+    "highlights": [
+      {
+        "text": "It's a form with a classifier behind it.",
+        "color": "amber"
+      },
+      {
+        "text": "Every \"get an instant quote\" form on the internet promises an answer and then sends \"we'll email you by end of day.\"",
+        "color": "amber"
+      },
+      {
+        "text": "The speed is the thing the client notices.",
+        "note": "Why step 5 matters",
+        "color": "green"
+      }
+    ]
   },
   {
     "slug": "i-reverse-engineered-instinct-s-memory-here-s-exactly-how-it",
@@ -4042,7 +4762,8 @@
           "h": 1080
         }
       ]
-    }
+    },
+    "keyline": "gives a FULL masterclass on using Jev."
   },
   {
     "slug": "here-s-how-i-shipped-2-500-prs-last-month-to-production",
@@ -4068,7 +4789,8 @@
           "h": 2160
         }
       ]
-    }
+    },
+    "keyline": "here's how i shipped 2,500 PRs last month to production"
   },
   {
     "slug": "choose-your-pain",
@@ -4245,7 +4967,18 @@
       "date": "2026-09-22",
       "text": "Prompt in Claude Tag\n\n\"Recreate Market Street, San Francisco as it stood on April 17, 1906, the afternoon before the earthquake, in Blender.\n\nScope: the Ferry Building up Market to Fifth Street, including the Palace Hotel, the Call Building, the Chronicle Building, Lotta's Fountain and the Emporium. Before modeling anything, build a source file from: the 1899-1905 Sanborn fire insurance maps (footprints, heights, materials, occupants), the Miles Brothers film \"A Trip Down Market Street\" (April 1906), period photographs from OpenSFHistory, the Library of Congress and the David Rumsey collection, and USGS topography. Record every building with footprint, height, facade material, occupant, and the source for each fact with a confidence level. Build everything in Blender Python. No downloaded meshes, textures or HDRIs. Write reusable generators (Victorian commercial facade, mansard roof, bay windows, awnings, painted signage, gas and electric street lamps, cable car, horse-drawn wagon, early automobile) and assemble the street from the source file, so every building traces back to data. Provide a 10 second video up the street.\"",
       "avatar": "/posts/2102466524934271381/avatar.webp"
-    }
+    },
+    "highlights": [
+      {
+        "text": "Record every building with footprint, height, facade material, occupant, and the source for each fact with a confidence level.",
+        "note": "Sourcing before modeling",
+        "color": "amber"
+      },
+      {
+        "text": "No downloaded meshes, textures or HDRIs.",
+        "color": "amber"
+      }
+    ]
   },
   {
     "slug": "using-claude-to-go-viral-on-x-mrbeast-s-framework",

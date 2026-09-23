@@ -1,0 +1,277 @@
+{
+  "base": "http://localhost:4329/",
+  "label": "vet-264-grid",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-23-vet-264-grid",
+  "at": "2026-09-23T12:20:27.200Z",
+  "shots": [
+    {
+      "route": "/library/kind/post",
+      "url": "http://localhost:4329/library/kind/post",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "library_kind_post-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".pt--grid": [
+          {
+            "text": "Prompt in Claude Tag\"Recreate Market Str",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.5px"
+          },
+          {
+            "text": "One of the best businesses to build with",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.5px"
+          },
+          {
+            "text": "Jevs Founder, Diogo Alemdia, gives a FUL",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.5px"
+          }
+        ],
+        ".pt--grid mark": [
+          {
+            "text": "gives a FULL masterclass on using Jev.",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.5px"
+          },
+          {
+            "text": "here's how i shipped 2,500 PRs last mont",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.5px"
+          },
+          {
+            "text": "yesterday my \"boring\" business did $4,00",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.5px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/kind/post",
+      "url": "http://localhost:4329/library/kind/post",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library_kind_post-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".pt--grid": [
+          {
+            "text": "Prompt in Claude Tag\"Recreate Market Str",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.5px"
+          },
+          {
+            "text": "One of the best businesses to build with",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.5px"
+          },
+          {
+            "text": "Jevs Founder, Diogo Alemdia, gives a FUL",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.5px"
+          }
+        ],
+        ".pt--grid mark": [
+          {
+            "text": "gives a FULL masterclass on using Jev.",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.5px"
+          },
+          {
+            "text": "here's how i shipped 2,500 PRs last mont",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.5px"
+          },
+          {
+            "text": "yesterday my \"boring\" business did $4,00",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "15px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.5px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/kind/post",
+      "url": "http://localhost:4329/library/kind/post",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "library_kind_post-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".pt--grid": [
+          {
+            "text": "Prompt in Claude Tag\"Recreate Market Str",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.5px"
+          },
+          {
+            "text": "One of the best businesses to build with",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.5px"
+          },
+          {
+            "text": "Jevs Founder, Diogo Alemdia, gives a FUL",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.5px"
+          }
+        ],
+        ".pt--grid mark": [
+          {
+            "text": "gives a FULL masterclass on using Jev.",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.5px"
+          },
+          {
+            "text": "here's how i shipped 2,500 PRs last mont",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.5px"
+          },
+          {
+            "text": "yesterday my \"boring\" business did $4,00",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.5px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/kind/post",
+      "url": "http://localhost:4329/library/kind/post",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library_kind_post-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".pt--grid": [
+          {
+            "text": "Prompt in Claude Tag\"Recreate Market Str",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.5px"
+          },
+          {
+            "text": "One of the best businesses to build with",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.5px"
+          },
+          {
+            "text": "Jevs Founder, Diogo Alemdia, gives a FUL",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.5px"
+          }
+        ],
+        ".pt--grid mark": [
+          {
+            "text": "gives a FULL masterclass on using Jev.",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.5px"
+          },
+          {
+            "text": "here's how i shipped 2,500 PRs last mont",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.5px"
+          },
+          {
+            "text": "yesterday my \"boring\" business did $4,00",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "15px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.5px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}
