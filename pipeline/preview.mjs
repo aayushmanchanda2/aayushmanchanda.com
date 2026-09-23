@@ -12,7 +12,9 @@
  * so a wall is refused here the same way a /sites capture refuses it.
  *
  * Optional like the icon: no file and the card shows the icon and the words.
- * So a failure is a log line and null, never a thrown error.
+ * So a failure is a log line and null, never a thrown error. **Never a GitHub
+ * page:** the site comes from `icon.mjs › siteOf`, so a repository-only tool is
+ * shot at its repo's `homepage` or not at all.
  *
  * Run directly to backfill every tool: `node pipeline/preview.mjs [--force]`.
  */
@@ -26,6 +28,7 @@ import sharp from "sharp";
 
 import { CONTEXT_OPTIONS, loadPage, withDeadline } from "./capture.mjs";
 import { measureShot, shotLooksBlank } from "./challenge.mjs";
+import { siteOf } from "./icon.mjs";
 import { resolvePaths } from "./state.mjs";
 import { describe } from "./util.mjs";
 
@@ -83,15 +86,17 @@ const exists = (file) => access(file).then(() => true, () => false);
  * @param {string | null} input.url   The product site, else its repository.
  * @param {string} input.dir
  * @param {import("playwright").Browser} [input.browser]
+ * @param {typeof globalThis.fetch} [input.fetch]
  * @param {boolean} [input.force]
  * @param {(line: string) => void} [input.log]
  * @returns {Promise<string | null>} The file, or null for the icon-only card.
  */
-export async function capturePreview({ slug, url, dir, browser, force = false, log = () => {} }) {
+export async function capturePreview({ slug, url: given, dir, browser, fetch, force = false, log = () => {} }) {
   const file = path.join(dir, `${slug}.webp`);
   if (!force && (await exists(file))) return file;
+  const url = await siteOf(given, fetch);
   if (url === null) {
-    log(`preview: ${slug} has no url or repo — icon only`);
+    log(`preview: ${slug} has no site of its own — icon only`);
     return null;
   }
 

@@ -1,0 +1,123 @@
+{
+  "base": "http://localhost:4330/",
+  "label": "qa-fix-1-library",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-22-qa-fix-1-library",
+  "at": "2026-09-23T04:15:21.847Z",
+  "shots": [
+    {
+      "route": "/library/one-of-the-best-write-ups-i-have-seen-on-getting-hermes-agen",
+      "url": "http://localhost:4330/library/one-of-the-best-write-ups-i-have-seen-on-getting-hermes-agen",
+      "width": 320,
+      "height": 700,
+      "theme": "light",
+      "png": "library_one_of_the_best_write_ups_i_have_seen_on_getting_hermes_agen-320-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".crumbs__here": [
+          {
+            "text": "one of the best write-ups I have seen on",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".chip": [
+          {
+            "text": "post",
+            "color": "rgb(89, 89, 89)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [
+        "platform.twitter.com",
+        "syndication.twitter.com"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/one-of-the-best-write-ups-i-have-seen-on-getting-hermes-agen",
+      "url": "http://localhost:4330/library/one-of-the-best-write-ups-i-have-seen-on-getting-hermes-agen",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "library_one_of_the_best_write_ups_i_have_seen_on_getting_hermes_agen-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".crumbs__here": [
+          {
+            "text": "one of the best write-ups I have seen on",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".chip": [
+          {
+            "text": "post",
+            "color": "rgb(89, 89, 89)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [
+        "platform.twitter.com",
+        "syndication.twitter.com"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/one-of-the-best-write-ups-i-have-seen-on-getting-hermes-agen",
+      "url": "http://localhost:4330/library/one-of-the-best-write-ups-i-have-seen-on-getting-hermes-agen",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library_one_of_the_best_write_ups_i_have_seen_on_getting_hermes_agen-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".crumbs__here": [
+          {
+            "text": "one of the best write-ups I have seen on",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".chip": [
+          {
+            "text": "post",
+            "color": "rgb(89, 89, 89)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [
+        "platform.twitter.com",
+        "syndication.twitter.com"
+      ],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}

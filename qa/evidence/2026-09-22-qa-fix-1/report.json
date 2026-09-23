@@ -1,0 +1,489 @@
+{
+  "base": "http://localhost:4330/",
+  "label": "qa-fix-1",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-22-qa-fix-1",
+  "at": "2026-09-23T04:15:16.879Z",
+  "shots": [
+    {
+      "route": "/tools",
+      "url": "http://localhost:4330/tools",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "tools-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".select": [
+          {
+            "text": "All verdictsUsingWatchingOn holdSkipped",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          },
+          {
+            "text": "All categoriesagent infraagent workspace",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".chip": [
+          {
+            "text": "using",
+            "color": "rgb(21, 101, 59)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          },
+          {
+            "text": "using",
+            "color": "rgb(21, 101, 59)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          },
+          {
+            "text": "watching",
+            "color": "rgb(23, 50, 207)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          }
+        ],
+        ".hint__key": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools?verdict=using",
+      "url": "http://localhost:4330/tools?verdict=using",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "tools_verdict_using-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".select": [
+          {
+            "text": "All verdictsUsingWatchingOn holdSkipped",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          },
+          {
+            "text": "All categoriesagent infraagent workspace",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".chip": [
+          {
+            "text": "using",
+            "color": "rgb(21, 101, 59)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          },
+          {
+            "text": "using",
+            "color": "rgb(21, 101, 59)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          },
+          {
+            "text": "watching",
+            "color": "rgb(23, 50, 207)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          }
+        ],
+        ".hint__key": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4330/tools",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "tools-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".select": [
+          {
+            "text": "All verdictsUsingWatchingOn holdSkipped",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "All categoriesagent infraagent workspace",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".chip": [
+          {
+            "text": "using",
+            "color": "rgb(21, 101, 59)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          },
+          {
+            "text": "using",
+            "color": "rgb(21, 101, 59)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          },
+          {
+            "text": "watching",
+            "color": "rgb(23, 50, 207)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          }
+        ],
+        ".hint__key": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools?verdict=using",
+      "url": "http://localhost:4330/tools?verdict=using",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "tools_verdict_using-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".select": [
+          {
+            "text": "All verdictsUsingWatchingOn holdSkipped",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "All categoriesagent infraagent workspace",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".chip": [
+          {
+            "text": "using",
+            "color": "rgb(21, 101, 59)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          },
+          {
+            "text": "using",
+            "color": "rgb(21, 101, 59)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          },
+          {
+            "text": "watching",
+            "color": "rgb(23, 50, 207)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          }
+        ],
+        ".hint__key": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4330/tools",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "tools-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".select": [
+          {
+            "text": "All verdictsUsingWatchingOn holdSkipped",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          },
+          {
+            "text": "All categoriesagent infraagent workspace",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".chip": [
+          {
+            "text": "using",
+            "color": "rgb(113, 214, 160)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          },
+          {
+            "text": "using",
+            "color": "rgb(113, 214, 160)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          },
+          {
+            "text": "watching",
+            "color": "rgb(128, 147, 255)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          }
+        ],
+        ".hint__key": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools?verdict=using",
+      "url": "http://localhost:4330/tools?verdict=using",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "tools_verdict_using-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".select": [
+          {
+            "text": "All verdictsUsingWatchingOn holdSkipped",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          },
+          {
+            "text": "All categoriesagent infraagent workspace",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".chip": [
+          {
+            "text": "using",
+            "color": "rgb(113, 214, 160)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          },
+          {
+            "text": "using",
+            "color": "rgb(113, 214, 160)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          },
+          {
+            "text": "watching",
+            "color": "rgb(128, 147, 255)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          }
+        ],
+        ".hint__key": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4330/tools",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "tools-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".select": [
+          {
+            "text": "All verdictsUsingWatchingOn holdSkipped",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "All categoriesagent infraagent workspace",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".chip": [
+          {
+            "text": "using",
+            "color": "rgb(113, 214, 160)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          },
+          {
+            "text": "using",
+            "color": "rgb(113, 214, 160)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          },
+          {
+            "text": "watching",
+            "color": "rgb(128, 147, 255)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          }
+        ],
+        ".hint__key": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools?verdict=using",
+      "url": "http://localhost:4330/tools?verdict=using",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "tools_verdict_using-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".select": [
+          {
+            "text": "All verdictsUsingWatchingOn holdSkipped",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "All categoriesagent infraagent workspace",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ],
+        ".chip": [
+          {
+            "text": "using",
+            "color": "rgb(113, 214, 160)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          },
+          {
+            "text": "using",
+            "color": "rgb(113, 214, 160)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          },
+          {
+            "text": "watching",
+            "color": "rgb(128, 147, 255)",
+            "font-size": "12px",
+            "font-weight": "500",
+            "letter-spacing": "0.48px",
+            "line-height": "12px"
+          }
+        ],
+        ".hint__key": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}

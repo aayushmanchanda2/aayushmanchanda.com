@@ -13,8 +13,10 @@
  * exactly what proved the point: the row, its CSS and its key handler were one
  * page's scoped block, and a copy in the second page would have been ninety
  * lines held in step by nothing. Escape closes to the section index, ← and →
- * (or k and j) walk the entries in the order the section renders them, wrapping; the caller
- * decides the ring, this file only reads it.
+ * walk the entries in the order the section renders them, wrapping; the caller
+ * decides the ring, this file only reads it. k and j do the same, but only with
+ * focus inside the /library list pane (WCAG 2.1.4: a bare letter anywhere else
+ * belongs to the reader's own shortcuts).
  */
 
 /** One destination the row offers, with the full name a screen reader gets. */
@@ -142,9 +144,18 @@ const hints: Hint[] = [
     font-family: var(--font-mono);
     color: var(--text-secondary);
   }
+
+  /* No keyboard on a touchscreen, so no key caps: the words are the links. */
+  @media (hover: none) {
+    .hint__key {
+      display: none;
+    }
+  }
 </style>
 
 <script>
+  import { PANE_ATTRIBUTE } from "../lib/library-pane";
+
   /**
    * The keys, and which hint each one presses.
    *
@@ -157,7 +168,8 @@ const hints: Hint[] = [
     Escape: "close",
     ArrowLeft: "prev",
     ArrowRight: "next",
-    // Vim-style aliases, briOS's: j down the list, k up it (VET-231).
+    // Vim-style aliases, briOS's: j down the list, k up it (VET-231). Letters,
+    // so they are scoped to the list pane below.
     j: "next",
     k: "prev",
   };
@@ -189,6 +201,10 @@ const hints: Hint[] = [
       ) {
         return;
       }
+
+      // A bare letter only counts inside the list pane (WCAG 2.1.4). On /sites,
+      // which has no pane, j and k are never ours.
+      if (event.key.length === 1 && !(target instanceof Element && target.closest(`[${PANE_ATTRIBUTE}]`))) return;
 
       // Escape belongs to whatever is on top. Two surfaces match this selector
       // today — the command palette and the mobile nav panel — and both close

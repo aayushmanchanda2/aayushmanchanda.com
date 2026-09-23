@@ -169,6 +169,21 @@ async function homepageOf(repo, fetch) {
 }
 
 /**
+ * The tool's own site: the url itself, or a repository's `homepage`. Null when
+ * all that is left is a GitHub page. `preview.mjs` asks the same question, so a
+ * hover card never pictures a repository either.
+ *
+ * @param {string | null} url  The product site, or a GitHub repository.
+ * @param {Fetch} [fetch]
+ * @returns {Promise<string | null>}
+ */
+export async function siteOf(url, fetch = globalThis.fetch) {
+  const repo = url === null ? null : repoFrom(url);
+  const site = repo === null ? url : await homepageOf(repo, fetch);
+  return site === null || GITHUB_IMAGE_HOST.test(new URL(site).hostname) ? null : site;
+}
+
+/**
  * Any image in, a 256px square WebP out — or null when the source is too small
  * to be anything but a blur. Transparent pixels land on white, the way a home
  * screen flattens a touch icon, so a dark logo does not vanish in dark mode.
@@ -224,9 +239,8 @@ export async function fetchIcon({ slug, url, dir, fetch = globalThis.fetch, forc
   const file = path.join(dir, `${slug}.webp`);
   if (!force && (await exists(file))) return file;
 
-  const repo = url === null ? null : repoFrom(url);
-  const site = repo === null ? url : await homepageOf(repo, fetch);
-  if (site === null || GITHUB_IMAGE_HOST.test(new URL(site).hostname)) {
+  const site = await siteOf(url, fetch);
+  if (site === null) {
     log(`icon: ${slug} has no site of its own — letter`);
     return null;
   }

@@ -6,7 +6,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { PANE_KEY, PREPAINT } from "./library-pane.ts";
+import { PANE_KEY, PREPAINT, paneStep } from "./library-pane.ts";
 
 /**
  * @param {{ saved?: string | null, rowTop?: number, height?: number, blocked?: boolean }} options
@@ -68,4 +68,13 @@ test("pagehide saves, blocked storage throws nothing, a hidden pane never saves"
   const hidden = run({ height: 0 });
   hidden.handlers.pagehide?.();
   assert.equal(hidden.store[PANE_KEY], undefined);
+});
+
+test("Up, Down, Home and End walk the pane rows and stop at the ends", () => {
+  assert.equal(paneStep("ArrowDown", 3, 10), 4);
+  assert.equal(paneStep("ArrowDown", 9, 10), 9);
+  assert.equal(paneStep("ArrowUp", 0, 10), 0);
+  assert.equal(paneStep("Home", 5, 10), 0);
+  assert.equal(paneStep("End", 5, 10), 9);
+  assert.equal(paneStep("j", 5, 10), null);
 });

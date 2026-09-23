@@ -296,7 +296,7 @@ export function contactJsonLd(): JsonLd {
  * official-sounding one would be the same move `applicationCategory` refuses on
  * a tool page: a tidier claim than the true one.
  *
- * No `BreadcrumbList`, for the reason /about and /privacy have none: the page is
+ * No `BreadcrumbList`, for the reason /about has none: the page is
  * reached from the colophon row in the footer of every page, and a persistent
  * navigation row is not a trail.
  */
@@ -311,32 +311,30 @@ export function designJsonLd(): JsonLd {
   });
 }
 
+/**
+ * /privacy: a `WebPage` and the trail the bar prints, `Aayush Manchanda /
+ * Privacy`. It was the one indexable page with no graph at all (Wave A QA);
+ * the breadcrumb is here because the bar already draws that trail for it.
+ */
+export function privacyJsonLd(): JsonLd {
+  const url = pageUrl("/privacy");
+
+  return graph(
+    {
+      "@type": "WebPage",
+      "@id": `${url}#webpage`,
+      name: "Privacy",
+      url,
+    },
+    breadcrumb({ name: "Privacy", path: "/privacy" }),
+  );
+}
+
 /*
- * There is deliberately no builder for `/privacy` or the 404, and this comment
- * is the record of that call rather than an oversight waiting to be corrected.
- *
- * **The 404 cannot honestly have one.** It is served at whatever URL the reader
- * mistyped, so any `url` it claimed would be false, and `@id` needs a URL. It
- * also ships `noindex` and no canonical, for the same reason — see
+ * There is deliberately no builder for the 404. It is served at whatever URL
+ * the reader mistyped, so any `url` it claimed would be false, and `@id` needs
+ * a URL. It also ships `noindex` and no canonical, for the same reason — see
  * `layouts/Base.astro › noindex`.
- *
- * **`/privacy` could have one, and does not.** The node would be a `WebPage`
- * carrying `name` and `url`: both true, and both already stated by `<title>`
- * and `rel=canonical` on that page. That is not machine-readable content, it is
- * the same two facts a third time. §7's posture is not to emit a node so a page
- * looks complete — the same instinct that refuses `keywords` and a
- * `SearchAction`. A privacy page's whole value is its prose, and a stub is not
- * a summary of it.
- *
- * `designJsonLd` above is the nearest call and went the other way, on one
- * argument that does not apply here: `design.md` and `/llms.txt` both name
- * /design *as the source for the design language*, so that claim is worth a
- * stable `@id` to hang on. Nothing points at /privacy as the source of
- * anything; readers arrive from the footer when they want it.
- *
- * If either page ever grows something a reader can see and a graph can carry —
- * a date it was last true, most likely, on /privacy — that is when it earns a
- * node, and design.md §7's table moves in the same commit.
  */
 
 /** `ListItem`s, numbered from 1 the way `BreadcrumbList` and `ItemList` both want. */
