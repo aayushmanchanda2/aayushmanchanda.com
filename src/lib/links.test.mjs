@@ -21,7 +21,8 @@
  * `repoFrom` writes into a gallery, `githubRepo` accepts unchanged.
  *
  * Importable from Node because `lib/links.ts` imports only `lib/site.ts`, which
- * is two constants and a `new URL`, and `node:fs` for the icon check. `lib/tools.ts` reads JSON at module load
+ * is two constants and a `new URL`, and `lib/assets.ts`, which lists public/
+ * with `node:fs` for the icon check. `lib/tools.ts` reads JSON at module load
  * and is still not testable this way; see the header of `parse.test.mjs`.
  */
 import test from "node:test";

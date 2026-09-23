@@ -21,9 +21,7 @@
  * publish pipeline is held to the same rule from the other side.
  */
 
-import { githubRepo, linkLabel, previewFor } from "./links";
-import { previewAttributes } from "./preview-card";
-import { rowAttributes } from "./tools-table";
+import { githubRepo } from "./links";
 import type { Fail } from "./parse";
 import { SLUG, readers, routeSlug } from "./parse";
 
@@ -307,25 +305,3 @@ export const verdictGroups: VerdictGroup[] = VERDICTS.map((verdict) => ({
   verdict,
   tools: tools.filter((tool) => tool.verdict === verdict),
 })).filter((group) => group.tools.length > 0);
-
-/**
- * The data attributes a /tools row or grid tile carries: sort and filter keys
- * (`lib/tools-table.ts`) and the hover card's words (`lib/preview-card.ts`).
- */
-export function toolAttributes(tool: Tool): Record<string, string> {
-  const home = tool.url ?? tool.repo;
-  return {
-    ...rowAttributes(tool, {
-      verdictRank: VERDICTS.indexOf(tool.verdict),
-      categorySlug: categorySlug(tool.category),
-      index: tools.indexOf(tool),
-    }),
-    ...previewAttributes({
-      image: previewFor(tool.slug),
-      name: tool.name,
-      domain: home === null ? "" : linkLabel(home),
-      description: tool.description,
-      note: tool.note,
-    }),
-  };
-}

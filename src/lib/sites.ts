@@ -22,6 +22,7 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
 
+import { PUBLIC_DIR } from "./assets";
 import type { SiteDesign } from "./design-md";
 import { parseDesign } from "./design-md";
 import type { Fail } from "./parse";
@@ -123,23 +124,6 @@ const READ = readers("sites.json");
 /** Annotated, or TypeScript stops treating a call as the end of control flow. */
 const fail: Fail = READ.fail;
 const { readString, readDate, readOptional, isRecord } = READ;
-
-/**
- * `public/` — the web root, so a `/shots/…` path resolves by joining here.
- *
- * Anchored to the working directory, not to `import.meta.url`: by the time
- * this module runs during `astro build` it has been bundled into
- * `dist/.prerender/chunks/`, and a relative walk from there lands nowhere.
- * Astro runs from the project root in both dev and build.
- */
-const PUBLIC_DIR = path.join(process.cwd(), "public");
-
-if (!existsSync(PUBLIC_DIR)) {
-  throw new Error(
-    `src/lib/sites.ts: no public/ directory at ${PUBLIC_DIR}. ` +
-      `Astro must run from the project root for the shot guard to work.`,
-  );
-}
 
 /** Returns the parsed URL so the caller can cross-check the domain against it. */
 function readUrl(entry: Record<string, unknown>, where: string): URL {
