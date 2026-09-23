@@ -1,0 +1,53 @@
+---
+/**
+ * The window as a postage stamp (VET-262): the mat and its perforation
+ * (VET-255, VET-260), the white margin band and keyline inside it, the
+ * denomination printed on the keyline, and the postmark. Decorative, so all of
+ * it is `aria-hidden`; `styles/frame.css` draws it and `data-stamp` on <html>
+ * switches the add-ons.
+ */
+import { formatDay } from "../lib/date";
+import { feedItems } from "../lib/feeds";
+import { FEED_SECTIONS, type FeedSection, getSections } from "../lib/sections";
+
+interface Props {
+  /** The nav section this page sits in, e.g. "/tools". */
+  href?: string;
+  /** True on the section's own index page, where the count and postmark show. */
+  index: boolean;
+}
+
+const { href, index } = Astro.props;
+
+const current = (await getSections()).find((section) => section.href === href);
+const denomination = current && (index ? `${current.name} · ${current.count}` : current.name);
+
+/** The section's newest entry, the date its feed would say it last changed. */
+const feed = index && FEED_SECTIONS.find((section): section is FeedSection => section === href);
+const updated = feed ? (await feedItems(feed)).map((item) => item.date).sort().at(-1) : undefined;
+---
+
+<div class="stamp" aria-hidden="true">
+  <span class="stamp__mark">2026</span>
+  {denomination && <span class="stamp__mark stamp__mark--end">{denomination}</span>}
+</div>
+<div class="mat" aria-hidden="true"><div class="mat__lift"></div></div>
+{
+  current && updated && (
+    <svg class="postmark" viewBox="0 0 200 96" aria-hidden="true">
+      <g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <path d="M2 30q9-7 18 0t18 0 18 0 18 0 18 0 18 0" />
+        <path d="M6 48q9-7 18 0t18 0 18 0 18 0 18 0 14 0" />
+        <path d="M2 66q9-7 18 0t18 0 18 0 18 0 18 0 18 0" />
+        <path d="M149 5c25-1 44 19 43 44s-20 44-45 43-43-21-42-46 19-40 46-41" />
+        <path d="M148 17c17 0 31 14 31 31s-14 31-32 31-30-15-30-32 14-30 31-30" stroke-width="1.5" />
+      </g>
+      <g fill="currentColor" font-size="10" text-anchor="middle">
+        <text x="148" y="40">{current.name.toUpperCase()}</text>
+        {formatDay(updated).toUpperCase().split(", ").map((line, i) => (
+          <text x="148" y={53 + i * 12}>{line}</text>
+        ))}
+      </g>
+    </svg>
+  )
+}

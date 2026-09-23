@@ -89,6 +89,15 @@ const selected = current === null ? "" : current;
     white-space: nowrap;
   }
 
+  /* At 320 the four segments are wider than the stamp's inner column (they
+     overflowed /library by 28px, VET-262); a tighter item keeps them on it. */
+  @media (max-width: 359px) {
+    .seg__item {
+      gap: 0.25rem;
+      padding-inline: 0.25rem;
+    }
+  }
+
   .seg__item::after {
     content: "";
     position: absolute;

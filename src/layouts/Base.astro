@@ -22,6 +22,7 @@ import "../styles/frame.css";
 
 import CommandPalette from "../components/CommandPalette.astro";
 import Footer from "../components/Footer.astro";
+import Stamp from "../components/Stamp.astro";
 import TopBar from "../components/TopBar.astro";
 import { normalize } from "../lib/links";
 import { markdownVariantFor } from "../lib/markdown";
@@ -158,7 +159,7 @@ const markdownVariant = variant === null ? null : absolute(variant);
 ---
 
 <!doctype html>
-<html lang="en" data-section={matSection}>
+<html lang="en" data-section={matSection} data-stamp="full">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -311,7 +312,7 @@ const markdownVariant = variant === null ? null : absolute(variant);
       the wiring.
     */}
     <a class="skip mono" href="#main" data-mnav-inert>Skip to content</a>
-    <div class="mat" aria-hidden="true"></div>
+    <Stamp href={section?.href} index={normalize(pathname) === section?.href} />
 
     {/*
       One region for every theme button on the page. It is empty until a press,
