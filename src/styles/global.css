@@ -105,11 +105,10 @@
   --page-pad: clamp(1rem, 5vw, 3rem);
   /* The sticky top bar in `layouts/Base.astro`. */
   --bar-h: 3.5rem;
-  /* The stamp frame's inset from the viewport (`styles/frame.css`): 12px on a
-     phone, 20px from 1334px. */
-  --frame: clamp(0.75rem, 1.5vw, 1.25rem);
-  /* The sheet the stamp sits on: the frame's gutter and its perforation. */
-  --frame-paper: #f5f5f5;
+  /* The stamp frame's inset from the viewport (`styles/frame.css`): 12px up
+     to 390px, wide enough to show the mat's grid on a desktop (24px at 925px,
+     32px from 1280px). */
+  --frame: clamp(0.75rem, 2.25vw + 0.2rem, 2rem);
 
   /* The gap under a masthead, before whatever the page is actually about.
      Every section index, every filter page, /design, the 404 and the three
@@ -159,7 +158,6 @@
     --outline: rgb(255 255 255 / 0.1);
     --dot: rgb(255 255 255 / 0.1);
     --surface-selected: #171717;
-    --frame-paper: #171717;
     --shadow-contrast: inset 0 0 0 0.5px rgb(255 255 255 / 0.04),
       inset 0 0.5px 0 0 rgb(255 255 255 / 0.04), 0 1px 3px 0 rgb(0 0 0 / 0.4);
     --amber-ink: #fcd34d;
@@ -189,7 +187,6 @@
   --outline: rgb(255 255 255 / 0.1);
   --dot: rgb(255 255 255 / 0.1);
   --surface-selected: #171717;
-  --frame-paper: #171717;
   --shadow-contrast: inset 0 0 0 0.5px rgb(255 255 255 / 0.04),
     inset 0 0.5px 0 0 rgb(255 255 255 / 0.04), 0 1px 3px 0 rgb(0 0 0 / 0.4);
   --amber-ink: #fcd34d;

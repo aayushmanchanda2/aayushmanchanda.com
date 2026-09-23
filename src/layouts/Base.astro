@@ -117,6 +117,10 @@ const pathname = Astro.url.pathname;
 const section = navItems.find(
   (item) => item.href !== "/" && `${normalize(pathname)}/`.startsWith(`${item.href}/`),
 );
+/** The mat colour behind the stamp frame (`styles/frame.css`): the nav section's
+ * slug, `home`, or `other` for the footer pages, the 404 and /design. */
+const matSection = section ? section.href.slice(1) : pathname === "/" ? "home" : "other";
+
 const trail: Crumb[] = trailOf(jsonLd) ??
   Astro.props.trail ??
   (section ? [{ name: section.label, path: section.href }] : []);
@@ -154,7 +158,7 @@ const markdownVariant = variant === null ? null : absolute(variant);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" data-section={matSection} data-mat="a">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -307,6 +311,7 @@ const markdownVariant = variant === null ? null : absolute(variant);
       the wiring.
     */}
     <a class="skip mono" href="#main" data-mnav-inert>Skip to content</a>
+    <div class="mat" aria-hidden="true"></div>
 
     {/*
       One region for every theme button on the page. It is empty until a press,
