@@ -807,14 +807,6 @@
       ],
       "type": [
         {
-          "name": "display",
-          "fontFamily": "Inter",
-          "fontSize": "24px",
-          "fontWeight": "600",
-          "lineHeight": "32px",
-          "letterSpacing": "normal"
-        },
-        {
           "name": "heading",
           "fontFamily": "Inter",
           "fontSize": "16px",
@@ -1705,14 +1697,6 @@
           "letterSpacing": "normal"
         },
         {
-          "name": "heading",
-          "fontFamily": "Inter",
-          "fontSize": "16px",
-          "fontWeight": "400",
-          "lineHeight": "25.6px",
-          "letterSpacing": "normal"
-        },
-        {
           "name": "body",
           "fontFamily": "Inter",
           "fontSize": "24px",
@@ -2492,14 +2476,6 @@
       ],
       "type": [
         {
-          "name": "display",
-          "fontFamily": "Public Sans",
-          "fontSize": "15px",
-          "fontWeight": "500",
-          "lineHeight": "22.5px",
-          "letterSpacing": "normal"
-        },
-        {
           "name": "body",
           "fontFamily": "Public Sans",
           "fontSize": "15px",
@@ -2717,14 +2693,6 @@
       "type": [
         {
           "name": "display",
-          "fontFamily": "Sans",
-          "fontSize": "16px",
-          "fontWeight": "450",
-          "lineHeight": "24.8px",
-          "letterSpacing": "normal"
-        },
-        {
-          "name": "heading",
           "fontFamily": "Sans",
           "fontSize": "16px",
           "fontWeight": "450",

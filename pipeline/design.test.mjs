@@ -10,7 +10,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { contrast, firstFamily, rank, summarize, toHex } from "./design.mjs";
+import { contrast, dedupeType, firstFamily, rank, summarize, toHex } from "./design.mjs";
 
 /**
  * A sample with quiet defaults: transparent, unbordered, no text.
@@ -130,9 +130,9 @@ test("a faint alpha hairline is not a border token", () => {
 test("type roles come from their elements, mono only when code exists", () => {
   const design = run([
     el({ tag: "h1", text: 10, font: ['"Söhne", sans-serif', "48.0001px", "600", "52px", "-0.96px"] }),
-    el({ tag: "h3", text: 10 }),
+    el({ tag: "h3", text: 10, font: ["Inter", "20px", "600", "28px", "normal"] }),
     el({ tag: "p", text: 200 }),
-    el({ tag: "a", nav: true, text: 5 }),
+    el({ tag: "a", nav: true, text: 5, font: ["Inter", "14px", "500", "20px", "normal"] }),
   ]);
   assert.deepEqual(names(design?.type), ["display", "heading", "body", "label"]);
   assert.deepEqual(design?.type[0], {
@@ -143,6 +143,26 @@ test("type roles come from their elements, mono only when code exists", () => {
     lineHeight: "52px",
     letterSpacing: "-0.96px",
   });
+});
+
+test("two roles set identically are one style, kept under the content role", () => {
+  /** @type {[string, string, string, string, string]} */
+  const same = ['"Public Sans", sans-serif', "15px", "500", "22.5px", "normal"];
+  const design = run([
+    el({ tag: "h1", text: 10, font: same }),
+    el({ tag: "p", text: 200, font: same }),
+    el({ tag: "button", text: 5, font: ["Figtree", "13px", "600", "18.2px", "-0.5px"] }),
+  ]);
+  assert.deepEqual(names(design?.type), ["body", "label"]);
+});
+
+test("dedupeType keeps order and only drops exact matches", () => {
+  /** @param {string} name @param {string} size */
+  const t = (name, size) => ({ name, fontFamily: "Inter", fontSize: size, fontWeight: "400", lineHeight: "24px", letterSpacing: "normal" });
+  assert.deepEqual(
+    dedupeType([t("display", "32px"), t("heading", "16px"), t("body", "16px"), t("label", "14px")]).map((x) => x.name),
+    ["display", "body", "label"],
+  );
 });
 
 test("spacing keeps the top five px values, ascending, named on the 4px step", () => {

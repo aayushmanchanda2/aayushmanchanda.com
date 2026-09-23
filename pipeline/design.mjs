@@ -195,6 +195,39 @@ export function byCount(values) {
   return rank(values.map((value) => /** @type {[T, number]} */ ([value, 1])));
 }
 
+/**
+ * Roles in the order they keep a style when two read identically. Content
+ * roles first: a page whose h1 is set exactly like its paragraphs has one
+ * style, and `body` is the truer name for it.
+ */
+const TYPE_PRIORITY = ["body", "display", "heading", "label", "mono"];
+
+/**
+ * Type tokens with exact duplicates dropped: when two roles share all five
+ * properties, only the one earliest in `TYPE_PRIORITY` stays. Order of what
+ * is kept is unchanged.
+ *
+ * @template {{ name: string, fontFamily: string, fontSize: string, fontWeight: string, lineHeight: string, letterSpacing: string }} T
+ * @param {T[]} type
+ * @returns {T[]}
+ */
+export function dedupeType(type) {
+  /** @param {T} t */
+  const key = (t) => [t.fontFamily, t.fontSize, t.fontWeight, t.lineHeight, t.letterSpacing].join("|");
+  /** @param {T} t */
+  const rankOf = (t) => {
+    const at = TYPE_PRIORITY.indexOf(t.name);
+    return at === -1 ? TYPE_PRIORITY.length : at;
+  };
+  /** @type {Map<string, T>} */
+  const kept = new Map();
+  for (const t of [...type].sort((a, b) => rankOf(a) - rankOf(b))) {
+    if (!kept.has(key(t))) kept.set(key(t), t);
+  }
+  const winners = new Set(kept.values());
+  return type.filter((t) => winners.has(t));
+}
+
 /** @param {string} hex */
 function channels(hex) {
   return [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255);
@@ -368,7 +401,7 @@ export function summarize({ body, html, edges, samples }, readDate) {
   if (full) radius.push({ name: "full", value: "9999px" });
 
   if (colors.length + type.length + spacing.length + radius.length === 0) return null;
-  return { read_date: readDate, colors, type, spacing, radius };
+  return { read_date: readDate, colors, type: dedupeType(type), spacing, radius };
 }
 
 /**
