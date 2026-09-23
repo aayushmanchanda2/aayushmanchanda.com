@@ -1,0 +1,41 @@
+{
+  "base": "http://localhost:4337/",
+  "label": "r5-4-before-panel",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-23-r5-4-before-panel",
+  "at": "2026-09-23T18:30:10.712Z",
+  "shots": [
+    {
+      "route": "/sites",
+      "url": "http://localhost:4337/sites",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "sites-1280-light.png",
+      "status": 200,
+      "clicked": [
+        "a[data-panel-open]:visible"
+      ],
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/sites",
+      "url": "http://localhost:4337/sites",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "sites-1280-dark.png",
+      "status": 200,
+      "clicked": [
+        "a[data-panel-open]:visible"
+      ],
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}

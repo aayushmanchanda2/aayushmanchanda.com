@@ -1,0 +1,40 @@
+{
+ "390": {
+  "maskLayers": 4,
+  "maskComposite": "add, add, add, add, exclude, add",
+  "maskSize": "10.8px 9px",
+  "border": "3px",
+  "padding": "5.72px",
+  "paperComposite": "exclude, add, add, add, add, exclude, add",
+  "shadeFilter": "drop-shadow(oklch(0.16 0.06 74 / 0.3) 0px 0.5px 0.5px) drop-",
+  "oldLift": 0,
+  "docHeight": 2852
+ },
+ "1280": {
+  "maskLayers": 4,
+  "maskComposite": "add, add, add, add, exclude, add",
+  "maskSize": "14.256px 11.88px",
+  "border": "8px",
+  "padding": "7.84px",
+  "paperComposite": "exclude, add, add, add, add, exclude, add",
+  "shadeFilter": "drop-shadow(oklch(0.16 0.06 74 / 0.3) 0px 0.5px 0.5px) drop-",
+  "oldLift": 0,
+  "docHeight": 1767
+ },
+ "1600": {
+  "maskLayers": 4,
+  "maskComposite": "add, add, add, add, exclude, add",
+  "maskSize": "14.4px 12px",
+  "border": "8px",
+  "padding": "8px",
+  "paperComposite": "exclude, add, add, add, add, exclude, add",
+  "shadeFilter": "drop-shadow(oklch(0.16 0.06 74 / 0.3) 0px 0.5px 0.5px) drop-",
+  "oldLift": 0,
+  "docHeight": 1619
+ },
+ "forced": {
+  "maskHoles": false,
+  "shade": "none",
+  "outline": "solid"
+ }
+}

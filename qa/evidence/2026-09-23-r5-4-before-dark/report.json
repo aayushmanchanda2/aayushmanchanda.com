@@ -1,0 +1,91 @@
+{
+  "base": "http://localhost:4337/",
+  "label": "r5-4-before-dark",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-23-r5-4-before-dark",
+  "at": "2026-09-23T18:29:58.682Z",
+  "shots": [
+    {
+      "route": "/",
+      "url": "http://localhost:4337/",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "home-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4337/tools",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "tools-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/sites",
+      "url": "http://localhost:4337/sites",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "sites-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library",
+      "url": "http://localhost:4337/library",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes",
+      "url": "http://localhost:4337/notes",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "notes-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/about",
+      "url": "http://localhost:4337/about",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "about-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}

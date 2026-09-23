@@ -9,6 +9,9 @@
     forced-color-adjust: none;
     border-color: Canvas;
     background: none;
+    /* the paper's edge: a plain line where the perforation was */
+    outline: 1px solid CanvasText;
+    outline-offset: -1px;
   }
 
   html .stamp::before {
@@ -21,9 +24,12 @@
     color: CanvasText;
   }
 
-  /* The mat keeps covering the gutter, as plain Canvas (its mask still cuts
-     the page and the holes out); its digits, lift and the postmark go. */
+  /* The mat keeps covering the gutter, as plain Canvas, cut straight (no
+     holes); its digits, lift and the postmark go. */
   html .mat {
+    --cut: var(--solid) content-box content-box, var(--solid) border-box;
+    --cut-op: exclude, add;
+
     forced-color-adjust: none;
     background: Canvas;
   }
@@ -33,7 +39,7 @@
     content: none;
   }
 
-  html :is(.mat__lift, .postmark) {
+  html :is(.mat__shade, .postmark) {
     display: none;
   }
 

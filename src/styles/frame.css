@@ -12,9 +12,9 @@
    Body padding makes the room; everything sticky or fixed under the bar reads
    `--frame` too (`TopBar`, `ToolList`, `DetailPanel`, `LibraryPane`, the shell's
    min-height in `Base.astro`). One fixed, click-through layer (`.mat`) draws
-   it: a full-window sheet of mat, masked down to the gutter plus four rows of
-   half-circles along the page's edge, which are the perforation. The mat shows
-   through the holes because the holes are the mat. Fixed and static, so it is
+   it: a full-window sheet of mat, masked down to the gutter plus the holes
+   along the page's edge (`--cut`), so the perforation is cut out of the page
+   and the one mat runs on through every hole. Fixed and static, so it is
    painted once and never repaints on scroll; reduced motion has nothing to
    change. design.md §3 has the numbers.
 
@@ -104,6 +104,22 @@ body {
   --p: calc(var(--d) * 1.2);
   --hole: radial-gradient(circle closest-side, #000 calc(100% - 1px), transparent);
   --solid: linear-gradient(#000 0 0);
+  /* The cut (R5-4): the gutter (the window, `exclude` the page) plus four
+     rows of `--d` holes on a `--p` pitch, centred on the page's edge. The
+     rows are laid out on the padding box, the page grown by `--pad` (half a
+     pitch, plus under 1px of rounding),
+     so `space` puts the first and last hole of each edge on the corner (a
+     quarter-hole in the paper) and spreads the rest evenly: every edge ends
+     on a whole hole. Fixed px, on a window-fixed box, so no page height or
+     resize stretches a hole. */
+  --cut:
+    var(--hole) 0 calc(var(--pad) - var(--d) / 2) / var(--p) var(--d) space no-repeat padding-box border-box,
+    var(--hole) 0 calc(100% - var(--pad) + var(--d) / 2) / var(--p) var(--d) space no-repeat padding-box border-box,
+    var(--hole) calc(var(--pad) - var(--d) / 2) 0 / var(--d) var(--p) no-repeat space padding-box border-box,
+    var(--hole) calc(100% - var(--pad) + var(--d) / 2) 0 / var(--d) var(--p) no-repeat space padding-box border-box,
+    var(--solid) content-box content-box,
+    var(--solid) border-box;
+  --cut-op: add, add, add, add, exclude, add;
   /* white lines, tinted toward the mat's hue so they glow rather than grey */
   --tick: oklch(0.97 0.04 var(--mat-h) / 0.34);
   --major: oklch(0.97 0.04 var(--mat-h) / 0.16);
@@ -115,10 +131,25 @@ body {
      the menu (70, 80) and the palette (100) */
   z-index: 40;
   pointer-events: none;
-  /* the content box is the page: the holes and the cut-out are laid out on
-     it, while the mat's own background fills the whole window */
-  padding: var(--mat-w);
-  overflow: hidden;
+  clip-path: inset(0);
+  mask: var(--cut);
+  mask-composite: var(--cut-op);
+}
+
+/* The boxes the cut is laid out on: border-box the window, padding-box the
+   page plus about half a pitch, content-box the page. The paper wears the mat too,
+   so the anti-aliased rim where the two masks meet is mat, not a colour. */
+.mat,
+.mat__paper {
+  /* whole px, since browsers snap a border's width; the padding takes the
+     rest, so the content box lands exactly on the page */
+  --b: round(down, var(--mat-w) - var(--p) / 2, 1px);
+  --pad: calc(var(--mat-w) - var(--b));
+
+  border: var(--b) solid transparent;
+  padding: var(--pad);
+  /* grid lines and digits are laid out on the window */
+  background-origin: border-box;
   /* top to bottom: grain, ruler ticks (40px, then 8px) along the top and left
      edges, 40px major and 8px minor lines, the scuffs, the wear, the
      vignette, the gradient */
@@ -138,18 +169,6 @@ body {
     linear-gradient(160deg, var(--mat-hi), var(--mat));
   background-size: auto, 100% 5.5px, 5.5px 100%, 100% 2.5px, 2.5px 100%, auto, auto, auto, auto, 100% 100%, 480px, auto, auto;
   background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat, repeat, repeat, repeat, no-repeat, repeat, no-repeat, no-repeat;
-  /* `--d` holes on a 1.2 × `--d` pitch, centred on the page's edge so half
-     of each bites in; `space` spreads them so both ends of an edge match. Below them
-     the page (the content box) is cut out of the window: `exclude` against the
-     bottom layer leaves the gutter, and the holes are added back on top. */
-  mask:
-    var(--hole) 0 calc(var(--d) / -2) / var(--p) var(--d) space no-repeat content-box border-box,
-    var(--hole) 0 calc(100% + var(--d) / 2) / var(--p) var(--d) space no-repeat content-box border-box,
-    var(--hole) calc(var(--d) / -2) 0 / var(--d) var(--p) no-repeat space content-box border-box,
-    var(--hole) calc(100% + var(--d) / 2) 0 / var(--d) var(--p) no-repeat space content-box border-box,
-    var(--solid) content-box content-box,
-    var(--solid) border-box;
-  mask-composite: add, add, add, add, exclude, add;
 }
 
 /* The digits. Geist Mono's advance is 0.6em, so letter-spacing pads each one
@@ -169,13 +188,13 @@ body {
 /* both rows start at the first major line, so the corner stays clear, and
    sit 3px in, clear of the holes */
 .mat::before {
-  top: 3px;
-  left: 43px;
+  top: calc(3px - var(--b));
+  left: calc(43px - var(--b));
 }
 
 .mat::after {
-  top: 43px;
-  left: 3px;
+  top: calc(43px - var(--b));
+  left: calc(3px - var(--b));
   writing-mode: vertical-lr;
 }
 
@@ -261,22 +280,22 @@ body {
   right: 1.5rem;
 }
 
-/* The lift: the paper's shadow on the mat, tinted by it. Inside
-   `.mat`, so the mask shows it only in the gutter and the holes. The rims
-   are the same four rows of holes as the mask, shaded at the edge, so each
-   hole reads as punched through paper with depth rather than painted on;
-   its box is the page, so only the paper's half of each shows. Static. */
-.mat__lift {
-  --rim: radial-gradient(circle closest-side, transparent 62%, oklch(0.16 0.06 var(--mat-h) / 0.4));
-
+/* The lift (R5-4): the paper's shadow on the mat. `.mat__paper` is the
+   cut's inverse (the page less its holes, `exclude` on top of the cut), so
+   the mat's own mask hides it and leaves only the shadow its wrapper drops,
+   in the gutter and inside every hole, following the cut edge. Static, inside
+   a fixed layer, so it rasterises once. */
+.mat__shade {
   position: absolute;
-  inset: var(--mat-w);
-  background:
-    var(--rim) 0 calc(var(--d) / -2) / var(--p) var(--d) space no-repeat,
-    var(--rim) 0 calc(100% + var(--d) / 2) / var(--p) var(--d) space no-repeat,
-    var(--rim) calc(var(--d) / -2) 0 / var(--d) var(--p) no-repeat space,
-    var(--rim) calc(100% + var(--d) / 2) 0 / var(--d) var(--p) no-repeat space;
-  box-shadow:
-    0 1px 2px oklch(0.2 0.06 var(--mat-h) / 0.3),
-    0 8px 24px oklch(0.2 0.08 var(--mat-h) / 0.4);
+  inset: calc(-1 * var(--b));
+  filter:
+    drop-shadow(0 0.5px 0.5px oklch(0.16 0.06 var(--mat-h) / 0.3))
+    drop-shadow(0 2px 4px oklch(0.16 0.06 var(--mat-h) / 0.22));
+}
+
+.mat__paper {
+  position: absolute;
+  inset: 0;
+  mask: var(--solid) border-box, var(--cut);
+  mask-composite: exclude, var(--cut-op);
 }
