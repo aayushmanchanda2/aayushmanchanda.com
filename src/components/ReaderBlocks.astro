@@ -10,6 +10,7 @@
  * releases each one as it scrolls into view, once. No script, reduced motion
  * and print all get a static, full mark.
  */
+import Doodle from "./Doodle.astro";
 import EntryLink from "./EntryLink.astro";
 import type { Highlight } from "../lib/library";
 
@@ -27,18 +28,21 @@ const { highlights, excerpt, url, domain } = Astro.props;
   highlights.length > 0 && (
     <section class="block" aria-labelledby="highlights">
       <h2 class="accent-bar" id="highlights">Highlights</h2>
-      <ul class="quotes">
-        {highlights.map((highlight) => (
-          <li>
-            <blockquote class="quote" cite={url}>
-              <p>
-                <mark class="hl" data-color={highlight.color}>{highlight.text}</mark>
-              </p>
-            </blockquote>
-            {highlight.note && <p class="quote__note">{highlight.note}</p>}
-          </li>
-        ))}
-      </ul>
+      <div class="pulled">
+        <Doodle class="pulled__bracket" shape="bracket" variant={2} stroke={1.5} stretch draw />
+        <ul class="quotes">
+          {highlights.map((highlight) => (
+            <li>
+              <blockquote class="quote" cite={url}>
+                <p>
+                  <mark class="hl" data-color={highlight.color}>{highlight.text}</mark>
+                </p>
+              </blockquote>
+              {highlight.note && <p class="quote__note">{highlight.note}</p>}
+            </li>
+          ))}
+        </ul>
+      </div>
     </section>
   )
 }
@@ -79,6 +83,22 @@ const { highlights, excerpt, url, domain } = Astro.props;
   .block {
     max-width: 40rem;
     margin-top: 2.5rem;
+  }
+
+  /* The pull-quotes sit inside a pen bracket (VET-251), indented to the
+     excerpt, so the two quoted blocks start on one edge. */
+  .pulled {
+    position: relative;
+    padding-left: 1rem;
+  }
+
+  .pulled__bracket {
+    position: absolute;
+    left: -0.25rem;
+    top: 0.2rem;
+    bottom: 0.2rem;
+    width: 0.625rem;
+    height: calc(100% - 0.4rem);
   }
 
   .quotes {

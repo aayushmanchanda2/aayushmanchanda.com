@@ -67,6 +67,15 @@
   --highlight-blue: rgb(92 116 255 / 0.22);
   --highlight-pink: rgb(244 114 182 / 0.3);
   --highlight-green: rgb(74 222 128 / 0.35);
+  /* Pen strokes (VET-251): the doodles and text marks, the highlighter's four
+     hues plus ink as solid lines. `light-dark()` resolves off `color-scheme`,
+     which both dark blocks set, so one declaration covers every theme state.
+     Dark lifts the lightness and drops chroma so a line glows less on black. */
+  --pen-amber: light-dark(oklch(0.74 0.16 68), oklch(0.8 0.13 78));
+  --pen-blue: light-dark(oklch(0.55 0.21 265), oklch(0.7 0.14 268));
+  --pen-pink: light-dark(oklch(0.66 0.2 355), oklch(0.76 0.13 355));
+  --pen-green: light-dark(oklch(0.64 0.16 152), oklch(0.78 0.14 152));
+  --pen-ink: light-dark(oklch(0.32 0 0), oklch(0.86 0 0));
   /* Light keeps the accent at 18% under primary ink (13.58:1); briOS's blue
      pair is 4.80:1 and a second blue on a page whose links are ours. */
   --selection-bg: rgb(43 75 255 / 0.18);

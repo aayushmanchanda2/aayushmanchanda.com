@@ -1,0 +1,51 @@
+---
+/**
+ * Mark: a pen mark on a word or two (VET-251). The words stay plain text; a
+ * stretched `Doodle` sits behind them, sized by CSS to the words' own box, so
+ * it follows the font at every width with no measuring script. Under the
+ * words for an underline or a squiggle, round them for a circle. Keep the
+ * words short: the mark does not wrap, and neither does what it marks.
+ */
+import Doodle, { type PenColor } from "./Doodle.astro";
+
+interface Props {
+  shape?: "underline" | "underline-double" | "squiggle" | "circle";
+  variant?: 1 | 2 | 3;
+  color?: PenColor;
+  stroke?: 1.5 | 2 | 3;
+}
+
+const { shape = "underline", variant, color = "amber", stroke = 2 } = Astro.props;
+---
+
+<span class="mark" data-shape={shape}
+  ><slot /><Doodle class="mark__pen" {shape} {variant} {color} {stroke} stretch draw /></span
+>
+
+<style>
+  .mark {
+    position: relative;
+    white-space: nowrap;
+  }
+
+  .mark__pen {
+    position: absolute;
+    left: -0.08em;
+    width: calc(100% + 0.16em);
+    bottom: -0.2em;
+    height: 0.34em;
+  }
+
+  [data-shape="squiggle"] .mark__pen {
+    height: 0.28em;
+  }
+
+  /* An ellipse cuts its box's corners, so it needs more room across than
+     up and down to clear the first and last letters. */
+  [data-shape="circle"] .mark__pen {
+    left: -0.4em;
+    width: calc(100% + 0.8em);
+    top: -0.15em;
+    height: calc(100% + 0.3em);
+  }
+</style>

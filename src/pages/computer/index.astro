@@ -4,6 +4,7 @@
  * emoji tile, a title and the summary under it, drawn by `EntryList` so the
  * rows match "Read next" under a tip.
  */
+import Mark from "../../components/Mark.astro";
 import { getCollection } from "astro:content";
 
 import Base from "../../layouts/Base.astro";
@@ -29,7 +30,7 @@ const jsonLd = listJsonLd({
   jsonLd={jsonLd}
 >
   <header>
-    <h1 class="page-title">Computer</h1>
+    <h1 class="page-title"><Mark color="ink" variant={2}>Computer</Mark></h1>
     <p class="standfirst">
       How I work with my computer and the agents on it. Each tip is one habit,
       the reason for it and the exact steps.

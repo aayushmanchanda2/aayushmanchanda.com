@@ -1,6 +1,8 @@
 ---
 import Avatar from "../components/Avatar.astro";
+import Doodle from "../components/Doodle.astro";
 import EntryList from "../components/EntryList.astro";
+import Mark from "../components/Mark.astro";
 import NewsletterSignup from "../components/NewsletterSignup.astro";
 import Base from "../layouts/Base.astro";
 import { feedItems } from "../lib/feeds";
@@ -35,12 +37,15 @@ const jsonLd = homeJsonLd();
     </p>
     <p class="standfirst hero__purpose">
       There&rsquo;s a lot of noise in AI. I test it on my own companies and my
-      clients, and what survives shows up here with a date on it.
+      clients, and <Mark variant={2}>what survives</Mark> shows up here with a
+      date on it.
     </p>
   </header>
 
   <section class="index" aria-labelledby="index-heading">
-    <h2 class="index__title mono" id="index-heading">The mindscape</h2>
+    <h2 class="index__title mono" id="index-heading">
+      The mindscape<Doodle class="index__arrow" shape="arrow-curve" variant={2} color="blue" stroke={1.5} draw />
+    </h2>
 
     <ul class="index__list">
       {
@@ -137,6 +142,17 @@ const jsonLd = homeJsonLd();
 
   .index__title {
     color: var(--text-tertiary);
+  }
+
+  /* A pen arrow off the heading's last letter, curling down to the first
+     row. It ends in the list's top margin, above the first name. */
+  .index__arrow {
+    /* inline, so its static position is after the text, not under it */
+    display: inline;
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    margin: 0.35em 0 0 0.4em;
   }
 
   .index__list {
