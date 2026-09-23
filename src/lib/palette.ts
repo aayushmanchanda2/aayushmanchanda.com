@@ -24,10 +24,10 @@
  */
 
 import { ownsKey } from "./keys";
+import { runAction } from "./palette-actions";
 import { renderRows } from "./palette-rows";
 import { RESULT_LIMIT, search, tokenize } from "./search";
-import type { SearchEntry } from "./search";
-import { toggleSound } from "./ui-sound";
+import type { Action, SearchEntry } from "./search";
 
 export function initPalette(root: HTMLElement): void {
   const input = root.querySelector<HTMLInputElement>("[data-palette-input]");
@@ -82,7 +82,10 @@ export function initPalette(root: HTMLElement): void {
     empty.hidden = hits.length > 0;
     results.hidden = hits.length === 0;
     input.setAttribute("aria-expanded", String(hits.length > 0));
-    status.textContent = hits.length === 0 ? "No matches" : `${hits.length} ${hits.length === 1 ? "result" : "results"}`;
+    status.textContent =
+      hits.length === 0 ? "No matches"
+      : query.trim() === "" ? "Suggestions"
+      : `${hits.length} ${hits.length === 1 ? "result" : "results"}`;
 
     setActive(0);
   };
@@ -171,15 +174,23 @@ export function initPalette(root: HTMLElement): void {
   };
 
   /**
-   * Follow a row, or run its command. `location.href`, not `row.click()`: the
-   * close hides the subtree, and a synthetic click inside a hidden subtree does
-   * not navigate. The href is read before the close for the same reason.
+   * Follow a row, run its action, or type its query. `location.href`, not
+   * `row.click()`: the close hides the subtree, and a synthetic click inside a
+   * hidden subtree does not navigate. The href is read before the close for
+   * the same reason.
    */
   const go = (row: HTMLAnchorElement | undefined): void => {
     if (!row) return;
-    if (row.dataset.paletteAction) {
-      setOpen(false);
-      toggleSound();
+    const { paletteAction, paletteQuery } = row.dataset;
+    if (paletteQuery) {
+      input.value = paletteQuery;
+      render(paletteQuery);
+      input.focus({ preventScroll: true });
+      return;
+    }
+    if (paletteAction) {
+      // In place, and the palette stays open so the row can show what changed.
+      void runAction(row, paletteAction as Action).then((said) => (status.textContent = said));
       return;
     }
     const href = row.href;
@@ -233,7 +244,7 @@ export function initPalette(root: HTMLElement): void {
   });
 
   results.addEventListener("click", (event) => {
-    const command = (event.target as HTMLElement).closest<HTMLAnchorElement>("[data-palette-action]");
+    const command = (event.target as HTMLElement).closest<HTMLAnchorElement>("[data-palette-action], [data-palette-query]");
     if (command) event.preventDefault();
     return command ? go(command) : setOpen(false);
   });

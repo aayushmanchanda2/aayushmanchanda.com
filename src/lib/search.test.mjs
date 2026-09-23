@@ -20,7 +20,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { RESULT_LIMIT, excerptFor, scoreEntry, search, tokenize } from "./search.ts";
+import { excerptFor, scoreEntry, search, tokenize } from "./search.ts";
 
 /** @typedef {import("./search.ts").SearchEntry} SearchEntry */
 
@@ -66,14 +66,16 @@ test("an empty or blank query has no tokens", () => {
    The empty query — the palette's opening state
    --------------------------------------------------------------------------- */
 
-test("an empty query lists everything, in the order the index gave", () => {
-  const entries = [entry("Home", "Pages"), entry("Tools", "Pages"), entry("Astro")];
-  assert.deepEqual(titles(entries, ""), ["Home", "Tools", "Astro"]);
+test("an empty query lists the grouped rows, in the order the index gave, uncapped", () => {
+  const grouped = Array.from({ length: 20 }, (_, i) => ({ ...entry(`Row ${i}`), group: i < 5 ? "Go to" : "Browse" }));
+  const entries = [...grouped, entry("Astro")];
+  assert.deepEqual(titles(entries, ""), grouped.map((row) => row.title));
 });
 
-test("the empty query is still capped", () => {
-  const entries = Array.from({ length: 40 }, (_, i) => entry(`Tool ${i}`));
-  assert.equal(search(entries, "").length, RESULT_LIMIT);
+test("a typed query never ranks a grouped row", () => {
+  const entries = [{ ...entry("Astro"), group: "Recent saves" }, entry("Astro")];
+  assert.equal(search(entries, "astro").length, 1);
+  assert.equal(search(entries, "astro")[0]?.entry.group, undefined);
 });
 
 /* ---------------------------------------------------------------------------

@@ -17,9 +17,9 @@
  */
 
 import { formatDay } from "./date";
+import { actionText } from "./palette-actions";
 import type { Part, RowIcon, SearchEntry, SearchHit } from "./search";
 import { excerptFor } from "./search";
-import { soundOn } from "./ui-sound";
 
 function el<K extends keyof HTMLElementTagNameMap>(
   tag: K,
@@ -96,19 +96,13 @@ function rowNode(hit: SearchHit, tokens: readonly string[]): HTMLAnchorElement {
   // not be a tab stop of its own.
   row.tabIndex = -1;
   if (entry.action) row.dataset.paletteAction = entry.action;
+  if (entry.query) row.dataset.paletteQuery = entry.query;
 
+  const [title, sub] = entry.action ? actionText(entry.action) : [entry.title, entry.sub];
   const text = el("span", "palette__row-text");
   text.append(
-    el(
-      "span",
-      "palette__row-title",
-      entry.action === "sound" ? `Sound: ${soundOn() ? "on" : "off"}` : entry.title,
-    ),
-    el(
-      "span",
-      "palette__row-sub",
-      [entry.section, entry.action ? "toggle" : entry.sub].filter(Boolean).join(" · "),
-    ),
+    el("span", "palette__row-title", title),
+    el("span", "palette__row-sub", [entry.section, sub].filter(Boolean).join(" · ")),
   );
   const parts = excerptFor(entry, tokens);
   if (parts) text.append(excerptNode(parts));
@@ -126,6 +120,10 @@ function rowNode(hit: SearchHit, tokens: readonly string[]): HTMLAnchorElement {
 /**
  * Replace `container`'s contents with `hits`, and hand back the rows.
  *
+ * Grouped hits (the empty palette, `lib/palette-home.ts`) go under a heading,
+ * each run in a `role="group"` named by it; the rows stay the listbox's
+ * options, so the arrow keys walk straight across the groups.
+ *
  * Read back out of the DOM rather than collected while building, so the order
  * the arrow keys walk is guaranteed to be the rendered one.
  */
@@ -134,6 +132,28 @@ export function renderRows(
   hits: readonly SearchHit[],
   tokens: readonly string[],
 ): HTMLAnchorElement[] {
-  container.replaceChildren(...hits.map((hit) => rowNode(hit, tokens)));
+  const nodes: HTMLElement[] = [];
+  let group: HTMLElement | null = null;
+  for (const hit of hits) {
+    const heading = hit.entry.group;
+    if (!heading) {
+      nodes.push(rowNode(hit, tokens));
+      continue;
+    }
+    if (group?.dataset.group !== heading) {
+      const id = `palette-group-${nodes.length}`;
+      const label = el("div", "palette__group mono", heading);
+      label.id = id;
+      label.setAttribute("role", "presentation");
+      group = el("div", "palette__groupbox");
+      group.dataset.group = heading;
+      group.setAttribute("role", "group");
+      group.setAttribute("aria-labelledby", id);
+      group.append(label);
+      nodes.push(group);
+    }
+    group.append(rowNode(hit, tokens));
+  }
+  container.replaceChildren(...nodes);
   return Array.from(container.querySelectorAll<HTMLAnchorElement>("[data-palette-row]"));
 }

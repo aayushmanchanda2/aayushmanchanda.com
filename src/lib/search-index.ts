@@ -27,18 +27,17 @@ import type { Post } from "./library";
 import { entryHref, library } from "./library";
 import { monogram } from "./post";
 import type { RowIcon, SearchEntry } from "./search";
+import { paletteHome } from "./palette-home";
 import { getSections } from "./sections";
 import { collectionLabel, sites } from "./sites";
-import { hueSlot } from "./tags";
+import { hueSlot, tagLabel } from "./tags";
 import type { Tool } from "./tools";
 import { tools } from "./tools";
 
 /**
- * Group headings, and the order an empty palette lists them in.
- *
- * Pages first, because the empty state is the answer to "what is on this site"
- * and the section indexes are that answer. Once a reader types anything,
- * relevance takes over and this order stops applying — see `search()`.
+ * Section names: the first half of a row's subline. Once a reader types,
+ * relevance decides the order (`search()`); before that the palette shows
+ * `lib/palette-home.ts`'s groups instead.
  */
 const SECTION = {
   pages: "Pages",
@@ -178,7 +177,7 @@ async function build(): Promise<SearchEntry[]> {
   const notes = await getCollection("notes");
   const tips = await getCollection("computer");
 
-  return [
+  const rows: SearchEntry[] = [
     ...STATIC_PAGES.map((page) => ({ ...page, glyph: "article" as const })),
 
     /**
@@ -189,7 +188,7 @@ async function build(): Promise<SearchEntry[]> {
      */
     ...(await sectionPages()),
 
-    // After the ten pages, so an empty palette still shows it (the cap is 12).
+    // Found by typing; the empty palette lists its own copy under Actions.
     {
       title: "Sound",
       section: SECTION.settings,
@@ -232,7 +231,7 @@ async function build(): Promise<SearchEntry[]> {
         title: entry.title,
         section: SECTION.library,
         href: entryHref(entry),
-        terms: `${entry.domain} ${entry.kind}`,
+        terms: [entry.domain, entry.kind, ...entry.tags.map(tagLabel)].join(" "),
         // The keyline and a video's moments are his picks from the source, so they rank with the highlights.
         lead: squash(entry.tldr, entry.keyline, ...entry.highlights.map((h) => h.text), ...entry.moments.map((m) => m.text), entry.note, entry.why),
         body: squash(entry.post?.text, entry.post?.quoted?.text, entry.excerpt, ...(entry.digest?.bullets ?? [])),
@@ -278,6 +277,9 @@ async function build(): Promise<SearchEntry[]> {
       }),
     ),
   ];
+
+  // The empty palette's groups first (`lib/palette-home.ts`); `search()` shows them only before a query.
+  return [...paletteHome(await getSections(), rows), ...rows];
 }
 
 /** The section indexes as palette rows. */
