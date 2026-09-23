@@ -60,7 +60,7 @@ export const GET: APIRoute = async () => {
 > and tips on how he works with his computer.
 
 Aayush co-founded Orbis, an AI healthcare company, runs Vetted, an AI
-consulting practice, and builds things with AI from Canada.
+transformation partner, and builds things with AI.
 
 He tests AI tools on his own companies and his clients; what survives shows up
 here with a date on it.

@@ -54,7 +54,7 @@ export const GET: APIRoute = async () => {
     // the identity beat and the first block picks up at the purpose beat. Both
     // here would print the same sentence twice in a row.
     description:
-      "Aayush Manchanda co-founded Orbis, runs Vetted, and builds things with AI from Canada.",
+      "Aayush Manchanda co-founded Orbis, runs Vetted, and builds things with AI.",
     // The home page summarises every section, so its freshness is the freshest
     // thing any section has.
     updated: newest([
