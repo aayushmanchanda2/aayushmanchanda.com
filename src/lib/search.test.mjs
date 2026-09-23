@@ -20,7 +20,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { RESULT_LIMIT, flatten, scoreEntry, search, tokenize } from "./search.ts";
+import { RESULT_LIMIT, excerptFor, scoreEntry, search, tokenize } from "./search.ts";
 
 /** @typedef {import("./search.ts").SearchEntry} SearchEntry */
 
@@ -46,7 +46,7 @@ function entry(title, section = "Tools", terms = "", href = "/x") {
  * @returns {string[]}
  */
 function titles(entries, query, limit) {
-  return flatten(search(entries, query, limit)).map((hit) => hit.entry.title);
+  return search(entries, query, limit).map((hit) => hit.entry.title);
 }
 
 /* ---------------------------------------------------------------------------
@@ -73,7 +73,7 @@ test("an empty query lists everything, in the order the index gave", () => {
 
 test("the empty query is still capped", () => {
   const entries = Array.from({ length: 40 }, (_, i) => entry(`Tool ${i}`));
-  assert.equal(flatten(search(entries, "")).length, RESULT_LIMIT);
+  assert.equal(search(entries, "").length, RESULT_LIMIT);
 });
 
 /* ---------------------------------------------------------------------------
@@ -162,64 +162,56 @@ test("on a tie, the shorter title wins", () => {
 });
 
 /* ---------------------------------------------------------------------------
-   Grouping — headings, without disturbing the ranking
+   One list across sections, and the prose behind a title (VET-247)
    --------------------------------------------------------------------------- */
 
-test("results are grouped by section, best section first", () => {
-  const entries = [
-    entry("Astro Docs", "Library", ""),
-    entry("Astro", "Tools", ""),
-  ];
-  const groups = search(entries, "astro");
-
-  // "Astro" is the stronger hit, so Tools leads even though Library came first
-  // in the index.
-  assert.deepEqual(
-    groups.map((group) => group.section),
-    ["Tools", "Library"],
-  );
-});
-
-test("a section appears once, with its hits together", () => {
-  const entries = [
-    entry("Astro", "Tools"),
-    entry("Astro Docs", "Library"),
-    entry("Astro Islands", "Tools"),
-  ];
-  const groups = search(entries, "astro");
-
-  assert.deepEqual(
-    groups.map((group) => group.section),
-    ["Tools", "Library"],
-  );
-  assert.deepEqual(groups[0].hits.map((hit) => hit.entry.title), [
-    "Astro",
-    "Astro Islands",
-  ]);
-});
-
-test("flattening a grouped result gives the order the arrow keys walk", () => {
+test("results are one list in rank order, whatever their section", () => {
   const entries = [
     entry("Astro Docs", "Library"),
+    entry("Islands of Astro", "Tools"),
     entry("Astro", "Tools"),
-    entry("Astro Islands", "Tools"),
   ];
-  const groups = search(entries, "astro");
-
-  // The flat list is exactly the groups concatenated — which is what the DOM
-  // renders, and therefore what the highlight indexes into.
-  assert.deepEqual(
-    flatten(groups).map((hit) => hit.entry.title),
-    groups.flatMap((group) => group.hits.map((hit) => hit.entry.title)),
-  );
+  assert.deepEqual(titles(entries, "astro"), ["Astro", "Astro Docs", "Islands of Astro"]);
 });
 
-test("the cap applies to results overall, not per section", () => {
-  const entries = [
-    ...Array.from({ length: 10 }, (_, i) => entry(`Astro Tool ${i}`, "Tools")),
-    ...Array.from({ length: 10 }, (_, i) => entry(`Astro Read ${i}`, "Library")),
-  ];
-  const groups = search(entries, "astro", 5);
+test("the cap applies to results overall", () => {
+  const entries = Array.from({ length: 20 }, (_, i) => entry(`Astro ${i}`));
+  assert.equal(search(entries, "astro", 5).length, 5);
+});
 
-  assert.equal(flatten(groups).length, 5);
+test("a word only inside a body still finds the entry", () => {
+  const post = { ...entry("Welcome", "Library"), body: "a long post about neuroplasticity and habits" };
+  assert.deepEqual(titles([entry("Other"), post], "neuroplasticity"), ["Welcome"]);
+});
+
+test("title beats lead beats body", () => {
+  const entries = [
+    { ...entry("Zeta", "Library"), body: "all about gardens" },
+    { ...entry("Beta", "Library"), lead: "gardens in a sentence" },
+    entry("Gardens"),
+  ];
+  assert.deepEqual(titles(entries, "gardens"), ["Gardens", "Beta", "Zeta"]);
+});
+
+test("an excerpt centres on the word the title lacks and marks every query word", () => {
+  const body = `${"filler ".repeat(30)}the habit loop shapes the habit ${"tail ".repeat(30)}`.trim();
+  const parts = excerptFor({ ...entry("Loop notes"), body }, ["loop", "habit"]);
+  assert.ok(parts);
+  assert.equal(parts[0].text, "… ");
+  assert.equal(parts[parts.length - 1].text, " …");
+  assert.deepEqual(
+    parts.filter((part) => part.mark).map((part) => part.text),
+    ["habit", "loop", "habit"],
+  );
+  assert.ok(parts.map((part) => part.text).join("").length < 160);
+});
+
+test("no excerpt when the title already holds every word", () => {
+  assert.equal(excerptFor({ ...entry("Habit Loop"), body: "habit" }, ["habit"]), null);
+});
+
+test("an excerpt keeps angle brackets as text, for the DOM to print", () => {
+  const parts = excerptFor({ ...entry("X"), body: "<script>alert(1)</script> find me" }, ["find"]);
+  assert.ok(parts);
+  assert.equal(parts.map((part) => part.text).join(""), "<script>alert(1)</script> find me");
 });

@@ -15,11 +15,24 @@
  * tested one and a shipped one that drifted.
  */
 
+/** A row's 30px picture: `src`, then `fallback`, then `letter` on its hue. */
+export interface RowIcon {
+  /** A post's author is a face, so round; a tool or a site is an app icon. */
+  shape: "round" | "app";
+  src?: string;
+  fallback?: string;
+  letter: string;
+  hue: number;
+}
+
+/** A row with no picture draws one of these (`styles/kind-icon.css`). */
+export type Glyph = "article" | "post" | "video" | "note" | "sound";
+
 /** One searchable destination: an entry, or a page. */
 export interface SearchEntry {
   /** What the reader sees, and the field that carries the most weight. */
   title: string;
-  /** Display label for the group heading — "Tools", "Sites", "Pages". */
+  /** "Tools", "Sites", "Pages": the first half of the row's subline. */
   section: string;
   href: string;
   /**
@@ -29,6 +42,16 @@ export interface SearchEntry {
    * single `indexOf` over the joined text answers that without a loop.
    */
   terms?: string;
+  /** The short prose: a TLDR, the highlights, a tool's note. Outranks `body`. */
+  lead?: string;
+  /** The long prose: a post's whole text, a note's body. Whitespace collapsed at build. */
+  body?: string;
+  /** Who or where: "Ben Lang @benln", "rareui.com". The subline's second half. */
+  sub?: string;
+  /** ISO day, printed on the right. */
+  date?: string;
+  icon?: RowIcon;
+  glyph?: Glyph;
   /** A command rather than a destination: the row runs it instead of navigating. */
   action?: "sound";
 }
@@ -37,12 +60,6 @@ export interface SearchEntry {
 export interface SearchHit {
   entry: SearchEntry;
   score: number;
-}
-
-/** Hits under one section heading, best first. */
-export interface SearchGroup {
-  section: string;
-  hits: SearchHit[];
 }
 
 /**
@@ -60,10 +77,10 @@ export const RESULT_LIMIT = 12;
  *
  * The title dominates on purpose. `terms` exists so that "gallery" finds a site
  * filed under a collection by that name, but a site actually *called* Gallery
- * should always beat it, and a weight of 0.45 means no amount of term matching
- * adds up to a title match.
+ * should always beat it. Then the prose: a TLDR or a highlight is what the entry
+ * is about, and a word buried in a 3,000-word post body is only evidence.
  */
-const FIELD_WEIGHT = { title: 1, terms: 0.45, section: 0.3 } as const;
+const FIELD_WEIGHT = { title: 1, lead: 0.5, terms: 0.45, section: 0.3, body: 0.2 } as const;
 
 /**
  * Where in the field the token landed.
@@ -130,18 +147,16 @@ function matchScore(field: string, token: string): number {
  * is one match, not two.
  */
 function tokenScore(fields: ScoredFields, token: string): number {
-  return Math.max(
-    matchScore(fields.title, token) * FIELD_WEIGHT.title,
-    matchScore(fields.terms, token) * FIELD_WEIGHT.terms,
-    matchScore(fields.section, token) * FIELD_WEIGHT.section,
-  );
+  let best = NO_MATCH;
+  for (const key of FIELDS) {
+    best = Math.max(best, matchScore(fields[key], token) * FIELD_WEIGHT[key]);
+  }
+  return best;
 }
 
-interface ScoredFields {
-  title: string;
-  terms: string;
-  section: string;
-}
+const FIELDS = ["title", "lead", "terms", "section", "body"] as const;
+
+type ScoredFields = Record<(typeof FIELDS)[number], string>;
 
 /**
  * An entry's total, or `NO_MATCH` when it is out.
@@ -152,11 +167,9 @@ interface ScoredFields {
  * further from what they wanted than when they started.
  */
 export function scoreEntry(entry: SearchEntry, tokens: readonly string[]): number {
-  const fields: ScoredFields = {
-    title: normalizeText(entry.title),
-    terms: normalizeText(entry.terms ?? ""),
-    section: normalizeText(entry.section),
-  };
+  const fields = Object.fromEntries(
+    FIELDS.map((key) => [key, normalizeText(entry[key] ?? "")]),
+  ) as ScoredFields;
 
   let total = 0;
   for (const token of tokens) {
@@ -168,24 +181,22 @@ export function scoreEntry(entry: SearchEntry, tokens: readonly string[]): numbe
 }
 
 /**
- * Rank, cap, then group.
+ * Rank, then cap.
  *
  * An empty query is not an empty result: opening the palette and seeing the
  * first twelve destinations tells a reader what is in here, which is most of
  * why they opened it. Order in that case is the order `entries` arrives in,
  * which `lib/search-index.ts` sets deliberately.
  *
- * Grouping happens *after* the cap so the twelve rows are the twelve best
- * results overall rather than a quota per section. Groups are then ordered by
- * their strongest hit, which keeps the best result inside the first heading —
- * a palette whose top answer sits under the third heading is a palette that
- * makes you read it.
+ * One flat list, best first, across sections. Each row names its section in
+ * its subline, so a heading per section would say it twice and would reorder
+ * the ranking into runs (G1, VET-247).
  */
 export function search(
   entries: readonly SearchEntry[],
   query: string,
   limit: number = RESULT_LIMIT,
-): SearchGroup[] {
+): SearchHit[] {
   const tokens = tokenize(query);
 
   const ranked: SearchHit[] =
@@ -196,7 +207,7 @@ export function search(
           .filter((hit) => hit.score > NO_MATCH)
           .sort(compareHits);
 
-  return groupHits(ranked.slice(0, limit));
+  return ranked.slice(0, limit);
 }
 
 /**
@@ -217,38 +228,60 @@ function compareHits(a: SearchHit, b: SearchHit): number {
   return a.entry.title.localeCompare(b.entry.title);
 }
 
-/**
- * Contiguous runs by section, in first-seen order.
- *
- * First-seen rather than a fixed section order, because `ranked` is already
- * sorted by relevance and the first section to appear is the one holding the
- * best hit. Reordering here would undo the ranking the sort just did.
- */
-function groupHits(ranked: readonly SearchHit[]): SearchGroup[] {
-  const groups: SearchGroup[] = [];
-  const bySection = new Map<string, SearchGroup>();
-
-  for (const hit of ranked) {
-    let group = bySection.get(hit.entry.section);
-    if (!group) {
-      group = { section: hit.entry.section, hits: [] };
-      bySection.set(hit.entry.section, group);
-      groups.push(group);
-    }
-    group.hits.push(hit);
-  }
-
-  return groups;
+/** A run of excerpt text, marked when it is one of the query's words. */
+export interface Part {
+  text: string;
+  mark: boolean;
 }
 
+/** Characters of context either side of the word an excerpt is centred on. */
+const EXCERPT_RADIUS = 60;
+
 /**
- * The rows of a grouped result in the order the keyboard walks them.
+ * Why a row matched, when the title does not say: a window of the lead or the
+ * body around the first query word the title lacks, every query word in it
+ * marked. Null when the title holds every word, or when the match was in the
+ * terms (a domain, a category), which the subline already shows.
  *
- * The palette renders groups but navigates a flat list, and those two orders
- * have to be the same one or the arrow keys land on a different row than the
- * highlight. Deriving the flat order from the groups — rather than keeping a
- * second list alongside them — is what makes that impossible to get wrong.
+ * Parts rather than HTML: the caller builds text nodes and `<mark>`s from
+ * them, so there is no escaping step to get wrong.
  */
-export function flatten(groups: readonly SearchGroup[]): SearchHit[] {
-  return groups.flatMap((group) => group.hits);
+export function excerptFor(entry: SearchEntry, tokens: readonly string[]): Part[] | null {
+  const title = normalizeText(entry.title);
+  const anchor = tokens.find((token) => !title.includes(token));
+  if (anchor === undefined) return null;
+  const text = [entry.lead, entry.body].find((field) => field?.toLowerCase().includes(anchor));
+  return text === undefined ? null : excerpt(text, anchor, tokens);
+}
+
+/** `text` cut to a window around `anchor`, on word boundaries, with `tokens` marked. */
+export function excerpt(text: string, anchor: string, tokens: readonly string[]): Part[] {
+  const lower = text.toLowerCase();
+  const at = lower.indexOf(anchor);
+  let start = Math.max(0, at - EXCERPT_RADIUS);
+  let end = Math.min(text.length, at + anchor.length + EXCERPT_RADIUS);
+  if (start > 0) start = lower.indexOf(" ", start) + 1 || start;
+  if (start > at) start = at;
+  if (end < text.length) end = Math.max(lower.lastIndexOf(" ", end), at + anchor.length);
+
+  const parts: Part[] = [];
+  let from = start;
+  while (from < end) {
+    let hit = -1;
+    let size = 0;
+    for (const token of tokens) {
+      const found = lower.indexOf(token, from);
+      if (found >= 0 && found + token.length <= end && (hit < 0 || found < hit)) {
+        hit = found;
+        size = token.length;
+      }
+    }
+    if (hit < 0) hit = end;
+    if (hit > from) parts.push({ text: text.slice(from, hit), mark: false });
+    if (size > 0) parts.push({ text: text.slice(hit, hit + size), mark: true });
+    from = hit + size;
+  }
+  if (start > 0) parts.unshift({ text: "… ", mark: false });
+  if (end < text.length) parts.push({ text: " …", mark: false });
+  return parts;
 }

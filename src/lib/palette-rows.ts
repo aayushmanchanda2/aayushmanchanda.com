@@ -2,88 +2,138 @@
  * The command palette's result list, as DOM.
  *
  * Split out of `lib/palette.ts` so that each file has one job: this one turns
- * ranked groups into elements, that one decides when the palette is open, which
- * row is highlighted and where the keys go. They met at a single seam already —
- * `render()` called two builders and read the rows back — so the split cost
- * nothing but the import below.
+ * ranked hits into elements, that one decides when the palette is open, which
+ * row is highlighted and where the keys go.
  *
- * Everything here is built with `createElement` rather than a template string.
- * The text going in is entry titles from the data files, and constructing nodes
- * means there is no escaping step to forget the day a title contains an angle
- * bracket.
+ * Everything here is built with `createElement` and `textContent` rather than
+ * a template string. The text going in is titles, post bodies and excerpts
+ * from the data files, and constructing nodes means there is no escaping step
+ * to forget the day one of them contains an angle bracket. The `<mark>`s in an
+ * excerpt are elements built from `excerptFor`'s parts, never parsed markup.
  *
  * These elements never carry Astro's `data-astro-cid-*` attribute, because
  * nothing here is compiled from a `.astro` template — which is why the palette's
  * styles are a plain global stylesheet. See the header of `styles/palette.css`.
  */
 
-import type { SearchEntry, SearchGroup } from "./search";
+import { formatDay } from "./date";
+import type { Part, RowIcon, SearchEntry, SearchHit } from "./search";
+import { excerptFor } from "./search";
 import { soundOn } from "./ui-sound";
 
-function rowNode(entry: SearchEntry): HTMLAnchorElement {
-  const row = document.createElement("a");
-  row.className = "palette__row";
+function el<K extends keyof HTMLElementTagNameMap>(
+  tag: K,
+  className: string,
+  text?: string,
+): HTMLElementTagNameMap[K] {
+  const node = document.createElement(tag);
+  node.className = className;
+  if (text !== undefined) node.textContent = text;
+  return node;
+}
+
+/**
+ * The 30px slot: a picture over its letter, or a kind glyph.
+ *
+ * The same three layers as `AppIcon.astro`: the logo, then on `error` the
+ * self-hosted icon once, then the letter underneath on its identity hue.
+ */
+function iconNode(entry: SearchEntry): HTMLElement {
+  const slot = el("span", "palette__icon");
+  slot.setAttribute("aria-hidden", "true");
+  const icon: RowIcon | undefined = entry.icon;
+
+  if (!icon) {
+    slot.dataset.shape = "glyph";
+    const glyph = el("i", "ki");
+    glyph.dataset.kind = entry.glyph ?? "article";
+    slot.append(glyph);
+    return slot;
+  }
+
+  slot.dataset.shape = icon.shape;
+  const letter = el("span", "monogram", icon.letter);
+  letter.dataset.hue = String(icon.hue);
+  slot.append(letter);
+
+  if (icon.src) {
+    const img = el("img", "");
+    img.alt = "";
+    img.width = 30;
+    img.height = 30;
+    img.decoding = "async";
+    img.referrerPolicy = "strict-origin-when-cross-origin";
+    let fallback = icon.fallback;
+    img.addEventListener("error", () => {
+      if (fallback) {
+        img.src = fallback;
+        fallback = undefined;
+      } else {
+        img.remove();
+      }
+    });
+    img.src = icon.src;
+    slot.append(img);
+  }
+  return slot;
+}
+
+function excerptNode(parts: readonly Part[]): HTMLElement {
+  const line = el("span", "palette__row-excerpt");
+  for (const part of parts) {
+    line.append(part.mark ? el("mark", "", part.text) : document.createTextNode(part.text));
+  }
+  return line;
+}
+
+function rowNode(hit: SearchHit, tokens: readonly string[]): HTMLAnchorElement {
+  const { entry } = hit;
+  const row = el("a", "palette__row");
   row.href = entry.href;
   row.role = "option";
   row.dataset.paletteRow = "";
   // Focus stays in the field; the highlight is a virtual cursor, so a row must
   // not be a tab stop of its own.
   row.tabIndex = -1;
-
-  const title = document.createElement("span");
-  title.className = "palette__row-title";
-  title.textContent =
-    entry.action === "sound" ? `Sound: ${soundOn() ? "on" : "off"}` : entry.title;
   if (entry.action) row.dataset.paletteAction = entry.action;
 
-  const where = document.createElement("span");
-  where.className = "palette__row-where mono";
-  // Every row goes to a page on this site — see `lib/search-index.ts`, which is
-  // where that is decided and why — so the muted column is simply the path.
-  // There is no external case to handle: no `target`, no `rel`, and no second
-  // navigation path to keep working.
-  where.textContent = entry.action ? "toggle" : entry.href;
+  const text = el("span", "palette__row-text");
+  text.append(
+    el(
+      "span",
+      "palette__row-title",
+      entry.action === "sound" ? `Sound: ${soundOn() ? "on" : "off"}` : entry.title,
+    ),
+    el(
+      "span",
+      "palette__row-sub",
+      [entry.section, entry.action ? "toggle" : entry.sub].filter(Boolean).join(" · "),
+    ),
+  );
+  const parts = excerptFor(entry, tokens);
+  if (parts) text.append(excerptNode(parts));
 
-  row.append(title, where);
+  row.append(iconNode(entry), text);
+
+  if (entry.date) {
+    const date = el("time", "palette__row-date mono", formatDay(entry.date));
+    date.dateTime = entry.date;
+    row.append(date);
+  }
   return row;
 }
 
-/** One `role="group"` per section heading, with its rows inside. */
-function groupNode(group: SearchGroup): HTMLElement {
-  const wrap = document.createElement("div");
-  wrap.role = "group";
-  wrap.setAttribute("aria-label", group.section);
-
-  const heading = document.createElement("div");
-  heading.className = "palette__heading mono";
-  heading.textContent = group.section;
-  // The group's own aria-label already announces this to a screen reader;
-  // leaving it in the tree twice would read the section name on every row.
-  heading.setAttribute("aria-hidden", "true");
-  wrap.append(heading);
-
-  for (const hit of group.hits) {
-    wrap.append(rowNode(hit.entry));
-  }
-  return wrap;
-}
-
 /**
- * Replace `container`'s contents with `groups`, and hand back the rows.
+ * Replace `container`'s contents with `hits`, and hand back the rows.
  *
- * The rows come back read out of the DOM rather than collected while building,
- * because the caller uses the returned order to drive the arrow keys and the
- * highlight. Reading them back is what guarantees that order is the rendered
- * one: a list assembled alongside the tree can disagree with it, and the bug
- * that produces — arrows landing on a different row than the highlight — is
- * exactly the sort nobody notices in review.
+ * Read back out of the DOM rather than collected while building, so the order
+ * the arrow keys walk is guaranteed to be the rendered one.
  */
-export function renderGroups(
+export function renderRows(
   container: HTMLElement,
-  groups: readonly SearchGroup[],
+  hits: readonly SearchHit[],
+  tokens: readonly string[],
 ): HTMLAnchorElement[] {
-  container.replaceChildren(...groups.map(groupNode));
-  return Array.from(
-    container.querySelectorAll<HTMLAnchorElement>("[data-palette-row]"),
-  );
+  container.replaceChildren(...hits.map((hit) => rowNode(hit, tokens)));
+  return Array.from(container.querySelectorAll<HTMLAnchorElement>("[data-palette-row]"));
 }

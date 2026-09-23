@@ -9,8 +9,8 @@
  * A CSS mask rather than an inline `<svg>`, because the pane repeats 139 rows
  * on 139 pages: a row pays for one element. The kind's word stays inside it,
  * pushed out of the box (image replacement, not `display: none`), so a screen
- * reader still hears it. The pane's rows use it today; the /library redesign
- * is next.
+ * reader still hears it. The styles are global (`styles/kind-icon.css`)
+ * because the ⌘K palette builds the same `<i>` in the browser on every page.
  */
 import type { Kind } from "../lib/library";
 
@@ -22,40 +22,3 @@ const { kind } = Astro.props;
 ---
 
 <i class="ki" data-kind={kind}>{kind}</i>
-
-<style is:global>
-  .ki {
-    display: inline-block;
-    flex: none;
-    width: 14px;
-    height: 14px;
-    overflow: hidden;
-    white-space: nowrap;
-    text-indent: 100%;
-    font-style: normal;
-    background-color: var(--text-tertiary);
-    -webkit-mask: var(--ki) center / contain no-repeat;
-    mask: var(--ki) center / contain no-repeat;
-  }
-
-  .ki[data-kind="article"] {
-    --ki: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.25'%3E%3Cpath d='M3.5 1.75H9.75L12.5 4.5V14.25H3.5Z M9.5 1.75V4.75H12.5 M5.75 8.25H10.25 M5.75 11H10.25'/%3E%3C/svg%3E");
-  }
-
-  .ki[data-kind="post"] {
-    --ki: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.25' stroke-linejoin='round'%3E%3Cpath d='M2.25 2.75H13.75V11H7.25L4.25 13.75V11H2.25Z'/%3E%3C/svg%3E");
-  }
-
-  .ki[data-kind="video"] {
-    --ki: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.25' stroke-linejoin='round'%3E%3Cpath d='M4.75 2.75L12.75 8L4.75 13.25Z'/%3E%3C/svg%3E");
-  }
-
-  /* A forced palette repaints backgrounds to Canvas, which would erase a
-     masked glyph; paint it in the text colour instead. */
-  @media (forced-colors: active) {
-    .ki {
-      forced-color-adjust: none;
-      background-color: CanvasText;
-    }
-  }
-</style>

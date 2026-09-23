@@ -23,8 +23,8 @@
  *     because the panel's search control closes the panel on its way in.
  */
 
-import { renderGroups } from "./palette-rows";
-import { RESULT_LIMIT, flatten, search } from "./search";
+import { renderRows } from "./palette-rows";
+import { RESULT_LIMIT, search, tokenize } from "./search";
 import type { SearchEntry } from "./search";
 import { toggleSound } from "./ui-sound";
 
@@ -33,17 +33,27 @@ export function initPalette(root: HTMLElement): void {
   const results = root.querySelector<HTMLElement>("[data-palette-results]");
   const empty = root.querySelector<HTMLElement>("[data-palette-empty]");
   const scrim = root.querySelector<HTMLElement>("[data-palette-scrim]");
-  const data = document.querySelector<HTMLElement>("[data-palette-index]");
-  if (!input || !results || !empty || !scrim || !data) return;
+  if (!input || !results || !empty || !scrim) return;
 
-  let entries: SearchEntry[] = [];
-  try {
-    entries = JSON.parse(data.textContent ?? "[]") as SearchEntry[];
-  } catch {
-    // A malformed index is a build bug, but it must not take the page's other
-    // scripts down with it. The palette simply never opens.
-    return;
-  }
+  /**
+   * The index, fetched on first open (`pages/search.json.ts`, VET-247). It
+   * carries every post's full text, so it is one cached request for readers
+   * who search rather than bytes inline on every page for all who do not.
+   */
+  let entries: SearchEntry[] | null = null;
+  let loading: Promise<void> | null = null;
+  const load = (): Promise<void> =>
+    (loading ??= fetch("/search.json")
+      .then((response) => (response.ok ? response.json() : Promise.reject(response.status)))
+      .then((data: SearchEntry[]) => {
+        entries = data;
+        if (open) render(input.value);
+      })
+      .catch(() => {
+        loading = null;
+        empty.textContent = "Search didn't load. Close and try again.";
+        empty.hidden = false;
+      }));
 
   /** Rows in the order the arrow keys walk them — always the DOM order. */
   let rows: HTMLAnchorElement[] = [];
@@ -54,20 +64,15 @@ export function initPalette(root: HTMLElement): void {
 
   /* --- rendering --------------------------------------------------------- */
 
-  /**
-   * Every closure below is a const arrow rather than a `function` declaration,
-   * and that is load-bearing rather than a style choice: a hoisted function is
-   * reachable from above the guard as far as TypeScript is concerned, so the
-   * five non-null narrowings that guard just established would not hold inside
-   * it, and every line touching `input`, `results` or `empty` would need a `!`.
-   * `MobileNav.astro` documents the same trap in its own `setOpen`.
-   */
+  // Const arrows, not `function`s: a hoisted function would lose the guard's
+  // non-null narrowing (`MobileNav.astro › setOpen` has the same note).
   const render = (query: string): void => {
-    const groups = search(entries, query, RESULT_LIMIT);
-    const hits = flatten(groups);
+    if (!entries) return;
+    const hits = search(entries, query, RESULT_LIMIT);
 
-    rows = renderGroups(results, groups);
+    rows = renderRows(results, hits, tokenize(query));
 
+    empty.textContent = "No matches";
     empty.hidden = hits.length > 0;
     results.hidden = hits.length === 0;
 
@@ -146,6 +151,7 @@ export function initPalette(root: HTMLElement): void {
           : null);
       input.value = "";
       render("");
+      void load();
 
       // Synchronously too: inside a rAF it lost the first character typed
       // straight after Cmd+K.
@@ -224,6 +230,8 @@ export function initPalette(root: HTMLElement): void {
     return command ? go(command) : setOpen(false);
   });
   scrim.addEventListener("click", () => setOpen(false));
+  // The footer's sound toggle is for the pointer; keep focus in the field.
+  root.querySelector("[data-sound-toggle]")?.addEventListener("pointerdown", (event) => event.preventDefault());
 
   /**
    * Focus that escapes while the palette is open gets pulled back.

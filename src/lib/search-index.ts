@@ -13,18 +13,23 @@
  * bundler, so this file cannot run under `node --test`; the ranking it feeds
  * has no imports at all and therefore can. See the header there.
  *
- * Cost: this runs once, at module load, and `layouts/Base.astro` awaits the
- * same promise on every page rather than rebuilding per route.
+ * It ships as one static file, `/search.json` (`pages/search.json.ts`), which
+ * the palette fetches the first time it opens (VET-247). It carries the full
+ * text of every post, so it no longer rides inline on every page.
  */
 
 import { getCollection } from "astro:content";
 
+import { isoDay } from "./date";
 import { experiments } from "./experiments";
-import { repoOwner } from "./links";
+import { markFor, repoOwner } from "./links";
+import type { Post } from "./library";
 import { entryHref, library } from "./library";
-import type { SearchEntry } from "./search";
+import { monogram } from "./post";
+import type { RowIcon, SearchEntry } from "./search";
 import { getSections } from "./sections";
 import { collectionLabel, sites } from "./sites";
+import { hueSlot } from "./tags";
 import type { Tool } from "./tools";
 import { tools } from "./tools";
 
@@ -127,24 +132,54 @@ function hostOf(url: string): string {
 }
 
 /**
- * Build the index.
+ * Prose for the index: the parts that exist, one space between words, or
+ * `undefined` so `JSON.stringify` drops the key. Collapsing here is what lets
+ * the excerpt index into the lowercased text without drifting.
+ */
+function squash(...parts: (string | null | undefined)[]): string | undefined {
+  return parts.filter(Boolean).join(" ").replace(/\s+/g, " ").trim() || undefined;
+}
+
+/** A tool's or a site's AppIcon layers (`lib/links.ts › markFor`), as data. */
+function appIcon(entry: { slug: string; name: string; url?: string | null; logoDomain?: string | null }): RowIcon {
+  const mark = markFor(entry);
+  return {
+    shape: "app",
+    src: mark.logo ?? mark.icon ?? undefined,
+    fallback: mark.logo ? (mark.icon ?? undefined) : undefined,
+    letter: mark.letter.toUpperCase(),
+    hue: hueSlot(entry.slug),
+  };
+}
+
+/** The poster's self-hosted avatar, over the same monogram `PostCard` draws. */
+function postIcon(post: Post): RowIcon {
+  return {
+    shape: "round",
+    src: post.avatar ?? undefined,
+    letter: monogram(post.author),
+    hue: hueSlot(post.handle),
+  };
+}
+
+/** Markdown down to the words a reader sees: link text kept, syntax gone. */
+function plain(markdown: string): string {
+  return markdown.replace(/!?\[([^\]]*)\]\([^)]*\)/g, "$1").replace(/[#*_>`|~-]+/g, " ");
+}
+
+/**
+ * Build the index. Async for one reason: /notes comes from the content layer.
  *
- * Async for one reason: /notes comes from the content layer. Everything else is
- * a module-level constant that was parsed when its file was imported.
- *
- * Entry hrefs point at the site, never off it. That used to cost /library
- * something: an undigested entry had no page, so its row landed on
- * `/library#slug` — the row in context, with its note and its neighbours —
- * because ejecting a reader to a third-party article from a nav control is not
- * something a palette should do. Every entry has a page now, so every library
- * row goes to it and the anchor fallback is gone. `/experiments#slug` is the
- * last one, and that section genuinely has no per-entry page.
+ * Entry hrefs point at the site, never off it: ejecting a reader to a
+ * third-party article from a nav control is not something a palette should
+ * do, and every library entry has a page. `/experiments#slug` is the one
+ * anchor left, because that section has no per-entry page.
  */
 async function build(): Promise<SearchEntry[]> {
   const notes = await getCollection("notes");
 
   return [
-    ...STATIC_PAGES,
+    ...STATIC_PAGES.map((page) => ({ ...page, glyph: "article" as const })),
 
     /**
      * The section indexes, from the manifest that already decides which
@@ -160,6 +195,7 @@ async function build(): Promise<SearchEntry[]> {
       section: SECTION.settings,
       href: "#sound",
       terms: "audio click tick mute unmute",
+      glyph: "sound",
       action: "sound",
     },
 
@@ -169,6 +205,11 @@ async function build(): Promise<SearchEntry[]> {
         section: SECTION.tools,
         href: `/tools/${tool.slug}`,
         terms: toolTerms(tool),
+        lead: squash(tool.note, tool.description),
+        body: squash(tool.like, tool.dislike, tool.why, tool.try),
+        sub: tool.url ? hostOf(tool.url) : tool.repo ? repoOwner(tool.repo) : undefined,
+        date: tool.status_date,
+        icon: appIcon(tool),
       }),
     ),
 
@@ -179,6 +220,10 @@ async function build(): Promise<SearchEntry[]> {
         href: `/sites/${site.slug}`,
         // Collections are stored as slugs; the reader saw the label.
         terms: [site.domain, ...site.collections.map(collectionLabel)].join(" "),
+        lead: squash(site.like, site.dislike),
+        sub: site.domain,
+        date: site.saved_date,
+        icon: appIcon({ ...site, name: site.title }),
       }),
     ),
 
@@ -188,6 +233,11 @@ async function build(): Promise<SearchEntry[]> {
         section: SECTION.library,
         href: entryHref(entry),
         terms: `${entry.domain} ${entry.kind}`,
+        lead: squash(entry.tldr, ...entry.highlights.map((h) => h.text), entry.note, entry.why),
+        body: squash(entry.post?.text, entry.post?.quoted?.text, entry.excerpt, ...(entry.digest?.bullets ?? [])),
+        sub: entry.post ? `${entry.post.author} @${entry.post.handle}` : entry.domain,
+        date: entry.saved_date,
+        ...(entry.post ? { icon: postIcon(entry.post) } : { glyph: entry.kind }),
       }),
     ),
 
@@ -197,6 +247,9 @@ async function build(): Promise<SearchEntry[]> {
         section: SECTION.notes,
         href: `/notes/${note.id}`,
         terms: note.data.type,
+        body: squash(plain(note.body ?? "")),
+        date: isoDay(note.data.date),
+        glyph: "note",
       }),
     ),
 
@@ -206,6 +259,10 @@ async function build(): Promise<SearchEntry[]> {
         section: SECTION.experiments,
         href: `/experiments#${experiment.slug}`,
         terms: experiment.status,
+        lead: squash(experiment.one_liner),
+        sub: experiment.status,
+        date: experiment.started,
+        glyph: "article",
       }),
     ),
   ];
@@ -218,6 +275,7 @@ async function sectionPages(): Promise<SearchEntry[]> {
     section: SECTION.pages,
     href: section.href,
     terms: section.blurb,
+    glyph: "article",
   }));
 }
 
