@@ -1,23 +1,22 @@
 /**
  * icon.mjs — a tool's app icon, fetched once and kept in this repository.
  *
- * The site used to ask logo.dev for every tool logo on every page view, which
- * put a third party on /tools. Now the pipeline asks once, when a tool is
- * published, and the page serves `public/icons/<slug>.webp` from this domain.
- * `lib/links.ts › markFor` draws the file when it exists and the letter when
- * it does not, so "no icon" is always a valid answer here.
+ * The page asks logo.dev for the logo live (`lib/links.ts › markFor`). This
+ * file is its fallback: when logo.dev has nothing, the page swaps to
+ * `public/icons/<slug>.webp`, served from this domain, and with no file it
+ * shows the letter. So "no icon" is always a valid answer here.
  *
- * Tried in order, first usable image wins:
+ * **Never a copy of a logo.dev image.** Their free plan does not license
+ * storing logos on our own server (VET-254), so only the site's own icons are
+ * kept. Tried in order, first usable image wins:
  *
  *   1. the site's apple-touch-icon (the declared ones, then `/apple-touch-icon.png`)
  *   2. the largest icon in its web manifest
- *   3. logo.dev, with `fallback=404` so an unknown domain gets nothing rather
- *      than logo.dev's generated monogram
  *
  * **Never a GitHub owner's avatar.** A repository-only tool uses the repo's
  * `homepage`, else the site its README names (`readme-site.mjs`, strict). Any
- * candidate on a GitHub host is skipped, and so is logo.dev for a github.com or
- * github.io site (the octocat). Most owners are individuals: a stranger's face.
+ * candidate on a GitHub host is skipped. Most owners are individuals: a
+ * stranger's face.
  *
  * Run directly to backfill every tool: `node pipeline/icon.mjs [--force]`.
  */
@@ -42,35 +41,10 @@ const MIN_SOURCE = 120;
 const TIMEOUT_MS = 10_000;
 const MAX_BYTES = 2 * 1024 * 1024;
 
-/** The publishable half of the logo.dev key pair; it is meant to be public. */
-const LOGO_DEV_TOKEN = "pk_YsFOVGNeRx6b1C0u0e0yTw";
-
 const HEADERS = { "user-agent": "Mozilla/5.0 (compatible; aayushmanchanda.com icon fetch)" };
 
 /** Hosts whose images are GitHub's, never the tool's: avatars and the octocat. */
 const GITHUB_IMAGE_HOST = /(^|\.)(github\.com|githubusercontent\.com|githubassets\.com)$/i;
-
-/** Sites logo.dev knows only as GitHub. */
-const GITHUB_SITE_HOST = /(^|\.)github\.(com|io)$/i;
-
-/**
- * Icons that were fetched, looked at on a contact sheet, and turned down: the
- * letter reads better than a generic or wrong picture. Checked before the file,
- * so a `--force` backfill cannot bring one back.
- */
-export const REJECTED = new Set([
-  // logo.dev answered with a social card or a page screenshot, not a logo.
-  "agent-browser",
-  "atlas-brain-wearable",
-  "cloudflare-os",
-  "email-your-icp-website-visitors-ploy",
-  "emilkowalski-skills-design-and-animation-skills-for-agents",
-  "jakubkrehel-skills-interface-design-skills-for-agents",
-  "ref-review-the-plan-before-the-code",
-  "vgpu",
-  // logo.dev answered with the site owner's photo: a face, the thing this file refuses.
-  "txt-minimalist-text-editor-for-macos",
-]);
 
 /** @typedef {typeof globalThis.fetch} Fetch */
 
@@ -137,15 +111,10 @@ export async function candidatesFor(site, fetch) {
     const declaredManifest = links.find((link) => relHas(link.rel ?? "", "manifest") && link.href);
     if (declaredManifest) manifest = await manifestIcons(new URL(String(declaredManifest.href), base).href, fetch);
   } catch {
-    // A page behind a bot wall may still serve its icon file, and logo.dev may know the domain.
+    // A page behind a bot wall may still serve its icon file.
   }
 
-  const host = new URL(site).hostname.replace(/^www\./, "");
-  const logoDev = GITHUB_SITE_HOST.test(host)
-    ? []
-    : [`https://img.logo.dev/${encodeURIComponent(host)}?token=${LOGO_DEV_TOKEN}&size=${ICON_SIZE}&format=webp&fallback=404`];
-
-  return [...new Set([...declared, new URL("/apple-touch-icon.png", site).href, ...manifest, ...logoDev])];
+  return [...new Set([...declared, new URL("/apple-touch-icon.png", site).href, ...manifest])];
 }
 
 /**
@@ -247,8 +216,6 @@ const exists = (file) => access(file).then(() => true, () => false);
  * @returns {Promise<string | null>} The icon file, or null for the letter.
  */
 export async function fetchIcon({ slug, url, dir, fetch = globalThis.fetch, force = false, log = () => {} }) {
-  if (REJECTED.has(slug)) return null;
-
   const file = path.join(dir, `${slug}.webp`);
   if (!force && (await exists(file))) return file;
 
