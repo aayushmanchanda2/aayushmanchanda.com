@@ -134,13 +134,23 @@ body {
   mask-composite: var(--cut-op);
 }
 
+/* The mat sits over the page, so without mask-composite (Chrome < 120,
+   Safari < 15.4) it would hide the page entirely. There it stays out and the
+   page sits on the body's background. */
+@supports not (mask-composite: exclude) {
+  .mat {
+    display: none;
+  }
+}
+
 /* The boxes the cut is laid out on: border-box the window, padding-box the
    page plus about half a pitch, content-box the page. The paper wears the mat too,
    so the anti-aliased rim where the two masks meet is mat, not a colour. */
 .mat,
 .mat__paper {
-  /* whole px (browsers snap borders); the padding takes the rest */
-  --b: round(down, var(--mat-w) - var(--p) / 2, 1px);
+  /* whole px (browsers snap borders) where round() exists, below; the padding
+     takes the rest */
+  --b: calc(var(--mat-w) - var(--p) / 2);
   --pad: calc(var(--mat-w) - var(--b));
 
   border: var(--b) solid transparent;
@@ -166,6 +176,16 @@ body {
     linear-gradient(160deg, var(--mat-hi), var(--mat));
   background-size: auto, 100% 5.5px, 5.5px 100%, 100% 2.5px, 2.5px 100%, auto, auto, auto, auto, 100% 100%, 480px, auto, auto;
   background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat, repeat, repeat, repeat, no-repeat, repeat, no-repeat, no-repeat;
+}
+
+/* A custom property can't fall back by cascade (round() would only fail at
+   computed time), so the whole-px border is gated instead (Chrome < 125 keeps
+   the subpixel calc above). */
+@supports (width: round(down, 1px, 1px)) {
+  .mat,
+  .mat__paper {
+    --b: round(down, var(--mat-w) - var(--p) / 2, 1px);
+  }
 }
 
 /* The digits. Geist Mono's advance is 0.6em, so letter-spacing pads each one
