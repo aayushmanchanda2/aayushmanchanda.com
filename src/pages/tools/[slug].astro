@@ -133,6 +133,36 @@ const outCard = (href: string) =>
   {shot && <PreviewCard />}
 </Base>
 
+<script>
+  // Only an icon on the /tools grid opens with the zoom (`lib/home-screen.ts`).
+  window.addEventListener("pageswap", (event) => event.viewTransition?.skipTransition());
+</script>
+
+<style is:global>
+  /* The app-open zoom (VET-253): the /tools icon named `app-open` grows into
+     the page's main column while the rest crossfades. Leaving this page never
+     animates (script above). */
+  @media (prefers-reduced-motion: no-preference) {
+    @view-transition {
+      navigation: auto;
+    }
+  }
+
+  #main {
+    view-transition-name: app-open;
+  }
+
+  ::view-transition-group(app-open) {
+    animation-duration: 380ms;
+    animation-timing-function: var(--ease-out);
+  }
+
+  /* The icon lets go early, so the page is what fills the screen. */
+  ::view-transition-old(app-open) {
+    animation-duration: 180ms;
+  }
+</style>
+
 <style>
   /* --- the metadata strip --------------------------------------------------- */
 

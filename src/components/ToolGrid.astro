@@ -14,11 +14,17 @@
  * edges, the list draws the left, and the first visible row draws the top
  * (`:nth-child(-n + cols of :not([hidden]))`, so a filter still gets its roof).
  * A short last row ends in a step, with no lines round empty cells.
+ *
+ * VET-253 makes it a home screen: the Dock pinned at the bottom (`Dock.astro`),
+ * jiggle mode, and the app-open zoom (`lib/home-screen.ts`). The wallpaper is
+ * the tools green at 7%, under the lines, so the rules stay the only marks.
  */
 import AppIcon from "./AppIcon.astro";
+import Dock from "./Dock.astro";
 import PreviewCard from "./PreviewCard.astro";
 import type { Tool } from "../lib/tools";
 import { toolAttributes } from "./tool-attributes";
+import { dockTools } from "../lib/home-screen";
 
 interface Props {
   tools: Tool[];
@@ -31,33 +37,63 @@ const { tools } = Astro.props;
 const breakable = (name: string) => name.split(/(?<=[/.])(?=.)/);
 ---
 
-<ul class="tiles" data-tool-rows>
-  {
-    tools.map((tool) => (
-      <li class="tile" {...toolAttributes(tool)}>
-        <a class="tile__link" href={`/tools/${tool.slug}`}>
-          <AppIcon tool={tool} size={60} />
-          <span class="tile__name" title={tool.description ? `${tool.name}: ${tool.description}` : tool.name}>
-            {breakable(tool.name).map((part, i) => (<>{i > 0 && <wbr />}{part}</>))}
-          </span>
-        </a>
-      </li>
-    ))
-  }
-</ul>
+<div class="home" data-home>
+  <p class="visually-hidden" aria-live="polite" data-jiggle-live></p>
+  <button class="home__done glass" type="button" data-jiggle-done hidden>Done</button>
+  <ul class="tiles" data-tool-rows>
+    {
+      tools.map((tool) => (
+        <li class="tile" {...toolAttributes(tool)}>
+          <a class="tile__link" href={`/tools/${tool.slug}`}>
+            <AppIcon tool={tool} size={60} />
+            <span class="tile__name" title={tool.description ? `${tool.name}: ${tool.description}` : tool.name}>
+              {breakable(tool.name).map((part, i) => (<>{i > 0 && <wbr />}{part}</>))}
+            </span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+  <div class="home__shelf">
+    <p class="home__hint glass" data-jiggle-hint hidden>Long-press an icon</p>
+    <Dock tools={dockTools(tools)} />
+  </div>
+</div>
 
 <PreviewCard />
 
+<script>
+  import { initHomeScreen } from "../lib/home-screen";
+
+  initHomeScreen();
+</script>
+
 <style>
-  .tiles {
-    display: none;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    margin-top: 1rem;
-    border-left: 1px solid var(--hairline);
+  /* The cross-document zoom into a tool's page; `tools/[slug].astro` opts in
+     too, and `lib/home-screen.ts` skips every navigation but an icon's. */
+  @media (prefers-reduced-motion: no-preference) {
+    @view-transition {
+      navigation: auto;
+    }
   }
 
-  :global(html[data-tools-view="grid"]) .tiles {
+  .home {
+    display: none;
+    container-type: inline-size;
+    margin-top: 1rem;
+    /* A Dock name near the edge would widen the page on a phone. */
+    overflow-x: clip;
+  }
+
+  :global(html[data-tools-view="grid"]) .home {
+    display: block;
+  }
+
+  .tiles {
     display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-left: 1px solid var(--hairline);
+    background: radial-gradient(100% 70% at 50% 0%, var(--wallpaper), transparent);
   }
 
   .tile {
@@ -106,6 +142,9 @@ const breakable = (name: string) => name.split(/(?<=[/.])(?=.)/);
     padding: 1.25rem 0.5rem;
     color: var(--text-primary);
     text-decoration: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
   }
 
   .tile__link:hover {
@@ -134,5 +173,99 @@ const breakable = (name: string) => name.split(/(?<=[/.])(?=.)/);
     overflow-wrap: normal;
     word-break: normal;
     hyphens: none;
+  }
+
+  /* --- the home screen (VET-253) ----------------------------------------- */
+
+  /* Pinned inside the keyline, over the grid while it scrolls, at rest under
+     its last row. Click-through round the Dock, so the tiles beside it work. */
+  .home__shelf {
+    position: sticky;
+    bottom: calc(var(--frame-in) + 0.75rem);
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+    pointer-events: none;
+  }
+
+  .home__hint {
+    padding: 0.125rem 0.625rem;
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+  }
+
+  .home__hint[hidden],
+  .home__done[hidden] {
+    display: none;
+  }
+
+  /* iOS's Done: top right of the screen, under the bar, while jiggling. */
+  .home__done {
+    position: fixed;
+    top: calc(var(--frame) + var(--bar-h) + 0.75rem);
+    right: calc(var(--frame) + var(--keyline) + 0.75rem);
+    z-index: 30;
+    min-height: 2.5rem;
+    padding-inline: 1.125rem;
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+
+  /* Two rocks, ±1 to 1.5deg, alternated by position with offset pivots,
+     lengths and start points, so no two neighbours move in step. */
+  @keyframes jiggle-a {
+    0%, 100% { rotate: -1deg; }
+    50% { rotate: 1.5deg; }
+  }
+
+  @keyframes jiggle-b {
+    0%, 100% { rotate: 1.25deg; }
+    50% { rotate: -1deg; }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .home[data-jiggle] :global(.app-icon) {
+      animation: jiggle-a 0.24s ease-in-out infinite;
+      transform-origin: 48% 54%;
+    }
+
+    .home[data-jiggle] :global(li:nth-child(even) .app-icon) {
+      animation-name: jiggle-b;
+      animation-duration: 0.22s;
+      transform-origin: 53% 46%;
+    }
+
+    .home[data-jiggle] :global(li:nth-child(3n) .app-icon) {
+      animation-duration: 0.25s;
+      animation-delay: -0.08s;
+    }
+
+    .home[data-jiggle] :global(li:nth-child(5n + 1) .app-icon) {
+      animation-delay: -0.15s;
+    }
+
+    /* The open, where there is no View Transition: up and out, then the page. */
+    .home :global(.app-icon.is-opening) {
+      scale: 1.6;
+      opacity: 0;
+      transition-property: scale, opacity;
+      transition-duration: 160ms;
+      transition-timing-function: var(--ease-out);
+    }
+  }
+
+  /* Reduced motion: a still tilt says the same thing. */
+  @media (prefers-reduced-motion: reduce) {
+    .home[data-jiggle] :global(.app-icon) {
+      rotate: -1deg;
+    }
+
+    .home[data-jiggle] :global(li:nth-child(even) .app-icon) {
+      rotate: 1deg;
+    }
   }
 </style>
