@@ -91,41 +91,51 @@ const COLUMNS = ALL.filter((column) => column.id !== drop);
 <PreviewCard />
 
 <style>
+  /* briOS's /stack, edge to edge: the table bleeds out of the shell's padding
+     and its outer cells pad back by `--page-pad`, so names meet the title. */
   .table {
-    width: 100%;
+    width: calc(100% + 2 * var(--page-pad));
+    margin-inline: calc(-1 * var(--page-pad));
     table-layout: fixed;
     border-collapse: collapse;
     font-size: 0.875rem;
+    line-height: 1.25rem;
   }
 
-  /* Sticks under the 56px bar. A `box-shadow` rather than a border draws the
-     rule, because a collapsed border stays behind when a sticky cell moves. */
+  /* Sticky under the bar. A `box-shadow` draws the rule because a collapsed
+     border stays behind when a sticky cell moves. */
   .th {
     position: sticky;
     top: var(--bar-h);
     z-index: 1;
-    padding: 0 0.75rem 0 0;
-    background: var(--bg);
+    padding: 0 1rem 0 0;
+    background: var(--surface-2);
     box-shadow: inset 0 -1px 0 var(--hairline);
-    color: var(--text-tertiary);
-    font-weight: 400;
+    color: var(--text-secondary);
+    font-weight: 500;
     text-align: left;
     white-space: nowrap;
   }
 
-  .th--name { width: 27%; padding-left: 0.25rem; }
-  .th--category { width: 8.5rem; }
-  .th--verdict { width: 6.5rem; }
-  .th--date { width: 6.75rem; padding-right: 0; }
+  /* Under 1280px a one-span track is narrower than a date ("Aug 17, 2026" is
+     88px), so the short columns take fixed widths. Every cell ends in 16px. */
+  .th--name { width: 27%; }
+  .th--category { width: 9.5rem; }
+  .th--verdict { width: 7.5rem; }
+  .th--date { width: calc(6.75rem + var(--page-pad)); }
 
-  /* A control, so `--text-secondary` and never the tertiary of a label
-     (design.md §4, the ink floor). 40px tall: the whole header cell presses. */
+  :is(.th, .cell):first-child { padding-left: var(--page-pad); }
+  :is(.th, .cell):last-child { padding-right: var(--page-pad); }
+
+  /* A control: `--text-secondary` (the ink floor), 40px tall (the hit floor;
+     briOS's header row is 36). */
   .sort {
     display: inline-flex;
     align-items: center;
     gap: 0.25rem;
     min-height: 40px;
     color: var(--text-secondary);
+    font-weight: inherit;
     transition-property: color;
     transition-duration: var(--dur-fast);
     transition-timing-function: var(--ease);
@@ -150,34 +160,30 @@ const COLUMNS = ALL.filter((column) => column.id !== drop);
     transition-timing-function: var(--ease);
   }
 
-  .row:hover {
-    background: var(--surface-2);
-  }
+  .row:hover { background: var(--surface-2); }
 
+  /* `py-3`, briOS's 12px, and a 16px gap to the next column. */
   .cell {
-    padding: 0.625rem 0.75rem 0.625rem 0;
+    padding: 0.75rem 1rem 0.75rem 0;
     border-bottom: 1px solid var(--hairline);
     vertical-align: middle;
     color: var(--text-tertiary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-  .cell--date { padding-right: 0; white-space: nowrap; }
-  .cell--name { padding-left: 0.25rem; }
+  .row__name { display: flex; align-items: center; gap: 0.75rem; }
 
-  .row__name {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
+  /* One line, briOS's `truncate font-medium`. */
   .row__link {
     min-width: 0;
+    overflow: hidden;
     color: var(--text-primary);
-    font-size: 0.9375rem;
     font-weight: 500;
-    line-height: 1.35;
     text-decoration: none;
-    overflow-wrap: anywhere;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   /* The stretched link: the row is the target, the anchor is the one tab stop,
@@ -189,30 +195,47 @@ const COLUMNS = ALL.filter((column) => column.id !== drop);
     border-radius: var(--r-lg);
   }
 
-  .row__link:focus-visible {
-    outline: none;
-  }
+  .row__link:focus-visible { outline: none; }
 
   .row__link:focus-visible::after {
     outline: 2px solid var(--accent);
     outline-offset: -2px;
   }
 
-  /* Two lines, the listing clamp: the whole note is on the tool's page. */
+  /* One line in tertiary, briOS's; the whole note is on the tool's page. */
   .row__desc {
-    display: -webkit-box;
+    overflow: hidden;
+    white-space: nowrap;
+    color: var(--text-tertiary);
+    text-overflow: ellipsis;
+  }
+
+  /* The phone copy under the name: two lines, the listing clamp. */
+  .row__desc--phone {
+    display: none;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     line-clamp: 2;
     overflow: hidden;
-    color: var(--text-secondary);
-    line-height: 1.5;
+    padding: 0.25rem 0 0 calc(32px + 0.75rem);
+    white-space: normal;
   }
 
-  /* The phone copy of the description, under the name. */
-  .row__desc--phone {
-    display: none;
-    padding: 0.25rem 0 0 calc(32px + 0.75rem);
+  /* From 1280px, briOS's `grid-cols-12 gap-4 px-4` exactly (3/5/2/1/1). A fixed
+     table ignores `calc(% + px)` widths, so columns are plain twelfths and the
+     gaps are paid as padding that puts each content box where the grid does:
+     track t = (W - 208px) / 12, Name 3t + 32 from 16px, Description 5t + 64. */
+  @media (min-width: 1280px) {
+    .th--name { width: 25%; }
+    .th--category { width: 16.6667%; }
+    .th--verdict, .th--date { width: 8.3333%; }
+
+    .th--name, .cell--name { padding: 0 4px 0 16px; }
+    .th--desc, .cell--desc { padding: 0 10.667px 0 12px; }
+    .th--category, .cell--category { padding: 0 13.333px 0 5.333px; }
+    .th--verdict, .cell--verdict { padding: 0 14.667px 0 2.667px; }
+    .th--date, .cell--date { padding: 0 16px 0 1.333px; }
+    .cell { padding-block: 0.75rem; }
   }
 
   /* Phone width, like briOS: icon and name with the description under them,
@@ -231,10 +254,9 @@ const COLUMNS = ALL.filter((column) => column.id !== drop);
       display: none;
     }
 
-    .th--name { width: auto; padding-left: 0; }
-    .cell--name { padding-left: 0; }
-    .th--verdict,
-    .cell--verdict { padding-right: 0; }
+    .th--name { width: auto; }
+    .th--verdict { width: calc(6.5rem + var(--page-pad)); }
+    .cell--name { white-space: normal; }
     .cell--verdict { vertical-align: top; }
 
     .row__desc--phone {

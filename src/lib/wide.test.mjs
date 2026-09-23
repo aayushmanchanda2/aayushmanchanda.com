@@ -1,20 +1,19 @@
 /**
- * The wide page, and where it is allowed to stop.
+ * The full-width pages, and where the width is allowed to stop.
  *
- * `/library`'s rows carry a tags column, and a column needs room the 44rem
- * shell does not have, so `Base.astro` takes a `wide` prop that lifts the
- * content column to `--page-wide`. The whole risk in that concession is scope.
- * There are two easy ways to widen a page and only one of them is right:
+ * The index pages (/tools, /sites, /library and their filter pages, plus a
+ * library entry's list-detail) run edge to edge: `Base.astro`'s `full` prop
+ * lifts `.shell__main`'s cap and nothing else. The whole risk in that is
+ * scope. There are two easy ways to widen a page and only one of them is right:
  *
- *   - `.shell__main--wide { max-width: var(--page-wide) }` widens the content.
- *   - `.shell { … }`, or a page redeclaring `--page-max` on `:root`, widens the
- *     content **and the footer under it**, because both read the same token.
+ *   - `.shell__main--full { max-width: none }` widens the content.
+ *   - `.shell { … }`, or a page redeclaring `--page-max`, widens the content
+ *     **and the footer under it**, because both read the same token.
  *
  * The second one looks identical on the page you were testing. It shows up as a
- * colophon that is 44rem on eleven pages and 52rem on four, which nobody
- * notices from inside one page — it is a difference between pages, and the
- * reader who sees it is the one who navigated. So the token's consumers are a
- * fixed list here rather than a sentence in design.md.
+ * colophon that is one width on the reading pages and another on the index
+ * pages, which nobody notices from inside one page. So the token's consumers
+ * and the list of full-width routes are fixed here rather than in a sentence.
  *
  * Parsed as text, the same move `theme.test.mjs` and `overscroll.test.mjs`
  * make on the stylesheets: there is no runtime to ask.
@@ -27,7 +26,7 @@ import { fileURLToPath } from "node:url";
 
 const SRC = fileURLToPath(new URL("..", import.meta.url));
 
-/** The one file allowed to declare either width token, relative to `src/`. */
+/** The one file allowed to declare the column token, relative to `src/`. */
 const TOKENS_LIVE_IN = "styles/global.css";
 
 /**
@@ -50,7 +49,7 @@ function walk(dir) {
 }
 
 /**
- * Every line that *declares* one of the two width tokens, with its file.
+ * Every line that *declares* the column token, with its file.
  *
  * A declaration is `--page-max:`; a use is `var(--page-max)`. Only the first
  * can move the footer, which is why the sweep looks for it and not for both.
@@ -62,7 +61,7 @@ function declarations() {
     readFileSync(full, "utf8")
       .split("\n")
       .flatMap((text, index) => {
-        const match = text.match(/(--page-max|--page-wide)\s*:/);
+        const match = text.match(/(--page-max)\s*:/);
         return match
           ? [
               {
@@ -120,22 +119,36 @@ function consumersOf(rules, token) {
     .sort();
 }
 
-test("both width tokens are declared once, in global.css", () => {
-  for (const token of ["--page-max", "--page-wide"]) {
-    const found = declarations().filter((one) => one.token === token);
-    assert.deepEqual(
-      found.map((one) => one.file),
-      [TOKENS_LIVE_IN],
-      `${token} is declared somewhere other than ${TOKENS_LIVE_IN}. Redeclaring it scoped to a page widens the footer with the content, because the colophon reads the same token — widen \`.shell__main\` instead.`,
-    );
-  }
+/**
+ * Every page that passes `full` to Base, relative to `src/pages/`.
+ *
+ * @returns {string[]}
+ */
+function fullPages() {
+  const pages = path.join(SRC, "pages");
+  return walk(pages)
+    .filter((full) => full.endsWith(".astro"))
+    .filter((full) => /<Base\b[^>]*\n\s+full\n/.test(readFileSync(full, "utf8")))
+    .map((full) => path.relative(pages, full).split(path.sep).join("/"))
+    .sort();
+}
+
+test("the column token is declared once, in global.css", () => {
+  assert.deepEqual(
+    declarations().map((one) => one.file),
+    [TOKENS_LIVE_IN],
+    `--page-max is declared somewhere other than ${TOKENS_LIVE_IN}. Redeclaring it scoped to a page widens the footer with the content, because the colophon reads the same token — pass \`full\` to Base instead.`,
+  );
 });
 
-test("only the content column takes the wide width", () => {
+test("only the content column drops its cap", () => {
+  const uncapped = [...shellRules()]
+    .filter(([, declarations]) => /max-width: none/.test(declarations))
+    .map(([selector]) => selector);
   assert.deepEqual(
-    consumersOf(shellRules(), "--page-wide"),
-    [".shell__main--wide"],
-    "something other than the content column reads --page-wide. The footer must stay at --page-max on every page: it is the same colophon closing all of them.",
+    uncapped,
+    [".shell__main--full"],
+    "something other than the content column lifts its cap. The footer must stay at --page-max on every page: it is the same colophon closing all of them.",
   );
 });
 
@@ -145,20 +158,39 @@ test("the footer and the default column still cap at --page-max", () => {
 
 test("the shell itself caps nothing", () => {
   // `.shell` is the flex column holding main and the footer. A max-width there
-  // would cap both at once and take the `wide` prop's decision away from the
+  // would cap both at once and take the `full` prop's decision away from the
   // page that made it.
   for (const [selector, declarations] of shellRules()) {
-    if (selector !== ".shell") continue;
+    if (selector !== ".shell" && selector !== ".shell--full") continue;
     assert.ok(
       !declarations.includes("max-width"),
-      `.shell declares a max-width (${declarations}). Cap .shell__main, never the shell.`,
+      `${selector} declares a max-width (${declarations}). Cap .shell__main, never the shell.`,
     );
   }
+});
+
+test("full width is the index pages and nothing else", () => {
+  // Reading pages (notes, about, a tool's page, a site's page, contact,
+  // privacy, home) keep the centred column. A new index page joins this list
+  // on purpose, and a reading page that lands here is the bug.
+  assert.deepEqual(fullPages(), [
+    "library.astro",
+    "library/[slug].astro",
+    "library/domain/[domain].astro",
+    "library/kind/[kind].astro",
+    "library/tag/[slug].astro",
+    "sites.astro",
+    "sites/collection/[slug].astro",
+    "sites/domain/[domain].astro",
+    "tools.astro",
+    "tools/category/[category].astro",
+    "tools/verdict/[verdict].astro",
+  ]);
 });
 
 test("the sweep is actually finding declarations", () => {
   // A regex that silently stops matching would make the first test pass by
   // finding nothing, which is the failure mode a text-parsing test has.
-  assert.equal(declarations().length, 2);
+  assert.equal(declarations().length, 1);
   assert.ok(shellRules().size > 20);
 });
