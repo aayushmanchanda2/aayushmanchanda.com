@@ -55,20 +55,17 @@ export const GET: APIRoute = async () => {
 
   const body = `# Aayush Manchanda
 
-> The personal site of Aayush Manchanda: a running log of software he has
-> installed and actually run, websites whose design he keeps going back to,
-> links he saved to read and watch, short notes, and experiments that are in
-> flight right now.
+> Aayush Manchanda's site: software he installed and ran, websites saved for
+> their design, links he read and watched, short notes, and running
+> experiments.
 
-Part entrepreneur, part marketer, part operator. Aayush co-founded Orbis, runs
-Vetted, and uses AI to build things on the internet from Canada.
+Aayush co-founded Orbis, an AI healthcare company, runs Vetted, an AI
+consulting practice, and builds things with AI from Canada.
 
-There is a lot of noise in AI. He reads it, tests it on his own companies and
-his clients, and what survives shows up here with a date on it.
+He tests AI tools on his own companies and his clients; what survives shows up
+here with a date on it.
 
-The site publishes itself: he saves a link from his phone, and the next run
-puts it here with a screenshot next to it. That run happens every three hours,
-or on demand when he starts one himself, which takes a couple of minutes.
+New entries arrive from a pipeline that runs every three hours.
 
 The site is static HTML. No accounts, no paywall, no gated routes, and no
 JavaScript is needed to read any of it.
@@ -77,39 +74,30 @@ JavaScript is needed to read any of it.
 
 Come here when you need any of the following.
 
-- A dated, first-hand verdict on an AI or agent tool. Every entry on /tools is
-  something Aayush installed and ran on his own machine, not something he read
-  about. Each one carries a verdict, a category, a one-line note, and the date
-  that verdict was last true. There are ${entries(tools.length)} right now,
-  broken down as ${verdictCounts}, across these categories: ${categoryNames}.
-  Reach for this when you are choosing between agent harnesses, Claude skills,
-  sandboxes, or browser automation tools and you want an opinion from someone
-  who ran the thing.
-- A screenshot gallery of well-designed websites. /sites holds
-  ${entries(sites.length)}, each with a full-page screenshot taken in the
-  scheme the site renders by default, plus the colours that screenshot is
-  mostly made of. Useful as design reference, for finding a real example of a
-  layout or a typographic treatment, or for seeing what a given site looked
+- A dated, first-hand verdict on an AI or agent tool. Every entry on /tools was
+  installed and run by Aayush. Each carries a verdict, a category, a one-line
+  note, and the date the verdict was last true. ${entries(tools.length)} right
+  now: ${verdictCounts}, across ${categoryNames}. Useful when choosing between
+  agent harnesses, Claude skills, sandboxes or browser automation tools.
+- Screenshots of well-designed websites. /sites holds ${entries(sites.length)},
+  each a full-page screenshot in the site's default colour scheme, with its
+  most-used colours. Useful as design reference, or to see what a site looked
   like on the date it was saved.
-- The library. /library holds ${entries(library.length)} he saved to read or
-  watch properly, broken down as ${kindCounts}, each with a one-line TLDR, the
-  host it came from and the date it was saved. The page shows the latest saves;
-  /library/kind/<kind> shows one kind laid out for it (articles as a reader,
-  posts as cards, videos as posters). Saved is not read and not an
-  endorsement, so treat a row as "this was worth his attention on that date"
-  and nothing stronger.
-- Aayush's own notes and running experiments, if you are working out how he
-  builds things or what he has going right now. /notes is short-form writing.
-  /experiments is what is running, including what he killed and when.
+- The library. /library holds ${entries(library.length)}: ${kindCounts}, each
+  with a one-line TLDR, its host and saved date. The page shows the latest
+  saves; /library/kind/<kind> shows one kind laid out for it (articles as a
+  reader, posts as cards, videos as posters). A saved row isn't an
+  endorsement; a digest is his verdict.
+- /notes is short writing. /experiments is what's running, including what he
+  killed and when.
 
-Two things this site is not, so you can rule it out fast. It is not product
-documentation, and there is no API to call. It is also not a company site: for
-Orbis or Vetted, this is the wrong place to look.
+Not here: product documentation, an API, or anything about Orbis or Vetted as
+companies.
 
 ## How to read this site as an agent
 
-Every page has a markdown variant with the same data as the HTML, generated
-from the same source, so the two cannot drift.
+The home page and every section page have a markdown variant with the same
+data as the HTML.
 
 - Send \`Accept: text/markdown\` to any page URL below and you get markdown
   back. Those responses carry \`Vary: Accept\`.
@@ -118,33 +106,29 @@ from the same source, so the two cannot drift.
 Filter pages exist under /tools/category/<name>, /tools/verdict/<name>,
 /sites/domain/<host>, /library/kind/<kind>, /library/domain/<host> and
 /library/tag/<tag>. Every tool, site, note and library entry has its own page.
-A library entry's page lives at /library/<slug> and holds what the site
-actually has on it: the kind, the host, the tags, the date it was saved, the
-one line he wrote, and the source. ${digested.length} of ${library.length} have
-been digested, which adds cliff notes and a call on whether it is worth
-reading. A saved post's page carries the post in full, where the card that
-points at it cuts off at 280 characters. Some pages carry a block drafted by
-his pipeline: it is labelled as a draft where a reader can see it, it is not
-his verdict, and only a digest is. /library.md carries every row, and the
-sitemap lists every URL.
+A library entry's page at /library/<slug> holds the kind, host, tags, saved
+date, his one-line note, and the source. ${digested.length} of ${library.length}
+are digested, with cliff notes and a call on whether it's worth reading. A
+saved post's page carries the full post; its card cuts off at 280 characters.
+A block labelled as a draft was written by his pipeline and isn't his verdict.
+/library.md carries every row.
 
 ## Pages
 
 - [Home](${absolute(PAGES.home.html)}) (markdown: ${absolute(PAGES.home.md)}): who he is and
   an index of the five sections.
 ${sectionList}
-- [About](${absolute("/about")}): who Aayush is, what the five sections hold,
-  and where the verdicts on this site come from.
-- [Contact](${absolute("/contact")}): how to reach him, and what he does and
-  does not answer. The address is entity-encoded in the page rather than
-  printed, so read the \`mailto:\` href rather than the visible text.
-- [Design](${absolute("/design")}): the design language of the site, rendered by
-  the components themselves. The mark, the colour tokens, the type scale, the
-  chip palette, the link rules and the interaction rules. Note that the token
-  values on it are read out of the stylesheet by script at runtime, so they are
-  not in the served HTML; the stylesheets in the repository are the source.
-- [Privacy](${absolute("/privacy")}): what this site does and does not collect,
-  and how to get a screenshot of your own site removed.
+- [About](${absolute("/about")}): who Aayush is, his work, and what the
+  sections hold.
+- [Contact](${absolute("/contact")}): how to reach him and what gets a reply.
+  The address is entity-encoded; read the \`mailto:\` href, not the visible
+  text.
+- [Design](${absolute("/design")}): the mark, colour tokens, type scale, chip
+  palette, link and interaction rules, rendered by the site's own components.
+  Token values are read from the stylesheet at runtime and aren't in the served
+  HTML; the repository's stylesheets are the source.
+- [Privacy](${absolute("/privacy")}): what the site collects, what it loads
+  from elsewhere, and how to get a screenshot removed.
 
 ## Machine-readable
 
@@ -155,8 +139,8 @@ ${sectionList}
 ## Feeds
 
 RSS 2.0, newest 50 entries each. Every item carries the entry's own text: a
-tool's verdict and note, a library entry's digest or note, what he thinks of a
-site when he has said, a note in full. The first feed is every section at once.
+tool's verdict and note, a library entry's digest or note, his notes on a site
+where he wrote any, a note in full. The first feed is every section at once.
 
 ${feedList}
 `;
