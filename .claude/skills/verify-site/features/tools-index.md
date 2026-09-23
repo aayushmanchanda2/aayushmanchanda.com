@@ -35,7 +35,7 @@ Preconditions:
 
 ## Gotchas
 
-- The `.views` group ships `hidden` and the PREPAINT script in `src/lib/tools-view.ts` unhides it; with JS broken the toggle is missing, not dead. Its absence is a finding.
+- The `.views` group ships `hidden` and the PREPAINT script from `src/lib/view-toggle.ts` (`TOOLS_VIEW`, written by `ViewToggle.astro`) unhides it; with JS broken the toggle is missing, not dead. Its absence is a finding.
 - The view persists in `localStorage["tools-view"]` per browser context. `shoot.mjs` uses a fresh context per size/theme; within one run a `--click` persists across the routes after it.
 - Playwright's click on a non-name cell trips its "another element intercepts" check, because the stretched link covers the row on purpose. Pass `{ force: true }`: the mouse still presses the cell.
 - Filters are applied by a module script after parse, so a deep link paints the full table for a frame before hiding rows. Wait for load before asserting.

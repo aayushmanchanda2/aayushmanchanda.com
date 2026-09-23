@@ -5,9 +5,9 @@
  * Every timestamp is a real link to the moment on YouTube, so with no script,
  * or with a modifier held, it opens there. With script, a video that has a
  * facade on the page plays in place from that second: an idle facade is
- * pressed with a start time, a running player is re-pointed at it. Both go
- * through `VideoFacade.astro`, so the page still asks YouTube for nothing
- * until a reader presses something. A playlist has no facade and keeps the
+ * pressed with a start time (`VideoFacade.astro` builds the player), and a
+ * running player has its `src` re-pointed by the script below. Either way the
+ * page asks YouTube for nothing until a reader presses something. A playlist has no facade and keeps the
  * plain link, timed against the playlist's first video.
  */
 import type { Moment } from "../lib/library";

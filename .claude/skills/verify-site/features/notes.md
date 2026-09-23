@@ -4,7 +4,7 @@
 
 ## Sub-features
 
-- `notes-list` `h1.page-title` ("Notes"), `.years > section` per year with `h2.year`, then `ul.list` of `a.row` with `.row__title`, `.row__thumb` (`components/NoteList.astro`).
+- `notes-list` `h1.page-title` ("Notes"), `.years > section` per year with `h2.year`, then `ul.list` of `a.row` with `.row__title`, `.row__thumb` (`components/EntryList.astro`).
 - `notes-detail` `article.note[data-type]`, `.note__head` (`time.note__date`, `h1.page-title--entry`), `.prose`, `nav.also[aria-label="Elsewhere on this site"]`, `nav.next` (`h2.next__head.accent-bar` + the same `ul.list`).
 
 ## How to get to it (user POV)

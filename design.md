@@ -180,7 +180,7 @@ Meta at `--text-tertiary` now clears AA (it was 2.94:1 at 45% alpha and 13px). A
 | prose h2 / h3 | 24px / 20px, 700, lh 1.3; 40 / 36px above, 12px below | any `.prose` |
 | note list title | `1.25rem` (20px) / 1.6, 500, `--text-primary`, underline on hover only | /notes and "Read next" (`components/EntryList.astro`); "Latest" stacks an 18px/1.5 title over its meta |
 | UI row | `0.875rem` (14px) / 1.45; the title 500 (600 in the palette, §3), the rest 400 | every row in a list or table: the /tools table (its line is briOS's 20px), the /library pane, the /library index and its filter pages, /experiments, the palette, a /sites list row |
-| row note | `0.875rem` / 1.45 | the second line of a UI row, and a home index blurb; capped at two lines (§3) |
+| row note | `0.875rem` / 1.45, `--text-secondary` (a /tools or /sites table cell is `--text-tertiary` on one truncated line, briOS's /stack; B14) | the second line of a UI row, and a home index blurb; capped at two lines (§3) |
 | `.mono` | `0.875rem`, 400, normal tracking, sentence case, sans | every label; figures inside it are mono |
 
 Headings are 600 / lh 1.05 / `-0.03em` with `text-wrap: balance`; paragraphs get `text-wrap: pretty`. Both are already global — do not re-declare them. The masthead classes above override the weight to 700.
@@ -560,7 +560,7 @@ Five things are worth not re-deriving.
 **The first three run on every push and every pull request** (`.github/workflows/ci.yml`). They were a list a person was trusted to run, which is discipline, and discipline is what goes first on the day a change looks too small to bother — so they are a machine's job now. Run them locally anyway: CI is the backstop, not the loop. The last four cannot be automated and are still yours.
 
 1. `npx astro check` → **0 errors, 0 warnings.** Hints have a known baseline of 13 (eleven `z is deprecated` from `content.config.ts`, one unused `Props`, one unreachable-code hint); do not add to it. Note that `checkJs` is on, so a new `.mjs` under `scripts/` or `pipeline/` is type-checked too and needs its JSDoc. **CI cannot hold the hint baseline for you** — `astro check` exits 0 on a hint, so a fourteenth passes the step and only the count in the log says otherwise.
-2. `npm test` → all pass (544 at the time of writing).
+2. `npm test` → all pass (642 at the time of writing).
 3. `npm run build` → clean, then `npm run validate:schema` → clean. The second reads `dist/`, so it is only meaningful after the first, and it is a separate CI step for the same reason: a failure should name which of the two broke.
 4. **Both themes, and both forced states.** Four looks, not two: OS light, OS dark, and then a pinned theme fighting each of them — `data-theme="dark"` on a light OS is the one that catches a token declared in only one of the two dark blocks. Every colour is a token; a hex outside `styles/` is the bug.
 5. **Mobile.** At 375px: the top bar's trail (a long title ellipses, ancestors never do) and the menu panel, the row reflows at 599/639, the palette as a full-screen sheet.
