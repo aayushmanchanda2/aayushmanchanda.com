@@ -3032,5 +3032,96 @@
       ]
     },
     "collections": []
+  },
+  {
+    "slug": "mother-design-brand-strategy-and-design",
+    "title": "Mother Design",
+    "url": "https://www.motherdesign.com/",
+    "domain": "motherdesign.com",
+    "saved_date": "2026-09-23",
+    "shot": "/shots/mother-design-brand-strategy-and-design.webp",
+    "palette": [
+      "#ffffff",
+      "#b38a4d",
+      "#e2cbb5",
+      "#ccb191",
+      "#58aa02",
+      "#2c1408"
+    ],
+    "design": {
+      "read_date": "2026-09-23",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "surface",
+          "hex": "#f4f4f4"
+        },
+        {
+          "name": "text",
+          "hex": "#000000"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#808080"
+        },
+        {
+          "name": "border",
+          "hex": "#000000"
+        }
+      ],
+      "type": [
+        {
+          "name": "heading",
+          "fontFamily": "Basis",
+          "fontSize": "16px",
+          "fontWeight": "600",
+          "lineHeight": "19.2px",
+          "letterSpacing": "-0.32px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "Basis",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "19.2px",
+          "letterSpacing": "-0.32px"
+        },
+        {
+          "name": "label",
+          "fontFamily": "Basis",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "16.8px",
+          "letterSpacing": "-0.14px"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "1px",
+          "value": "1px"
+        },
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "10px",
+          "value": "10px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        },
+        {
+          "name": "5",
+          "value": "20px"
+        }
+      ],
+      "radius": []
+    },
+    "collections": []
   }
 ]
