@@ -89,6 +89,24 @@
     "section": "sites",
     "at": "2026-09-14T14:32:39.466Z"
   },
+  "1837392089": {
+    "kind": "published",
+    "slug": "why-discipline-builds-actual-confidence",
+    "section": "reading",
+    "at": "2026-09-23T21:36:02.100Z"
+  },
+  "1837392162": {
+    "kind": "published",
+    "slug": "you-don-t-need-more-discipline-you-need-more-love",
+    "section": "reading",
+    "at": "2026-09-23T21:36:02.100Z"
+  },
+  "1837392456": {
+    "kind": "published",
+    "slug": "everyone-is-an-artist-till-rent-is-due",
+    "section": "reading",
+    "at": "2026-09-23T21:36:02.100Z"
+  },
   "1837725541": {
     "kind": "published",
     "slug": "services-the-new-software-6-months-later",
@@ -404,6 +422,12 @@
     "slug": "chopin",
     "section": "tools",
     "at": "2026-09-05T04:39:09.938Z"
+  },
+  "1842753402": {
+    "kind": "published",
+    "slug": "hermes-agent-masterclass",
+    "section": "reading",
+    "at": "2026-09-23T21:36:02.100Z"
   },
   "1843014775": {
     "kind": "published",
@@ -776,5 +800,17 @@
     "slug": "mother-design-brand-strategy-and-design",
     "section": "sites",
     "at": "2026-09-23T17:13:50.345Z"
+  },
+  "1863847318": {
+    "kind": "published",
+    "slug": "she-left-waterloo-without-graduating-now-she-s-a-member-of-t",
+    "section": "reading",
+    "at": "2026-09-23T21:36:02.100Z"
+  },
+  "1863851311": {
+    "kind": "published",
+    "slug": "30-seconds-of-typing-can-now-turn-into-100-hours-of-gtm-work",
+    "section": "reading",
+    "at": "2026-09-23T21:36:02.100Z"
   }
 }
