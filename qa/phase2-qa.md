@@ -42,17 +42,17 @@ Reviewers, all read-only:
   - The tools `new` category must not collide with a real one, and stays out of JSON-LD.
 
 ## Fix B: UI polish and structure (one PR after A)
-- [ ] **B1. Stamp labels:** 11–12px, ink opacity ≥ .85, so contrast is ≥ 4.5 on paper in both themes. Ruler digits stay decorative.
-- [ ] **B2. Letter tiles:** one neutral tone (surface-2 with tertiary ink), not random hues, so they read as intentional.
-- [ ] **B3. Sites panel on desktop:** a layered left-edge shadow and a 4–8% dim over the gallery behind it, in both themes.
-- [ ] **B4. Postmark below 600px:** shift it right or hide the wavy lines so it clears the breadcrumbs.
-- [ ] **B5. Sites list:** use the tools table style, with headers Name / Domain / Collections / Saved.
-- [ ] **B6. Library "All" view:** a mixed layout (newest article card, latest 4 posts, latest 2 videos), so it no longer repeats the pane.
-- [ ] **B7. Masthead consistency:** one pattern, with the subtitle under the title everywhere, Tools included.
-- [ ] **B8. Post card links:** one pattern, "Read more" plus a ↗ icon for the original. Consistent X mark size.
-- [ ] **B9. Highlighter:** consolidate into a single `mark` system with a `--pen` token. Amber from one token; wallpaper and library mat derived from shared hue tokens.
-- [ ] **B10. Dead CSS:** remove `data-age="strong"`, `data-stamp` base, the `.mat__lift` rules and the unused strong texture. Prebuild the `--age` noise as a small tiled asset rather than a stretched 1440×900.
-- [ ] **B11. Shared helpers:**
+- [x] **B1. Stamp labels:** 11–12px, ink opacity ≥ .85, so contrast is ≥ 4.5 on paper in both themes. Ruler digits stay decorative.
+- [x] **B2. Letter tiles:** one neutral tone (surface-2 with tertiary ink), not random hues, so they read as intentional.
+- [x] **B3. Sites panel on desktop:** a layered left-edge shadow and a 4–8% dim over the gallery behind it, in both themes.
+- [x] **B4. Postmark below 600px:** shift it right or hide the wavy lines so it clears the breadcrumbs.
+- [x] **B5. Sites list:** use the tools table style, with headers Name / Domain / Collections / Saved.
+- [x] **B6. Library "All" view:** a mixed layout (newest article card, latest 4 posts, latest 2 videos), so it no longer repeats the pane.
+- [x] **B7. Masthead consistency:** one pattern, with the subtitle under the title everywhere, Tools included.
+- [x] **B8. Post card links:** one pattern, "Read more" plus a ↗ icon for the original. Consistent X mark size.
+- [x] **B9. Highlighter:** consolidate into a single `mark` system with a `--pen` token. Amber from one token; wallpaper and library mat derived from shared hue tokens.
+- [x] **B10. Dead CSS:** remove `data-age="strong"`, `data-stamp` base, the `.mat__lift` rules and the unused strong texture. Prebuild the `--age` noise as a small tiled asset rather than a stretched 1440×900.
+- [x] **B11. Shared helpers:**
   - `lib/motion.ts` (reduced-motion)
   - `lib/storage.ts` (safe localStorage)
   - `lib/reveal.ts` (from A8)
@@ -61,14 +61,14 @@ Reviewers, all read-only:
   - pipeline `util.mjs`: `exists`, `oneLine`/`flat`, `squash`, a fetch-with-timeout wrapper, `bareHost`
   - `library.ts`: `readCommittedPath` and `readList` reuse
   - `links.ts` `markFor` uses `monogram()`
-- [ ] **B12. Search:** normalize the index once after fetch; cache the parsed site-panel fragment, not the Document. `ui-sound`: try/catch around AudioContext, and suspend on mute or when the page is hidden.
-- [ ] **B13. Tests:**
+- [x] **B12. Search:** normalize the index once after fetch; cache the parsed site-panel fragment, not the Document. `ui-sound`: try/catch around AudioContext, and suspend on mute or when the page is hidden.
+- [x] **B13. Tests:**
   - `wide.test` checks behaviour, not the regex fullPages pattern
   - `ink.test` parses `light-dark()` pairs
   - `rescrape` tie test
   - `backfill-posts.mjs` gets a main guard
   - fix stale `types.d.ts` `Post.text`
-- [ ] **B14. design.md drift:**
+- [x] **B14. design.md drift:**
   - amber consumers
   - the token list is hand-written, so either generate it or say so
   - move hex values in `AppIcon`/`PostMedia` into `styles/`
@@ -76,7 +76,7 @@ Reviewers, all read-only:
   - stale comments in CollectionChips, chip.css, Moments and palette.css
   - verify-site features map entries for deleted files
 
-- [ ] **B15. Split library.ts:** move post parsing into `src/lib/post-schema.ts` (library.ts is at 938 lines). `/library/kind/*` renders only its own view's markup. The other views load on switch or link out, so the same ~350KB of HTML no longer ships four times.
+- [x] **B15. Split library.ts:** move post parsing into `src/lib/post-schema.ts` (library.ts is at 938 lines). `/library/kind/*` renders only its own view's markup. The other views load on switch or link out, so the same ~350KB of HTML no longer ships four times.
 
 ## Deferred / Aayush's call
 - Orbis role: the Work row stays frozen with no title (earlier decision). The UI review asked for "Co-founder", which is not applied.
@@ -89,3 +89,12 @@ Proof: `qa/evidence/2026-09-23-qa-fix-a/` (`check.mjs` writes `report.json`, `ex
 - A9 went further than "below 360": the four segments need 309px, which clipped at 360 and 390 too, so the counts drop by container width (toolbar under 20rem), not viewport.
 - A11 moves the verdict pill onto the name line on phones, so the description can take the full row.
 - A10's forced-colors block lives in its own `styles/forced-colors.css` (frame.css was already over 300 lines).
+
+## Fix B: done (branch `qa-phase2-fix-b`)
+Proof: `qa/evidence/2026-09-23-qa-fix-b*/` (`report.json` per run; PNGs gitignored, rerun `shoot.mjs` to recreate). Before shots: `2026-09-23-qa-fix-b-before*`. Library routing: `2026-09-23-qa-fix-b-library/check.mjs` → `check.json`. Notes against the list above:
+- B1: `--stamp-label`, 11px, .9/.85 alpha, unworn. 5.00 to 5.30:1 light and 6.97 to 7.37:1 dark across the six mats, held in `ink.test`.
+- B7: /tools' table header now starts at 304px at 1280 (was 257 with the inline intro); the controls sit 0.75rem under the standfirst.
+- B10: the lift is live (`data-stamp="full"` shipped), so only its switch rules went, with `data-stamp` and `data-age`. `public/mat-wear.webp` is 17KB, made by `scripts/mat-wear.mjs`; before/after corner crops in `2026-09-23-qa-fix-b-g1/cmp-*.png`.
+- B11: the fetch-with-timeout wrapper was skipped: every call site takes an injected `fetch` for its tests, so a wrapper would have to take it too.
+- B15: HTML per route, before → after: /library 355,850 → 127,623; article 339,225 → 139,633; post 346,499 → 283,576; video 333,590 → 100,846 (1.38MB → 0.65MB). A kind press on /library or a kind route follows its link; `/library?kind=` redirects. library.ts is 759 lines (post parsing moved to `post-schema.ts`, 172).
+
