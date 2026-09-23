@@ -15,3 +15,8 @@ test("the key is the first 12 hex of sha1(url)", () => {
   assert.match(linkHash("https://vetted.tools"), /^[0-9a-f]{12}$/);
   assert.notEqual(linkHash("https://vetted.tools"), linkHash("https://vetted.tools/"));
 });
+
+test("a link keeps the parentheses it opened, drops the markdown one around it, and reads &amp; as &", () => {
+  const text = `[wiki](https://en.wikipedia.org/wiki/Foo_(bar)). <a href="https://a.dev/?x=1&amp;y=2">a</a> (see https://b.dev).`;
+  assert.deepEqual(outboundLinks(text), ["https://en.wikipedia.org/wiki/Foo_(bar)", "https://a.dev/?x=1&y=2", "https://b.dev"]);
+});

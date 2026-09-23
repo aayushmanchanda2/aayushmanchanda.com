@@ -17,7 +17,7 @@ Reviewers, all read-only:
   - Give each atomic write a unique `.tmp` suffix.
   - Validate `library.ts`: post id numeric, `quoted` exactly one level deep, `w`/`h` finite and above 0, booleans strict.
   - Add tests for non-JSON, partial media failure and a bad quoted id.
-- [ ] **A3. `siteOf` runs 3× per tool.** Resolve it once, pass it down, and send `GITHUB_TOKEN` when set. In `link-previews`: no double fetch, launch Chromium lazily, and fix the URL regex so `)` and `&amp;` match `linkHash`.
+- [x] **A3. `siteOf` runs 3× per tool.** Resolve it once, pass it down, and send `GITHUB_TOKEN` when set. In `link-previews`: no double fetch, launch Chromium lazily, and fix the URL regex so `)` and `&amp;` match `linkHash`.
 - [ ] **A4. `site-panel.ts:36,148` and older Safari.** `checkVisibility` is missing before Safari 17.4. Add the fallback `el.checkVisibility?.() ?? el.getClientRects().length > 0`.
 - [ ] **A5. One Escape closes two layers.** Every document-level key listener gets `if (event.defaultPrevented) return;` through a shared `lib/keys.ts` `ownsKey(e)`. That covers the palette, sites panel, home screen, EntryNav, mobile nav and library pane.
 - [ ] **A6. Sites panel history.** Closing calls `history.back()` when `history.state?.site` is set, otherwise `replaceState`. On fetch failure use `location.replace`.

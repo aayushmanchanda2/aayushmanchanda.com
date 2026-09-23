@@ -35,13 +35,16 @@ const MANIFEST = path.join(ROOT, "src", "data", "link-previews.json");
 /** Profiles and repositories say nothing a card could add; this site is not outbound. */
 const SKIP =
   /(^|\.)(x\.com|twitter\.com|github\.com|linkedin\.com|instagram\.com|threads\.net|bsky\.app|youtube\.com|aayushmanchanda\.com)$/;
-const URLS = /https?:\/\/[^\s"'`)<>\]]+/g;
+const URLS = /https?:\/\/[^\s"'`<>\]]+/g;
 
 /** @param {string} url  Same rule as `src/lib/assets.ts › linkHash`. */
 export const linkHash = (url) => createHash("sha1").update(url).digest("hex").slice(0, 12);
 
 /**
- * Every outbound link in `text` worth a card, in order, once each.
+ * Every outbound link in `text` worth a card, in order, once each, spelled the
+ * way the page's `href` ends up (the key `linkHash` must match): `&amp;` read
+ * as `&`, and a closing `)` kept only when the URL opened one (`Foo_(bar)`),
+ * not when it closes the markdown link around it.
  *
  * @param {string} text
  * @returns {string[]}
@@ -49,7 +52,10 @@ export const linkHash = (url) => createHash("sha1").update(url).digest("hex").sl
 export function outboundLinks(text) {
   const found = new Set();
   for (const [raw] of text.matchAll(URLS)) {
-    const url = raw.replace(/[.,;:!?]+$/, "");
+    let url = raw.replaceAll("&amp;", "&").replace(/[.,;:!?]+$/, "");
+    while (url.endsWith(")") && url.split("(").length < url.split(")").length) {
+      url = url.slice(0, -1).replace(/[.,;:!?]+$/, "");
+    }
     if (!URL.canParse(url) || SKIP.test(new URL(url).hostname.replace(/^www\./, ""))) continue;
     found.add(url);
   }
@@ -80,22 +86,26 @@ if (process.argv[1] !== undefined && import.meta.url === pathToFileURL(process.a
   const manifest = {};
   /** @type {string[]} */
   const missing = [];
-  const browser = await chromium.launch({ headless: true });
+  // Launched on the first link that needs a shot, so a run with nothing new starts no browser.
+  /** @type {Promise<import("playwright").Browser> | undefined} */
+  let launching;
+  const browser = () => (launching ??= chromium.launch({ headless: true }));
   try {
     await backfill(
       urls,
       async (url) => {
         const hash = linkHash(url);
-        const got = await capturePreview({ slug: hash, url, dir: DIR, browser, force, og: true, log: console.log });
+        const kept = force ? undefined : old[hash];
+        // One read of the page: its og:image for the picture, its title for the row.
+        const meta = kept ? undefined : await readMeta(url);
+        const got = await capturePreview({ slug: hash, url, meta, dir: DIR, browser, force, og: true, log: console.log });
         if (got === null) return void missing.push(url);
-        const kept = old[hash];
-        const title = !force && kept ? kept.title : (await readMeta(url)).title;
-        manifest[hash] = { url, title, domain: new URL(url).hostname.replace(/^www\./, "") };
+        manifest[hash] = { url, title: kept ? kept.title : (meta?.title ?? null), domain: new URL(url).hostname.replace(/^www\./, "") };
       },
       3,
     );
   } finally {
-    await browser.close();
+    await (await launching)?.close();
   }
   const sorted = Object.fromEntries(Object.entries(manifest).sort(([a], [b]) => a.localeCompare(b)));
   await writeAtomic(MANIFEST, `${JSON.stringify(sorted, null, 2)}\n`);

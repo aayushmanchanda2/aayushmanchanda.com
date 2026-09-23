@@ -50,9 +50,17 @@ const GITHUB_IMAGE_HOST = /(^|\.)(github\.com|githubusercontent\.com|githubasset
 
 /** @typedef {typeof globalThis.fetch} Fetch */
 
-/** @param {string} url @param {Fetch} fetch */
+/**
+ * GitHub's API allows 60 anonymous calls an hour per IP, which a shared CI
+ * runner spends before breakfast; with `GITHUB_TOKEN` (the workflow's own) it is 1,000.
+ * @param {string} url @param {Fetch} fetch
+ */
 async function get(url, fetch) {
-  const response = await fetch(url, { headers: HEADERS, signal: AbortSignal.timeout(TIMEOUT_MS) });
+  const token = process.env["GITHUB_TOKEN"];
+  /** @type {Record<string, string>} */
+  const headers = { ...HEADERS };
+  if (token && new URL(url).hostname === "api.github.com") headers["authorization"] = `Bearer ${token}`;
+  const response = await fetch(url, { headers, signal: AbortSignal.timeout(TIMEOUT_MS) });
   if (!response.ok) throw new Error(`${url} returned HTTP ${response.status}`);
   return response;
 }
@@ -211,17 +219,18 @@ const exists = (file) => access(file).then(() => true, () => false);
  * @param {object} input
  * @param {string} input.slug
  * @param {string | null} input.url   The product site, or a GitHub repository.
+ * @param {string | null} [input.site]  `siteOf(url)`, when the caller already asked.
  * @param {string} input.dir
  * @param {Fetch} [input.fetch]
  * @param {boolean} [input.force]
  * @param {(line: string) => void} [input.log]
  * @returns {Promise<string | null>} The icon file, or null for the letter.
  */
-export async function fetchIcon({ slug, url, dir, fetch = globalThis.fetch, force = false, log = () => {} }) {
+export async function fetchIcon({ slug, url, site: known, dir, fetch = globalThis.fetch, force = false, log = () => {} }) {
   const file = path.join(dir, `${slug}.webp`);
   if (!force && (await exists(file))) return file;
 
-  const site = await siteOf(url, fetch);
+  const site = known === undefined ? await siteOf(url, fetch) : known;
   if (site === null) {
     log(`icon: ${slug} has no site of its own — letter`);
     return null;

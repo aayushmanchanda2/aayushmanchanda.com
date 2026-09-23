@@ -353,7 +353,7 @@ export async function run(argv = [], overrides = {}) {
         deps.postFrom({ ...input, publicDir: path.dirname(paths.postsDir), fetch: deps.fetch }),
       fetchIcon: (input) => deps.fetchIcon({ ...input, fetch: deps.fetch, log }),
       capturePreview: (input) => deps.capturePreview({ ...input, log }),
-      siteOf: (repo) => deps.siteOf(repo, deps.fetch),
+      siteOf: (url) => deps.siteOf(url, deps.fetch),
     };
 
     /** @type {Summary} */

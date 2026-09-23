@@ -272,12 +272,12 @@ export function fakeSyndication({ answer = (saved) => saved } = {}) {
  * @param {string} [options.fail]
  */
 export function fakeIcon({ fail } = {}) {
-  /** @type {{ slug: string, url: string | null, dir: string }[]} */
+  /** @type {{ slug: string, url: string | null, site?: string | null, dir: string }[]} */
   const calls = [];
 
   /** @type {typeof import("./icon.mjs").fetchIcon} */
-  async function fetchIcon({ slug, url, dir }) {
-    calls.push({ slug, url, dir });
+  async function fetchIcon({ slug, url, site, dir }) {
+    calls.push({ slug, url, dir, ...(site === undefined ? {} : { site }) });
     if (fail !== undefined) throw new Error(fail);
 
     await mkdir(dir, { recursive: true });
@@ -296,12 +296,12 @@ export function fakeIcon({ fail } = {}) {
  * @param {string} [options.fail]
  */
 export function fakePreview({ fail } = {}) {
-  /** @type {{ slug: string, url: string | null, dir: string }[]} */
+  /** @type {{ slug: string, url: string | null, site?: string | null, dir: string }[]} */
   const calls = [];
 
   /** @type {typeof import("./preview.mjs").capturePreview} */
-  async function capturePreview({ slug, url, dir }) {
-    calls.push({ slug, url, dir });
+  async function capturePreview({ slug, url, site, dir }) {
+    calls.push({ slug, url, dir, ...(site === undefined ? {} : { site }) });
     if (fail !== undefined) throw new Error(fail);
 
     await mkdir(dir, { recursive: true });
@@ -509,8 +509,9 @@ export function deps({
     postFrom: syndication.postFrom,
     fetchIcon: icon.fetchIcon,
     capturePreview: preview.capturePreview,
-    // Offline by default: a repo save keeps `url` null unless a test hands in a site.
-    siteOf: async () => null,
+    // Offline by default: a link is its own site, and a repo save keeps `url`
+    // null unless a test hands in a site.
+    siteOf: async (/** @type {string | null} */ url) => (url === null || url.includes("github.com") ? null : url),
     makeFirecrawl: firecrawl === undefined ? firecrawlFrom : () => firecrawl,
     env: { RAINDROP_TOKEN: "test-token" },
     now: () => new Date("2026-08-26T10:00:00.000Z"),

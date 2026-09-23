@@ -99,6 +99,9 @@ jobs:
         env:
           RAINDROP_TOKEN: ${{ secrets.RAINDROP_TOKEN }}
           FIRECRAWL_API_KEY: ${{ secrets.FIRECRAWL_API_KEY }}
+          # The run's own token, so a repository save's homepage lookup is not
+          # one of 60 anonymous API calls an hour shared with the whole runner.
+          GITHUB_TOKEN: ${{ github.token }}
         run: node pipeline/publish.mjs | tee "${RUNNER_TEMP}/publish.log"
 
       # The contract: the last line of stdout, and the only line with this

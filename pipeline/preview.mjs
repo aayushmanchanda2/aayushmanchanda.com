@@ -156,20 +156,23 @@ const exists = (file) => access(file).then(() => true, () => false);
  * @param {object} input
  * @param {string} input.slug
  * @param {string | null} input.url   The product site, else its repository.
+ * @param {string | null} [input.site]  `siteOf(url)`, when the caller already asked.
+ * @param {{ image: string | null }} [input.meta]  `readMeta(url)`, when the caller already read it.
  * @param {string} input.dir
- * @param {import("playwright").Browser} [input.browser]
+ * @param {import("playwright").Browser | (() => Promise<import("playwright").Browser>)} [input.browser]
+ *   A shared browser, or a function that launches one on first call.
  * @param {typeof globalThis.fetch} [input.fetch]
  * @param {boolean} [input.force]
  * @param {boolean} [input.og]  The page's og:image first, and the link itself rather than its site.
  * @param {(line: string) => void} [input.log]
  * @returns {Promise<string | null>} The file, or null for the icon-only card.
  */
-export async function capturePreview({ slug, url: given, dir, browser, fetch = globalThis.fetch, force = false, og = false, log = () => {} }) {
+export async function capturePreview({ slug, url: given, site, meta, dir, browser, fetch = globalThis.fetch, force = false, og = false, log = () => {} }) {
   const file = path.join(dir, `${slug}.webp`);
   if (!force && (await exists(file))) return file;
   if (og) {
     const shootable = given !== null && URL.canParse(given) && !NOT_A_SITE.test(new URL(given).hostname.replace(/^www\./, ""));
-    const { image } = given === null ? { image: null } : await readMeta(given, fetch);
+    const { image } = given === null ? { image: null } : (meta ?? (await readMeta(given, fetch)));
     const webp = image === null ? null : await ogPreview(image, fetch).catch(() => null);
     if (webp !== null && (await writeAtomic(file, webp).then(() => true, () => false))) {
       log(`preview: ${slug} <- og:image ${image} (${Math.round(webp.length / 1000)}KB)`);
@@ -180,7 +183,7 @@ export async function capturePreview({ slug, url: given, dir, browser, fetch = g
       return null;
     }
   }
-  const url = og ? given : await siteOf(given, fetch);
+  const url = og ? given : site === undefined ? await siteOf(given, fetch) : site;
   if (url === null) {
     log(`preview: ${slug} has no site of its own — icon only`);
     return null;
@@ -192,7 +195,8 @@ export async function capturePreview({ slug, url: given, dir, browser, fetch = g
   let context;
   try {
     owned = browser === undefined ? await chromium.launch({ headless: true }) : null;
-    const ctx = (context = await (owned ?? /** @type {import("playwright").Browser} */ (browser)).newContext({
+    const shared = typeof browser === "function" ? await browser() : browser;
+    const ctx = (context = await (owned ?? /** @type {import("playwright").Browser} */ (shared)).newContext({
       ...CONTEXT_OPTIONS,
       viewport: PREVIEW_VIEWPORT,
       colorScheme: "light",
