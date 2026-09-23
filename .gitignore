@@ -6,3 +6,6 @@ dist/
 .vercel
 .env*
 pipeline/tmp/
+
+# verify-site evidence: PNGs are re-creatable and heavy; report.json is kept
+qa/evidence/**/*.png
