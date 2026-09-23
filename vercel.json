@@ -1,86 +1,106 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-
   "routes": [
     {
       "src": "^/reading/?$",
       "status": 308,
-      "headers": { "Location": "/library" }
+      "headers": {
+        "Location": "/library"
+      }
     },
     {
       "src": "^/reading\\.md$",
       "status": 308,
-      "headers": { "Location": "/library.md" }
+      "headers": {
+        "Location": "/library.md"
+      }
     },
     {
       "src": "^/reading/(.*)$",
       "status": 308,
-      "headers": { "Location": "/library/$1" }
-    },
-    {
-      "src": "^/library/(?:60-new-creative-growth-ideas|a-24-year-old-ai-creative-director-gives-away-her-playbook-e|a-detailed-explanation-and-setup-video-for-multica|a-great-cold-email-can-change-your-life|a-post-from-ephraimakanmu|agentic-engineering-crash-course-graphs-workflows-verifiable|app-pricing-that-makes-150-per-day|applied-ai-doesn-t-work|arxiv-quickarxiv|automating-x-posts-to-every-other-platform-with-grok-bot|benln-post|build-a-language-model-on-your-mac-free-course|chatgpt-training|choose-your-pain|claude-code-codex-for-marketers-q-a|claude-video-watch-skill|coding-skills-that-matter-in-the-age-of-ai|cua-computer-history-open-source-local-memory-for-agents|david-senra-podcast|diogo-almeida-jev-founder-masterclass-36min-video|directionally-correct|double-your-productivity-without-more-work-or-stress|ecom-eddie-post|ep-s-signal-knowledgebase|every-hermes-agent-concept-explained-for-normal-people|everyone-is-an-artist-till-rent-is-due|ex-nasa-dev-reveals-his-agentic-engineering-workflow|google-fell-out-of-the-ai-race|grok-bot-guides|grok-bot-internal-best-practices-from-6-teams-at-spacexai|hawthorne-effect|herdr-crash-course-a-beginner-s-guide|hermes-agent-masterclass|how-an-intern-6x-d-website-traffic-with-blogeo|how-my-parents-raised-me-to-be-confident|how-pocket-fm-grew-from-zero-to-500m-arr|how-stripe-built-its-company-brain-kai|how-to-become-a-hermes-operator-and-automation-architect|how-to-break-into-startups-as-a-non-technical-person-full-pl|how-to-build-a-one-person-media-company-with-hermes-bots|how-to-build-a-top-0-1-social-media-team-at-every-budget|how-to-design-a-brand-system-from-one-reference-image|how-to-design-brand-mascots-with-ai-krea|how-to-fix-your-entire-life-in-1-day|how-to-get-25-000-paying-customers-step-by-step|how-to-get-a-great-job-without-applying-for-one|how-to-make-money-with-jev-full-guide-instant-quote-widgets|how-to-master-grok-bot-in-16-minutes|how-to-run-a-local-ai-agency-full-guide-chris-atonomi|how-to-train-your-agency-starting-today|how-to-unclench|how-to-yap-on-the-internet|i-just-filmed-6-days-of-cold-calls-and-door-knocks|i-just-fulfilled-a-real-999-ai-assessment-on-camera|i-reverse-engineered-instinct-s-memory-here-s-exactly-how-it|introducing-buzz|introducing-digitalocean-managed-agents|introducing-ocr-in-anydoc|introducing-skill-doctor-v1|introducing-system-one-models-jev|it-s-boring-but-it-let-me-exit-my-agency-for-7-figures|jev-as-a-local-services-matcher-startup-ideas-podcast|joel-greenblatt-s-jelly-bean-experiment|learn-how-to-make-ultra-realistic-scenes-in-runway|lunagraph-opens-its-visual-react-editor|moving-your-coding-agents-to-the-cloud-railway|networking-foundations-course-free-course-flavio-copes|neuroplasticity-how-repetition-quietly-decides-who-you-becom|one-of-the-best-write-ups-i-have-seen-on-getting-hermes-agen|one-person-with-ai-outperformed-an-entire-team|patterns-i-ve-seen-in-every-high-performer-i-know-that-are-r|philosopher-ceo-kareem-amin|policy-assignment-system-engineering-take-home-warp|pstack-run-create-verification-skill|sarah-sarahlevinger-on-x|some-tips-for-claude-fable-5-1|templates-in-grok-bot|termius-tailscale-tmux|the-11-marketing-rules-that-built-the-bryan-johnson-universe|the-accidental-cto|the-art-of-hosting|the-boring-marketer-how-to-find-boring-businesses-that-need|the-complete-guide-to-pstack-pt-1|the-complete-guide-to-pstack-pt-2|the-golden-snitch|the-incumbents-are-coming|the-marketing-philosophy-behind-everything-i-do-free-mini-co|the-money-button-v1|the-most-profitable-landing-pages-for-google-ads-in-2026|the-rise-and-fall-of-agent-civilizations|this-is-the-new-bar-for-pms-i-m-able-to-do-now-in-a-day-what|using-claude-to-go-viral-on-x-mrbeast-s-framework|we-are-in-the-middle-of-the-digital-renaissance-please-take|webmcp-by-microsoft-and-google-is-here|welcome-to-side-quests|what-to-do-when-you-feel-overwhelmed|what-we-learned-from-15-hours-of-anthropic-certification-tra|why-discipline-builds-actual-confidence)(?:\\.md)?/?$",
-      "status": 308,
-      "headers": { "Location": "/library" }
-    },
-    {
-      "src": "^/library/(?:why-some-people-become-successful-while-others-stay-average|you-don-t-need-more-discipline-you-need-more-love)(?:\\.md)?/?$",
-      "status": 308,
-      "headers": { "Location": "/library" }
+      "headers": {
+        "Location": "/library/$1"
+      }
     },
     {
       "src": "^/computer/?$",
       "status": 308,
-      "headers": { "Location": "/notes" }
+      "headers": {
+        "Location": "/notes"
+      }
     },
     {
       "src": "^/computer\\.md$",
       "status": 308,
-      "headers": { "Location": "/notes.md" }
+      "headers": {
+        "Location": "/notes.md"
+      }
     },
     {
       "src": "^/computer/(.*)$",
       "status": 308,
-      "headers": { "Location": "/notes/$1" }
+      "headers": {
+        "Location": "/notes/$1"
+      }
     },
     {
       "src": "^/(feed|rss)/?$",
       "status": 308,
-      "headers": { "Location": "/rss.xml" }
+      "headers": {
+        "Location": "/rss.xml"
+      }
     },
     {
       "src": "^/(notes|library|tools|sites)/feed/?$",
       "status": 308,
-      "headers": { "Location": "/$1/rss.xml" }
+      "headers": {
+        "Location": "/$1/rss.xml"
+      }
     },
     {
       "src": "^/tools/category/claude-skills/?$",
       "status": 308,
-      "headers": { "Location": "/tools/category/agent-skills" }
+      "headers": {
+        "Location": "/tools/category/agent-skills"
+      }
     },
     {
       "src": "^/tools/category/web-utility/?$",
       "status": 308,
-      "headers": { "Location": "/tools/category/web-access" }
+      "headers": {
+        "Location": "/tools/category/web-access"
+      }
     },
     {
       "src": "^/tools/category/desktop-utility/?$",
       "status": 308,
-      "headers": { "Location": "/tools/category/personal-apps" }
+      "headers": {
+        "Location": "/tools/category/personal-apps"
+      }
     },
     {
       "src": "^/tools/category/sandboxes/?$",
       "status": 308,
-      "headers": { "Location": "/tools/category/agent-infra" }
+      "headers": {
+        "Location": "/tools/category/agent-infra"
+      }
     },
     {
       "src": "^/tools/category/unsorted/?$",
       "status": 308,
-      "headers": { "Location": "/tools" }
+      "headers": {
+        "Location": "/tools"
+      }
     },
-
     {
       "src": "^/$",
-      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
       "dest": "/index.md",
       "headers": {
         "Content-Type": "text/markdown; charset=utf-8",
@@ -89,7 +109,13 @@
     },
     {
       "src": "^/tools/?$",
-      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
       "dest": "/tools.md",
       "headers": {
         "Content-Type": "text/markdown; charset=utf-8",
@@ -98,7 +124,13 @@
     },
     {
       "src": "^/sites/?$",
-      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
       "dest": "/sites.md",
       "headers": {
         "Content-Type": "text/markdown; charset=utf-8",
@@ -107,7 +139,13 @@
     },
     {
       "src": "^/library/?$",
-      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
       "dest": "/library.md",
       "headers": {
         "Content-Type": "text/markdown; charset=utf-8",
@@ -116,7 +154,13 @@
     },
     {
       "src": "^/experiments/?$",
-      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
       "dest": "/experiments.md",
       "headers": {
         "Content-Type": "text/markdown; charset=utf-8",
@@ -125,22 +169,31 @@
     },
     {
       "src": "^/notes/?$",
-      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
       "dest": "/notes.md",
       "headers": {
         "Content-Type": "text/markdown; charset=utf-8",
         "Vary": "Accept, Accept-Encoding"
       }
     },
-
     {
       "src": "^/(tools|sites|library|experiments|notes)/?$",
-      "headers": { "Vary": "Accept, Accept-Encoding" },
+      "headers": {
+        "Vary": "Accept, Accept-Encoding"
+      },
       "continue": true
     },
     {
       "src": "^/$",
-      "headers": { "Vary": "Accept, Accept-Encoding" },
+      "headers": {
+        "Vary": "Accept, Accept-Encoding"
+      },
       "continue": true
     },
     {
@@ -163,16 +216,33 @@
     },
     {
       "src": "^/llms\\.txt$",
-      "headers": { "Content-Type": "text/plain; charset=utf-8" },
+      "headers": {
+        "Content-Type": "text/plain; charset=utf-8"
+      },
       "continue": true
     },
-
-    { "handle": "filesystem" },
-
-    { "handle": "error" },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "^/library/[^/]+?(?:\\.md)?/?$",
+      "status": 308,
+      "headers": {
+        "Location": "/library"
+      }
+    },
+    {
+      "handle": "error"
+    },
     {
       "src": "^/.*$",
-      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
       "status": 404,
       "dest": "/404.md",
       "headers": {
@@ -180,6 +250,10 @@
         "Vary": "Accept, Accept-Encoding"
       }
     },
-    { "src": "^/.*$", "status": 404, "dest": "/404.html" }
+    {
+      "src": "^/.*$",
+      "status": 404,
+      "dest": "/404.html"
+    }
   ]
 }
