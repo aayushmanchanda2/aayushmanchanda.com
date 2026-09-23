@@ -59,7 +59,7 @@ import SoundToggle from "./SoundToggle.astro";
         data-palette-input
         type="text"
         role="combobox"
-        aria-expanded="true"
+        aria-expanded="false"
         aria-controls="palette-results"
         aria-autocomplete="list"
         aria-label="Search this site"
@@ -81,6 +81,8 @@ import SoundToggle from "./SoundToggle.astro";
     </div>
 
     <p class="palette__empty mono" data-palette-empty hidden>No matches</p>
+    {/* What a screen reader hears after each keystroke: loading, the count, or the failure. */}
+    <p class="visually-hidden" role="status" data-palette-status></p>
 
     <div class="palette__legend mono">
       <span class="palette__keys" aria-hidden="true">&uarr;&darr; navigate &middot; &crarr; open &middot; esc close</span>

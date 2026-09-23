@@ -27,9 +27,13 @@ const groups = foundationGroups(design);
 const familyList = familiesOf(design);
 ---
 
+{/* The heading sits outside the summary: a summary is a button, and a screen
+    reader flattens a heading inside one, so the section fell out of the
+    page's heading list. The summary keeps the visible word. */}
+<h2 class="visually-hidden">Design</h2>
 <details class="found" data-copy-root>
   <summary class="found__summary">
-    <h2 class="found__title mono">Design</h2>
+    <span class="found__title mono">Design</span>
     <span class="found__groups">{groups.map((group) => group.head).join(", ")}</span>
     <span class="found__chevron" aria-hidden="true"></span>
   </summary>

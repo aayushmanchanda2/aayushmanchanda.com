@@ -95,6 +95,9 @@
      brand moment, and white-on-#2B4BFF clears AA either way. */
   --accent-panel: #2b4bff;
   --accent-panel-ink: #ffffff;
+  /* A search match on the cursor row: a dark wash, so the white ink stays AA
+     (a white wash read 3.5:1). ink.test holds it. */
+  --accent-panel-mark: rgb(0 0 0 / 0.3);
 
   /* type */
   --font-sans: "Geist Variable", ui-sans-serif, system-ui, -apple-system,

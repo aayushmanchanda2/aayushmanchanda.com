@@ -1,0 +1,51 @@
+/* A forced palette (Windows high contrast) drops every gradient and repaints
+   every border in CanvasText: the band would become a solid slab of ink, the
+   highlighter would vanish and the cursor row would lose its fill. So the
+   paper stays Canvas with a CanvasText keyline, the marks and the cursor take
+   the system's own Mark and Highlight pairs, and the decoration (the mat's
+   texture and digits, the postmark) goes, since it carries no words. */
+@media (forced-colors: active) {
+  html .stamp {
+    forced-color-adjust: none;
+    border-color: Canvas;
+    background: none;
+  }
+
+  html .stamp::before {
+    border-color: CanvasText;
+    mask: none;
+  }
+
+  html .stamp__mark {
+    background: Canvas;
+    color: CanvasText;
+  }
+
+  /* The mat keeps covering the gutter, as plain Canvas (its mask still cuts
+     the page and the holes out); its digits, lift and the postmark go. */
+  html .mat {
+    forced-color-adjust: none;
+    background: Canvas;
+  }
+
+  html .mat::before,
+  html .mat::after {
+    content: none;
+  }
+
+  html :is(.mat__lift, .postmark) {
+    display: none;
+  }
+
+  html :is(mark, .hl) {
+    forced-color-adjust: none;
+    background: Mark;
+    color: MarkText;
+  }
+
+  html .palette__row[data-active] {
+    forced-color-adjust: none;
+    background: Highlight;
+    color: HighlightText;
+  }
+}
