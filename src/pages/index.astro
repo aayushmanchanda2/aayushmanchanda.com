@@ -239,14 +239,13 @@ const jsonLd = homeJsonLd();
     line-height: 1.6;
   }
 
-  /* Title left, section and day right; stacked on a phone. Each row is a 40px
-     target by its own padding (design.md §4). */
+  /* Title, then section and day under it: side by side went ragged, since a
+     long title wraps the meta under it anyway. Each row is a 40px target by
+     its own padding (design.md §4). */
   .entry {
     display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 0.125rem 1rem;
+    flex-direction: column;
+    gap: 0.125rem;
     min-height: 40px;
     padding-block: 0.375rem;
     color: var(--text-primary);
@@ -272,7 +271,6 @@ const jsonLd = homeJsonLd();
   }
 
   .entry__meta {
-    flex: none;
     font-size: 0.875rem;
     color: var(--text-tertiary);
   }
@@ -288,9 +286,4 @@ const jsonLd = homeJsonLd();
     color: var(--text-tertiary);
   }
 
-  @media (max-width: 599px) {
-    .entry {
-      flex-direction: column;
-    }
-  }
 </style>

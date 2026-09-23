@@ -1,0 +1,317 @@
+{
+  "base": "http://localhost:4330/",
+  "label": "vet-230",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-22-vet-230",
+  "at": "2026-09-23T03:56:48.325Z",
+  "shots": [
+    {
+      "route": "/",
+      "url": "http://localhost:4330/",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "home-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".latest__head": [
+          {
+            "text": "Latest",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".entry__title": [
+          {
+            "text": "Prompt in Claude Tag \"Recreate Market St",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "500",
+            "letter-spacing": "-0.18px",
+            "line-height": "27px"
+          },
+          {
+            "text": "Have you seen any of the launches below ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "500",
+            "letter-spacing": "-0.18px",
+            "line-height": "27px"
+          },
+          {
+            "text": "Introducing DigitalOcean Managed Agents",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "500",
+            "letter-spacing": "-0.18px",
+            "line-height": "27px"
+          }
+        ],
+        ".entry__meta": [
+          {
+            "text": "LibrarySep 23, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "LibrarySep 23, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "LibrarySep 23, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/",
+      "url": "http://localhost:4330/",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "home-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".latest__head": [
+          {
+            "text": "Latest",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".entry__title": [
+          {
+            "text": "Prompt in Claude Tag \"Recreate Market St",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "500",
+            "letter-spacing": "-0.18px",
+            "line-height": "27px"
+          },
+          {
+            "text": "Have you seen any of the launches below ",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "500",
+            "letter-spacing": "-0.18px",
+            "line-height": "27px"
+          },
+          {
+            "text": "Introducing DigitalOcean Managed Agents",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "18px",
+            "font-weight": "500",
+            "letter-spacing": "-0.18px",
+            "line-height": "27px"
+          }
+        ],
+        ".entry__meta": [
+          {
+            "text": "LibrarySep 23, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "LibrarySep 23, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "LibrarySep 23, 2026",
+            "color": "rgb(115, 115, 115)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/",
+      "url": "http://localhost:4330/",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "home-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".latest__head": [
+          {
+            "text": "Latest",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".entry__title": [
+          {
+            "text": "Prompt in Claude Tag \"Recreate Market St",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "500",
+            "letter-spacing": "-0.18px",
+            "line-height": "27px"
+          },
+          {
+            "text": "Have you seen any of the launches below ",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "500",
+            "letter-spacing": "-0.18px",
+            "line-height": "27px"
+          },
+          {
+            "text": "Introducing DigitalOcean Managed Agents",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "500",
+            "letter-spacing": "-0.18px",
+            "line-height": "27px"
+          }
+        ],
+        ".entry__meta": [
+          {
+            "text": "LibrarySep 23, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "LibrarySep 23, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "LibrarySep 23, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/",
+      "url": "http://localhost:4330/",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "home-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".latest__head": [
+          {
+            "text": "Latest",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".entry__title": [
+          {
+            "text": "Prompt in Claude Tag \"Recreate Market St",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "500",
+            "letter-spacing": "-0.18px",
+            "line-height": "27px"
+          },
+          {
+            "text": "Have you seen any of the launches below ",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "500",
+            "letter-spacing": "-0.18px",
+            "line-height": "27px"
+          },
+          {
+            "text": "Introducing DigitalOcean Managed Agents",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "18px",
+            "font-weight": "500",
+            "letter-spacing": "-0.18px",
+            "line-height": "27px"
+          }
+        ],
+        ".entry__meta": [
+          {
+            "text": "LibrarySep 23, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "LibrarySep 23, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          },
+          {
+            "text": "LibrarySep 23, 2026",
+            "color": "rgba(255, 255, 255, 0.5)",
+            "font-size": "14px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "22.4px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}
