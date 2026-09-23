@@ -2,9 +2,8 @@
  * The site's data as feed items: every /notes, /library, /tools and /sites
  * entry, carrying its real text rather than a "read more" link.
  *
- * Read by the five `rss.xml` endpoints, the feed `<link>`s in `Base.astro`,
- * /llms.txt, and the home page's "Latest" list, so all of them agree on what
- * is newest. The XML itself is `lib/rss.ts`.
+ * Read by the five `rss.xml` endpoints and the home page's "Latest" list, so
+ * they agree on what is newest. The list of feeds is `lib/sections.ts › FEEDS`. The XML itself is `lib/rss.ts`.
  */
 
 import { getCollection } from "astro:content";
@@ -13,37 +12,10 @@ import { isoDay } from "./date";
 import { library, rowSummary } from "./library";
 import { VOICE_FIELDS, type Voice } from "./markdown";
 import { newestFirst, paragraphs, renderFeed, escapeXml, type FeedItem } from "./rss";
-import { CATALOGUE, type SectionHref } from "./sections";
+import { CATALOGUE, FEED_SECTIONS, feedTitle, type FeedSection } from "./sections";
 import { SITE_URL } from "./site";
 import { sites } from "./sites";
 import { VERDICT_LABELS, tools } from "./tools";
-
-/** The sections with a feed. /experiments has no per-entry pages to link. */
-export const FEED_SECTIONS = ["/notes", "/library", "/tools", "/sites"] as const;
-
-export type FeedSection = (typeof FEED_SECTIONS)[number];
-
-const SITE_NAME = "Aayush Manchanda";
-
-/** The combined feed, and every section's own. */
-export const FEEDS: readonly { title: string; path: string; href: string }[] = [
-  { title: SITE_NAME, path: "/", href: "/rss.xml" },
-  ...FEED_SECTIONS.map((section) => ({
-    title: feedTitle(section),
-    path: section,
-    href: `${section}/rss.xml`,
-  })),
-];
-
-function catalogue(section: SectionHref) {
-  const entry = CATALOGUE.find((item) => item.href === section);
-  if (!entry) throw new Error(`${section} is not in the section manifest`);
-  return entry;
-}
-
-function feedTitle(section: FeedSection): string {
-  return `${SITE_NAME} · ${catalogue(section).name}`;
-}
 
 /** The "What I like: ..." lines an entry has, in the order its page shows them. */
 function voice(entry: Voice): string[] {
@@ -129,9 +101,9 @@ export async function feedItems(section?: FeedSection): Promise<FeedItem[]> {
 export async function feedResponse(section?: FeedSection): Promise<Response> {
   const xml = renderFeed(
     {
-      title: section ? feedTitle(section) : SITE_NAME,
+      title: feedTitle(section),
       description: section
-        ? catalogue(section).blurb
+        ? CATALOGUE[section].blurb
         : "Everything new on the site: tools I ran, sites I keep going back to, things I saved to read, and notes.",
       path: section ?? "/",
       self: section ? `${section}/rss.xml` : "/rss.xml",

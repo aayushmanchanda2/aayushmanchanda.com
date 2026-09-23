@@ -1,0 +1,91 @@
+---
+/**
+ * TopBar — the bar at the top of every page: menu, trail, search.
+ *
+ * Sticky, 56px, the page colour behind it, and no backdrop filter on purpose:
+ * a filter would make this the containing block for the menu panel's
+ * `position: fixed` and clip it to the bar. A press on its empty stretch
+ * scrolls to the top (script below). `Base.astro` works out the items and the
+ * trail; this draws them.
+ */
+import Breadcrumbs from "./Breadcrumbs.astro";
+import MobileNav from "./MobileNav.astro";
+import type { Crumb } from "../lib/schema";
+import type { NavItem } from "../lib/sections";
+
+interface Props {
+  navItems: NavItem[];
+  pathname: string;
+  trail: Crumb[];
+}
+
+const { navItems, pathname, trail } = Astro.props;
+---
+
+<header class="bar" data-bar>
+  <MobileNav items={navItems} pathname={pathname} />
+  <Breadcrumbs trail={trail} />
+  <button
+    class="bar__search mono press"
+    type="button"
+    data-palette-open
+    data-mnav-inert
+  >
+    Search <kbd data-palette-hint>&#8984;K</kbd>
+  </button>
+</header>
+
+<script>
+  // A press on the bar's empty stretch goes back to the top. Controls in
+  // it keep their own job. `html { scroll-behavior }` decides smooth or
+  // instant, so reduced motion is already honoured.
+  document.querySelector("[data-bar]")?.addEventListener("click", (event) => {
+    if ((event.target as Element).closest("a, button")) return;
+    window.scrollTo({ top: 0 });
+  });
+</script>
+
+<style>
+  .bar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    height: var(--bar-h);
+    padding-inline: max(0.5rem, env(safe-area-inset-left))
+      max(0.5rem, env(safe-area-inset-right));
+    background: var(--bg);
+  }
+
+  .bar__search {
+    flex-shrink: 0;
+    margin-left: auto;
+    padding: 0.625rem 0.5rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+
+  .bar__search kbd {
+    font: inherit;
+    font-family: var(--font-mono);
+    margin-left: 0.35rem;
+    padding: 0.1rem 0.35rem;
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--r-sm);
+  }
+
+  @media (hover: hover) {
+    .bar__search:hover {
+      color: var(--accent);
+    }
+  }
+
+  /* A phone's bar is the trail's: search is one press away in the menu. */
+  @media (max-width: 599px) {
+    .bar__search {
+      display: none;
+    }
+  }
+</style>

@@ -21,6 +21,7 @@ const SRC = fileURLToPath(new URL("..", import.meta.url));
 const read = (/** @type {string} */ rel) => readFileSync(SRC + rel, "utf8");
 
 const base = read("layouts/Base.astro");
+const bar = read("components/TopBar.astro");
 const crumbs = read("components/Breadcrumbs.astro");
 const mnav = read("components/MobileNav.astro");
 
@@ -38,7 +39,7 @@ test("the background surfaces carry the inert marker", () => {
     "the top bar's trail no longer carries data-mnav-inert — its links sit behind the open panel",
   );
   assert.ok(
-    /class="bar__search[^"]*"[^>]*data-mnav-inert/.test(base.replace(/\s+/g, " ")),
+    /class="bar__search[^"]*"[^>]*data-mnav-inert/.test(bar.replace(/\s+/g, " ")),
     "the top bar's search button no longer carries data-mnav-inert",
   );
 });
