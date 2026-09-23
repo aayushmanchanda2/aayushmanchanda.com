@@ -56,6 +56,7 @@ export const GET: APIRoute = () => {
     tool.verdict,
     tool.category,
     tool.status_date,
+    tool.description ?? "",
     tool.note,
   ]);
 
@@ -76,7 +77,7 @@ export const GET: APIRoute = () => {
       "Software Aayush Manchanda installed and ran, with a dated verdict on each.",
     updated: newest(tools.map((tool) => tool.status_date)),
     blocks: [
-      table(["Tool", "Repo", "Verdict", "Category", "Updated", "Note"], rows),
+      table(["Tool", "Repo", "Verdict", "Category", "Updated", "Description", "Note"], rows),
       ...(words === null ? [] : [words]),
       section(
         "Verdicts",

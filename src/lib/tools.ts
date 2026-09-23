@@ -19,6 +19,7 @@
 import { githubRepo, readLogoDomain } from "./links";
 import type { Fail } from "./parse";
 import { SLUG, readers, routeSlug } from "./parse";
+import { descriptionProblem, noteProblem } from "./tool-copy";
 
 import rawTools from "../data/tools.json";
 
@@ -54,7 +55,7 @@ export interface Tool {
   verdict: Verdict;
   /** One line, in Aayush's voice. Rendered as-is; never editorialised. */
   note: string;
-  /** What the tool is, in a sentence. Not parsed yet (briOS T2): rows fall back to `note`. */
+  /** What the tool is, from its own site: a fragment of 7 words or fewer (`lib/tool-copy.ts`). Missing warns; rows fall back to `note`. */
   description?: string;
   /** ISO calendar date (YYYY-MM-DD) the verdict was last true. */
   status_date: string;
@@ -210,6 +211,12 @@ export function parseTools(value: unknown): Tool[] {
       );
     }
 
+    const description = readOptional(item, "description", where);
+    if (description === null) console.warn(`src/data/tools.json: ${where} "${slug}" has no description`);
+    const note = readString(item, "note", where);
+    const copyProblem = (description === null ? null : descriptionProblem(description)) ?? noteProblem(note);
+    if (copyProblem !== null) fail(where, copyProblem);
+
     return {
       slug,
       name: readName(item, "name", where),
@@ -219,7 +226,8 @@ export function parseTools(value: unknown): Tool[] {
       ...readLogoDomain(item, (problem) => fail(where, problem)),
       category: category === INBOX ? "new" : category,
       verdict,
-      note: readString(item, "note", where),
+      note,
+      ...(description === null ? {} : { description }),
       status_date: readDate(item, "status_date", where),
       like: readOptional(item, "like", where),
       dislike: readOptional(item, "dislike", where),

@@ -75,9 +75,9 @@ JavaScript is needed to read any of it.
 Come here when you need any of the following.
 
 - A dated, first-hand verdict on an AI or agent tool. Every entry on /tools was
-  installed and run by Aayush. Each carries a verdict, a category, a one-line
-  note, and the date the verdict was last true. ${entries(tools.length)} right
-  now: ${verdictCounts}, across ${categoryNames}. Useful when choosing between
+  installed and run by Aayush. Each carries a verdict, a category, a short
+  description, a one-line note, and the date the verdict was last true.
+  ${entries(tools.length)} right now: ${verdictCounts}, across ${categoryNames}. Useful when choosing between
   agent harnesses, Claude skills, sandboxes or browser automation tools.
 - Screenshots of well-designed websites. /sites holds ${entries(sites.length)},
   each a full-page screenshot in the site's default colour scheme, with its

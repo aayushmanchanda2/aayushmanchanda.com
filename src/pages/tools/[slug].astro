@@ -73,6 +73,7 @@ const outCard = (href: string) =>
 
   <header>
     <h1 class="page-title page-title--entry">{tool.name}</h1>
+    {tool.description && <p class="dek">{tool.description}</p>}
 
     {/*
       A `ul`, so three facts are three items to anything reading the page out
@@ -149,6 +150,15 @@ const outCard = (href: string) =>
        rhythm, 8 within a group, 16 between groups, 40 between sections */
     margin-top: 1rem;
     color: var(--text-tertiary);
+  }
+
+  /* What the tool is, in its own site's words, 8px under the name: one group
+     with the title. The standfirst below the strip is his verdict on it. */
+  .dek {
+    margin-top: 0.5rem;
+    font-size: 1.0625rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
   }
 
   .strip + .standfirst {

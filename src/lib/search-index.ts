@@ -205,7 +205,7 @@ async function build(): Promise<SearchEntry[]> {
         section: SECTION.tools,
         href: `/tools/${tool.slug}`,
         terms: toolTerms(tool),
-        lead: squash(tool.note, tool.description),
+        lead: squash(tool.description, tool.note),
         body: squash(tool.like, tool.dislike, tool.why, tool.try),
         sub: tool.url ? hostOf(tool.url) : tool.repo ? repoOwner(tool.repo) : undefined,
         date: tool.status_date,

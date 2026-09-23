@@ -77,7 +77,7 @@ function toolItems(): FeedItem[] {
     date: tool.status_date,
     section: "Tools",
     html:
-      paragraphs(`${VERDICT_LABELS[tool.verdict]}. ${tool.note}`, ...voice(tool)) +
+      paragraphs(tool.description, `${VERDICT_LABELS[tool.verdict]}. ${tool.note}`, ...voice(tool)) +
       source(tool.url ?? tool.repo),
   }));
 }
