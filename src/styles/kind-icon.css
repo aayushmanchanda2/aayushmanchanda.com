@@ -1,0 +1,48 @@
+/* The kind glyphs (`components/KindIcon.astro`): a CSS mask per kind, painted
+   in --text-tertiary. Global and loaded by `layouts/Base.astro`, because the
+   ⌘K palette (`lib/palette-rows.ts`) builds these in the browser on every page. */
+
+.ki {
+  display: inline-block;
+  flex: none;
+  width: 14px;
+  height: 14px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-indent: 100%;
+  font-style: normal;
+  background-color: var(--text-tertiary);
+  -webkit-mask: var(--ki) center / contain no-repeat;
+  mask: var(--ki) center / contain no-repeat;
+}
+
+.ki[data-kind="article"] {
+  --ki: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.25'%3E%3Cpath d='M3.5 1.75H9.75L12.5 4.5V14.25H3.5Z M9.5 1.75V4.75H12.5 M5.75 8.25H10.25 M5.75 11H10.25'/%3E%3C/svg%3E");
+}
+
+.ki[data-kind="post"] {
+  --ki: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.25' stroke-linejoin='round'%3E%3Cpath d='M2.25 2.75H13.75V11H7.25L4.25 13.75V11H2.25Z'/%3E%3C/svg%3E");
+}
+
+.ki[data-kind="video"] {
+  --ki: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.25' stroke-linejoin='round'%3E%3Cpath d='M4.75 2.75L12.75 8L4.75 13.25Z'/%3E%3C/svg%3E");
+}
+
+/* The palette's two glyphs that are not a library kind: a pencil for a note,
+   and the footer toggle's speaker for the sound row. */
+.ki[data-kind="note"] {
+  --ki: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.25' stroke-linejoin='round'%3E%3Cpath d='M10.75 2.25L13.75 5.25L5.5 13.5H2.5V10.5Z M9 4L12 7'/%3E%3C/svg%3E");
+}
+
+.ki[data-kind="sound"] {
+  --ki: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.25' stroke-linejoin='round'%3E%3Cpath d='M2 6H4.5L8 3V13L4.5 10H2Z M10.5 5.8A3 3 0 0 1 10.5 10.2 M12.3 4A5.5 5.5 0 0 1 12.3 12'/%3E%3C/svg%3E");
+}
+
+/* A forced palette repaints backgrounds to Canvas, which would erase a
+   masked glyph; paint it in the text colour instead. */
+@media (forced-colors: active) {
+  .ki {
+    forced-color-adjust: none;
+    background-color: CanvasText;
+  }
+}
