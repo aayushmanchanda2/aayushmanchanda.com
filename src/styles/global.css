@@ -105,10 +105,15 @@
   --page-pad: clamp(1rem, 5vw, 3rem);
   /* The sticky top bar in `layouts/Base.astro`. */
   --bar-h: 3.5rem;
-  /* The stamp frame's inset from the viewport (`styles/frame.css`): 12px up
-     to 390px, wide enough to show the mat's grid on a desktop (24px at 925px,
-     32px from 1280px). */
-  --frame: clamp(0.75rem, 2.25vw + 0.2rem, 2rem);
+  /* The stamp frame's inset from the viewport (`styles/frame.css`): 10.5px
+     at 390, 15px at 768, 21.6px at 1280, capped at 22px (VET-261 slimmed it
+     by a third from VET-260's 12/32px). */
+  --frame: clamp(0.625rem, 1.25vw + 0.35rem, 1.375rem);
+  /* Film grain, arc.net's recipe (VET-261): a static 220px tile of white
+     specks at 0 to 18% alpha, mean 6.5%, laid over a flat colour with normal
+     blending. arc.net ships it as a PNG (`/noise-light.png`); this is the same
+     statistics from `feTurbulence`, 0.3KB inline. On the mat and the menu. */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 .3 0 0 0 -.085'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 
   /* The gap under a masthead, before whatever the page is actually about.
      Every section index, every filter page, /design, the 404 and the three
