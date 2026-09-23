@@ -1,0 +1,573 @@
+{
+  "base": "http://localhost:4329/",
+  "label": "skill-proof",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-22-skill-proof",
+  "at": "2026-09-23T02:00:30.561Z",
+  "shots": [
+    {
+      "route": "/",
+      "url": "http://localhost:4329/",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "home-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Hey, I’m Aayush.",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "44px",
+            "font-weight": "600",
+            "letter-spacing": "-1.98px",
+            "line-height": "43.12px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "Part entrepreneur, part marketer, part o",
+            "color": "rgba(23, 23, 23, 0.75)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          },
+          {
+            "text": "There’s a lot of noise in AI. I read it,",
+            "color": "rgba(23, 23, 23, 0.75)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          }
+        ],
+        ".row__name": [
+          {
+            "text": "Tools",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "22px",
+            "font-weight": "500",
+            "letter-spacing": "-0.55px",
+            "line-height": "25.3px"
+          },
+          {
+            "text": "Sites",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "22px",
+            "font-weight": "500",
+            "letter-spacing": "-0.55px",
+            "line-height": "25.3px"
+          },
+          {
+            "text": "Library",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "22px",
+            "font-weight": "500",
+            "letter-spacing": "-0.55px",
+            "line-height": "25.3px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4329/tools",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "tools-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Tools",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "44px",
+            "font-weight": "600",
+            "letter-spacing": "-1.98px",
+            "line-height": "43.12px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "Software I installed, ran, and formed an",
+            "color": "rgba(23, 23, 23, 0.75)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          }
+        ],
+        ".row__name": [
+          {
+            "text": "Paperclipusing",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "500",
+            "letter-spacing": "-0.17px",
+            "line-height": "22.95px"
+          },
+          {
+            "text": "Hermesusing",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "500",
+            "letter-spacing": "-0.17px",
+            "line-height": "22.95px"
+          },
+          {
+            "text": "Headlongwatching",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "500",
+            "letter-spacing": "-0.17px",
+            "line-height": "22.95px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/",
+      "url": "http://localhost:4329/",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "home-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Hey, I’m Aayush.",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "84px",
+            "font-weight": "600",
+            "letter-spacing": "-3.78px",
+            "line-height": "82.32px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "Part entrepreneur, part marketer, part o",
+            "color": "rgba(23, 23, 23, 0.75)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          },
+          {
+            "text": "There’s a lot of noise in AI. I read it,",
+            "color": "rgba(23, 23, 23, 0.75)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          }
+        ],
+        ".row__name": [
+          {
+            "text": "Tools",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "28px",
+            "font-weight": "500",
+            "letter-spacing": "-0.7px",
+            "line-height": "32.2px"
+          },
+          {
+            "text": "Sites",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "28px",
+            "font-weight": "500",
+            "letter-spacing": "-0.7px",
+            "line-height": "32.2px"
+          },
+          {
+            "text": "Library",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "28px",
+            "font-weight": "500",
+            "letter-spacing": "-0.7px",
+            "line-height": "32.2px"
+          }
+        ]
+      },
+      "hoverCheck": {
+        "hover": ".rail__item:not([aria-current])",
+        "expect": ".rail__item:hover .rail__label",
+        "waitMs": 400,
+        "visibleBefore": false,
+        "visibleAfter": true,
+        "png": "home-1280-light-hover.png",
+        "pass": true
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4329/tools",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "tools-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Tools",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "84px",
+            "font-weight": "600",
+            "letter-spacing": "-3.78px",
+            "line-height": "82.32px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "Software I installed, ran, and formed an",
+            "color": "rgba(23, 23, 23, 0.75)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          }
+        ],
+        ".row__name": [
+          {
+            "text": "Paperclipusing",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "500",
+            "letter-spacing": "-0.17px",
+            "line-height": "22.95px"
+          },
+          {
+            "text": "Hermesusing",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "500",
+            "letter-spacing": "-0.17px",
+            "line-height": "22.95px"
+          },
+          {
+            "text": "Headlongwatching",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "17px",
+            "font-weight": "500",
+            "letter-spacing": "-0.17px",
+            "line-height": "22.95px"
+          }
+        ]
+      },
+      "hoverCheck": {
+        "hover": ".rail__item:not([aria-current])",
+        "expect": ".rail__item:hover .rail__label",
+        "waitMs": 400,
+        "visibleBefore": false,
+        "visibleAfter": true,
+        "png": "tools-1280-light-hover.png",
+        "pass": true
+      },
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/",
+      "url": "http://localhost:4329/",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "home-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(9, 9, 11)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Hey, I’m Aayush.",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "44px",
+            "font-weight": "600",
+            "letter-spacing": "-1.98px",
+            "line-height": "43.12px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "Part entrepreneur, part marketer, part o",
+            "color": "rgba(250, 250, 250, 0.75)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          },
+          {
+            "text": "There’s a lot of noise in AI. I read it,",
+            "color": "rgba(250, 250, 250, 0.75)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          }
+        ],
+        ".row__name": [
+          {
+            "text": "Tools",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "22px",
+            "font-weight": "500",
+            "letter-spacing": "-0.55px",
+            "line-height": "25.3px"
+          },
+          {
+            "text": "Sites",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "22px",
+            "font-weight": "500",
+            "letter-spacing": "-0.55px",
+            "line-height": "25.3px"
+          },
+          {
+            "text": "Library",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "22px",
+            "font-weight": "500",
+            "letter-spacing": "-0.55px",
+            "line-height": "25.3px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4329/tools",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "tools-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(9, 9, 11)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Tools",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "44px",
+            "font-weight": "600",
+            "letter-spacing": "-1.98px",
+            "line-height": "43.12px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "Software I installed, ran, and formed an",
+            "color": "rgba(250, 250, 250, 0.75)",
+            "font-size": "17px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "28.05px"
+          }
+        ],
+        ".row__name": [
+          {
+            "text": "Paperclipusing",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "17px",
+            "font-weight": "500",
+            "letter-spacing": "-0.17px",
+            "line-height": "22.95px"
+          },
+          {
+            "text": "Hermesusing",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "17px",
+            "font-weight": "500",
+            "letter-spacing": "-0.17px",
+            "line-height": "22.95px"
+          },
+          {
+            "text": "Headlongwatching",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "17px",
+            "font-weight": "500",
+            "letter-spacing": "-0.17px",
+            "line-height": "22.95px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/",
+      "url": "http://localhost:4329/",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "home-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(9, 9, 11)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Hey, I’m Aayush.",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "84px",
+            "font-weight": "600",
+            "letter-spacing": "-3.78px",
+            "line-height": "82.32px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "Part entrepreneur, part marketer, part o",
+            "color": "rgba(250, 250, 250, 0.75)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          },
+          {
+            "text": "There’s a lot of noise in AI. I read it,",
+            "color": "rgba(250, 250, 250, 0.75)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          }
+        ],
+        ".row__name": [
+          {
+            "text": "Tools",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "28px",
+            "font-weight": "500",
+            "letter-spacing": "-0.7px",
+            "line-height": "32.2px"
+          },
+          {
+            "text": "Sites",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "28px",
+            "font-weight": "500",
+            "letter-spacing": "-0.7px",
+            "line-height": "32.2px"
+          },
+          {
+            "text": "Library",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "28px",
+            "font-weight": "500",
+            "letter-spacing": "-0.7px",
+            "line-height": "32.2px"
+          }
+        ]
+      },
+      "hoverCheck": {
+        "hover": ".rail__item:not([aria-current])",
+        "expect": ".rail__item:hover .rail__label",
+        "waitMs": 400,
+        "visibleBefore": false,
+        "visibleAfter": true,
+        "png": "home-1280-dark-hover.png",
+        "pass": true
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4329/tools",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "tools-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(9, 9, 11)",
+      "styles": {
+        "h1": [
+          {
+            "text": "Tools",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "84px",
+            "font-weight": "600",
+            "letter-spacing": "-3.78px",
+            "line-height": "82.32px"
+          }
+        ],
+        ".standfirst": [
+          {
+            "text": "Software I installed, ran, and formed an",
+            "color": "rgba(250, 250, 250, 0.75)",
+            "font-size": "19px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "31.35px"
+          }
+        ],
+        ".row__name": [
+          {
+            "text": "Paperclipusing",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "17px",
+            "font-weight": "500",
+            "letter-spacing": "-0.17px",
+            "line-height": "22.95px"
+          },
+          {
+            "text": "Hermesusing",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "17px",
+            "font-weight": "500",
+            "letter-spacing": "-0.17px",
+            "line-height": "22.95px"
+          },
+          {
+            "text": "Headlongwatching",
+            "color": "rgb(250, 250, 250)",
+            "font-size": "17px",
+            "font-weight": "500",
+            "letter-spacing": "-0.17px",
+            "line-height": "22.95px"
+          }
+        ]
+      },
+      "hoverCheck": {
+        "hover": ".rail__item:not([aria-current])",
+        "expect": ".rail__item:hover .rail__label",
+        "waitMs": 400,
+        "visibleBefore": false,
+        "visibleAfter": true,
+        "png": "tools-1280-dark-hover.png",
+        "pass": true
+      },
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}
