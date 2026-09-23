@@ -1,0 +1,262 @@
+---
+/**
+ * EntryDetail — a library entry's detail: the header (title, the domain as
+ * the one way out, the strip of facts whose values are filter links, the
+ * standfirst), then the four optional blocks in reading order: the thing itself
+ * (post or video), the digest, the draft, his own `why`.
+ *
+ * Lifted out of `pages/library/[slug].astro` (VET-258) so /library's Articles
+ * view can open the newest article beside the pane with the same markup. There
+ * the title is an `h2` linking to the entry's page, because the page already
+ * has its `h1`. The reasoning for each block is in `[slug].astro`'s header and
+ * design.md §3.
+ */
+import DigestBlocks from "./DigestBlocks.astro";
+import DraftBlock from "./DraftBlock.astro";
+import EntryLink from "./EntryLink.astro";
+import KindChip from "./KindChip.astro";
+import TagChips from "./TagChips.astro";
+import PostCard from "./PostCard.astro";
+import VideoFacade from "./VideoFacade.astro";
+import VoiceBlocks from "./VoiceBlocks.astro";
+import type { LibraryEntry } from "../lib/library";
+import { entryHref } from "../lib/library";
+import { formatDay } from "../lib/date";
+
+interface Props {
+  entry: LibraryEntry;
+  /** `h2` where the page has its own `h1`; the title then links to the entry. */
+  level?: "h1" | "h2";
+}
+
+const { entry, level = "h1" } = Astro.props;
+const Title = level;
+---
+
+<header>
+  <Title class="page-title page-title--entry">
+    {level === "h1" ? entry.title : <a class="title-link" href={entryHref(entry)}>{entry.title}</a>}
+  </Title>
+  <p class="out">
+    <EntryLink class="ext" href={entry.url}>{entry.domain}</EntryLink>
+  </p>
+
+  {/*
+    A `ul`, so the facts are separate items to anything reading the page out
+    loud. The dots are separators drawn by CSS between the items, never
+    characters in the content. Every value that can be a way back out into
+    the collection is one — the save.design anatomy, same as /tools — and
+    since VET-63 that includes the tags, which is what makes the thinnest
+    page here a page with somewhere to go.
+
+    The dates are the honest ones and there are up to three: `saved` is when
+    the link came in, `digested` is the day the verdict below was last true,
+    and `drafted` is the day the pipeline had its go. An opinion with an old
+    date on it is a warning, which is the whole reason they are printed.
+
+    The tags come last and take a line of their own (VET-223). In the middle
+    of the row they wrapped as one block on a phone: the list indented under
+    its own separator, which sat alone to the left of it, and the date after
+    it started the next line with another. Last, they are one line of facts
+    and then one row of subjects, at every width.
+  */}
+  <ul class="strip mono">
+    <li class="strip__item">
+      <a class="strip__chip" href={`/library/kind/${entry.kind}`}>
+        <KindChip kind={entry.kind} />
+      </a>
+    </li>
+    <li class="strip__item">
+      Saved <time datetime={entry.saved_date}>{formatDay(entry.saved_date)}</time>
+    </li>
+    {
+      entry.digest && (
+        <li class="strip__item">
+          Digested <time datetime={entry.digest.digested}>{formatDay(entry.digest.digested)}</time>
+        </li>
+      )
+    }
+    {
+      entry.draft && (
+        <li class="strip__item">
+          Drafted <time datetime={entry.draft.drafted}>{formatDay(entry.draft.drafted)}</time>
+        </li>
+      )
+    }
+    {
+      entry.tags.length > 0 && (
+        <li class="strip__item strip__item--tags">
+          <TagChips tags={entry.tags} />
+        </li>
+      )
+    }
+  </ul>
+
+  {/*
+    Not on a post the pipeline could read: there the note is a copy of the
+    post's words, which the embed below already shows (VET-221). A post it
+    could not read keeps the note, because then it is the only text there is.
+  */}
+  {entry.note && !entry.post && <p class="standfirst">{entry.note}</p>}
+</header>
+
+{/*
+  The thing itself, when the site has it: the post drawn from the repo in
+  full (`PostCard.astro`, no embed, so the page is final on first paint), or
+  the video's poster. An article has neither and renders neither.
+*/}
+{
+  entry.post && (
+    <div class="thing">
+      <PostCard post={entry.post} url={entry.url} mode="page" />
+    </div>
+  )
+}
+{entry.video && <VideoFacade entry={{ ...entry, video: entry.video }} />}
+
+{entry.digest && <DigestBlocks digest={entry.digest} />}
+{entry.draft && <DraftBlock draft={entry.draft} />}
+
+{/*
+  His own `why`, through the component /tools and /sites render his sentences
+  with, under the label that list already fixes. Only the entry's top-level
+  `why` reaches it: a drafted one is somebody else's agent talking and it goes
+  in the box above, in the third person, where it is labelled as such.
+*/}
+<VoiceBlocks why={entry.why} />
+
+<style>
+  /* --- the metadata strip --------------------------------------------------
+     The /tools strip, verbatim in its reasoning: between the title and the
+     standfirst because the strip is what the title is, quiet furniture rather
+     than prose, separators in the list item and never in a link's text. */
+
+  /* **The row gap is 1.25rem and it is a hit area, not a rhythm.** The /tools
+     strip this is otherwise copied from takes `gap: 0 0.7rem`, because nothing
+     on it claims more room than it draws. This one carries chips that do: a tag
+     reaches 0.375rem above and below its 28px box (`styles/chip.css ›
+     .tag::after`) and the kind chip 0.62rem above and below its 20.3px one
+     (`.strip__chip::after` below). With the lines welded together that
+     overreach lands on whatever is on the line before it — measured at 375px
+     before this gap existed, a tag's target covered the kind chip by 9.9px.
+     design.md §4: adjacent targets may touch, never overlap. The kind chip's
+     overreach is the larger, so it sets the number: 2 × 0.62rem.
+
+     The column gap is 0.5rem, ui-skills' `gap-2`, and `.strip__item` takes the
+     same so the separator dot stays centred. */
+  .strip {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1.25rem 0.5rem;
+    /* title to meta strip is 16px, and so is strip to standfirst: §2's rhythm,
+       8 within a group, 16 between groups, 40 between sections */
+    margin-top: 1rem;
+    color: var(--text-tertiary);
+  }
+
+  .strip + .standfirst {
+    margin-top: 1rem;
+  }
+
+  .strip__item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* The alt-text form, so the separator has no accessible name and a screen
+     reader reads the facts rather than "middle dot" between each of them. It is
+     what `layouts/Base.astro › .foot__meta` already uses and what design.md §6
+     says a strip should join it in on touch. */
+  .strip__item + .strip__item::before {
+    content: "\00b7" / "";
+    color: var(--hairline-strong);
+  }
+
+  /* The tag chips bring their own 0.75rem row gap, which is the hit-area
+     arithmetic `TagChips.astro` explains and not a rhythm this row chose.
+
+     A line to themselves, and no separator: a dot in front of a row that
+     starts a line is the orphan this rule exists to remove. The strip's
+     1.25rem row gap above them is the hit-area arithmetic again, the kind
+     chip's 0.62rem reach plus the tag's 0.375rem, with room over. */
+  .strip__item--tags {
+    flex-basis: 100%;
+  }
+
+  .strip__item + .strip__item--tags::before {
+    content: none;
+  }
+
+  /* the chip does the talking; the anchor only carries the target */
+  .strip__chip {
+    position: relative;
+    display: inline-flex;
+    text-decoration: none;
+    /* The same band as its neighbours above, which it was outside: the opacity
+       step used to snap while the two links either side of it faded. */
+    transition-property: opacity;
+    transition-duration: var(--dur);
+    transition-timing-function: var(--ease);
+  }
+
+  /* design.md §4's 40px floor, taken the way `chip.css › .tag::after` takes it:
+     0.62rem of dead space above and below a 20.3px box, offsets rather than a
+     centring transform so nothing rests on one and reduced motion has nothing
+     to undo, and horizontal only so it cannot swallow the domain link beside
+     it. §4's stated exception is for text — a word in a row of words — and this
+     is a box, and the tags beside it on this line claim 40px too.
+
+     The row gap above is what keeps the two hit boxes from meeting: 20px of gap
+     against the 19.84px two of these overreach into it leaves them touching,
+     with a sixth of a pixel to spare. Tight, and touching is the rule. */
+  .strip__chip::after {
+    content: "";
+    position: absolute;
+    inset: -0.62rem 0;
+  }
+
+  .strip__chip:hover {
+    opacity: 0.75;
+  }
+
+  /* --- the header ---------------------------------------------------------- */
+
+  /* The detail header's second line: the domain, linked out, 8px under the
+     title so the two read as one group. briOS sets it tertiary; here it is a
+     control, so --text-secondary (design.md §4, the ink floor). */
+  .out {
+    margin-top: 0.5rem;
+    overflow-wrap: anywhere;
+  }
+
+  .out :global(a) {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition-property: color;
+    transition-duration: var(--dur);
+    transition-timing-function: var(--ease);
+  }
+
+  .out :global(a:hover) {
+    color: var(--accent);
+  }
+
+  /* The post at reading width, 40px under the header like every block after it. */
+  .thing {
+    max-width: 40rem;
+    margin-top: 2.5rem;
+  }
+
+  .title-link {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  @media (hover: hover) {
+    .title-link:hover {
+      color: var(--accent);
+    }
+  }
+</style>

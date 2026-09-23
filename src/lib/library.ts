@@ -76,8 +76,8 @@ export type Kind = (typeof KINDS)[number];
 /**
  * The plural of each kind, for a heading or a tab.
  *
- * Here rather than in either of the two files that render it: the tab row and
- * the kind page's own `h1` are two surfaces naming the same three things, and
+ * Here rather than in either of the two files that render it: the kind segments
+ * and the kind route's title are two surfaces naming the same three things, and
  * the first one to disagree would be the one nobody notices. `Record<Kind, …>`,
  * so a fourth kind will not compile until it has been named.
  */
@@ -85,6 +85,13 @@ export const KIND_LABELS: Record<Kind, string> = {
   article: "Articles",
   post: "Posts",
   video: "Videos",
+};
+
+/** The line that opens each kind's view on /library, and its route's description. */
+export const KIND_BLURBS: Record<Kind, string> = {
+  article: "Long enough to need a chair and a cup of something.",
+  post: "Short things somebody put on a timeline, saved before they scrolled away.",
+  video: "Talks and interviews. These want a block of time before they give anything back.",
 };
 
 /**
@@ -265,8 +272,8 @@ export interface LibraryEntry {
    */
   why: string | null;
   /**
-   * The source in 25 words or fewer, or null. The TLDR ticket (T14) writes
-   * and validates it; until then no entry has one and `rowSummary` falls back.
+   * The source in a sentence, or null. Every entry carries one since VET-258,
+   * copied from `library-content.json`; F3 owns validating it.
    */
   tldr: string | null;
 }

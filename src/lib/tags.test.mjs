@@ -195,7 +195,7 @@ test("every row that wraps tag chips is at least as tall as their targets", () =
     ["components/TagChips.astro", /\.tags\s*\{[^}]*gap:\s*([\d.]+)rem/, null],
     ["components/TagFilters.astro", /\.filters__row\s*\{[^}]*gap:\s*([\d.]+)rem/, null],
     [
-      "pages/library/[slug].astro",
+      "components/EntryDetail.astro",
       /\n  \.strip\s*\{[^}]*gap:\s*([\d.]+)rem/,
       /\.strip__chip::after\s*\{[^}]*inset:\s*-([\d.]+)rem 0;/,
     ],
@@ -288,7 +288,7 @@ test("the kind chip on an entry strip claims the same target its tags do", () =>
    * row of words — and a chip is not one.
    */
   const page = readFileSync(
-    fileURLToPath(new URL("../pages/library/[slug].astro", import.meta.url)),
+    fileURLToPath(new URL("../components/EntryDetail.astro", import.meta.url)),
     "utf8",
   );
   assert.match(

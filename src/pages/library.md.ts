@@ -1,17 +1,16 @@
 /**
  * /library.md — the saved links as a table, for an agent that asked for markdown.
  *
- * This is the one variant whose HTML page has nothing an agent cannot have. The
- * other four either hide something behind a picture (/sites) or spread one list
- * across several routes (/tools); /library is a table on both sides, so the two
- * renderings are close to the same document.
+ * The HTML /library is a notes-style view since VET-258: a list pane beside a
+ * main area whose layout follows the kind (latest saves, an article reader, a
+ * post grid, a video grid). An agent needs none of that layout, only the rows,
+ * so this is every entry as one table with the TLDR each row shows.
  *
  * The thing worth saying out loud here used to be which slugs are URLs, because
  * only digested entries had a page and an agent that had learned the shape of
  * this site would look for `/library/<slug>` the way it found `/tools/<slug>`
  * and get a 404. Every entry has one now, so the table names both: `Title`
- * links the page and `Source` is the thing itself, which is the same pair of
- * offers the HTML row makes and in the same order.
+ * links the page and `Source` is the thing itself.
  *
  * Rows come from `lib/library.ts` in the order that boundary already sorted
  * them, newest save first.
@@ -60,6 +59,7 @@ export const GET: APIRoute = () => {
     entry.domain,
     entry.kind,
     entry.saved_date,
+    entry.tldr ?? "",
     entry.note ?? "",
   ]);
 
@@ -80,7 +80,7 @@ export const GET: APIRoute = () => {
       ...digested.map((entry) => entry.digest.digested),
     ]),
     blocks: [
-      table(["Title", "Source", "Tags", "Domain", "Kind", "Saved", "Note"], rows),
+      table(["Title", "Source", "Tags", "Domain", "Kind", "Saved", "TLDR", "Note"], rows),
       section(
         "Kinds",
         list(KINDS.map((kind) => `\`${kind}\`: ${MEANING[kind]}`)),

@@ -1,9 +1,10 @@
 ---
 /**
- * TagFilters — the whole tag vocabulary, at the top of a library list.
+ * TagFilters — the whole tag vocabulary, at the top of a /library/tag page.
+ * /library and the kind routes carry it as the pane's tag select (VET-258).
  *
- * **The page used to have nothing at the top you could press.** `KindTabs`
- * partitions the section four ways and that was the only filter a reader could
+ * **The page used to have nothing at the top you could press.** The kind
+ * control partitions the section four ways and that was the only filter a reader could
  * see without first finding a row about the right subject and pressing the chip
  * on it. Aayush's review named it: the tags were reachable only from inside the
  * list, so finding everything about `agents` meant already having found one.
@@ -15,10 +16,10 @@
  * what *that* row is about. It does not tell you the vocabulary, and it cannot
  * offer a subject that is not on the screen.
  *
- * ## Why this is chips and `KindTabs` is tabs
+ * ## Why this is chips and the kind control is segments
  *
- * A kind is a partition: every entry has exactly one, the four tabs add up to
- * the list, and a tab row is the idiom for "where you are". Tags overlap and do
+ * A kind is a partition: every entry has exactly one, the four segments add up
+ * to the list, and a one-of-four control is the idiom for "where you are". Tags overlap and do
  * not add up to anything — a link can carry three or none — so a row of them is
  * a set of doors rather than a set of positions, which is what a chip already
  * is everywhere else on this page. Reusing `.tag` is the point: the chip a
@@ -26,7 +27,7 @@
  * control, and pressing either lands on the same page.
  *
  * Every tag, on every one of these pages, not just the ones present in what is
- * being shown. Same call `KindTabs` makes and for the same reason: a filter row
+ * being shown. Same call the kind segments make and for the same reason: a filter row
  * that changes between the page you filtered from and the page you landed on is
  * two controls that happen to resemble each other. `lib/library.ts ›
  * libraryTags` is the vocabulary; this row ranks it by entry count (ties
@@ -78,8 +79,8 @@ const showAll = `Show all ${groups.length}`;
 ---
 
 {/*
-  Links with `aria-current`, never `role="tab"` — the call `KindTabs.astro`
-  makes at length. These navigate to real pages, and a tablist role promises
+  Links with `aria-current`, never `role="tab"` — the call `KindSegments.astro`
+  makes. These navigate to real pages, and a tablist role promises
   arrow-key movement inside the row that a static site does not implement.
 */}
 <nav class="filters" aria-label="Filter the library by tag">

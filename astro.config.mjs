@@ -41,23 +41,6 @@ export default defineConfig({
   site: SITE_URL,
 
   /**
-   * Opt-in prefetching, for the library's kind tabs and nothing else so far.
-   *
-   * `prefetchAll` stays off deliberately. Turning it on would have the browser
-   * fetch every link in view, which on a page that is a list of forty rows is
-   * forty requests nobody asked for, and on /tools most of those links leave
-   * the site. So a link prefetches only where the markup says `data-astro-prefetch`,
-   * and the default strategy for one is `hover`: the tabs are four adjacent
-   * targets, and a reader crossing the row on the way to the third one should
-   * not pull the first two down with them the way `viewport` or `load` would.
-   *
-   * It costs one small module on the pages that carry a prefetching link, and
-   * nothing on the pages that do not. No page needs it to be readable, which is
-   * the claim /llms.txt makes about JavaScript on this site.
-   */
-  prefetch: { defaultStrategy: 'hover' },
-
-  /**
    * No Shiki. It paints every fenced block in an inline `github-dark` style
    * that no stylesheet can theme, so a code block in a note was a black slab
    * on the light page. `styles/prose.css › .prose pre` draws it in the site's

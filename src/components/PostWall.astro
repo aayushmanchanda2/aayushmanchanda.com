@@ -1,15 +1,17 @@
 ---
 /**
- * PostWall — `/library/kind/post` as a grid of `PostCard`s.
+ * PostWall — the /library Posts view as a grid of `PostCard`s.
  *
- * Four across above 1100px, three above 900, two above 600, one below, with a
- * 12px gap (swiped.design's post grid). A grid rather than columns, so the
+ * Four across from 1000px of its own width, three from 700, two from 440, one
+ * below, with a 12px gap (swiped.design's post grid). Container widths rather
+ * than viewport ones, because the wall sits beside the 350px list pane on a
+ * desktop and alone on a phone (VET-258). A grid rather than columns, so the
  * posts stay newest first reading across, and every card in a row stretches
  * to the tallest: the text is cut and clamped, so rows stay close in height.
  *
  * Only an entry with a post gets a card. One saved without a status id (a
- * profile link) keeps its row on /library, where a title alone still says
- * something.
+ * profile link) keeps its row in the pane, where a title alone still says
+ * something. Each card carries its tags for the pane's tag filter.
  */
 import type { LibraryEntry, Post } from "../lib/library";
 import { entryHref } from "../lib/library";
@@ -27,39 +29,45 @@ const cards = entries.filter(
 );
 ---
 
-<ul class="wall">
-  {
-    cards.map((entry) => (
-      <li>
-        <PostCard post={entry.post} url={entry.url} mode="grid" href={entryHref(entry)} />
-      </li>
-    ))
-  }
-</ul>
+<div class="wallbox">
+  <ul class="wall">
+    {
+      cards.map((entry) => (
+        <li data-tags={entry.tags.join(" ")}>
+          <PostCard post={entry.post} url={entry.url} mode="grid" href={entryHref(entry)} />
+        </li>
+      ))
+    }
+  </ul>
+</div>
 
 <style>
+  .wallbox {
+    container-type: inline-size;
+  }
+
   .wall {
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
     gap: 12px;
     margin: 0;
   }
 
-  @media (max-width: 1100px) {
-    .wall {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-  }
-
-  @media (max-width: 900px) {
+  @container (width >= 440px) {
     .wall {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 
-  @media (max-width: 600px) {
+  @container (width >= 700px) {
     .wall {
-      grid-template-columns: minmax(0, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @container (width >= 1000px) {
+    .wall {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
   }
 </style>

@@ -92,9 +92,12 @@ Come here when you need any of the following.
   layout or a typographic treatment, or for seeing what a given site looked
   like on the date it was saved.
 - The library. /library holds ${entries(library.length)} he saved to read or
-  watch properly, broken down as ${kindCounts}, each with the host it came from
-  and the date it was saved. Saved is not read and not an endorsement, so treat
-  a row as "this was worth his attention on that date" and nothing stronger.
+  watch properly, broken down as ${kindCounts}, each with a one-line TLDR, the
+  host it came from and the date it was saved. The page shows the latest saves;
+  /library/kind/<kind> shows one kind laid out for it (articles as a reader,
+  posts as cards, videos as posters). Saved is not read and not an
+  endorsement, so treat a row as "this was worth his attention on that date"
+  and nothing stronger.
 - Aayush's own notes and running experiments, if you are working out how he
   builds things or what he has going right now. /notes is short-form writing.
   /experiments is what is running, including what he killed and when.
@@ -120,7 +123,7 @@ actually has on it: the kind, the host, the tags, the date it was saved, the
 one line he wrote, and the source. ${digested.length} of ${library.length} have
 been digested, which adds cliff notes and a call on whether it is worth
 reading. A saved post's page carries the post in full, where the card that
-points at it cuts off at 700 characters. Some pages carry a block drafted by
+points at it cuts off at 280 characters. Some pages carry a block drafted by
 his pipeline: it is labelled as a draft where a reader can see it, it is not
 his verdict, and only a digest is. /library.md carries every row, and the
 sitemap lists every URL.

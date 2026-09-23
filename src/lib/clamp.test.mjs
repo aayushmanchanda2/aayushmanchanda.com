@@ -64,7 +64,7 @@ const LISTINGS = [
   "components/PreviewCard.astro",
   "components/ToolGrid.astro",
   "components/ToolList.astro",
-  "components/VideoFacade.astro",
+  "components/LibraryViews.astro",
 ];
 
 /**
@@ -107,6 +107,7 @@ test("the pages the overflow lives on render all of it", () => {
   // same three lines there would make the row a door to nowhere.
   for (const file of [
     "pages/library/[slug].astro",
+    "components/EntryDetail.astro",
     "components/VoiceBlocks.astro",
     "components/DigestBlocks.astro",
     "components/DraftBlock.astro",

@@ -32,55 +32,26 @@
  * entry's own page — but the play control is the thing itself, and the thing
  * itself is at YouTube whatever the title decides.
  *
- * ## Two surfaces, and `chrome` is the difference
+ * ## One surface
  *
- * The shelf on `/library/kind/video` wants the whole tile: the poster, then the
- * title, the note and the date hanging under it. A `/library/<slug>` page wants
- * the facade and nothing else, because its `h1` is that title, its standfirst
- * is that note and its metadata strip carries that date — three things a tile
- * would say a second time, one of them as a link to the page you are already
- * on. So `chrome` turns the hanging half off, and the poster is what is left.
- *
- * The wrapper element moves with it. On the shelf this is a list item, because
- * the shelf is a list; on a detail page it is a section of the page, and an
- * `<li>` outside a list is markup a parser has to guess at.
- *
- * ## What the tile does not show
- *
- * No tags, no hostname, no kind chip, for the reason the old post card gave at
- * length: each is a link on the row form of the same entry, and a tile does not
- * need six targets. The two it has are distinct regions with distinct
- * affordances — press the poster and it plays here, press the title and you go
- * to the page about it — which is the ordinary anatomy of a video listing
- * rather than the coin toss that rule is about. Every video saved here is on
- * youtube.com, so a hostname would be the same word down every tile, which is
- * the column `LibraryList.astro` already dropped for the same reason.
+ * The facade renders on the video's own `/library/<slug>` page and nowhere
+ * else. The /library Videos view (VET-258) is a grid of posters that open that
+ * page, so it plays nothing in place; the title, note and date a shelf tile
+ * used to hang under the poster were dropped with the shelf, because on the
+ * entry page all three are already the masthead.
  */
 import type { LibraryEntry, Video } from "../lib/library";
-import { entryHref } from "../lib/library";
-import { formatDay } from "../lib/date";
 
 interface Props {
   /** A video entry the pipeline could fetch a poster for. */
   entry: LibraryEntry & { video: Video };
-  /**
-   * The title, note and date under the poster. Off on the entry's own page,
-   * where all three are already the masthead.
-   */
-  chrome?: boolean;
 }
 
-const { entry, chrome = true } = Astro.props;
+const { entry } = Astro.props;
 const { video } = entry;
-
-/** Where the title goes. The one seam, shared with the row and the card. */
-const href = entryHref(entry);
-
-/** A list item on the shelf, a plain block on a page that is not a list. */
-const Wrapper = chrome ? "li" : "div";
 ---
 
-<Wrapper class:list={["tile", !chrome && "tile--page"]}>
+<div class="tile">
   <div class="tile__frame">
     {/*
       `alt=""`, which is design.md §6's decorative case rather than an exception
@@ -120,43 +91,12 @@ const Wrapper = chrome ? "li" : "div";
       <span class="visually-hidden">Play video: {entry.title}</span>
     </a>
   </div>
-
-  {
-    chrome && (
-      <Fragment>
-        <span class="tile__name">
-          <a class="tile__link" href={href}>
-            {entry.title}
-          </a>
-        </span>
-
-        {entry.note && <p class="tile__note">{entry.note}</p>}
-
-        <time class="tile__date mono" datetime={entry.saved_date}>{formatDay(entry.saved_date)}</time>
-      </Fragment>
-    )
-  }
-</Wrapper>
+</div>
 
 <style>
+  /* One of the entry page's four optional blocks, 40px under the one before
+     it, the clamp `.thing`, `DigestBlocks` and `DraftBlock` open with. */
   .tile {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  /* On an entry page the facade is one of the four optional blocks, and every
-     other one of them opens with this exact clamp — `[slug].astro › .thing`,
-     `DigestBlocks`, `DraftBlock`, and the `.source` line closing the page. This
-     one had nothing, so the player sat welded to the standfirst: measured, a
-     0px gap under a paragraph that everything else on the page stands 64px
-     clear of.
-
-     It belongs to the page form and not to the tile, because on the shelf the
-     grid's own `2rem` row gap already owns the spacing and a margin here would
-     be added to it. `chrome` is the only thing that tells the two apart, which
-     is what it is for. */
-  .tile--page {
     margin-top: 2.5rem;
   }
 
@@ -246,47 +186,6 @@ const Wrapper = chrome ? "li" : "div";
     .tile__frame:hover .tile__thumb {
       opacity: 0.82;
     }
-  }
-
-  .tile__name {
-    font-size: 1.0625rem;
-    font-weight: 500;
-    letter-spacing: -0.01em;
-    line-height: 1.35;
-  }
-
-  /* The row's treatment, because it is the row's job: the title of the thing,
-     carrying its own underline so touch gets one without a hover. */
-  .tile__link {
-    color: inherit;
-    text-decoration-line: underline;
-    text-decoration-color: var(--hairline-strong);
-  }
-
-  .tile__link:hover {
-    color: var(--accent);
-    text-decoration-color: currentColor;
-  }
-
-  /* Two lines, the cap every listing on the site now takes
-     (`LibraryList.astro`, `ToolList.astro`). A tile is a poster and a caption,
-     and a caption that runs to five lines drags the row of tiles beside it out
-     of alignment — the shelf is a grid, so one long note sets the height of
-     everything on its row. The whole note is the standfirst on the entry's own
-     page, which is where the title already goes. */
-  .tile__note {
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    overflow: hidden;
-    font-size: 0.9375rem;
-    line-height: 1.55;
-    color: var(--text-secondary);
-  }
-
-  .tile__date {
-    color: var(--text-tertiary);
   }
 
   /* The player, once there is one. Keyed to the frame and `:global` for the

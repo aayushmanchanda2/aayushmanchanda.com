@@ -34,7 +34,9 @@ import { entryHref, library } from "./library.ts";
 
 const SRC = fileURLToPath(new URL("..", import.meta.url));
 
-const ROUTE = "pages/library/[slug].astro";
+const PAGE = "pages/library/[slug].astro";
+/** The entry detail, lifted out of `PAGE` in VET-258. */
+const ROUTE = "components/EntryDetail.astro";
 const DRAFT = "components/DraftBlock.astro";
 const POST_CARD = "components/PostCard.astro";
 const LIST = "components/LibraryList.astro";
@@ -61,7 +63,7 @@ function code(source) {
    --------------------------------------------------------------------------- */
 
 test("the route table is the whole library, and the seam agrees with it", () => {
-  const route = code(read(ROUTE));
+  const route = code(read(PAGE));
 
   assert.match(
     route,
@@ -87,7 +89,7 @@ test("the route table is the whole library, and the seam agrees with it", () => 
 });
 
 test("the keyboard ring walks every page, not the digested few", () => {
-  const route = code(read(ROUTE));
+  const route = code(read(PAGE));
   assert.match(
     route,
     /library\[\(index \+ offset \+ library\.length\) % library\.length\]/,
