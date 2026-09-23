@@ -1,0 +1,199 @@
+{
+  "base": "http://localhost:4329/",
+  "label": "r5-1",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-23-r5-1",
+  "at": "2026-09-23T17:40:03.740Z",
+  "shots": [
+    {
+      "route": "/",
+      "url": "http://localhost:4329/",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "home-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/about",
+      "url": "http://localhost:4329/about",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "about-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes",
+      "url": "http://localhost:4329/notes",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "notes-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4329/tools",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "tools-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/sites",
+      "url": "http://localhost:4329/sites",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "sites-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/hermes-agent-masterclass",
+      "url": "http://localhost:4329/library/hermes-agent-masterclass",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "library_hermes_agent_masterclass-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/the-money-button-v1",
+      "url": "http://localhost:4329/library/the-money-button-v1",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "library_the_money_button_v1-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/",
+      "url": "http://localhost:4329/",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "home-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/about",
+      "url": "http://localhost:4329/about",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "about-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/notes",
+      "url": "http://localhost:4329/notes",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "notes-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4329/tools",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "tools-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/sites",
+      "url": "http://localhost:4329/sites",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "sites-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/hermes-agent-masterclass",
+      "url": "http://localhost:4329/library/hermes-agent-masterclass",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library_hermes_agent_masterclass-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/the-money-button-v1",
+      "url": "http://localhost:4329/library/the-money-button-v1",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library_the_money_button_v1-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}

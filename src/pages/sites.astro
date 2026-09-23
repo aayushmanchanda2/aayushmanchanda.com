@@ -91,7 +91,10 @@ const jsonLd = listJsonLd({
     margin-top: 1rem;
   }
 
+  /* Takes the row's slack, so its chips wrap beside the layout toggle rather
+     than pushing the toggle onto a line of its own. */
   .collections {
+    flex: 1 1 20rem;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
