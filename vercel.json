@@ -1,76 +1,106 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-
   "routes": [
     {
       "src": "^/reading/?$",
       "status": 308,
-      "headers": { "Location": "/library" }
+      "headers": {
+        "Location": "/library"
+      }
     },
     {
       "src": "^/reading\\.md$",
       "status": 308,
-      "headers": { "Location": "/library.md" }
+      "headers": {
+        "Location": "/library.md"
+      }
     },
     {
       "src": "^/reading/(.*)$",
       "status": 308,
-      "headers": { "Location": "/library/$1" }
+      "headers": {
+        "Location": "/library/$1"
+      }
     },
     {
       "src": "^/computer/?$",
       "status": 308,
-      "headers": { "Location": "/notes" }
+      "headers": {
+        "Location": "/notes"
+      }
     },
     {
       "src": "^/computer\\.md$",
       "status": 308,
-      "headers": { "Location": "/notes.md" }
+      "headers": {
+        "Location": "/notes.md"
+      }
     },
     {
       "src": "^/computer/(.*)$",
       "status": 308,
-      "headers": { "Location": "/notes/$1" }
+      "headers": {
+        "Location": "/notes/$1"
+      }
     },
     {
       "src": "^/(feed|rss)/?$",
       "status": 308,
-      "headers": { "Location": "/rss.xml" }
+      "headers": {
+        "Location": "/rss.xml"
+      }
     },
     {
       "src": "^/(notes|library|tools|sites)/feed/?$",
       "status": 308,
-      "headers": { "Location": "/$1/rss.xml" }
+      "headers": {
+        "Location": "/$1/rss.xml"
+      }
     },
     {
       "src": "^/tools/category/claude-skills/?$",
       "status": 308,
-      "headers": { "Location": "/tools/category/agent-skills" }
+      "headers": {
+        "Location": "/tools/category/agent-skills"
+      }
     },
     {
       "src": "^/tools/category/web-utility/?$",
       "status": 308,
-      "headers": { "Location": "/tools/category/web-access" }
+      "headers": {
+        "Location": "/tools/category/web-access"
+      }
     },
     {
       "src": "^/tools/category/desktop-utility/?$",
       "status": 308,
-      "headers": { "Location": "/tools/category/personal-apps" }
+      "headers": {
+        "Location": "/tools/category/personal-apps"
+      }
     },
     {
       "src": "^/tools/category/sandboxes/?$",
       "status": 308,
-      "headers": { "Location": "/tools/category/agent-infra" }
+      "headers": {
+        "Location": "/tools/category/agent-infra"
+      }
     },
     {
       "src": "^/tools/category/unsorted/?$",
       "status": 308,
-      "headers": { "Location": "/tools" }
+      "headers": {
+        "Location": "/tools"
+      }
     },
-
     {
       "src": "^/$",
-      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
       "dest": "/index.md",
       "headers": {
         "Content-Type": "text/markdown; charset=utf-8",
@@ -79,7 +109,13 @@
     },
     {
       "src": "^/tools/?$",
-      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
       "dest": "/tools.md",
       "headers": {
         "Content-Type": "text/markdown; charset=utf-8",
@@ -88,7 +124,13 @@
     },
     {
       "src": "^/sites/?$",
-      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
       "dest": "/sites.md",
       "headers": {
         "Content-Type": "text/markdown; charset=utf-8",
@@ -97,7 +139,13 @@
     },
     {
       "src": "^/library/?$",
-      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
       "dest": "/library.md",
       "headers": {
         "Content-Type": "text/markdown; charset=utf-8",
@@ -106,7 +154,13 @@
     },
     {
       "src": "^/experiments/?$",
-      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
       "dest": "/experiments.md",
       "headers": {
         "Content-Type": "text/markdown; charset=utf-8",
@@ -115,22 +169,31 @@
     },
     {
       "src": "^/notes/?$",
-      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
       "dest": "/notes.md",
       "headers": {
         "Content-Type": "text/markdown; charset=utf-8",
         "Vary": "Accept, Accept-Encoding"
       }
     },
-
     {
       "src": "^/(tools|sites|library|experiments|notes)/?$",
-      "headers": { "Vary": "Accept, Accept-Encoding" },
+      "headers": {
+        "Vary": "Accept, Accept-Encoding"
+      },
       "continue": true
     },
     {
       "src": "^/$",
-      "headers": { "Vary": "Accept, Accept-Encoding" },
+      "headers": {
+        "Vary": "Accept, Accept-Encoding"
+      },
       "continue": true
     },
     {
@@ -153,16 +216,33 @@
     },
     {
       "src": "^/llms\\.txt$",
-      "headers": { "Content-Type": "text/plain; charset=utf-8" },
+      "headers": {
+        "Content-Type": "text/plain; charset=utf-8"
+      },
       "continue": true
     },
-
-    { "handle": "filesystem" },
-
-    { "handle": "error" },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "^/library/[^/]+?(?:\\.md)?/?$",
+      "status": 308,
+      "headers": {
+        "Location": "/library"
+      }
+    },
+    {
+      "handle": "error"
+    },
     {
       "src": "^/.*$",
-      "has": [{ "type": "header", "key": "accept", "value": ".*text/markdown.*" }],
+      "has": [
+        {
+          "type": "header",
+          "key": "accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
       "status": 404,
       "dest": "/404.md",
       "headers": {
@@ -170,6 +250,10 @@
         "Vary": "Accept, Accept-Encoding"
       }
     },
-    { "src": "^/.*$", "status": 404, "dest": "/404.html" }
+    {
+      "src": "^/.*$",
+      "status": 404,
+      "dest": "/404.html"
+    }
   ]
 }

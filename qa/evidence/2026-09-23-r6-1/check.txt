@@ -1,0 +1,15 @@
+detail pages: 39 live entries: 39
+removed slugs found in dist: 0 []
+308 /library /library/<removed#0>
+308 /library /library/<removed#0>.md
+308 /library /library/<removed#25>
+308 /library /library/<removed#25>.md
+308 /library /library/<removed#50>
+308 /library /library/<removed#50>.md
+308 /library /library/<removed#75>
+308 /library /library/<removed#75>.md
+308 /library /library/<removed#99>
+308 /library /library/<removed#99>.md
+orphans under public/posts: 0 of 24
+tag pages: 8 empty: []
+kind pages: [ 'article', 'post', 'video' ]
