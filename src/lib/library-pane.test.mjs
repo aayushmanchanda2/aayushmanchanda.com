@@ -6,7 +6,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { PANE_KEY, PREPAINT, paneStep } from "./library-pane.ts";
+import { FILTER, PANE_KEY, PREPAINT, paneStep } from "./library-pane.ts";
 
 /**
  * @param {{ saved?: string | null, rowTop?: number, height?: number, blocked?: boolean }} options
@@ -77,4 +77,124 @@ test("Up, Down, Home and End walk the pane rows and stop at the ends", () => {
   assert.equal(paneStep("Home", 5, 10), 0);
   assert.equal(paneStep("End", 5, 10), 9);
   assert.equal(paneStep("j", 5, 10), null);
+});
+
+/**
+ * `FILTER` against a fake pane: four rows, the kind links, the tag select, a
+ * count, an empty state and the entry's hint row.
+ *
+ * @param {{ search?: string, current?: number }} options
+ */
+function filter({ search = "", current = 1 }) {
+  /** @param {Record<string, string>} attrs */
+  const el = (attrs = {}) => {
+    /** @type {Record<string, (event: object) => void>} */
+    const on = {};
+    return {
+      attrs,
+      on,
+      hidden: false,
+      search: "",
+      tabIndex: 0,
+      href: "",
+      textContent: "",
+      value: "",
+      /** @param {string} name */
+      hasAttribute: (name) => name in attrs,
+      /** @param {string} name @param {string} value */
+      setAttribute: (name, value) => (attrs[name] = value),
+      /** @param {string} name */
+      removeAttribute: (name) => delete attrs[name],
+      /** @param {string} type @param {(event: object) => void} fn */
+      addEventListener: (type, fn) => (on[type] = fn),
+    };
+  };
+  const rows = [
+    ["article", "agents"],
+    ["post", "agents design"],
+    ["post", ""],
+    ["video", "agents"],
+  ].map(([kind, tags], index) => {
+    const a = Object.assign(el(index === current ? { "aria-current": "page" } : {}), { href: `/library/e${index}` });
+    const li = Object.assign(el(), {
+      dataset: { kind, tags },
+      firstElementChild: a,
+      querySelector: () => ({ textContent: `Entry ${index}` }),
+    });
+    Object.assign(a, { parentNode: li });
+    return li;
+  });
+  const segs = ["", "article", "post", "video"].map((kind) => Object.assign(el(), { dataset: { kindSet: kind } }));
+  const select = Object.assign(el(), { options: [{ value: "" }, { value: "agents" }, { value: "design" }] });
+  const count = el();
+  const empty = el();
+  /** @type {Record<string, ReturnType<typeof el>>} */
+  const nav = { prev: el(), next: el(), close: el() };
+  const pane = {
+    /** @param {string} s */
+    querySelectorAll: (s) => (s.includes("data-rows") ? rows : segs),
+    /** @param {string} s */
+    querySelector: (s) =>
+      s.startsWith("select") ? select
+      : s.includes("count") ? count
+      : s.includes("empty") ? empty
+      : rows[current]?.firstElementChild ?? null,
+  };
+  const hints = { querySelector: (/** @type {string} */ s) => nav[s.match(/"(\w+)"/)?.[1] ?? ""] };
+  /** @type {string[]} */
+  const replaced = [];
+  const document = {
+    querySelector: (/** @type {string} */ s) => (s.includes("entry-nav") ? hints : pane),
+    addEventListener: () => {},
+  };
+  const location = { search, pathname: "/library/e1" };
+  const history = { replaceState: (/** @type {unknown} */ _, /** @type {string} */ __, /** @type {string} */ url) => replaced.push(url) };
+  new Function("document", "location", "history", FILTER)(document, location, history);
+  return { rows, segs, select, count, empty, nav, replaced };
+}
+
+const shown = (/** @type {{ hidden: boolean }[]} */ rows) => rows.map((row) => (row.hidden ? 0 : 1)).join("");
+
+test("the URL filters the pane, marks the segment, counts, and carries the query on every row", () => {
+  const pane = filter({ search: "?kind=post&tag=agents" });
+  assert.equal(shown(pane.rows), "0100");
+  assert.equal(pane.count.textContent, "1 entry");
+  assert.equal(pane.empty.hidden, true);
+  assert.equal(pane.select.value, "agents");
+  assert.deepEqual(pane.segs.map((seg) => seg.attrs["aria-current"] ?? "-"), ["-", "-", "true", "-"]);
+  assert.ok(pane.rows.every((row) => row.firstElementChild.search === "?kind=post&tag=agents"));
+
+  const typo = filter({ search: "?kind=podcast&tag=nope" });
+  assert.equal(shown(typo.rows), "1111");
+  assert.equal(typo.segs[0]?.attrs["aria-current"], "true");
+  assert.equal(typo.count.textContent, "4 entries");
+});
+
+test("one tab stop, on the current row, or the first shown row when the filter hides it", () => {
+  assert.deepEqual(filter({ search: "?kind=post" }).rows.map((row) => row.firstElementChild.tabIndex), [-1, 0, -1, -1]);
+  assert.deepEqual(filter({ search: "?kind=video" }).rows.map((row) => row.firstElementChild.tabIndex), [-1, -1, -1, 0]);
+});
+
+test("a plain click filters in place and replaces the URL; a modifier click is left alone", () => {
+  const pane = filter({ search: "?tag=design" });
+  let prevented = false;
+  pane.segs[1]?.on.click?.({ button: 0, preventDefault: () => (prevented = true) });
+  assert.ok(prevented);
+  assert.deepEqual(pane.replaced, ["/library/e1?kind=article&tag=design"]);
+
+  const modified = filter({});
+  modified.segs[2]?.on.click?.({ button: 0, metaKey: true, preventDefault: () => assert.fail("took a cmd-click") });
+  assert.deepEqual(modified.replaced, []);
+});
+
+test("the tag select narrows, and close, prev and next follow the rows it shows", () => {
+  const pane = filter({});
+  pane.select.value = "agents";
+  pane.select.on.change?.({});
+  assert.deepEqual(pane.replaced, ["/library/e1?tag=agents"]);
+  assert.equal(shown(pane.rows), "1101");
+  assert.equal(pane.nav.close?.search, "?tag=agents");
+  assert.equal(pane.nav.next?.href, "/library/e3");
+  assert.equal(pane.nav.prev?.href, "/library/e0");
+  assert.equal(pane.nav.next?.attrs["aria-label"], "Next entry: Entry 3");
 });

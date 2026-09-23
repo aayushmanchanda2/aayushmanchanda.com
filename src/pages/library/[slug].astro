@@ -106,6 +106,8 @@ const description =
 >
   <LibraryPane slot="pane" entries={library} current={entry.slug} />
 
+  {/* Centred in the detail pane, briOS's `mx-auto max-w-3xl px-4 md:px-6 lg:px-8`. */}
+  <div class="detail">
   <header>
     <h1 class="page-title page-title--entry">{entry.title}</h1>
     <p class="out">
@@ -207,9 +209,29 @@ const description =
     prev={prev && { href: prev.href, aria: `Previous entry: ${prev.title}` }}
     next={next && { href: next.href, aria: `Next entry: ${next.title}` }}
   />
+  </div>
 </Base>
 
 <style>
+  /* 48rem centred; the shell's 1rem pad plus 0.5rem at 768px and 1rem at
+     1024px makes briOS's 16 / 24 / 32. */
+  .detail {
+    max-width: 48rem;
+    margin-inline: auto;
+  }
+
+  @media (min-width: 768px) {
+    .detail {
+      padding-inline: 0.5rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .detail {
+      padding-inline: 1rem;
+    }
+  }
+
   /* --- the metadata strip --------------------------------------------------
      The /tools strip, verbatim in its reasoning: between the title and the
      standfirst because the strip is what the title is, quiet furniture rather

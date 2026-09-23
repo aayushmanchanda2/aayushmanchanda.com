@@ -1,0 +1,115 @@
+---
+/**
+ * KindSegments — the All / Articles / Posts / Videos segmented control, with a
+ * count on each. Today it tops the /library/<slug> list pane; it is its own
+ * component so the /library redesign can use it too.
+ *
+ * Each segment is a link to a real page (`/library`, `/library/kind/<kind>`),
+ * so a modifier click or no scripting still lands somewhere true. In the pane,
+ * `lib/library-pane.ts › FILTER` takes a plain click and filters the list in
+ * place through `?kind=`, marking the chosen segment `aria-current="true"`.
+ * Pass `current` where the page itself is a kind (or /library, `null`) and
+ * that segment carries `aria-current="page"`. Links, never `role="tab"`: a
+ * tablist promises arrow keys inside the row that nothing here implements.
+ *
+ * A segment is a control, not a label, which is why it does not reuse
+ * `KindChip`: the chip's tone is spent naming the kind on a row, and a selected
+ * state needs a look the tones do not have. The selected look is `ViewToggle`'s
+ * pressed button, the site's other segmented control.
+ */
+import type { Kind, KindGroup } from "../lib/library";
+import { KIND_LABELS } from "../lib/library";
+
+interface Props {
+  groups: KindGroup[];
+  /** Total across every kind, for `All`. */
+  total: number;
+  /** The kind this page is, null for /library; omitted in the pane. */
+  current?: Kind | null;
+}
+
+const { groups, total, current } = Astro.props;
+const segments = [
+  { kind: "", href: "/library", label: "All", count: total },
+  ...groups.map((group) => ({
+    kind: group.kind,
+    href: `/library/kind/${group.kind}`,
+    label: KIND_LABELS[group.kind],
+    count: group.entries.length,
+  })),
+];
+const selected = current === null ? "" : current;
+---
+
+<nav class="seg" aria-label="Filter the library by kind">
+  {
+    segments.map((segment) => (
+      <a
+        class="seg__item"
+        href={segment.href}
+        data-kind-set={segment.kind}
+        aria-current={segment.kind === selected ? "page" : undefined}
+      >
+        {segment.label}
+        <span class="seg__count tabular-nums">{segment.count}</span>
+      </a>
+    ))
+  }
+</nav>
+
+<style is:global>
+  /* Global and namespaced, like the pane it sits in: no scoped-style attribute
+     on four links repeated on 139 pages. */
+  .seg {
+    display: flex;
+    gap: 2px;
+    width: fit-content;
+    max-width: 100%;
+    padding: 2px;
+    border: 1px solid var(--hairline);
+    border-radius: var(--r-md);
+  }
+
+  /* 28px drawn, 40px pressed: the `::after` reaches 6px past each edge, the
+     offset trick `.tag::after` and `ViewToggle` use. Hover is instant. */
+  .seg__item {
+    position: relative;
+    flex: 1 1 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    min-height: 28px;
+    padding-inline: 0.5rem;
+    border-radius: var(--r-sm);
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: var(--text-secondary);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .seg__item::after {
+    content: "";
+    position: absolute;
+    inset: -6px 0;
+  }
+
+  @media (hover: hover) {
+    .seg__item:hover {
+      color: var(--text-primary);
+    }
+  }
+
+  .seg__item[aria-current] {
+    background: var(--hairline);
+    box-shadow: inset 0 0 0 1px var(--hairline-strong);
+    color: var(--text-primary);
+  }
+
+  /* A figure in a control: mono at the chip size, in the control's own ink. */
+  .seg__count {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+</style>
