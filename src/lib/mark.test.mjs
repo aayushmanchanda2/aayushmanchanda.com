@@ -46,7 +46,7 @@ const OG = read("../../scripts/og.mjs");
 
 /** Every file that renders the lockup without being allowed to draw it. */
 const CONSUMERS = [
-  ["design.astro", read("../pages/design.astro")],
+  ["DesignMark.astro", read("../components/design/DesignMark.astro")],
 ];
 
 /**
@@ -188,5 +188,24 @@ test("nothing else in the build draws the mark; the callers import it", () => {
       /import MarkGlyph from/,
       `${name} renders the mark without importing the one drawing of it`,
     );
+  }
+});
+
+test("the home-screen icons exist at the size every reference names", () => {
+  /** @param {string} name → [width, height] from the PNG's IHDR */
+  const size = (name) => {
+    const png = readFileSync(fileURLToPath(new URL(`../../public/${name}`, import.meta.url)));
+    return [png.readUInt32BE(16), png.readUInt32BE(20)];
+  };
+  const manifest = JSON.parse(read("../../public/site.webmanifest"));
+  for (const icon of manifest.icons) {
+    const [w] = icon.sizes.split("x").map(Number);
+    assert.deepEqual(size(icon.src.slice(1)), [w, w], `${icon.src} is not ${icon.sizes}`);
+  }
+  assert.deepEqual(size("apple-touch-icon.png"), [180, 180]);
+  assert.deepEqual(size("favicon-96x96.png"), [96, 96]);
+  const base = read("../layouts/Base.astro");
+  for (const href of ["/apple-touch-icon.png", "/site.webmanifest", "/favicon-96x96.png"]) {
+    assert.ok(base.includes(`href="${href}"`), `Base.astro does not link ${href}`);
   }
 });

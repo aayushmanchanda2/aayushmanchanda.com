@@ -93,7 +93,7 @@ const anyTags = entries.some((entry) => entry.tags.length > 0);
             because it does not leave. `lib/library.ts › entryHref` is where
             that is decided, and the post card and the video tile read it too.
           */}
-          <a class="row__link" href={entryHref(entry)}>
+          <a class="row__link" href={entryHref(entry)} data-astro-prefetch="hover">
             {entry.title}
           </a>
           <KindChip kind={entry.kind} />

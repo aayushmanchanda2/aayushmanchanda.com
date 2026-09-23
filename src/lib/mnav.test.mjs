@@ -23,7 +23,7 @@ const read = (/** @type {string} */ rel) => readFileSync(SRC + rel, "utf8");
 const base = read("layouts/Base.astro");
 const bar = read("components/TopBar.astro");
 const crumbs = read("components/Breadcrumbs.astro");
-const mnav = read("components/MobileNav.astro");
+const mnav = read("lib/mnav.ts");
 
 test("the background surfaces carry the inert marker", () => {
   assert.ok(
@@ -54,7 +54,7 @@ test("the theme live region stays out of the inert set", () => {
 });
 
 test("setOpen flips inert both ways", () => {
-  const script = mnav.slice(mnav.indexOf("<script>"));
+  const script = mnav;
   assert.ok(
     script.includes('querySelectorAll<HTMLElement>("[data-mnav-inert]")'),
     "MobileNav no longer collects the [data-mnav-inert] surfaces",

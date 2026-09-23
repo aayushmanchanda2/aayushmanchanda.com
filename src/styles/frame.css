@@ -214,6 +214,28 @@ body {
     linear-gradient(to top, var(--bg) var(--cover), transparent calc(var(--cover) + 8px));
 }
 
+/* The edge catches pointers (K2): the band and the solid paper under the
+   keyline hide what scrolls beneath them, so a click there must not reach a
+   row the reader cannot see. One layer over the whole window, clipped to the
+   frame with an even-odd hole where the page shows; hit-testing follows the
+   clip. The wheel still scrolls the page through it. */
+.stamp::after {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--frame));
+  pointer-events: auto;
+  --t: calc(var(--frame) + var(--cover));
+  clip-path: polygon(
+    evenodd,
+    0 0, 100% 0, 100% 100%, 0 100%, 0 0,
+    var(--frame) var(--t),
+    var(--frame) calc(100% - var(--t)),
+    calc(100% - var(--frame)) calc(100% - var(--t)),
+    calc(100% - var(--frame)) var(--t),
+    var(--frame) var(--t)
+  );
+}
+
 .stamp::before {
   content: "";
   position: absolute;

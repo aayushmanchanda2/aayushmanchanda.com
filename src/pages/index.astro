@@ -51,7 +51,7 @@ const jsonLd = homeJsonLd();
       {
         sections.map((section, i) => (
           <li>
-            <a class="row press" href={section.href}>
+            <a class="row press" href={section.href} data-astro-prefetch="hover">
               <span class="row__num mono tabular-nums">
                 {String(i + 1).padStart(2, "0")}
               </span>

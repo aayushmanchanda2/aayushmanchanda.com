@@ -235,7 +235,8 @@ async function build(): Promise<SearchEntry[]> {
         section: SECTION.library,
         href: entryHref(entry),
         terms: `${entry.domain} ${entry.kind}`,
-        lead: squash(entry.tldr, ...entry.highlights.map((h) => h.text), entry.note, entry.why),
+        // The keyline and a video's moments are his picks from the source, so they rank with the highlights.
+        lead: squash(entry.tldr, entry.keyline, ...entry.highlights.map((h) => h.text), ...entry.moments.map((m) => m.text), entry.note, entry.why),
         body: squash(entry.post?.text, entry.post?.quoted?.text, entry.excerpt, ...(entry.digest?.bullets ?? [])),
         sub: entry.post ? `${entry.post.author} @${entry.post.handle}` : entry.domain,
         date: entry.saved_date,

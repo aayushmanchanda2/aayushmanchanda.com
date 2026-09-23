@@ -209,8 +209,11 @@ const year = new Date().getFullYear();
      gate because they share the selector; on touch they navigate before a
      hover could show, so the gate costs them nothing. */
   @media (hover: hover) {
+    /* A profile link takes its brand's colour on hover. GitHub's and X's are
+       both black on light and white on dark, which is primary ink here; a
+       brand with a hue would set it on its own row. */
     .foot__link:hover {
-      color: var(--accent);
+      color: var(--text-primary);
     }
 
     .foot__quiet:hover {

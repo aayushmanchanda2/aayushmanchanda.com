@@ -127,7 +127,9 @@
   /* The reading column. Index pages drop the cap with Base's `full` prop
      (`.shell__main--full`); the footer keeps it everywhere. */
   --page-max: 42rem;
-  --page-pad: clamp(1rem, 5vw, 3rem);
+  /* 1.5rem floor: at a phone the reading pages' text starts where the index
+     pages' does (`Base.astro › .shell--full`), not 4.5px left of it. */
+  --page-pad: clamp(1.5rem, 5vw, 3rem);
   /* The sticky top bar in `layouts/Base.astro`. */
   --bar-h: 3.5rem;
   /* The stamp (`styles/frame.css`, VET-262): `--mat-w` is the mat showing
@@ -263,6 +265,12 @@
 html {
   -webkit-text-size-adjust: 100%;
   scroll-behavior: smooth;
+  /* A press is answered by the control's own :active, not a grey flash. */
+  -webkit-tap-highlight-color: transparent;
+  /* Thin and in the theme's own greys; `scrollbar-color` inherits, so every
+     inner scroller (a pane, the palette, a shot) gets it too. */
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-quaternary) transparent;
 }
 
 body {
@@ -361,6 +369,14 @@ canvas {
   height: auto;
 }
 
+/* An icon or logo is a picture of the name beside it: not text to select.
+   `AppIcon`, `Avatar` and a post's avatar also carry `draggable="false"`. */
+svg,
+img[draggable="false"] {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 button {
   font: inherit;
   color: inherit;
@@ -394,6 +410,15 @@ mark {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
   border-radius: var(--r-sm);
+}
+
+/* Every same-origin navigation crossfades, and only for a reader who has not
+   asked for less motion. /tools and a tool page narrow it to the app-open
+   zoom (`lib/home-screen.ts`, `tools/[slug].astro`). */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
 }
 
 /* --------------------------------------------------------------------------

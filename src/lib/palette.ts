@@ -17,7 +17,7 @@
  *
  *   - /sites entry pages already bail on `[aria-modal="true"][data-open]`,
  *     which this palette matches when open. That code needed no change.
- *   - `MobileNav.astro` bails on `[data-palette][data-open]` for the same
+ *   - `lib/mnav.ts` bails on `[data-palette][data-open]` for the same
  *     reason, added alongside this.
  *   - The palette itself can never be open underneath the mobile panel,
  *     because the panel's search control closes the panel on its way in.
@@ -65,7 +65,7 @@ export function initPalette(root: HTMLElement): void {
   /* --- rendering --------------------------------------------------------- */
 
   // Const arrows, not `function`s: a hoisted function would lose the guard's
-  // non-null narrowing (`MobileNav.astro › setOpen` has the same note).
+  // non-null narrowing (`lib/mnav.ts › setOpen` has the same note).
   const render = (query: string): void => {
     if (!entries) return;
     const hits = search(entries, query, RESULT_LIMIT);
@@ -266,6 +266,14 @@ export function initPalette(root: HTMLElement): void {
   // Any control that wants to open the palette says so in markup — the footer
   // hint and the mobile panel's search row both carry the attribute — so this
   // file never needs to know where the triggers are.
+  // A pointer resting on a trigger, or focus landing on one, starts the index
+  // fetch, so the palette opens with results rather than a wait.
+  for (const type of ["pointerover", "focusin"]) {
+    document.addEventListener(type, (event) => {
+      if ((event.target as Element).closest?.("[data-palette-open]")) void load();
+    });
+  }
+
   document.addEventListener("click", (event) => {
     const trigger = (event.target as HTMLElement).closest<HTMLElement>(
       "[data-palette-open]",

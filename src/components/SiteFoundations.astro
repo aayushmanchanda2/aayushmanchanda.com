@@ -1,26 +1,17 @@
 ---
 /**
- * SiteFoundations — a saved site's design tokens, as things you can take.
- *
- * A port of ui-skills' `design-md-foundations.astro` (colours, typography,
- * spacing, radius; click-to-copy; "Show all N") in our voice and shape: sans
- * sentence-case labels, mono only for values, hairline rows on `--bg` rather
- * than rounded tinted cards (design.md §3). "Copy as DESIGN.md" stands in for
- * ui-skills' source pane. Copy and its flash are `lib/copy-flash.ts`, shared
- * with `PaletteRow.astro`, which this panel replaces once it names three
- * colours (`SiteDetail.astro`).
- *
- * `lib/design-md.ts › parseDesign` is why the inline styles below may
- * interpolate tokens: hex is `#rrggbb`, lengths are px, families are plain.
- *
- * A closed `<details>` (VET-242): the tokens are there for the reader who
- * came to take them, and below the fold of everyone else. The summary names
- * which groups are inside, so closed still says what opening gets you.
- * Behaviour (copy, "Show all N") is `lib/site-detail.ts`.
+ * SiteFoundations — a saved site's design tokens, as things you can take: a
+ * port of ui-skills' `design-md-foundations.astro` in our shape (sans labels,
+ * mono values, hairline rows, design.md §3), with "Copy as DESIGN.md" for its
+ * source pane. A closed `<details>` (VET-242) whose summary names the groups.
+ * Copy and "Show all N" are `lib/site-detail.ts` and `lib/copy-flash.ts`; the
+ * groups are `lib/foundations.ts`. Inline styles may interpolate tokens
+ * because `lib/design-md.ts › parseDesign` holds their shape.
  */
 import type { SiteDesign } from "../lib/design-md";
 import { toDesignMd } from "../lib/design-md";
 import { formatDay } from "../lib/date";
+import { PROPERTIES, SPECIMEN_MAX, familiesOf, foundationGroups, specimenFamily } from "../lib/foundations";
 
 interface Props {
   design: SiteDesign;
@@ -32,50 +23,8 @@ interface Props {
 const { design, title, domain } = Astro.props;
 const markdown = toDesignMd(design, { title, domain });
 
-/**
- * ui-skills' type cap: three styles, then "Show all N". Its ten-colour cap is
- * not ported: `summarize` names six colour roles at most, so it never binds.
- */
-const TYPE_CAP = 3;
-
-/** Past this a specimen stops being a letter and starts being the page. */
-const SPECIMEN_MAX = "48px";
-
-const PROPERTIES = [["fontFamily", "Family"], ["fontSize", "Size"], ["fontWeight", "Weight"],
-  ["lineHeight", "Line height"], ["letterSpacing", "Letter spacing"]] as const;
-
-/**
- * The four groups in ui-skills' order. Colours, spacing and radius share one
- * row (a picture of the token, its name, its value); typography is its own.
- */
-const groups = [
-  {
-    head: "Colors",
-    cap: Infinity,
-    visual: "swatch",
-    rows: design.colors.map((c) => ({ name: c.name, value: c.hex, paint: `background-color: ${c.hex}` })),
-  },
-  { head: "Typography", cap: TYPE_CAP, rows: [] },
-  { head: "Spacing", cap: Infinity, visual: "bar", rows: design.spacing.map((t) => ({ ...t, paint: `width: ${t.value}` })) },
-  { head: "Radius", cap: Infinity, visual: "shape", rows: design.radius.map((t) => ({ ...t, paint: `border-radius: ${t.value}` })) },
-]
-  .map((group) => ({ ...group, id: `found-${group.head.toLowerCase()}`, count: group.head === "Typography" ? design.type.length : group.rows.length }))
-  .filter((group) => group.count > 0);
-
-/**
- * CSS generic and system family keywords. Quoted, each becomes a family name
- * no machine has, so they stay bare.
- */
-const KEYWORDS = new Set(["-apple-system", "BlinkMacSystemFont", "system-ui", "ui-sans-serif", "ui-serif",
-  "ui-monospace", "ui-rounded", "serif", "sans-serif", "monospace", "cursive", "fantasy"]);
-
-/** The specimen's stack: the site's family, then the generic its role falls back to. */
-const specimenFamily = (family: string, role: string) =>
-  `${KEYWORDS.has(family) ? family : `'${family}'`}, ${role === "mono" ? "monospace" : "sans-serif"}`;
-
-const families = [...new Set(design.type.map((style) => style.fontFamily))];
-const familyList =
-  families.length > 1 ? `${families.slice(0, -1).join(", ")} or ${families.at(-1)}` : families[0];
+const groups = foundationGroups(design);
+const familyList = familiesOf(design);
 ---
 
 <details class="found" data-copy-root>

@@ -236,7 +236,7 @@ test("a row offers the page and the thing, and the domain link survives both", (
   );
   assert.match(
     list,
-    /<a class="row__link" href=\{entryHref\(entry\)\}>/,
+    /<a class="row__link" href=\{entryHref\(entry\)\}[ >]/,
     "the row's title no longer goes to the entry's page",
   );
   assert.match(

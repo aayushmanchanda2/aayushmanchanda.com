@@ -27,7 +27,7 @@ const stacked = entries.some((entry) => entry.meta !== undefined);
   {
     entries.map((entry) => (
       <li>
-        <a class:list={["row press", entry.tip && "row--tip"]} href={entry.href}>
+        <a class:list={["row press", entry.tip && "row--tip"]} href={entry.href} data-astro-prefetch="hover">
           {entry.tip && <span class="row__emoji" aria-hidden="true">{entry.tip.emoji}</span>}
           <span class="row__title">{entry.title}</span>
           {entry.tip && <span class="row__summary">{entry.tip.summary}</span>}
@@ -154,10 +154,11 @@ const stacked = entries.some((entry) => entry.meta !== undefined);
     line-height: 1;
   }
 
+  /* Balanced, like every heading: a two-line tip title splits evenly. */
   .row--tip .row__title {
     font-size: 1.125rem;
     line-height: 1.4;
-    text-wrap: pretty;
+    text-wrap: balance;
   }
 
   .row__summary {

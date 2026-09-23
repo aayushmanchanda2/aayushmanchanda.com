@@ -30,7 +30,7 @@ const { tools } = Astro.props;
       <ul class="dock__apps">
         {tools.map((tool) => (
           <li class="dock__app">
-            <a class="dock__link" href={`/tools/${tool.slug}`} aria-label={tool.name} data-name={tool.name}>
+            <a class="dock__link" href={`/tools/${tool.slug}`} data-astro-prefetch="hover" aria-label={tool.name} data-name={tool.name}>
               <AppIcon tool={tool} size={60} />
             </a>
           </li>

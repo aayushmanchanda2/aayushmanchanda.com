@@ -50,3 +50,22 @@ test("a stored choice wins; with none, reduced motion is off", () => {
   assert.equal(initialOn("off", false), false);
   assert.equal(initialOn("garbage", true), false);
 });
+
+test("the pre-paint script writes the same state initialOn picks", async () => {
+  const { PREPAINT } = await import("./ui-sound.ts");
+  for (const [stored, reduced, want] of [
+    ["on", true, "on"],
+    ["off", false, "off"],
+    [null, false, "on"],
+    [null, true, "off"],
+    ["junk", true, "off"],
+  ]) {
+    /** @type {Record<string, string>} */
+    const attrs = {};
+    const document = { documentElement: { setAttribute: (/** @type {string} */ k, /** @type {string} */ v) => (attrs[k] = v) } };
+    const localStorage = { getItem: () => stored };
+    const matchMedia = () => ({ matches: reduced });
+    new Function("document", "localStorage", "matchMedia", PREPAINT)(document, localStorage, matchMedia);
+    assert.equal(attrs["data-sound"], want, `stored ${stored}, reduced ${reduced}`);
+  }
+});

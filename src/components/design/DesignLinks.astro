@@ -1,0 +1,51 @@
+---
+/** /design, the links: the prose link, the outbound mark and the quiet furniture link. */
+
+---
+
+<section>
+  <h2 class="sheet__head mono">Links</h2>
+  <p>
+    A link inside a sentence is blue with a 2px underline in the same blue
+    at 40%, like <a href="/about">this one</a>, and the line goes solid on
+    hover. It stays at body weight: prose is near-black now, and a bold blue
+    word in it shouts. The line is the cue that does not depend on seeing
+    colour.
+  </p>
+  <p>
+    A link that leaves the site takes an arrow, drawn by CSS: <a class="ext"
+    href="https://rareui.com" rel="noopener nofollow"
+    target="_blank">rareui.com</a>. It has an empty accessible name, so a
+    screen reader announces the link and not &ldquo;north east arrow&rdquo;
+    after it.
+  </p>
+  <p>
+    Everything else is exempt, and exempt structurally rather than by an
+    override. The top bar, chips, footer items, index rows, tool and library
+    rows, tabs and metadata strips are simply not in that rule, and
+    each sets its own <span class="code">text-decoration: none</span>.
+    Underlining them would turn navigation into a paragraph of
+    shouting.
+  </p>
+  <p>
+    Furniture that still has to read as a link uses the quiet pattern: it
+    keeps its ink and carries a permanent underline in the hairline colour,
+    going accent on hover. <span class="quiet">It looks like this.</span> The
+    underline is permanent because a touchscreen has no hover to reveal one.
+  </p>
+</section>
+
+<style>
+
+  /* --- links ------------------------------------------------------------ */
+
+  /* The quiet pattern, as a specimen. It is a `span` rather than an anchor on
+     purpose: it demonstrates a treatment and has nowhere to go, and a link that
+     goes nowhere is worse than a drawing of one. */
+  .quiet {
+    color: inherit;
+    text-decoration-line: underline;
+    text-decoration-color: var(--hairline-strong);
+    text-underline-offset: 0.18em;
+  }
+</style>

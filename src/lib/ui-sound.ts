@@ -45,6 +45,15 @@ export function soundTarget(node: EventTarget | null): Element | null {
 export const initialOn = (stored: string | null, reducedMotion: boolean): boolean =>
   stored === "on" || stored === "off" ? stored === "on" : !reducedMotion;
 
+/**
+ * `data-sound` on `<html>` before the first paint, the theme's pattern
+ * (`lib/theme.ts › PREPAINT`): `SoundToggle.astro` swaps its glyph off it, so a
+ * muted reader never sees the "on" icon for a frame. Built from `initialOn`
+ * itself, so the pre-paint pass and the runtime cannot disagree.
+ */
+export const PREPAINT = `(function(){var s=null;try{s=localStorage.getItem(${JSON.stringify(STORAGE_KEY)})}catch(e){}
+document.documentElement.setAttribute("data-sound",(${initialOn})(s,matchMedia("(prefers-reduced-motion: reduce)").matches)?"on":"off");})();`;
+
 /* --- runtime ------------------------------------------------------------- */
 
 let ctx: AudioContext | undefined;
@@ -114,6 +123,7 @@ function play(rate = 1): void {
 
 function sync(): void {
   const on = soundOn();
+  document.documentElement.setAttribute("data-sound", on ? "on" : "off");
   for (const button of document.querySelectorAll<HTMLElement>("[data-sound-toggle]")) {
     button.setAttribute("aria-pressed", String(on));
     button.title = on ? "Sound on" : "Sound off";

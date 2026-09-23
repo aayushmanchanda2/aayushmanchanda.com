@@ -60,6 +60,7 @@ const index = start !== undefined;
           <li data-kind={entry.kind} data-tags={entry.tags.join(" ")}>
             <a
               href={entryHref(entry)}
+              data-astro-prefetch="hover"
               aria-current={entry.slug === current ? "page" : undefined}
               {...libraryPreview(entry)}
             >

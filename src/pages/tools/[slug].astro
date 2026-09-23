@@ -67,7 +67,7 @@ const outCard = (href: string) =>
 
 <Base
   title={`${tool.name} · Tools · Aayush Manchanda`}
-  description={tool.note}
+  description={tool.description ? `${tool.name}: ${tool.description}. ${tool.note}` : tool.note}
   jsonLd={jsonLd}
 >
 
@@ -140,13 +140,8 @@ const outCard = (href: string) =>
 
 <style is:global>
   /* The app-open zoom (VET-253): the /tools icon named `app-open` grows into
-     the page's main column while the rest crossfades. Leaving this page never
-     animates (script above). */
-  @media (prefers-reduced-motion: no-preference) {
-    @view-transition {
-      navigation: auto;
-    }
-  }
+     the page's main column while the rest crossfades (the opt-in is site-wide,
+     `styles/global.css`). Leaving this page never animates (script above). */
 
   #main {
     view-transition-name: app-open;

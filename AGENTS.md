@@ -22,6 +22,8 @@ npm test            # all pass
 npm run build       # clean
 ```
 
+**What a test is for** (Brian Lovin's rule): test copy, hrefs and logic, not CSS source. A test that greps a stylesheet for a property passes while the page looks wrong and fails on a harmless refactor. Look is checked on the real page, below.
+
 Then verify against the real page, not the built HTML: `npm run dev`, open it, press the thing you changed. Check both themes, 375px wide, and reduced motion. The full checklist is §8 of `design.md`.
 
 ## Copy

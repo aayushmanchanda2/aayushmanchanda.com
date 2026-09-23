@@ -84,9 +84,9 @@ test("Up, Down, Home and End walk the pane rows and stop at the ends", () => {
  * count, an empty state and the entry's hint row; with `home`, the /library
  * shell's four views and two tagged items in them.
  *
- * @param {{ search?: string, current?: number, home?: string, start?: string, pathname?: string }} options
+ * @param {{ search?: string, current?: number, home?: string, start?: string, pathname?: string, crumbs?: object }} options
  */
-function filter({ search = "", current = 1, home, start, pathname = "/library/e1" }) {
+function filter({ search = "", current = 1, home, start, pathname = "/library/e1", crumbs }) {
   /** @param {Record<string, string>} attrs */
   const el = (attrs = {}) => {
     /** @type {Record<string, (event: object) => void>} */
@@ -125,7 +125,9 @@ function filter({ search = "", current = 1, home, start, pathname = "/library/e1
     Object.assign(a, { parentNode: li });
     return li;
   });
-  const segs = ["", "article", "post", "video"].map((kind) => Object.assign(el(), { dataset: { kindSet: kind } }));
+  const segs = ["", "article", "post", "video"].map((kind) =>
+    Object.assign(el(), { dataset: { kindSet: kind }, firstChild: { textContent: ` ${kind ? kind[0]?.toUpperCase() + kind.slice(1) + "s" : "All"} ` } }),
+  );
   const select = Object.assign(el(), { options: [{ value: "" }, { value: "agents" }, { value: "design" }] });
   const count = el();
   const empty = el();
@@ -150,7 +152,7 @@ function filter({ search = "", current = 1, home, start, pathname = "/library/e1
   /** @type {string[]} */
   const pushed = [];
   const document = {
-    querySelector: (/** @type {string} */ s) => (s.includes("entry-nav") ? hints : pane),
+    querySelector: (/** @type {string} */ s) => (s.includes("entry-nav") ? hints : s.includes("crumbs") ? crumbs ?? null : pane),
     /** @param {string} s */
     querySelectorAll: (s) =>
       s.includes("kind-set") ? segs
@@ -262,4 +264,49 @@ test("a kind route starts on its kind and swaps to /library?kind=", () => {
   Object.assign(route.location, { pathname: "/library/kind/video", search: "" });
   route.on.popstate?.();
   assert.equal(view(route.views), "video");
+});
+
+/** A trail as `Breadcrumbs.astro` draws it: li > a for a link, li > span for the current step. */
+function trail(/** @type {[string, string | null][]} */ steps) {
+  /** @param {string} name @param {string | null} href */
+  const li = (name, href) => ({
+    href,
+    firstElementChild: { textContent: name, href: href ?? undefined },
+    get textContent() {
+      return ` ${this.firstElementChild.textContent} `;
+    },
+    cloneNode() {
+      return li(this.firstElementChild.textContent, this.firstElementChild.href ?? null);
+    },
+  });
+  /** @type {ReturnType<typeof li>[]} */
+  const children = steps.map(([name, href]) => li(name, href));
+  return {
+    children,
+    get lastElementChild() {
+      return children.at(-1);
+    },
+    removeChild: (/** @type {unknown} */ node) => children.splice(children.indexOf(/** @type {any} */ (node)), 1),
+    appendChild: (/** @type {any} */ node) => children.push(node),
+    /** The trail as text, a link marked with its href. */
+    read: () => children.map((c) => c.firstElementChild.textContent + (c.firstElementChild.href ? `(${c.firstElementChild.href})` : "")).join(" > "),
+  };
+}
+
+test("an in-place kind switch updates the trail's last step, and All puts Library back", () => {
+  const crumbs = trail([["Aayush Manchanda", "/"], ["Library", null]]);
+  const index = filter({ home: "/library", start: "", pathname: "/library", current: -1, crumbs });
+  assert.equal(crumbs.read(), "Aayush Manchanda(/) > Library");
+  index.segs[3]?.on.click?.({ button: 0, preventDefault: () => {} });
+  assert.equal(crumbs.read(), "Aayush Manchanda(/) > Library(/library) > Videos");
+  index.segs[2]?.on.click?.({ button: 0, preventDefault: () => {} });
+  assert.equal(crumbs.read(), "Aayush Manchanda(/) > Library(/library) > Posts");
+  index.segs[0]?.on.click?.({ button: 0, preventDefault: () => {} });
+  assert.equal(crumbs.read(), "Aayush Manchanda(/) > Library");
+
+  const kindTrail = trail([["Aayush Manchanda", "/"], ["Library", "/library"], ["Videos", null]]);
+  const route = filter({ home: "/library", start: "video", pathname: "/library/kind/video", current: -1, crumbs: kindTrail });
+  assert.equal(kindTrail.read(), "Aayush Manchanda(/) > Library(/library) > Videos");
+  route.segs[0]?.on.click?.({ button: 0, preventDefault: () => {} });
+  assert.equal(kindTrail.read(), "Aayush Manchanda(/) > Library");
 });

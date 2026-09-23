@@ -1,0 +1,168 @@
+---
+/** /design, the chips: every vocabulary rendered by the component that ships it. */
+import CollectionChips from "../CollectionChips.astro";
+import KindChip from "../KindChip.astro";
+import StatusChip from "../StatusChip.astro";
+import TagChips from "../TagChips.astro";
+import VerdictBadge from "../VerdictBadge.astro";
+import { STATUSES } from "../../lib/experiments";
+import { KINDS, library, libraryTags } from "../../lib/library";
+import { monogram } from "../../lib/post";
+import { collectionGroups } from "../../lib/sites";
+import { MONOGRAM_HUES, hueSlot } from "../../lib/tags";
+import { VERDICTS } from "../../lib/tools";
+
+/** Three real collections, for the chip in its filter-link form. */
+const collections = collectionGroups.slice(0, 3).map((group) => group.slug);
+
+/** Five real tags. Tags are plain grey, so any five show the whole chip. */
+const tagSpecimen = libraryTags.slice(0, 5).map((group) => group.slug);
+
+/**
+ * The identity palette's seven slots, as the monogram wears them, off real
+ * posters (`styles/chip.css › [data-hue]`). A slot no saved post lands on has
+ * no specimen, which is the honest thing for a page that renders shipped data.
+ */
+const posts = library.flatMap((entry) => (entry.post === null ? [] : [entry.post]));
+
+const monogramSpecimen = Array.from({ length: MONOGRAM_HUES }, (_, hue) =>
+  posts.find((post) => hueSlot(post.handle) === hue),
+).flatMap((post) =>
+  post === undefined
+    ? []
+    : [{ hue: hueSlot(post.handle), initial: monogram(post.author), author: post.author }],
+);
+---
+
+<section>
+  <h2 class="sheet__head mono">Chips</h2>
+  <p>
+    A soft tint, never a solid fill, so twenty rows read as one page rather
+    than as a traffic light. A tone sets three numbers and the tint, the
+    hairline and the ink all derive from them, which is how light and dark
+    stay in step without a second palette.
+  </p>
+  <p>
+    Every ink clears 6:1 over its own tint. Not over the page behind it: over
+    the colour the tint actually composites to, which is the lower of the two
+    numbers and the one you are subject to. Measuring against the page
+    flatters every tone by about eight tenths of a point.
+  </p>
+
+  <dl class="spec">
+    <div class="spec__row">
+      <dt class="code">verdict</dt>
+      <dd>
+        <ul class="chips">
+          {VERDICTS.map((verdict) => (
+            <li>
+              <VerdictBadge verdict={verdict} />
+            </li>
+          ))}
+        </ul>
+      </dd>
+    </div>
+    <div class="spec__row">
+      <dt class="code">status</dt>
+      <dd>
+        <ul class="chips">
+          {STATUSES.map((status) => (
+            <li>
+              <StatusChip status={status} />
+            </li>
+          ))}
+        </ul>
+      </dd>
+    </div>
+    <div class="spec__row">
+      <dt class="code">kind</dt>
+      <dd>
+        <ul class="chips">
+          {KINDS.map((kind) => (
+            <li>
+              <KindChip kind={kind} />
+            </li>
+          ))}
+        </ul>
+      </dd>
+    </div>
+    <div class="spec__row">
+      <dt class="code">chip--link</dt>
+      <dd><CollectionChips collections={collections} /></dd>
+    </div>
+    <div class="spec__row">
+      <dt class="code">tag</dt>
+      <dd><TagChips tags={tagSpecimen} /></dd>
+    </div>
+    <div class="spec__row">
+      <dt class="code">monogram</dt>
+      <dd>
+        <ul class="chips chips--monogram">
+          {monogramSpecimen.map((one) => (
+            <li>
+              <span class="monogram" data-hue={one.hue} title={one.author}>
+                {one.initial}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </dd>
+    </div>
+  </dl>
+
+  <p>
+    The tag is the one chip that is not a tint. A verdict and a status sit
+    somewhere on a scale, and the fill is what says so; a library tag names
+    a subject, and one subject is not better than another. So it takes no
+    colour at all: a grey outlined box with the word in it.
+  </p>
+
+  <p>
+    The monogram row is the site&rsquo;s seven identity hues. A saved post on <a
+      href="/library/kind/post">/library</a> opens with the poster&rsquo;s
+    profile picture, or without one, a circle holding their initial,
+    coloured by hashing their handle into one of seven slots.
+  </p>
+
+  <p>
+    Those are every verdict on <a href="/tools">/tools</a>, every status on <a
+    href="/experiments">/experiments</a> and every kind on <a
+    href="/library">/library</a>, read from the same lists those pages
+    use.
+  </p>
+  <p>
+    The chip--link row is the filter form: same tone, same size, plus a
+    pointer cursor and a tint that deepens on hover. Hover one. That state
+    holds AA rather than 6:1, the one place the vocabulary spends contrast
+    on purpose.
+  </p>
+  <p>
+    Blue is the accent hue held back from the accent lightness, because an
+    inline link and a shipped chip must not be the same blue on the same
+    page. It is held back by two dials in the light theme and by lightness
+    alone in the dark one, where nothing darker survives the tint.
+  </p>
+</section>
+
+<style>
+
+  /* --- chips ------------------------------------------------------------ */
+
+  /* The same row `CollectionChips.astro › .collections` uses, at the same gap,
+     because the chip in its label form and the chip in its link form are one
+     vocabulary and a row of them should not be two spacings. A list, so four
+     verdicts are four items to anything reading the page out loud. */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: 0;
+  }
+
+
+  /* Seven 48px circles need more air between them than a row of chips does,
+     and they need it in both directions once the row wraps. */
+  .chips--monogram {
+    gap: 0.6rem;
+  }
+</style>
