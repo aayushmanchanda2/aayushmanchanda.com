@@ -140,6 +140,17 @@ jobs:
         continue-on-error: true
         run: node pipeline/link-previews.mjs
 
+      # VET-274: new bookmarks in the Internal/* collections go to the private
+      # library in Convex, never to this public repo. Prints one line and exits
+      # 0 until the setup wizard has set both secrets.
+      - name: Private library sync
+        continue-on-error: true
+        env:
+          RAINDROP_TOKEN: ${{ secrets.RAINDROP_TOKEN }}
+          INGEST_SECRET: ${{ secrets.INGEST_SECRET }}
+          CONVEX_SITE_URL: ${{ secrets.CONVEX_SITE_URL }}
+        run: node pipeline/private-sync.mjs
+
       # `publish.mjs` stages and commits exactly these paths and nothing else,
       # so a clean tree here is the normal case, not an error. This step exists
       # for the run where it left something behind — and it stages the same

@@ -171,6 +171,7 @@ function parseBookmark(value, collection) {
     domain: typeof value["domain"] === "string" ? value["domain"] : "",
     collection,
     tags,
+    ...(typeof value["cover"] === "string" && value["cover"] !== "" ? { cover: value["cover"] } : {}),
   };
 }
 
