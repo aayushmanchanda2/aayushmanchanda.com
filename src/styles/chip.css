@@ -221,11 +221,11 @@
   font-family: var(--font-sans);
   font-size: 0.8125rem;
   font-weight: 500;
-  /* Stated, because a tag sits inside `.mono` on an entry strip and would
-     otherwise inherit its tracking and its uppercase. */
+  /* TopicTag's `tracking-normal`, stated so a tag reads the same in any
+     container. It is also the label voice now (`global.css › .mono`), so a tag
+     on an entry strip and the words beside it are one voice (design.md §2). */
   letter-spacing: normal;
   line-height: 1;
-  text-transform: none;
   white-space: nowrap;
   color: var(--fg);
   text-decoration: none;

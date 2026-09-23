@@ -71,7 +71,7 @@ const jsonLd = listJsonLd({
 
 <style>
   /* No tab row here, so the chips are the first thing under the masthead and
-     they take the masthead's own gap rather than that plus the 0.9rem they sit
+     they take the masthead's own gap rather than that plus the 1rem they sit
      under a tab row with. `TagFilters.astro` reads the property. */
   .body {
     --filters-gap: 0;
@@ -79,11 +79,11 @@ const jsonLd = listJsonLd({
     margin-top: var(--gap-masthead);
   }
 
-  /* The same 1.25rem /library and the kind pages put between their filter rows
+  /* The same 1rem /library and the kind pages put between their filter rows
      and their list. The row has to hold the same place on all four pages or it
      stops reading as one persistent control and starts reading as two that
      happen to match. */
   .rows {
-    margin-top: 1.25rem;
+    margin-top: 1rem;
   }
 </style>

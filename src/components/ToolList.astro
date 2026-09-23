@@ -25,7 +25,9 @@ const { tools, grouped = true } = Astro.props;
 
 const groups = grouped
   ? groupByCategory(tools).map((group) => ({
-      heading: group.category,
+      // Sentence case: the head is a label (design.md §2). The category stays
+      // lowercase where it is a value, on an entry strip and in its route.
+      heading: group.category.charAt(0).toUpperCase() + group.category.slice(1),
       tools: group.tools,
     }))
   : [{ heading: null, tools }];
@@ -94,11 +96,11 @@ const groups = grouped
               </span>
 
               <span class="row__meta">
-                <span class="row__date mono tabular-nums">
-                  as of {tool.status_date}
+                <span class="row__date mono">
+                  As of <span class="tabular-nums">{tool.status_date}</span>
                 </span>
                 <a class="row__more mono" href={`/tools/${tool.slug}`}>
-                  details<span class="visually-hidden"> for {tool.name}</span>
+                  Details<span class="visually-hidden"> for {tool.name}</span>
                 </a>
               </span>
 
@@ -113,22 +115,18 @@ const groups = grouped
 </div>
 
 <style>
+  /* Sections are 2.5rem apart (design.md §2, the 8/16/40 rhythm). */
   .group + .group {
-    margin-top: clamp(2.75rem, 7vw, 4rem);
+    margin-top: 2.5rem;
   }
 
-  /* Same voice as "THE MINDSCAPE" on the home page. */
+  /* Same voice as "The mindscape" on the home page. The count is mono at the
+     label's own size, which `global.css › .mono .tabular-nums` does. */
   .group__head {
     display: flex;
     align-items: baseline;
-    gap: 0.6rem;
+    gap: 0.5rem;
     color: var(--faint);
-    font-weight: 500;
-    letter-spacing: 0.1em;
-  }
-
-  .group__count {
-    font-size: 0.625rem;
   }
 
   .group__rows {
@@ -145,9 +143,11 @@ const groups = grouped
       "mark name meta"
       ".    note meta";
     column-gap: 1rem;
-    row-gap: 0.3rem;
+    /* 8px inside a row, 16px either side of the rule between rows: design.md
+       §2's rhythm */
+    row-gap: 0.5rem;
     align-items: start;
-    padding-block: clamp(1rem, 2.2vw, 1.25rem);
+    padding-block: 1rem;
     border-bottom: 1px solid var(--hairline);
     transition-property: border-color;
     transition-duration: var(--dur-fast);
@@ -176,9 +176,9 @@ const groups = grouped
      and deliberately does not — `lib/links.ts › markFor` has the reasoning and
      /privacy is the reason.
 
-     `letter-spacing: 0` undoes the `.mono` label tracking, which on a single
-     centred glyph is not tracking at all: it is 0.08em of padding on the right
-     only, and it lands the letter visibly left of centre in the box. */
+     The letter is stored in the name's own case (`lib/links.ts › markFor`)
+     and capitalised here: an initial is a mark, not a word in the label voice,
+     so it keeps the capital the uppercase mono label used to give it. */
   .row__mark--initial {
     display: grid;
     place-items: center;
@@ -188,7 +188,7 @@ const groups = grouped
        well under the 17px name beside it. */
     font-size: 0.75rem;
     line-height: 1;
-    letter-spacing: 0;
+    text-transform: uppercase;
   }
 
   .row__name {
@@ -241,7 +241,7 @@ const groups = grouped
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 0.35rem;
+    gap: 0.5rem;
     /* optical: line the date up with the name, not the row box */
     padding-top: 0.2rem;
   }
@@ -252,7 +252,7 @@ const groups = grouped
   }
 
   /* Carries its own underline: on touch there is no hover to reveal one, and
-     a bare mono word next to the date would read as a second label. --muted,
+     a bare word next to the date would read as a second label. --muted,
      not the date's --faint: this is a control (design.md §4, the ink floor). */
   .row__more {
     color: var(--muted);
@@ -276,7 +276,7 @@ const groups = grouped
         "mark name"
         ".    note"
         ".    meta";
-      row-gap: 0.45rem;
+      row-gap: 0.5rem;
     }
 
     .row__meta {

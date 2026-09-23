@@ -177,7 +177,11 @@ test("the draft block says what it is, at full ink, and dates itself", () => {
     /border: 1px solid var\(--hairline-strong\)/,
     "the draft block lost its border, which is what says the words in it are quoted rather than said",
   );
-  assert.match(drawn, /Drafted \{draft\.drafted\}/, "the draft stopped printing its own date");
+  assert.match(
+    drawn,
+    /Drafted <span class="tabular-nums">\{draft\.drafted\}<\/span>/,
+    "the draft stopped printing its own date, or its date stopped being a figure (mono inside the label voice, design.md §2)",
+  );
 });
 
 /* ---------------------------------------------------------------------------
@@ -328,7 +332,7 @@ test("a row offers the page and the thing, and the domain link survives both", (
   );
   assert.match(
     list,
-    /source<span class="visually-hidden">: \{entry\.title\}<\/span>/,
+    /Source<span class="visually-hidden">: \{entry\.title\}<\/span>/,
     "the `source` link lost the title only a screen reader hears. Forty links reading `source` and nothing else is a list nobody can navigate by name.",
   );
 });

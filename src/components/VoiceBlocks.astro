@@ -45,7 +45,7 @@ interface Props extends Voice {}
 const voice: Voice = Astro.props;
 
 interface Block {
-  /** Title case here; `.mono` does the shouting in CSS. */
+  /** Sentence case, printed as written: the label voice has no case transform. */
   label: string;
   body: string;
   /**
@@ -82,7 +82,7 @@ const blocks: Block[] = VOICE_FIELDS.flatMap(({ key, label, code }) => {
 
 <style>
   /* Measured against /privacy, which is the site's other block of labelled
-     prose: same mono label at --faint, same muted body at 1.7. Two pages that
+     prose: same label at --faint, same muted body at 1.7. Two pages that
      are both "a label and a paragraph" should not be two typographic systems.
 
      What is different is the rules. /privacy hairlines every section because it
@@ -90,23 +90,21 @@ const blocks: Block[] = VOICE_FIELDS.flatMap(({ key, label, code }) => {
      short blocks on an entry page are one thought, and ruling them would slice
      it up and then compete with the facts table underneath. Gap does the work. */
   .voice {
-    margin-top: clamp(2.5rem, 8vh, 4rem);
+    margin-top: 2.5rem;
     display: flex;
     flex-direction: column;
-    gap: clamp(1.5rem, 4vw, 2rem);
+    gap: 1rem;
     max-width: 62ch;
   }
 
   .voice__label {
     color: var(--faint);
-    font-weight: 500;
-    letter-spacing: 0.1em;
     /* the label is metadata; the paragraph under it carries the reading size */
     line-height: 1.6;
   }
 
   .voice__body {
-    margin-top: 0.4rem;
+    margin-top: 0.5rem;
     font-size: 1rem;
     line-height: 1.7;
     color: var(--muted);

@@ -120,6 +120,12 @@ const description =
       the link came in, `digested` is the day the verdict below was last true,
       and `drafted` is the day the pipeline had its go. An opinion with an old
       date on it is a warning, which is the whole reason they are printed.
+
+      The tags come last and take a line of their own (VET-223). In the middle
+      of the row they wrapped as one block on a phone: the list indented under
+      its own separator, which sat alone to the left of it, and the date after
+      it started the next line with another. Last, they are one line of facts
+      and then one row of subjects, at every width.
     */}
     <ul class="strip mono">
       <li class="strip__item">
@@ -130,27 +136,27 @@ const description =
       <li class="strip__item">
         <a href={`/library/domain/${routeSlug(entry.domain)}`}>{entry.domain}</a>
       </li>
-      {
-        entry.tags.length > 0 && (
-          <li class="strip__item strip__item--tags">
-            <TagChips tags={entry.tags} />
-          </li>
-        )
-      }
       <li class="strip__item">
-        <span class="tabular-nums">saved {entry.saved_date}</span>
+        Saved <span class="tabular-nums">{entry.saved_date}</span>
       </li>
       {
         entry.digest && (
           <li class="strip__item">
-            <span class="tabular-nums">digested {entry.digest.digested}</span>
+            Digested <span class="tabular-nums">{entry.digest.digested}</span>
           </li>
         )
       }
       {
         entry.draft && (
           <li class="strip__item">
-            <span class="tabular-nums">drafted {entry.draft.drafted}</span>
+            Drafted <span class="tabular-nums">{entry.draft.drafted}</span>
+          </li>
+        )
+      }
+      {
+        entry.tags.length > 0 && (
+          <li class="strip__item strip__item--tags">
+            <TagChips tags={entry.tags} />
           </li>
         )
       }
@@ -243,10 +249,14 @@ const description =
     flex-wrap: wrap;
     align-items: center;
     gap: 1.25rem 0.5rem;
-    margin-top: clamp(1rem, 2.5vw, 1.4rem);
+    /* title to meta strip is 16px, and so is strip to standfirst: §2's rhythm,
+       8 within a group, 16 between groups, 40 between sections */
+    margin-top: 1rem;
     color: var(--faint);
-    text-transform: none;
-    letter-spacing: 0.02em;
+  }
+
+  .strip + .standfirst {
+    margin-top: 1rem;
   }
 
   .strip__item {
@@ -265,12 +275,18 @@ const description =
   }
 
   /* The tag chips bring their own 0.75rem row gap, which is the hit-area
-     arithmetic `TagChips.astro` explains and not a rhythm this row chose. It
-     only shows when the chips wrap, and they wrap on a phone, so the item is
-     allowed to be as tall as its own contents rather than being squashed to
-     the strip's line. */
+     arithmetic `TagChips.astro` explains and not a rhythm this row chose.
+
+     A line to themselves, and no separator: a dot in front of a row that
+     starts a line is the orphan this rule exists to remove. The strip's
+     1.25rem row gap above them is the hit-area arithmetic again, the kind
+     chip's 0.62rem reach plus the tag's 0.375rem, with room over. */
   .strip__item--tags {
-    align-items: center;
+    flex-basis: 100%;
+  }
+
+  .strip__item + .strip__item--tags::before {
+    content: none;
   }
 
   /* Quiet by default and accent on hover — navigation furniture, deliberately
@@ -342,7 +358,7 @@ const description =
     flex-wrap: wrap;
     align-items: baseline;
     gap: 0.25rem 0.6rem;
-    margin-top: clamp(2.5rem, 8vh, 4rem);
+    margin-top: 2.5rem;
     padding-top: 1.1rem;
     border-top: 1px solid var(--hairline);
     /* a URL has no spaces to break at, so it must be allowed to break anywhere */
@@ -351,6 +367,5 @@ const description =
 
   .source__label {
     color: var(--faint);
-    letter-spacing: 0.1em;
   }
 </style>

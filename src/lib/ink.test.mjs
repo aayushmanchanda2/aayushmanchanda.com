@@ -2,7 +2,7 @@
  * The ink floor: interactive ink never sits below `--muted`.
  *
  * design.md §4. `--faint` is metadata's colour, and composited over the page it
- * measures 2.94:1 on the light theme — under the 4.5:1 the 11px label voice
+ * measures 2.94:1 on the light theme — under the 4.5:1 the 13px label voice
  * owes and under even the 3:1 a non-text control owes. §3's kind tabs wrote the
  * principle down first ("a control has to clear AA on its own"); this test is
  * what keeps the rest of the site's quiet controls from drifting back.
@@ -146,6 +146,7 @@ const FLOORS = [
   ["pages/library/[slug].astro", ".strip a:not(.strip__chip):not(.tag) {"],
   ["pages/404.astro", ".agents {"],
   ["styles/palette.css", ".palette__empty {"],
+  ["pages/sites.astro", ".collections a {"],
 ];
 
 test("every ink-floor surface still declares --muted", () => {

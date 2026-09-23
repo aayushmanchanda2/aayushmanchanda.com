@@ -90,7 +90,7 @@ const logo = mark.kind === "logo" ? mark.src : null;
         </a>
       </li>
       <li class="strip__item">
-        <span class="tabular-nums">as of {tool.status_date}</span>
+        As of <span class="tabular-nums">{tool.status_date}</span>
       </li>
     </ul>
 
@@ -134,7 +134,7 @@ const logo = mark.kind === "logo" ? mark.src : null;
         */}
         {alsoRepo && (
           <span class="source__also">
-            <EntryLink class="source__repo mono" href={alsoRepo}>repo</EntryLink>
+            <EntryLink class="source__repo mono" href={alsoRepo}>Repo</EntryLink>
           </span>
         )}
       </p>
@@ -154,23 +154,28 @@ const logo = mark.kind === "logo" ? mark.src : null;
     /* Matches the gap inside an item, so a separator sits centred between two
        facts rather than welded to the end of the one before it. Same idiom as
        the hint row at the foot of a site page. */
-    gap: 0 0.7rem;
-    margin-top: clamp(1rem, 2.5vw, 1.4rem);
+    gap: 0 0.5rem;
+    /* title to strip and strip to standfirst are both 16px: design.md §2's
+       rhythm, 8 within a group, 16 between groups, 40 between sections */
+    margin-top: 1rem;
     color: var(--faint);
-    text-transform: none;
-    letter-spacing: 0.02em;
+  }
+
+  .strip + .standfirst {
+    margin-top: 1rem;
   }
 
   .strip__item {
     display: flex;
     align-items: center;
-    gap: 0.7rem;
+    gap: 0.5rem;
   }
 
   /* The separator lives in the list item, outside the anchor, so it is never
-     part of a link's text or its target. */
+     part of a link's text or its target. The alt-text form gives it no
+     accessible name, as on the /library strip (design.md §6). */
   .strip__item + .strip__item::before {
-    content: "\00b7";
+    content: "\00b7" / "";
     color: var(--hairline-strong);
   }
 
@@ -224,7 +229,7 @@ const logo = mark.kind === "logo" ? mark.src : null;
     flex-wrap: wrap;
     align-items: baseline;
     gap: 0.25rem 0.6rem;
-    margin-top: clamp(2.5rem, 8vh, 4rem);
+    margin-top: 2.5rem;
     padding-top: 1.1rem;
     border-top: 1px solid var(--hairline);
     /* a URL has no spaces to break at, so it must be allowed to break anywhere */
@@ -233,7 +238,6 @@ const logo = mark.kind === "logo" ? mark.src : null;
 
   .source__label {
     color: var(--faint);
-    letter-spacing: 0.1em;
   }
 
   .source__favicon {
@@ -253,7 +257,7 @@ const logo = mark.kind === "logo" ? mark.src : null;
   }
 
   .source__also::before {
-    content: "\00b7";
+    content: "\00b7" / "";
     color: var(--hairline-strong);
   }
 </style>

@@ -2,7 +2,7 @@
    aayushmanchanda.com — global design system
    Design direction, locked from code-level inspection.
 
-   Type:   Geist Sans (body) + Geist Mono (display / labels / metadata)
+   Type:   Geist Sans (body, labels) + Geist Mono (data: dates, counts, code)
    Light:  bg #FFFFFF, fg #171717, muted = fg @ 75%
    Dark:   bg #09090B, fg #FAFAFA
    Accent: one electric blue, hue 231deg, used ONLY for links,
@@ -29,6 +29,10 @@
   --bg: #ffffff;
   --fg: #171717;
   --fg-channels: 23 23 23;
+  /* Three text levels, and every piece of text is one of them (design.md §2):
+       --fg     primary: titles, names, links, anything a reader came for
+       --muted  secondary: prose, notes, standfirsts, and every control
+       --faint  meta: labels, dates, counts, separators — never a control */
   --muted: rgb(var(--fg-channels) / 0.75);
   --faint: rgb(var(--fg-channels) / 0.45);
   --hairline: rgb(var(--fg-channels) / 0.1);
@@ -288,13 +292,28 @@ ol {
   font-feature-settings: "tnum" 1;
 }
 
-/* Mono display / label voice. */
+/* The label voice: section heads, field labels, crumbs, footer items, tabs.
+   Sans at 13px/500, normal tracking, sentence case, the ui-skills label
+   (`DESIGN.md`: "Use sentence case for labels and links"). It was 11px
+   uppercase mono with 0.08em tracking until VET-223, which is why the class is
+   still called `mono`: ninety call sites and the tests that read them match
+   the name, and renaming it would be a diff about a word.
+
+   What is still mono is data inside a label: a date, a count, a clock, a year.
+   Those already carry `.tabular-nums` (§2 of design.md: any digit that changes
+   in place or sits in a column), so that class is the switch and no call site
+   has to opt in twice. Colour is the caller's: `--faint` for pure metadata,
+   `--muted` for anything a reader presses (design.md §4, the ink floor). */
 .mono {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
   font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-size: 0.6875rem;
+  letter-spacing: normal;
+}
+
+.mono.tabular-nums,
+.mono .tabular-nums {
+  font-family: var(--font-mono);
 }
 
 /* Tactile press. Transition properties are named explicitly —
@@ -462,8 +481,6 @@ ol {
 
 .doc__head {
   color: var(--faint);
-  font-weight: 500;
-  letter-spacing: 0.1em;
   /* the head is the label; the paragraph under it carries the reading size */
   line-height: 1.6;
 }
@@ -487,15 +504,18 @@ ol {
    table: the save.design details anatomy, where every value is also a way back
    out into the rest of the collection. Each page keeps only the styling for the
    values it actually has (a favicon, a chip), which is where they differ. */
+/* 40px above: the facts table is a section, and §2's rhythm puts sections
+   2.5rem apart. The row gap only shows below 599px, where a label stacks on
+   its value, and a label and its value are one group: 8px. */
 .facts {
-  margin-top: clamp(3rem, 10vh, 5rem);
+  margin-top: 2.5rem;
   border-top: 1px solid var(--hairline);
 }
 
 .fact {
   display: grid;
   grid-template-columns: 7rem minmax(0, 1fr);
-  gap: 0.35rem 1rem;
+  gap: 0.5rem 1rem;
   align-items: baseline;
   padding-block: 0.95rem;
   border-bottom: 1px solid var(--hairline);
@@ -519,7 +539,7 @@ ol {
 
 /* Back link above a page title. --muted, not --faint: the crumb is a control,
    and interactive ink never sits below --muted (§4 of design.md — --faint is
-   2.94:1 on the light theme, which fails AA for the 11px label voice). */
+   2.94:1 on the light theme, which fails AA for the 13px label voice). */
 .crumb {
   margin-bottom: clamp(1.25rem, 3vw, 2rem);
   color: var(--muted);
