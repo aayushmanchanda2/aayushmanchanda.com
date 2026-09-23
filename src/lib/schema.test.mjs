@@ -94,6 +94,7 @@ const FULL_TOOL = {
   repo_moved: false,
   category: "agent infra",
   verdict: "using",
+  description: "Control plane for a company run by agents",
   note: "Agent org control plane.",
   status_date: "2026-08-17",
   why: "I wanted one place to see what the agents are doing.",
@@ -690,10 +691,12 @@ test("sameAs is a second page about the software, never the same one twice", () 
 
 test("the opinion lives on the review, never on the software", () => {
   const document = toolJsonLd(FULL_TOOL);
-  assert.ok(
-    !("description" in at(document, 0)),
-    "his take is not the product's own description",
+  assert.equal(
+    at(document, 0)["description"],
+    FULL_TOOL.description,
+    "the software's description is what the tool is (VET-234), never his note",
   );
+  assert.ok(!("description" in at(toolJsonLd(BARE_TOOL), 0)), "no description, no key");
   assert.ok(at(document, 1)["reviewBody"].includes(FULL_TOOL.note));
 });
 

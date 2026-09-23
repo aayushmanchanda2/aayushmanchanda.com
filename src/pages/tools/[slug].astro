@@ -67,7 +67,7 @@ const outCard = (href: string) =>
 
 <Base
   title={`${tool.name} · Tools · Aayush Manchanda`}
-  description={tool.note}
+  description={tool.description ? `${tool.name}: ${tool.description}. ${tool.note}` : tool.note}
   jsonLd={jsonLd}
 >
 

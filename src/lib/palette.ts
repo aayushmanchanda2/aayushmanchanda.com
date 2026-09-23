@@ -266,6 +266,14 @@ export function initPalette(root: HTMLElement): void {
   // Any control that wants to open the palette says so in markup — the footer
   // hint and the mobile panel's search row both carry the attribute — so this
   // file never needs to know where the triggers are.
+  // A pointer resting on a trigger, or focus landing on one, starts the index
+  // fetch, so the palette opens with results rather than a wait.
+  for (const type of ["pointerover", "focusin"]) {
+    document.addEventListener(type, (event) => {
+      if ((event.target as Element).closest?.("[data-palette-open]")) void load();
+    });
+  }
+
   document.addEventListener("click", (event) => {
     const trigger = (event.target as HTMLElement).closest<HTMLElement>(
       "[data-palette-open]",

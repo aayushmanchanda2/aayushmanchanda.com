@@ -28,10 +28,12 @@
  *   - **No `keywords`.** Nothing on this site is a keyword list.
  *   - **The tool's own opinion never leaks onto the software.** A
  *     `SoftwareApplication` here carries only what is true of the software:
- *     name, url, the category it is filed under. Every judgement lives in the
- *     `Review` node, attributed to a person, with the date it was last true.
- *     Putting his note in `SoftwareApplication.description` would quietly
- *     restate one man's take as the product's own description.
+ *     name, url, the category it is filed under, and `description`, the
+ *     tool's one-glance fragment (VET-234) that says what it is, in its own
+ *     site's words. Every judgement lives in the `Review` node, attributed to
+ *     a person, with the date it was last true. Putting his note in
+ *     `SoftwareApplication.description` would quietly restate one man's take
+ *     as the product's own description.
  *
  * ---------------------------------------------------------------------------
  * EVERY DOCUMENT IS AN `@graph`, even a one-node one. A page usually has more
@@ -466,6 +468,7 @@ export function toolJsonLd(tool: Tool): JsonLd {
       name: tool.name,
       url: tool.url ?? tool.repo,
       applicationCategory: tool.category,
+      description: tool.description ?? null,
       sameAs: tool.url !== null && tool.repo !== null ? [tool.repo] : null,
     },
     {
