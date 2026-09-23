@@ -1,24 +1,22 @@
 ---
 /**
  * SiteGrid — the gallery view of /sites, and of its collection and domain
- * pages. briOS's /sites grid (`GoodWebsitesPageClient.tsx`,
- * `GoodWebsiteGalleryItem.tsx`), in markup and CSS:
+ * pages.
  *
- *   - edge to edge, 1 / 2 / 3 / 4 columns at 640 / 1024 / 1536px, 2px gaps and
- *     2px of padding on a `--surface-3` canvas (transparent in dark);
- *   - a 40:21 crop of the top of the full-page capture, which grows 2% on
- *     hover over 300ms;
- *   - the name in a blurred pill bottom-left, faded in on hover where a
- *     pointer can hover and always shown where it cannot.
+ * The card is mostly picture: the top of the full-page capture on graph paper
+ * (`ShotFrame.astro`, `crop`), the title and the domain in mono underneath.
+ * 1 / 2 / 3 / 4 columns at 640 / 1024 / 1536px across the full width, with
+ * real gaps so each card reads as its own object.
  *
  * One card per domain (`lib/screens.ts`): a site saved as three pages is one
  * card saying "3 screens", and the panel lists them. No preview card on a
  * tile: the tile already is the picture.
  *
- * Every tile is a link to `/sites/<slug>`. On /sites, `SitePanel.astro` turns
+ * Every card is a link to `/sites/<slug>`. On /sites, `SitePanel.astro` turns
  * that click into the slide-over; everywhere else it is a plain page load.
  */
 import type { SiteGroup } from "../lib/screens";
+import ShotFrame from "./ShotFrame.astro";
 
 interface Props {
   groups: SiteGroup[];
@@ -39,24 +37,18 @@ const EAGER_COUNT = 4;
 <ul class="grid" data-sites-grid>
   {
     groups.map(({ primary, screens }, index) => (
-      <li class="tile" style={`--stagger: ${Math.min(index, STAGGER_CAP)}`}>
+      <li class="card" style={`--stagger: ${Math.min(index, STAGGER_CAP)}`}>
         <a
-          class="tile__link"
+          class="card__link press"
           href={`/sites/${primary.slug}`}
           data-site-open
           data-slugs={screens.map((screen) => screen.site.slug).join(" ")}
         >
-          <img
-            class="tile__shot outlined"
-            src={primary.shot}
-            alt=""
-            loading={index < EAGER_COUNT ? "eager" : "lazy"}
-            fetchpriority={index < EAGER_COUNT ? "high" : "auto"}
-            decoding="async"
-          />
-          <span class="tile__pills">
-            <span class="pill pill--name">{primary.title}</span>
-            {screens.length > 1 && <span class="pill pill--count">{screens.length} screens</span>}
+          <ShotFrame src={primary.shot} alt="" crop eager={index < EAGER_COUNT} />
+          <span class="card__meta">
+            <span class="card__title">{primary.title}</span>
+            {screens.length > 1 && <span class="card__count mono">{screens.length} screens</span>}
+            <span class="card__domain mono">{primary.domain}</span>
           </span>
         </a>
       </li>
@@ -65,28 +57,14 @@ const EAGER_COUNT = 4;
 </ul>
 
 <style>
-  /* Bleeds out of the shell's padding, as the /tools table does. */
   .grid {
-    --canvas: var(--surface-3);
+    --gap: clamp(16px, 2vw, 28px);
 
     display: grid;
     grid-template-columns: minmax(0, 1fr);
-    gap: 2px;
-    width: calc(100% + 2 * var(--page-pad));
-    margin: 0 calc(-1 * var(--page-pad));
-    padding: 2px;
-    background: var(--canvas);
-  }
-
-  /* briOS's `dark:bg-transparent`, under both of global.css's dark selectors. */
-  @media (prefers-color-scheme: dark) {
-    :global(:root:not([data-theme="light"])) .grid {
-      --canvas: transparent;
-    }
-  }
-
-  :global(:root[data-theme="dark"]) .grid {
-    --canvas: transparent;
+    /* Rows get 8px more than columns: the caption sits in the row gap. */
+    gap: calc(var(--gap) + 0.5rem) var(--gap);
+    margin: 0;
   }
 
   @media (min-width: 640px) {
@@ -105,97 +83,56 @@ const EAGER_COUNT = 4;
     display: none;
   }
 
-  .tile {
+  .card {
     min-width: 0;
   }
 
-  .tile__link {
-    position: relative;
-    display: block;
-    aspect-ratio: 40 / 21;
-    overflow: hidden;
-    background: var(--surface-3);
-  }
+  .card__link {
+    /* A card is a wide target; 0.96 would visibly shove it sideways. */
+    --press-scale: 0.985;
 
-  .tile__link:focus-visible {
-    outline-offset: -2px;
-    border-radius: 0;
-  }
-
-  .tile__shot {
-    display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: top;
-    transition-property: transform;
-    transition-duration: 300ms;
-    transition-timing-function: var(--ease-out);
-  }
-
-  .tile__link:hover .tile__shot {
-    transform: scale(1.02);
-  }
-
-  /* briOS's `p-4` corner. */
-  .tile__pills {
-    position: absolute;
-    inset: auto 1rem 1rem 1rem;
     display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    gap: 0.5rem;
-    pointer-events: none;
+    flex-direction: column;
+    gap: 0.75rem;
+    color: inherit;
+    text-decoration: none;
   }
 
-  /* `h-7 rounded-full bg-black/50 px-2.5 saturate-150 backdrop-blur-3xl
-     text-sm font-medium text-white`, at 60% black rather than 50%: white on
-     50% black over a white screenshot is 3.95:1, under AA for 14px. */
-  .pill {
-    display: flex;
-    align-items: center;
-    min-width: 0;
-    height: 1.75rem;
-    padding-inline: 0.625rem;
-    border-radius: var(--r-pill);
-    background: rgb(0 0 0 / 0.6);
-    backdrop-filter: saturate(1.5) blur(64px);
-    -webkit-backdrop-filter: saturate(1.5) blur(64px);
-    color: #fff;
+  /* Hover is instant (design.md §4): no transition on the frame's border or
+     the title's ink. */
+  .card__link:hover :global(.frame) {
+    border-color: var(--hairline-strong);
+  }
+
+  /* Title and count share the first line, the domain takes the second. */
+  .card__meta {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 0.75rem;
+    row-gap: 0.15rem;
+    align-items: baseline;
+  }
+
+  .card__title {
     font-size: 0.875rem;
     font-weight: 500;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+  }
+
+  .card__link:hover .card__title {
+    color: var(--accent);
+  }
+
+  .card__count {
+    color: var(--text-tertiary);
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
-  .pill--count {
-    flex: none;
-  }
-
-  /* Where a pointer can hover, the name waits for it: briOS's motion values,
-     opacity, 4px and 0.96 over 150ms. The count is data and always shows. */
-  @media (min-width: 640px) and (hover: hover) {
-    .pill--name {
-      opacity: 0;
-      transform: translateY(4px) scale(0.96);
-      transition-property: opacity, transform;
-      transition-duration: 150ms;
-      transition-timing-function: var(--ease-out);
-    }
-
-    .tile__link:is(:hover, :focus-visible) .pill--name {
-      opacity: 1;
-      transform: none;
-    }
-  }
-
-  /* The global brake shortens these; this also drops the zoom and the rise. */
-  @media (prefers-reduced-motion: reduce) {
-    .tile__link:hover .tile__shot,
-    .pill--name {
-      transform: none;
-    }
+  .card__domain {
+    grid-column: 1 / -1;
+    color: var(--text-tertiary);
+    overflow-wrap: anywhere;
   }
 
   /* --- entrance ------------------------------------------------------------
@@ -204,7 +141,7 @@ const EAGER_COUNT = 4;
      hold a card invisible for its stagger and then pop it in. */
 
   @media (prefers-reduced-motion: no-preference) {
-    .tile {
+    .card {
       animation: card-in var(--dur-slow) var(--ease-out) both;
       animation-delay: calc(var(--stagger, 0) * 80ms);
     }

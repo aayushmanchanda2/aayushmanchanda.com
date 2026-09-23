@@ -473,12 +473,15 @@ async function captureAndPublish(bookmark, attempts, ctx) {
   }
 
   await rm(scratch, { recursive: true, force: true });
-  if (section === "tools") {
+  // A site gets one too: the /sites list draws it as the row's app icon.
+  if (section === "tools" || section === "sites") {
     try {
       await ctx.fetchIcon({ slug, url: bookmark.url, dir: ctx.paths.iconsDir });
     } catch (error) {
       ctx.log(`icon: ${slug} — ${describe(error)}, letter`);
     }
+  }
+  if (section === "tools") {
     try {
       await ctx.capturePreview({ slug, url: bookmark.url, dir: ctx.paths.previewsDir });
     } catch (error) {

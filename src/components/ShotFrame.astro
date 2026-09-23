@@ -6,23 +6,28 @@
  * border, sharp corners, and a 1px optical outline on the imagery itself so a
  * white screenshot does not bleed into a white page.
  *
- * The whole full-page capture sits inside a fixed-height window you scroll
- * through: on an entry the picture IS the content, so it gets a viewport
- * rather than a thumbnail. The gallery's crop is `SiteGrid.astro`'s own tile.
+ * Two modes over one full-page capture:
+ *
+ *   - the default (an entry) puts the whole capture inside a fixed-height
+ *     window you scroll through. The picture IS the content there.
+ *   - `crop` (a gallery card) shows the top of the same file at 8:5. A card is
+ *     a thing you skim past; a card that scrolled would be a scroll trap.
  *
  * No `width`/`height` on the `<img>`: a full-page capture has no one intrinsic
- * size to declare, so the scroller's own height reserves the box and nothing
- * reflows once the bytes land.
+ * size to declare, so the box is reserved in CSS instead, by `aspect-ratio`
+ * when cropped and by the scroller's own height otherwise.
  */
 interface Props {
   /** Web path of the full-page shot. */
   src: string;
   alt: string;
+  /** The top of the capture at 8:5, for a gallery card. */
+  crop?: boolean;
   /** True for above-the-fold shots: skips lazy loading for the LCP candidate. */
   eager?: boolean;
 }
 
-const { src, alt, eager = false } = Astro.props;
+const { src, alt, crop = false, eager = false } = Astro.props;
 
 const img = {
   src,
@@ -34,14 +39,20 @@ const img = {
 ---
 
 <span class="frame dotted-grid dotted-grid--fine">
-  {/*
-    Focusable and named: a scrollable region that only a mouse can reach is
-    a region a keyboard user cannot read. `tabindex` is what gives the arrow
-    keys somewhere to land.
-  */}
-  <span class="scroller" tabindex="0" role="region" aria-label={alt}>
-    <img class="scroller__shot" {...img} />
-  </span>
+  {
+    crop ? (
+      <img class="crop outlined" {...img} />
+    ) : (
+      /*
+        Focusable and named: a scrollable region that only a mouse can reach is
+        a region a keyboard user cannot read. `tabindex` is what gives the arrow
+        keys somewhere to land.
+      */
+      <span class="scroller" tabindex="0" role="region" aria-label={alt}>
+        <img class="scroller__shot" {...img} />
+      </span>
+    )
+  }
 </span>
 
 <style>
@@ -53,6 +64,18 @@ const img = {
     /* Sharp corners are the /sites house style: the screenshots supply all the
        softness this page needs. */
     border-radius: 0;
+  }
+
+  /* Anchored to the top so a card shows the masthead, the part of a site you
+     recognise. */
+  .crop {
+    display: block;
+    width: 100%;
+    aspect-ratio: 8 / 5;
+    object-fit: cover;
+    object-position: top center;
+    border-radius: 0;
+    background-color: var(--bg);
   }
 
   .scroller {
