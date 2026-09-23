@@ -1649,63 +1649,6 @@
     "also_saved": true
   },
   {
-    "slug": "why-discipline-builds-actual-confidence",
-    "title": "Why Discipline Builds Actual Confidence",
-    "url": "https://youtube.com/watch?v=INQn-WRkDeU&si=9vaMK7D_DjyetcKt",
-    "domain": "youtube.com",
-    "saved_date": "2026-09-23",
-    "kind": "video",
-    "note": "Bailey Schildbach on why discipline builds confidence: keeping promises to yourself creates self-trust, and a record of doing hard things is harder to shake than any glow-up.",
-    "video": {
-      "provider": "youtube",
-      "id": "INQn-WRkDeU",
-      "thumb": "/shots/why-discipline-builds-actual-confidence-thumb.webp"
-    }
-  },
-  {
-    "slug": "you-don-t-need-more-discipline-you-need-more-love",
-    "title": "You Don’t Need More Discipline, You Need More Love",
-    "url": "https://youtube.com/watch?v=4ofWHPtxJC8&si=XGeSJQvKvukqjO5Y",
-    "domain": "youtube.com",
-    "saved_date": "2026-09-23",
-    "kind": "video",
-    "note": "Bailey Schildbach argues that discipline without love becomes self-punishment, and that self-improvement should start from care for who you're becoming.",
-    "video": {
-      "provider": "youtube",
-      "id": "4ofWHPtxJC8",
-      "thumb": "/shots/you-don-t-need-more-discipline-you-need-more-love-thumb.webp"
-    }
-  },
-  {
-    "slug": "everyone-is-an-artist-till-rent-is-due",
-    "title": "Everyone is an artist till rent is due",
-    "url": "https://youtube.com/watch?v=1z8RKvVi9gA&si=E1PqHvPgVXliGR_O",
-    "domain": "youtube.com",
-    "saved_date": "2026-09-23",
-    "kind": "video",
-    "note": "Bailey Schildbach wrestles with the gap between creative ambition and economic reality, asking how to protect the work you love while still paying rent.",
-    "video": {
-      "provider": "youtube",
-      "id": "1z8RKvVi9gA",
-      "thumb": "/shots/everyone-is-an-artist-till-rent-is-due-thumb.webp"
-    }
-  },
-  {
-    "slug": "hermes-agent-masterclass",
-    "title": "Hermes Agent Masterclass",
-    "url": "https://m.youtube.com/playlist?list=PLmpUb_PWAkDx-VWjh00tVCji794xAa_IX",
-    "domain": "m.youtube.com",
-    "saved_date": "2026-09-23",
-    "kind": "video",
-    "note": "Tonbi's 10-part video masterclass on Hermes Agent - install, deploy to a VPS, memory, skills, providers, tools, cron, subagents and security, about five hours end to end.",
-    "video": {
-      "provider": "youtube",
-      "id": "BeWUUclCin0",
-      "list": "PLmpUb_PWAkDx-VWjh00tVCji794xAa_IX",
-      "thumb": "/shots/hermes-agent-masterclass-thumb.webp"
-    }
-  },
-  {
     "slug": "she-left-waterloo-without-graduating-now-she-s-a-member-of-t",
     "title": "She left Waterloo without graduating. Now she's a Member of Technical Staff at…",
     "url": "https://x.com/juliafedorin/status/2097363988086755667?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
