@@ -113,25 +113,27 @@ const { entries, current } = Astro.props;
     border-radius: var(--r-lg);
     color: var(--text-primary);
     text-decoration: none;
-    transition-property: background-color;
-    transition-duration: var(--dur-fast);
-    transition-timing-function: var(--ease);
   }
 
+  /* briOS's /hn row: hover and selected are one look, and hover is instant
+     (design.md §4). */
   @media (hover: hover) {
     .pane a:hover {
-      background: var(--surface-2);
+      background: var(--surface-selected);
+      box-shadow: var(--shadow-contrast);
     }
   }
 
   .pane a[aria-current="page"] {
-    background: var(--surface-3);
+    background: var(--surface-selected);
+    box-shadow: var(--shadow-contrast);
   }
 
+  /* 14px UI text throughout the row (design.md §2). */
   .pane b {
-    font-size: 0.9375rem;
+    font-size: 0.875rem;
     font-weight: 500;
-    line-height: 1.4;
+    line-height: 1.45;
     overflow-wrap: anywhere;
     display: -webkit-box;
     -webkit-box-orient: vertical;
@@ -143,8 +145,8 @@ const { entries, current } = Astro.props;
   .pane small {
     display: flex;
     gap: 0.4rem;
-    font-size: 0.8125rem;
-    line-height: 1.5;
+    font-size: 0.875rem;
+    line-height: 1.45;
     color: var(--text-tertiary);
   }
 
@@ -158,8 +160,8 @@ const { entries, current } = Astro.props;
      stands in until then). */
   .pane a > span {
     margin-top: 0.125rem;
-    font-size: 0.8125rem;
-    line-height: 1.5;
+    font-size: 0.875rem;
+    line-height: 1.45;
     color: var(--text-secondary);
     display: -webkit-box;
     -webkit-box-orient: vertical;

@@ -157,11 +157,9 @@ const jsonLd = homeJsonLd();
     border-bottom-color: var(--hairline-strong);
   }
 
+  /* Hover ink is instant (design.md §4); only the arrow moves. */
   .row__num {
     color: var(--text-tertiary);
-    transition-property: color;
-    transition-duration: var(--dur-fast);
-    transition-timing-function: var(--ease);
   }
 
   .row:hover .row__num {
@@ -180,9 +178,6 @@ const jsonLd = homeJsonLd();
     font-weight: 500;
     letter-spacing: -0.025em;
     line-height: 1.15;
-    transition-property: color;
-    transition-duration: var(--dur-fast);
-    transition-timing-function: var(--ease);
   }
 
   .row:hover .row__name {
@@ -190,8 +185,8 @@ const jsonLd = homeJsonLd();
   }
 
   .row__blurb {
-    font-size: 0.9375rem;
-    line-height: 1.5;
+    font-size: 0.875rem;
+    line-height: 1.45;
     color: var(--text-secondary);
     text-wrap: pretty;
   }

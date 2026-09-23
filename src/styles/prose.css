@@ -21,16 +21,14 @@
    ========================================================================== */
 
 /* Rem, not ch: Geist's 1ch is wider than its average glyph (VET-225).
-   Unsmoothed, because antialiasing thins Geist on macOS and prose is where
-   stroke weight is read for minutes at a time. */
+   Smoothing is the platform default site-wide since VET-240 (global.css ›
+   body), so prose no longer has to undo anything. */
 .prose {
   max-width: 40rem;
   font-size: 1.125rem;
   line-height: 1.6;
   color: var(--text-primary);
   overflow-wrap: anywhere;
-  -webkit-font-smoothing: auto;
-  -moz-osx-font-smoothing: auto;
 }
 
 /* One gap between any two blocks, briOS's `gap-4`. Headings add their own
@@ -146,6 +144,10 @@
   border-top: 1px solid var(--hairline);
 }
 
+/* The 10% inset edge every picture on the site carries (global.css ›
+   .outlined, design.md §8); markdown cannot put a class on an <img>. */
 .prose img {
   border-radius: var(--r-md);
+  outline: 1px solid var(--outline);
+  outline-offset: -1px;
 }
