@@ -1,0 +1,18 @@
+{
+  "seg1280": {
+    "counts": true,
+    "clipped": 0
+  },
+  "seg430": {
+    "counts": true,
+    "clipped": 0
+  },
+  "seg412": {
+    "counts": true,
+    "clipped": 0
+  },
+  "barRing": {
+    "focused": "bar__search mono press",
+    "outlineOffset": "-2px"
+  }
+}

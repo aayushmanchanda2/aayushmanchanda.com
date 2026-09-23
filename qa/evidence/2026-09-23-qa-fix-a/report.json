@@ -1,0 +1,136 @@
+{
+  "a5a6": {
+    "afterOne": {
+      "palette": false,
+      "panel": true,
+      "path": "/sites/arc-from-the-browser-company"
+    },
+    "afterTwo": {
+      "panel": false,
+      "path": "/sites",
+      "state": null
+    },
+    "switched": {
+      "panel": false,
+      "path": "/sites",
+      "addedEntries": 0
+    }
+  },
+  "a7": {
+    "hint": {
+      "text": "Press E",
+      "visible": true
+    },
+    "eOutside": false,
+    "eInside": true,
+    "hintAfterFirstUse": false,
+    "touchHint": "Long-press an icon",
+    "touchHintAfter6s": false
+  },
+  "w320": {
+    "seg": {
+      "navRight": 278,
+      "viewport": 320,
+      "clippedItems": 0,
+      "counts": false,
+      "pageOverflow": 0
+    },
+    "tools": {
+      "selects": [
+        {
+          "width": 236,
+          "text": 81,
+          "fits": true
+        },
+        {
+          "width": 236,
+          "text": 99,
+          "fits": true
+        }
+      ],
+      "descWidth": 236,
+      "rowWidth": 284,
+      "verdictOnNameLine": true,
+      "pageOverflow": 0
+    }
+  },
+  "w360": {
+    "seg": {
+      "navRight": 318,
+      "viewport": 360,
+      "clippedItems": 0,
+      "counts": false,
+      "pageOverflow": 0
+    },
+    "tools": {
+      "selects": [
+        {
+          "width": 134,
+          "text": 81,
+          "fits": true
+        },
+        {
+          "width": 134,
+          "text": 99,
+          "fits": true
+        }
+      ],
+      "descWidth": 275,
+      "rowWidth": 323,
+      "verdictOnNameLine": true,
+      "pageOverflow": 0
+    }
+  },
+  "w390": {
+    "seg": {
+      "navRight": 347,
+      "viewport": 390,
+      "clippedItems": 0,
+      "counts": false,
+      "pageOverflow": 0
+    },
+    "tools": {
+      "selects": [
+        {
+          "width": 148,
+          "text": 81,
+          "fits": true
+        },
+        {
+          "width": 148,
+          "text": 99,
+          "fits": true
+        }
+      ],
+      "descWidth": 305,
+      "rowWidth": 353,
+      "verdictOnNameLine": true,
+      "pageOverflow": 0
+    }
+  },
+  "a10": {
+    "forcedMark": {
+      "bg": "rgb(255, 255, 0)",
+      "color": "rgb(0, 0, 0)",
+      "mat": "rgb(255, 255, 255)"
+    },
+    "palette": {
+      "status": "12 results",
+      "role": "status",
+      "expanded": "true",
+      "optionRole": "option"
+    },
+    "paletteEmpty": {
+      "status": "No matches",
+      "expanded": "false"
+    },
+    "barRing": {
+      "focused": "palette__input",
+      "outlineOffset": "3px"
+    },
+    "designHeading": {
+      "h2InSummary": false,
+      "h2Before": "<h2 class=\"visually-hidden\" data-astro-cid-qiim65y4=\"\">Design</h2>"
+    }
+  }
+}
