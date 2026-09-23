@@ -57,6 +57,14 @@ export default defineConfig({
    */
   prefetch: { defaultStrategy: 'hover' },
 
+  /**
+   * No Shiki. It paints every fenced block in an inline `github-dark` style
+   * that no stylesheet can theme, so a code block in a note was a black slab
+   * on the light page. `styles/prose.css › .prose pre` draws it in the site's
+   * own surface and ink in both themes instead, monochrome like the rest.
+   */
+  markdown: { syntaxHighlight: false },
+
   integrations: [
     sitemap({
       customPages: MARKDOWN_VARIANTS,

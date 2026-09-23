@@ -1,0 +1,94 @@
+---
+/**
+ * A list of note titles: briOS's `ListItem` (`shared/ListComponents.tsx`).
+ * Used twice, by each year on /notes and by "Read next" under a note, so the
+ * two cannot drift apart.
+ *
+ * Plain 20px titles in primary ink, underlined on hover, no rule between rows:
+ * the list is a column of things to read, not a table. No date on the row; the
+ * year heading above it carries the when, and the note's page has the day.
+ * A scratch note keeps its thumbnail after the title, because the picture is
+ * most of that note.
+ */
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  notes: CollectionEntry<"notes">[];
+}
+
+const { notes } = Astro.props;
+---
+
+<ul class="list">
+  {
+    notes.map((note) => (
+      <li>
+        <a class="row press" href={`/notes/${note.id}`}>
+          <span class="row__title">{note.data.title}</span>
+          {note.data.type === "scratch" && (
+            <img
+              class="row__thumb outlined"
+              src={note.data.image}
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
+          )}
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  /* 16px between rows on a phone, 6px above 640px: briOS's `gap-4 sm:gap-1.5`,
+     paid for here by the row's own padding so each row is a 40px target
+     (design.md §4). */
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  @media (min-width: 640px) {
+    .list {
+      gap: 0;
+    }
+  }
+
+  .row {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 40px;
+    padding-block: 0.25rem;
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  /* The underline is the hover, not the accent `a:hover` gives a bare link. */
+  .row:hover {
+    color: var(--text-primary);
+  }
+
+  .row__title {
+    font-size: 1.25rem;
+    font-weight: 500;
+    line-height: 1.6;
+    letter-spacing: -0.01em;
+    text-underline-offset: 3px;
+  }
+
+  .row:hover .row__title {
+    text-decoration-line: underline;
+  }
+
+  .row__thumb {
+    flex: none;
+    width: 44px;
+    height: 30px;
+    object-fit: cover;
+    object-position: top center;
+    border-radius: 3px;
+  }
+</style>
