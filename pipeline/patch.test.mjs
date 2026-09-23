@@ -221,6 +221,27 @@ test("the source fields are held to the caps the build holds them to", async (t)
   await assert.rejects(run({ title: null }), /cannot be cleared/);
 });
 
+test("a block and also_saved are written, validated, and cleared as no key (VET-273)", async (t) => {
+  const { paths, log } = await repo(t);
+  const run = (/** @type {any} */ patch) => patchLibrary({ patch: { url: URL_A, ...patch }, paths, log, commit: false });
+  const block = { best_for: "Owners.", tip: "Loop it.", needs: ["cron"], prompt: { text: "Do it.", ours: false }, start_here: ["Pick one job."] };
+
+  const result = await run({ block, also_saved: true });
+  assert.deepEqual(result.changed, ["block", "also_saved"]);
+  let [first] = await readJson(paths.libraryJson);
+  assert.deepEqual(first.block, block);
+  assert.equal(first.also_saved, true);
+
+  await run({ block: null, also_saved: false });
+  [first] = await readJson(paths.libraryJson);
+  assert.ok(!("block" in first) && !("also_saved" in first));
+
+  await assert.rejects(run({ block: { ...block, start_here: ["a", "b", "c", "d"] } }), /1 to 3/);
+  await assert.rejects(run({ block: { ...block, tip: "" } }), /block\.tip/);
+  await assert.rejects(run({ also_saved: "yes" }), /true or false/);
+  assert.deepEqual(parseArgs(["--slug", "x", "--also-saved", "true", "--block", "{}"]).patch, { slug: "x", also_saved: true, block: {} });
+});
+
 test("a post quotes its own words and a video's moments are timed (VET-264)", async (t) => {
   const post = { ...SEED[1], post: { text: "Termius on the phone. Tailscale to the box. tmux keeps it alive." } };
   const video = { slug: "talk", title: "Talk", url: "https://www.youtube.com/playlist?list=PLx", domain: "youtube.com", saved_date: "2026-07-30", kind: "video" };

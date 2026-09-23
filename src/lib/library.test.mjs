@@ -359,3 +359,30 @@ test("highlights default to amber and no note, and hold their caps", () => {
   failsWith(entry({ highlights: [{ text: "a", color: "red" }] }), "amber, blue, pink, green");
   failsWith(entry({ excerpt: "word ".repeat(81) }), "81 words; the cap is 80");
 });
+
+test("a block reads whole, drops what is absent, and holds its rules (VET-273)", () => {
+  const good = {
+    best_for: "Founders.",
+    tip: "Write the plan first.",
+    time: { text: "An hour.", source: "estimate" },
+    needs: [],
+    prompt: { text: "Plan it.", ours: true, context: "drafting only" },
+    start_here: ["One.", "Two."],
+  };
+  const parsed = parseOne({ block: good, also_saved: true });
+  assert.deepEqual(parsed.block, { ...good, prompt: { text: "Plan it.", ours: true } });
+  assert.equal(parsed.also_saved, true);
+  assert.equal(parseOne({}).block, null);
+  assert.equal(parseOne({}).also_saved, false);
+  assert.deepEqual(parseOne({ block: { ...good, time: null, prompt: null } }).block, {
+    best_for: "Founders.", tip: "Write the plan first.", needs: [], start_here: ["One.", "Two."],
+  });
+
+  failsWith(entry({ block: { ...good, tip: " " } }), "block.tip");
+  failsWith(entry({ block: { ...good, start_here: ["a", "b", "c", "d"] } }), "1 to 3");
+  failsWith(entry({ block: { ...good, start_here: [] } }), "1 to 3");
+  failsWith(entry({ block: { ...good, time: { text: "x", source: "guess" } } }), "stated, estimate");
+  failsWith(entry({ block: { ...good, prompt: { text: "x" } } }), "ours");
+  failsWith(entry({ block: { ...good, best_for: "A — B" } }), "em dash");
+  failsWith(entry({ also_saved: "yes" }), "also_saved");
+});

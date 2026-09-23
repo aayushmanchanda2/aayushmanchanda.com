@@ -43,7 +43,26 @@
         "text": "He feeds whole transcripts, not summaries.",
         "color": "amber"
       }
-    ]
+    ],
+    "block": {
+      "best_for": "Founders who hand build work to agents and never read the code.",
+      "tip": "Have the agent write itself a plan.md before every project. Make each run save what it learned to a markdown file, so the next run starts where the last one ended.",
+      "needs": [
+        "Compound Engineering",
+        "Telegram",
+        "a Mac",
+        "an email address for the agent"
+      ],
+      "prompt": {
+        "text": "Before you start, write yourself a plan.md for this project: the goal, the steps, and how you'll check each step is done. When you finish, add what you learned to notes.md so the next run starts from there.",
+        "ours": true
+      },
+      "start_here": [
+        "Start every project by having the agent write its own plan.md.",
+        "Have every run add what it learned to a markdown file.",
+        "Give it the whole meeting transcript instead of a summary."
+      ]
+    }
   },
   {
     "slug": "anthropic-agents-that-run-for-hours",
@@ -80,11 +99,12 @@
         "t": 2311,
         "text": "The five takeaways: self-evaluation is a trap, compaction isn't coherence, use structured handoffs, write taste down as a rubric, read the traces."
       }
-    ]
+    ],
+    "also_saved": true
   },
   {
     "slug": "how-gumclaw-works",
-    "title": "How Gumclaw Works",
+    "title": "See how Gumroad's AI operations agent runs daily",
     "url": "https://gumclaw.github.io/how-i-work/",
     "domain": "gumclaw.github.io",
     "saved_date": "2026-07-20",
@@ -118,11 +138,31 @@
     "tags": [
       "agents",
       "harnesses"
-    ]
+    ],
+    "block": {
+      "best_for": "Owners who want an AI agent running daily operations jobs on a schedule.",
+      "tip": "Give every job the same loop: read the policy and memory, check facts against live sources, do the work, report to a person. Turn every real mistake into a dated policy rule.",
+      "needs": [
+        "Hermes agent framework",
+        "the Fable 5 model",
+        "a dedicated machine (a MacBook Pro)",
+        "cron scheduling",
+        "plain-text memory"
+      ],
+      "prompt": {
+        "text": "Write an operating policy for an AI assistant that handles [job, e.g. support emails]. Every run it should read this policy, check each fact against [live source] before using it, do the work, then send me a short report. Add a section called 'Rules from mistakes' where every rule carries the date it was added.",
+        "ours": true
+      },
+      "start_here": [
+        "Pick one recurring job and put it on a schedule.",
+        "Write the policy the agent reads before it acts.",
+        "Keep public posts as drafts a person approves."
+      ]
+    }
   },
   {
     "slug": "most-valuable-skill-2026-managing-ai-agents",
-    "title": "Most Valuable Skill of 2026: Managing AI Agents",
+    "title": "How one founder runs his company with agents",
     "url": "https://www.youtube.com/watch?v=vJEy3nP2_C8",
     "domain": "youtube.com",
     "saved_date": "2026-07-20",
@@ -154,11 +194,27 @@
         "t": 2075,
         "text": "He spent about $20k on tokens last month and calls it unsustainable. Cheaper tuned models now run his improvement loops."
       }
-    ]
+    ],
+    "block": {
+      "best_for": "Solo founders with a software product who run several coding agents at once.",
+      "tip": "Set up a 9am production watchdog that summarizes what every paying customer did yesterday, with a link to see each action. Ryan Carson reads it every morning.",
+      "needs": [
+        "cloud coding agents (he uses Devin, from Cognition)"
+      ],
+      "prompt": {
+        "text": "Every day at 9am, look at everything our paying customers did in the app yesterday. Write me a short summary: the most important things that happened and anything that went wrong. For each item, write a line like 'Customer did X' with a link to see it.",
+        "ours": true
+      },
+      "start_here": [
+        "Move agent work to the cloud so five to ten sessions run at once.",
+        "Pin the threads that matter today and check agents about every 25 minutes.",
+        "Set up the 9am watchdog on your paying customers."
+      ]
+    }
   },
   {
     "slug": "jason-liu-codex-operating-system",
-    "title": "Jason Liu's Codex operating system",
+    "title": "Jason Liu's Codex setup for Slack and email",
     "url": "https://x.com/petergyang/status/2081382827548148091",
     "domain": "x.com",
     "saved_date": "2026-07-20",
@@ -196,7 +252,26 @@
         "note": "A heartbeat prompt worth stealing",
         "color": "blue"
       }
-    ]
+    ],
+    "block": {
+      "best_for": "Anyone whose day starts in email, Slack and a task board.",
+      "tip": "Ask the agent to check your email, Slack and Linear on a schedule and tell you what to do first. Jason Liu calls it a heartbeat.",
+      "needs": [
+        "Codex",
+        "email",
+        "Slack",
+        "Linear"
+      ],
+      "prompt": {
+        "text": "Turn this thread into a heartbeat. I want you to check my emails, my Slack, my Linear, and tell me what I need to prioritize.",
+        "ours": false
+      },
+      "start_here": [
+        "Give Codex access to your email, Slack and Linear.",
+        "Paste the heartbeat prompt into a thread.",
+        "Have it read a week of your Slack messages and make a skill that writes like you."
+      ]
+    }
   },
   {
     "slug": "anatomy-of-an-agent-harness",
@@ -243,7 +318,8 @@
     "tags": [
       "agents",
       "harnesses"
-    ]
+    ],
+    "also_saved": true
   },
   {
     "slug": "built-a-little-agent-automation-where-i-paste-a-link-to-a-co",
@@ -276,7 +352,25 @@
         "text": "Yesterday I tried to save a link that 403d so I had my agent wire up a rotating residential proxy to get around it.",
         "color": "amber"
       }
-    ]
+    ],
+    "block": {
+      "best_for": "Anyone filing links, leads or references into a Notion database by hand.",
+      "tip": "Let an agent run the filing so you can fix its mistakes in plain language later. Brian Lovin's agent dedupes each link, classifies it, screenshots it, files it in Notion and drafts a tweet.",
+      "needs": [
+        "an agent",
+        "a Notion database",
+        "a small endpoint that captures light and dark mode screenshots"
+      ],
+      "prompt": {
+        "text": "review all sites I've saved in the notion db and see if we accidentally captured loading states/403 errors and re-process",
+        "ours": false
+      },
+      "start_here": [
+        "Paste a link and have the agent check your Notion database for duplicates.",
+        "Have it pull the metadata and classify the link.",
+        "Add it to the database and reply with a draft post."
+      ]
+    }
   },
   {
     "slug": "tell-your-agent-to-mine-your-conversations",
@@ -307,7 +401,22 @@
         }
       ]
     },
-    "keyline": "mine all my conversations on disk and tell me how I work"
+    "keyline": "mine all my conversations on disk and tell me how I work",
+    "block": {
+      "best_for": "Anyone who's used an AI assistant for months and kept the chat history.",
+      "tip": "Have your agent read your past conversations and tell you how you work, including what you're bad at.",
+      "needs": [
+        "an agent that can read your conversations on disk"
+      ],
+      "prompt": {
+        "text": "mine all my conversations on disk and tell me how I work, what I'm good at, what I'm bad at, and how I can use AI better",
+        "ours": false
+      },
+      "start_here": [
+        "Open an agent that can read your saved conversations.",
+        "Paste the prompt."
+      ]
+    }
   },
   {
     "slug": "orwell-s-rules-for-writing-with-llms",
@@ -343,11 +452,25 @@
         "text": "Never use the passive where you can use the active.",
         "color": "amber"
       }
-    ]
+    ],
+    "block": {
+      "best_for": "Anyone sending AI-drafted emails, posts or review replies.",
+      "tip": "Edit every AI draft against Orwell's six rules before it goes out. Cut every word you can, and swap passive voice for active.",
+      "needs": [],
+      "prompt": {
+        "text": "Edit this draft with Orwell's six rules: no stock metaphors or similes, short words over long ones, cut every word you can, active voice over passive, everyday English over jargon, and break any rule before you write something barbarous. Show the edit, then list what you cut: [paste draft]",
+        "ours": true
+      },
+      "start_here": [
+        "Cut any word you can cut.",
+        "Swap the passive voice for the active.",
+        "Use the short word when a short one will do."
+      ]
+    }
   },
   {
     "slug": "there-s-no-speed-limit",
-    "title": "There’s no speed limit",
+    "title": "Learn faster than the default pace allows",
     "url": "https://sive.rs/kimo",
     "domain": "sive.rs",
     "saved_date": "2026-08-28",
@@ -373,7 +496,21 @@
     "note": "Derek Sivers' story of a teacher who compressed years of music theory into a few intense lessons, a sharp reminder that the default pace isn't a law.",
     "tags": [
       "agency"
-    ]
+    ],
+    "block": {
+      "best_for": "Anyone learning a new skill at someone else's pace.",
+      "tip": "The standard pace is built so anyone can keep up. Derek Sivers' teacher covered a full semester of Berklee harmony in one three-hour lesson, then four more semesters in four more lessons.",
+      "needs": [],
+      "prompt": {
+        "text": "I want to learn [skill] as fast as I can. Teach me the core ideas one at a time and quiz me on each before moving on. Keep the pace hard and don't wait for me to feel ready.",
+        "ours": true
+      },
+      "start_here": [
+        "Find someone who'll teach you at a hard pace and quiz you as you go.",
+        "Buy the course materials and teach yourself the rest.",
+        "Ask to sit the final exam for credit."
+      ]
+    }
   },
   {
     "slug": "services-the-new-software-6-months-later",
@@ -420,11 +557,24 @@
         "note": "The business model in one line",
         "color": "green"
       }
-    ]
+    ],
+    "block": {
+      "best_for": "Founders selling AI-powered services to clients who can't afford a mistake.",
+      "tip": "Sell what the agent can do, with a qualified person who owns the outcome. Yaman's line: \"Accountability is how you cap variance.\"",
+      "needs": [],
+      "prompt": {
+        "text": "Rewrite my service offer so it sells the result the AI delivers and names the qualified person on our team who owns the outcome and steps in when something goes wrong. Here's the current offer: [paste]",
+        "ours": true
+      },
+      "start_here": [
+        "Name the expert who owns each client's outcome.",
+        "Let the AI do the work and have that expert step in where needed."
+      ]
+    }
   },
   {
     "slug": "agents-with-taste",
-    "title": "Agents with Taste",
+    "title": "Teach coding agents your design taste with rules",
     "url": "https://emilkowal.ski/ui/agents-with-taste",
     "domain": "emilkowal.ski",
     "saved_date": "2026-08-30",
@@ -447,7 +597,8 @@
     "tags": [
       "agents",
       "design"
-    ]
+    ],
+    "also_saved": true
   },
   {
     "slug": "the-modern-app-starter-checklist",
@@ -480,7 +631,8 @@
       }
     ],
     "excerpt": "From idea to a shipped, monetized, agent-friendly product on Cloudflare - whether it's a content/data site, a SaaS with real UI, or an API you sell. Written so an AI agent (or a human) can execute it top to bottom. Each phase has exact commands, config, and a check to confirm it worked. Every gotcha listed happened in a real production build. Skip phases you don't need, but read their gotchas anyway.",
-    "note": "A production-minded checklist for shipping agent-friendly Cloudflare apps, covering scaffolding, data stores, staging, security, deployment, and verification."
+    "note": "A production-minded checklist for shipping agent-friendly Cloudflare apps, covering scaffolding, data stores, staging, security, deployment, and verification.",
+    "also_saved": true
   },
   {
     "slug": "the-claude-code-guide-for-startups",
@@ -508,7 +660,24 @@
       }
     ],
     "excerpt": "If you want to take a peek at the future of work, ask startups how they are operating today. So we did. We spoke with more than a dozen fast-growing startups about how they use agentic coding tools to build products and scale their companies. These startups are changing the rules of who gets to build, what gets scrapped, and how to create a flywheel between how you build and what you build.",
-    "note": "Anthropic's five operating principles for startups using Claude Code: let everyone ship, automate tedium, verify outputs, build for rebuilding, and productionize prototypes."
+    "note": "Anthropic's five operating principles for startups using Claude Code: let everyone ship, automate tedium, verify outputs, build for rebuilding, and productionize prototypes.",
+    "block": {
+      "best_for": "Startup teams where non-engineers want to ship with Claude Code.",
+      "tip": "Connect Claude to the tools your team already works in, and only automate what you can check. Anthropic's rule three: you can't automate a process you can't monitor and verify.",
+      "needs": [
+        "Claude Code",
+        "MCP or CLI connections to your team's tools"
+      ],
+      "prompt": {
+        "text": "Here's a process my team runs every week: [describe]. Before we automate it, tell me how we'd check the output is right each time, what a pass looks like, and what should stop the run.",
+        "ours": true
+      },
+      "start_here": [
+        "Connect Claude to your sources of truth and daily tools via MCP or CLI.",
+        "Put what can't change in CLAUDE.md at the root of your repo.",
+        "Share skills across the company through a plugin marketplace."
+      ]
+    }
   },
   {
     "slug": "how-our-agents-build-on-brand-pages-with-design-md",
@@ -536,7 +705,25 @@
       }
     ],
     "excerpt": "Across Vercel, we use coding agents to design and build pages that have to look and feel like Vercel. The typography, color, and composition all need to carry the same judgment that we put into the pages we already ship ourselves.",
-    "note": "Vercel explains how it built design.md as a public brand file for coding agents, using repeatable visual evals to turn subjective guidance into rules that produce consistent pages."
+    "note": "Vercel explains how it built design.md as a public brand file for coding agents, using repeatable visual evals to turn subjective guidance into rules that produce consistent pages.",
+    "block": {
+      "best_for": "Anyone who keeps fixing the same things in AI-built pages, reports or proposals.",
+      "tip": "Rewrite your last ten corrections as rules you can check by looking, and keep them in one design.md file. When a page comes out wrong, fix the file.",
+      "needs": [
+        "v0",
+        "Codex",
+        "Claude"
+      ],
+      "prompt": {
+        "text": "Here are the last ten corrections I've made to AI-built pages: [paste]. Rewrite each as a rule someone could check by looking at the page. For example, 'Let evidence tables use the full available width' instead of 'Make the table feel less cramped'. Group them under scope, reader and task, observable decisions, and available primitives.",
+        "ours": true
+      },
+      "start_here": [
+        "Generate the page once with no design context and save it as your baseline.",
+        "Turn your last ten corrections into one file.",
+        "Generate again with the same input, model and viewport, file loaded, and compare."
+      ]
+    }
   },
   {
     "slug": "building-shared-memory-for-ai-agents-in-notion",
@@ -569,7 +756,8 @@
       }
     ],
     "excerpt": "As software engineering changes, tribal knowledge is increasingly concentrated not only in a single person's mind, but in a single agent session. Here at Notion, we kept having to manually extract experiential learnings as skills or documentation and share them with the team in-repo. But that doesn't scale.",
-    "note": "Notion’s engineering team explains Lore, an open-source shared-memory system that stores agent knowledge as structured Notion pages and measures whether retrieval improves performance."
+    "note": "Notion’s engineering team explains Lore, an open-source shared-memory system that stores agent knowledge as structured Notion pages and measures whether retrieval improves performance.",
+    "also_saved": true
   },
   {
     "slug": "you-cannot-mandate-an-ai-transformation",
@@ -602,11 +790,29 @@
       }
     ],
     "excerpt": "We have heard it so often that it now occupies the space between meme and cult mantra: AI is going to change everything!",
-    "note": "Julie Zhuo maps AI adoption from personal relief to shared wins, reliable systems, and organizational redesign without stripping people of agency."
+    "note": "Julie Zhuo maps AI adoption from personal relief to shared wins, reliable systems, and organizational redesign without stripping people of agency.",
+    "block": {
+      "best_for": "Owners and managers trying to get a team to use AI.",
+      "tip": "Point AI at a task people hate before anything they're proud of. \"A leader cannot mandate enthusiasm. A leader can arrange for relief.\"",
+      "time": {
+        "text": "Julie Zhuo says to aim for a first team win \"in days, not months\".",
+        "source": "stated"
+      },
+      "needs": [],
+      "prompt": {
+        "text": "I hate doing [task]. Give me a step-by-step plan to automate it.",
+        "ours": false
+      },
+      "start_here": [
+        "Automate one thing you hate this week.",
+        "Give one curious person time to rebuild a low-stakes weekly task, like a status update.",
+        "Write down the old baseline first, so you can prove what changed."
+      ]
+    }
   },
   {
     "slug": "school-visualize-value",
-    "title": "School | Visualize Value",
+    "title": "Six free courses on packaging and selling ideas",
     "url": "https://visualizevalue.com/school",
     "domain": "visualizevalue.com",
     "saved_date": "2026-09-04",
@@ -625,11 +831,25 @@
       }
     ],
     "excerpt": "Six courses. All free. Start with The Fundamentals of Value.",
-    "note": "Jack Butcher’s free course library covers visual clarity, positioning, packaging, publishing, service, and turning knowledge into reusable assets."
+    "note": "Jack Butcher’s free course library covers visual clarity, positioning, packaging, publishing, service, and turning knowledge into reusable assets.",
+    "block": {
+      "best_for": "Service business owners who want to package and explain what they sell.",
+      "tip": "Start with The Fundamentals of Value, as Jack Butcher says. Then take Build Once, Sell Twice if you're still billing by the hour.",
+      "needs": [],
+      "prompt": {
+        "text": "Here's what I sell and how I charge for it: [describe]. Help me package it as a fixed product I can sell more than once instead of billing hours. Give it a name, list what's included, and suggest a price.",
+        "ours": true
+      },
+      "start_here": [
+        "Start with The Fundamentals of Value.",
+        "Take Build Once, Sell Twice.",
+        "Then Context is Capital, on using AI as leverage."
+      ]
+    }
   },
   {
     "slug": "honkish-what-made-honk-feel-alive",
-    "title": "Honkish — What Made Honk Feel Alive",
+    "title": "Design details from Honk's live messaging app",
     "url": "https://benji.org/honkish",
     "domain": "benji.org",
     "saved_date": "2026-09-05",
@@ -657,7 +877,8 @@
       }
     ],
     "excerpt": "Before pivoting to build Family, I worked with many of the same talented people on Honk, a real-time messaging app. We discontinued Honk when we shifted our focus to Family, and when we were eventually acquired, the Honk IP was transferred over along with everything else.",
-    "note": "Benji's postmortem on Honk, the real-time messaging app with no send button. A catalogue of the micro-interactions that made it playful, and why that wasn't enough."
+    "note": "Benji's postmortem on Honk, the real-time messaging app with no send button. A catalogue of the micro-interactions that made it playful, and why that wasn't enough.",
+    "also_saved": true
   },
   {
     "slug": "how-we-built-interfere-s-new-website",
@@ -687,7 +908,8 @@
       }
     ],
     "excerpt": "Rebuilding a website is never easy, especially when you’re also defining the visual identity for an early-stage company that’s still relatively unknown. We did a week-long sprint to figure out how we wanted Interfere to look and feel.",
-    "note": "Paul Faivret and Jakub Krehel unpack a week-long sprint spanning visual identity, product graphics, animation, assets, and the site’s technical stack."
+    "note": "Paul Faivret and Jakub Krehel unpack a week-long sprint spanning visual identity, product graphics, animation, assets, and the site’s technical stack.",
+    "also_saved": true
   },
   {
     "slug": "my-llm-cliche-highlighter-is-up-to-38-patterns-now",
@@ -720,7 +942,23 @@
         }
       ]
     },
-    "keyline": "My LLM cliché highlighter is up to 38 patterns now"
+    "keyline": "My LLM cliché highlighter is up to 38 patterns now",
+    "block": {
+      "best_for": "Anyone who sends AI-drafted copy to customers.",
+      "tip": "Paste an AI draft into Simon Willison's free highlighter before it goes out. It flags sentences that match known LLM cliches and shows which one each hit.",
+      "needs": [
+        "a browser (tools.simonwillison.net/llm-cliche-highlighter)"
+      ],
+      "prompt": {
+        "text": "Rewrite the sentences I've marked so they say the same thing plainly. Keep my facts and numbers, cut the cliches, and don't add anything new: [paste flagged sentences]",
+        "ours": true
+      },
+      "start_here": [
+        "Open tools.simonwillison.net/llm-cliche-highlighter.",
+        "Paste your text or load it from a URL.",
+        "Tap each highlight to see which cliche it hit."
+      ]
+    }
   },
   {
     "slug": "your-agents-md-is-holding-you-back",
@@ -768,11 +1006,12 @@
         "title": "Your AGENTS.md is holding you back",
         "cover": "/posts/2094485724171223409/cover.webp"
       }
-    }
+    },
+    "also_saved": true
   },
   {
     "slug": "the-bridge",
-    "title": "The Bridge",
+    "title": "An illustrator's code for playful homepage effects",
     "url": "https://noahfarrar.com/thebridge",
     "domain": "noahfarrar.com",
     "saved_date": "2026-09-14",
@@ -790,7 +1029,8 @@
       }
     ],
     "excerpt": "I'm an illustrator / designer who always quietly admired people who could open a code editor and make something exist. This project has been about learning to cross that bridge in real time, mixing traditional workflows (sketching, vectorizing by hand, etc) with tools like Claude and really leaning into this new superpower us visual tinkerers have at our fingertips.",
-    "note": "Illustrator Noah Farrar learns to code with Claude and breaks down every interactive moment on his homepage — dither reveals, spring physics, click bursts — with the exact numbers behind each one."
+    "note": "Illustrator Noah Farrar learns to code with Claude and breaks down every interactive moment on his homepage — dither reveals, spring physics, click bursts — with the exact numbers behind each one.",
+    "also_saved": true
   },
   {
     "slug": "use-your-code-based-design-system-with-magic-patterns",
@@ -808,11 +1048,12 @@
       }
     ],
     "excerpt": "Learn how product teams connect Magic Patterns to their AI coding agents (Claude Code, Cursor, and others) through the MCP.",
-    "note": "A Lenny's Workshop recording with Magic Patterns cofounder Alexander Danilowicz: connecting Magic Patterns to Claude Code and Cursor over MCP so agents generate on-brand components and prototypes stay in sync with production code."
+    "note": "A Lenny's Workshop recording with Magic Patterns cofounder Alexander Danilowicz: connecting Magic Patterns to Claude Code and Cursor over MCP so agents generate on-brand components and prototypes stay in sync with production code.",
+    "also_saved": true
   },
   {
     "slug": "how-to-turn-your-ai-into-a-world-class-designer",
-    "title": "How to turn your AI into a world-class designer",
+    "title": "Get less generic design out of AI",
     "url": "https://www.lennysnewsletter.com/p/how-to-turn-your-ai-into-a-world",
     "domain": "lennysnewsletter.com",
     "saved_date": "2026-09-14",
@@ -837,11 +1078,28 @@
       }
     ],
     "excerpt": "I’d always thought AI was bad at design. But after reading this mind-blowing post by Anshu Chimala, I realize I was just doing it wrong. Anshu led software engineering and design teams at Apple for 12 years, focusing on research and prototyping for future AI products.",
-    "note": "Anshu Chimala spent twelve years prototyping AI products at Apple; this Lenny's guest post lays out his end-to-end process for getting real design taste out of AI. The full walkthrough sits behind the paywall."
+    "note": "Anshu Chimala spent twelve years prototyping AI products at Apple; this Lenny's guest post lays out his end-to-end process for getting real design taste out of AI. The full walkthrough sits behind the paywall.",
+    "block": {
+      "best_for": "Owners building landing pages with AI who keep getting the same template.",
+      "tip": "Have the AI generate a random string and base its colors, layout and type on it. Then have a second agent critique screenshots until it scores the page 9/10 or higher.",
+      "needs": [
+        "Claude Code",
+        "an OpenAI or Gemini API key, for images"
+      ],
+      "prompt": {
+        "text": "Build me a landing page for [business]. First generate a long random string of letters and numbers with a script, then choose the colors, layout and typography from patterns you see in it. Keep the string out of the design.",
+        "ours": true
+      },
+      "start_here": [
+        "Have the AI seed each design with a random string.",
+        "Give it an ambitious, specific creative brief.",
+        "Have a second agent critique screenshots, not code, and cut anything without a job."
+      ]
+    }
   },
   {
     "slug": "skyline-restaurant-and-cocktail-bar-a-blender-production-bri",
-    "title": "Skyline Restaurant and Cocktail Bar — a Blender production brief",
+    "title": "Skyline Restaurant and Cocktail Bar: a Blender production brief",
     "url": "https://restaurant-bar.space-z.ai/skyline_restaurant_bar_brief.html",
     "domain": "restaurant-bar.space-z.ai",
     "saved_date": "2026-09-14",
@@ -867,7 +1125,8 @@
       }
     ],
     "excerpt": "Create a complete, editable, photorealistic Blender environment depicting Skyline Restaurant and Cocktail Bar. Create a complete destination restaurant and cocktail bar above a dense global city at night, balancing theatrical arrival, intimate dining, visible culinary craft, and credible back-of-house operation.",
-    "note": "A full production brief for an autonomous agent: Claude Code, 12-plus hours unattended, building a photorealistic Blender restaurant judged by a 100-point rubric and six fresh-context critics. Worth reading as a spec for how far agent task briefs have come."
+    "note": "A full production brief for an autonomous agent: Claude Code, 12-plus hours unattended, building a photorealistic Blender restaurant judged by a 100-point rubric and six fresh-context critics. Worth reading as a spec for how far agent task briefs have come.",
+    "also_saved": true
   },
   {
     "slug": "how-a-professional-writer-writes-with-ai",
@@ -900,11 +1159,29 @@
         "t": 2280,
         "text": "Borrowing Vonnegut, Hitchcock and Sorkin as AI editing skills."
       }
-    ]
+    ],
+    "block": {
+      "best_for": "Owners who write their own emails, posts and newsletters with AI.",
+      "tip": "Build context files and style guides before you ask AI to write. That's the part Katie Parrott says makes AI output useful; it starts at 10:59.",
+      "needs": [
+        "ChatGPT (she started on the $20-a-month plan)",
+        "Claude projects",
+        "the Compound Writing plugin"
+      ],
+      "prompt": {
+        "text": "Interview me to build a style guide for my writing. Ask about my readers, what I sell, words I use and avoid, and three pieces I've written that I like. Then write it up as a one-page context file I can attach to every writing request.",
+        "ours": true
+      },
+      "start_here": [
+        "Watch 10:59 on context files and style guides.",
+        "Watch 14:15 on what makes a Claude project work.",
+        "Try the Compound Writing plugin (github.com/EveryInc/compound-writing)."
+      ]
+    }
   },
   {
     "slug": "how-to-build-a-services-as-software-delivery-stack",
-    "title": "Kenny Damian's 6-system services-as-software stack",
+    "title": "Kenny Damian's six systems for scaling client delivery",
     "url": "https://x.com/kenny_gtm/status/2095907541431775260?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
     "domain": "x.com",
     "saved_date": "2026-09-14",
@@ -947,6 +1224,27 @@
         "title": "How to Build a Services-as-Software Delivery Stack",
         "cover": "/posts/2095907541431775260/cover.webp"
       }
+    },
+    "block": {
+      "best_for": "Agencies and service businesses doing AI work for 2 or more clients.",
+      "tip": "Give each client its own folder and a context.md with their ICP, offer, personas, what works and what doesn't. Decide which source wins when they disagree, before an agent runs.",
+      "time": {
+        "text": "About 5 minutes to connect each tool. He doesn't give a total.",
+        "source": "stated"
+      },
+      "needs": [
+        "Claude Code",
+        "your own API keys for each client"
+      ],
+      "prompt": {
+        "text": "check for exposed API keys and vulnerabilities",
+        "ours": false
+      },
+      "start_here": [
+        "One folder per client, own keys.",
+        "CLAUDE.md at the root, under 200 lines.",
+        "context.md per client, sources ranked."
+      ]
     }
   },
   {
@@ -997,7 +1295,8 @@
         "text": "Now I'm at about 90% success rate, which is similar or better than Scrapingbee",
         "color": "amber"
       }
-    ]
+    ],
+    "also_saved": true
   },
   {
     "slug": "inside-openai-s-forward-deployed-engineer-role",
@@ -1027,7 +1326,8 @@
       }
     ],
     "excerpt": "The Forward Deployed Engineer (FDE) role has gained a lot of popularity in recent years, and OpenAI is a good example of fast scaling of their FDE organization. Additionally, they recently built a separate entity called the OpenAI Deployment Company, focused on helping customers use OpenAI’s products.",
-    "note": "Gregor Ojstersek’s interview with OpenAI’s FDE lead explains how the team sits between customers, product, and research, and why the job mixes engineering with on-site problem discovery."
+    "note": "Gregor Ojstersek’s interview with OpenAI’s FDE lead explains how the team sits between customers, product, and research, and why the job mixes engineering with on-site problem discovery.",
+    "also_saved": true
   },
   {
     "slug": "build-your-own-company-brain-the-enterprise-ai-playbook-from",
@@ -1056,11 +1356,25 @@
       }
     ],
     "excerpt": "Learn how Stripe scaled AI to everyone at a complex global company by building context, governance, and a shared skills platform directly into their internal agent",
-    "note": "Stripe’s engineering team explains how it built Kai for 10,000 weekly users, including governance, shared skills, secure data access, and safeguards against rogue agents."
+    "note": "Stripe’s engineering team explains how it built Kai for 10,000 weekly users, including governance, shared skills, secure data access, and safeguards against rogue agents.",
+    "block": {
+      "best_for": "Companies rolling out one internal AI assistant to non-technical staff.",
+      "tip": "Use projects to set the default model, tools and access for each team, so a few people who understand the tradeoffs make those calls once for everyone.",
+      "needs": [],
+      "prompt": {
+        "text": "When I ask a question about our numbers, first look for an existing report that answers it. If there isn't one, use our standard metrics sheet. Only go to the raw data as a last resort, and tell me which of the three you used.",
+        "ours": true
+      },
+      "start_here": [
+        "Send data questions to existing reports first, then the metrics layer, then the raw catalog.",
+        "Use projects to set each team's default model and tool rules.",
+        "Let each person choose what the agent sees, like their Drive or Slack."
+      ]
+    }
   },
   {
     "slug": "ordinary-abundance",
-    "title": "Ordinary Abundance",
+    "title": "Historical awe for the everyday things at home",
     "url": "https://ordinaryabundance.com/",
     "domain": "ordinaryabundance.com",
     "saved_date": "2026-09-15",
@@ -1089,11 +1403,12 @@
       }
     ],
     "excerpt": "Edward Bellamy once imagined that music on demand would be \"the limit of human felicity.\" A modern apartment is full of things that once drew the same kind of awe.",
-    "note": "A visual essay that tours an ordinary apartment through the historical wonder once attached to music, electric light, photography, and other everyday objects."
+    "note": "A visual essay that tours an ordinary apartment through the historical wonder once attached to music, electric light, photography, and other everyday objects.",
+    "also_saved": true
   },
   {
     "slug": "craft",
-    "title": "Craft",
+    "title": "Short design engineering tips on type and motion",
     "url": "https://craft.gustavofior.com/",
     "domain": "craft.gustavofior.com",
     "saved_date": "2026-09-18",
@@ -1122,11 +1437,12 @@
       }
     ],
     "excerpt": "A collection of design engineering concepts. These essays are short and simple, meant as a collection of useful ideas and tricks rather than an exhaustive resource.",
-    "note": "Gustavo Fior's concise collection of design-engineering ideas, from reference gathering and novelty budgets to motion, typography, color and interaction details."
+    "note": "Gustavo Fior's concise collection of design-engineering ideas, from reference gathering and novelty budgets to motion, typography, color and interaction details.",
+    "also_saved": true
   },
   {
     "slug": "l8-principal-building-a-full-stack-app-with-agentic-engineer",
-    "title": "L8 Principal Building a Full Stack App with Agentic Engineering",
+    "title": "Build a full-stack app with coding agents",
     "url": "https://www.youtube.com/watch?v=kPN564Kol14",
     "domain": "youtube.com",
     "saved_date": "2026-09-22",
@@ -1155,7 +1471,8 @@
         "t": 4964,
         "text": "GPT models, especially the 5.6, has this tendency to over-engineer."
       }
-    ]
+    ],
+    "also_saved": true
   },
   {
     "slug": "here-s-how-i-shipped-2-500-prs-last-month-to-production",
@@ -1182,7 +1499,8 @@
         }
       ]
     },
-    "keyline": "here's how i shipped 2,500 PRs last month to production"
+    "keyline": "here's how i shipped 2,500 PRs last month to production",
+    "also_saved": true
   },
   {
     "slug": "automating-repetitive-work-at-openai-with-codex",
@@ -1211,7 +1529,8 @@
       }
     ],
     "excerpt": "My first job at OpenAI was on the cloud infrastructure team, bringing up new Kubernetes clusters for application teams. I'd spend a week getting a batch of clusters ready, working through issues with private links, quota, and Terraform. As soon as those clusters were ready, I'd start on another batch.",
-    "note": "Jeremy Lewi shows how Runme notebooks and WebMCP turn recurring engineering work into reviewable workflows that retain decisions and lessons between Codex runs."
+    "note": "Jeremy Lewi shows how Runme notebooks and WebMCP turn recurring engineering work into reviewable workflows that retain decisions and lessons between Codex runs.",
+    "also_saved": true
   },
   {
     "slug": "how-to-pivot-your-saas-company-in-the-age-of-ai",
@@ -1240,11 +1559,25 @@
       }
     ],
     "excerpt": "It has never been easier to build software. I've spent the last year rebuilding Bannerbear from the ground up for V5, and a large chunk of that work was done with AI coding agents. Features that would have taken me a week in 2022 take an afternoon now.",
-    "note": "Jon Yongfook argues that cheap feature development has ended feature-led moats, then lays out seven ways SaaS businesses can compete through operations, distribution, data, and trust."
+    "note": "Jon Yongfook argues that cheap feature development has ended feature-led moats, then lays out seven ways SaaS businesses can compete through operations, distribution, data, and trust.",
+    "block": {
+      "best_for": "SaaS founders whose features a competitor can now copy in a weekend.",
+      "tip": "Pick two or three of Jon Yongfook's seven moves, starting with distribution. \"If two products have identical features, and they will, the one with the audience wins.\"",
+      "needs": [],
+      "prompt": {
+        "text": "Here's my product, my customers and my competitors: [describe]. Which two or three of these seven moves fit my business best, and why? Build the unsexy operational things, build where I have distribution, build for agents, go where the tech isn't, pivot into hardware, lower prices, become the all-in-one.",
+        "ours": true
+      },
+      "start_here": [
+        "Pick two or three of the seven; some contradict each other.",
+        "If you don't have an audience yet, make that the project.",
+        "Make your product reachable by an agent through an API or MCP."
+      ]
+    }
   },
   {
     "slug": "learn-by-copy",
-    "title": "Learn by Copy",
+    "title": "Find your writing voice by copying others' style",
     "url": "https://longform.asmartbear.com/learn-by-copy/?utm_source=twitter&utm_campaign=asmartbear_twitter&utm_medium=social",
     "domain": "longform.asmartbear.com",
     "saved_date": "2026-09-22",
@@ -1269,7 +1602,21 @@
       }
     ],
     "excerpt": "In America we're trained that all copying is bad; of course plagiarism is, but perhaps we're throwing the baby out with the bathwater.",
-    "note": "Jason Cohen makes the case for copying structure and style—not words—as a practical way to discover your own strengths and learn how to write."
+    "note": "Jason Cohen makes the case for copying structure and style—not words—as a practical way to discover your own strengths and learn how to write.",
+    "block": {
+      "best_for": "Owners who write their own marketing and haven't found their voice yet.",
+      "tip": "Write one short piece in the style of a writer you like, copying the style and never the words. Jason Cohen's Seth Godin copy was 160 words and showed him what he liked and what didn't fit.",
+      "needs": [],
+      "prompt": {
+        "text": "Here's a piece by a writer whose style I like: [paste]. Describe the style in five plain rules: structure, sentence length, how it opens, how it ends, and tone. Then read my draft and tell me which rules I'm already following: [paste draft]",
+        "ours": true
+      },
+      "start_here": [
+        "Pick a writer whose style you like.",
+        "Write a short piece on your own topic in their style.",
+        "Note what you liked and what didn't fit you."
+      ]
+    }
   },
   {
     "slug": "recreate-1906-market-street-in-blender-with-claude",
@@ -1298,6 +1645,7 @@
         "text": "No downloaded meshes, textures or HDRIs.",
         "color": "amber"
       }
-    ]
+    ],
+    "also_saved": true
   }
 ]

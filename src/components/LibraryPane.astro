@@ -32,7 +32,7 @@ import { entryHref, rowSummary } from "../lib/library";
 import { FILTER, PREPAINT } from "../lib/library-pane";
 import { clipText } from "../lib/post";
 import { libraryPreview } from "../lib/assets";
-import { formatMonth } from "../lib/date";
+import { formatDay, formatMonth } from "../lib/date";
 
 interface Props {
   entries: LibraryEntry[];
@@ -45,10 +45,12 @@ interface Props {
 const { entries, current, start } = Astro.props;
 const index = start !== undefined;
 
-/** Month headers: "2026-09" -> its label and how many entries it holds. */
+/** Month headers over the main feed: "2026-09" -> its label and count. "Also saved" follows it (VET-273). */
+const main = entries.filter((entry) => !entry.also_saved);
+const also = entries.filter((entry) => entry.also_saved);
 const months = new Map<string, number>();
-for (const entry of entries) months.set(entry.saved_date.slice(0, 7), (months.get(entry.saved_date.slice(0, 7)) ?? 0) + 1);
-const opens = (i: number) => i === 0 || entries[i]!.saved_date.slice(0, 7) !== entries[i - 1]!.saved_date.slice(0, 7);
+for (const entry of main) months.set(entry.saved_date.slice(0, 7), (months.get(entry.saved_date.slice(0, 7)) ?? 0) + 1);
+const opens = (i: number) => i === 0 || main[i]!.saved_date.slice(0, 7) !== main[i - 1]!.saved_date.slice(0, 7);
 ---
 
 <nav
@@ -65,16 +67,18 @@ const opens = (i: number) => i === 0 || entries[i]!.saved_date.slice(0, 7) !== e
   <div class="pane__tags"><LibraryTags /></div>
   <ul data-rows>
     {
-      entries.map((entry, i) => {
-        const summary = rowSummary(entry);
+      [...main, ...also].map((entry, i) => {
+        const quiet = entry.also_saved;
+        const summary = quiet ? null : (entry.block?.tip ?? rowSummary(entry));
         return (
           <>
-          {opens(i) && (
+          {!quiet && opens(i) && (
             <li class="pane__month mono" data-month>
               {formatMonth(entry.saved_date)} · <span class="tabular-nums" data-month-count>{months.get(entry.saved_date.slice(0, 7))}</span>
             </li>
           )}
-          <li data-kind={entry.kind} data-tags={entry.tags.join(" ")}>
+          {i === main.length && <li class="pane__month pane__also mono" data-month>Also saved · <span class="tabular-nums" data-month-count>{also.length}</span></li>}
+          <li data-kind={entry.kind} data-tags={entry.tags.join(" ")} data-also={quiet ? "" : undefined}>
             <a
               href={entryHref(entry)}
               data-astro-prefetch="hover"
@@ -83,10 +87,11 @@ const opens = (i: number) => i === 0 || entries[i]!.saved_date.slice(0, 7) !== e
             >
               <b>{entry.title}</b>
               <small>
-                <KindIcon kind={entry.kind} />
+                {!quiet && <KindIcon kind={entry.kind} />}
                 <span>{entry.domain}</span>
+                {quiet && <time datetime={entry.saved_date}>{formatDay(entry.saved_date)}</time>}
               </small>
-              {summary && <span>{clipText(summary, 110)}</span>}
+              {summary && <span class:list={[entry.block && "tip"]}>{clipText(summary, 110)}</span>}
             </a>
           </li>
           </>
@@ -187,6 +192,22 @@ const opens = (i: number) => i === 0 || entries[i]!.saved_date.slice(0, 7) !== e
     color: var(--text-secondary);
   }
 
+  /* Quieter than a month: the rows under it are kept, not featured (VET-273). */
+  .pane .pane__also {
+    margin-top: 1.5rem;
+    color: var(--text-tertiary);
+  }
+
+  .pane li[data-also] b {
+    font-weight: 400;
+    color: var(--text-secondary);
+  }
+
+  .pane li[data-also] time::before {
+    content: "\00b7" / "";
+    margin-right: 0.4rem;
+  }
+
   .pane .pane__month .tabular-nums {
     color: var(--text-tertiary);
   }
@@ -268,5 +289,11 @@ const opens = (i: number) => i === 0 || entries[i]!.saved_date.slice(0, 7) !== e
     -webkit-line-clamp: 2;
     line-clamp: 2;
     overflow: hidden;
+  }
+
+  /* A block's tip: one line (VET-273). */
+  .pane li > a > .tip {
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
   }
 </style>

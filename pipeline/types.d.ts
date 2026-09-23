@@ -176,6 +176,10 @@ export interface Patch {
     why: string;
     digested: string;
   } | null;
+  /** The entry's block (VET-273), held to `src/lib/reader.mjs › block`. */
+  block?: import("../src/lib/reader.mjs").Block | null;
+  /** true moves the entry under "Also saved"; false removes the key. */
+  also_saved?: boolean | null;
 }
 
 /** What `plan()` decided to do about one bookmark. */

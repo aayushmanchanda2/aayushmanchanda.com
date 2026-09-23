@@ -175,6 +175,8 @@ const DIGESTED_ENTRY = {
   excerpt: null,
   keyline: null,
   moments: [],
+  block: null,
+  also_saved: false,
 };
 
 /**
@@ -212,6 +214,8 @@ const SAVED_ENTRY = {
   excerpt: null,
   keyline: null,
   moments: [],
+  block: null,
+  also_saved: false,
 };
 
 /** @type {import("./sites.ts").Site} */

@@ -1,0 +1,197 @@
+---
+/**
+ * EntryBlock — the card at the top of a library entry (VET-273): who the
+ * piece is for, the one tip, how long it takes, what you need, a prompt to
+ * copy, and where to start. A `dl` of label/value rows, so a screen reader
+ * hears each label with its value; one column under 40rem.
+ *
+ * The prompt copies through `lib/copy-flash.ts`, the pattern /sites already
+ * uses: the label flashes "copied" and the status line announces it. A prompt
+ * we wrote carries an "our prompt" chip, so it is never read as the source's
+ * own words.
+ */
+import type { Block } from "../lib/library";
+
+interface Props {
+  block: Block;
+}
+
+const { block } = Astro.props;
+---
+
+<section class="blk" aria-label="The short version" data-copy-root>
+  <dl class="blk__rows">
+    <dt>Best for</dt>
+    <dd>{block.best_for}</dd>
+    <dt>The tip</dt>
+    <dd class="blk__tip">{block.tip}</dd>
+    {
+      block.time && (
+        <>
+          <dt>Time it takes</dt>
+          <dd>
+            {block.time.text}
+            {block.time.source === "estimate" && <span class="blk__est"> (estimate)</span>}
+          </dd>
+        </>
+      )
+    }
+    {
+      block.needs.length > 0 && (
+        <>
+          <dt>What you need</dt>
+          <dd>{block.needs.join(", ")}</dd>
+        </>
+      )
+    }
+    {
+      block.prompt && (
+        <>
+          <dt>The prompt</dt>
+          <dd class="blk__prompt">
+            <div class="blk__box">
+              <p class="blk__text mono" data-block-prompt>{block.prompt.text}</p>
+              <div class="blk__tools">
+                {block.prompt.ours && <span class="chip" data-tone="gray">our prompt</span>}
+                <button type="button" class="blk__copy mono press" data-copy={block.prompt.text} data-copy-name="the prompt">
+                  <span data-copy-label aria-hidden="true">Copy</span>
+                  <span class="visually-hidden">Copy the prompt</span>
+                </button>
+              </div>
+            </div>
+          </dd>
+        </>
+      )
+    }
+    <dt>Start here</dt>
+    <dd>
+      <ol class="blk__steps">
+        {block.start_here.map((step) => <li>{step}</li>)}
+      </ol>
+    </dd>
+  </dl>
+  <p class="visually-hidden" role="status" aria-live="polite" data-copy-status></p>
+</section>
+
+<script>
+  import { wireAllCopy } from "../lib/copy-flash";
+
+  wireAllCopy();
+</script>
+
+<style>
+  /* Structural, so sharp and a hairline, the draft box's surface (design.md §3). */
+  .blk {
+    max-width: 40rem;
+    margin-top: 1.5rem;
+    padding: clamp(1rem, 3vw, 1.25rem);
+    border: 1px solid var(--hairline-strong);
+  }
+
+  /* Label column sized to the longest label, value column the rest. */
+  .blk__rows {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: 0.75rem 1.25rem;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+  }
+
+  dt {
+    padding-top: 0.1rem;
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+  }
+
+  dd {
+    color: var(--text-secondary);
+    text-wrap: pretty;
+  }
+
+  .blk__tip {
+    color: var(--text-primary);
+  }
+
+  .blk__est {
+    color: var(--text-tertiary);
+  }
+
+  .blk__box {
+    border: 1px solid var(--hairline);
+    background: var(--surface-selected);
+  }
+
+  .blk__text {
+    padding: 0.75rem 0.875rem 0.5rem;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    color: var(--text-primary);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .blk__tools {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: 0 0.375rem 0.375rem 0.875rem;
+  }
+
+  .blk__tools .chip {
+    margin-right: auto;
+  }
+
+  /* 40px tall, the site's control floor (design.md §4). */
+  .blk__copy {
+    min-height: 40px;
+    min-width: 4.5rem;
+    padding-inline: 0.75rem;
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--r-md);
+    background: var(--bg);
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+    cursor: pointer;
+    transition-property: color, border-color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  /* copy-flash writes "copied"; the button reads "Copied". */
+  .blk__copy [data-copy-label] {
+    text-transform: capitalize;
+  }
+
+  @media (hover: hover) {
+    .blk__copy:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+  }
+
+  .blk__steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    padding-left: 1.25rem;
+    list-style: decimal;
+  }
+
+  .blk__steps li::marker {
+    color: var(--text-tertiary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (max-width: 40rem) {
+    .blk__rows {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.25rem;
+    }
+
+    dd + dt {
+      margin-top: 0.75rem;
+    }
+  }
+</style>

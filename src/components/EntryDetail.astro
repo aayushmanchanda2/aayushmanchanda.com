@@ -14,6 +14,7 @@
  */
 import DigestBlocks from "./DigestBlocks.astro";
 import DraftBlock from "./DraftBlock.astro";
+import EntryBlock from "./EntryBlock.astro";
 import EntryLink from "./EntryLink.astro";
 import KindChip from "./KindChip.astro";
 import Moments from "./Moments.astro";
@@ -95,7 +96,8 @@ const preview = libraryPreview(entry);
     }
   </ul>
 
-  {/* What the source says, in a sentence: the first thing to read (VET-233). */}
+  {/* The block card (VET-273), then what the source says in a sentence (VET-233). */}
+  {entry.block && <EntryBlock block={entry.block} />}
   {entry.tldr && <p class="lead">{entry.tldr}</p>}
 </header>
 

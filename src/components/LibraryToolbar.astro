@@ -4,15 +4,18 @@
  * list pane on every library page, and /library draws a second one above its
  * view for phones, where the pane is hidden (VET-258). The tag filter sits
  * under it (`LibraryTags.astro`, VET-267). `lib/library-pane.ts › FILTER`
- * wires every copy on the page.
+ * wires every copy on the page. Every count here is the main feed's; the
+ * "Also saved" group counts itself in the pane (VET-273).
  */
 import KindSegments from "./KindSegments.astro";
-import { kindGroups, library } from "../lib/library";
+import { feed, kindGroups } from "../lib/library";
+
+const groups = kindGroups.map((group) => ({ ...group, entries: group.entries.filter((entry) => !entry.also_saved) }));
 ---
 
 <div class="ltools">
-  <KindSegments groups={kindGroups} total={library.length} />
-  <p class="ltools__count tabular-nums" aria-live="polite" data-filter-count>{library.length} entries</p>
+  <KindSegments groups={groups} total={feed.length} />
+  <p class="ltools__count tabular-nums" aria-live="polite" data-filter-count>{feed.length} entries</p>
 </div>
 
 <style is:global>

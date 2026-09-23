@@ -1,0 +1,37 @@
+{
+  "detailPagesWithBlock": 20,
+  "ourPromptPages": 15,
+  "mismatches": [],
+  "copy": [
+    {
+      "slug": "jason-liu-codex-operating-system",
+      "exact": true,
+      "label": "Copied\nCopy the prompt",
+      "status": "Copied the prompt"
+    },
+    {
+      "slug": "matt-van-horn-agent-first-workflow",
+      "exact": true,
+      "label": "Copied\nCopy the prompt",
+      "status": "Copied the prompt"
+    }
+  ],
+  "paneAlsoHeader": "Also saved · 19",
+  "paneAlsoRows": 19,
+  "paneMainRows": 20,
+  "toolbarCount": "20 entries",
+  "allViewAlsoRows": 19,
+  "allViewAlsoHeader": "Also saved 19",
+  "monthCountsSum": 20,
+  "paneTipOneLine": true,
+  "searchHasAlsoSaved": true,
+  "mdBlocks": 20,
+  "mdOurPrompt": 15,
+  "llmsLine": [
+    "20 entries open with a short version: who it's for, the tip,",
+    "it) and where to start. 19 entries sit under Also saved: kept, not featured.",
+    "/library.md carries every row and every short version as markdown."
+  ],
+  "phoneColumns": 1,
+  "phoneOverflow": false
+}

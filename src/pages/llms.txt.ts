@@ -19,7 +19,7 @@
 import type { APIRoute } from "astro";
 
 import { PAGES } from "../lib/markdown";
-import { digested, kindGroups, library } from "../lib/library";
+import { alsoSaved, digested, kindGroups, library } from "../lib/library";
 import { FEEDS, getSections } from "../lib/sections";
 import { sites } from "../lib/sites";
 import { categories, tools, verdictGroups } from "../lib/tools";
@@ -112,7 +112,10 @@ date, his one-line note, and the source. ${digested.length} of ${library.length}
 are digested, with cliff notes and a call on whether it's worth reading. A
 saved post's page carries the full post; its card cuts off at 280 characters.
 A block labelled as a draft was written by his pipeline and isn't his verdict.
-/library.md carries every row.
+${entries(library.filter((entry) => entry.block !== null).length)} open with a short version: who it's for, the tip,
+the time it takes, what you need, a prompt to copy (marked when the site wrote
+it) and where to start. ${entries(alsoSaved.length)} sit under Also saved: kept, not featured.
+/library.md carries every row and every short version as markdown.
 
 ## Pages
 

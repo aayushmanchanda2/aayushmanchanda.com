@@ -7,7 +7,8 @@
  *   - **All**: an editorial front page (QA phase 2, B6), not a second copy of
  *     the pane: the newest article as a card with its TLDR and first
  *     highlight, the latest four posts as compact `PostCard`s, the latest two
- *     videos, each with a link to its kind.
+ *     videos, each with a link to its kind, then the quieter "Also saved"
+ *     list (VET-273): kept entries that left the main feed.
  *   - **Articles**: list-detail. Beside the pane, the newest article opens here
  *     through `EntryDetail`, the entry page's own markup, the way Notes opens
  *     on the latest note; a "pick one" empty state would be a click that
@@ -30,7 +31,7 @@ import LibraryToolbar from "./LibraryToolbar.astro";
 import PostWall from "./PostWall.astro";
 import VideoGrid from "./VideoGrid.astro";
 import type { Kind } from "../lib/library";
-import { KIND_BLURBS, KIND_LABELS, entryHref, library } from "../lib/library";
+import { KIND_BLURBS, KIND_LABELS, alsoSaved, entryHref, feed } from "../lib/library";
 import { FILTER, PREPAINT } from "../lib/library-pane";
 import { formatDay } from "../lib/date";
 
@@ -41,7 +42,8 @@ interface Props {
 
 const { start } = Astro.props;
 
-const of = (kind: Kind) => library.filter((entry) => entry.kind === kind);
+// The main feed only; "Also saved" entries sit in their own list under All (VET-273).
+const of = (kind: Kind) => feed.filter((entry) => entry.kind === kind);
 const articles = of("article");
 const [reading] = articles;
 const posts = of("post").filter((entry) => entry.post !== null);
@@ -95,6 +97,15 @@ const more = [
             {section.kind === "post" ? <PostWall entries={section.entries} compact /> : <VideoGrid entries={section.entries} />}
           </section>
         ))}
+        {alsoSaved.length > 0 && (
+          <section class="mix__part" aria-labelledby="mix-also">
+            <h2 class="mix__head mono" id="mix-also">
+              <span>Also saved</span>
+              <span class="tabular-nums">{alsoSaved.length}</span>
+            </h2>
+            <LibraryFeed entries={alsoSaved} quiet />
+          </section>
+        )}
       </div>
     </section>
   )

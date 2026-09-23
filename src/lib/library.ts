@@ -62,8 +62,8 @@
 import { SLUG, routeSlug } from "./parse.ts";
 import type { Post } from "./post-schema.ts";
 import { READ, fail, readCommittedPath, readList, readPostObject } from "./post-schema.ts";
-import type { Color } from "./reader.mjs";
-import { CAPS, highlights, keyline, moments, postHighlights, prose } from "./reader.mjs";
+import type { Block, Color } from "./reader.mjs";
+import { CAPS, block, highlights, keyline, moments, postHighlights, prose } from "./reader.mjs";
 
 import rawLibrary from "../data/library.json" with { type: "json" };
 
@@ -108,6 +108,7 @@ export const KIND_BLURBS: Record<Kind, string> = {
  * and the why are what earn the entry its page.
  */
 export type { Post, PostLink, PostMedia } from "./post-schema.ts";
+export type { Block } from "./reader.mjs";
 
 export interface Digest {
   /** Three to five load-bearing claims from the piece, one line each. */
@@ -246,6 +247,10 @@ export interface LibraryEntry {
   keyline: string | null;
   /** A video's key moments, each tied to the YouTube id its time belongs to. Empty when none. */
   moments: Moment[];
+  /** Best for, the tip, time, needs, a prompt to copy, where to start (VET-273). Or null. */
+  block: Block | null;
+  /** Kept, but out of the main feed: listed under "Also saved" (VET-273). */
+  also_saved: boolean;
 }
 
 /** A point in a video, at `t` whole seconds into `video` (a YouTube id). */
@@ -567,6 +572,14 @@ function readCapped<T>(
   }
 }
 
+/** Absent or null is false; anything else has to be a boolean. */
+function readFlag(entry: Record<string, unknown>, key: string, where: string): boolean {
+  const value = entry[key];
+  if (value === undefined || value === null) return false;
+  if (typeof value !== "boolean") fail(where, `needs "${key}" to be true, false, or absent (got ${JSON.stringify(value)})`);
+  return value;
+}
+
 export function parseLibrary(value: unknown): LibraryEntry[] {
   if (!Array.isArray(value)) fail("root", "must be a JSON array of library entries");
   if (value.length === 0) fail("root", "must hold at least one library entry");
@@ -631,6 +644,8 @@ export function parseLibrary(value: unknown): LibraryEntry[] {
         if (id === undefined) fail(where, `has "moments" but no video, and no "source_video_id" to time them against`);
         return { t: m.t, text: m.text, video: id };
       }),
+      block: readCapped(item, "block", where, block),
+      also_saved: readFlag(item, "also_saved", where),
     };
   });
 
@@ -686,6 +701,7 @@ export function entryHref(entry: Pick<LibraryEntry, "slug">): string {
  * The line under a row's title in the /library/<slug> list pane: the TLDR
  * once there is one, the note until then. A post the pipeline could read gets
  * no fallback, because its note is its own words and its title already is.
+ * A row whose entry has a block shows its tip instead (the pane, VET-273).
  */
 export function rowSummary(entry: LibraryEntry): string | null {
   return entry.tldr ?? (entry.post ? null : entry.note);
@@ -718,6 +734,10 @@ export const library: LibraryEntry[] = parseLibrary(rawLibrary)
 export const digested: DigestedEntry[] = library.filter(
   (entry): entry is DigestedEntry => entry.digest !== null,
 );
+
+/** The main feed, and the quieter "Also saved" group under it (VET-273). Same order as `library`. */
+export const feed: LibraryEntry[] = library.filter((entry) => !entry.also_saved);
+export const alsoSaved: LibraryEntry[] = library.filter((entry) => entry.also_saved);
 
 /** Kinds in vocabulary order, empty ones dropped: no page without entries. */
 export const kindGroups: KindGroup[] = KINDS.map((kind) => ({

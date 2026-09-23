@@ -10,6 +10,9 @@
  * `filterable` writes the tags onto each row, so the pane's tag select narrows
  * it (`lib/library-pane.ts › FILTER`). The All view's latest twelve leave it
  * off: a "latest" list that a filter could empty would be a different list.
+ *
+ * An entry with a block shows its tip on the one line instead of the TLDR
+ * (VET-273). `quiet` is the "Also saved" list: title, domain and date only.
  */
 import KindIcon from "./KindIcon.astro";
 import type { LibraryEntry } from "../lib/library";
@@ -19,20 +22,21 @@ import { formatDay } from "../lib/date";
 interface Props {
   entries: LibraryEntry[];
   filterable?: boolean;
+  quiet?: boolean;
 }
 
-const { entries, filterable = false } = Astro.props;
+const { entries, filterable = false, quiet = false } = Astro.props;
 ---
 
-<ul class="feed">
+<ul class:list={["feed", quiet && "feed--quiet"]}>
   {
     entries.map((entry) => (
       <li data-tags={filterable ? entry.tags.join(" ") : undefined}>
         <a href={entryHref(entry)} data-astro-prefetch="hover">
-          <KindIcon kind={entry.kind} />
+          {!quiet && <KindIcon kind={entry.kind} />}
           <span class="feed__body">
             <b>{entry.title}</b>
-            {entry.tldr && <span class="feed__tldr">{entry.tldr}</span>}
+            {!quiet && (entry.block?.tip ?? entry.tldr) && <span class="feed__tldr">{entry.block?.tip ?? entry.tldr}</span>}
             <small>
               <span>{entry.domain}</span>
               <time datetime={entry.saved_date}>{formatDay(entry.saved_date)}</time>
@@ -97,6 +101,15 @@ const { entries, filterable = false } = Astro.props;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  .feed--quiet a {
+    padding-block: 0.5rem;
+  }
+
+  .feed--quiet b {
+    font-weight: 400;
+    color: var(--text-secondary);
   }
 
   .feed small {
