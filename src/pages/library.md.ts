@@ -28,9 +28,10 @@ import {
   newest,
   quote,
 } from "../lib/markdown";
-import type { Kind } from "../lib/library";
+import type { Kind, LibraryEntry } from "../lib/library";
 import {
   KINDS,
+  alsoSaved,
   digested,
   kindGroups,
   library,
@@ -49,6 +50,27 @@ const MEANING: Record<Kind, string> = {
   post: "A short thing published on a social timeline.",
   video: "A talk, an interview, or a recorded workshop.",
 };
+
+/** An entry's block as plain markdown (VET-273), under its title. */
+function blockMarkdown(entry: LibraryEntry & { block: NonNullable<LibraryEntry["block"]> }): string {
+  const { block } = entry;
+  const time = block.time && `${block.time.text}${block.time.source === "estimate" ? " (estimate)" : ""}`;
+  return [
+    `### ${entry.title}`,
+    list([
+      `Best for: ${block.best_for}`,
+      `The tip: ${block.tip}`,
+      ...(time ? [`Time it takes: ${time}`] : []),
+      ...(block.needs.length > 0 ? [`What you need: ${block.needs.join(", ")}`] : []),
+    ]),
+    ...(block.prompt
+      ? [`The prompt${block.prompt.ours ? " (our prompt, not the source's words)" : ""}:`, "```text\n" + block.prompt.text + "\n```"]
+      : []),
+    "Start here:",
+    block.start_here.map((step, index) => `${index + 1}. ${step}`).join("\n"),
+    `Page: ${absolute(`/library/${entry.slug}`)}`,
+  ].join("\n\n");
+}
 
 export const GET: APIRoute = () => {
   // Tags as the slugs rather than as the words the chips read, because a slug
@@ -69,6 +91,7 @@ export const GET: APIRoute = () => {
   // such section — the markdown twin of the honest-absence rule the HTML
   // routes follow.
   const digests = digestSection(digested);
+  const blocked = library.filter((entry): entry is LibraryEntry & { block: NonNullable<LibraryEntry["block"]> } => entry.block !== null);
   const highlighted = library.filter((entry) => entry.highlights.length + entry.moments.length > 0);
 
   return markdownDocument({
@@ -114,6 +137,24 @@ export const GET: APIRoute = () => {
         ),
       ),
       ...(digests === null ? [] : [digests]),
+      ...(blocked.length === 0
+        ? []
+        : [
+            section(
+              "Blocks",
+              "The short version of an entry: who it's for, the tip, the time it takes, what you need, a prompt to copy and where to start. A prompt marked as ours was written for this site, not quoted.",
+              ...blocked.map(blockMarkdown),
+            ),
+          ]),
+      ...(alsoSaved.length === 0
+        ? []
+        : [
+            section(
+              "Also saved",
+              "Kept but not featured: each still has its page and is in the table above.",
+              list(alsoSaved.map((entry) => `${link(entry.title, absolute(`/library/${entry.slug}`))} (${entry.domain}, ${entry.saved_date})`)),
+            ),
+          ]),
       section(
         "Highlights",
         "Passages quoted from the source, never the whole piece. Videos list their moments, each linked to the second it starts.",

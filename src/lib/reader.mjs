@@ -143,3 +143,72 @@ export function clock(t) {
 
 /** The moment on YouTube itself. @param {string} id @param {number} t */
 export const watchAt = (id, t) => `https://www.youtube.com/watch?v=${id}&t=${t}s`;
+
+/** Where a block's time comes from: the source said it, or we guessed. */
+export const TIME_SOURCES = /** @type {const} */ (["stated", "estimate"]);
+
+/** The most "Start here" steps a block carries. */
+export const START_MAX = 3;
+
+/**
+ * @typedef {{
+ *   best_for: string, tip: string,
+ *   time?: { text: string, source: (typeof TIME_SOURCES)[number] },
+ *   needs: string[],
+ *   prompt?: { text: string, ours: boolean },
+ *   start_here: string[],
+ * }} Block
+ */
+
+/** @param {unknown} value @param {string} at @returns {Record<string, unknown>} */
+function object(value, at) {
+  if (typeof value !== "object" || value === null || Array.isArray(value)) {
+    throw new Error(`"${at}" has to be an object`);
+  }
+  return /** @type {Record<string, unknown>} */ (value);
+}
+
+/** @param {unknown} value @param {string} at @param {number} min @param {number} max */
+function lines(value, at, min, max) {
+  if (!Array.isArray(value) || value.length < min || value.length > max) {
+    throw new Error(`"${at}" has to be a list of ${min} to ${max} lines`);
+  }
+  return value.map((item, index) => {
+    if (typeof item === "string" && item.includes("\n")) throw new Error(`"${at}[${index}]" has to be one line`);
+    return prose(item, `${at}[${index}]`, Infinity);
+  });
+}
+
+/**
+ * The block on a library entry (VET-273): who it is for, the tip, what it
+ * takes, a prompt to copy, and where to start. `time` and `prompt` are
+ * optional; absent or null stays absent, so a patch writes what a hand-edit
+ * would. Every string is non-empty and has no em dash.
+ * @param {unknown} value @returns {Block}
+ */
+export function block(value) {
+  const raw = object(value, "block");
+  /** @type {Block["time"]} */
+  let time;
+  if (raw.time != null) {
+    const at = object(raw.time, "block.time");
+    const source = TIME_SOURCES.find((name) => name === at.source);
+    if (!source) throw new Error(`"block.time.source" has to be one of ${TIME_SOURCES.join(", ")}`);
+    time = { text: prose(at.text, "block.time.text", Infinity), source };
+  }
+  /** @type {Block["prompt"]} */
+  let prompt;
+  if (raw.prompt != null) {
+    const at = object(raw.prompt, "block.prompt");
+    if (typeof at.ours !== "boolean") throw new Error(`"block.prompt.ours" has to be true or false`);
+    prompt = { text: prose(at.text, "block.prompt.text", Infinity), ours: at.ours };
+  }
+  return {
+    best_for: prose(raw.best_for, "block.best_for", Infinity),
+    tip: prose(raw.tip, "block.tip", Infinity),
+    ...(time && { time }),
+    needs: lines(raw.needs, "block.needs", 0, 12),
+    ...(prompt && { prompt }),
+    start_here: lines(raw.start_here, "block.start_here", 1, START_MAX),
+  };
+}

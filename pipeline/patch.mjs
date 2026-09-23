@@ -34,7 +34,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { collectionsFrom, readEntries, urlKey, writeEntries } from "./entries.mjs";
 import { resolvePaths } from "./state.mjs";
 import { isRecord } from "./util.mjs";
-import { CAPS, highlights, keyline, moments, postHighlights, prose } from "../src/lib/reader.mjs";
+import { CAPS, block, highlights, keyline, moments, postHighlights, prose } from "../src/lib/reader.mjs";
 
 /** @typedef {import("./types.js").Paths} Paths */
 /** @typedef {import("./types.js").Patch} Patch */
@@ -42,7 +42,7 @@ import { CAPS, highlights, keyline, moments, postHighlights, prose } from "../sr
 const REPO_ROOT = fileURLToPath(new URL("..", import.meta.url));
 
 /** Every field a patch may touch, in the order the entry writes them. */
-const FIELDS = ["title", "tldr", "highlights", "keyline", "moments", "excerpt", "tags", "note", "why", "draft", "digest"];
+const FIELDS = ["title", "tldr", "highlights", "keyline", "moments", "excerpt", "tags", "note", "why", "draft", "digest", "block", "also_saved"];
 
 /**
  * A patch that cannot be applied: no such entry, two entries, a field that is
@@ -156,6 +156,12 @@ function normalise(field, value, entry) {
       return normaliseDraft(value);
     case "digest":
       return normaliseDigest(value);
+    case "block":
+      return capped(() => block(value));
+    case "also_saved":
+      if (typeof value !== "boolean") throw new PatchError(`"also_saved" has to be true or false`);
+      // false is the default, so it is written as no key at all.
+      return value ? true : null;
     default:
       throw new PatchError(`"${field}" is not a field a patch can set`);
   }
@@ -200,7 +206,7 @@ function normaliseSentence(field, value) {
 }
 
 /**
- * The source fields (`tldr`, `highlights`, `keyline`, `moments`, `excerpt`) under the caps
+ * The source fields (`tldr`, `highlights`, `keyline`, `moments`, `excerpt`, `block`) under the caps
  * `library.ts` builds with, so a patch the build would refuse is refused here.
  * @template T @param {() => T} read @returns {T}
  */
@@ -458,6 +464,9 @@ const USAGE = [
   "  --why <text>      replace Aayush's why; --why '' removes it",
   "  --draft <json>    {\"bullets\":[…],\"why\":\"…\",\"drafted\":\"YYYY-MM-DD\"}",
   "  --digest <json>   all four fields; --digest '' removes it",
+  "  --block <json>    {\"best_for\":\"…\",\"tip\":\"…\",\"needs\":[…],\"start_here\":[1-3 steps]}, optional",
+  "                    \"time\":{\"text\":\"…\",\"source\":\"stated|estimate\"} and \"prompt\":{\"text\":\"…\",\"ours\":true}; '' removes it",
+  "  --also-saved true|false  move the entry to (or out of) the quieter Also saved group",
   "  --no-commit       write the file and stop, so the diff can be read first",
 ].join("\n");
 
@@ -509,8 +518,13 @@ export function parseArgs(argv) {
       case "--excerpt":
         patch[flag.slice(2)] = value.trim() === "" ? null : value;
         break;
+      case "--also-saved":
+        if (value !== "true" && value !== "false") throw new PatchError(`--also-saved takes true or false`);
+        patch.also_saved = value === "true";
+        break;
       case "--draft":
       case "--digest":
+      case "--block":
       case "--highlights":
       case "--moments":
         patch[flag.slice(2)] = jsonArg(value, flag);

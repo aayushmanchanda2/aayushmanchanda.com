@@ -47,7 +47,8 @@ addEventListener("pagehide",s);p.addEventListener("click",s);
  * toolbar for phones, where the pane is hidden. A month header counts the rows
  * the filter shows under it and hides at zero; a tag's count is how many shown
  * rows carry it, and a tag at 0 (ticking it could only empty the list) is
- * disabled and moved to the end of its list (R5-4). On an entry page a plain click on a segment filters in place
+ * disabled and moved to the end of its list (R5-4). The live count is the main
+ * feed's: an "Also saved" row (`data-also`) counts under its own header only (VET-273). On an entry page a plain click on a segment filters in place
  * (a modifier click still opens the kind page). Every row link, and the hint
  * row's close, prev and next, carry the query, so the filter survives a click
  * to any entry; prev and next step to the nearest shown row, and the roving
@@ -83,10 +84,10 @@ if(close)close.search=s;if(i<0)return;
 for(var j=1;j<n;j++){var r=rows[((i+d[1]*j)%n+n)%n];if(!r.hidden){l.href=r.firstElementChild.href;l.setAttribute("aria-label",d[2]+" entry: "+r.querySelector("b").textContent);return;}}});}
 function chip(box,cls,text,name,next){var b=document.createElement("button");b.type="button";b.className=cls;b.textContent=text;b.setAttribute("aria-label",name);
 b.addEventListener("click",function(){var f=read();f.tags=next(f.tags);set(f);var to=box.querySelector("button")||box.parentNode.querySelector("summary");if(to)to.focus();});box.append(b);}
-function apply(f){var s=query(f),n=0,stop=null,per=Object.create(null),heads=[],head=null;
+function apply(f){var s=query(f),n=0,shown=0,stop=null,per=Object.create(null),heads=[],head=null;
 items.forEach(function(li){if(!li.dataset.kind){head={li:li,n:0};heads.push(head);return;}
 var a=li.firstElementChild,ok=(!f.kind||li.dataset.kind===f.kind)&&has(li,f.tags);
-li.hidden=!ok;a.search=s;a.tabIndex=-1;if(!ok)return;n++;if(head)head.n++;if(!stop||a.hasAttribute("aria-current"))stop=a;
+li.hidden=!ok;a.search=s;a.tabIndex=-1;if(!ok)return;shown++;if(!li.hasAttribute("data-also"))n++;if(head)head.n++;if(!stop||a.hasAttribute("aria-current"))stop=a;
 li.dataset.tags.split(" ").forEach(function(t){per[t]=(per[t]||0)+1;});});
 if(stop)stop.tabIndex=0;
 heads.forEach(function(h){h.li.hidden=!h.n;h.li.querySelector("[data-month-count]").textContent=h.n;});
@@ -97,7 +98,7 @@ chips.forEach(function(box){box.replaceChildren();box.hidden=!f.tags.length;if(!
 f.tags.forEach(function(t){chip(box,"tag",labels[t]+" \\u00d7","Remove tag "+labels[t],function(ts){return ts.filter(function(x){return x!==t;});});});
 chip(box,"tag tag--more","Clear","Clear tags",function(){return [];});});
 counts.forEach(function(c){c.textContent=n+(n===1?" entry":" entries");});
-if(empty)empty.hidden=n>0;
+if(empty)empty.hidden=shown>0;
 all('[data-view]:not([data-view=""]) [data-tags]').forEach(function(e){e.hidden=!has(e,f.tags);});
 ring(s);}
 function set(f){history.replaceState(null,"",location.pathname+query(home?{kind:"",tags:f.tags}:f));apply(f);}

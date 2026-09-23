@@ -1,0 +1,61 @@
+{
+  "base": "http://localhost:4337/",
+  "label": "r6-2-dark",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-23-r6-2-dark",
+  "at": "2026-09-23T19:28:10.661Z",
+  "shots": [
+    {
+      "route": "/library",
+      "url": "http://localhost:4337/library",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/jason-liu-codex-operating-system",
+      "url": "http://localhost:4337/library/jason-liu-codex-operating-system",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library_jason_liu_codex_operating_system-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/matt-van-horn-agent-first-workflow",
+      "url": "http://localhost:4337/library/matt-van-horn-agent-first-workflow",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library_matt_van_horn_agent_first_workflow-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/recreate-1906-market-street-in-blender-with-claude",
+      "url": "http://localhost:4337/library/recreate-1906-market-street-in-blender-with-claude",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library_recreate_1906_market_street_in_blender_with_claude-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}
