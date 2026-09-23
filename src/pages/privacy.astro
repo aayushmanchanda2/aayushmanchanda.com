@@ -1,94 +1,18 @@
 ---
 /**
- * /privacy — the trust anchor.
+ * /privacy: what the site collects, what it loads from elsewhere, and the
+ * takedown route.
  *
- * Every claim on this page was checked against the code before it was written.
- * The logos are the first exception, and they have moved twice. VET-226 made
- * them self-hosted copies; VET-254 found logo.dev's free plan does not license
- * copies, so `lib/links.ts › markFor` names img.logo.dev live again on /tools,
- * a tool's page and /sites, with `strict-origin-when-cross-origin` so they get
- * the site's address and not the page. The section below says exactly that. A
- * privacy page that is wrong about its own build is worth less than no page at
- * all; adding an image host means changing this page in the same commit.
+ * Every claim here is about today's build and was checked against the code.
+ * Anything that reaches for `localStorage`, `sessionStorage` or a third-party
+ * host edits this page in the same commit. `scripts/validate-schema.mjs` fails
+ * the build if a page names X's widget or media hosts or ships a video URL
+ * before play, and `lib/links.ts › markFor` is the one place img.logo.dev is
+ * named. The newsletter copy is gated on `NEWSLETTER_ACTION`, the same string
+ * the signup block is gated on (`lib/newsletter.test.mjs`).
  *
- * The storage paragraph is the same rule applied a second time. This page used
- * to say the site "writes nothing to local storage", which stopped being true
- * the moment the theme toggle shipped, so it now names each key instead: the
- * theme, the /tools view (VET-227) and the library list's scroll in session
- * storage (VET-231, `lib/library-pane.ts`). Anything that reaches for
- * `localStorage` or `sessionStorage` has to come back and edit this.
- *
- * The takedown paragraph is the third. It used to end "That is the only contact
- * route on this site", which stopped being true the moment /contact shipped, so
- * it now says why an issue is still the route it asks for rather than claiming
- * there is no other one. It grew a second half when /library started rehosting
- * the pictures attached to a saved post: the same rule that made the /sites
- * gallery need a takedown route makes a post card need one, and the route is
- * the same route rather than a second one.
- *
- * That paragraph names three things and no more, because three things are what
- * the data carries: who posted it (`Post.author` and `Post.handle`), the
- * original post (the entry's `url`), and the day the link was saved
- * (`saved_date`). **It deliberately does not claim a retrieval date for a
- * picture.** `saved_date` is the day the pipeline first published the entry,
- * and the four pictures on the site today were fetched by a later backfill, so
- * "the day I fetched this file" is a fact nothing here stores. Storing it would
- * be the honest way to make that claim; claiming it from a field that means
- * something else would not.
- *
- * The newsletter is the fourth, and it is the first one written before the thing
- * it describes exists. Both the paragraph about it and the sentence it would
- * falsify are gated on `NEWSLETTER_ACTION`, the same string the signup block
- * itself is gated on, so the page cannot describe a form the site does not have
- * and cannot claim there are no forms once it does. One line in `lib/site.ts`
- * moves the control and this page together, which is the only arrangement that
- * survives someone turning the newsletter on months from now without reading
- * this comment.
- *
- * The analytics section is the fifth, and it is the one that came due. This
- * page used to say there was no analytics here, and promised that anything
- * which counted pages would rewrite it in the same commit. That commit is this
- * one: Vercel Web Analytics now ships from `layouts/Base.astro`.
- *
- * The claim that had to be re-checked rather than assumed was the one directly
- * below it. Both of the analytics URLs are same-origin paths on this domain
- * (`/_vercel/insights/script.js` and `/_vercel/insights/event`), so **"the one
- * outside request" survived intact** and still means what it says. Had the
- * script loaded from a Vercel host instead, that section would have had to name
- * a second one in this same commit. Check that pair again before changing how
- * analytics is loaded.
- *
- * The videos are the sixth, and they are the first thing on this site a reader
- * can choose to load from someone else. `components/VideoFacade.astro` renders
- * a saved video as the still this repository committed plus a play control, and
- * builds the YouTube player only on a press — so the section below had to stop
- * saying "nothing else loads from anyone else" flat and start saying **when**.
- * Scoping it to the page load is what keeps both halves true at once: the site
- * still makes exactly one outside request of its own, on every page, and a page
- * with no video on it still cannot make a second one however hard you press it.
- *
- * The posts are the seventh, and they have moved twice. VET-67 and VET-221
- * swapped the hand-drawn cards for X's own embeds, which made two pages load a
- * script and a frame from X on page load. VET-244 swapped them back: every post
- * is drawn here from a copy the pipeline stores (`pipeline/post.mjs`), avatar,
- * photos and video included, so no page asks X for anything.
- * `scripts/validate-schema.mjs` fails any page in `dist/` that names X's widget
- * hosts or points a `src` or `poster` at X's media CDN, so "every other page
- * loads nothing from anyone" is a build failure rather than a promise.
- *
- * Underneath all seven is one rule: **every claim here is a claim about today's
- * build, and it says so.** A never-ever about analytics or third parties is a
- * promise a future commit can turn into a lie, and a privacy page that has gone
- * false is worse than none. So the page states what is true now and names the
- * commit that would have to change it, which is a claim that stays honest
- * whichever way the site goes.
- *
- * Not in the nav or the section manifest on purpose: it is a footer page, and
- * it sits in the colophon row beside /about and /contact.
- *
- * The prose shell is `styles/global.css › .doc`, shared with those two. It
- * lived here as a scoped block until there were three pages that had to look
- * like siblings.
+ * Not in the nav: a footer page beside /about and /contact, sharing the
+ * `styles/global.css › .doc` prose shell with them.
  */
 import Base from "../layouts/Base.astro";
 import { privacyJsonLd } from "../lib/schema";
@@ -103,9 +27,8 @@ import { NEWSLETTER_ACTION } from "../lib/site";
   <header>
     <h1 class="page-title">Privacy</h1>
     <p class="standfirst">
-      Short version: this site is a pile of static files. It counts how many
-      people open a page, and it has no idea who any of them are. A few pages
-      borrow something from somebody else, and they are named below.
+      This site is static files. It counts page views, and two things on it
+      load from outside hosts. Both are named below.
     </p>
   </header>
 
@@ -115,124 +38,77 @@ import { NEWSLETTER_ACTION } from "../lib/site";
       {
         NEWSLETTER_ACTION ? (
           <p>
-            Almost nothing you hand over, and the one exception is a box you
-            have to fill in yourself. There are no accounts and no comments. The
-            only form on the site is the newsletter signup on the front page,
-            and what happens to what you type into it is written out below. The
-            site also counts page views, which is the next section.
+            No accounts, no comments. The one form is the newsletter signup on
+            the front page, covered below. Page views are counted, covered next.
           </p>
         ) : (
           <p>
-            Nothing you hand over. There are no accounts, no forms, no comments,
-            no newsletter box. There is nothing here for you to fill in, and
-            nowhere for it to go if there were. The site does count page views,
-            and that is the next section.
+            No accounts, no forms, no comments, no newsletter box. Page views
+            are counted, covered next.
           </p>
         )
       }
+      <p>Fonts are served from this domain, not a font CDN.</p>
       <p>
-        The fonts are bundled into the build and served from this domain, so
-        reading a page here does not tell a font CDN that you were reading it.
+        Three things go in local storage, each only after you press something:
+        the theme you picked in the footer (<em>light</em>, <em>dark</em> or
+        <em>system</em>), the list-or-grid view on <a
+          href="/tools">/tools</a> and <a href="/sites">/sites</a>, and whether
+        the click sound is <em>on</em> or <em>off</em>.
       </p>
       <p>
-        It writes three things to local storage, and only after you ask it to.
-        If you press the theme button in the footer, the site saves the word
-        <em>light</em>, <em>dark</em> or <em>system</em> so the next page you
-        open is the colour you picked. If you switch <a
-          href="/tools">/tools</a> or <a href="/sites">/sites</a> between list
-        and grid, it saves which one. If you turn the click sound off or on,
-        from the footer or the search box, it saves <em>on</em> or
-        <em>off</em>.
-        Until you press one of them, nothing goes in local storage.
-      </p>
-      <p>
-        One number goes in session storage, which your browser drops when you
-        close the tab: how far you scrolled the list beside a library entry, so
-        moving to the next entry does not throw you back to the top. None of it
-        leaves your browser, nothing reads it but this site, and clearing your
-        site data forgets it.
+        One number goes in session storage, dropped when you close the tab:
+        your scroll position in the list beside a library entry. None of it
+        leaves your browser.
       </p>
     </section>
 
     <section>
       <h2 class="doc__head mono">Counting page views</h2>
       <p>
-        Since 26 August 2026 this site counts page views with <a
+        Since 26 August 2026 the site counts page views with <a
           href="https://vercel.com/docs/analytics/privacy-policy"
           rel="noopener nofollow"
-        >Vercel Web Analytics</a>. I wanted to know which pages people actually
-        read, because that is most of what tells me whether any of this was
-        worth someone&rsquo;s time.
+        >Vercel Web Analytics</a>.
       </p>
       <p>
-        There are no cookies, and nothing is written to your browser. You are
-        not given an ID, and nothing recorded here can be joined up with your
-        visit to any other site. Vercel counts a visit by hashing the request it
-        already received, and that hash is discarded after 24 hours.
+        No cookies, no ID, nothing written to your browser. Vercel counts a
+        visit by hashing the request and discards the hash after 24 hours.
       </p>
       <p>
-        What gets recorded is the page you opened, the site that sent you, your
-        browser and operating system, whether you are on a phone, a tablet or a
-        desktop, and the country, region and city the request came from. That is
-        the whole list. It reaches me as totals: this page got this many views
-        this week, most of them from that referrer. There is no view of it that
-        is one person, and I could not build one.
+        Recorded: the page, the referrer, your browser and operating system,
+        device type, and the country, region and city of the request. I see
+        totals only.
       </p>
       <p>
-        The script is served from this domain rather than from an analytics
-        company, and the counts it sends go to the same place. So counting page
-        views did not add a host to the list below: it added a script, and the
-        script is mine. Vercel holds the numbers, which is the company already
-        serving you these pages. If that ever moves to someone else, the new
-        name lands here on the commit that moves it.
+        The script and its beacon are served from this domain. Vercel, which
+        hosts the site, holds the numbers.
       </p>
     </section>
 
     <section>
       <h2 class="doc__head mono">The pages that load from somewhere else</h2>
       <p>
-        The logos on <a href="/tools">/tools</a>, on each tool&rsquo;s page
-        and on <a href="/sites">/sites</a> load from <a
+        Logos. The logos on <a href="/tools">/tools</a>, each tool&rsquo;s page,
+        <a href="/sites">/sites</a> and <a href="/about">/about</a> load from <a
           href="https://logo.dev" rel="noopener nofollow">logo.dev</a>, a logo
-        API. Your browser asks them for each logo, so they see your IP address
-        and that the request came from this site. They don&rsquo;t see which
-        page you were on: those requests carry this site&rsquo;s address and
-        nothing after it. I&rsquo;d rather keep copies here, but their free plan
-        doesn&rsquo;t allow it. When logo.dev has no logo, the icon comes from
-        this domain or is a letter. Nothing else on those pages loads from
-        anyone else.
+        API. They see your IP address and this site&rsquo;s address, not the
+        page you were on. When logo.dev has no logo, the icon comes from this
+        domain or is a letter.
       </p>
       <p>
-        The saved posts used to load from X. For a while <a
-          href="/library/kind/post">the posts page</a> and each post&rsquo;s own
-        page showed X&rsquo;s own embeds, which meant a script from X and a
-        frame of theirs for every post. Now I draw each post here. The words,
-        the poster&rsquo;s profile picture and any photos or video are fetched
-        once, when I save the post, and stored in this site&rsquo;s own files.
-        Opening a post asks X for nothing. The link that says it opens the
-        original is the only way to X, and it does nothing until you press it.
+        Saved videos. Nothing loads from YouTube until you press play; the still
+        on <a href="/library/kind/video">the videos page</a> is served from this
+        domain. On play, the player comes from youtube-nocookie.com, which holds
+        off cookies until something is played. Google gets your IP address and
+        this site&rsquo;s name, not the page you were on.
       </p>
       <p>
-        The saved videos are the outside request you can make yourself, and
-        nothing loads from YouTube until you press play. A video on <a
-          href="/library/kind/video">the videos page</a> shows a still I copied
-        into this repository when I saved it, the same way the screenshots work,
-        so the page arrives with a picture from this domain and no player in it.
-        Press play and the still is replaced by one, and that is the moment your
-        browser first talks to Google: the player comes from
-        youtube-nocookie.com, which holds off the usual cookies until something
-        is actually played, and is still Google either way. They get your IP
-        address and the name of this site, not the page you were reading, and
-        anything stored after that is stored under their name rather than mine.
-        On a page with no video on it there is nothing to press, so there is
-        nothing to load.
+        Saved posts load nothing from X. Each post&rsquo;s words, profile
+        picture, photos and video are stored in this site&rsquo;s files. The
+        link to the original is the only way to X.
       </p>
-      <p>
-        That is the whole list: logo.dev on the tools and sites pages, and
-        YouTube if you press play. Every other page here loads nothing from
-        anyone, and a new host would be named in this section on the commit
-        that added it.
-      </p>
+      <p>That&rsquo;s the whole list. Every other page loads from this domain only.</p>
     </section>
 
     {
@@ -240,29 +116,21 @@ import { NEWSLETTER_ACTION } from "../lib/site";
         <section>
           <h2 class="doc__head mono">The newsletter</h2>
           <p>
-            The signup box on the front page is the one thing here you can type
-            into. Nothing loads from Buttondown to draw it or watch it: it is
-            plain HTML served from this domain, so the section above still
-            stands. Nothing goes anywhere until you press Subscribe.
+            The signup box on the front page is plain HTML served from this
+            domain. Nothing is sent until you press Subscribe.
           </p>
           <p>
-            When you do, your browser sends your address to <a
+            Pressing it sends your address to <a
               href="https://buttondown.com"
               rel="noopener nofollow"
-            >Buttondown</a>, which runs the list and sends the issues. Usually
-            you stay on this page and the box says it went through; Buttondown
-            then emails you a link to confirm. If Buttondown wants to check
-            something first, a CAPTCHA or an address it does not like, your
-            browser goes to their page so they can ask you directly. Either way
-            Buttondown gets your address, and sees your IP the way any host does
-            when a browser talks to it. This site never receives either. There
-            is no server here to receive them with.
+            >Buttondown</a>, which runs the list, sends the issues, and emails
+            you a confirmation link. If Buttondown wants a CAPTCHA or rejects
+            the address, your browser goes to their page. Buttondown gets your
+            address and your IP; this site has no server and receives neither.
           </p>
           <p>
-            Your address is for sending you the newsletter and nothing else. I do
-            not sell it, and I do not upload it anywhere. Every issue has an
-            unsubscribe link at the bottom, and pressing it takes you off the
-            list without going through me.
+            Your address is used for the newsletter only and never sold. Every
+            issue has an unsubscribe link.
           </p>
         </section>
       )
@@ -271,56 +139,39 @@ import { NEWSLETTER_ACTION } from "../lib/site";
     <section>
       <h2 class="doc__head mono">Server logs</h2>
       <p>
-        The site is hosted on Vercel, and Vercel keeps its own standard request
-        logs, same as any host. I do not read them, I do not analyse them, and I
-        have not wired anything to them. They are a side effect of being on the
-        internet, not something I set up to learn about you. They are also
-        separate from the page counting above, which is a script running in the
-        page and not something read back out of a log.
+        Vercel hosts the site and keeps standard request logs. I don&rsquo;t
+        read them or wire anything to them.
       </p>
     </section>
 
     <section>
       <h2 class="doc__head mono">Screenshots, saved posts and video stills</h2>
       <p>
-        The <a href="/sites">/sites</a> gallery is screenshots of other
-        people&rsquo;s websites. A pipeline takes them automatically when I save
-        a link, and
-        every one of them gets a page that links out to the site it came from.
-        If one of them is yours and you want it gone, open an issue at <a
+        <a href="/sites">/sites</a> is screenshots of other people&rsquo;s
+        websites, each linking to the site it came from. If one is yours and
+        you want it gone, open an issue at <a
           href="https://github.com/aayushmanchanda2"
-          rel="noopener">github.com/aayushmanchanda2</a> and I will take it
-        down. You do not have to explain why. An issue is the route I would
-        rather you used for this, because it leaves a record that the request
-        was made and answered. If you would rather not open one, <a
-          href="/contact">/contact</a> has my address.
+          rel="noopener">github.com/aayushmanchanda2</a> and I&rsquo;ll take it
+        down, no reason needed. Or email me via <a
+          href="/contact">/contact</a>.
       </p>
       <p>
-        The saved posts work the same way. When I save something from x.com,
-        the pipeline copies the words, the poster&rsquo;s profile picture and any
-        photos or video into this repository, and every post here is drawn from
-        that copy. It stays if the original is deleted. The post is still the
-        poster&rsquo;s either way. Every one of them names who wrote it and links
-        back to the original, and its row on <a href="/library">/library</a> carries
-        the date I saved it. If one of them is yours, the same issue link works
-        and the same answer applies.
+        A saved post&rsquo;s page holds a copy of its words, profile picture,
+        photos and video. Every one names the author, links to the original,
+        and carries the date I saved it on <a href="/library">/library</a>. If
+        one is yours, the same issue link works.
       </p>
       <p>
-        A saved video is the same arrangement with one picture in it. What sits
-        on the page before you press play is YouTube&rsquo;s own poster frame
-        for that video, fetched once when I saved the link and stored here, so
-        that showing you what you are about to watch does not cost you a request
-        to Google. If it is your video and you would rather I did not, the issue
-        link above takes it down too.
+        A saved video&rsquo;s page holds its YouTube poster frame, stored here.
+        Same issue link if it&rsquo;s yours.
       </p>
     </section>
 
     <section>
       <h2 class="doc__head mono">Who owns what</h2>
       <p>
-        My writing and my notes are mine. The screenshots and anything I quote
-        belong to whoever made the thing they are of. If you want to reuse
-        something I wrote, go ahead. A link back is plenty.
+        My writing is mine. Screenshots and quotes belong to whoever made the
+        original. Reuse anything I wrote; a link back is plenty.
       </p>
     </section>
   </div>
