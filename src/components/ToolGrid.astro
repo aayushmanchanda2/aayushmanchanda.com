@@ -1,0 +1,90 @@
+---
+/**
+ * ToolGrid — /tools as an iOS home screen: a 60px squircle and the name under
+ * it, each tile one link to the tool's own page.
+ *
+ * A second markup beside `ToolList.astro`'s table, not the table restyled: a
+ * tile has none of a row's cells, and `display` games on table elements cost
+ * the table its semantics in Safari. `html[data-tools-view="grid"]` swaps which
+ * one shows (`lib/tools-view.ts`). The tiles carry the same data attributes as
+ * the rows, so the filters hide both and a sort orders both.
+ */
+import AppIcon from "./AppIcon.astro";
+import type { Tool } from "../lib/tools";
+import { toolAttributes } from "../lib/tools";
+
+interface Props {
+  tools: Tool[];
+}
+
+const { tools } = Astro.props;
+---
+
+<ul class="tiles" data-tool-rows>
+  {
+    tools.map((tool) => (
+      <li class="tile" {...toolAttributes(tool)}>
+        <a class="tile__link" href={`/tools/${tool.slug}`}>
+          <AppIcon tool={tool} size={60} />
+          <span class="tile__name">{tool.name}</span>
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<style>
+  .tiles {
+    display: none;
+    grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr));
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  :global(html[data-tools-view="grid"]) .tiles {
+    display: grid;
+  }
+
+  .tile[hidden] {
+    display: none;
+  }
+
+  .tile__link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    height: 100%;
+    padding: 0.75rem 0.25rem;
+    border-radius: var(--r-lg);
+    color: var(--text-primary);
+    text-decoration: none;
+    transition-property: background-color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .tile__link:hover {
+    background: var(--surface-2);
+  }
+
+  .tile__link:focus-visible {
+    outline-offset: -2px;
+    border-radius: var(--r-lg);
+  }
+
+  /* Two lines, centred, the springboard label. The full name is the h1 of the
+     page the tile opens. */
+  .tile__name {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+    max-width: 100%;
+    font-size: 0.8125rem;
+    line-height: 1.3;
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+</style>

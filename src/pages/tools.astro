@@ -1,8 +1,9 @@
 ---
 import Base from "../layouts/Base.astro";
+import ToolGrid from "../components/ToolGrid.astro";
 import ToolList from "../components/ToolList.astro";
 import { listJsonLd, pageUrl } from "../lib/schema";
-import { tools } from "../lib/tools";
+import { categories, tools, verdictGroups } from "../lib/tools";
 import { PREPAINT, VIEWS, type View } from "../lib/tools-view";
 
 /** Sentence case on the buttons; the stored value stays the lowercase key. */
@@ -17,31 +18,42 @@ const jsonLd = listJsonLd({
     url: pageUrl(`/tools/${tool.slug}`),
   })),
 });
+
+const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
 ---
 
 <Base
   title="Tools · Aayush Manchanda"
   description="Software Aayush Manchanda installed, ran, and formed an opinion about, with a dated verdict on each one."
   jsonLd={jsonLd}
+  wide
 >
-  <header>
+  {/* Title and intro share a baseline, so the table starts high on the page. */}
+  <header class="masthead">
     <h1 class="page-title">Tools</h1>
-    <p class="standfirst">
-      Software I installed, ran, and formed an opinion about. Every verdict is
-      dated, so you can see how stale it is.
-    </p>
+    <p class="intro">Software I installed, ran, and formed an opinion about. Every verdict is dated.</p>
   </header>
 
-  <div class="body">
-    {/*
-      List or grid: one markup, and `ToolList.astro` switches its layout off
-      `data-tools-view` on `<html>`. Buttons with `aria-pressed` rather than a
-      radio group or tabs: two states, one press each, no panel swapped in.
-      The pre-paint script sits between the toggle and the list, so both are
-      already right on the first paint of a reload. The group ships `hidden`
-      and that script unhides it: with scripting off the page is the list and
-      there is no control that does nothing.
-    */}
+  {/*
+    Filters, count and layout in one row directly above the table. The
+    filters are native selects synced to `?verdict=&category=` (script below).
+    The layout toggle is two `aria-pressed` buttons; it ships `hidden` and
+    PREPAINT unhides it, so without scripting there is no control that does
+    nothing. PREPAINT sits after the toggle and before the table, so a reload
+    paints the stored view on its first frame.
+  */}
+  <div class="controls">
+    <label class="visually-hidden" for="filter-verdict">Verdict</label>
+    <select class="select" id="filter-verdict" data-filter="verdict">
+      <option value="">All verdicts</option>
+      {verdictGroups.map((group) => <option value={group.verdict}>{group.verdict}</option>)}
+    </select>
+    <label class="visually-hidden" for="filter-category">Category</label>
+    <select class="select" id="filter-category" data-filter="category">
+      <option value="">All categories</option>
+      {categories.map((group) => <option value={group.slug}>{group.category}</option>)}
+    </select>
+    <p class="count tabular-nums" aria-live="polite" data-filter-count>{count(tools.length)}</p>
     <div class="views" role="group" aria-label="Tools layout" hidden>
       {
         VIEWS.map((view) => (
@@ -56,22 +68,69 @@ const jsonLd = listJsonLd({
         ))
       }
     </div>
-    <script is:inline set:html={PREPAINT} />
-
-    <ToolList tools={tools} />
   </div>
+  <script is:inline set:html={PREPAINT} />
+
+  <ToolList tools={tools} />
+  <ToolGrid tools={tools} />
+  <p class="empty" data-filter-empty hidden>No tools match both filters. <a href="/tools">Show all</a></p>
 </Base>
 
 <style>
-  .body {
-    margin-top: var(--gap-masthead);
+  .masthead {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 1rem;
   }
 
-  /* Right-aligned above the first category head, at every width. */
+  .intro {
+    color: var(--text-secondary);
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+    margin-bottom: 0.25rem;
+  }
+
+  /* Native, so the platform's own picker opens on a phone; only the closed
+     box is drawn. The chevron is two gradients rather than an image. */
+  .select {
+    appearance: none;
+    min-height: 32px;
+    padding: 0 1.75rem 0 0.75rem;
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--r-md);
+    background:
+      linear-gradient(45deg, transparent 50%, currentColor 50%) right 0.875rem center / 5px 5px no-repeat,
+      linear-gradient(135deg, currentColor 50%, transparent 50%) right 0.5625rem center / 5px 5px no-repeat,
+      var(--bg);
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition-property: border-color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .select:hover {
+    border-color: var(--text-quaternary);
+  }
+
+  .count {
+    margin-left: 0.25rem;
+    color: var(--text-tertiary);
+    font-size: 0.875rem;
+  }
+
   .views {
     display: flex;
-    width: fit-content;
-    margin: 0 0 1rem auto;
+    margin-left: auto;
     padding: 2px;
     border: 1px solid var(--hairline);
     border-radius: var(--r-md);
@@ -82,12 +141,11 @@ const jsonLd = listJsonLd({
     display: none;
   }
 
-  /* 30px drawn, 40px pressed: the `::after` reaches 5px past each edge, the
-     same offset trick `.tag::after` uses for its hit floor. Inner corners are
-     --r-sm inside the --r-md frame, 4 + 2px padding + 1px border ≈ 8. */
+  /* 26px drawn inside the 32px frame, 40px pressed: the `::after` reaches past
+     each edge, the offset trick `.tag::after` uses for its hit floor. */
   .views__btn {
     position: relative;
-    min-height: 30px;
+    min-height: 26px;
     padding-inline: 0.75rem;
     border-radius: var(--r-sm);
     color: var(--text-secondary);
@@ -99,7 +157,7 @@ const jsonLd = listJsonLd({
   .views__btn::after {
     content: "";
     position: absolute;
-    inset: -5px 0;
+    inset: -7px 0;
   }
 
   .views__btn:hover {
@@ -113,10 +171,25 @@ const jsonLd = listJsonLd({
     box-shadow: inset 0 0 0 1px var(--hairline-strong);
     color: var(--text-primary);
   }
+
+  .empty {
+    padding-block: 2.5rem;
+    color: var(--text-secondary);
+    text-align: center;
+  }
+
+  /* A phone gives the two selects the first line, count and layout the next. */
+  @media (max-width: 639px) {
+    .select {
+      flex: 1 1 calc(50% - 0.25rem);
+      min-width: 0;
+    }
+  }
 </style>
 
 <script>
   import { ATTRIBUTE, BUTTON_ATTRIBUTE, STORAGE_KEY, toView } from "../lib/tools-view";
+  import { filterSearch, matches, readFilters, type Filters } from "../lib/tools-table";
 
   const buttons = document.querySelectorAll<HTMLButtonElement>(`[${BUTTON_ATTRIBUTE}]`);
 
@@ -135,5 +208,46 @@ const jsonLd = listJsonLd({
         /* not persisted, still applied */
       }
     });
+  }
+
+  /* --- filters: the URL is the state ------------------------------------- */
+
+  const verdict = document.querySelector<HTMLSelectElement>('[data-filter="verdict"]');
+  const category = document.querySelector<HTMLSelectElement>('[data-filter="category"]');
+  const counter = document.querySelector<HTMLElement>("[data-filter-count]");
+  const empty = document.querySelector<HTMLElement>("[data-filter-empty]");
+
+  if (verdict && category && counter && empty) {
+    const values = (select: HTMLSelectElement) =>
+      [...select.options].map((option) => option.value).filter(Boolean);
+
+    const apply = (filters: Filters) => {
+      verdict.value = filters.verdict;
+      category.value = filters.category;
+      for (const item of document.querySelectorAll<HTMLElement>("[data-tool]")) {
+        item.hidden = !matches(
+          { verdict: item.dataset.verdict ?? "", category: item.dataset.category ?? "" },
+          filters,
+        );
+      }
+      // Count the table's rows only: the grid holds the same tools again.
+      const shown = document.querySelectorAll("tr[data-tool]:not([hidden])").length;
+      counter.textContent = `${shown} ${shown === 1 ? "tool" : "tools"}`;
+      empty.hidden = shown > 0;
+    };
+
+    const fromUrl = () => apply(readFilters(location.search, values(verdict), values(category)));
+
+    // A push per change, so Back steps through the filters a reader tried.
+    for (const select of [verdict, category]) {
+      select.addEventListener("change", () => {
+        const filters = { verdict: verdict.value, category: category.value };
+        history.pushState(null, "", `${location.pathname}${filterSearch(filters)}`);
+        apply(filters);
+      });
+    }
+
+    window.addEventListener("popstate", fromUrl);
+    fromUrl();
   }
 </script>

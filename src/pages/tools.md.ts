@@ -45,9 +45,10 @@ export const GET: APIRoute = () => {
   /*
    * Two link columns, because a tool has two places to go and an agent asking
    * for markdown is the reader least able to guess the missing one. `Tool`
-   * links what the HTML row links — the product when there is one, the
-   * repository when there is not — and `Repo` is filled only when it is a
-   * second destination, so the same URL never appears twice in one row.
+   * links what a details page's Source line links — the product when there is
+   * one, the repository when there is not — and `Repo` is filled only when it
+   * is a second destination, so the same URL never appears twice in one row.
+   * The HTML rows link the details pages instead; those are listed below.
    */
   const rows = tools.map((tool) => [
     linkOrText(tool.name, tool.url ?? tool.repo),

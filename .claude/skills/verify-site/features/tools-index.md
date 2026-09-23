@@ -1,19 +1,21 @@
 # Tools index
 
-/tools lists every tool grouped by category, each row with a mark, name, verdict badge, dated status, note and a Details link. A two-button control switches the same markup between a list and a card grid, and the choice persists across reloads. Category and verdict pages filter the list.
+/tools is a sortable table (briOS /stack): icon and name, description, category, verdict pill, date. Every row links to `/tools/<slug>`. Two native selects filter by verdict and category and sync to `?verdict=&category=`. A List/Grid toggle swaps the table for an iOS-style icon grid, and the choice persists across reloads. Category and verdict pages render the same table with their subset.
 
 ## Sub-features
 
-- `tools-list` renders grouped rows (`.group`, `.group__head`, `.row`) in list view by default.
-- `tools-grid` switches to cards when the reader presses Grid; persists after reload.
-- `tools-filter-category` /tools/category/<slug> shows one category.
-- `tools-filter-verdict` /tools/verdict/<verdict> shows one verdict.
-- `tools-marks` row icons (`.row__mark.app-icon`): an `<img src="/icons/<slug>.webp">`, or `.app-icon__letter` where there is none.
+- `tools-table` `table` > `tbody[data-tool-rows]` > `tr.row[data-tool]` (attributes `data-verdict`, `data-category` (slug), `data-sort-name|category|verdict|date`, `data-index`). Name cell `.row__link` is stretched over the row.
+- `tools-sort` `th[data-sort-key] > button.sort` (name, category, verdict, date); state is `aria-sort` on the `th`. Cycle: natural direction (date newest first), reverse, file order.
+- `tools-filters` `#filter-verdict`, `#filter-category` (`[data-filter]`), count `[data-filter-count]` (aria-live), empty state `[data-filter-empty]`.
+- `tools-grid` `ul[data-tool-rows] > li.tile[data-tool] > a.tile__link` (60px `.app-icon`, `.tile__name`), shown when `html[data-tools-view="grid"]`.
+- `tools-filter-category` /tools/category/<slug>: table without the Category column.
+- `tools-filter-verdict` /tools/verdict/<verdict>: table without the Verdict column.
+- `tools-marks` `.app-icon`: an `<img src="/icons/<slug>.webp">`, or `.app-icon__letter` where there is none.
 
 ## How to get to it (user POV)
 
 - Tools in the Menu panel or the top bar trail, or open `/tools` directly.
-- Press `List` or `Grid` in the `Tools layout` group, top right above the first category.
+- Pick a Verdict or Category in the selects above the table; press a column header to sort; press `List` or `Grid` at the right of the same row.
 - From a tool detail page, the verdict chip (`/tools/verdict/<verdict>`) or category link (`/tools/category/<slug>`).
 
 ## Driving it with shoot.mjs
@@ -22,14 +24,17 @@ Preconditions:
 
 - Doctor passes. Current filter slugs: `ls dist/tools/category dist/tools/verdict` (e.g. `agent-infra`, `using`).
 
-- **List baseline.** `node .claude/skills/verify-site/shoot.mjs --base http://localhost:4329 --routes /tools --label tools-list --styles '.row__name,.group__head,[data-tools-view-set][aria-pressed="true"]'`. Pressed button text is `List`; screenshots show rows.
-- **Grid via the button.** `... --routes /tools --label tools-grid --click '[data-tools-view-set="grid"]' --styles '[data-tools-view-set][aria-pressed="true"]'`. Pressed button text is `Grid`; screenshots show bordered cards, two per row at 1280.
-- **Filters.** `... --routes /tools/category/agent-infra,/tools/verdict/using --label tools-filters --styles '.page-title'`. Both `200`; `.page-title` text is the category/verdict.
-- **Third-party hosts.** Every run above records `thirdPartyHosts`; since VET-226 the icons are self-hosted, so /tools and its filters must show no third-party host at all, on all three routes at both sizes.
+- **Table baseline.** `node .claude/skills/verify-site/shoot.mjs --base http://localhost:4329 --routes /tools --label tools-list --styles '.row__link,.row__desc,.sort,[data-filter-count]'`. Screenshots show the table; first row under 300px at 1280.
+- **Query filters.** `... --routes '/tools?verdict=using,/tools?category=agent-infra&verdict=watching' --label tools-query`. Use a label separate from the filter pages: `/tools?verdict=using` and `/tools/verdict/using` slug to the same PNG name.
+- **Grid via the button.** `... --routes /tools --label tools-grid --click '[data-tools-view-set="grid"]'`. Pressed button text is `Grid`; screenshots show 60px squircles, four across at 390.
+- **Filter pages.** `... --routes /tools/category/agent-infra,/tools/verdict/using --label tools-filters --styles '.page-title'`. Both `200`.
+- **Sort, filter round-trip, row click, Back.** `shoot.mjs` has no select or back step; `qa/evidence/2026-09-22-vet-227/interactions.mjs` is the scripted check (run from the repo root with the base URL as its argument) and writes `interactions.json`.
+- **Third-party hosts.** Every run records `thirdPartyHosts`; icons are self-hosted, so /tools and its filters show none.
 
 ## Gotchas
 
 - The `.views` group ships `hidden` and the PREPAINT script in `src/lib/tools-view.ts` unhides it; with JS broken the toggle is missing, not dead. Its absence is a finding.
-- The view persists in `localStorage["tools-view"]` per browser context. `shoot.mjs` uses a fresh context per size/theme, so a `--click` in one run does not leak into the next; within one run it persists across the routes listed after it.
-- `data-tools-view` on `<html>` is the layout switch; it is set by script, so assert via `aria-pressed` and the screenshot, not by reading HTML source.
-- The grid is `auto-fill` 15rem columns: expect one column at 390, two at 1280. Run the grid click at both sizes.
+- The view persists in `localStorage["tools-view"]` per browser context. `shoot.mjs` uses a fresh context per size/theme; within one run a `--click` persists across the routes after it.
+- Playwright's click on a non-name cell trips its "another element intercepts" check, because the stretched link covers the row on purpose. Pass `{ force: true }`: the mouse still presses the cell.
+- Filters are applied by a module script after parse, so a deep link paints the full table for a frame before hiding rows. Wait for load before asserting.
+- Programmatic `focus()` does not match `:focus-visible`; reach the row link with `Tab` to see its ring.

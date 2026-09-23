@@ -22,6 +22,7 @@
  */
 
 import { githubRepo } from "./links";
+import { rowAttributes } from "./tools-table";
 import type { Fail } from "./parse";
 import { SLUG, readers, routeSlug } from "./parse";
 
@@ -58,6 +59,12 @@ export interface Tool {
   verdict: Verdict;
   /** One line, in Aayush's voice. Rendered as-is; never editorialised. */
   note: string;
+  /**
+   * What the tool is, in a sentence, for the /tools table. Not parsed yet: the
+   * field lands with its drafted copy (briOS T2), and until then every row
+   * falls back to `note`.
+   */
+  description?: string;
   /** ISO calendar date (YYYY-MM-DD) the verdict was last true. */
   status_date: string;
 
@@ -291,3 +298,12 @@ export const verdictGroups: VerdictGroup[] = VERDICTS.map((verdict) => ({
   verdict,
   tools: tools.filter((tool) => tool.verdict === verdict),
 })).filter((group) => group.tools.length > 0);
+
+/** The data attributes a /tools row or grid tile carries (`lib/tools-table.ts`). */
+export function toolAttributes(tool: Tool): Record<string, string> {
+  return rowAttributes(tool, {
+    verdictRank: VERDICTS.indexOf(tool.verdict),
+    categorySlug: categorySlug(tool.category),
+    index: tools.indexOf(tool),
+  });
+}
