@@ -33,6 +33,14 @@ export const VERDICTS = ["using", "watching", "on-hold", "skipped"] as const;
 
 export type Verdict = (typeof VERDICTS)[number];
 
+/** A verdict as a reader sees it: the /tools/verdict heading and the feed line. */
+export const VERDICT_LABELS: Record<Verdict, string> = {
+  using: "Using",
+  watching: "Watching",
+  "on-hold": "On hold",
+  skipped: "Skipped",
+};
+
 export interface Tool {
   /** URL-safe id; also the details page path (`/tools/<slug>`). */
   slug: string;

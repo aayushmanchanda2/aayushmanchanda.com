@@ -29,6 +29,7 @@ import { markdownVariantFor } from "../lib/markdown";
 import type { Crumb, JsonLd } from "../lib/schema";
 import { serialize, trailOf } from "../lib/schema";
 import type { NavItem } from "../lib/sections";
+import { FEEDS } from "../lib/feeds";
 import { getSections } from "../lib/sections";
 import { absolute } from "../lib/site";
 import { PREPAINT, THEME_COLORS } from "../lib/theme";
@@ -189,6 +190,9 @@ const ogImage = absolute("/og.png");
  * so this page's own pathname arrives as `/tools/`.
  */
 const variant = markdownVariantFor(normalize(pathname));
+
+/** The combined feed everywhere, plus this section's own on its pages. */
+const feeds = FEEDS.filter((feed) => feed.path === "/" || feed.path === section?.href);
 const markdownVariant = variant === null ? null : absolute(variant);
 ---
 
@@ -278,6 +282,16 @@ const markdownVariant = variant === null ? null : absolute(variant);
       markdownVariant && (
         <link rel="alternate" type="text/markdown" href={markdownVariant} />
       )
+    }
+    {
+      feeds.map((feed) => (
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title={feed.title}
+          href={absolute(feed.href)}
+        />
+      ))
     }
     <link rel="sitemap" type="application/xml" href="/sitemap-index.xml" />
 
