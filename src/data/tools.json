@@ -921,7 +921,7 @@
     "name": "Roughdraft",
     "url": "https://www.roughdraft.page/",
     "repo": "https://github.com/Lex-Inc/roughdraft",
-    "category": "unsorted",
+    "category": "dev platforms",
     "verdict": "watching",
     "description": "Local-first Markdown reviewer with inline comments",
     "note": "Saved, not tried yet.",
