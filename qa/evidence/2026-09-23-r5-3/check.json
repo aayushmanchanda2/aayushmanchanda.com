@@ -1,0 +1,218 @@
+{
+  "base": "http://localhost:4331",
+  "at": "2026-09-23T18:26:27.822Z",
+  "results": [
+    {
+      "name": "two tags filter with AND and update the URL",
+      "ok": true,
+      "detail": {
+        "search": "?tags=agents,harnesses",
+        "shown": 7,
+        "count": "7 entries"
+      }
+    },
+    {
+      "name": "selected tags show as chips plus Clear",
+      "ok": true,
+      "detail": {
+        "chips": [
+          "Remove tag agents",
+          "Remove tag harnesses",
+          "Clear tags"
+        ]
+      }
+    },
+    {
+      "name": "tags persist when clicking into an entry",
+      "ok": true,
+      "detail": {
+        "url": "/library/herdr-crash-course-a-beginner-s-guide?tags=agents,harnesses",
+        "checked": [
+          "agents",
+          "harnesses"
+        ],
+        "shown": 7
+      }
+    },
+    {
+      "name": "Clear resets",
+      "ok": true,
+      "detail": {
+        "search": "",
+        "shown": 139,
+        "focused": "ltags__sum mono"
+      }
+    },
+    {
+      "name": "month headers show and recount with the filters",
+      "ok": true,
+      "detail": {
+        "all": [
+          {
+            "text": "September 2026 · 91",
+            "hidden": false
+          },
+          {
+            "text": "August 2026 · 34",
+            "hidden": false
+          },
+          {
+            "text": "July 2026 · 14",
+            "hidden": false
+          }
+        ],
+        "video": [
+          {
+            "text": "September 2026 · 5",
+            "hidden": false
+          },
+          {
+            "text": "August 2026 · 2",
+            "hidden": false
+          },
+          {
+            "text": "July 2026 · 3",
+            "hidden": false
+          }
+        ],
+        "videoRows": 10
+      }
+    },
+    {
+      "name": "j/k skip the headers",
+      "ok": true,
+      "detail": {
+        "indexSteps": 95,
+        "allOnRows": true,
+        "landed": "How to sell a $999 AI assessmentpostx.co",
+        "entryPage": {
+          "from": "/library/networking-foundations-course-free-course-flavio-copes",
+          "to": "/library/a-24-year-old-ai-creative-director-gives-away-her-playbook-e",
+          "expected": "/library/a-24-year-old-ai-creative-director-gives-away-her-playbook-e"
+        }
+      }
+    },
+    {
+      "name": "⌘K opens with all 5 groups before typing",
+      "ok": true,
+      "detail": {
+        "groups": [
+          {
+            "label": "Go to",
+            "rows": 5
+          },
+          {
+            "label": "Browse",
+            "rows": 10
+          },
+          {
+            "label": "Recent saves",
+            "rows": 5
+          },
+          {
+            "label": "Actions",
+            "rows": 3
+          },
+          {
+            "label": "Try searching",
+            "rows": 4
+          }
+        ]
+      }
+    },
+    {
+      "name": "arrows cross the groups",
+      "ok": true,
+      "detail": {
+        "start": {
+          "title": "Tools",
+          "group": "Go to"
+        },
+        "crossed": {
+          "title": "Tools I use",
+          "group": "Browse"
+        },
+        "back": {
+          "title": "Experiments",
+          "group": "Go to"
+        }
+      }
+    },
+    {
+      "name": "a Try searching item fills the input",
+      "ok": true,
+      "detail": {
+        "query": "agents",
+        "filled": "agents",
+        "typedRows": 12
+      }
+    },
+    {
+      "name": "the theme action switches the theme in place",
+      "ok": true,
+      "detail": {
+        "theme0": "system",
+        "theme1": "light",
+        "themeTitle": "Theme: light"
+      }
+    },
+    {
+      "name": "each Browse deep link lands on the filtered view",
+      "ok": true,
+      "detail": {
+        "landings": [
+          {
+            "href": "/tools?verdict=using",
+            "status": 200,
+            "shown": true
+          },
+          {
+            "href": "/tools?verdict=watching",
+            "status": 200,
+            "shown": true
+          },
+          {
+            "href": "/tools?verdict=on-hold",
+            "status": 200,
+            "shown": true
+          },
+          {
+            "href": "/tools?verdict=skipped",
+            "status": 200,
+            "shown": true
+          },
+          {
+            "href": "/library/kind/article",
+            "status": 200,
+            "shown": true
+          },
+          {
+            "href": "/library/kind/post",
+            "status": 200,
+            "shown": true
+          },
+          {
+            "href": "/library/kind/video",
+            "status": 200,
+            "shown": true
+          },
+          {
+            "href": "/sites/collection/reference-libraries",
+            "status": 200,
+            "shown": true
+          },
+          {
+            "href": "/sites/collection/personal-sites",
+            "status": 200,
+            "shown": true
+          },
+          {
+            "href": "/sites/collection/portfolios",
+            "status": 200,
+            "shown": true
+          }
+        ]
+      }
+    }
+  ]
+}

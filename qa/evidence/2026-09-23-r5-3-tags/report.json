@@ -1,0 +1,41 @@
+{
+  "base": "http://localhost:4331/",
+  "label": "r5-3-tags",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-23-r5-3-tags",
+  "at": "2026-09-23T18:25:24.556Z",
+  "shots": [
+    {
+      "route": "/library/herdr-crash-course-a-beginner-s-guide?tags=agents%2Charnesses",
+      "url": "http://localhost:4331/library/herdr-crash-course-a-beginner-s-guide?tags=agents%2Charnesses",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library_herdr_crash_course_a_beginner_s_guide_tags_agents_2Charnesses-1280-light.png",
+      "status": 200,
+      "clicked": [
+        ".pane .ltags__sum"
+      ],
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/herdr-crash-course-a-beginner-s-guide?tags=agents%2Charnesses",
+      "url": "http://localhost:4331/library/herdr-crash-course-a-beginner-s-guide?tags=agents%2Charnesses",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library_herdr_crash_course_a_beginner_s_guide_tags_agents_2Charnesses-1280-dark.png",
+      "status": 200,
+      "clicked": [
+        ".pane .ltags__sum"
+      ],
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}
