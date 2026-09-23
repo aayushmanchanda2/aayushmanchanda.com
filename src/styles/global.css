@@ -410,6 +410,15 @@ mark {
   border-radius: var(--r-sm);
 }
 
+/* Every same-origin navigation crossfades, and only for a reader who has not
+   asked for less motion. /tools and a tool page narrow it to the app-open
+   zoom (`lib/home-screen.ts`, `tools/[slug].astro`). */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
 /* --------------------------------------------------------------------------
    3. Utilities
    -------------------------------------------------------------------------- */

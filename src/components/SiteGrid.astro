@@ -40,7 +40,7 @@ const EAGER_COUNT = 4;
       <li class="card" style={`--stagger: ${Math.min(index, STAGGER_CAP)}`}>
         <a
           class="card__link press"
-          href={`/sites/${primary.slug}`}
+          href={`/sites/${primary.slug}`} data-astro-prefetch="hover"
           data-site-open
           data-slugs={screens.map((screen) => screen.site.slug).join(" ")}
         >

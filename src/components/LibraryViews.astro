@@ -93,7 +93,7 @@ const videos = of("video").filter(
     {
       videos.map((entry) => (
         <li data-tags={entry.tags.join(" ")}>
-          <a class="vtile" href={entryHref(entry)}>
+          <a class="vtile" href={entryHref(entry)} data-astro-prefetch="hover">
             <img class="vtile__thumb outlined" src={entry.video.thumb} alt="" loading="lazy" decoding="async" />
             <b>{entry.title}</b>
             <small>

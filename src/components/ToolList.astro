@@ -64,7 +64,7 @@ const COLUMNS = ALL.filter((column) => column.id !== drop);
           <td class="cell cell--name">
             <span class="row__name">
               <AppIcon tool={tool} size={32} />
-              <a class="row__link" href={`/tools/${tool.slug}`}>
+              <a class="row__link" href={`/tools/${tool.slug}`} data-astro-prefetch="hover">
                 {tool.name}
               </a>
             </span>

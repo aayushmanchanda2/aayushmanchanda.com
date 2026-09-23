@@ -48,6 +48,13 @@ export default defineConfig({
    */
   markdown: { syntaxHighlight: false },
 
+  /**
+   * Opt-in only: a link prefetches when it carries `data-astro-prefetch`,
+   * which the index rows do (`hover`), so the page a pointer rests on is
+   * cached before the click. Nothing else on the site prefetches.
+   */
+  prefetch: { prefetchAll: false, defaultStrategy: "hover" },
+
   integrations: [
     sitemap({
       customPages: MARKDOWN_VARIANTS,

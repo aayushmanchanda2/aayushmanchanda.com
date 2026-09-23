@@ -27,7 +27,7 @@ const stacked = entries.some((entry) => entry.meta !== undefined);
   {
     entries.map((entry) => (
       <li>
-        <a class:list={["row press", entry.tip && "row--tip"]} href={entry.href}>
+        <a class:list={["row press", entry.tip && "row--tip"]} href={entry.href} data-astro-prefetch="hover">
           {entry.tip && <span class="row__emoji" aria-hidden="true">{entry.tip.emoji}</span>}
           <span class="row__title">{entry.title}</span>
           {entry.tip && <span class="row__summary">{entry.tip.summary}</span>}

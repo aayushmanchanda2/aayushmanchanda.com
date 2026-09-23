@@ -44,7 +44,7 @@ const breakable = (name: string) => name.split(/(?<=[/.])(?=.)/);
     {
       tools.map((tool) => (
         <li class="tile" {...toolAttributes(tool)}>
-          <a class="tile__link" href={`/tools/${tool.slug}`}>
+          <a class="tile__link" href={`/tools/${tool.slug}`} data-astro-prefetch="hover">
             <AppIcon tool={tool} size={60} />
             <span class="tile__name" title={tool.description ? `${tool.name}: ${tool.description}` : tool.name}>
               {breakable(tool.name).map((part, i) => (<>{i > 0 && <wbr />}{part}</>))}
@@ -69,14 +69,9 @@ const breakable = (name: string) => name.split(/(?<=[/.])(?=.)/);
 </script>
 
 <style>
-  /* The cross-document zoom into a tool's page; `tools/[slug].astro` opts in
-     too, and `lib/home-screen.ts` skips every navigation but an icon's. */
-  @media (prefers-reduced-motion: no-preference) {
-    @view-transition {
-      navigation: auto;
-    }
-  }
-
+  /* The cross-document zoom into a tool's page rides the site-wide
+     `@view-transition` (`styles/global.css`); `lib/home-screen.ts` skips
+     every navigation off /tools but an icon's. */
   .home {
     display: none;
     container-type: inline-size;
