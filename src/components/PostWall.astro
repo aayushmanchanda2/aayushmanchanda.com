@@ -2,12 +2,12 @@
 /**
  * PostWall — the /library Posts view as a grid of `PostCard`s.
  *
- * Four across from 1000px of its own width, three from 700, two from 440, one
- * below, with a 12px gap (swiped.design's post grid). Container widths rather
- * than viewport ones, because the wall sits beside the 350px list pane on a
- * desktop and alone on a phone (VET-258). A grid rather than columns, so the
- * posts stay newest first reading across, and every card in a row stretches
- * to the tallest: the text is cut and clamped, so rows stay close in height.
+ * Masonry (VET-284): CSS columns, four from 1000px of its own width, three
+ * from 700, two from 440, one below, 16px apart; each card is as tall as its
+ * post and never splits across columns. Container widths rather than viewport
+ * ones, because the wall sits beside the 350px list pane on a desktop and
+ * alone on a phone (VET-258). Columns fill top to bottom, so newest first
+ * reads down the first column, then the next.
  *
  * Only an entry with a post gets a card. One saved without a status id (a
  * profile link) keeps its row in the pane, where a title alone still says
@@ -52,33 +52,46 @@ const cards = entries.filter(
   }
 
   .wall {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 12px;
+    columns: 1;
+    column-gap: 16px;
     margin: 0;
+  }
+
+  /* `inline-block` as well as `break-inside`: Safari splits a block across
+     columns even when told not to, and a split card cuts its shadow. */
+  .wall > li {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 16px;
+    break-inside: avoid;
+  }
+
+  /* The tag filter hides a card with `hidden`, which the display above beats. */
+  .wall > li[hidden] {
+    display: none;
   }
 
   @container (width >= 440px) {
     .wall {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      columns: 2;
     }
   }
 
   @container (width >= 700px) {
     .wall {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      columns: 3;
     }
   }
 
   @container (width >= 1000px) {
     .wall {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      columns: 4;
     }
   }
 
   @container (700px <= width < 1000px) {
     .wall--compact {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      columns: 2;
     }
   }
 
