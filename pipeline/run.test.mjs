@@ -476,7 +476,7 @@ test("a saved post lands with the words in it, not with Raindrop's placeholder",
 
   assert.equal(
     post.title,
-    "Been rebuilding the Diadem brand archive for three weeks and the thing nobody…",
+    "Been rebuilding the Diadem brand archive for three weeks…",
     "the title is what the post says",
   );
   assert.match(post.note, /^@EphraimAkanmu: Been rebuilding/, "and the note says whose it was");

@@ -14,11 +14,12 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
+import { TITLE_MAX } from "../src/lib/reader.mjs";
+
 import {
   DraftError,
   FAILED_TAG,
   POST_NOTE_MAX,
-  POST_TITLE_MAX,
   PUBLISHED_TAG,
   SWEEP_HOLD_TAG,
   VETTED_TAG,
@@ -231,7 +232,7 @@ test("a post Raindrop could not read supplies the title it could not", () => {
   });
 
   assert.notEqual(entry.title, "A post from @ephraimakanmu");
-  assert.ok(entry.title.length <= POST_TITLE_MAX + 1);
+  assert.ok([...entry.title].length <= TITLE_MAX);
   assert.ok(text.startsWith(String(entry.title).replace("…", "")));
   assert.equal(entry.kind, "post");
 });
@@ -643,4 +644,14 @@ test("a post with paragraphs still gets a one-line title and note", () => {
 
   assert.equal(entry.title, "One. Two.");
   assert.equal(entry.note, "@ephraimakanmu", "the whole post fit, paragraphs and all");
+});
+
+test("a long raw title still publishes, cut on a word inside the 60-character cap (VET-283)", () => {
+  const long = "Build your own company brain: the enterprise AI playbook from Stripe's engineering team";
+  const entry = buildReadingEntry({ bookmark: saved({ title: long, url: "https://example.com/brain" }), slug: "brain", date: "2026-09-24" });
+  assert.equal(entry.title, "Build your own company brain: the enterprise AI playbook…");
+  assert.ok([...entry.title].length <= TITLE_MAX);
+
+  const exact = "a".repeat(TITLE_MAX);
+  assert.equal(buildReadingEntry({ bookmark: saved({ title: exact, url: "https://example.com/x" }), slug: "x", date: "2026-09-24" }).title, exact);
 });

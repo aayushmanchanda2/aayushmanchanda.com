@@ -219,6 +219,7 @@ test("the source fields are held to the caps the build holds them to", async (t)
   await assert.rejects(run({ highlights: [{ text: "a", color: "red" }] }), /amber, blue, pink, green/);
   await assert.rejects(run({ title: "Two\nlines" }), /one non-empty line/);
   await assert.rejects(run({ title: null }), /cannot be cleared/);
+  await assert.rejects(run({ title: "a".repeat(61) }), /61 characters; the cap is 60/);
 });
 
 test("a block and also_saved are written, validated, and cleared as no key (VET-273)", async (t) => {

@@ -63,7 +63,7 @@ import { SLUG, routeSlug } from "./parse.ts";
 import type { Post } from "./post-schema.ts";
 import { READ, fail, readCommittedPath, readList, readPostObject } from "./post-schema.ts";
 import type { Block, Color } from "./reader.mjs";
-import { CAPS, block, highlights, keyline, moments, postHighlights, prose } from "./reader.mjs";
+import { CAPS, block, highlights, keyline, moments, postHighlights, prose, title } from "./reader.mjs";
 
 import rawLibrary from "../data/library.json" with { type: "json" };
 
@@ -249,7 +249,7 @@ export interface LibraryEntry {
   moments: Moment[];
   /** Best for, the tip, time, needs, a prompt to copy, where to start (VET-273). Or null. */
   block: Block | null;
-  /** Kept, but out of the main feed: listed under "Also saved" (VET-273). */
+  /** Kept, but out of the main feed: listed under "Also saved" (VET-273). A public entry with no `tldr` is held here until it has one (VET-283). */
   also_saved: boolean;
 }
 
@@ -572,6 +572,16 @@ function readCapped<T>(
   }
 }
 
+/** Required, one string, and within `reader.mjs › TITLE_MAX` (VET-283). */
+function readTitle(entry: Record<string, unknown>, where: string): string {
+  const value = readString(entry, "title", where);
+  try {
+    return title(value);
+  } catch (error) {
+    fail(where, error instanceof Error ? error.message : String(error));
+  }
+}
+
 /** Absent or null is false; anything else has to be a boolean. */
 function readFlag(entry: Record<string, unknown>, key: string, where: string): boolean {
   const value = entry[key];
@@ -617,7 +627,7 @@ export function parseLibrary(value: unknown): LibraryEntry[] {
 
     return {
       slug,
-      title: readString(item, "title", where),
+      title: readTitle(item, where),
       // Returned as authored, not as `url.href`, which would rewrite a bare
       // origin with a trailing slash and change what the row shows.
       url: readString(item, "url", where),
@@ -711,8 +721,13 @@ export function rowSummary(entry: LibraryEntry): string | null {
    Derived views — computed once, at build time
    --------------------------------------------------------------------------- */
 
-/** Newest save first; ties keep the order they were written in the JSON. */
+/**
+ * Newest save first; ties keep the order they were written in the JSON. An
+ * entry with no TLDR yet is Also saved, never a bare main-feed row (VET-283);
+ * the /me archive's own rows are not held to it.
+ */
 export const library: LibraryEntry[] = parseLibrary(rawLibrary)
+  .map((entry) => (entry.tldr === null ? { ...entry, also_saved: true } : entry))
   .map((entry, index) => ({ entry, index }))
   .sort((a, b) =>
     a.entry.saved_date === b.entry.saved_date
@@ -720,6 +735,13 @@ export const library: LibraryEntry[] = parseLibrary(rawLibrary)
       : b.entry.saved_date.localeCompare(a.entry.saved_date),
   )
   .map(({ entry }) => entry);
+
+// The build names every entry held in Also saved only for want of a TLDR (VET-283).
+for (const item of rawLibrary as { slug: string; tldr?: unknown; also_saved?: unknown }[]) {
+  if (item.tldr == null && item.also_saved !== true) {
+    console.warn(`src/data/library.json: "${item.slug}" has no tldr, so it sits in Also saved until one is patched in`);
+  }
+}
 
 /**
  * The entries somebody has actually read, in the order the list renders them.

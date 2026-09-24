@@ -41,10 +41,21 @@ function styles(): string {
   ].join("\n");
 }
 
-/** The card's own layout, inside the stamp's keyline (body padding is `--frame`). */
+/**
+ * The card's own layout, inside the stamp's keyline (body padding is `--frame`).
+ * The chrome is sized for the 300px-wide iMessage card (VET-283): the domain in
+ * an ink pill and the section in a chip of its mat's hue, both 17px here, which
+ * is 8.5px there. The keyline marks and the postmark were dropped: at 11px and
+ * 20% ink they could not be read below 600px.
+ */
 const CARD_CSS = `
 body{margin:0;width:600px;height:315px;overflow:hidden;background:var(--bg);-webkit-font-smoothing:antialiased}
-.card{box-sizing:border-box;height:100%;display:flex;gap:20px;align-items:center;padding:22px 24px 26px}
+.card{box-sizing:border-box;height:100%;display:flex;gap:20px;align-items:center;padding:58px 24px 22px}
+.tags{position:fixed;top:calc(var(--frame) + 16px);left:calc(var(--frame) + 24px);right:calc(var(--frame) + 24px);
+  display:flex;justify-content:space-between;align-items:center;gap:12px}
+.tag{font:600 17px/1 var(--font-sans);letter-spacing:-0.01em;padding:7px 12px 8px;border-radius:999px;white-space:nowrap}
+.tag--domain{background:var(--text-primary);color:var(--bg)}
+.tag--section{background:oklch(0.46 calc(var(--ink-c) * 1.6) var(--mat-h));color:var(--media-ink);text-transform:capitalize}
 .card__text{flex:1;min-width:0;display:flex;flex-direction:column;gap:10px}
 .card__title{margin:0;font:600 var(--size)/1.08 var(--font-sans);letter-spacing:-0.035em;color:var(--text-primary);
   display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden;text-wrap:balance}
@@ -57,29 +68,7 @@ body{margin:0;width:600px;height:315px;overflow:hidden;background:var(--bg);-web
   background:var(--bg);mask:var(--squircle) center/100% 100%;font:600 20px/1 var(--font-sans);color:var(--text-primary)}
 .card__logo img{width:36px;height:36px;mask:var(--squircle) center/100% 100%}
 .card__logo--ring{outline:none;box-shadow:inset 0 0 0 1px var(--hairline-strong)}
-.postmark{position:fixed;top:0;right:calc(var(--frame) + 1.5rem);z-index:41;width:112px;color:var(--text-primary);
-  opacity:.2;rotate:-8deg;mask:var(--ink-wear),var(--ink-wear) 71px 29px;mask-composite:intersect;font-family:var(--font-mono)}
-.stamp__mark{text-transform:none}
 `;
-
-/** The cancellation from `components/Stamp.astro`, struck with the card's date. */
-function postmark(name: string, date: string | null): string {
-  const day = date ? new Date(`${date}T00:00:00Z`) : null;
-  const lines = day
-    ? [day.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" }), String(day.getUTCFullYear())]
-    : [];
-  return `<svg class="postmark" viewBox="0 0 200 96" aria-hidden="true">
-  <g fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-    <path d="M2 30q9-7 18 0t18 0 18 0 18 0 18 0 18 0"/><path d="M6 48q9-7 18 0t18 0 18 0 18 0 18 0 14 0"/><path d="M2 66q9-7 18 0t18 0 18 0 18 0 18 0 18 0"/>
-    <path d="M149 5c25-1 44 19 43 44s-20 44-45 43-43-21-42-46 19-40 46-41"/>
-    <path d="M148 17c17 0 31 14 31 31s-14 31-32 31-30-15-30-32 14-30 31-30" stroke-width="1.5"/>
-  </g>
-  <g fill="currentColor" font-size="10" text-anchor="middle">
-    <text x="148" y="${lines.length ? 40 : 52}">${esc(name.toUpperCase())}</text>
-    ${lines.map((line, i) => `<text x="148" y="${53 + i * 12}">${esc(line.toUpperCase())}</text>`).join("")}
-  </g>
-</svg>`;
-}
 
 /** Title size by length: a short name fills the stamp, a headline wraps. */
 const titleSize = (title: string, picture: boolean) => {
@@ -101,9 +90,9 @@ export function cardHtml(card: OgCard, css: string): string {
   const section = card.section === "other" ? "" : card.section;
   return `<!doctype html><html lang="en" data-theme="light" data-section="${section}"><meta charset="utf-8"><style>${css}</style>
 <body>
-<div class="stamp" aria-hidden="true"><span class="stamp__mark">aayushmanchanda.com</span><span class="stamp__mark stamp__mark--end">${esc(card.label)}</span></div>
+<div class="stamp" aria-hidden="true"></div>
 <div class="mat" aria-hidden="true"><div class="mat__shade"><div class="mat__paper"></div></div></div>
-${postmark(section || "Aayush", card.date)}
+<header class="tags"><span class="tag tag--domain">aayushmanchanda.com</span>${card.label ? `<span class="tag tag--section">${esc(card.label)}</span>` : ""}</header>
 <main class="card"><div class="card__text">
 <h1 class="card__title" style="--size:${titleSize(card.title, Boolean(pic))}px">${esc(card.title)}</h1>
 ${card.line ? `<p class="card__line">${esc(card.line)}</p>` : ""}

@@ -33,6 +33,7 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 
+import { TITLE_MAX } from "../src/lib/reader.mjs";
 import { cleanName } from "./names.mjs";
 import { thumbWebPath } from "./thumb.mjs";
 import { bareHost, isRecord, oneLine, writeAtomic } from "./util.mjs";
@@ -542,9 +543,6 @@ export function buildToolEntry({ bookmark, slug, date }) {
    Posts
    --------------------------------------------------------------------------- */
 
-/** How much of a post the title shows. About one line at the page's measure. */
-export const POST_TITLE_MAX = 80;
-
 /** How much of it the note shows. A tweet's own limit, near enough. */
 export const POST_NOTE_MAX = 280;
 
@@ -583,6 +581,18 @@ export function clip(text, max) {
   const body = space > max / 2 ? cut.slice(0, space) : cut;
 
   return `${body.replace(/[\s,.;:!?—–-]+$/u, "")}…`;
+}
+
+/**
+ * A /library title as the site holds it (`reader.mjs › title`): whole when it
+ * fits in `TITLE_MAX`, else cut on a word with the ellipsis inside the cap, so
+ * a long raw title still publishes (VET-283). Hermes renames it later with
+ * `patch.mjs --title`.
+ * @param {string} text @returns {string}
+ */
+export function fitTitle(text) {
+  const tidy = text.trim();
+  return [...tidy].length <= TITLE_MAX ? tidy : clip(tidy, TITLE_MAX - 1);
 }
 
 /**
@@ -640,8 +650,8 @@ export function buildReadingEntry({
   draft = null,
   why = null,
 }) {
-  const fallbackTitle = bookmark.title === "" ? hostnameOf(bookmark.url) : bookmark.title;
-  const headline = post === null ? "" : clip(oneLine(post.article?.title ?? post.text), POST_TITLE_MAX);
+  const fallbackTitle = fitTitle(bookmark.title === "" ? hostnameOf(bookmark.url) : bookmark.title);
+  const headline = post === null ? "" : fitTitle(oneLine(post.article?.title ?? post.text));
   const tags = collectionsFrom(bookmark.tags);
 
   return {
@@ -805,6 +815,6 @@ function isCalendarDate(value) {
  */
 function postNote(post) {
   const line = oneLine(post.text);
-  const whole = clip(line, POST_TITLE_MAX) === line;
+  const whole = fitTitle(line) === line;
   return whole ? `@${post.handle}` : `@${post.handle}: ${clip(line, POST_NOTE_MAX)}`;
 }

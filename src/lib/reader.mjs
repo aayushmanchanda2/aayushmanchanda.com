@@ -14,6 +14,16 @@
 
 export const CAPS = { tldr: 25, highlights: 5, highlight: 60, note: 25, excerpt: 80 };
 
+/** A title fits a row and a share card: 60 characters, counted in code points (VET-283). */
+export const TITLE_MAX = 60;
+
+/** @param {string} value @returns {string} */
+export function title(value) {
+  const length = [...value].length;
+  if (length > TITLE_MAX) throw new Error(`"title" is ${length} characters; the cap is ${TITLE_MAX}`);
+  return value;
+}
+
 /** Amber is the default and the one `--highlight` has always been. */
 export const COLORS = /** @type {const} */ (["amber", "blue", "pink", "green"]);
 

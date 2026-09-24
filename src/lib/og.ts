@@ -25,10 +25,8 @@ export interface OgCard {
   title: string;
   /** One line under the title. */
   line: string | null;
-  /** The stamp's denomination, bottom right. */
+  /** The coloured section chip, top right (e.g. "Library · post"), or "" for none. */
   label: string;
-  /** ISO day struck in the postmark, or none. */
-  date: string | null;
   /** A `public/` path shown framed beside the text: a preview or a screenshot. */
   picture: string | null;
   /** A tool's own icon (`public/icons`), else its initial in `letter`. */
@@ -70,7 +68,7 @@ export function ogCards(): Promise<OgCard[]> {
 }
 
 async function build(): Promise<OgCard[]> {
-  const base = { date: null, picture: null, logo: null, letter: null };
+  const base = { picture: null, logo: null, letter: null };
   const [notes, tips] = await Promise.all([getCollection("notes"), getCollection("computer")]);
 
   const indexes: OgCard[] = SECTION_HREFS.map((href) => ({
@@ -79,7 +77,7 @@ async function build(): Promise<OgCard[]> {
     section: href.slice(1),
     title: name(href),
     line: CATALOGUE[href].blurb,
-    label: "Aayush Manchanda",
+    label: "",
   }));
 
   const about: OgCard = {
@@ -102,7 +100,6 @@ async function build(): Promise<OgCard[]> {
         title: tool.name,
         line: tool.description ?? tool.note,
         label: name("/tools"),
-        date: tool.status_date,
         picture: assetFor("previews", tool.slug),
         logo,
         letter: logo ? null : monogram(tool.name),
@@ -115,7 +112,6 @@ async function build(): Promise<OgCard[]> {
       title: site.title,
       line: site.domain,
       label: name("/sites"),
-      date: site.saved_date,
       picture: site.shot,
     })),
     ...library.map((entry) => ({
@@ -125,7 +121,6 @@ async function build(): Promise<OgCard[]> {
       title: entry.title,
       line: entry.domain,
       label: `${name("/library")} · ${entry.kind}`,
-      date: entry.saved_date,
       picture: entry.kind === "video" ? (entry.video?.thumb ?? null) : entry.kind === "article" ? assetFor("previews/library", entry.slug) : null,
     })),
     ...notes.map((note) => ({
@@ -135,7 +130,6 @@ async function build(): Promise<OgCard[]> {
       title: note.data.title,
       line: null,
       label: name("/notes"),
-      date: note.data.date.toISOString().slice(0, 10),
     })),
     ...tips.map((tip) => ({
       ...base,

@@ -17,7 +17,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { KINDS, PROVIDERS, parseLibrary } from "./library.ts";
+import { KINDS, PROVIDERS, feed, library, parseLibrary } from "./library.ts";
 
 /**
  * A minimal valid entry. Every test below is this plus one thing wrong.
@@ -397,4 +397,15 @@ test("a block tip's lead is its first sentence, quotes and all", async () => {
   assert.deepEqual(leadSentence('Point AI at a chore. "A leader can arrange for relief." Then stop.'), ["Point AI at a chore.", '"A leader can arrange for relief." Then stop.']);
   assert.deepEqual(leadSentence("One sentence only."), ["One sentence only.", ""]);
   assert.deepEqual(leadSentence("Use tools.simonwillison.net first. Then edit."), ["Use tools.simonwillison.net first.", "Then edit."]);
+});
+
+test("a title over 60 characters fails the build (VET-283)", () => {
+  failsWith(entry({ title: "a".repeat(61) }), "a-saved-thing|entry 0", "61 characters; the cap is 60");
+  assert.equal(parseLibrary([entry({ title: "é".repeat(60) })])[0].title.length, 60);
+});
+
+test("no main-feed entry is bare: one with no TLDR waits in Also saved (VET-283)", () => {
+  assert.ok(feed.length > 0);
+  for (const entry of feed) assert.notEqual(entry.tldr, null, `${entry.slug} is in the main feed with no TLDR`);
+  assert.ok(library.filter((entry) => entry.tldr === null).every((entry) => entry.also_saved));
 });

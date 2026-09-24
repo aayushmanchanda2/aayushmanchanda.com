@@ -1,0 +1,113 @@
+{
+  "base": "http://localhost:4337/",
+  "label": "vet-283",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-24-vet-283",
+  "at": "2026-09-24T05:45:39.086Z",
+  "shots": [
+    {
+      "route": "/library",
+      "url": "http://localhost:4337/library",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "library-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/30-seconds-of-typing-can-now-turn-into-100-hours-of-gtm-work",
+      "url": "http://localhost:4337/library/30-seconds-of-typing-can-now-turn-into-100-hours-of-gtm-work",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "library_30_seconds_of_typing_can_now_turn_into_100_hours_of_gtm_work-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library",
+      "url": "http://localhost:4337/library",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/30-seconds-of-typing-can-now-turn-into-100-hours-of-gtm-work",
+      "url": "http://localhost:4337/library/30-seconds-of-typing-can-now-turn-into-100-hours-of-gtm-work",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library_30_seconds_of_typing_can_now_turn_into_100_hours_of_gtm_work-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library",
+      "url": "http://localhost:4337/library",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "library-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/30-seconds-of-typing-can-now-turn-into-100-hours-of-gtm-work",
+      "url": "http://localhost:4337/library/30-seconds-of-typing-can-now-turn-into-100-hours-of-gtm-work",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "library_30_seconds_of_typing_can_now_turn_into_100_hours_of_gtm_work-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library",
+      "url": "http://localhost:4337/library",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/30-seconds-of-typing-can-now-turn-into-100-hours-of-gtm-work",
+      "url": "http://localhost:4337/library/30-seconds-of-typing-can-now-turn-into-100-hours-of-gtm-work",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library_30_seconds_of_typing_can_now_turn_into_100_hours_of_gtm_work-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}
