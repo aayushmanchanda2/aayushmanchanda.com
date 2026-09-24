@@ -2,7 +2,8 @@
 /**
  * Avatar: Aayush's photo, round, not draggable. Used on /about and the home
  * hero, the two pages whose `Person` carries it as `image` (`lib/schema.ts`).
- * `public/aayush.jpg` is the fallback; the webp pair covers 1x to 3x.
+ * Shown at 64px at most, so one 128px WebP, 2x (design.md §8 "Images");
+ * `public/aayush.jpg` stays as the `Person` image.
  */
 interface Props {
   size: number;
@@ -13,23 +14,16 @@ interface Props {
 const { size, class: className, ...rest } = Astro.props;
 ---
 
-<picture>
-  <source
-    type="image/webp"
-    srcset="/aayush-240.webp 240w, /aayush-400.webp 400w"
-    sizes={`${size}px`}
-  />
-  <img
-    class:list={["avatar outlined", className]}
-    src="/aayush.jpg"
-    alt="Aayush Manchanda"
-    width={size}
-    height={size}
-    draggable="false"
-    decoding="async"
-    {...rest}
-  />
-</picture>
+<img
+  class:list={["avatar outlined", className]}
+  src="/aayush-128.webp"
+  alt="Aayush Manchanda"
+  width={size}
+  height={size}
+  draggable="false"
+  decoding="async"
+  {...rest}
+/>
 
 <style>
   .avatar {

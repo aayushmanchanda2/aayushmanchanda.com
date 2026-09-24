@@ -1,0 +1,120 @@
+{
+  "base": "https://aayushmanchanda.com",
+  "date": "2026-09-24T19:54:59.216Z",
+  "routes": {
+    "/tools": {
+      "lighthouse": {
+        "score": 99,
+        "lcpMs": 1860,
+        "tbtMs": 0,
+        "cls": 0,
+        "totalKB": 325,
+        "imageRequests": 32,
+        "imageKB": 193,
+        "fcpMs": 1293,
+        "lcpElement": "<p class=\"standfirst\" data-astro-cid-e2calspi=\"\">",
+        "documentKB": 38,
+        "tbtMsRuns": [
+          0,
+          0,
+          9
+        ],
+        "lcpMsRuns": [
+          1780,
+          1860,
+          1912
+        ]
+      },
+      "scroll": {
+        "htmlKB": 348,
+        "img": 127,
+        "eager": 0,
+        "high": 0,
+        "fullShotSrc": 0,
+        "loadImageKB": 17,
+        "scrollImageKB": 447,
+        "scrollPx": 7202,
+        "frames": 1547,
+        "fps": 118,
+        "longFrames50": 0,
+        "worstFrameMs": 25
+      }
+    },
+    "/library/answer-ai-design-with-blue-ink-style-illustrations": {
+      "lighthouse": {
+        "score": 100,
+        "lcpMs": 1670,
+        "tbtMs": 0,
+        "cls": 0,
+        "totalKB": 387,
+        "imageRequests": 11,
+        "imageKB": 270,
+        "fcpMs": 1070,
+        "lcpElement": "<dd data-astro-cid-3dkvbi5v=\"\">",
+        "documentKB": 25,
+        "tbtMsRuns": [
+          108,
+          0,
+          0
+        ],
+        "lcpMsRuns": [
+          1665,
+          1670,
+          1727
+        ]
+      },
+      "scroll": {
+        "htmlKB": 92,
+        "img": 5,
+        "eager": 0,
+        "high": 0,
+        "fullShotSrc": 0,
+        "loadImageKB": 18,
+        "scrollImageKB": 270,
+        "scrollPx": 1136,
+        "frames": 345,
+        "fps": 117,
+        "longFrames50": 0,
+        "worstFrameMs": 17
+      }
+    },
+    "/sites/arc-from-the-browser-company": {
+      "lighthouse": {
+        "score": 99,
+        "lcpMs": 2203,
+        "tbtMs": 0,
+        "cls": 0,
+        "totalKB": 250,
+        "imageRequests": 6,
+        "imageKB": 144,
+        "fcpMs": 1078,
+        "lcpElement": "<img class=\"scroller__shot\" src=\"https://aayushmanchanda.com/thumbs/arc-from-the-browser-company-full-780.w…\" alt=\"Full page of Arc\" loading=\"eager\" decoding=\"async\" fetchpriority=\"high\" width=\"1440\" height=\"6117\" data-astro-cid-h7q67odh=\"\">",
+        "documentKB": 18,
+        "tbtMsRuns": [
+          0,
+          0,
+          0
+        ],
+        "lcpMsRuns": [
+          2200,
+          2203,
+          2205
+        ]
+      },
+      "scroll": {
+        "htmlKB": 69,
+        "img": 1,
+        "eager": 1,
+        "high": 1,
+        "fullShotSrc": 0,
+        "loadImageKB": 144,
+        "scrollImageKB": 144,
+        "scrollPx": 1650,
+        "frames": 452,
+        "fps": 119,
+        "longFrames50": 0,
+        "worstFrameMs": 17
+      }
+    }
+  }
+}

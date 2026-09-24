@@ -251,7 +251,7 @@ test("a Firecrawl second chance that came back with a wall fails instead of publ
     (error) => {
       assert.ok(error instanceof CaptureBlockedError, "the failure is typed, not a bare Error");
       assert.equal(error.signature, "blank capture");
-      assert.match(error.message, /^inspora captured as a blank page: 1440x900/);
+      assert.match(error.message, /^inspora captured as a blank page: 1280x800/);
       return true;
     },
   );

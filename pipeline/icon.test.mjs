@@ -41,7 +41,7 @@ function server(routes) {
 
 const dir = () => mkdtemp(path.join(tmpdir(), "icon-"));
 
-test("the declared apple-touch-icon wins, stored as a 256px WebP", async () => {
+test("the declared apple-touch-icon wins, stored as an ICON_SIZE WebP", async () => {
   const icons = await dir();
   const { fetch } = server({
     "https://eve.dev/touch.png": await png(180),

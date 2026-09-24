@@ -1,0 +1,10 @@
+# Vercel preview builds of vet-309b-image-sweep (vercel inspect --logs, filtered)
+## cold: ca1c6ca, cache from main had none of the new copies
+2026-09-24T20:12:03.730Z  Restored build cache from previous deployment (8c4BS746hpvJQowfLw4HRS3VYSQ5)
+2026-09-24T20:17:48.511Z  [thumbs] encoded 344 copies in 338.5s
+2026-09-24T20:17:54.186Z  Build Completed in /vercel/output [6m]
+2026-09-24T20:18:12.078Z  Uploading build cache [106.32 MB]
+## warm: c520f44, next push
+2026-09-24T20:22:49.998Z  Restored build cache from previous deployment (mHBFxgaiL3c9pQWrK3VyvoFLsjRg)
+2026-09-24T20:22:59.771Z  Build Completed in /vercel/output [9s]
+2026-09-24T20:23:15.617Z  Uploading build cache [106.32 MB]

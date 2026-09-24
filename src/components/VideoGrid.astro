@@ -9,7 +9,7 @@ import KindIcon from "./KindIcon.astro";
 import type { LibraryEntry } from "../lib/library";
 import { entryHref } from "../lib/library";
 import { formatDay } from "../lib/date";
-import { posterSrcset } from "../lib/thumbs";
+import { posterOf } from "../lib/thumbs";
 import { webpSize } from "../lib/assets";
 
 interface Props {
@@ -26,7 +26,7 @@ const { entries } = Astro.props;
       <li data-tags={entry.tags.join(" ")}>
         <a class="vtile" href={entryHref(entry)} data-astro-prefetch="hover">
           {entry.video ? (
-            <img class="vtile__thumb outlined" src={entry.video.thumb} srcset={posterSrcset(entry.video.thumb, webpSize(entry.video.thumb)?.width ?? 0)} sizes="(min-width: 640px) 20rem, 100vw" {...webpSize(entry.video.thumb)} alt="" loading="lazy" decoding="async" />
+            <img class="vtile__thumb outlined" src={posterOf(entry.video.thumb)} {...webpSize(entry.video.thumb)} alt="" loading="lazy" decoding="async" />
           ) : (
             <span class="vtile__thumb vtile__ph outlined" aria-hidden="true"><KindIcon kind="video" /></span>
           )}

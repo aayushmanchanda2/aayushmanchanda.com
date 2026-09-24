@@ -12,6 +12,7 @@ import path from "node:path";
 
 import type { LibraryEntry } from "./library";
 import { previewAttributes } from "./preview-card.ts";
+import { posterOf } from "./thumbs.ts";
 
 /**
  * `public/` — the web root, so a `/shots/…` path resolves by joining here.
@@ -71,7 +72,7 @@ export function webpSize(publicPath: string): { width: number; height: number } 
  * article with no picture: a card of words would repeat the row.
  */
 export function libraryPreview(entry: LibraryEntry): Record<string, string> {
-  const image = entry.kind === "video" ? (entry.video?.thumb ?? null) : entry.kind === "article" ? assetFor("previews/library", entry.slug) : null;
+  const image = entry.kind === "video" ? (entry.video ? posterOf(entry.video.thumb) : null) : entry.kind === "article" ? assetFor("previews/library", entry.slug) : null;
   return image === null ? {} : previewAttributes({ image, name: entry.title, domain: entry.domain });
 }
 

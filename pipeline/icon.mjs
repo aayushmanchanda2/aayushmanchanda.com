@@ -30,12 +30,13 @@ import { pathToFileURL } from "node:url";
 import sharp from "sharp";
 
 import { repoFrom } from "./entries.mjs";
+import { ICON_SIZE, ICON_WEBP } from "./image-policy.mjs";
 import { NOT_A_SITE, siteInReadme } from "./readme-site.mjs";
 import { resolvePaths } from "./state.mjs";
 import { backfill, describe, exists, isRecord, writeAtomic } from "./util.mjs";
 
-/** The stored square. The largest mark is 60px, 120 device pixels at 2x. */
-export const ICON_SIZE = 256;
+/** The stored square: `image-policy.mjs`. */
+export { ICON_SIZE };
 
 /** Smaller than this and the 60px mark would be an upscaled blur. */
 const MIN_SOURCE = 120;
@@ -192,7 +193,7 @@ export async function encodeIcon(bytes) {
   const webp = await image
     .flatten({ background: "#ffffff" })
     .resize(ICON_SIZE, ICON_SIZE, { fit: "contain", background: "#ffffff" })
-    .webp({ quality: 90 })
+    .webp(ICON_WEBP)
     .toBuffer();
   // A white-on-transparent mark flattens to a blank square: no icon, try the next source.
   const { channels } = await sharp(webp).stats();

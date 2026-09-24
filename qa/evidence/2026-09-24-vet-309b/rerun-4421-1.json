@@ -1,0 +1,44 @@
+{
+  "base": "http://localhost:4421",
+  "date": "2026-09-24T20:32:52.397Z",
+  "routes": {
+    "/library/answer-ai-design-with-blue-ink-style-illustrations": {
+      "lighthouse": {
+        "score": 98,
+        "lcpMs": 2367,
+        "tbtMs": 0,
+        "cls": 0,
+        "totalKB": 272,
+        "imageRequests": 11,
+        "imageKB": 169,
+        "fcpMs": 1485,
+        "lcpElement": "<dd data-astro-cid-3dkvbi5v=\"\">",
+        "documentKB": 20,
+        "tbtMsRuns": [
+          0,
+          0,
+          0
+        ],
+        "lcpMsRuns": [
+          2332,
+          2367,
+          3117
+        ]
+      },
+      "scroll": {
+        "htmlKB": 91,
+        "img": 5,
+        "eager": 0,
+        "high": 0,
+        "fullShotSrc": 0,
+        "loadImageKB": 169,
+        "scrollImageKB": 169,
+        "scrollPx": 1136,
+        "frames": 351,
+        "fps": 119,
+        "longFrames50": 0,
+        "worstFrameMs": 17
+      }
+    }
+  }
+}

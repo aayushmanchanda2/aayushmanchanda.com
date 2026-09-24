@@ -13,6 +13,7 @@ import path from "node:path";
 import { pickText } from "./post-text.mjs";
 import { fetchWebp } from "./thumb.mjs";
 import { describe, exists, isRecord, readCapped, writeAtomic } from "./util.mjs";
+import { AVATAR_WIDTH, POST_PICTURE_WIDTH } from "./image-policy.mjs";
 
 /** @typedef {import("./types.js").Post} Post */
 /** @typedef {typeof globalThis.fetch} Fetch */
@@ -31,9 +32,6 @@ const FEATURES =
 
 /** Over this a video is kept as its poster. 26 posts at 720p came to 155MB, in git. */
 export const VIDEO_MAX_BYTES = 4 * 1024 * 1024;
-
-const AVATAR_WIDTH = 96;
-const PICTURE_WIDTH = 1200;
 
 /** The id in `x.com/<handle>/status/<id>`, or null for a profile. @param {string} url @returns {string | null} */
 export function postId(url) {
@@ -208,7 +206,7 @@ async function localise(tweet, publicDir, fetch) {
   // gets a second try and a log line: a single silent miss left the Waterloo
   // post without its avatar for good (VET-284), and nothing retries later.
   const tryPicture = async (/** @type {string} */ url, /** @type {string} */ name) => {
-    const get = () => picture(url, id, name, name === "avatar" ? AVATAR_WIDTH : PICTURE_WIDTH, publicDir, fetch);
+    const get = () => picture(url, id, name, name === "avatar" ? AVATAR_WIDTH : POST_PICTURE_WIDTH, publicDir, fetch);
     try {
       return await get().catch(get);
     } catch (error) {
