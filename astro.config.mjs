@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
+import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 import { lastmods } from './src/lib/lastmod.ts';
@@ -33,6 +34,12 @@ import { SITE_URL, absolute } from './src/lib/site.ts';
 const MARKDOWN_VARIANTS = Object.values(PAGES).map((page) => absolute(page.md));
 
 const LASTMOD = lastmods();
+
+/** A built page that asks not to be indexed (`Base.astro › noindex`) is not in the sitemap. */
+const noindexed = (page) => {
+  const file = fileURLToPath(new URL(`./dist${new URL(page).pathname}index.html`, import.meta.url));
+  return existsSync(file) && readFileSync(file, 'utf8').includes('<meta name="robots" content="noindex"');
+};
 
 /**
  * The /me harness (`src/fixtures/MeFixture.astro`): a route under `astro dev`
@@ -147,7 +154,7 @@ export default defineConfig({
        * that ever changes.
        */
       filter: (page) =>
-        !page.endsWith('/robots.txt') && !page.endsWith('/llms.txt') && !new URL(page).pathname.startsWith('/me/'),
+        !page.endsWith('/robots.txt') && !page.endsWith('/llms.txt') && !new URL(page).pathname.startsWith('/me/') && !noindexed(page),
     }),
     meFixture,
   ],

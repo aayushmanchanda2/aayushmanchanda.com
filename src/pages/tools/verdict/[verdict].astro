@@ -10,6 +10,7 @@ import ToolList from "../../../components/ToolList.astro";
 import { listJsonLd, pageUrl } from "../../../lib/schema";
 import type { Verdict } from "../../../lib/tools";
 import { VERDICT_LABELS, verdictGroups } from "../../../lib/tools";
+import { withNames } from "../../../lib/meta";
 
 const STANDFIRST: Record<Verdict, string> = {
   using: "Tools I use day to day.",
@@ -44,7 +45,7 @@ const jsonLd = listJsonLd({
 
 <Base
   title={`${heading} · Tools · Aayush Manchanda`}
-  description={standfirst}
+  description={withNames(standfirst, tools.map((tool) => tool.name))}
   jsonLd={jsonLd}
   full
 >

@@ -9,6 +9,7 @@ import Base from "../../../layouts/Base.astro";
 import ToolList from "../../../components/ToolList.astro";
 import { listJsonLd, pageUrl } from "../../../lib/schema";
 import { categories } from "../../../lib/tools";
+import { withNames } from "../../../lib/meta";
 
 export const getStaticPaths = (() =>
   categories.map((group) => ({
@@ -36,7 +37,8 @@ const jsonLd = listJsonLd({
 
 <Base
   title={`${category} · Tools · Aayush Manchanda`}
-  description={`${lead} ${category}.`}
+  description={withNames(`${lead} ${category}.`, tools.map((tool) => tool.name))}
+  noindex={tools.length === 1}
   jsonLd={jsonLd}
   full
 >

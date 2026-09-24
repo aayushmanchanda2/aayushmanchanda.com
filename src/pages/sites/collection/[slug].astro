@@ -18,6 +18,7 @@ import SiteGrid from "../../../components/SiteGrid.astro";
 import { groupByDomain } from "../../../lib/screens";
 import { listJsonLd, pageUrl } from "../../../lib/schema";
 import { collectionGroups } from "../../../lib/sites";
+import { withNames } from "../../../lib/meta";
 
 export const getStaticPaths = (() =>
   collectionGroups.map((group) => ({
@@ -45,7 +46,8 @@ const jsonLd = listJsonLd({
 
 <Base
   title={`${label} · Sites · Aayush Manchanda`}
-  description={`${lead} ${label}.`}
+  description={withNames(`${lead} ${label}.`, sites.map((site) => site.title))}
+  noindex={sites.length === 1}
   jsonLd={jsonLd}
   full
 >

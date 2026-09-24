@@ -12,6 +12,7 @@ import Base from "../../../layouts/Base.astro";
 import LibraryList from "../../../components/LibraryList.astro";
 import { libraryDomains } from "../../../lib/library";
 import { libraryRowUrl, listJsonLd } from "../../../lib/schema";
+import { withNames } from "../../../lib/meta";
 
 export const getStaticPaths = (() =>
   libraryDomains.map((group) => ({
@@ -36,7 +37,8 @@ const jsonLd = listJsonLd({
 
 <Base
   title={`${domain} · Library · Aayush Manchanda`}
-  description={`${lead} ${domain}.`}
+  description={withNames(`${lead} ${domain}.`, entries.map((entry) => entry.title))}
+  noindex={entries.length === 1}
   jsonLd={jsonLd}
   full
 >

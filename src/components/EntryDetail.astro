@@ -30,7 +30,7 @@ import ReaderBlocks from "./ReaderBlocks.astro";
 import VideoFacade from "./VideoFacade.astro";
 import type { LibraryEntry } from "../lib/library";
 import type { Why } from "../lib/private";
-import { entryHref } from "../lib/library";
+import { entryHref, libraryDomains } from "../lib/library";
 import { libraryPreview } from "../lib/assets";
 import { formatDay } from "../lib/date";
 import { VOICE_FIELDS } from "../lib/markdown";
@@ -54,6 +54,8 @@ const filed = rows([["Filed note", entry.post ? null : entry.note], ["Why it’s
 const mine = rows([["Raindrop note", why?.mine], ["Telegram", why?.telegram], [VOICE_FIELDS.find((field) => field.key === "why")?.label ?? "Why", entry.why]]);
 const marks = why?.highlights ?? [];
 const ai = Boolean(entry.tldr || entry.block || entry.digest || entry.draft || filed.length);
+// More from this host, when there is more: its filter page's only way in (VET-281).
+const host = libraryDomains.find((group) => group.domain === entry.domain && group.entries.length > 1);
 const source = Boolean(entry.post || entry.video || entry.moments.length || entry.highlights.length || entry.excerpt || marks.length || entry.kind === "article");
 ---
 
@@ -63,6 +65,7 @@ const source = Boolean(entry.post || entry.video || entry.moments.length || entr
   </Title>
   <p class="out">
     <EntryLink class="ext" href={entry.url} {...preview}>{entry.domain}</EntryLink>
+    {host && <a class="out__more" href={`/library/domain/${host.slug}`}>{host.entries.length} saved</a>}
   </p>
 
   {/*
@@ -271,6 +274,12 @@ const source = Boolean(entry.post || entry.video || entry.moments.length || entr
 
   .out :global(a:hover) {
     color: var(--accent);
+  }
+
+  .out__more::before {
+    content: "·";
+    margin-inline: 0.5em;
+    color: var(--text-tertiary);
   }
 
   .title-link {

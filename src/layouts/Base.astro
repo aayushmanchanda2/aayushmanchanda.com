@@ -33,6 +33,7 @@ import type { Crumb, JsonLd } from "../lib/schema";
 import { serialize, trailOf } from "../lib/schema";
 import type { NavItem } from "../lib/sections";
 import { FEEDS, getSections } from "../lib/sections";
+import { fitDescription, fitTitle } from "../lib/meta";
 import { type OgImage, ogImageFor } from "../lib/og";
 import { absolute } from "../lib/site";
 import { PREPAINT, THEME_COLORS } from "../lib/theme";
@@ -58,21 +59,14 @@ interface Props {
    */
   jsonLd?: JsonLd;
   /**
-   * This response is not a document at a URL, so it claims none.
+   * Keep this page out of search: `noindex`, and no `rel=canonical` or
+   * `og:url`, since a canonical and a noindex are contradictory signals.
    *
-   * The 404 is the only caller and the only page that can be. It is served at
-   * whatever address the reader actually typed, so `/404/` — the path it
-   * happens to be built at — is not its URL, is not a canonical form of the
-   * URL it was served at, and is not a page anyone should be sent back to. So
-   * `rel=canonical` and `og:url` are omitted rather than pointed somewhere
-   * plausible: aiming them at `/` would claim the error page is a duplicate of
-   * the home page, which is a different false statement, not a fix.
-   *
-   * `noindex` says the same thing to a crawler that the missing canonical says
-   * by omission. `robots.txt` cannot: it allows everything on purpose, because
-   * there are no private routes here, and disallowing `/404` there would only
-   * stop the page being *fetched*, which is not the same as stopping it being
-   * *indexed*.
+   * Two callers. The 404, which is served at whatever address the reader
+   * typed, so it has no URL of its own to claim. And a filter page listing one
+   * entry (VET-281): a thin copy of that entry's own page, useful to click
+   * through to and useless as a search result. `astro.config.mjs` keeps every
+   * noindex page out of the sitemap by reading this tag off the built page.
    */
   noindex?: boolean;
   /**
@@ -103,7 +97,7 @@ interface Props {
 
 const {
   title = "Aayush Manchanda",
-  description = "Aayush Manchanda co-founded Orbis, runs Vetted, and builds things with AI. Software he ran, sites he saved, and what he's reading, each with a date on it.",
+  description: fullDescription = "Aayush Manchanda co-founded Orbis, runs Vetted, and builds things with AI. Software he ran, sites he saved, and what he's reading, each with a date on it.",
   jsonLd,
   noindex = false,
   full = false,
@@ -113,6 +107,9 @@ const {
  * Home, then the sections. Only sections that have entries come back from
  * `getSections()`, so an empty one is never linked from the nav.
  */
+/** Cut to what a search result shows, by `lib/meta.ts`'s rules. */
+const description = fitDescription(fullDescription);
+
 const navItems: NavItem[] = [
   { href: "/", label: "Home" },
   ...(await getSections()).map((section) => ({ href: section.href, label: section.name })),
@@ -239,7 +236,7 @@ const markdownVariant = variant === null ? null : absolute(variant);
     */}
     <script is:inline set:html={PREPAINT + SOUND_PREPAINT} />
 
-    <title>{title}</title>
+    <title>{fitTitle(title)}</title>
     <meta name="description" content={description} />
     {noindex && <meta name="robots" content="noindex" />}
     {!noindex && <link rel="canonical" href={canonical} />}
