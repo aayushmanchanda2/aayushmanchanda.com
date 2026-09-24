@@ -7,7 +7,7 @@ import assert from "node:assert/strict";
 
 import { isOwner, sameSecret } from "../../convex/owner.ts";
 import { isMePath, meEnv } from "./me.ts";
-import { libraryJson, swapMedia, toEntries, toEntry } from "./private.ts";
+import { libraryJson, mergeBlocks, ownNote, raindropHighlights, swapMedia, toEntries, toEntry, whyOf } from "./private.ts";
 
 const row = (extra = {}) => ({
   slug: "synthetic-row",
@@ -47,7 +47,7 @@ test("/me is configured only with all four values, and only /me paths are privat
 });
 
 test("a row parses as a library entry, private keys stripped, a posterless video read as an article", () => {
-  assert.deepEqual(Object.keys(libraryJson(row())).sort(), ["domain", "kind", "saved_date", "slug", "title", "url"]);
+  assert.deepEqual(Object.keys(libraryJson(row({ why_saved: "x", telegram_note: "t", raindrop_highlights: [] }))).sort(), ["domain", "kind", "saved_date", "slug", "title", "url"]);
   assert.equal(toEntry(row({ kind: "video" })).kind, "article");
   assert.equal(toEntry(row()).title, "A synthetic row");
 });
@@ -64,4 +64,39 @@ test("media paths become storage URLs at any depth, and nothing else changes", (
 test("a bad row is left out of the list, newest save first", () => {
   const rows = toEntries([row({ slug: "older", saved_date: "2026-01-01" }), row({ slug: "BAD SLUG" }), row({ slug: "newer", saved_date: "2026-03-01" })]);
   assert.deepEqual(rows.map((entry) => entry.slug), ["newer", "older"]);
+});
+
+test("the why card takes his note verbatim, line breaks and all, and drops what is empty", () => {
+  const why = whyOf(row({ raindrop_note: "line one\n  line two ", note: "Filed.", why_saved: " ", raindrop_highlights: [{ _id: "h1", text: "A passage.", note: "", color: "yellow" }, "Plain.", { text: "" }, null] }));
+  assert.deepEqual(why, {
+    mine: "line one\n  line two ",
+    telegram: null,
+    filed: "Filed.",
+    why: null,
+    sweep: null,
+    highlights: [{ text: "A passage.", note: null }, { text: "Plain.", note: null }],
+  });
+  assert.deepEqual(raindropHighlights(undefined), []);
+  assert.deepEqual(whyOf(row({ raindrop_note: "" })).mine, null);
+  assert.equal(whyOf(row({ telegram_note: "Sent with the link." })).telegram, "Sent with the link.");
+});
+
+test("blocks merge by slug onto the entry, and a slug that matches nothing is reported", () => {
+  const archive = [{ entry: { slug: "a" }, raindrop_note: "" }, { entry: { slug: "b" }, raindrop_note: "" }];
+  const block = { best_for: "Me.", tip: "Do it.", needs: [], start_here: ["Go."], next_step: "Open it." };
+  const { rows, unmatched } = mergeBlocks(archive, [{ slug: "a", why_saved: "Because.", also_saved: true, block }, { slug: "zzz", block: null }]);
+  assert.deepEqual(rows[0], { entry: { slug: "a", block, also_saved: true }, raindrop_note: "", why_saved: "Because." });
+  assert.equal(rows[1], archive[1]);
+  assert.deepEqual(unmatched, ["zzz"]);
+  assert.equal(toEntry(row({ block, also_saved: true })).block?.next_step, "Open it.");
+});
+
+test("Hermes's sweep-hold lines are not his note: stripped, and a note of nothing else is no note", () => {
+  assert.equal(ownNote("sweep-hold: page won't fetch"), null);
+  assert.equal(ownNote("sweep-hold: a\n  sweep-hold: b\n"), null);
+  assert.equal(ownNote("Read this before the call.\nsweep-hold: paywalled"), "Read this before the call.");
+  assert.equal(ownNote("sweep-hold: x\nFirst line\n\nSecond, after a blank"), "First line\n\nSecond, after a blank");
+  assert.equal(ownNote("Mentions sweep-hold: mid-line, which is his"), "Mentions sweep-hold: mid-line, which is his");
+  assert.equal(ownNote(null), null);
+  assert.equal(whyOf(row({ raindrop_note: "sweep-hold: timeout" })).mine, null);
 });

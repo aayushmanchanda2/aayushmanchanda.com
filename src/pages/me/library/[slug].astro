@@ -4,7 +4,7 @@ import MeGate from "../../../components/MeGate.astro";
 import PrivateEntry from "../../../components/PrivateEntry.astro";
 import { gate, privateApi, privateHeaders } from "../../../lib/me";
 import type { PrivateRow } from "../../../lib/private";
-import { toEntries, toEntry } from "../../../lib/private";
+import { toEntries, toEntry, whyOf } from "../../../lib/private";
 
 export const prerender = false;
 
@@ -15,7 +15,7 @@ let view = null;
 if (access.state === "owner") {
   const slug = Astro.params.slug ?? "";
   const [list, one] = await Promise.all([access.convex.query(privateApi.list, {}), access.convex.query(privateApi.get, { slug })]);
-  if (one !== null) view = { entry: toEntry(one.row, one.media), rows: toEntries(list as PrivateRow[]), mine: one.row.raindrop_note, sweep: one.row.sweep_note };
+  if (one !== null) view = { entry: toEntry(one.row, one.media), rows: toEntries(list as PrivateRow[]), why: whyOf(one.row) };
 }
 const state = access.state === "owner" || access.state === "forbidden" ? "not-found" : access.state;
 if (view === null && state === "not-found") Astro.response.status = 404;

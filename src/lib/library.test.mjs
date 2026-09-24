@@ -385,4 +385,7 @@ test("a block reads whole, drops what is absent, and holds its rules (VET-273)",
   failsWith(entry({ block: { ...good, prompt: { text: "x" } } }), "ours");
   failsWith(entry({ block: { ...good, best_for: "A — B" } }), "em dash");
   failsWith(entry({ also_saved: "yes" }), "also_saved");
+  assert.equal(parseOne({ block: { ...good, next_step: "Open it." } }).block?.next_step, "Open it.");
+  assert.equal("next_step" in (parseOne({ block: { ...good, next_step: null } }).block ?? {}), false);
+  failsWith(entry({ block: { ...good, next_step: "One.\nTwo." } }), "block.next_step");
 });

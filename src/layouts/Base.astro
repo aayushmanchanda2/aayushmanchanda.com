@@ -329,7 +329,7 @@ const markdownVariant = variant === null ? null : absolute(variant);
     */}
     <span class="visually-hidden" aria-live="polite" data-theme-live></span>
 
-    <TopBar navItems={navItems} pathname={pathname} trail={trail} />
+    <TopBar navItems={navItems} pathname={pathname} trail={trail}><slot name="bar" slot="bar" /></TopBar>
     <CommandPalette />
     {/* The UI tick (`lib/ui-sound.ts`): listeners only; no audio until a press. */}
     <script>

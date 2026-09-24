@@ -18,7 +18,7 @@ npm run build                                          # "[build] Complete!"
 python3 -m http.server 4329 --directory dist &         # serves dist/ as built
 ```
 
-`astro preview` stopped working in VET-274: the Vercel adapter (for the on-demand /me pages) has no preview server. The prerendered site is still `dist/`, byte for byte, so any static server proves it; rebuild after every source change. `/tools` answers 301 to `/tools/` here (Vercel serves both), which the harness follows. /me is on demand: drive it through `astro dev`, whose dev-only `/me/fixture/<entry|index|sign-in|unconfigured|not-found>` routes render the signed-in pages from synthetic rows.
+`astro preview` stopped working in VET-274: the Vercel adapter (for the on-demand /me pages) has no preview server. The prerendered site is still `dist/`, byte for byte, so any static server proves it; rebuild after every source change. `/tools` answers 301 to `/tools/` here (Vercel serves both), which the harness follows. /me is on demand: drive it through `astro dev`, whose dev-only `/me/fixture/<entry|post|video|index|sign-in|unconfigured|not-found>` routes render the signed-in pages from synthetic rows (`src/fixtures/private.ts`); every /me page has `[data-sign-out]` (bar, and the list header on index).
 
 Deployed: skip the build and pass `--base https://aayushmanchandacom.vercel.app` (production) or a Vercel preview URL. Deployed runs prove what shipped, not your working tree.
 

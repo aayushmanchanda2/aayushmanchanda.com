@@ -35,6 +35,10 @@ export const entryFields = {
     raindrop_id: v.optional(v.union(v.number(), v.null())),
     bucket: text,
     raindrop_note: v.union(v.string(), v.null()),
+    /** `src/lib/private.ts › raindropHighlights` shape: `{ text, note }`. */
+    raindrop_highlights: v.optional(v.array(v.object({ text: v.string(), note: v.union(v.string(), v.null()) }))),
+    why_saved: text,
+    telegram_note: text,
     sweep_note: v.union(v.string(), v.null()),
 };
 

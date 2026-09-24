@@ -11,16 +11,27 @@
  * rewrites each count to what the current filter shows, and draws the chips.
  * Fewer than two tags is not a filter worth a section, so it renders nothing.
  */
+import type { LibraryEntry } from "../lib/library";
 import { libraryTags } from "../lib/library";
 import { tagLabel } from "../lib/tags";
+
+interface Props {
+  /** /me's private rows (VET-274): their tags join the list. Absent: markup unchanged. */
+  extra?: LibraryEntry[];
+}
+
+const { extra = [] } = Astro.props;
 
 /** How many tags show before "Show all". */
 const TOP = 12;
 
+const counts = new Map(libraryTags.map((group) => [group.slug, group.entries.length]));
+for (const slug of extra.flatMap((entry) => entry.tags)) counts.set(slug, (counts.get(slug) ?? 0) + 1);
+
 /** Busiest first, ties alphabetical: fixed per build, so every page reads the same. */
-const tags = [...libraryTags]
-  .sort((a, b) => b.entries.length - a.entries.length || a.slug.localeCompare(b.slug))
-  .map((group) => ({ slug: group.slug, label: tagLabel(group.slug), count: group.entries.length }));
+const tags = [...counts]
+  .sort(([a, m], [b, n]) => n - m || a.localeCompare(b))
+  .map(([slug, count]) => ({ slug, label: tagLabel(slug), count }));
 const [top, rest] = [tags.slice(0, TOP), tags.slice(TOP)];
 ---
 

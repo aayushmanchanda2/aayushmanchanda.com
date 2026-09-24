@@ -2,26 +2,28 @@
 /**
  * A private entry at /me/library/<slug> (VET-274): the public entry page's
  * anatomy (`pages/library/[slug].astro`) with the private rows merged into the
- * pane and "Why I saved it" on top. Rendered by the real route and by the
- * dev-only fixture, so both show the same thing.
+ * pane, "Why I saved it" on top and "Sign out" in the bar. The filed note moves
+ * into the card, so `EntryDetail` does not print it a second time. Rendered by
+ * the real route and by the dev-only fixture, so both show the same thing.
  */
 import Base from "../layouts/Base.astro";
 import EntryDetail from "./EntryDetail.astro";
 import EntryNav from "./EntryNav.astro";
 import PrivatePane from "./PrivatePane.astro";
+import SignOut from "./SignOut.astro";
 import WhyCard from "./WhyCard.astro";
 import type { LibraryEntry } from "../lib/library";
+import type { Why } from "../lib/private";
 import { privateHref } from "../lib/private";
 
 interface Props {
   entry: LibraryEntry;
   /** Every private entry, newest first; the ring walks these. */
   rows: LibraryEntry[];
-  mine: string | null;
-  sweep: string | null;
+  why: Why;
 }
 
-const { entry, rows, mine, sweep } = Astro.props;
+const { entry, rows, why } = Astro.props;
 const at = rows.findIndex((row) => row.slug === entry.slug);
 const step = (offset: number) => {
   const row = rows[(at + offset + rows.length) % rows.length];
@@ -30,10 +32,11 @@ const step = (offset: number) => {
 ---
 
 <Base title={`${entry.title} · Private · Aayush Manchanda`} description="Private." noindex full>
+  <SignOut slot="bar" bar />
   <PrivatePane slot="pane" rows={rows} current={entry.slug} />
   <div class="detail">
-    <WhyCard mine={mine} sweep={sweep} />
-    <EntryDetail entry={entry} />
+    <WhyCard why={why} />
+    <EntryDetail entry={{ ...entry, note: null }} />
     <EntryNav label="Private entries" close={{ href: "/me/library", aria: "Close and go back to the private library" }} prev={step(-1)} next={step(1)} />
   </div>
 </Base>

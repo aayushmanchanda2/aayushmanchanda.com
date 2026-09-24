@@ -157,6 +157,7 @@ export const START_MAX = 3;
  *   needs: string[],
  *   prompt?: { text: string, ours: boolean },
  *   start_here: string[],
+ *   next_step?: string,
  * }} Block
  */
 
@@ -181,8 +182,8 @@ function lines(value, at, min, max) {
 
 /**
  * The block on a library entry (VET-273): who it is for, the tip, what it
- * takes, a prompt to copy, and where to start. `time` and `prompt` are
- * optional; absent or null stays absent, so a patch writes what a hand-edit
+ * takes, a prompt to copy, where to start, and the one thing to do next.
+ * `time`, `prompt` and `next_step` are optional; absent or null stays absent, so a patch writes what a hand-edit
  * would. Every string is non-empty and has no em dash.
  * @param {unknown} value @returns {Block}
  */
@@ -210,5 +211,6 @@ export function block(value) {
     needs: lines(raw.needs, "block.needs", 0, 12),
     ...(prompt && { prompt }),
     start_here: lines(raw.start_here, "block.start_here", 1, START_MAX),
+    ...(raw.next_step != null && { next_step: lines([raw.next_step], "block.next_step", 1, 1)[0] }),
   };
 }

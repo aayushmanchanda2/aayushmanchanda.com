@@ -1,14 +1,16 @@
 ---
 /**
- * /me/library (VET-274): the library pane with the private rows merged in
- * and a "Private" segment, and the private rows alone in the main column,
- * which is what a phone sees (the pane hides under 48rem).
+ * /me/library (VET-274): the library pane itself, the public rows with the
+ * private ones merged in, as the page's one column at every width, the way
+ * Notes shows its list: kind segments with "Private", the tags, month
+ * headers, each row's tip, lock-marked private rows and "Also saved" last.
+ * One list and one `FILTER`, so a phone gets the same filters a desktop does.
+ * "Sign out" sits in the bar and in the list's header.
  */
 import Base from "../layouts/Base.astro";
 import PrivatePane from "./PrivatePane.astro";
+import SignOut from "./SignOut.astro";
 import type { LibraryEntry } from "../lib/library";
-import { formatDay } from "../lib/date";
-import { privateHref } from "../lib/private";
 
 interface Props {
   rows: LibraryEntry[];
@@ -18,59 +20,57 @@ const { rows } = Astro.props;
 ---
 
 <Base title="Private library · Aayush Manchanda" description="Private." noindex full>
-  <PrivatePane slot="pane" rows={rows} />
+  <SignOut slot="bar" bar />
   <section class="plist">
-    <h1 class="page-title">Private <span class="plist__count tabular-nums">{rows.length}</span></h1>
-    <ul>
-      {
-        rows.map((row) => (
-          <li>
-            <a href={privateHref(row.slug)}>{row.title}</a>
-            <small class="mono">
-              {row.domain} · <time datetime={row.saved_date}>{formatDay(row.saved_date)}</time>
-            </small>
-          </li>
-        ))
-      }
-    </ul>
+    <div class="plist__head">
+      <h1 class="page-title">Private <span class="plist__count tabular-nums">{rows.length}</span></h1>
+      <SignOut />
+    </div>
+    <PrivatePane rows={rows} />
   </section>
 </Base>
 
 <style>
   .plist {
-    max-width: 48rem;
+    max-width: 40rem;
     margin-inline: auto;
+  }
+
+  .plist__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
   }
 
   .plist__count {
     color: var(--text-tertiary);
   }
 
-  .plist ul {
-    margin-top: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.9rem;
+  /* The pane out of its side column: in the page's flow and scroll, so its
+     toolbar and month headers stick under the site's bar instead. */
+  .plist :global(.pane) {
+    display: block;
+    --pane-top: calc(var(--frame) + var(--bar-h));
   }
 
-  .plist li {
-    display: flex;
-    flex-direction: column;
-    gap: 0.125rem;
+  .plist :global(.pane__bar) {
+    top: var(--pane-top);
+    padding-inline: 0;
   }
 
-  .plist a {
-    color: var(--text-primary);
-    text-decoration: none;
-    text-wrap: pretty;
+  .plist :global(.pane .pane__month) {
+    top: calc(var(--pane-top) + var(--pane-bar, 5.375rem));
+    padding-inline: 0;
   }
 
-  .plist a:hover {
-    text-decoration: underline;
+  .plist :global(.pane__tags),
+  .plist :global(.pane ul) {
+    padding-inline: 0;
   }
 
-  .plist small {
-    font-size: 0.8125rem;
-    color: var(--text-tertiary);
+  .plist :global(.pane li > a) {
+    margin-inline: -0.875rem;
   }
 </style>

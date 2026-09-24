@@ -50,8 +50,8 @@ const { entries, current, start, extra = [] } = Astro.props;
 const index = start !== undefined;
 
 /** Month headers over the main feed: "2026-09" -> its label and count. "Also saved" follows it (VET-273). */
-const main = [...entries.filter((entry) => !entry.also_saved), ...extra].sort((a, b) => b.saved_date.localeCompare(a.saved_date));
-const also = entries.filter((entry) => entry.also_saved);
+const byDate = [...entries, ...extra].sort((a, b) => b.saved_date.localeCompare(a.saved_date));
+const [main, also] = [byDate.filter((entry) => !entry.also_saved), byDate.filter((entry) => entry.also_saved)];
 const months = new Map<string, number>();
 for (const entry of main) months.set(entry.saved_date.slice(0, 7), (months.get(entry.saved_date.slice(0, 7)) ?? 0) + 1);
 const opens = (i: number) => i === 0 || main[i]!.saved_date.slice(0, 7) !== main[i - 1]!.saved_date.slice(0, 7);
@@ -66,9 +66,9 @@ const opens = (i: number) => i === 0 || main[i]!.saved_date.slice(0, 7) !== main
   data-start={start}
 >
   <div class="pane__bar">
-    <LibraryToolbar privateCount={extra.length} />
+    <LibraryToolbar privateCount={extra.filter((entry) => !entry.also_saved).length} />
   </div>
-  <div class="pane__tags"><LibraryTags /></div>
+  <div class="pane__tags"><LibraryTags extra={extra} /></div>
   <ul data-rows>
     {
       [...main, ...also].map((entry, i) => {
