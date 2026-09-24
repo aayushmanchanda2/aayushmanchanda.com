@@ -135,15 +135,15 @@ const PERSON_DESCRIPTION =
  * A page's canonical URL, in the exact form `Base.astro` puts in the canonical
  * link.
  *
- * Astro builds directory-format routes, so every page's real URL ends in a
- * slash. Emitting `/tools/paperclip` in the graph while the canonical link says
- * `/tools/paperclip/` would hand a crawler two URLs for one page and let it
- * decide whether they are the same document. `scripts/validate-schema.mjs`
+ * No trailing slash (VET-281): every internal link is written `/tools/paperclip`,
+ * and `vercel.json` 308s `/tools/paperclip/` there, so that is the page's one
+ * URL. Emitting another spelling in the graph than the canonical link says
+ * would hand a crawler two URLs for one page. `scripts/validate-schema.mjs`
  * compares the two on every built page, so this cannot drift on its own.
  */
 export function pageUrl(path: string): string {
-  const trimmed = path.endsWith("/") ? path.slice(0, -1) : path;
-  return absolute(`${trimmed}/`);
+  const trimmed = path.length > 1 && path.endsWith("/") ? path.slice(0, -1) : path;
+  return absolute(trimmed);
 }
 
 /** A URL for one row of a page that has no page of its own (`/experiments`). */
@@ -547,7 +547,7 @@ export function libraryRowUrl(entry: Pick<LibraryEntry, "slug">): string {
 }
 
 /**
- * What kind of thing a digested entry reviews, in schema.org's vocabulary.
+ * What kind of thing a library entry is about, in schema.org's vocabulary.
  *
  * The same three words the kind chip prints, translated once: a `post` is a
  * thing on a social timeline and a `video` is a recording, and schema.org has
@@ -562,9 +562,9 @@ const KIND_TYPES: Record<Kind, string> = {
 
 /**
  * The digest as one body of prose: the page's own sentences, in the order the
- * page stacks them — the note as standfirst, then the cliff notes, then the
- * verdict and the why. Same contract as `reviewBody` for a tool: a null note
- * contributes nothing because it renders nothing.
+ * page stacks them — the note, then the cliff notes, then the verdict and the
+ * why. A null note contributes nothing because it renders nothing. It is the
+ * digested page's `abstract`, never a `reviewBody`: an agent wrote it.
  */
 export function digestReviewBody(entry: DigestedEntry): string {
   return [entry.note, ...entry.digest.bullets, entry.digest.verdict, entry.digest.why]
@@ -573,31 +573,24 @@ export function digestReviewBody(entry: DigestedEntry): string {
 }
 
 /**
- * One library entry's page, at one of two weights, and the digest is the whole
- * difference.
+ * One library entry's page: a `WebPage` about the saved thing, digested or not.
  *
- * **A `Review` is an opinion, so it is gated on there being one.** Every entry
- * has a page since VET-63, and most of those pages hold no judgement at all:
- * what a saved link is, where it came from, what it is about, the day it
- * arrived, one line he wrote, and the way to the thing. That is a page about
- * something, which is a `WebPage`, and typing it as a `Review` because the
- * route it sits on used to only build reviews would put an unearned
- * machine-readable verdict on forty pages. **A drafted entry is a `WebPage`
- * too**: the draft is his pipeline's placeholder, loudly labelled as one where
- * a reader can see it, and a graph has no register in which to say "somebody's
- * agent wrote this and nobody has checked it".
+ * **Nothing here is typed as his opinion, because none of it is his writing.**
+ * The digest (cliff notes, verdict, why) and the filed note are written by his
+ * agents, and the page files them under "Written by AI" (VET-279). This used
+ * to emit a `Review` with the `Person` as `author`, which told a search engine
+ * he wrote text an agent wrote (VET-281). Now a digested page carries the
+ * digest as the page's `abstract`, dated `dateModified` the day it was
+ * digested, with the `Person` as `publisher`: he chose to put it on his site,
+ * which is true, and nothing claims he wrote it. **A drafted entry is the
+ * undigested shape**: the draft is his pipeline's placeholder and never
+ * reaches the graph.
  *
- * The digested shape follows `toolJsonLd` — a `Review` by the `Person`, dated
- * the day the digest was written, which is the `digested` date the page prints.
- * The undigested shape follows `siteJsonLd`: a `WebPage` whose subject is
- * external, `dateCreated` the visible saved date, `description` the note when
- * there is one and absent when there is not. Neither lifts the external thing
- * to a top-level node, because that would mean minting an `@id` on this origin
- * for a document that lives on someone else's.
- *
- * No `Person` on the undigested branch, which is the same call `siteJsonLd`
- * makes and for the same reason: nothing on that page is attributed to him in
- * the graph, so a `Person` node would sit there referenced by nothing.
+ * `dateCreated` is the visible saved date, `description` the note when there
+ * is one. The external thing rides inside as `about`, typed by its kind, and
+ * gets no `@id` on this origin, because it lives on someone else's. No
+ * `Person` on the undigested branch: nothing there points at him, so the node
+ * would be referenced by nothing.
  */
 export function libraryJsonLd(entry: LibraryEntry): JsonLd {
   const path = `/library/${entry.slug}`;
@@ -614,30 +607,24 @@ export function libraryJsonLd(entry: LibraryEntry): JsonLd {
     url: entry.url,
   };
 
-  if (entry.digest === null) {
-    return graph(
-      {
-        "@type": "WebPage",
-        "@id": `${url}#webpage`,
-        name: entry.title,
-        url,
-        dateCreated: entry.saved_date,
-        about: subject,
-        description: entry.note,
-      },
-      trail,
-    );
-  }
+  const page = {
+    "@type": "WebPage",
+    "@id": `${url}#webpage`,
+    name: entry.title,
+    url,
+    dateCreated: entry.saved_date,
+    about: subject,
+    description: entry.note,
+  };
+
+  if (entry.digest === null) return graph(page, trail);
 
   return graph(
     {
-      "@type": "Review",
-      "@id": `${url}#review`,
-      url,
-      itemReviewed: subject,
-      author: ref(PERSON_ID),
-      reviewBody: digestReviewBody({ ...entry, digest: entry.digest }),
-      datePublished: entry.digest.digested,
+      ...page,
+      abstract: digestReviewBody({ ...entry, digest: entry.digest }),
+      dateModified: entry.digest.digested,
+      publisher: ref(PERSON_ID),
     },
     person(),
     trail,

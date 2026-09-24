@@ -47,11 +47,15 @@ const { site, prev, next } = Astro.props;
  * theirs. See `lib/schema.ts`.
  */
 const jsonLd = siteJsonLd(site);
+
+/** The page shot: host and path, so three screens of one site are three results. */
+const where = `${site.domain}${new URL(site.url).pathname.replace(/\/$/, "")}`;
+const screen = where === site.domain ? site.title : `${site.title} (${where.slice(site.domain.length)})`;
 ---
 
 <Base
-  title={`${site.title} · Sites · Aayush Manchanda`}
-  description={`Full-page screenshot of ${site.title} (${site.domain}), saved ${site.saved_date}.`}
+  title={`${screen} · Sites · Aayush Manchanda`}
+  description={`Full-page screenshot of ${site.title} (${where}), saved ${site.saved_date}.`}
   jsonLd={jsonLd}
 >
 

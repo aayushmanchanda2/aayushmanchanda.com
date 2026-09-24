@@ -67,8 +67,9 @@ here with a date on it.
 
 New entries arrive from a pipeline that runs every three hours.
 
-The site is static HTML. No accounts, no paywall, no gated routes, and no
-JavaScript is needed to read any of it.
+The site is static HTML. No paywall, and no JavaScript is needed to read any
+of it. The one gated route is /me, one signed-in reader's private pages;
+robots.txt disallows it and nothing public links into it.
 
 ## When to use this site
 

@@ -56,11 +56,14 @@ import path from "node:path";
  * @property {(page: string) => boolean} match
  * @property {(types: string[]) => boolean} [when]
  *   A second gate, on the graph rather than on the path. One route can build
- *   two page types when the data decides the shape: `/library/<slug>` is a
- *   `Review` for an entry somebody has read and a `WebPage` for one nobody has,
+ *   two page types when the data decides the shape: `/library/<slug>` carries
+ *   the `Person` as publisher when it has a digest and no `Person` when not,
  *   and no pattern over the URL can tell those apart. Groups are tried in
  *   order, so the gated one goes first and the ungated one is the fallback.
  * @property {string[]} types
+ * @property {Record<string, string[]>} [forbids]
+ *   Properties a node of a given `@type` must not carry on this page type: a
+ *   digested library page's `WebPage` never names an `author` (VET-281).
  * @property {Record<string, string[]>} [requires]
  *   Extra properties a node of a given `@type` must carry *on this page type*.
  *   `REQUIRED` below is what is true of a type everywhere; this is what is true
@@ -211,9 +214,9 @@ const EXPECTED = [
   {
     /*
      * Every library entry builds a page here since VET-63, and the two groups
-     * are the digest and the absence of one. A `Review` is an opinion, so a
-     * page with no digest on it emits a `WebPage` instead — see the parity
-     * argument at `lib/schema.ts › libraryJsonLd`. The thing saved is external
+     * are the digest and the absence of one. Both are a `WebPage`: the digest
+     * is an agent's, so it is the page's abstract, never his `Review` — see
+     * `lib/schema.ts › libraryJsonLd`. The thing saved is external
      * either way and rides inside as a nested node, so neither top level names
      * anything but this site.
      *
@@ -226,8 +229,14 @@ const EXPECTED = [
      */
     name: "library details (digested)",
     match: (page) => /^library\/[^/]+\/index\.html$/.test(page),
-    when: (types) => types.includes("Review"),
-    types: ["Review", "Person", "BreadcrumbList"],
+    when: (types) => types.includes("Person"),
+    types: ["WebPage", "Person", "BreadcrumbList"],
+    // The digest is an agent's writing (VET-281): the page's abstract, with
+    // him as publisher and never as author, and no Review.
+    requires: {
+      WebPage: ["about", "dateCreated", "abstract", "dateModified", "publisher"],
+    },
+    forbids: { WebPage: ["author", "reviewBody"] },
   },
   {
     name: "library details",
@@ -524,6 +533,13 @@ for (const page of pages) {
               `is a ${group.name} page, so its ${type} is missing ${property}`,
             );
           }
+        }
+      }
+    }
+    for (const [type, properties] of Object.entries(group.forbids ?? {})) {
+      for (const node of graph.filter((one) => one["@type"] === type)) {
+        for (const property of properties.filter((one) => one in node)) {
+          fail(page, `is a ${group.name} page, so its ${type} must not carry ${property}`);
         }
       }
     }

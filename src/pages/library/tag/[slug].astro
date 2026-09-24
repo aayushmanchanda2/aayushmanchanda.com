@@ -22,6 +22,7 @@ import TagFilters from "../../../components/TagFilters.astro";
 import { libraryTags } from "../../../lib/library";
 import { libraryRowUrl, listJsonLd } from "../../../lib/schema";
 import { tagLabel } from "../../../lib/tags";
+import { withNames } from "../../../lib/meta";
 
 export const getStaticPaths = (() =>
   libraryTags.map((group) => ({
@@ -47,7 +48,8 @@ const jsonLd = listJsonLd({
 
 <Base
   title={`${label} · Library · Aayush Manchanda`}
-  description={`${lead} ${label}.`}
+  description={withNames(`${lead} ${label}.`, entries.map((entry) => entry.title))}
+  noindex={entries.length === 1}
   jsonLd={jsonLd}
   full
 >

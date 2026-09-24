@@ -102,3 +102,20 @@ test("the retired /computer section 308s into /notes", () => {
   assert.equal(to("/computer.md"), "/notes.md");
   assert.equal(to("/computer/save-a-link"), "/notes/save-a-link");
 });
+
+test("a slashed URL 308s to the one spelling every link and canonical uses (VET-281)", () => {
+  /** @type {{ routes: { src: string, status?: number, headers?: Record<string, string>, handle?: string }[] }} */
+  const { routes } = JSON.parse(read("../../vercel.json"));
+  const before = routes.slice(0, routes.findIndex((route) => route.handle === "filesystem"));
+  const to = (/** @type {string} */ path) => {
+    for (const route of before) {
+      const hit = route.src && new RegExp(route.src).exec(path);
+      if (hit && route.status === 308) return route.headers?.Location?.replace("$1", hit[1] ?? "");
+    }
+    return undefined;
+  };
+  assert.equal(to("/tools/agent-browser/"), "/tools/agent-browser");
+  assert.equal(to("/library/"), "/library");
+  assert.equal(to("/tools/agent-browser"), undefined, "the unslashed page is served, not redirected");
+  assert.equal(to("/"), undefined, "home keeps its slash");
+});

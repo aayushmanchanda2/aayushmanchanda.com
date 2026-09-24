@@ -1,0 +1,18 @@
+{
+ "pages": 264,
+ "distinctImages": 172,
+ "formats": [
+  "png 1200x630",
+  "jpeg 1200x630"
+ ],
+ "bad": 0,
+ "byCard": {
+  "/og.png": 5,
+  "/og/about": 1,
+  "/og/experiments": 1,
+  "/og/library": 77,
+  "/og/notes": 6,
+  "/og/sites": 75,
+  "/og/tools": 99
+ }
+}

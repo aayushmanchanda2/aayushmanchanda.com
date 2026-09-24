@@ -13,10 +13,11 @@
  *   - `crop` (a gallery card) shows the top of the same file at 8:5. A card is
  *     a thing you skim past; a card that scrolled would be a scroll trap.
  *
- * No `width`/`height` on the `<img>`: a full-page capture has no one intrinsic
- * size to declare, so the box is reserved in CSS instead, by `aspect-ratio`
- * when cropped and by the scroller's own height otherwise.
+ * The crop's box is reserved by `aspect-ratio`; the full shot carries its own
+ * `width`/`height` (read off the file, `lib/assets.ts › webpSize`), which is
+ * what reserves it on a phone, where the scroller lets it run full height.
  */
+import { webpSize } from "../lib/assets";
 interface Props {
   /** Web path of the full-page shot. */
   src: string;
@@ -28,6 +29,11 @@ interface Props {
 }
 
 const { src, alt, crop = false, eager = false } = Astro.props;
+
+/* The full shot's own size: on a phone the scroller lets it run full height
+   (`height: auto` below 48rem), and without these the text under it jumped
+   when the bytes landed (VET-281). The crop's box is its aspect-ratio. */
+const size = crop ? null : webpSize(src);
 
 const img = {
   src,
@@ -49,7 +55,7 @@ const img = {
         keys somewhere to land.
       */
       <span class="scroller" tabindex="0" role="region" aria-label={alt}>
-        <img class="scroller__shot" {...img} />
+        <img class="scroller__shot" {...img} {...size} />
       </span>
     )
   }
@@ -88,9 +94,8 @@ const img = {
        A browser that does not know the keyword drops the declaration and gets
        flush-top everywhere, which is the same behaviour minus the nicety. */
     justify-content: safe center;
-    /* Fixed, not `max-height`: a full-page capture has no intrinsic size to
-       declare, so this is the only thing reserving the box before the bytes
-       land. Tall enough to read a layout, short enough that the page's own
+    /* Fixed, not `max-height`, so the frame is one size whatever the shot's
+       length. Tall enough to read a layout, short enough that the page's own
        scroll is still reachable past the bottom of it. */
     height: clamp(20rem, 70dvh, 46rem);
     overflow-y: auto;
