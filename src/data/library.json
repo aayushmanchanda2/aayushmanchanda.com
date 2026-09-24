@@ -2169,5 +2169,103 @@
         "Agree on credit, consent, and compensation."
       ]
     }
+  },
+  {
+    "slug": "how-volatile-are-ai-responses-70k-answer-28-day-study",
+    "title": "How Volatile Are AI Responses? (70K Answer, 28 Day Study)",
+    "url": "https://detailed.com/ai-volatility/",
+    "domain": "detailed.com",
+    "saved_date": "2026-09-24",
+    "kind": "article",
+    "note": "A 70,000-response study finds AI answers change constantly at the edges, while the few leading brands and source types stay relatively stable."
+  },
+  {
+    "slug": "how-nontechnical-builders-can-ship-software-with-claude-code",
+    "title": "POV: your boss asks you to build something by next week…",
+    "url": "https://x.com/jjenglert/status/2102762257520222319?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-09-24",
+    "kind": "post",
+    "note": "@JJEnglert: POV: your boss asks you to build something by next week. You've never built software before. At least not something other people have to use. This video walks you through it, start to finish. Here's the path: - The stack: Claude Code builds it, GitHub backs it up, Vercel puts it…",
+    "post": {
+      "id": "2102762257520222319",
+      "author": "JJ Englert",
+      "handle": "JJEnglert",
+      "date": "2026-09-23",
+      "text": "POV: your boss asks you to build something by next week. You've never built software before. At least not something other people have to use.\n\nThis video walks you through it, start to finish.\n\nHere's the path:\n\n- The stack: Claude Code builds it, GitHub backs it up, Vercel puts it live\n- Build vs. buy: only build the thing that makes you better than everyone else\n- Write the plan first. It's the GPS for your agent.\n- Map every person who will use it, and what each one needs\n- Design it in Claude Design before a single line of code\n- Build the thing\n\nBy the end, you've shipped a real, working app.\n\nKnow someone who wants to build their own software? Send this to them.\n\nTimestamps:\n0:00 The ask\n0:35 The stack\n3:03 Build vs. buy\n4:10 Why you plan first\n6:00 Set up your project and GitHub\n7:22 Build the plan with Claude\n9:20 Feeling overwhelmed? That's normal\n10:03 Map your users\n11:19 Design it in Claude Design\n13:21 Review and tweak the design\n15:18 The finished app\n\nThis might be the nuttiest video I've made to date. Yay or nay? Let me know.",
+      "avatar": "/posts/2102762257520222319/avatar.webp",
+      "media": [
+        {
+          "type": "video",
+          "poster": "/posts/2102762257520222319/1-poster.webp",
+          "w": 1920,
+          "h": 1080
+        }
+      ]
+    },
+    "media_retrieved": "2026-09-24"
+  },
+  {
+    "slug": "claude-dev-technical-writing-for-people-building-with-claude",
+    "title": "claude.dev — Technical Writing for People Building with…",
+    "url": "https://claude.dev/",
+    "domain": "claude.dev",
+    "saved_date": "2026-09-24",
+    "kind": "article",
+    "note": "Anthropic’s developer publication collects practical writing and videos on Claude, Claude Code, agents, skills, context engineering, and production lessons."
+  },
+  {
+    "slug": "thinking-in-systems-shipping-in-loops",
+    "title": "Thinking in Systems, Shipping in Loops",
+    "url": "https://x.com/ttunguz/status/2103145763098566858?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-09-24",
+    "kind": "post",
+    "note": "@ttunguz: “Writing code by hand is no longer an economically productive enterprise for the vast majority of programmers working at the vast majority of companies. That’s today. By the end of the year, it will be virtually all domains, virtually all programmers, virtually all companies.”…",
+    "post": {
+      "id": "2103145763098566858",
+      "author": "Tomasz Tunguz",
+      "handle": "ttunguz",
+      "date": "2026-09-24",
+      "text": "“Writing code by hand is no longer an economically productive enterprise for the vast majority of programmers working at the vast majority of companies. That’s today. By the end of the year, it will be virtually all domains, virtually all programmers, virtually all companies.”\n\nDavid Heinemeier Hansson, CTO of 37signals · Rails World, Austin · 23 September 2026\n\nSoftware engineering have evolved to systems architecture. That was always the destination.\n\nWe see this in our portfolio companies. Artemis engineers merged 2 pull requests per day in January, 6 by May & 16 by August, 30,000 in eight months. Dan Shiebler, their CTO, describes the division of labor plainly : every line of the platform is written by agents, & the engineers design systems, set constraints & review outputs.\n\nGreat design scales. Lauren Tan, an engineer on SpaceXAI’s Grok team, ships 2,000 pull requests a month to production, nearly one hundred a working day. Asked what makes that possible, she does not name a model but verification, loops that enable AI to validate its work.\n\nThis is the new software engineering : designing the systems that let AI write code correctly at scale.\n\nDartmouth professor Donella Meadows argued that the most powerful places to intervene in a system are the least intuitive, & that people reliably find them & then turn them the wrong way.\n\nThree properties define great system design : resilience, self-organization & hierarchy.\n\nResilience is AI checking its own work, robustly, through tests, a reviewer agent & production observability rather than one gate. Self-organization is the loop learning, so a class of failure becomes a new skill the agent applies next time. Hierarchy is the layering of skills, tools & sandboxes into composable components that are reused once verified to work.\n\nThis work isn’t easy. Systems architecture never has been. It was my goal in 2005 as a Java software engineer just as much as it is today as we build out our agentic systems\n\n“A new career as a professional maker of things. Yes, you will no longer be chiseling that code by hand, but you will be making amazing things. You will be steering intelligence.”",
+      "avatar": "/posts/2103145763098566858/avatar.webp",
+      "links": [
+        {
+          "text": "x.com/i/article/2103…",
+          "href": "https://x.com/i/article/2103145302312300544"
+        }
+      ],
+      "article": {
+        "title": "Thinking in Systems, Shipping in Loops",
+        "cover": "/posts/2103145763098566858/cover.webp"
+      }
+    },
+    "media_retrieved": "2026-09-24"
+  },
+  {
+    "slug": "claude-full-course-1-hour-build-automate-anything",
+    "title": "Claude FULL COURSE 1 HOUR (Build & Automate Anything)",
+    "url": "https://x.com/ai_explorer25/status/2101292015468327165/video/1",
+    "domain": "x.com",
+    "saved_date": "2026-09-24",
+    "kind": "post",
+    "note": "@ai_explorer25",
+    "post": {
+      "id": "2101292015468327165",
+      "author": "AI_Explorer",
+      "handle": "ai_explorer25",
+      "date": "2026-09-19",
+      "text": "Claude FULL COURSE 1 HOUR (Build & Automate Anything)",
+      "avatar": "/posts/2101292015468327165/avatar.webp",
+      "media": [
+        {
+          "type": "video",
+          "poster": "/posts/2101292015468327165/1-poster.webp",
+          "w": 1280,
+          "h": 720
+        }
+      ]
+    },
+    "media_retrieved": "2026-09-24"
   }
 ]

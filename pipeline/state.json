@@ -848,5 +848,35 @@
     "slug": "ghost",
     "section": "sites",
     "at": "2026-09-24T11:57:56.564Z"
+  },
+  "1864622275": {
+    "kind": "published",
+    "slug": "how-volatile-are-ai-responses-70k-answer-28-day-study",
+    "section": "reading",
+    "at": "2026-09-24T21:36:47.244Z"
+  },
+  "1864622947": {
+    "kind": "published",
+    "slug": "how-nontechnical-builders-can-ship-software-with-claude-code",
+    "section": "reading",
+    "at": "2026-09-24T21:36:47.244Z"
+  },
+  "1864712467": {
+    "kind": "published",
+    "slug": "claude-dev-technical-writing-for-people-building-with-claude",
+    "section": "reading",
+    "at": "2026-09-24T21:36:47.244Z"
+  },
+  "1864758525": {
+    "kind": "published",
+    "slug": "thinking-in-systems-shipping-in-loops",
+    "section": "reading",
+    "at": "2026-09-24T21:36:47.244Z"
+  },
+  "1864801904": {
+    "kind": "published",
+    "slug": "claude-full-course-1-hour-build-automate-anything",
+    "section": "reading",
+    "at": "2026-09-24T21:36:47.244Z"
   }
 }
