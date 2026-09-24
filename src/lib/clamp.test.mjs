@@ -74,12 +74,19 @@ const LISTINGS = [
  */
 const POST_TEXT = "components/PostText.astro";
 
+/**
+ * The share card (`lib/og-render.ts`, VET-281): a picture of the page, not a
+ * page. Its title and line stop where the 1200x630 stamp does, and the link
+ * it is shared with goes to the page that carries all of it.
+ */
+const OG_CARD = "lib/og-render.ts";
+
 test("every listing note stops at two lines, and nothing else in the build clamps", () => {
   const clamped = walk("").filter((file) => /-webkit-line-clamp/.test(code(read(file))));
 
   assert.deepEqual(
     clamped.sort(),
-    [...LISTINGS, POST_TEXT].sort(),
+    [...LISTINGS, POST_TEXT, OG_CARD].sort(),
     "the set of files clamping a line count changed. A clamp belongs on a listing row whose title goes to a page carrying the whole thing, and nowhere else — a page that is itself the overflow must render all of it (lib/post.ts says why at length).",
   );
 });

@@ -33,6 +33,7 @@ import type { Crumb, JsonLd } from "../lib/schema";
 import { serialize, trailOf } from "../lib/schema";
 import type { NavItem } from "../lib/sections";
 import { FEEDS, getSections } from "../lib/sections";
+import { type OgImage, ogImageFor } from "../lib/og";
 import { absolute } from "../lib/site";
 import { PREPAINT, THEME_COLORS } from "../lib/theme";
 import { PREPAINT as SOUND_PREPAINT } from "../lib/ui-sound";
@@ -92,6 +93,12 @@ interface Props {
    * else leaves it out and gets the trail worked out below.
    */
   trail?: Crumb[];
+  /**
+   * The share card. Left out, the page gets its own from `lib/og.ts` (a
+   * section index, a tool, a site, a library entry, a note, /about), its
+   * section's on a filter page, or the site card.
+   */
+  image?: OgImage;
 }
 
 const {
@@ -141,8 +148,8 @@ const trail: Crumb[] = trailOf(jsonLd) ??
  */
 const canonical = absolute(pathname);
 
-/** One static card for the whole site. Regenerate with `npm run og`. */
-const ogImage = absolute("/og.png");
+const image = Astro.props.image ?? (await ogImageFor(normalize(pathname)));
+const ogImage = absolute(image.src);
 
 /**
  * This page's markdown variant, if it has one. Advertising it with
@@ -242,12 +249,13 @@ const markdownVariant = variant === null ? null : absolute(variant);
     <meta property="og:description" content={description} />
     {!noindex && <meta property="og:url" content={canonical} />}
     <meta property="og:image" content={ogImage} />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Aayush Manchanda" />
+    <meta property="og:image:width" content={String(image.width)} />
+    <meta property="og:image:height" content={String(image.height)} />
+    <meta property="og:image:alt" content={image.alt} />
     <meta property="og:locale" content="en_CA" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={image.alt} />
 
     {
       markdownVariant && (

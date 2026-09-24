@@ -18,11 +18,16 @@ npm run build            # production build, and the real gate on content
 npm test                 # unit tests
 npm run check            # astro check, types across .astro and .ts
 npm run validate:schema  # reads dist/, so only meaningful after a build
-npm run og               # regenerate public/og.png through Playwright
+npm run og               # regenerate public/og.png (the site card) through Playwright
 ```
 
 `npm run build` is the real gate on content: a malformed entry fails it rather
 than rendering half a page, so nothing broken reaches the site.
+
+The build also draws every page's share card (`/og/<page>.jpg`, `src/lib/og.ts`)
+with Playwright's Chromium, cached by content hash in `og-cache/` (committed):
+a warm build draws nothing, a cold one about 15s. Vercel has no browser and
+builds from the cache; the publish workflow commits new cards after its build.
 
 `check`, `test`, `build` and `validate:schema` also run on every push and pull
 request (`.github/workflows/ci.yml`). That is a backstop, not the loop — the
@@ -230,4 +235,5 @@ the deployment on any key it does not recognise, `_comment` included.
 | `src/lib/site.ts` | `SITE_URL` and `NEWSLETTER_ACTION`. The origin, and the newsletter switch. |
 | `public/shots/` | Screenshots, written by the pipeline. Orphans deleted on the next run. |
 | `scripts/` | `og.mjs` (social card), `dns-cutover-wizard.sh` (re-runnable if the origin moves). |
+| `og-cache/` | Share cards by content hash, drawn at build (`src/pages/og/[...card].jpg.ts`). Commit them. |
 | `qa/` | QA passes, one file per batch. |

@@ -185,6 +185,18 @@ jobs:
       - name: Verify the committed tree still builds
         run: npx astro build
 
+      # The build above drew a share card for every new entry into og-cache/
+      # (`pages/og/[...card].jpg.ts`), with the Chromium this job installed.
+      # Committed so Vercel, which has no browser, ships them from the cache.
+      - name: Commit the share cards
+        run: |
+          if [ -z "$(git status --porcelain -- og-cache)" ]; then
+            echo "share cards already current"
+            exit 0
+          fi
+          git add -A -- og-cache
+          git commit -m "og: share cards for the new entries"
+
       - name: Push
         env:
           BEFORE: ${{ steps.identity.outputs.sha }}
