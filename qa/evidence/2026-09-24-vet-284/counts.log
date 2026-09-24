@@ -1,0 +1,9 @@
+ok   1280 /library/ want 45: {"segment":45,"live":45,"paneRows":45,"viewItems":null,"alsoSaved":false}
+ok   1280 /library/kind/article/ want 23: {"segment":23,"live":23,"paneRows":23,"viewItems":23,"alsoSaved":false}
+ok   1280 /library/kind/post/ want 18: {"segment":18,"live":18,"paneRows":18,"viewItems":18,"alsoSaved":false}
+ok   1280 /library/kind/video/ want 4: {"segment":4,"live":4,"paneRows":4,"viewItems":4,"alsoSaved":false}
+ok   390 /library/ want 45: {"segment":45,"live":45,"paneRows":45,"viewItems":null,"alsoSaved":false}
+ok   390 /library/kind/article/ want 23: {"segment":23,"live":23,"paneRows":23,"viewItems":23,"alsoSaved":false}
+ok   390 /library/kind/post/ want 18: {"segment":18,"live":18,"paneRows":18,"viewItems":18,"alsoSaved":false}
+ok   390 /library/kind/video/ want 4: {"segment":4,"live":4,"paneRows":4,"viewItems":4,"alsoSaved":false}
+every count agrees

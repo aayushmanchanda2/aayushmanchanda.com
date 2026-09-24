@@ -1,0 +1,61 @@
+{
+  "base": "http://localhost:4384/",
+  "label": "vet-284-views-dark",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-24-vet-284-views-dark",
+  "at": "2026-09-24T06:37:18.654Z",
+  "shots": [
+    {
+      "route": "/library/",
+      "url": "http://localhost:4384/library/",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/kind/article/",
+      "url": "http://localhost:4384/library/kind/article/",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library_kind_article-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/kind/post/",
+      "url": "http://localhost:4384/library/kind/post/",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library_kind_post-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/kind/video/",
+      "url": "http://localhost:4384/library/kind/video/",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library_kind_video-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}

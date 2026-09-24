@@ -1,0 +1,16 @@
+ok   768x1024 /library/ one column (split 720.84375px < 768): no pane; a drag scrolls the page 0->502
+ok   768x1024 /library/kind/article/ one column (split 720.84375px < 768): no pane; a drag scrolls the page 0->502
+ok   768x1024 /library/kind/post/ one column (split 720.84375px < 768): no pane; a drag scrolls the page 0->502
+ok   768x1024 /library/kind/video/ one column (split 720.84375px < 768): no pane; a drag scrolls the page 0->386
+ok   768x1024 /library/she-left-waterloo-without-graduating-now-she-s-a-member-of-t/ one column (split 720.84375px < 768): no pane; a drag scrolls the page 0->503
+ok   820x1180 /library/ pane drag: pane 0->503, page 0->0; at pane end: page 0->0; detail drag: page 0->504, pane 4310->4310
+ok   820x1180 /library/kind/article/ pane drag: pane 0->503, page 0->0; at pane end: page 0->0; detail drag: page 0->502, pane 1962->1962
+ok   820x1180 /library/kind/post/ pane drag: pane 0->502, page 0->0; at pane end: page 0->0; detail drag: page 0->501, pane 1152->1152
+ok   820x1180 /library/kind/video/ the pane's rows fit (kind-filtered), nothing to scroll
+ok   820x1180 /library/she-left-waterloo-without-graduating-now-she-s-a-member-of-t/ pane drag: pane 0->502, page 0->0; at pane end: page 0->0; detail drag: page 0->501, pane 4310->4310
+ok   1024x1366 /library/ pane drag: pane 0->502, page 0->0; at pane end: page 0->0; detail drag: page 0->501, pane 4129->4129
+ok   1024x1366 /library/kind/article/ pane drag: pane 0->502, page 0->0; at pane end: page 0->0; detail drag: page 0->415, pane 1781->1781
+ok   1024x1366 /library/kind/post/ pane drag: pane 0->502, page 0->0; at pane end: page 0->0; detail drag: page 0->502, pane 971->971
+ok   1024x1366 /library/kind/video/ the pane's rows fit (kind-filtered), nothing to scroll
+ok   1024x1366 /library/she-left-waterloo-without-graduating-now-she-s-a-member-of-t/ pane drag: pane 0->502, page 0->0; at pane end: page 0->0; detail drag: page 0->501, pane 4129->4129
+all ok
