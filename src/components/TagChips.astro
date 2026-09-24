@@ -15,13 +15,14 @@
  * `styles/chip.css › .tag` is the whole paint.
  *
  * The label drops the hyphens (`tagLabel`), the href keeps them. The slug is
- * the route and the join key; the reader only ever needs the words.
+ * the filter value and the join key; the reader only ever needs the words.
+ * A chip opens /library filtered to its tag (`?tags=`, VET-282): the tag
+ * pages that stood alone are gone, and `vercel.json` 308s their URLs there.
  *
  * A row of these on an entry says what that entry is about.
- * `components/TagFilters.astro` is the other shape the same chip takes — the
- * whole vocabulary at the top of a list, with the one you are standing on
- * marked — and the two share `.tag` so a chip a reader pressed on a row and a
- * chip they pressed at the top of the page are visibly the same control.
+ * `components/LibraryTags.astro` is the other shape the same chip takes, the
+ * library's tag filter, and the two share `.tag` so a chip a reader pressed on
+ * a row and a tag they ticked in the filter are visibly the same control.
  */
 import { tagLabel } from "../lib/tags";
 
@@ -37,7 +38,7 @@ const { tags } = Astro.props;
   {
     tags.map((slug) => (
       <li>
-        <a class="tag" href={`/library/tag/${slug}`}>
+        <a class="tag" href={`/library?tags=${slug}`}>
           {tagLabel(slug)}
         </a>
       </li>
@@ -66,9 +67,8 @@ const { tags } = Astro.props;
      tall as the inherited strut — 25.59px of it round the old 20.27px chip, so
      a wrapped row of tags carried 5.32px of leading nobody asked for and the
      chips did not sit where the gap said they would. A flex item blockifies its
-     child and the strut has nothing to hold. `TagFilters.astro › .filters__row
-     li` is the same line for the same reason, and it is where Aayush noticed
-     it. */
+     child and the strut has nothing to hold. Aayush noticed
+     it on the old tag filter row (VET-114). */
   .tags li {
     display: flex;
   }

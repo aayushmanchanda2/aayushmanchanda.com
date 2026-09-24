@@ -212,7 +212,6 @@ test("full width is the index pages and nothing else", () => {
     "library/[slug].astro",
     "library/domain/[domain].astro",
     "library/kind/[kind].astro",
-    "library/tag/[slug].astro",
     "sites.astro",
     "sites/collection/[slug].astro",
     "sites/domain/[domain].astro",

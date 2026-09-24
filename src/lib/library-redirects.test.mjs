@@ -24,3 +24,24 @@ test("library and tools fallback 308 sits after the filesystem and names no slug
   assert.equal(to("/tools/category/agent-skills"), undefined, "category pages are two segments deep");
   assert.ok(!routes.some((r) => r.src?.startsWith("^/library/(?:")), "no per-slug redirect list");
 });
+
+test("an old tag page and its .md 308 to /library filtered by that tag, before the slash rule", () => {
+  const at = routes.findIndex((r) => r.src?.startsWith("^/library/tag/"));
+  const slash = routes.findIndex((r) => r.src === "^/(.+)/$");
+  assert.ok(at >= 0 && at < slash, "the tag rule must come before the trailing-slash 308, so it is one hop");
+  const rule = routes[at];
+  assert.equal(rule.status, 308);
+  const to = (/** @type {string} */ path) => {
+    const hit = new RegExp(/** @type {string} */ (rule.src)).exec(path);
+    return hit ? rule.headers?.Location?.replace("$1", hit[1] ?? "") : undefined;
+  };
+  assert.equal(to("/library/tag/agents"), "/library?tags=agents");
+  assert.equal(to("/library/tag/go-to-market.md"), "/library?tags=go-to-market");
+  assert.equal(to("/library/tag/agents/"), "/library?tags=agents");
+  assert.equal(to("/library/kind/post"), undefined);
+});
+
+test("a tag chip on an entry opens /library filtered to it", () => {
+  const chips = readFileSync(new URL("../components/TagChips.astro", import.meta.url), "utf8");
+  assert.match(chips, /href=\{`\/library\?tags=\$\{slug\}`\}/);
+});

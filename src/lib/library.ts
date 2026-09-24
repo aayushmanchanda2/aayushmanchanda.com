@@ -201,8 +201,8 @@ export interface LibraryEntry {
    * What this link is about, in Aayush's words, as route segments.
    *
    * The same curation model /sites runs on and the same rule about spelling:
-   * every member is already the slug, because the value IS the route segment
-   * (`/library/tag/<x>`) and the join key at once. Folding "Go To Market" down
+   * every member is already the slug, because the value IS the filter value
+   * (`/library?tags=<x>`) and the join key at once. Folding "Go To Market" down
    * here instead of refusing it would make the file's contents and the site's
    * routes two different strings.
    *

@@ -12,9 +12,8 @@
  * `styles/chip.css` paints them; a slot with no rule renders the fallback.
  *
  * **A chip only ever points somewhere.** Every tag on every entry has to be a
- * group in `libraryTags`, because that list is the route table for
- * `/library/tag/<slug>` — a tag the derived view missed would be a chip linking
- * to a 404.
+ * group in `libraryTags`, because that list is the filter's vocabulary: a tag
+ * the derived view missed would be a chip that filters /library to nothing.
  *
  * **The chip is the plain TopicTag box**, and the rows that wrap it keep its
  * 40px hit area from overlapping the line beside it.
@@ -140,15 +139,15 @@ test("the tag is the plain TopicTag box: solid grey hairline, no hue, no mark", 
     "a dot or a mark came back on the tag",
   );
 
-  for (const file of ["components/TagChips.astro", "components/TagFilters.astro"]) {
+  for (const file of ["components/TagChips.astro", "components/LibraryTags.astro"]) {
     const source = readFileSync(fileURLToPath(new URL(`../${file}`, import.meta.url)), "utf8");
     assert.ok(!source.includes("data-hue"), `${file} puts a hue on a tag again`);
   }
 });
 
-test("every tag page has something on it, and everything on it is tagged", () => {
+test("every tag filters to something, and everything under it is tagged", () => {
   for (const group of libraryTags) {
-    assert.ok(group.entries.length > 0, `/library/tag/${group.slug} would be an empty page`);
+    assert.ok(group.entries.length > 0, `/library?tags=${group.slug} would filter to nothing`);
     for (const entry of group.entries) {
       assert.ok(
         entry.tags.includes(group.slug),
@@ -193,7 +192,6 @@ test("every row that wraps tag chips is at least as tall as their targets", () =
   /** @type {[string, RegExp, RegExp | null][]} */
   const ROWS = [
     ["components/TagChips.astro", /\.tags\s*\{[^}]*gap:\s*([\d.]+)rem/, null],
-    ["components/TagFilters.astro", /\.filters__row\s*\{[^}]*gap:\s*([\d.]+)rem/, null],
     ["components/LibraryTags.astro", /\.ltags__list\s*\{[^}]*gap:\s*([\d.]+)rem/, null],
     [
       "components/EntryDetail.astro",
@@ -240,7 +238,6 @@ test("a row of tag chips is as tall as the chips, not as tall as a line of text"
   /** @type {[string, RegExp][]} */
   const ROWS = [
     ["components/TagChips.astro", /\.tags li \{[^}]*display: flex;/],
-    ["components/TagFilters.astro", /\.filters__row li \{[^}]*display: flex;/],
   ];
 
   for (const [file, pattern] of ROWS) {
@@ -302,25 +299,4 @@ test("the kind chip on an entry strip claims the same target its tags do", () =>
     /\.strip__chip\s*\{[^}]*position:\s*relative;/,
     "the kind chip's hit area is absolutely positioned against something other than the chip",
   );
-});
-
-test("the filter row caps at twelve and never hides the tag you are on", () => {
-  /*
-   * VET-220. Thirty-two chips were eight lines on a phone before the list, so
-   * `TagFilters` shows the twelve busiest and a "Show all N" chip. Two things a
-   * later edit could quietly break: the number, and the exemption that keeps a
-   * tag page's `aria-current` chip visible when its tag ranks past the cap.
-   */
-  const source = readFileSync(
-    fileURLToPath(new URL("../components/TagFilters.astro", import.meta.url)),
-    "utf8",
-  );
-  assert.match(source, /const TAG_CAP = 12;/);
-  assert.match(
-    source,
-    /index >= TAG_CAP && slug !== current/,
-    "the current tag can fall into the collapsed tail, so a tag page can hide its own selected chip",
-  );
-  assert.match(source, /<li data-more hidden>/, "the button shows without scripting, where it does nothing");
-  assert.match(source, /hidden > 0 &&/, "the button renders when the tail it toggles is empty");
 });

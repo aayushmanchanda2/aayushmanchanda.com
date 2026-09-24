@@ -106,8 +106,8 @@ data as the HTML.
 - Or request the \`.md\` URL directly if you would rather not negotiate.
 
 Filter pages exist under /tools/category/<name>, /tools/verdict/<name>,
-/sites/domain/<host>, /library/kind/<kind>, /library/domain/<host> and
-/library/tag/<tag>. Every tool, site, note and library entry has its own page.
+/sites/domain/<host>, /library/kind/<kind> and /library/domain/<host>; a
+tag filters /library as /library?tags=<tag>. Every tool, site, note and library entry has its own page.
 A library entry's page at /library/<slug> holds the kind, host, tags, saved
 date, his one-line note, and the source. ${digested.length} of ${library.length}
 are digested by his agents, with cliff notes and a call on whether it's worth reading. A

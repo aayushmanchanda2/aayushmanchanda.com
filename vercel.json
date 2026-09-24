@@ -225,6 +225,13 @@
       "continue": true
     },
     {
+      "src": "^/library/tag/([^/.]+)(?:\\.md)?/?$",
+      "status": 308,
+      "headers": {
+        "Location": "/library?tags=$1"
+      }
+    },
+    {
       "src": "^/(.+)/$",
       "status": 308,
       "headers": {
