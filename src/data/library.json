@@ -2208,7 +2208,7 @@
   },
   {
     "slug": "how-nontechnical-builders-can-ship-software-with-claude-code",
-    "title": "POV: your boss asks you to build something by next week…",
+    "title": "Ship Your First App With Claude Code",
     "url": "https://x.com/jjenglert/status/2102762257520222319?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
     "domain": "x.com",
     "saved_date": "2026-09-24",
@@ -2230,7 +2230,26 @@
         }
       ]
     },
-    "media_retrieved": "2026-09-24"
+    "media_retrieved": "2026-09-24",
+    "tldr": "JJ Englert lays out a beginner workflow for shipping an app with Claude Code, GitHub, Vercel, upfront planning, user mapping, and design.",
+    "block": {
+      "best_for": "Nontechnical builders shipping a first internal app",
+      "tip": "Write the plan before coding, then map every user and what each needs.",
+      "time": {
+        "text": "15 minutes",
+        "source": "stated"
+      },
+      "needs": [
+        "Claude Code",
+        "GitHub",
+        "Vercel"
+      ],
+      "start_here": [
+        "Decide whether the differentiating part is worth building.",
+        "Write the plan and map every user need.",
+        "Design in Claude Design, then build with Claude Code and deploy on Vercel."
+      ]
+    }
   },
   {
     "slug": "claude-dev-technical-writing-for-people-building-with-claude",
