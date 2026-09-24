@@ -273,3 +273,20 @@ test("a link entity missing a string field is skipped, not written as undefined"
   assert.deepEqual(tweet.links, [{ text: "a.dev", href: "https://a.dev" }]);
   assert.equal(tweet.text, "see a.dev and https://t.co/b");
 });
+
+test("an avatar that fails once is fetched again, and a lost one is logged (VET-284)", async (t) => {
+  const tweet = { ...TWEET, user: { ...TWEET.user, profile_image_url_https: "https://pbs.twimg.com/profile_images/1/a_normal.jpg" } };
+  const { fetch: base } = cdn(tweet);
+  let misses = 1;
+  /** @type {typeof globalThis.fetch} */
+  const flaky = async (input, init) => (String(input).includes("profile_images") && misses-- > 0 ? new Response("", { status: 503 }) : base(input, init));
+  const post = await postFrom({ url: "https://x.com/a/status/1755217559312269550", saved: null, publicDir: await scratch(t), fetch: flaky });
+  assert.equal(post?.avatar, "/posts/1755217559312269550/avatar.webp");
+
+  const warn = t.mock.method(console, "warn", () => {});
+  /** @type {typeof globalThis.fetch} */
+  const down = async (input, init) => (String(input).includes("profile_images") ? new Response("", { status: 503 }) : base(input, init));
+  const lost = await postFrom({ url: "https://x.com/a/status/1755217559312269550", saved: null, publicDir: await scratch(t), fetch: down });
+  assert.equal(lost?.avatar, undefined);
+  assert.match(String(warn.mock.calls[0]?.arguments[0]), /kept no avatar/);
+});

@@ -126,7 +126,8 @@ export function postParagraphs(text: string): string[] {
 export type Block = { kind: "p"; text: string } | { kind: "ol" | "ul"; items: string[]; start: number };
 
 const STEP = /^(\d{1,2})[.)/]\s+/;
-const BULLET = /^[-•]\s+/;
+/** "- x" needs its space ("-5%" is not a list); "•x" does not, as X posts write it (VET-284). */
+const BULLET = /^(?:-\s+|•\s*)/;
 /** A list marker a scrape flattened into the middle of a line: " - Next" and ". 2) Next". */
 const INLINE_BULLET = /(?<=\S) [-•] (?=[A-Z@#"“])/g;
 const INLINE_STEP = /(?<=[.!?:"”)]) (?=\d{1,2}[.)/] \S)/g;

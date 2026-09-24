@@ -12,7 +12,7 @@ import path from "node:path";
 
 import { pickText } from "./post-text.mjs";
 import { fetchWebp } from "./thumb.mjs";
-import { exists, isRecord, readCapped, writeAtomic } from "./util.mjs";
+import { describe, exists, isRecord, readCapped, writeAtomic } from "./util.mjs";
 
 /** @typedef {import("./types.js").Post} Post */
 /** @typedef {typeof globalThis.fetch} Fetch */
@@ -204,9 +204,18 @@ async function video(sources, id, name, publicDir, fetch) {
  */
 async function localise(tweet, publicDir, fetch) {
   const { id } = tweet;
-  // One picture that will not fetch costs that picture, never the post.
-  const tryPicture = (/** @type {string} */ url, /** @type {string} */ name) =>
-    picture(url, id, name, name === "avatar" ? AVATAR_WIDTH : PICTURE_WIDTH, publicDir, fetch).catch(() => null);
+  // One picture that will not fetch costs that picture, never the post. It
+  // gets a second try and a log line: a single silent miss left the Waterloo
+  // post without its avatar for good (VET-284), and nothing retries later.
+  const tryPicture = (/** @type {string} */ url, /** @type {string} */ name) => {
+    const get = () => picture(url, id, name, name === "avatar" ? AVATAR_WIDTH : PICTURE_WIDTH, publicDir, fetch);
+    return get()
+      .catch(get)
+      .catch((/** @type {unknown} */ error) => {
+        console.warn(`warn: post ${id} kept no ${name} — ${describe(error)}`);
+        return null;
+      });
+  };
   const avatar = tweet.avatar && (await tryPicture(tweet.avatar, "avatar"));
 
   /** @type {NonNullable<Post["media"]>} */

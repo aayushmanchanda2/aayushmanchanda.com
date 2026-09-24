@@ -302,6 +302,8 @@ test("a long post's steps and bullets become real lists (VET-264)", () => {
     { kind: "ol", items: ["Read.\nThen reread.", "Write."], start: 1 },
   ]);
   assert.deepEqual(postBlocks("Why: - They never compared me. - They always believed in me. - They made time. " + "x".repeat(160)).map((b) => b.kind), ["p", "ul"]);
+  assert.deepEqual(postBlocks("Into:\n•Why\n•What"), [{ kind: "p", text: "Into:" }, { kind: "ul", items: ["Why", "What"], start: 1 }], "a bullet with no space after it");
+  assert.deepEqual(postBlocks("-5% today\n-3% tomorrow"), [{ kind: "p", text: "-5% today\n-3% tomorrow" }], "a minus sign is not a bullet");
   assert.deepEqual(postBlocks("0:00 - Intro\n1:20 - Demo"), [{ kind: "p", text: "0:00 - Intro\n1:20 - Demo" }], "a chapter list stays put");
   assert.deepEqual(postBlocks("1. a\n2. b\n1. c").map((b) => b.kind === "p" ? b.text : b.start), [1, 1], "a restart is a new list");
 });
