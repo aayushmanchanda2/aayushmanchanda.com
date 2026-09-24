@@ -62,21 +62,29 @@ const { collections, linked = true } = Astro.props;
     margin: 0;
   }
 
-  /* 44px under a finger (VET-307): each chip reaches 12px up and down, so the
-     lines sit 24px apart and two targets touch without overlapping. */
+  /* 44px under a finger (VET-307). Two wrapped 44px targets that do not
+     overlap need 44px from line to line, so the chip grows to the `.tag`'s
+     28px and the lines sit 16px apart, the /library tag rhythm, instead of a
+     21px chip with a 29px hole under it (VET-57). The flex item drops the
+     line box that padded each chip by 5px more. */
   @media (pointer: coarse) {
     .collections {
-      row-gap: 1.5rem;
+      row-gap: 1rem;
+    }
+
+    .collections li {
+      display: flex;
     }
 
     .collections :global(.chip--link) {
       position: relative;
+      padding-block: 0.5rem;
     }
 
     .collections :global(.chip--link)::after {
       content: "";
       position: absolute;
-      inset: -12px 0;
+      inset: -8px 0;
     }
   }
 </style>

@@ -123,6 +123,8 @@ it) and where to start.
 - [Home](${absolute(PAGES.home.html)}) (markdown: ${absolute(PAGES.home.md)}): who he is and
   an index of the sections.
 ${sectionList}
+- [Now](${absolute(PAGES.now.html)}) (markdown: ${absolute(PAGES.now.md)}): what he is
+  building, testing and learning right now, with the date it was last updated.
 - [About](${absolute("/about")}): who Aayush is, his work, and what the
   sections hold.
 - [Contact](${absolute("/contact")}): how to reach him and what gets a reply.

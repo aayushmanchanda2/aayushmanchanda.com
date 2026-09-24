@@ -69,6 +69,7 @@ import type { Tool } from "./tools";
  * above stay bare because they are erased before either tool sees them.
  */
 import { normalize } from "./links.ts";
+import { NOW_UPDATED } from "./now.ts";
 import { NEW_CATEGORY } from "./tool-copy.ts";
 import { absolute } from "./site.ts";
 
@@ -331,6 +332,25 @@ export function privacyJsonLd(): JsonLd {
       url,
     },
     breadcrumb({ name: "Privacy", path: "/privacy" }),
+  );
+}
+
+/**
+ * /now (VET-57): a `WebPage` dated by `lib/now.ts › NOW_UPDATED`, the date the
+ * page prints as "Updated", and the trail the bar draws for it.
+ */
+export function nowJsonLd(): JsonLd {
+  const url = pageUrl("/now");
+
+  return graph(
+    {
+      "@type": "WebPage",
+      "@id": `${url}#webpage`,
+      name: "Now",
+      url,
+      dateModified: NOW_UPDATED,
+    },
+    breadcrumb({ name: "Now", path: "/now" }),
   );
 }
 

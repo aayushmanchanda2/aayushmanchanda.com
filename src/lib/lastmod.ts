@@ -14,6 +14,7 @@ import path from "node:path";
 
 import { experiments } from "./experiments";
 import { library } from "./library";
+import { NOW_UPDATED } from "./now";
 import { sites } from "./sites";
 import { tools } from "./tools";
 
@@ -50,5 +51,6 @@ export function lastmods(): Map<string, string> {
   if (started) map.set("/experiments", started);
   const home = newest([...map.values()]);
   if (home) map.set("/", home);
+  map.set("/now", NOW_UPDATED);
   return map;
 }

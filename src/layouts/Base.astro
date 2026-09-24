@@ -104,7 +104,7 @@ const {
 } = Astro.props;
 
 /**
- * Home, then the sections. Only sections that have entries come back from
+ * Home, then the sections, then /now. Only sections that have entries come back from
  * `getSections()`, so an empty one is never linked from the nav.
  */
 /** Cut to what a search result shows, by `lib/meta.ts`'s rules. */
@@ -113,6 +113,8 @@ const description = fitDescription(fullDescription);
 const navItems: NavItem[] = [
   { href: "/", label: "Home" },
   ...(await getSections()).map((section) => ({ href: section.href, label: section.name })),
+  // One page, not a section: no count, no feed, but its own mat (VET-57).
+  { href: "/now", label: "Now" },
 ];
 
 const hasPane = Astro.slots.has("pane");

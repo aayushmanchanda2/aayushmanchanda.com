@@ -8,7 +8,23 @@
 import { chromium } from "playwright";
 
 const base = process.argv[2] ?? "http://localhost:4384";
+// The key routes of every section and footer page first (VET-57), then the library set.
 const routes = [
+  "/",
+  "/tools/",
+  "/tools/hermes/",
+  "/sites/",
+  "/sites/about-brian-lovin/",
+  "/sites/collection/landing-pages/",
+  "/notes/",
+  "/notes/building-this-site/",
+  "/experiments/",
+  "/about/",
+  "/contact/",
+  "/privacy/",
+  "/design/",
+  "/now/",
+  ...(process.argv[3] ? process.argv[3].split(",") : []),
   "/library/",
   "/library/kind/article/",
   "/library/kind/post/",
@@ -61,7 +77,9 @@ function scan() {
     const r = el.getBoundingClientRect();
     if (!r.width || clipped(el) || !el.parentElement) continue;
     const box = block(el.parentElement);
-    if (r.right > contentRight(box) + 1) out.push(`${name(el)} right ${Math.round(r.right)} > its box ${Math.round(contentRight(box))}`);
+    // A negative margin is a deliberate bleed (the /tools table runs to the paper's edge).
+    const bleed = Math.max(0, -parseFloat(getComputedStyle(el).marginRight));
+    if (r.right > contentRight(box) + bleed + 1) out.push(`${name(el)} right ${Math.round(r.right)} > its box ${Math.round(contentRight(box))}`);
   }
   return out;
 }

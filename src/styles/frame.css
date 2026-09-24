@@ -86,11 +86,20 @@ html {
   --mat-h: 354;
 }
 
+/* Teal (VET-57): /now, the one page in the nav that is not a section, on
+   the hue none of the five use, between the green and the blue. */
+[data-section="now"] {
+  --mat-hi: light-dark(oklch(0.62 0.12 196), oklch(0.43 0.09 198));
+  --mat: light-dark(oklch(0.5 0.11 206), oklch(0.31 0.075 208));
+  --mat-h: 200;
+}
+
 [data-section="tools"],
 [data-section="sites"],
 [data-section="library"],
 [data-section="notes"],
-[data-section="experiments"] {
+[data-section="experiments"],
+[data-section="now"] {
   --ink-c: 0.085;
 }
 
