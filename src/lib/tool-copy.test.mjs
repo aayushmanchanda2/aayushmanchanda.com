@@ -29,9 +29,13 @@ test("a note is 20 words or fewer with no em dash", () => {
 
 test("every tool in tools.json has a description and passes both caps", () => {
   const tools = JSON.parse(readFileSync(new URL("../data/tools.json", import.meta.url), "utf8"));
-  const problems = tools.flatMap((/** @type {{slug: string, description?: string, note: string}} */ tool) => {
+  const problems = tools.flatMap((/** @type {{slug: string, category: string, description?: string, note: string}} */ tool) => {
     const problem =
-      (tool.description === undefined ? "has no description" : descriptionProblem(tool.description)) ??
+      // A fresh pipeline save sits in the "unsorted" inbox with no description
+      // until a human or Hermes writes one; it must not turn main red.
+      (tool.description === undefined
+        ? tool.category === "unsorted" ? null : "has no description"
+        : descriptionProblem(tool.description)) ??
       noteProblem(tool.note);
     return problem === null ? [] : [`${tool.slug} ${problem}`];
   });
