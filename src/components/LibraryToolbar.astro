@@ -1,14 +1,14 @@
 ---
 /**
- * LibraryToolbar — the kind segments and a live count (VET-245). It tops the
- * list pane on every library page, and /library draws a second one above its
- * view for phones, where the pane is hidden (VET-258). The tag filter sits
- * under it (`LibraryTags.astro`, VET-267). `lib/library-pane.ts › FILTER`
- * wires every copy on the page. Every count here is the main feed's; the
- * "Also saved" group counts itself in the pane (VET-273).
+ * LibraryToolbar — the search field, the kind segments and a live count
+ * (VET-245, VET-282). It tops the list pane on every library page, and
+ * /library draws a second one above its view for phones, where the pane is
+ * hidden (VET-258). The tag filter sits under it (`LibraryTags.astro`,
+ * VET-267). `lib/library-pane.ts › FILTER` wires every copy on the page, and
+ * its filtering model says what each count means: every entry, both groups.
  */
 import KindSegments from "./KindSegments.astro";
-import { feed, kindGroups } from "../lib/library";
+import { kindGroups, library } from "../lib/library";
 
 interface Props {
   /** Private rows in the pane (/me only, VET-274): adds a "Private" segment. */
@@ -17,13 +17,19 @@ interface Props {
 
 const { privateCount = 0 } = Astro.props;
 const extra = privateCount > 0 ? { kind: "private", href: "/me/library?kind=private", label: "Private", count: privateCount } : undefined;
-
-const groups = kindGroups.map((group) => ({ ...group, entries: group.entries.filter((entry) => !entry.also_saved) }));
+const total = library.length + privateCount;
 ---
 
 <div class="ltools">
-  <KindSegments groups={groups} total={feed.length + privateCount} extra={extra} />
-  <p class="ltools__count tabular-nums" aria-live="polite" data-filter-count>{feed.length + privateCount} entries</p>
+  <label class="lsearch">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+      <circle cx="7" cy="7" r="4.5"></circle>
+      <path d="M10.5 10.5 L14 14" stroke-linecap="round"></path>
+    </svg>
+    <input type="search" data-filter-q placeholder="Search" aria-label="Search the library" autocomplete="off" enterkeyhint="search" />
+  </label>
+  <KindSegments groups={kindGroups} total={total} extra={extra} />
+  <p class="ltools__count tabular-nums" aria-live="polite" data-filter-count>{total} entries</p>
 </div>
 
 <style is:global>
@@ -40,6 +46,52 @@ const groups = kindGroups.map((group) => ({ ...group, entries: group.entries.fil
 
   .ltools .seg {
     width: 100%;
+  }
+
+  /* iOS's search field: a filled 40px well with the glyph inside (VET-282).
+     16px text, so iOS Safari does not zoom the page on focus. */
+  .lsearch {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2.5rem;
+    padding-inline: 0.75rem;
+    border-radius: var(--r-md);
+    background: var(--surface-3);
+    color: var(--text-tertiary);
+    cursor: text;
+  }
+
+  .lsearch svg {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .lsearch input {
+    flex: 1;
+    min-width: 0;
+    height: 2.5rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    appearance: none;
+    font: inherit;
+    font-size: 1rem;
+    color: var(--text-primary);
+  }
+
+  .lsearch input::placeholder {
+    color: var(--text-tertiary);
+  }
+
+  .lsearch input:focus {
+    outline: none;
+  }
+
+  .lsearch:has(input:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
   }
 
   .ltools__count {

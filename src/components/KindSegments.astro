@@ -10,7 +10,9 @@
  * in place through `?kind=`; on /library and a kind route the link is followed,
  * carrying the tag. Either way the chosen segment is `aria-current="true"`.
  * Pass `current` where the page itself is a kind (or /library, `null`) and
- * that segment carries `aria-current="page"`. Links, never `role="tab"`: a
+ * that segment carries `aria-current="page"`. Each count is every entry of
+ * that kind, both groups, and `FILTER` rewrites it to what the tags and text
+ * leave (`lib/library-pane.ts`, the filtering model). Links, never `role="tab"`: a
  * tablist promises arrow keys inside the row that nothing here implements.
  *
  * A segment is a control, not a label, which is why it does not reuse
@@ -55,7 +57,7 @@ const selected = current === null ? "" : current;
         aria-current={segment.kind === selected ? "page" : undefined}
       >
         {segment.label}
-        <span class="seg__count tabular-nums">{segment.count}</span>
+        <span class="seg__count tabular-nums" data-kind-count={segment.kind}>{segment.count}</span>
       </a>
     ))
   }
@@ -82,9 +84,9 @@ const selected = current === null ? "" : current;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.375rem;
+    gap: 0.25rem;
     min-height: 28px;
-    padding-inline: 0.5rem;
+    padding-inline: 0.375rem;
     border-radius: var(--r-sm);
     font-size: 0.875rem;
     line-height: 1.45;
@@ -93,12 +95,13 @@ const selected = current === null ? "" : current;
     white-space: nowrap;
   }
 
-  /* The four segments with their counts need 309px; a phone's column is
-     narrower up to about 410px wide (clipped at 320, 360 and 390, QA phase 2).
-     Under 20rem of toolbar the counts go: the live count beside the tag
-     select still says how many are showing. The toolbar is the container
+  /* The four segments with their counts need 272-295px (measured at 360,
+     375 and 390, VET-282: `qa/evidence/2026-09-23-vet-282/seg-measure.mjs`),
+     so a 375px phone keeps them: every count is live and it is the filter's
+     answer (E2). Under 18rem of toolbar they go, and the live count still
+     says how many are showing. The toolbar is the container
      (`LibraryToolbar.astro › .ltools`), so the 350px pane keeps its counts. */
-  @container (width < 20rem) {
+  @container (width < 18rem) {
     .seg__count {
       display: none;
     }

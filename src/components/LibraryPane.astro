@@ -17,24 +17,15 @@
  * row and `start` set to the kind the route pre-selects. There the two inline
  * scripts run from `LibraryViews.astro` instead, after the views they switch.
  *
- * It repeats on every entry page, so the row is kept small on purpose:
- * three bare elements plus the kind glyph, no scoped-style attributes (the
- * style block is global and namespaced to `.pane`), and the summary cut at 110
- * characters, about what the two-line clamp shows. The measured cost is in the
- * VET-231 audit.
+ * The list is `LibraryRows.astro`, which /library also draws as the phone's
+ * list. This file is the pane around it: toolbar, tags, empty state, keys.
  */
-import KindIcon from "./KindIcon.astro";
-import LockGlyph from "./LockGlyph.astro";
+import LibraryRows from "./LibraryRows.astro";
 import LibraryTags from "./LibraryTags.astro";
 import LibraryToolbar from "./LibraryToolbar.astro";
 import PreviewCard from "./PreviewCard.astro";
 import type { Kind, LibraryEntry } from "../lib/library";
-import { entryHref, rowSummary } from "../lib/library";
-import { privateHref } from "../lib/private";
 import { FILTER, PREPAINT } from "../lib/library-pane";
-import { clipText } from "../lib/post";
-import { libraryPreview } from "../lib/assets";
-import { formatDay, formatMonth } from "../lib/date";
 
 interface Props {
   entries: LibraryEntry[];
@@ -49,12 +40,6 @@ interface Props {
 const { entries, current, start, extra = [] } = Astro.props;
 const index = start !== undefined;
 
-/** Month headers over the main feed: "2026-09" -> its label and count. "Also saved" follows it (VET-273). */
-const byDate = [...entries, ...extra].sort((a, b) => b.saved_date.localeCompare(a.saved_date));
-const [main, also] = [byDate.filter((entry) => !entry.also_saved), byDate.filter((entry) => entry.also_saved)];
-const months = new Map<string, number>();
-for (const entry of main) months.set(entry.saved_date.slice(0, 7), (months.get(entry.saved_date.slice(0, 7)) ?? 0) + 1);
-const opens = (i: number) => i === 0 || main[i]!.saved_date.slice(0, 7) !== main[i - 1]!.saved_date.slice(0, 7);
 ---
 
 <nav
@@ -66,45 +51,10 @@ const opens = (i: number) => i === 0 || main[i]!.saved_date.slice(0, 7) !== main
   data-start={start}
 >
   <div class="pane__bar">
-    <LibraryToolbar privateCount={extra.filter((entry) => !entry.also_saved).length} />
+    <LibraryToolbar privateCount={extra.length} />
   </div>
   <div class="pane__tags"><LibraryTags extra={extra} /></div>
-  <ul data-rows>
-    {
-      [...main, ...also].map((entry, i) => {
-        const quiet = entry.also_saved;
-        const summary = quiet ? null : (entry.block?.tip ?? rowSummary(entry));
-        const own = extra.includes(entry);
-        return (
-          <>
-          {!quiet && opens(i) && (
-            <li class="pane__month mono" data-month>
-              {formatMonth(entry.saved_date)} · <span class="tabular-nums" data-month-count>{months.get(entry.saved_date.slice(0, 7))}</span>
-            </li>
-          )}
-          {i === main.length && <li class="pane__month pane__also mono" data-month>Also saved · <span class="tabular-nums" data-month-count>{also.length}</span></li>}
-          <li data-kind={own ? "private" : entry.kind} data-tags={entry.tags.join(" ")} data-also={quiet ? "" : undefined}>
-            <a
-              href={own ? privateHref(entry.slug) : entryHref(entry)}
-              data-astro-prefetch="hover"
-              aria-current={entry.slug === current ? "page" : undefined}
-              {...(own ? {} : libraryPreview(entry))}
-            >
-              <b>{entry.title}</b>
-              <small>
-                {!quiet && <KindIcon kind={entry.kind} />}
-                {own && <LockGlyph />}
-                <span>{entry.domain}</span>
-                {quiet && <time datetime={entry.saved_date}>{formatDay(entry.saved_date)}</time>}
-              </small>
-              {summary && <span class:list={[entry.block && "tip"]}>{clipText(summary, 110)}</span>}
-            </a>
-          </li>
-          </>
-        );
-      })
-    }
-  </ul>
+  <LibraryRows entries={entries} current={current} extra={extra} preview />
   <p class="pane__empty" data-filter-empty hidden>
     No entries match these filters. <a href={extra.length > 0 ? "/me/library" : current ? `/library/${current}` : "/library"}>Show all</a>
   </p>
@@ -127,9 +77,11 @@ const opens = (i: number) => i === 0 || main[i]!.saved_date.slice(0, 7) !== main
   const ALIAS: Record<string, string> = { j: "ArrowDown", k: "ArrowUp" };
   const pane = document.querySelector<HTMLElement>(`[${PANE_ATTRIBUTE}]`);
   const entryPage = document.querySelector("[data-entry-nav]") !== null;
-  pane?.addEventListener("keydown", (event) => {
-    if (!ownsKey(event) || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
-    const links = [...pane.querySelectorAll<HTMLAnchorElement>("[data-rows] > li:not([hidden]) > a")];
+  // Every copy of the list: the pane's, and /library's phone list (VET-282).
+  document.addEventListener("keydown", (event) => {
+    const list = (event.target as Element).closest?.("[data-rows]");
+    if (!list || !ownsKey(event) || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+    const links = [...list.querySelectorAll<HTMLAnchorElement>(":scope > li:not([hidden]) > a")];
     const from = links.indexOf(event.target as HTMLAnchorElement);
     const key = entryPage ? event.key : (ALIAS[event.key] ?? event.key);
     const to = from < 0 ? null : paneStep(key, from, links.length);
@@ -188,30 +140,6 @@ const opens = (i: number) => i === 0 || main[i]!.saved_date.slice(0, 7) !== main
     position: sticky;
     top: var(--pane-bar, 5.375rem);
     z-index: 1;
-    padding: 0.625rem 0.875rem 0.375rem;
-    background: var(--bg);
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--text-secondary);
-  }
-  /* Quieter than a month: the rows under it are kept, not featured (VET-273). */
-  .pane .pane__also {
-    margin-top: 1.5rem;
-    color: var(--text-tertiary);
-  }
-
-  .pane li[data-also] b {
-    font-weight: 400;
-    color: var(--text-secondary);
-  }
-
-  .pane li[data-also] time::before {
-    content: "\00b7" / "";
-    margin-right: 0.4rem;
-  }
-
-  .pane .pane__month .tabular-nums {
-    color: var(--text-tertiary);
   }
 
   .pane__empty {
@@ -222,78 +150,5 @@ const opens = (i: number) => i === 0 || main[i]!.saved_date.slice(0, 7) !== main
 
   .pane__empty a {
     color: var(--text-primary);
-  }
-
-  .pane ul {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    padding: 0.75rem;
-  }
-
-  .pane li > a {
-    display: flex;
-    flex-direction: column;
-    gap: 0.125rem;
-    padding: 0.75rem 0.875rem;
-    border-radius: var(--r-lg);
-    color: var(--text-primary);
-    text-decoration: none;
-  }
-  /* briOS's /hn row: hover and selected are one look, and hover is instant
-     (design.md §4). */
-  @media (hover: hover) {
-    .pane li > a:hover {
-      background: var(--surface-selected);
-      box-shadow: var(--shadow-contrast);
-    }
-  }
-
-  .pane li > a[aria-current="page"] {
-    background: var(--surface-selected);
-    box-shadow: var(--shadow-contrast);
-  }
-  /* 14px UI text throughout the row (design.md §2). */
-  .pane b {
-    font-size: 0.875rem;
-    font-weight: 500;
-    line-height: 1.45;
-    overflow-wrap: anywhere;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    overflow: hidden;
-  }
-
-  /* The kind glyph, then the domain (VET-245); the glyph carries the kind's
-     word for a screen reader. */
-  .pane small {
-    display: flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.875rem;
-    line-height: 1.45;
-    color: var(--text-tertiary);
-  }
-
-  /* The TLDR line (T14 fills it; `lib/library.ts › rowSummary` says what
-     stands in until then). */
-  .pane li > a > span {
-    margin-top: 0.125rem;
-    font-size: 0.875rem;
-    line-height: 1.45;
-    color: var(--text-secondary);
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    overflow: hidden;
-  }
-
-  /* A block's tip: one line (VET-273). */
-  .pane li > a > .tip {
-    -webkit-line-clamp: 1;
-    line-clamp: 1;
   }
 </style>

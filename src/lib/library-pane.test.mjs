@@ -84,9 +84,11 @@ test("Up, Down, Home and End walk the pane rows and stop at the ends", () => {
  * tag checkboxes, a chip row, a count, an empty state and the entry's hint
  * row; with `home`, two tagged items in the route's view.
  *
- * @param {{ search?: string, current?: number, home?: string, start?: string, pathname?: string }} options
+ * With `also`, an "Also saved" header and two rows follow the four (VET-273).
+ *
+ * @param {{ search?: string, current?: number, home?: string, start?: string, pathname?: string, also?: boolean }} options
  */
-function filter({ search = "", current = 1, home, start, pathname = "/library/e1" }) {
+function filter({ search = "", current = 1, home, start, pathname = "/library/e1", also = false }) {
   /** @param {Record<string, string>} attrs */
   const el = (attrs = {}) => {
     /** @type {Record<string, (event: object) => void>} */
@@ -134,12 +136,24 @@ function filter({ search = "", current = 1, home, start, pathname = "/library/e1
     const li = Object.assign(el(), {
       dataset: { kind, tags },
       firstElementChild: a,
+      textContent: `Entry ${index}`,
       querySelector: () => ({ textContent: `Entry ${index}` }),
     });
     Object.assign(a, { parentNode: li });
     return li;
   });
+  const alsoHead = Object.assign(el(), { dataset: {}, monthCount: el() });
+  Object.assign(alsoHead, { querySelector: () => alsoHead.monthCount });
+  const alsoRows = (also ? [["post", "agents"], ["article", "design"]] : []).map(([kind, tags], index) => {
+    const a = Object.assign(el(), { href: `/library/a${index}` });
+    const li = Object.assign(el({ "data-also": "" }), { dataset: { kind, tags }, firstElementChild: a, textContent: `Also ${index}`, querySelector: () => ({ textContent: `Also ${index}` }) });
+    Object.assign(a, { parentNode: li });
+    return li;
+  });
+  const listItems = [month, ...rows, ...(also ? [alsoHead, ...alsoRows] : [])];
+  const rowList = { querySelectorAll: () => listItems };
   const segs = ["", "article", "post", "video"].map((kind) => Object.assign(el(), { dataset: { kindSet: kind } }));
+  const segCounts = ["", "article", "post", "video"].map((kind) => Object.assign(el(), { dataset: { kindCount: kind } }));
   const list = el();
   const boxes = ["agents", "design"].map((tag) => {
     const box = Object.assign(el(), { value: tag, dataset: { label: tag }, count: el(), disabled: false });
@@ -171,10 +185,13 @@ function filter({ search = "", current = 1, home, start, pathname = "/library/e1
     querySelector: (/** @type {string} */ s) => (s.includes("entry-nav") ? hints : pane),
     /** @param {string} s */
     querySelectorAll: (s) =>
-      s.includes("kind-set") ? segs
+      s === "[data-rows]" ? [rowList]
+      : s.includes("kind-set") ? segs
+      : s.includes("kind-count") ? segCounts
       : s.includes("tag-set") ? boxes
       : s.includes("tag-chips") ? [chips]
-      : s.includes("count") ? [count]
+      : s.includes("filter-count") ? [count]
+      : s.includes("filter-empty") ? [empty]
       : s.includes("data-tags") ? items
       : [],
     createElement: () => el(),
@@ -199,7 +216,7 @@ function filter({ search = "", current = 1, home, start, pathname = "/library/e1
     box.checked = on;
     box.on.change?.({});
   };
-  return { list, rows, month, segs, boxes, chips, summary, count, empty, nav, replaced, items, location: { ...location, replaced: replacedTo }, tick };
+  return { list, rows, month, alsoHead, alsoRows, segs, segCounts, boxes, chips, summary, count, empty, nav, replaced, items, location: { ...location, replaced: replacedTo }, tick };
 }
 
 const shown = (/** @type {{ hidden: boolean }[]} */ rows) => rows.map((row) => (row.hidden ? 0 : 1)).join("");
@@ -334,4 +351,58 @@ test("a tag the filter leaves at 0 is disabled and sorted last; a ticked one nev
   const ticked = filter({ search: "?kind=article&tags=design" });
   assert.deepEqual(ticked.boxes.map((box) => box.disabled), [true, false]);
   assert.deepEqual(ticked.list.children.slice(-2).map((label) => label.tag), ["design", "agents"]);
+});
+
+/* The filtering model (VET-282): All is every entry, Also saved is a group at
+   the bottom, every filter applies to both groups, and every count agrees. */
+
+const counts = (/** @type {ReturnType<typeof filter>} */ pane) =>
+  Object.fromEntries(pane.segCounts.map((c) => [c.dataset.kindCount || "all", c.textContent]));
+
+test("All counts every entry, the main feed and Also saved together, the same in every place", () => {
+  const pane = filter({ also: true, current: -1 });
+  assert.equal(shown([...pane.rows, ...pane.alsoRows]), "111111");
+  assert.equal(pane.count.textContent, "6 entries");
+  assert.deepEqual(counts(pane), { all: 6, article: 2, post: 3, video: 1 });
+  assert.equal(pane.alsoHead.monthCount.textContent, 2);
+});
+
+test("select tag X: the list shows exactly the N entries carrying it across both groups, and the count reads N", () => {
+  const pane = filter({ also: true, current: -1 });
+  pane.tick("agents", true);
+  // agents: rows 0, 1, 3 in the main feed and the first Also saved row.
+  assert.equal(shown(pane.rows), "1101");
+  assert.equal(shown(pane.alsoRows), "10");
+  const n = [...pane.rows, ...pane.alsoRows].filter((row) => !row.hidden).length;
+  assert.equal(n, 4);
+  assert.equal(pane.count.textContent, `${n} entries`);
+  assert.equal(counts(pane).all, n, "All's segment reads the same N as the live count");
+  assert.deepEqual(counts(pane), { all: 4, article: 1, post: 2, video: 1 });
+  assert.equal(pane.month.monthCount.textContent, 3);
+  assert.equal(pane.alsoHead.monthCount.textContent, 1);
+  assert.equal(pane.alsoHead.hidden, false);
+});
+
+test("a kind and a tag narrow Also saved too; its header hides when nothing under it shows", () => {
+  const pane = filter({ also: true, current: -1, search: "?kind=video&tags=agents" });
+  assert.equal(shown([...pane.rows, ...pane.alsoRows]), "000100");
+  assert.equal(pane.count.textContent, "1 entry");
+  assert.equal(pane.alsoHead.hidden, true);
+  // A segment counts what pressing it would show under the same tags.
+  assert.deepEqual(counts(pane), { all: 4, article: 1, post: 2, video: 1 });
+});
+
+test("text search is a filter like the others, carried in the URL and on every row", () => {
+  const pane = filter({ also: true, current: -1, search: "?q=also%200" });
+  assert.equal(shown([...pane.rows, ...pane.alsoRows]), "000010");
+  assert.equal(pane.count.textContent, "1 entry");
+  assert.ok(pane.alsoRows[0]?.firstElementChild.search === "?q=also%200");
+});
+
+test("the view's items follow the filter on All too (B6's editorial mix)", () => {
+  const index = filter({ home: "/library", start: "", pathname: "/library", current: -1, also: true });
+  assert.deepEqual(index.items.map((item) => item.hidden), [false, false]);
+  index.tick("design", true);
+  assert.deepEqual(index.items.map((item) => item.hidden), [true, false]);
+  assert.deepEqual(index.replaced, ["/library?tags=design"]);
 });

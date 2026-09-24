@@ -1,6 +1,7 @@
 /**
- * pane-merge.ts — the private rows into a public page's library pane, in the
- * browser, once the signed-in module has them (VET-276).
+ * pane-merge.ts — the private rows into a public page's library list, in the
+ * browser, once the signed-in module has them (VET-276). Every copy of the
+ * list gets them: the pane's, and on /library the phone's (VET-282).
  *
  * It draws what `LibraryPane.astro` draws for a private row on /me (lock,
  * tip, `/me/library/<slug>`), puts each row where the /me pane would
@@ -88,12 +89,12 @@ function place(list: HTMLElement, rows: PaneRow[]): void {
   }
 }
 
-/** "Private N" after the kinds in every segmented control on the page, and N more under All. */
+/** "Private N" after the kinds in every segmented control on the page; `FILTER` recounts All and it. */
 function segments(count: number): void {
   for (const seg of document.querySelectorAll(".seg")) {
-    const all = seg.querySelector('[data-kind-set=""] .seg__count');
-    if (all) all.textContent = String(Number(all.textContent) + count);
-    const link = Object.assign(el("a", "seg__item", "Private ", el("span", "seg__count tabular-nums", String(count))), { href: "/me/library?kind=private" });
+    const tally = el("span", "seg__count tabular-nums", String(count));
+    tally.dataset.kindCount = "private";
+    const link = Object.assign(el("a", "seg__item", "Private ", tally), { href: "/me/library?kind=private" });
     link.dataset.kindSet = "private";
     seg.append(link);
   }
@@ -122,11 +123,12 @@ function tags(rows: PaneRow[]): void {
 
 export function mergePane(rows: PaneRow[]): void {
   const pane = document.querySelector<HTMLElement>("[data-pane]");
-  const list = pane?.querySelector<HTMLElement>("[data-rows]");
+  const lists = [...document.querySelectorAll<HTMLElement>("[data-rows]")];
   const filter = [...document.scripts].find((script) => !script.src && script.text.includes(FILTER_MARK));
-  if (!pane || !list || !filter || rows.length === 0 || list.querySelector('[data-kind="private"]')) return;
-  place(list, rows);
-  segments(rows.filter((row) => !row.also).length);
+  if (!pane || lists.length === 0 || !filter || rows.length === 0 || lists[0]!.querySelector('[data-kind="private"]')) return;
+  // Every copy of the list: the pane's, and /library's phone list (VET-282).
+  for (const list of lists) place(list, rows);
+  segments(rows.length);
   tags(rows);
   document.head.append(el("style", "", PANE_CSS));
   // FILTER bound its listeners to the old controls; clones drop them, and it
@@ -137,31 +139,4 @@ export function mergePane(rows: PaneRow[]): void {
     for (const link of document.querySelectorAll("[data-kind-set=private]")) link.addEventListener("click", (event) => event.stopImmediatePropagation());
   }
   document.body.append(el("script", "", filter.text));
-}
-
-/**
- * A phone has no pane (it hides under 48rem of the split), and /library's All
- * view is the page: the private rows go on top of it, the pane's own rows
- * with lock and tip, under a heading cloned from the view's own so its
- * scoped styles hold (VET-279). Hidden again wherever the pane shows.
- */
-const PHONE_CSS = ".me-phone .pane{display:flex;flex-direction:column;gap:2px}.me-phone .pane li>a{margin-inline:-.875rem}@container split (width >= 48rem){.me-phone{display:none}}";
-
-export function mergePhone(rows: PaneRow[]): void {
-  const shown = rows.filter((row) => !row.also);
-  const head = document.querySelector<HTMLElement>('[data-view=""] .mix__head:has(a)');
-  const part = head?.parentElement;
-  const link = head?.querySelector("a");
-  if (!head || !part?.parentElement || !link || shown.length === 0) return;
-  const title = head.cloneNode(false) as HTMLElement;
-  title.id = "mix-private";
-  title.append(Object.assign(head.firstElementChild?.cloneNode(false) ?? el("span", ""), { textContent: "Private" }), Object.assign(link.cloneNode(false), { href: "/me/library", textContent: `All ${shown.length}` }));
-  const items = shown.map(rowItem);
-  for (const item of items) delete item.dataset.tags;
-  const section = part.cloneNode(false) as HTMLElement;
-  section.classList.add("me-phone");
-  section.setAttribute("aria-labelledby", title.id);
-  section.append(title, el("ul", "pane", ...items));
-  part.parentElement.prepend(section);
-  document.head.append(el("style", "", PHONE_CSS));
 }

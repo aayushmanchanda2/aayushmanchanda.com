@@ -1,0 +1,203 @@
+---
+/**
+ * LibraryRows — the library list itself: every entry, newest first, under a
+ * header per month by `saved_date` (VET-267), then the quieter "Also saved"
+ * group (VET-273). `LibraryPane.astro` draws it beside every library page;
+ * /library draws it a second time as the phone's list (`LibraryViews.astro`,
+ * VET-282), where the pane is hidden. `lib/library-pane.ts › FILTER` filters
+ * every copy, and `lib/pane-merge.ts` merges private rows into each.
+ *
+ * It repeats on every entry page, so the row is kept small on purpose:
+ * three bare elements plus the kind glyph, no scoped-style attributes (the
+ * style block is global and namespaced to `.rows`), and the summary cut at
+ * 110 characters, about what the two-line clamp shows. The measured cost is
+ * in the VET-231 audit.
+ */
+import KindIcon from "./KindIcon.astro";
+import LockGlyph from "./LockGlyph.astro";
+import type { LibraryEntry } from "../lib/library";
+import { entryHref, rowSummary } from "../lib/library";
+import { privateHref } from "../lib/private";
+import { clipText } from "../lib/post";
+import { libraryPreview } from "../lib/assets";
+import { formatDay, formatMonth } from "../lib/date";
+
+interface Props {
+  entries: LibraryEntry[];
+  /** The slug of the entry on this page; its row gets `aria-current`. */
+  current?: string | undefined;
+  /** /me's private rows (VET-274): merged by date, lock-marked. */
+  extra?: LibraryEntry[];
+  /** The hover preview's data attributes: the pane's copy only. */
+  preview?: boolean;
+}
+
+const { entries, current, extra = [], preview = false } = Astro.props;
+
+/** Month headers over the main feed: "2026-09" -> its count. "Also saved" follows it (VET-273). */
+const byDate = [...entries, ...extra].sort((a, b) => b.saved_date.localeCompare(a.saved_date));
+const [main, also] = [byDate.filter((entry) => !entry.also_saved), byDate.filter((entry) => entry.also_saved)];
+const months = new Map<string, number>();
+for (const entry of main) months.set(entry.saved_date.slice(0, 7), (months.get(entry.saved_date.slice(0, 7)) ?? 0) + 1);
+const opens = (i: number) => i === 0 || main[i]!.saved_date.slice(0, 7) !== main[i - 1]!.saved_date.slice(0, 7);
+---
+
+<ul class="rows" data-rows>
+  {
+    [...main, ...also].map((entry, i) => {
+      const quiet = entry.also_saved;
+      const summary = quiet ? null : (entry.block?.tip ?? rowSummary(entry));
+      const own = extra.includes(entry);
+      return (
+        <>
+        {!quiet && opens(i) && (
+          <li class="pane__month mono" data-month>
+            {formatMonth(entry.saved_date)} · <span class="tabular-nums" data-month-count>{months.get(entry.saved_date.slice(0, 7))}</span>
+          </li>
+        )}
+        {i === main.length && <li class="pane__month pane__also mono" data-month>Also saved · <span class="tabular-nums" data-month-count>{also.length}</span></li>}
+        <li data-kind={own ? "private" : entry.kind} data-tags={entry.tags.join(" ")} data-also={quiet ? "" : undefined}>
+          <a
+            href={own ? privateHref(entry.slug) : entryHref(entry)}
+            data-astro-prefetch="hover"
+            aria-current={entry.slug === current ? "page" : undefined}
+            {...(own || !preview ? {} : libraryPreview(entry))}
+          >
+            <b>{entry.title}</b>
+            <small>
+              {!quiet && <KindIcon kind={entry.kind} />}
+              {own && <LockGlyph />}
+              <span>{entry.domain}</span>
+              {quiet && <time datetime={entry.saved_date}>{formatDay(entry.saved_date)}</time>}
+            </small>
+            {summary && <span class:list={[entry.block && "tip"]}>{clipText(summary, 110)}</span>}
+          </a>
+        </li>
+        </>
+      );
+    })
+  }
+</ul>
+
+<style is:global>
+  /* Global and namespaced: no scoped-style attributes on every entry page. */
+  .rows {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0.75rem;
+  }
+
+  .rows .pane__month {
+    padding: 0.625rem 0.875rem 0.375rem;
+    background: var(--bg);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+  }
+  /* Quieter than a month: the rows under it are kept, not featured (VET-273). */
+  .rows .pane__also {
+    margin-top: 1.5rem;
+    color: var(--text-tertiary);
+  }
+
+  .rows .pane__month .tabular-nums {
+    color: var(--text-tertiary);
+  }
+
+  .rows li[data-also] b {
+    font-weight: 400;
+    color: var(--text-secondary);
+  }
+
+  .rows li[data-also] time::before {
+    content: "\00b7" / "";
+    margin-right: 0.4rem;
+  }
+
+  .rows li > a {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding: 0.75rem 0.875rem;
+    border-radius: var(--r-lg);
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+  /* Notes' hairline between two rows (E8, VET-282), inset to the text and
+     gone beside a row that is lit, which draws its own edge. */
+  .rows li:not([data-month]) + li:not([data-month]) > a::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    inset-inline: 0.875rem;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .rows li > a[aria-current="page"]::before,
+  .rows li:has(> a[aria-current="page"]) + li > a::before {
+    display: none;
+  }
+  /* briOS's /hn row: hover and selected are one look, and hover is instant
+     (design.md §4). */
+  @media (hover: hover) {
+    .rows li > a:hover {
+      background: var(--surface-selected);
+      box-shadow: var(--shadow-contrast);
+    }
+
+    .rows li > a:hover::before,
+    .rows li:has(> a:hover) + li > a::before {
+      display: none;
+    }
+  }
+
+  .rows li > a[aria-current="page"] {
+    background: var(--surface-selected);
+    box-shadow: var(--shadow-contrast);
+  }
+  /* 14px UI text throughout the row (design.md §2). */
+  .rows b {
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.45;
+    overflow-wrap: anywhere;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+
+  /* The kind glyph, then the domain (VET-245); the glyph carries the kind's
+     word for a screen reader. */
+  .rows small {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: var(--text-tertiary);
+  }
+
+  /* The TLDR line (`lib/library.ts › rowSummary` says what stands in until
+     there is one). */
+  .rows li > a > span {
+    margin-top: 0.125rem;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    color: var(--text-secondary);
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+
+  /* A block's tip: one line (VET-273). */
+  .rows li > a > .tip {
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+  }
+</style>
