@@ -1,8 +1,9 @@
 ---
 /**
- * EntryBlock — the card at the top of a library entry (VET-273): who the
- * piece is for, the one tip, how long it takes, what you need, a prompt to
- * copy, and where to start. A `dl` of label/value rows, so a screen reader
+ * EntryBlock — the card at the top of a library entry (VET-273): the one
+ * thing to do next when there is one (first and largest: one action, then
+ * the rest), who the piece is for, the one tip, how long it takes, what you
+ * need, a prompt to copy, and where to start. A `dl` of label/value rows, so a screen reader
  * hears each label with its value; one column under 40rem.
  *
  * The prompt copies through `lib/copy-flash.ts`, the pattern /sites already
@@ -21,6 +22,14 @@ const { block } = Astro.props;
 
 <section class="blk" aria-label="The short version" data-copy-root>
   <dl class="blk__rows">
+    {
+      block.next_step && (
+        <>
+          <dt class="blk__next-label">Do this next</dt>
+          <dd class="blk__next">{block.next_step}</dd>
+        </>
+      )
+    }
     <dt>Best for</dt>
     <dd>{block.best_for}</dd>
     <dt>The tip</dt>
@@ -110,6 +119,25 @@ const { block } = Astro.props;
   }
 
   .blk__tip {
+    color: var(--text-primary);
+  }
+
+  /* The next step spans the card, over a hairline: the row to act on. */
+  .blk__next-label,
+  .blk__next {
+    grid-column: 1 / -1;
+  }
+
+  .blk__next-label {
+    color: var(--accent);
+  }
+
+  .blk__next {
+    padding-bottom: 0.875rem;
+    border-bottom: 1px solid var(--hairline);
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.4;
     color: var(--text-primary);
   }
 

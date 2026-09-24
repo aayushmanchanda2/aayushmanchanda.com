@@ -5,7 +5,10 @@
  *   node scripts/private-import.mjs --prod   # production, after the setup wizard has run
  *
  * Reads everything from the private folder next to this repo, never from the
- * repo: `library-private-archive.json` and `media/public/...`. Every entry
+ * repo: `library-private-archive.json`, `private-blocks.json` when it exists
+ * (each row's block, `why_saved` and `also_saved`, merged by slug) and
+ * `hermes-comments.json` when it exists (slug -> what he wrote Hermes on
+ * Telegram with the link) and `media/public/...`. Every entry
  * goes through `parseLibrary` first, the same parser the site builds with, so
  * a bad row stops here rather than on the page. Rows upsert by slug and files
  * skip when the stored copy has the same hash, so a re-run changes nothing.
@@ -13,12 +16,12 @@
  * private too: it is skipped, and removed from Convex with the files only it
  * used. Prints counts only.
  */
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { parseLibrary } from "../src/lib/library.ts";
-import { libraryJson } from "../src/lib/private.ts";
+import { libraryJson, mergeBlocks, ownNote, raindropHighlights } from "../src/lib/private.ts";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const PRIVATE = process.env["PRIVATE_DIR"] ?? path.join(ROOT, "..", "aayushmanchanda-private");
@@ -70,8 +73,16 @@ async function call(route, init = {}, tries = 3) {
   return body;
 }
 
-/** @type {{ entry: Record<string, unknown>, raindrop_id?: number | null, bucket?: string, raindrop_note?: string, sweep_note?: string }[]} */
-const archive = JSON.parse(readFileSync(path.join(PRIVATE, "library-private-archive.json"), "utf8"));
+/** @typedef {{ entry: Record<string, unknown>, raindrop_id?: number | null, bucket?: string, raindrop_note?: string, raindrop_highlights?: unknown, sweep_note?: string, why_saved?: string | null }} ArchiveRow */
+const BLOCKS = path.join(PRIVATE, "private-blocks.json");
+const merged = mergeBlocks(
+  /** @type {ArchiveRow[]} */ (JSON.parse(readFileSync(path.join(PRIVATE, "library-private-archive.json"), "utf8"))),
+  existsSync(BLOCKS) ? JSON.parse(readFileSync(BLOCKS, "utf8")) : [],
+);
+const archive = merged.rows;
+const COMMENTS = path.join(PRIVATE, "hermes-comments.json");
+/** @type {Record<string, string>} */
+const comments = existsSync(COMMENTS) ? JSON.parse(readFileSync(COMMENTS, "utf8")) : {};
 parseLibrary(archive.map((item) => libraryJson(item.entry)));
 
 const PUBLIC = new Set(JSON.parse(readFileSync(path.join(ROOT, "src", "data", "library.json"), "utf8")).map((/** @type {{ slug: string }} */ e) => e.slug));
@@ -87,7 +98,10 @@ const rows = archive.filter((item) => !isPublic(item)).map((item) => ({
   ...item.entry,
   raindrop_id: item.raindrop_id ?? null,
   bucket: item.bucket ?? null,
-  raindrop_note: item.raindrop_note || null,
+  raindrop_note: ownNote(item.raindrop_note),
+  raindrop_highlights: raindropHighlights(item.raindrop_highlights),
+  why_saved: item.why_saved || null,
+  telegram_note: comments[String(item.entry["slug"])] || null,
   sweep_note: item.sweep_note || null,
 }));
 
@@ -127,6 +141,7 @@ const counts = await call("/import");
 console.log(
   `target=${prod ? "prod" : "dev"} rows_sent=${rows.length} inserted=${total.inserted} updated=${total.updated} ` +
     `files_sent=${files.length} files_stored=${stored} files_unchanged=${files.length - stored} ` +
-    `public_skipped=${pruneSlugs.length} rows_pruned=${pruned.rows} files_pruned=${pruned.files} ` +
+    `blocks=${existsSync(BLOCKS) ? archive.filter((item) => item.entry["block"]).length : "no-file"} blocks_unmatched=${merged.unmatched.length} ` +
+    `notes=${rows.filter((row) => row.raindrop_note).length} telegram=${rows.filter((row) => row.telegram_note).length} public_skipped=${pruneSlugs.length} rows_pruned=${pruned.rows} files_pruned=${pruned.files} ` +
     `entries_in_convex=${counts.entries} media_in_convex=${counts.media}`,
 );
