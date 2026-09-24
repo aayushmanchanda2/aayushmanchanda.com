@@ -13,7 +13,7 @@
     "check": "astro check",
     "og": "node scripts/og.mjs",
     "test": "node --experimental-strip-types --disable-warning=ExperimentalWarning --test pipeline/*.test.mjs src/lib/*.test.mjs",
-    "validate:schema": "node scripts/validate-schema.mjs",
+    "validate:schema": "node scripts/validate-schema.mjs && node scripts/image-budget.mjs",
     "doodles": "node scripts/doodles.mjs"
   },
   "dependencies": {

@@ -16,6 +16,7 @@ import type { Site } from "../lib/sites";
 import { domainSlug, screensOf } from "../lib/sites";
 import { formatDay } from "../lib/date";
 import { previewAttributes } from "../lib/preview-card";
+import { cropOf, previewOf } from "../lib/thumbs";
 import CollectionChips from "./CollectionChips.astro";
 import PreviewCard from "./PreviewCard.astro";
 import PaletteRow from "./PaletteRow.astro";
@@ -50,7 +51,7 @@ const screens = screensOf(site.slug);
                 href={`/sites/${screen.site.slug}`}
                 aria-current={screen.site.slug === site.slug ? "page" : undefined}
               >
-                <img class="screen__shot" src={screen.site.shot} alt="" loading="lazy" decoding="async" />
+                <img class="screen__shot" src={cropOf(screen.site.shot).src} srcset={cropOf(screen.site.shot).webp} sizes="8rem" width="960" height="600" alt="" loading="lazy" decoding="async" />
                 <span class="screen__label">{screen.label}</span>
               </a>
             </li>
@@ -61,7 +62,7 @@ const screens = screensOf(site.slug);
   }
 
   <figure class="shot">
-    <ShotFrame src={site.shot} alt={`Full page of ${site.title}`} eager />
+    <ShotFrame src={site.shot} alt={`Full page of ${site.title}`} eager priority />
 
     {/*
       The caption IS the bar. `figcaption` has to be the first or last child of
@@ -125,7 +126,7 @@ const screens = screensOf(site.slug);
           href={site.url}
           rel="noopener nofollow"
           target="_blank"
-          {...previewAttributes({ image: site.shot, name: site.title, domain: site.domain })}
+          {...previewAttributes({ image: previewOf(site.shot), name: site.title, domain: site.domain })}
         >
           Visit {site.domain}
         </a>

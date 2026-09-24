@@ -30,16 +30,26 @@ interface Props {
   collections: string[];
   /** Off inside a row that is already a link. */
   linked?: boolean;
+  /**
+   * The collection this page is (the filter row on `/sites/collection/<slug>`):
+   * its chip is on, wears a ×, and leads back to /sites (VET-309).
+   */
+  current?: string;
 }
 
-const { collections, linked = true } = Astro.props;
+const { collections, linked = true, current } = Astro.props;
 ---
 
 <ul class="collections">
   {
     collections.map((slug) => (
       <li>
-        {linked ? (
+        {slug === current ? (
+          <a class="chip chip--link" data-tone="blue" href="/sites" aria-current="page" aria-label={`Remove filter: ${collectionLabel(slug)}`}>
+            {collectionLabel(slug)}
+            <span aria-hidden="true">×</span>
+          </a>
+        ) : linked ? (
           <a class="chip chip--link" data-tone="gray" href={`/sites/collection/${slug}`}>
             {collectionLabel(slug)}
           </a>

@@ -18,6 +18,7 @@ import { formatDay } from "../lib/date";
 import { paletteFamilies } from "../lib/hues";
 import { previewAttributes } from "../lib/preview-card";
 import type { SiteGroup } from "../lib/screens";
+import { previewOf } from "../lib/thumbs";
 
 interface Props {
   groups: SiteGroup[];
@@ -39,7 +40,7 @@ const { groups } = Astro.props;
     {
       groups.map(({ primary, screens }) => (
         <tr
-          {...previewAttributes({ image: primary.shot, name: primary.title, domain: primary.domain, note: primary.like })}
+          {...previewAttributes({ image: previewOf(primary.shot), name: primary.title, domain: primary.domain, note: primary.like })}
           data-hues={paletteFamilies(primary.palette).join(" ")}
         >
           <td>

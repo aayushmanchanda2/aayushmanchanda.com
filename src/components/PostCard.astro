@@ -19,6 +19,7 @@
  * The words themselves are `PostText.astro`: lists, links and the keyline.
  */
 import type { Post } from "../lib/library";
+import { webpSize } from "../lib/assets";
 import { formatDay } from "../lib/date";
 import { hueSlot } from "../lib/tags";
 import { POST_CARD_MAX, clipText, monogram, originalUrl } from "../lib/post";
@@ -49,7 +50,7 @@ const initial = monogram(post.author);
   <header class="pc__head">
     {
       post.avatar ? (
-        <img class="pc__avatar" src={post.avatar} alt="" width="40" height="40" decoding="async" draggable="false" />
+        <img class="pc__avatar" src={post.avatar} alt="" width="40" height="40" loading="lazy" decoding="async" draggable="false" />
       ) : (
         initial !== "" && (
           <span class="pc__avatar monogram" data-hue={hueSlot(post.handle)} aria-hidden="true">
@@ -69,7 +70,7 @@ const initial = monogram(post.author);
     post.article && (
       <div class="pc__article">
         {post.article.cover && (
-          <img class="pc__cover outlined" src={post.article.cover} alt="" loading="lazy" decoding="async" />
+          <img class="pc__cover outlined" src={post.article.cover} {...webpSize(post.article.cover)} alt="" loading="lazy" decoding="async" />
         )}
         <p class="pc__article-title">{post.article.title}</p>
         <slot />

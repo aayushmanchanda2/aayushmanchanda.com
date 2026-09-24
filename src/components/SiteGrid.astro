@@ -34,8 +34,11 @@ const { groups } = Astro.props;
  */
 const STAGGER_CAP = 8;
 
-/** The first row at the widest breakpoint is the LCP candidate: not lazy. */
+/** The first row at the widest breakpoint is above the fold: not lazy. Only the first card, the LCP, is high priority. */
 const EAGER_COUNT = 4;
+
+/** The card's width at each column count (the grid below). */
+const SIZES = "(min-width: 1536px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw";
 ---
 
 <ul class="grid" data-sites-grid>
@@ -48,7 +51,7 @@ const EAGER_COUNT = 4;
           data-panel-open
           data-slugs={screens.map((screen) => screen.site.slug).join(" ")}
         >
-          <ShotFrame src={primary.shot} alt="" crop eager={index < EAGER_COUNT} />
+          <ShotFrame src={primary.shot} alt="" crop sizes={SIZES} eager={index < EAGER_COUNT} priority={index === 0} />
           <span class="card__meta">
             <span class="card__title">{primary.title}</span>
             {screens.length > 1 && <span class="card__count mono">{screens.length} screens</span>}
