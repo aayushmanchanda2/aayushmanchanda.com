@@ -2297,7 +2297,41 @@
         "cover": "/posts/2103145763098566858/cover.webp"
       }
     },
-    "media_retrieved": "2026-09-24"
+    "media_retrieved": "2026-09-24",
+    "tldr": "Tomasz Tunguz argues software engineers now design agent systems, constraints, and verification loops rather than hand-writing every line of code.",
+    "highlights": [
+      {
+        "text": "This is the new software engineering : designing the systems that let AI write code correctly at scale.",
+        "note": "The job shifts from writing lines to designing reliable systems.",
+        "color": "amber"
+      },
+      {
+        "text": "Three properties define great system design : resilience, self-organization & hierarchy.",
+        "note": "These are the organizing principles.",
+        "color": "blue"
+      },
+      {
+        "text": "Self-organization is the loop learning, so a class of failure becomes a new skill the agent applies next time.",
+        "note": "Repeated failures should become reusable agent behavior.",
+        "color": "green"
+      }
+    ],
+    "excerpt": "“Writing code by hand is no longer an economically productive enterprise for the vast majority of programmers working at the vast majority of companies. That’s today. By the end of the year, it will be virtually all domains, virtually all programmers, virtually all companies.”",
+    "block": {
+      "best_for": "Engineering leaders building agentic software delivery systems",
+      "tip": "Put verification loops, reusable skills, and production observability around agent-generated code.",
+      "needs": [
+        "Tests",
+        "A reviewer agent",
+        "Production observability",
+        "Reusable skills and tools"
+      ],
+      "start_here": [
+        "Define the system architecture and constraints.",
+        "Add tests and a reviewer agent so AI can validate its work.",
+        "Turn repeated failures into reusable skills and components."
+      ]
+    }
   },
   {
     "slug": "claude-full-course-1-hour-build-automate-anything",
