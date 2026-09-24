@@ -82,6 +82,28 @@ const outCard = (href: string) =>
     <p class="standfirst">{tool.note}</p>
   </header>
 
+  {/*
+    The tool's own site, first screen (`pipeline/preview.mjs`, the picture its
+    hover card and share card use too), framed like a /sites shot. The page's
+    largest picture, so it loads first; width and height reserve its box.
+  */}
+  {
+    shot && (
+      <figure class="preview dotted-grid dotted-grid--fine">
+        <img
+          class="tool-preview__img outlined"
+          src={shot}
+          alt={`The ${tool.name} website`}
+          width="800"
+          height="420"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
+      </figure>
+    )
+  }
+
   <VoiceBlocks
     why={tool.why}
     like={tool.like}
@@ -116,6 +138,21 @@ const outCard = (href: string) =>
 </article>
 
 <style>
+  /* --- the preview: the /sites frame, at the pipeline's 40:21 ---------------- */
+  .preview {
+    margin: 2rem 0 0;
+    padding: 8px;
+    background-color: var(--bg);
+    border: 1px solid var(--hairline);
+  }
+
+  .tool-preview__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    background-color: var(--bg);
+  }
+
   /* --- the metadata strip --------------------------------------------------- */
 
   /* Between the title and the standfirst, not under it: the strip is what the
