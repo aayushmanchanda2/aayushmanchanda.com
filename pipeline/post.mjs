@@ -207,14 +207,14 @@ async function localise(tweet, publicDir, fetch) {
   // One picture that will not fetch costs that picture, never the post. It
   // gets a second try and a log line: a single silent miss left the Waterloo
   // post without its avatar for good (VET-284), and nothing retries later.
-  const tryPicture = (/** @type {string} */ url, /** @type {string} */ name) => {
+  const tryPicture = async (/** @type {string} */ url, /** @type {string} */ name) => {
     const get = () => picture(url, id, name, name === "avatar" ? AVATAR_WIDTH : PICTURE_WIDTH, publicDir, fetch);
-    return get()
-      .catch(get)
-      .catch((/** @type {unknown} */ error) => {
-        console.warn(`warn: post ${id} kept no ${name} — ${describe(error)}`);
-        return null;
-      });
+    try {
+      return await get().catch(get);
+    } catch (error) {
+      console.warn(`warn: post ${id} kept no ${name} — ${describe(error)}`);
+      return null;
+    }
   };
   const avatar = tweet.avatar && (await tryPicture(tweet.avatar, "avatar"));
 
