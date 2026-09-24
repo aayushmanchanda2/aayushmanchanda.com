@@ -1,0 +1,118 @@
+{
+  "390": {
+    "filtered": {
+      "url": "/sites/?hue=blue",
+      "onChip": "Remove filter: Blue",
+      "xVisible": true,
+      "clearVisible": true,
+      "clearHitPx": 46,
+      "chipHitPx": 46,
+      "cardsShown": 8,
+      "status": ""
+    },
+    "afterClear": {
+      "url": "/sites/",
+      "onChip": null,
+      "xVisible": false,
+      "clearVisible": false,
+      "clearHitPx": null,
+      "chipHitPx": 46,
+      "cardsShown": 32,
+      "status": "All 32 sites"
+    },
+    "afterReload": {
+      "url": "/sites/",
+      "onChip": null,
+      "xVisible": false,
+      "clearVisible": false,
+      "clearHitPx": null,
+      "chipHitPx": 46,
+      "cardsShown": 32,
+      "status": ""
+    },
+    "afterChipTap": {
+      "url": "/sites/",
+      "onChip": null,
+      "xVisible": false,
+      "clearVisible": false,
+      "clearHitPx": null,
+      "chipHitPx": 46,
+      "cardsShown": 32,
+      "status": "All 32 sites"
+    },
+    "collection": {
+      "onChip": "Remove filter: portfolios",
+      "onHref": "http://localhost:4410/sites",
+      "clearHref": "/sites",
+      "clearVisible": true
+    },
+    "collectionX": {
+      "url": "/sites/"
+    },
+    "pictures": {
+      "thumbs": {
+        "n": 32,
+        "maxRatio": 1.36,
+        "example": "/thumbs/ghost-960.avif"
+      }
+    }
+  },
+  "1280": {
+    "filtered": {
+      "url": "/sites/?hue=blue",
+      "onChip": "Remove filter: Blue",
+      "xVisible": true,
+      "clearVisible": true,
+      "clearHitPx": 40,
+      "chipHitPx": 40,
+      "cardsShown": 8,
+      "status": ""
+    },
+    "afterClear": {
+      "url": "/sites/",
+      "onChip": null,
+      "xVisible": false,
+      "clearVisible": false,
+      "clearHitPx": null,
+      "chipHitPx": 40,
+      "cardsShown": 32,
+      "status": "All 32 sites"
+    },
+    "afterReload": {
+      "url": "/sites/",
+      "onChip": null,
+      "xVisible": false,
+      "clearVisible": false,
+      "clearHitPx": null,
+      "chipHitPx": 40,
+      "cardsShown": 32,
+      "status": ""
+    },
+    "afterChipTap": {
+      "url": "/sites/",
+      "onChip": null,
+      "xVisible": false,
+      "clearVisible": false,
+      "clearHitPx": null,
+      "chipHitPx": 40,
+      "cardsShown": 32,
+      "status": "All 32 sites"
+    },
+    "collection": {
+      "onChip": "Remove filter: portfolios",
+      "onHref": "http://localhost:4410/sites",
+      "clearHref": "/sites",
+      "clearVisible": true
+    },
+    "collectionX": {
+      "url": "/sites/"
+    },
+    "pictures": {
+      "thumbs": {
+        "n": 32,
+        "maxRatio": 1.24,
+        "example": "/thumbs/ghost-480.avif"
+      }
+    }
+  }
+}

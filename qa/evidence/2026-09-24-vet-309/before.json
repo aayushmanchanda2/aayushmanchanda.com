@@ -1,0 +1,111 @@
+{
+  "base": "http://localhost:4409",
+  "date": "2026-09-24T19:39:49.528Z",
+  "routes": {
+    "/sites/": {
+      "lighthouse": {
+        "score": 71,
+        "lcpMs": 16904,
+        "tbtMs": 0,
+        "cls": 0,
+        "totalKB": 4095,
+        "imageRequests": 16,
+        "imageKB": 3805,
+        "tbtMsRuns": [
+          0,
+          0,
+          0
+        ],
+        "lcpMsRuns": [
+          16812,
+          16904,
+          16918
+        ]
+      },
+      "scroll": {
+        "htmlKB": 146,
+        "img": 60,
+        "eager": 4,
+        "high": 4,
+        "fullShotSrc": 32,
+        "loadImageKB": 3805,
+        "scrollImageKB": 6079,
+        "scrollPx": 8000,
+        "frames": 1677,
+        "fps": 116,
+        "longFrames50": 1,
+        "worstFrameMs": 134
+      }
+    },
+    "/sites/arc-from-the-browser-company/": {
+      "lighthouse": {
+        "score": 75,
+        "lcpMs": 6692,
+        "tbtMs": 0,
+        "cls": 0,
+        "totalKB": 1002,
+        "imageRequests": 6,
+        "imageKB": 792,
+        "tbtMsRuns": [
+          0,
+          0,
+          0
+        ],
+        "lcpMsRuns": [
+          6691,
+          6692,
+          6695
+        ]
+      },
+      "scroll": {
+        "htmlKB": 69,
+        "img": 1,
+        "eager": 1,
+        "high": 1,
+        "fullShotSrc": 1,
+        "loadImageKB": 792,
+        "scrollImageKB": 792,
+        "scrollPx": 1650,
+        "frames": 456,
+        "fps": 120,
+        "longFrames50": 0,
+        "worstFrameMs": 9
+      }
+    },
+    "/tools/": {
+      "lighthouse": {
+        "score": 77,
+        "lcpMs": 4362,
+        "tbtMs": 0,
+        "cls": 0,
+        "totalKB": 686,
+        "imageRequests": 32,
+        "imageKB": 194,
+        "tbtMsRuns": [
+          0,
+          0,
+          0
+        ],
+        "lcpMsRuns": [
+          4288,
+          4362,
+          4369
+        ]
+      },
+      "scroll": {
+        "htmlKB": 346,
+        "img": 125,
+        "eager": 0,
+        "high": 0,
+        "fullShotSrc": 0,
+        "loadImageKB": 194,
+        "scrollImageKB": 447,
+        "scrollPx": 7202,
+        "frames": 1540,
+        "fps": 118,
+        "longFrames50": 0,
+        "worstFrameMs": 33
+      }
+    }
+  }
+}
