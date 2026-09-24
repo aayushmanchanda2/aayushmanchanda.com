@@ -30,13 +30,15 @@ import { fileURLToPath } from "node:url";
 const SRC = fileURLToPath(new URL("..", import.meta.url));
 
 /**
- * The only two surfaces allowed to contain a scroll, relative to `src/`.
+ * The only surfaces allowed to contain a scroll, relative to `src/`.
  *
- * Both are modals: the palette's results list and the mobile nav's sheet. A
- * third entry needs the reasoning written into design.md §4 first — it is the
- * document that makes this list mean something.
+ * Two are modals: the palette's results list and the mobile nav's sheet. The
+ * third is the library's list pane (VET-284): a sidebar beside the page, never
+ * the page's own content, where a drag past its end moved the detail instead
+ * and the pane looked stuck on a tablet. Each entry has its reasoning in
+ * design.md §4 first — it is the document that makes this list mean something.
  */
-const MODALS = ["styles/palette.css", "components/MobileNavPanel.astro"];
+const MODALS = ["styles/palette.css", "components/MobileNavPanel.astro", "components/LibraryPane.astro"];
 
 /**
  * Every shipped file under `src/`, so a new surface cannot land outside the
@@ -90,7 +92,7 @@ test("every `contain` sits on a modal", () => {
   );
 });
 
-test("both modals still contain their scroll", () => {
+test("every allowed surface still contains its scroll", () => {
   const containing = declarations()
     .filter((d) => d.value === "contain")
     .map((d) => d.file);

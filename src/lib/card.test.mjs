@@ -116,10 +116,11 @@ test("every picture a post card would draw is a file in this repository", () => 
    The wall is one route's layout
    --------------------------------------------------------------------------- */
 
-test("nothing lays content out in columns", () => {
-  // The posts wall was the one multi-column box and it is a grid now, so posts
-  // read newest first across. A multi-column box reads down-then-across.
-  for (const file of walk("")) {
+test("nothing but the posts wall lays content out in columns", () => {
+  // A multi-column box reads down-then-across. The posts wall is the one
+  // place that trade is taken: Aayush asked for masonry (VET-284), cards as
+  // tall as their posts, and columns are the JS-free way to it.
+  for (const file of walk("").filter((file) => file !== "components/PostWall.astro")) {
     const source = code(read(file));
     assert.ok(
       !/(^|[;{\s])(column-width|column-count|columns)\s*:/.test(source),
