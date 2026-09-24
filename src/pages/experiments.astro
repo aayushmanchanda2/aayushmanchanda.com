@@ -2,16 +2,17 @@
 /**
  * /experiments — what is running, and what stopped.
  *
- * The /tools row anatomy, minus the favicon: an experiment is not a product
- * with a homepage, so there is nothing to fetch a mark for. Everything else
- * matches, down to the chip and the dated metadata column, because a reader
- * moving between the two sections should not have to relearn the page.
+ * VET-280's pass: its own raspberry mat and a postmark (`Stamp.astro`), a
+ * tally of all four statuses under the standfirst (a zero is a fact: nothing
+ * killed yet), and rows at an entry's grain, not a table's: an 18px name and
+ * his line at 16px, since each one is a sentence to read. A killed row keeps
+ * its place and drops its name to tertiary ink.
  */
 import Mark from "../components/Mark.astro";
 import Base from "../layouts/Base.astro";
 import EntryLink from "../components/EntryLink.astro";
 import StatusChip from "../components/StatusChip.astro";
-import { experiments } from "../lib/experiments";
+import { STATUSES, experiments } from "../lib/experiments";
 import { anchorUrl, listJsonLd } from "../lib/schema";
 import { formatDay } from "../lib/date";
 
@@ -24,6 +25,11 @@ import { formatDay } from "../lib/date";
  * would send half of them nowhere and the rest somewhere they were not asked
  * about.
  */
+const tally = STATUSES.map((status) => ({
+  status,
+  count: experiments.filter((experiment) => experiment.status === status).length,
+}));
+
 const jsonLd = listJsonLd({
   name: "Experiments",
   path: "/experiments",
@@ -47,6 +53,17 @@ const jsonLd = listJsonLd({
     </p>
   </header>
 
+  <ul class="tally" aria-label="Experiments by status">
+    {
+      tally.map(({ status, count }) => (
+        <li class="tally__item" data-empty={count === 0 || undefined}>
+          <StatusChip status={status} muted={count === 0} />
+          <span class="tally__count mono">{count}</span>
+        </li>
+      ))
+    }
+  </ul>
+
   <ul class="list">
     {
       experiments.map((experiment) => (
@@ -56,7 +73,7 @@ const jsonLd = listJsonLd({
          * /library rows, and more forced here: an experiment's `links` may be
          * empty, so for some of these there is no other destination at all.
          */
-        <li class="row" id={experiment.slug}>
+        <li class="row" id={experiment.slug} data-status={experiment.status}>
           <span class="row__name">
             {experiment.name}
             <StatusChip status={experiment.status} />
@@ -84,8 +101,31 @@ const jsonLd = listJsonLd({
 </Base>
 
 <style>
-  .list {
+  .tally {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
     margin-top: var(--gap-masthead);
+  }
+
+  .tally__item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .tally__count {
+    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* A status nobody is in yet: the word stays gray, the zero quieter. */
+  .tally__item[data-empty] .tally__count {
+    color: var(--text-tertiary);
+  }
+
+  .list {
+    margin-top: 1rem;
     border-top: 1px solid var(--hairline);
   }
 
@@ -104,7 +144,7 @@ const jsonLd = listJsonLd({
        §2's rhythm */
     row-gap: 0.5rem;
     align-items: start;
-    padding-block: 1rem;
+    padding-block: 1.25rem;
     border-bottom: 1px solid var(--hairline);
   }
 
@@ -116,18 +156,25 @@ const jsonLd = listJsonLd({
     grid-area: name;
     display: flex;
     flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.5rem 0.65rem;
-    font-size: 0.875rem;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+    font-size: 1.125rem;
     font-weight: 500;
-    line-height: 1.45;
+    line-height: 1.4;
+    text-wrap: balance;
+  }
+
+  .row[data-status="killed"] .row__name {
+    color: var(--text-tertiary);
   }
 
   .row__note {
     grid-area: note;
-    font-size: 0.875rem;
-    line-height: 1.45;
+    max-width: 38rem;
+    font-size: 1rem;
+    line-height: 1.55;
     color: var(--text-secondary);
+    text-wrap: pretty;
   }
 
   .row__date {
@@ -135,8 +182,8 @@ const jsonLd = listJsonLd({
     color: var(--text-tertiary);
     white-space: nowrap;
     text-align: right;
-    /* optical: line the date up with the name, not the row box */
-    padding-top: 0.2rem;
+    /* optical: line the date up with the 18px name, not the row box */
+    padding-top: 0.3rem;
   }
 
   .row__links {

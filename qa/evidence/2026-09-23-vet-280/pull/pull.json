@@ -1,0 +1,158 @@
+{
+  "androidAtRest": {
+    "active": false,
+    "armed": false,
+    "opacity": "0",
+    "top": 31,
+    "height": 44,
+    "pullTop": true,
+    "overscroll": "none",
+    "marker": 1
+  },
+  "androidFrames": [
+    {
+      "dy": 30,
+      "png": "qa/evidence/2026-09-23-vet-280/pull/frame-030.png",
+      "active": true,
+      "armed": false,
+      "opacity": "1",
+      "top": 41,
+      "height": 44,
+      "pullTop": true,
+      "overscroll": "none",
+      "marker": 1
+    },
+    {
+      "dy": 60,
+      "png": "qa/evidence/2026-09-23-vet-280/pull/frame-060.png",
+      "active": true,
+      "armed": false,
+      "opacity": "1",
+      "top": 54,
+      "height": 44,
+      "pullTop": true,
+      "overscroll": "none",
+      "marker": 1
+    },
+    {
+      "dy": 100,
+      "png": "qa/evidence/2026-09-23-vet-280/pull/frame-100.png",
+      "active": true,
+      "armed": false,
+      "opacity": "1",
+      "top": 68,
+      "height": 44,
+      "pullTop": true,
+      "overscroll": "none",
+      "marker": 1
+    },
+    {
+      "dy": 140,
+      "png": "qa/evidence/2026-09-23-vet-280/pull/frame-140.png",
+      "active": true,
+      "armed": true,
+      "opacity": "1",
+      "top": 80,
+      "height": 45,
+      "pullTop": true,
+      "overscroll": "none",
+      "marker": 1
+    },
+    {
+      "dy": 200,
+      "png": "qa/evidence/2026-09-23-vet-280/pull/frame-200.png",
+      "active": true,
+      "armed": true,
+      "opacity": "1",
+      "top": 94,
+      "height": 48,
+      "pullTop": true,
+      "overscroll": "none",
+      "marker": 1
+    },
+    {
+      "dy": 260,
+      "png": "qa/evidence/2026-09-23-vet-280/pull/frame-260.png",
+      "active": true,
+      "armed": true,
+      "opacity": "1",
+      "top": 104,
+      "height": 51,
+      "pullTop": true,
+      "overscroll": "none",
+      "marker": 1
+    }
+  ],
+  "androidReloaded": true,
+  "androidAfter": {
+    "active": false,
+    "armed": false,
+    "opacity": "0",
+    "top": 31,
+    "height": 44,
+    "pullTop": true,
+    "overscroll": "none",
+    "marker": null
+  },
+  "shortMid": {
+    "active": true,
+    "armed": false,
+    "opacity": "1",
+    "top": 54,
+    "height": 44,
+    "pullTop": true,
+    "overscroll": "none",
+    "marker": 1
+  },
+  "shortAfter": {
+    "active": false,
+    "armed": false,
+    "opacity": "0",
+    "top": 31,
+    "height": 44,
+    "pullTop": true,
+    "overscroll": "none",
+    "marker": 1
+  },
+  "scrolledMid": {
+    "active": false,
+    "armed": false,
+    "opacity": "0",
+    "top": 31,
+    "height": 44,
+    "pullTop": false,
+    "overscroll": "auto",
+    "marker": 1
+  },
+  "iosMid": {
+    "active": false,
+    "armed": false,
+    "opacity": "0",
+    "top": 31,
+    "height": 44,
+    "pullTop": false,
+    "overscroll": "auto",
+    "marker": 1
+  },
+  "iosAfter": {
+    "active": false,
+    "armed": false,
+    "opacity": "0",
+    "top": 31,
+    "height": 44,
+    "pullTop": false,
+    "overscroll": "auto",
+    "marker": 1
+  },
+  "reducedMid": {
+    "active": true,
+    "armed": true,
+    "opacity": "1",
+    "top": 87,
+    "height": 44,
+    "pullTop": true,
+    "overscroll": "none",
+    "marker": 1
+  },
+  "reducedReloaded": true
+}

@@ -47,7 +47,7 @@ async function notes(): Promise<FeedItem[]> {
 
 function libraryItems(): FeedItem[] {
   return library.map((entry) => {
-    // The TLDR says what the piece is; a digest is his call on it and follows.
+    // The TLDR says what the piece is; a digest is his agents' call on it and follows.
     const text = entry.digest
       ? paragraphs(entry.tldr, entry.digest.verdict, entry.digest.why)
       : paragraphs(entry.why, rowSummary(entry) ?? (entry.post?.article ? null : entry.post?.text));

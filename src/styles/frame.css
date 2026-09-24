@@ -79,10 +79,18 @@ html {
   --mat: light-dark(oklch(0.62 0.17 calc(var(--mat-h) - 24)), oklch(0.42 0.14 calc(var(--mat-h) - 30)));
 }
 
+/* Raspberry (VET-280): a lab's colour, clear of the violet and the amber. */
+[data-section="experiments"] {
+  --mat-hi: light-dark(oklch(0.6 0.19 358), oklch(0.43 0.15 358));
+  --mat: light-dark(oklch(0.48 0.2 350), oklch(0.31 0.13 350));
+  --mat-h: 354;
+}
+
 [data-section="tools"],
 [data-section="sites"],
 [data-section="library"],
-[data-section="notes"] {
+[data-section="notes"],
+[data-section="experiments"] {
   --ink-c: 0.085;
 }
 

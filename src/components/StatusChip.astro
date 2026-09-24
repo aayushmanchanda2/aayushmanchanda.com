@@ -21,9 +21,11 @@ const TONES: Record<Status, string> = {
 
 interface Props {
   status: Status;
+  /** Gray, for a status nobody is in yet (the /experiments tally). */
+  muted?: boolean;
 }
 
-const { status } = Astro.props;
+const { status, muted = false } = Astro.props;
 ---
 
-<span class="chip" data-tone={TONES[status]}>{status}</span>
+<span class="chip" data-tone={muted ? "gray" : TONES[status]}>{status}</span>

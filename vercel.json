@@ -226,10 +226,10 @@
       "handle": "filesystem"
     },
     {
-      "src": "^/library/[^/]+?(?:\\.md)?/?$",
+      "src": "^/(library|tools)/[^/]+?(?:\\.md)?/?$",
       "status": 308,
       "headers": {
-        "Location": "/library"
+        "Location": "/$1"
       }
     },
     {

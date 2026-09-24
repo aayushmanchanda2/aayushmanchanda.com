@@ -10,9 +10,10 @@
  * The Dock is a shortcut, the way a phone's Dock repeats nothing but reads as
  * the apps you open most.
  *
- * Icons are 56px and shrink to fit a phone (`--icon-size` off the grid's
- * width). Hovering one lifts it and, less, its neighbours: macOS's
- * magnification in CSS, with no motion under reduced motion.
+ * Icons are 56px and shrink to fit (`--icon-size` off the grid's width); a
+ * grid under 600px shows the first four, as a phone's Dock does. Hovering
+ * one lifts it and, less, its neighbours: macOS's magnification in CSS,
+ * with no motion under reduced motion.
  */
 import AppIcon from "./AppIcon.astro";
 import type { Tool } from "../lib/tools";
@@ -52,11 +53,31 @@ const { tools } = Astro.props;
   }
 
   .dock__apps {
+    --shown: var(--n);
     display: flex;
     align-items: flex-end;
     gap: var(--gap);
-    /* 56px, or whatever eight across leaves on a phone */
-    --icon-size: min(3.5rem, (100cqi - 2 * var(--pad-x) - 2px - (var(--n) - 1) * var(--gap)) / var(--n));
+    /* 56px, or whatever the shown icons leave across the grid */
+    --icon-size: min(3.5rem, (100cqi - 2 * var(--pad-x) - 2px - (var(--shown) - 1) * var(--gap)) / var(--shown));
+  }
+
+  /* A phone's Dock holds four (VET-280): eight across a 390px screen drew
+     34px specks. The first four are the newest "using" verdicts. */
+  @container (max-width: 37.5rem) {
+    .dock {
+      --gap: 1rem;
+      --pad-x: 0.875rem;
+      padding-block: 0.75rem;
+      border-radius: 2rem;
+    }
+
+    .dock__apps {
+      --shown: min(var(--n), 4);
+    }
+
+    .dock__app:nth-child(n + 5) {
+      display: none;
+    }
   }
 
   .dock__link {

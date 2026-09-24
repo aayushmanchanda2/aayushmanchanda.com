@@ -111,11 +111,12 @@ export function tick({ rate = 1 } = {}): void {
 }
 
 /**
- * Only called from inside a press, the one place a context may start. A
- * browser that refuses one (no Web Audio, too many contexts) stays silent
- * rather than breaking the press (QA phase 2, B12).
+ * Only called from inside a press (or a touch release, `lib/pull-refresh.ts`),
+ * the one place a context may start. A browser that refuses one (no Web
+ * Audio, too many contexts) stays silent rather than breaking the press
+ * (QA phase 2, B12).
  */
-function play(rate = 1): void {
+export function play(rate = 1): void {
   if (!soundOn()) return;
   try {
     ctx ??= new AudioContext({ latencyHint: "interactive" });

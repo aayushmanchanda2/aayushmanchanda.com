@@ -9,9 +9,12 @@
  *
  * Work rows, Vetted first: role and years only as Aayush approved them, no
  * links, and Canada on the two current companies only. Logos are `AppIcon`
- * (live from img.logo.dev, which /privacy names for this page; the two past
- * employers have no URL, so they show the letter). Projects are the sections that have entries, from the same
- * manifest the home index reads.
+ * (live from img.logo.dev, which /privacy names for this page). The two past
+ * employers have no URL, on purpose, so the logo comes from `logoDomain`:
+ * webwizards.ca draws. idfusion.com is left off because logo.dev answers it with
+ * a blank white square (checked 2026-09-23), so it keeps the letter.
+ * Projects are the sections that have entries, from the same manifest the
+ * home index reads.
  *
  * Not in the nav: a footer page beside /contact and /privacy.
  */
@@ -35,7 +38,7 @@ const work = [
   },
   { slug: "orbis", name: "Orbis", url: "https://orbisassist.co", what: "Voice receptionist for dental clinics", meta: "Canada" },
   { slug: "idfusion", name: "IDFusion Software", url: null, what: "Senior Project Manager", meta: "2021 to 2022" },
-  { slug: "web-wizards", name: "Web Wizards Inc.", url: null, what: "Project Manager", meta: "2017 to 2021" },
+  { slug: "web-wizards", name: "Web Wizards Inc.", url: null, logoDomain: "webwizards.ca", what: "Project Manager", meta: "2017 to 2021" },
 ];
 
 const elsewhere = [

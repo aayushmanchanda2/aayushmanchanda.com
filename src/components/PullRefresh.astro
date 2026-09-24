@@ -1,0 +1,126 @@
+---
+/**
+ * PullRefresh — the postmark that drops out from under the top bar on a pull
+ * at the top of the page (VET-280, `lib/pull-refresh.ts` owns the gesture and
+ * where it runs). Its outer ring draws itself as the pull goes, it stretches
+ * past the threshold on Apple's rubber band, and at the threshold the
+ * cancellation waves strike and it ticks. Release there and the page reloads.
+ * Decorative: the browser's own reload is always there, so it is `aria-hidden`.
+ */
+---
+
+<div class="pull" data-pull aria-hidden="true">
+  <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-linecap="round">
+    <circle class="pull__ring" cx="24" cy="24" r="20" pathLength="1" stroke-width="2.25" />
+    <circle cx="24" cy="24" r="14.5" stroke-width="1.25" opacity="0.45" />
+    <g class="pull__waves" stroke-width="1.75">
+      <path d="M15 19.5q2.25-1.8 4.5 0t4.5 0 4.5 0 4.5 0" />
+      <path d="M15 24q2.25-1.8 4.5 0t4.5 0 4.5 0 4.5 0" />
+      <path d="M15 28.5q2.25-1.8 4.5 0t4.5 0 4.5 0 4.5 0" />
+    </g>
+  </svg>
+</div>
+
+<script>
+  import { initPullRefresh } from "../lib/pull-refresh";
+
+  initPullRefresh();
+</script>
+
+<style>
+  /* Chrome on Android hands the pull over only at the top (the script sets it). */
+  :global(html[data-pull-top]) {
+    overscroll-behavior-y: none;
+  }
+
+  .pull {
+    position: fixed;
+    top: calc(var(--frame) + var(--bar-h));
+    left: 50%;
+    /* under the bar (30), so it slides out from behind it */
+    z-index: 29;
+    display: grid;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin-left: -1.375rem;
+    padding: 0.25rem;
+    border-radius: 50%;
+    background: var(--bg);
+    box-shadow: 0 0 0 1px var(--hairline), 0 4px 12px var(--panel-shadow);
+    color: var(--stamp-label);
+    pointer-events: none;
+    opacity: 0;
+    translate: 0 calc(-100% + var(--pull-y, 0px));
+    /* the stretch: past the threshold it keeps giving, a little, downward */
+    scale: 1 calc(1 + var(--pull-over, 0) * 0.14);
+    transform-origin: 50% 0;
+    transition-property: translate, opacity;
+    transition-duration: 320ms, var(--dur);
+    transition-timing-function: var(--ease-out);
+  }
+
+  /* While the finger is down it tracks 1:1; the spring back is the release. */
+  .pull[data-active] {
+    opacity: 1;
+    transition: none;
+  }
+
+  svg {
+    rotate: calc(var(--pull, 0) * -8deg);
+  }
+
+  .pull__ring {
+    rotate: -90deg;
+    transform-origin: center;
+    stroke-dasharray: 1 1;
+    stroke-dashoffset: calc(1 - var(--pull, 0));
+  }
+
+  .pull__waves {
+    opacity: 0;
+  }
+
+  .pull[data-armed] .pull__waves {
+    opacity: 1;
+  }
+
+  .pull[data-armed] svg {
+    animation: strike 240ms var(--ease-out);
+  }
+
+  .pull[data-struck] {
+    scale: 0.92;
+    transition: scale 120ms var(--ease-out);
+  }
+
+  @keyframes strike {
+    40% {
+      scale: 1.16;
+    }
+  }
+
+  /* No travel, stretch or strike: it fades in where it would rest. */
+  @media (prefers-reduced-motion: reduce) {
+    .pull,
+    .pull[data-active],
+    .pull[data-struck] {
+      translate: 0 0.75rem;
+      scale: 1;
+      opacity: var(--pull, 0);
+      transition: none;
+    }
+
+    svg,
+    .pull[data-armed] svg {
+      rotate: 0deg;
+      animation: none;
+    }
+  }
+
+  @media (forced-colors: active) {
+    .pull {
+      border: 1px solid CanvasText;
+      color: CanvasText;
+    }
+  }
+</style>

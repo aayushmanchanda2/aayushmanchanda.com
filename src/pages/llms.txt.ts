@@ -109,7 +109,7 @@ Filter pages exist under /tools/category/<name>, /tools/verdict/<name>,
 /library/tag/<tag>. Every tool, site, note and library entry has its own page.
 A library entry's page at /library/<slug> holds the kind, host, tags, saved
 date, his one-line note, and the source. ${digested.length} of ${library.length}
-are digested, with cliff notes and a call on whether it's worth reading. A
+are digested by his agents, with cliff notes and a call on whether it's worth reading. A
 saved post's page carries the full post; its card cuts off at 280 characters.
 A block labelled as a draft was written by his pipeline and isn't his verdict.
 ${entries(library.filter((entry) => entry.block !== null).length)} open with a short version: who it's for, the tip,
