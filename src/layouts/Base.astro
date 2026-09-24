@@ -24,6 +24,7 @@ import "../styles/forced-colors.css";
 
 import CommandPalette from "../components/CommandPalette.astro";
 import Footer from "../components/Footer.astro";
+import PullRefresh from "../components/PullRefresh.astro";
 import Stamp from "../components/Stamp.astro";
 import TopBar from "../components/TopBar.astro";
 import { normalize } from "../lib/links";
@@ -331,6 +332,7 @@ const markdownVariant = variant === null ? null : absolute(variant);
     <span class="visually-hidden" aria-live="polite" data-theme-live></span>
 
     <TopBar navItems={navItems} pathname={pathname} trail={trail} />
+    <PullRefresh />
     <CommandPalette />
     {/* The UI tick (`lib/ui-sound.ts`): listeners only; no audio until a press. */}
     <script>
