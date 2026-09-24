@@ -12,9 +12,13 @@
  * card saying "3 screens", and the panel lists them. No preview card on a
  * tile: the tile already is the picture.
  *
+ * Each card carries its primary screen's colour families (`data-hues`,
+ * `lib/hues.ts`) for the colour row (`HueFilter.astro`) to filter by.
+ *
  * Every card is a link to `/sites/<slug>`. On /sites, `DetailPanel.astro` turns
  * that click into the slide-over; everywhere else it is a plain page load.
  */
+import { paletteFamilies } from "../lib/hues";
 import type { SiteGroup } from "../lib/screens";
 import ShotFrame from "./ShotFrame.astro";
 
@@ -37,7 +41,7 @@ const EAGER_COUNT = 4;
 <ul class="grid" data-sites-grid>
   {
     groups.map(({ primary, screens }, index) => (
-      <li class="card" style={`--stagger: ${Math.min(index, STAGGER_CAP)}`}>
+      <li class="card" style={`--stagger: ${Math.min(index, STAGGER_CAP)}`} data-hues={paletteFamilies(primary.palette).join(" ")}>
         <a
           class="card__link press"
           href={`/sites/${primary.slug}`} data-astro-prefetch="hover"

@@ -2,6 +2,7 @@
 import Mark from "../components/Mark.astro";
 import Base from "../layouts/Base.astro";
 import CollectionChips from "../components/CollectionChips.astro";
+import HueFilter from "../components/HueFilter.astro";
 import SiteGrid from "../components/SiteGrid.astro";
 import SiteList from "../components/SiteList.astro";
 import DetailPanel from "../components/DetailPanel.astro";
@@ -63,13 +64,16 @@ const jsonLd = listJsonLd({
       */}
       {
         showCollections && (
-          <nav class="collections" aria-label="Filter sites by collection">
+          <nav class="collections" aria-label="Filter sites by collection" data-carry-hue>
             <span class="collections__label mono">Collections</span>
             <CollectionChips collections={collectionGroups.map((group) => group.slug)} />
           </nav>
         )
       }
       <ViewToggle config={SITES_VIEW} label="Sites layout" />
+      <div class="controls__hues">
+        <HueFilter groups={siteGroups} base="/sites" />
+      </div>
     </div>
   </header>
 
@@ -101,6 +105,11 @@ const jsonLd = listJsonLd({
     align-items: center;
     gap: 0.5rem 1rem;
     margin-top: 1rem;
+  }
+
+  /* The colour row takes a line of its own, under collections and layout. */
+  .controls__hues {
+    flex-basis: 100%;
   }
 
   /* Takes the row's slack, so its chips wrap beside the layout toggle rather

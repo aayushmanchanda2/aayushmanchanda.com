@@ -1,0 +1,91 @@
+{
+  "base": "http://localhost:4321",
+  "at": "2026-09-24T11:08:12.923Z",
+  "checks": [
+    {
+      "name": "?hue=blue on load: grid shows exactly the blue cards",
+      "ok": true,
+      "detail": "7 of 31"
+    },
+    {
+      "name": "survives reload",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "list view shows the same filtered set",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "row-link: a press on a filtered row opens its entry, hue kept",
+      "ok": true,
+      "detail": "/sites/ana-howard?hue=blue"
+    },
+    {
+      "name": "combines with a collection",
+      "ok": true,
+      "detail": "reference-libraries: 2 of 11"
+    },
+    {
+      "name": "clearing on a collection restores its whole set",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "clearing restores all",
+      "ok": true,
+      "detail": "31 cards"
+    },
+    {
+      "name": "a second family (mono) filters too, status announces",
+      "ok": true,
+      "detail": "8 black and white sites"
+    },
+    {
+      "name": "a family with no sites has no chip, and ?hue=teal reads as All",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "390-light: every chip takes a press 21px above and below its centre (44px)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "shot 390-light",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "1024-webkit-touch-light: every chip takes a press 21px above and below its centre (44px)",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "shot 1024-webkit-touch-light",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "shot 1280-light",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "shot 1600-light",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "shot 1280-dark",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "shot 1280-forced",
+      "ok": true,
+      "detail": ""
+    }
+  ]
+}
