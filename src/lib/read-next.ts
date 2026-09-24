@@ -30,3 +30,32 @@ export function readNext<T extends { id: string }>(
     .slice(0, count)
     .map(({ entry }) => entry);
 }
+
+/** What `related` compares: the tags, one group (a library kind, a tool category) and an ISO day. */
+export interface Facts {
+  id: string;
+  tags: readonly string[];
+  group: string;
+  date: string;
+}
+
+/**
+ * Up to `count` entries most like `current` (VET-56): most shared tags first,
+ * then the same group, then the newest. One sharing neither is not related and
+ * never shows, and neither does `current` itself. Callers pass public entries only.
+ */
+export function related<T>(current: T, entries: readonly T[], facts: (entry: T) => Facts, count = 3): T[] {
+  const me = facts(current);
+  const tags = new Set(me.tags);
+  // A shared tag outweighs the group: 2 per tag, 1 for the group.
+  const score = (f: Facts) => 2 * f.tags.filter((tag) => tags.has(tag)).length + (f.group === me.group ? 1 : 0);
+  return entries
+    .map((entry) => {
+      const f = facts(entry);
+      return { entry, f, score: score(f) };
+    })
+    .filter((c) => c.f.id !== me.id && c.score > 0)
+    .sort((a, b) => b.score - a.score || b.f.date.localeCompare(a.f.date) || a.f.id.localeCompare(b.f.id))
+    .slice(0, count)
+    .map((c) => c.entry);
+}

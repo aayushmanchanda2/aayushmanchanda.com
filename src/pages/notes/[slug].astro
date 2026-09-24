@@ -21,7 +21,7 @@ import EntryLink from "../../components/EntryLink.astro";
 import PreviewCard from "../../components/PreviewCard.astro";
 import { linkPreview } from "../../lib/assets";
 import ImageFrame from "../../components/ImageFrame.astro";
-import EntryList from "../../components/EntryList.astro";
+import ReadNext from "../../components/ReadNext.astro";
 import { noteJsonLd } from "../../lib/schema";
 import { formatDay, isoDay } from "../../lib/date";
 import { noteEntry } from "../../lib/entry-list";
@@ -98,14 +98,7 @@ const jsonLd = noteJsonLd({
     }
   </article>
 
-  {
-    next.length > 0 && (
-      <nav class="next" aria-labelledby="read-next">
-        <h2 class="accent-bar" id="read-next">Read next</h2>
-        <EntryList entries={next.map(noteEntry)} />
-      </nav>
-    )
-  }
+  <ReadNext entries={next.map(noteEntry)} />
   {carded && <PreviewCard />}
 </Base>
 
@@ -144,11 +137,5 @@ const jsonLd = noteJsonLd({
     flex-wrap: wrap;
     gap: 0.5rem 1.25rem;
     margin-top: 0.75rem;
-  }
-
-  /* --- read next ----------------------------------------------------------- */
-
-  .next {
-    margin-top: clamp(3rem, 8vw, 5rem);
   }
 </style>

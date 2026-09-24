@@ -40,7 +40,9 @@ import Base from "../../layouts/Base.astro";
 import EntryDetail from "../../components/EntryDetail.astro";
 import EntryNav from "../../components/EntryNav.astro";
 import LibraryPane from "../../components/LibraryPane.astro";
-import { library } from "../../lib/library";
+import ReadNext from "../../components/ReadNext.astro";
+import { library, type LibraryEntry } from "../../lib/library";
+import { related } from "../../lib/read-next";
 import { libraryJsonLd } from "../../lib/schema";
 
 /**
@@ -61,13 +63,15 @@ export const getStaticPaths = (() =>
 
     return {
       params: { slug: entry.slug },
-      props: { entry, prev: step(-1), next: step(1) },
+      // VET-56: tags, then kind, then the saved day. `library` is public entries only.
+      props: { entry, prev: step(-1), next: step(1), near: related(entry, library, (e: LibraryEntry) => ({ id: e.slug, tags: e.tags, group: e.kind, date: e.saved_date })) },
     };
   })) satisfies GetStaticPaths;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-const { entry, prev, next } = Astro.props;
+const { entry, prev, next, near } = Astro.props;
+const kindWord = (kind: string) => kind[0]!.toUpperCase() + kind.slice(1);
 
 /**
  * A `Review` when there is a digest to review with, a `WebPage` when there is
@@ -102,6 +106,10 @@ const description =
   {/* Centred in the detail pane, briOS's `mx-auto max-w-3xl px-4 md:px-6 lg:px-8`. */}
   <div class="detail">
     <EntryDetail entry={entry} />
+    <ReadNext
+      label="Related"
+      entries={near.map((e) => ({ title: e.title, href: `/library/${e.slug}`, meta: { label: kindWord(e.kind), date: e.saved_date } }))}
+    />
 
     {/*
       The hint row is the keyboard legend and the links themselves — EntryNav

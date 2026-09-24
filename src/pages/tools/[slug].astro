@@ -11,20 +11,23 @@ import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 
 import Base from "../../layouts/Base.astro";
 import PreviewCard from "../../components/PreviewCard.astro";
+import ReadNext from "../../components/ReadNext.astro";
 import ToolDetail from "../../components/ToolDetail.astro";
 import { assetFor } from "../../lib/assets";
 import { toolJsonLd } from "../../lib/schema";
-import { tools } from "../../lib/tools";
+import { related } from "../../lib/read-next";
+import { tools, type Tool } from "../../lib/tools";
 
 export const getStaticPaths = (() =>
   tools.map((tool) => ({
     params: { slug: tool.slug },
-    props: { tool },
+    // VET-56: a tool has no tags, so the category, then the verdict's day.
+    props: { tool, near: related(tool, tools, (t: Tool) => ({ id: t.slug, tags: [], group: t.category, date: t.status_date })) },
   }))) satisfies GetStaticPaths;
 
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
 
-const { tool } = Astro.props;
+const { tool, near } = Astro.props;
 
 /**
  * The software, and his review of it, as two linked nodes. Every sentence in
@@ -40,6 +43,10 @@ const jsonLd = toolJsonLd(tool);
   jsonLd={jsonLd}
 >
   <ToolDetail tool={tool} />
+  <ReadNext
+    label="Related"
+    entries={near.map((t) => ({ title: t.name, href: `/tools/${t.slug}`, meta: { label: t.category, date: t.status_date } }))}
+  />
   {assetFor("previews", tool.slug) && <PreviewCard />}
 </Base>
 
