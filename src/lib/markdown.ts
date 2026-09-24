@@ -290,7 +290,7 @@ export function digestSection(
   return [
     section(
       "Digests",
-      "Entries I've read. Each carries cliff notes and a call on whether it's worth your time.",
+      "Entries my agents read. Each carries cliff notes and a call on whether it's worth your time.",
     ),
     ...blocks,
   ].join("\n\n");
