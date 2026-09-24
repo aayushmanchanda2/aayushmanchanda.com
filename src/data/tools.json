@@ -906,5 +906,14 @@
     "description": "Local-first Markdown reviewer with inline comments",
     "note": "Saved, not tried yet.",
     "status_date": "2026-09-23"
+  },
+  {
+    "slug": "ai-accounting-for-startups-in-stockholm-bronn",
+    "name": "Bronn",
+    "url": "https://bronnhq.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "An AI-native Stockholm accounting firm that combines automated bookkeeping with human sign-off, covering payroll, VAT, reporting and CFO advice.",
+    "status_date": "2026-09-24"
   }
 ]

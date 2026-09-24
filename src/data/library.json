@@ -1697,5 +1697,101 @@
         }
       ]
     }
+  },
+  {
+    "slug": "improve-your-agent-harness-s-token-efficiency",
+    "title": "here's a prompt to improve your agent harness based on what we've learned at…",
+    "url": "https://x.com/ericzakariasson/status/2102853511637774551?s=20",
+    "domain": "x.com",
+    "saved_date": "2026-09-24",
+    "kind": "post",
+    "note": "@ericzakariasson: here's a prompt to improve your agent harness based on what we've learned at cursor. enjoy",
+    "post": {
+      "id": "2102853511637774551",
+      "author": "eric zakariasson",
+      "handle": "ericzakariasson",
+      "date": "2026-09-23",
+      "text": "here's a prompt to improve your agent harness based on what we've learned at cursor. enjoy",
+      "avatar": "/posts/2102853511637774551/avatar.webp"
+    }
+  },
+  {
+    "slug": "make-money-make-no-mistakes",
+    "title": "Make money, make no mistakes.",
+    "url": "https://x.com/sandylikesfrogs/status/2100631407676829995?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-09-24",
+    "kind": "post",
+    "note": "@sandylikesfrogs: What we learned making our first $75 with an AI-run business. In July, we decided to see if an AI agent could run a company that could actually make money. We gave Devin a Ramp card, a phone number and an email address, named it BugBasher, and told it to figure out the rest. The…",
+    "post": {
+      "id": "2100631407676829995",
+      "author": "sandra",
+      "handle": "sandylikesfrogs",
+      "date": "2026-09-17",
+      "text": "What we learned making our first $75 with an AI-run business. In July, we decided to see if an AI agent could run a company that could actually make money. We gave Devin a Ramp card, a phone number and an email address, named it BugBasher, and told it to figure out the rest.\n\nThe idea: to build an agentic exterminator service. New York City publishes the result of every restaurant health inspection, including pest violations. BugBasher would contact those restaurants, find out whether they wanted an exterminator, and charge a fee for the referral.\n\nFour weeks and a lot of phone calls later, it had made $75. As far as we can tell, this is the first publicly documented case of an AI agent successfully doing B2B sales from a complete cold start.",
+      "avatar": "/posts/2100631407676829995/avatar.webp",
+      "links": [
+        {
+          "text": "x.com/i/article/2100…",
+          "href": "https://x.com/i/article/2100440524733980673"
+        }
+      ],
+      "article": {
+        "title": "Make money, make no mistakes.",
+        "cover": "/posts/2100631407676829995/cover.webp"
+      }
+    }
+  },
+  {
+    "slug": "eight-mistakes-people-make-coding-with-ai",
+    "title": "I’ve spoken to over 50 people 1:1 over the last several months to better…",
+    "url": "https://x.com/atmoio/status/2102836012338589746?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-09-24",
+    "kind": "post",
+    "note": "@atmoio: I’ve spoken to over 50 people 1:1 over the last several months to better understand how they code with AI. It’s an absolute mess. Here are the top 8 mistakes I see. 0:00 - Intro 1:19 - Mistake 1: Talking to 2026 models like they’re 2025 models 2:43 - Mistake 2: Devising funky…",
+    "post": {
+      "id": "2102836012338589746",
+      "author": "Mo",
+      "handle": "atmoio",
+      "date": "2026-09-23",
+      "text": "I’ve spoken to over 50 people 1:1 over the last several months to better understand how they code with AI.\n\nIt’s an absolute mess.\n\nHere are the top 8 mistakes I see.\n\n0:00 - Intro 1:19 - Mistake 1: Talking to 2026 models like they’re 2025 models 2:43 - Mistake 2: Devising funky metaphorical factories to orchestrate your agents 3:59 - Mistake 3: Treating context as sacred 6:02 - Mistake 4: Treating previous conversations as sacred 7:59 - Mistake 5: Having a todo list 10:00 - Mistake 6: Using funky tools 13:47 - Mistake 7: Stressing over code quality 24:27 - Mistake 8: Using branches and worktrees",
+      "avatar": "/posts/2102836012338589746/avatar.webp",
+      "media": [
+        {
+          "type": "video",
+          "poster": "/posts/2102836012338589746/1-poster.webp",
+          "w": 1920,
+          "h": 1080
+        }
+      ]
+    }
+  },
+  {
+    "slug": "how-i-make-launch-videos-with-ai",
+    "title": "How I make launch videos with AI",
+    "url": "https://x.com/jake11moran/status/2102878602316652828?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-09-24",
+    "kind": "post",
+    "note": "@jake11moran: I've generated 20M+ views from videos made using HyperFrames. Here's how I start every launch video project. dump context and ideas, storyboard, animate. So what is HyperFrames? HyperFrames is an open source framework that turns HTML into video. Your agent writes each scene like…",
+    "post": {
+      "id": "2102878602316652828",
+      "author": "Jake Moran",
+      "handle": "jake11moran",
+      "date": "2026-09-23",
+      "text": "I've generated 20M+ views from videos made using HyperFrames. Here's how I start every launch video project.\n\ndump context and ideas, storyboard, animate.\n\nSo what is HyperFrames?\n\nHyperFrames is an open source framework that turns HTML into video. Your agent writes each scene like a web page - HTML for the layout, CSS for the look, JavaScript for the motion - and HyperFrames renders it frame by frame into an MP4.\n\nI never open a video editor. All of it happens in Claude Code.\n\nrepo: https://github.com/heygen-com/hyperframes\n\n1. Dump everything\n\nThe first message of every project is a context dump - whatever I have, in any order:\n\n- what's launching, and the one thing a viewer should get from the video - the source material: docs page, PR, launch post draft, the Slack thread it came from - screenshots of the real product - a reference video, if there's one whose style I want - aspect ratio and rough length\n\nI dictate most of it with Wispr, so it's messy.\n\nBefore anything gets built I ask for 5 story angles, a couple of sentences each, and iterate on one until it feels right. Then the agent writes it out scene by scene. This is one from our claude design to hyperframes launch:\n\n2. Storyboard before any animation\n\nThen I ask the agent to build one still frame per scene and lay them out in a grid - a contact sheet, basically a page of thumbnails, one for each row of the table.\n\nHow to get real UI\n\nThe rule I push hardest: everything on screen is real UI. Anyone who uses the product knows what it looks like, and an invented button breaks it for all of them.\n\nHow I do it:\n\n- Start with a capture of real websites with npx hyperframes capture <url> - the site's actual fonts, colors and logos. For the hyperframes.dev launch that meant the site's own font files. - Screenshot the real app (or pull the frames from Figma) and have the agent rebuild the screen in HTML - or let the agent take the screenshots itself with computer use. - Pull the real icons out of the apps. On a Mac they sit inside the app bundles in /System/Applications and the agent extracts them with sips. A colored square standing in for an icon fails review. - Pro tip: ask the agent to show only what the scene needs. Have it rebuild just the part the story touches, around 1.8x bigger, on a clean background.\n\n3. Animate\n\nOnce the sheet is approved the agent animates it. I usually have a bunch of notes on how to make the animation feel better - these are the words I use most frequently:\n\n- A push in is the camera moving closer until one part of the screen fills the frame. A pull back is the reverse.\n\n- A pan slides the camera sideways or up and down without changing the zoom.\n\n- A hard cut ends one shot and starts the next on the very next frame.\n\n- A match cut lines something up across two shots (same spot, same movement) so the cut reads as one continuous move.\n\n- Motion blur is the smear a real camera records when something moves fast.\n\n- Easing is how a move speeds up and slows down.\n\nHow do I ask for motion?\n\nIt's all feel - watch the preview and say what's off:\n\n- \"Slow every zoom and pan to 0.7x of current\" - every camera move takes longer, nothing else changes - \"Add a push in on the click\" - the camera moves in on whatever the cursor clicked, then pulls back - \"Have the cursor come in from off screen\" - it slides in from the edge instead of fading in - \"This scene leaves left, so bring the next one in from the right\" - the cut reads as one camera move\n\nEvery video becomes a template\n\nA HyperFrames video is a folder of HTML files, so once a scene works, you can reuse it in the next video.\n\nThe HyperFrames logo ending was built once, then reskinned launch to launch - cream, dark, white, with a site button or a GitHub star click.\n\nThe HeyGen App Store preview was built once, in English. 10 more versions (other languages, plus Android) are generated from that one file by a script.\n\nWe've built the Claude prompt box a few ways now - Claude Design, Claude on iPhone, Claude Code on desktop - and the next video can start from any of them.\n\nYou also don't have to start from zero. The HyperFrames catalog has 380+ prebuilt blocks and components - transitions, text effects, captions, mock UI - and each one installs with one command:\n\nThe launch video below is built from three of them.\n\nhttps://x.com/jake11moran/status/2102802985541865482?s=20\n\nWe also have a library of most of the launch videos ive made at https://github.com/heygen-com/hyperframes-launches/ so you can give your agent the code\n\nThis is not meant to be an exhaustive guide. Video has many different forms and each have their own playbooks. If you have questions about specific things you want to achieve with HyperFrames feel free to reach out!",
+      "avatar": "/posts/2102878602316652828/avatar.webp",
+      "links": [
+        {
+          "text": "x.com/i/article/2102…",
+          "href": "https://x.com/i/article/2102868636826566656"
+        }
+      ],
+      "article": {
+        "title": "How I make launch videos with AI",
+        "cover": "/posts/2102878602316652828/cover.webp"
+      }
+    }
   }
 ]
