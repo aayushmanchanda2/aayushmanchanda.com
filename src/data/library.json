@@ -1770,6 +1770,39 @@
         "title": "Make money, make no mistakes.",
         "cover": "/posts/2100631407676829995/cover.webp"
       }
+    },
+    "tldr": "BugBasher used public restaurant inspection data for cold outreach and earned $75 from pest-control referrals in four weeks.",
+    "highlights": [
+      {
+        "text": "The idea: to build an agentic exterminator service. New York City publishes the result of every restaurant health inspection, including pest violations.",
+        "note": "The public dataset exposed businesses with a specific, timely need.",
+        "color": "amber"
+      },
+      {
+        "text": "Four weeks and a lot of phone calls later, it had made $75.",
+        "note": "The experiment produced real revenue from a cold start.",
+        "color": "green"
+      }
+    ],
+    "excerpt": "What we learned making our first $75 with an AI-run business. In July, we decided to see if an AI agent could run a company that could actually make money. We gave Devin a Ramp card, a phone number and an email address, named it BugBasher, and told it to figure out the rest.",
+    "block": {
+      "best_for": "People testing whether an AI agent can run a small B2B service",
+      "tip": "Start with public data that identifies businesses with an immediate, specific need.",
+      "time": {
+        "text": "Four weeks",
+        "source": "stated"
+      },
+      "needs": [
+        "Public restaurant inspection data",
+        "A phone number",
+        "An email address",
+        "A payment card"
+      ],
+      "start_here": [
+        "Find restaurants with recent pest violations",
+        "Ask whether they want an exterminator",
+        "Charge for successful referrals"
+      ]
     }
   },
   {
