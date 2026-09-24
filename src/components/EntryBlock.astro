@@ -1,115 +1,121 @@
 ---
 /**
- * EntryBlock — the card at the top of a library entry (VET-273): the one
- * thing to do next when there is one (first and largest: one action, then
- * the rest), who the piece is for, the one tip, how long it takes, what you
- * need, a prompt to copy, and where to start. A `dl` of label/value rows, so a screen reader
- * hears each label with its value; one column under 40rem.
- *
- * The prompt copies through `lib/copy-flash.ts`, the pattern /sites already
- * uses: the label flashes "copied" and the status line announces it. A prompt
- * we wrote carries an "our prompt" chip, so it is never read as the source's
- * own words.
+ * EntryBlock — the short version atop a library entry (VET-273, redesigned in
+ * VET-277), read as a plan: the next step (private only), who it is for, the
+ * tip (its lead under the highlighter), time and needs as chips, a prompt to
+ * copy (`lib/copy-flash.ts`; "our prompt" when we wrote it), first steps.
+ * A `dl` grouped by `div`s, so a screen reader hears each label with its
+ * value; the tip's and time's labels are hidden where the pen and clock say them.
  */
 import type { Block } from "../lib/library";
+import { leadSentence } from "../lib/reader.mjs";
 
 interface Props {
   block: Block;
 }
 
 const { block } = Astro.props;
+const [lead, rest] = leadSentence(block.tip);
 ---
 
 <section class="blk" aria-label="The short version" data-copy-root>
-  <dl class="blk__rows">
-    {
-      block.next_step && (
-        <>
-          <dt class="blk__next-label">Do this next</dt>
-          <dd class="blk__next">{block.next_step}</dd>
-        </>
-      )
-    }
-    <dt>Best for</dt>
-    <dd>{block.best_for}</dd>
-    <dt>The tip</dt>
-    <dd class="blk__tip">{block.tip}</dd>
-    {
-      block.time && (
-        <>
-          <dt>Time it takes</dt>
-          <dd>
-            {block.time.text}
-            {block.time.source === "estimate" && <span class="blk__est"> (estimate)</span>}
-          </dd>
-        </>
-      )
-    }
-    {
-      block.needs.length > 0 && (
-        <>
-          <dt>What you need</dt>
-          <dd>{block.needs.join(", ")}</dd>
-        </>
-      )
-    }
-    {
-      block.prompt && (
-        <>
-          <dt>The prompt</dt>
-          <dd class="blk__prompt">
-            <div class="blk__box">
-              <p class="blk__text mono" data-block-prompt>{block.prompt.text}</p>
-              <div class="blk__tools">
-                {block.prompt.ours && <span class="chip" data-tone="gray">our prompt</span>}
-                <button type="button" class="blk__copy mono press" data-copy={block.prompt.text} data-copy-name="the prompt">
-                  <span data-copy-label aria-hidden="true">Copy</span>
-                  <span class="visually-hidden">Copy the prompt</span>
-                </button>
-              </div>
-            </div>
-          </dd>
-        </>
-      )
-    }
-    <dt>Start here</dt>
-    <dd>
-      <ol class="blk__steps">
-        {block.start_here.map((step) => <li>{step}</li>)}
-      </ol>
-    </dd>
+  <dl class="blk__list">
+    {block.next_step && (
+      <div class="blk__next">
+        <dt>Do this next</dt>
+        <dd>
+          <svg class="blk__icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M2.75 8 H12.5 M8.75 4.25 L12.5 8 L8.75 11.75" /></svg>
+          <span>{block.next_step}</span>
+        </dd>
+      </div>
+    )}
+    <div class="blk__for">
+      <dt>Best for</dt>
+      <dd>{block.best_for}</dd>
+    </div>
+    <div class="blk__tip">
+      <dt class="visually-hidden">The tip</dt>
+      <dd>{rest ? <><mark class="hl">{lead}</mark> {rest}</> : lead}</dd>
+    </div>
+    {block.time && (
+      <div class="blk__time">
+        <dt class="visually-hidden">Time it takes</dt>
+        <dd class="tag">
+          <svg class="blk__icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 2.5 A5.5 5.5 0 1 1 7.99 2.5 Z M8 5 V8 H10.5" /></svg>
+          {block.time.text}
+          {block.time.source === "estimate" && <span class="blk__est">(estimate)</span>}
+        </dd>
+      </div>
+    )}
+    {block.needs.length > 0 && (
+      <div class="blk__needs">
+        <dt>What you need</dt>
+        <dd>
+          <ul class="blk__chips" role="list">{block.needs.map((need) => <li class="tag">{need}</li>)}</ul>
+        </dd>
+      </div>
+    )}
+    {block.prompt && (
+      <div class="blk__prompt">
+        <dt>The prompt {block.prompt.ours && <span class="chip" data-tone="gray">our prompt</span>}</dt>
+        <dd>
+          <p class="blk__text" data-block-prompt>{block.prompt.text}</p>
+          <button type="button" class="blk__copy mono press" data-copy={block.prompt.text} data-copy-name="the prompt" data-copy-select="[data-block-prompt]">
+            <svg class="blk__icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M5.75 5.75 H13 V13 H5.75 Z M10.25 5.75 V3 H3 V10.25 H5.75" /></svg>
+            <span data-copy-label aria-hidden="true">Copy</span>
+            <span class="visually-hidden">Copy the prompt</span>
+          </button>
+        </dd>
+      </div>
+    )}
+    <div class="blk__start">
+      <dt>Start here</dt>
+      <dd>
+        <ol class="blk__steps" role="list">
+          {block.start_here.map((step) => <li>{step}</li>)}
+        </ol>
+      </dd>
+    </div>
   </dl>
   <p class="visually-hidden" role="status" aria-live="polite" data-copy-status></p>
 </section>
 
 <script>
   import { wireAllCopy } from "../lib/copy-flash";
+  import { reveal } from "../lib/reveal";
 
   wireAllCopy();
+  // The tip's lead sweeps in like every other highlighter mark (ReaderBlocks).
+  reveal("mark.hl:not([data-static])", "hl--on", 0.5);
 </script>
 
 <style>
-  /* Structural, so sharp and a hairline, the draft box's surface (design.md §3). */
+  /* No box: two hairlines hold it in the reading column (design.md §3). */
   .blk {
     max-width: 40rem;
-    margin-top: 1.5rem;
-    padding: clamp(1rem, 3vw, 1.25rem);
-    border: 1px solid var(--hairline-strong);
+    margin-block: 1.75rem 1rem;
+    padding-block: 1.5rem;
+    border-block: 1px solid var(--hairline);
   }
 
-  /* Label column sized to the longest label, value column the rest. */
-  .blk__rows {
-    display: grid;
-    grid-template-columns: max-content minmax(0, 1fr);
-    gap: 0.75rem 1.25rem;
-    font-size: 0.9375rem;
-    line-height: 1.55;
+  .blk__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 1.25rem 1rem;
   }
 
+  .blk__list > div {
+    flex: 1 0 100%;
+    min-width: 0;
+  }
+
+  /* Labels in the site's label voice: 14px sans, tertiary ink. */
   dt {
-    padding-top: 0.1rem;
-    font-family: var(--font-mono);
-    font-size: 0.8125rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
     color: var(--text-tertiary);
   }
 
@@ -118,73 +124,140 @@ const { block } = Astro.props;
     text-wrap: pretty;
   }
 
-  .blk__tip {
-    color: var(--text-primary);
+  .blk__icon {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.25;
+    stroke-linecap: square;
   }
 
-  /* The next step spans the card, over a hairline: the row to act on. */
-  .blk__next-label,
+  /* The one row to act on: full ink after an amber pen arrow. Not the accent:
+     blue is for links and controls, and this line is neither. */
   .blk__next {
-    grid-column: 1 / -1;
-  }
-
-  .blk__next-label {
-    color: var(--accent);
-  }
-
-  .blk__next {
-    padding-bottom: 0.875rem;
+    padding-bottom: 1.25rem;
     border-bottom: 1px solid var(--hairline);
-    font-size: 1.25rem;
+  }
+
+  .blk__next dd {
+    display: flex;
+    gap: 0.625rem;
+    margin-top: 0.375rem;
+    font-size: 1.125rem;
     font-weight: 600;
     line-height: 1.4;
     color: var(--text-primary);
   }
 
-  .blk__est {
+  .blk__next .blk__icon {
+    margin-top: 0.3rem;
+    color: var(--pen-amber);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .blk__for {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.25rem 0.5rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+  }
+
+  /* The hero line, a step under the 20px TLDR so the page keeps one lead; its
+     first sentence sits under the pen when there is a second to set it off. */
+  .blk__list > .blk__tip {
+    margin-top: -0.5rem;
+    font-size: 1.125rem;
+    font-weight: 500;
+    line-height: 1.45;
+  }
+
+  .blk__tip dd {
+    color: var(--text-primary);
+  }
+
+  /* Time and needs share a line when they fit. */
+  .blk__list > .blk__time {
+    flex: 0 1 auto;
+  }
+
+  .blk__list > .blk__needs {
+    flex: 1 1 14rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+  }
+
+  /* chip.css's tag, made inert: a fill instead of an outline and the 4px an
+     inline code chip takes, because the 8px outlined tag is a link (design.md
+     §3). It also wraps, since a need can be a whole phrase. */
+  .blk .tag {
+    height: auto;
+    min-height: 1.75rem;
+    padding-block: 0.3rem;
+    border-color: transparent;
+    border-radius: var(--r-sm);
+    background: var(--surface-3);
+    line-height: 1.3;
+    white-space: normal;
+    font-weight: 400;
+    color: var(--text-secondary);
+  }
+
+  .blk__est,
+  .blk__steps li::before {
     color: var(--text-tertiary);
   }
 
-  .blk__box {
+  .blk__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.375rem;
+  }
+
+  /* A hairline slip for the words to paste, with its control in the corner. */
+  .blk__prompt {
+    position: relative;
+    padding: 0.875rem 1rem 1rem;
     border: 1px solid var(--hairline);
-    background: var(--surface-selected);
+  }
+
+  .blk__prompt dt {
+    min-height: 40px;
+    padding-right: 6rem;
   }
 
   .blk__text {
-    padding: 0.75rem 0.875rem 0.5rem;
-    font-size: 0.8125rem;
+    margin-top: 0.25rem;
+    font-size: 0.9375rem;
     line-height: 1.6;
     color: var(--text-primary);
     white-space: pre-wrap;
     overflow-wrap: anywhere;
   }
 
-  .blk__tools {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 0.5rem;
-    padding: 0 0.375rem 0.375rem 0.875rem;
-  }
-
-  .blk__tools .chip {
-    margin-right: auto;
-  }
-
   /* 40px tall, the site's control floor (design.md §4). */
   .blk__copy {
+    position: absolute;
+    top: 0.625rem;
+    right: 0.625rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
     min-height: 40px;
-    min-width: 4.5rem;
     padding-inline: 0.75rem;
     border: 1px solid var(--hairline-strong);
     border-radius: var(--r-md);
     background: var(--bg);
     color: var(--text-secondary);
-    font-size: 0.8125rem;
     cursor: pointer;
-    transition-property: color, border-color;
-    transition-duration: var(--dur-fast);
-    transition-timing-function: var(--ease);
+    /* `.press` names the transition; a second one here would race it. */
   }
 
   /* copy-flash writes "copied"; the button reads "Copied". */
@@ -199,27 +272,28 @@ const { block } = Astro.props;
     }
   }
 
+  /* Numbered like a checklist: a mono figure in its own column. */
   .blk__steps {
+    counter-reset: step;
     display: flex;
     flex-direction: column;
-    gap: 0.375rem;
-    padding-left: 1.25rem;
-    list-style: decimal;
+    gap: 0.625rem;
+    margin-top: 0.625rem;
   }
 
-  .blk__steps li::marker {
-    color: var(--text-tertiary);
+  .blk__steps li {
+    counter-increment: step;
+    display: grid;
+    grid-template-columns: 1.25rem minmax(0, 1fr);
+    align-items: baseline;
+    gap: 0.5rem;
+    line-height: 1.5;
+  }
+
+  .blk__steps li::before {
+    content: counter(step);
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
     font-variant-numeric: tabular-nums;
-  }
-
-  @media (max-width: 40rem) {
-    .blk__rows {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 0.25rem;
-    }
-
-    dd + dt {
-      margin-top: 0.75rem;
-    }
   }
 </style>
