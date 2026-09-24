@@ -2177,7 +2177,34 @@
     "domain": "detailed.com",
     "saved_date": "2026-09-24",
     "kind": "article",
-    "note": "A 70,000-response study finds AI answers change constantly at the edges, while the few leading brands and source types stay relatively stable."
+    "note": "A 70,000-response study finds AI answers change constantly at the edges, while the few leading brands and source types stay relatively stable.",
+    "tldr": "Across 70,000 responses, leading brands stayed visible most days while exact brand and citation sets changed constantly, making single-check AI visibility misleading.",
+    "highlights": [
+      {
+        "text": "On ChatGPT, the leading brand appeared on 82% of days.",
+        "note": "The recurring leader is more stable than the full answer.",
+        "color": "amber"
+      },
+      {
+        "text": "The individual pages cited change constantly. Only about a quarter of the pages ChatGPT cited for a prompt were cited again the next day.",
+        "note": "Citation-level visibility is highly volatile.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "It's no secret that asking the same question to the same AI platform, seconds apart, can produce both different brand recommendations and cited links. But just how volatile are the results, and what, if anything, remains consistent?",
+    "block": {
+      "best_for": "Teams tracking brand visibility in ChatGPT and Google AI Overviews",
+      "tip": "Track a small set of actionable prompts over time instead of treating one response as stable.",
+      "needs": [
+        "A shortlist of business-critical prompts",
+        "Daily response tracking"
+      ],
+      "start_here": [
+        "Choose prompts specific to your business and priorities.",
+        "Run each prompt daily across the platforms that matter.",
+        "Track recurring core brands and citation types, not only exact answers."
+      ]
+    }
   },
   {
     "slug": "how-nontechnical-builders-can-ship-software-with-claude-code",
