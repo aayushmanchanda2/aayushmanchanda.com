@@ -1,0 +1,35 @@
+{
+ "archiveRows": 106,
+ "hiddenRows": 100,
+ "termsByKind": {
+  "slug": 100,
+  "title": 100,
+  "note": 27,
+  "ownNote": 2,
+  "telegram": 4,
+  "why_saved": 8,
+  "tip": 34,
+  "next_step": 33,
+  "email": 1
+ },
+ "dist": {
+  "bytes": 27819871,
+  "hits": {}
+ },
+ "vercelOutput": {
+  "bytes": 47518253,
+  "hits": {}
+ },
+ "branchDiff": {
+  "bytes": 42336,
+  "hits": {}
+ },
+ "commits": {
+  "bytes": 868,
+  "hits": {}
+ },
+ "evidence": {
+  "bytes": 34358,
+  "hits": {}
+ }
+}

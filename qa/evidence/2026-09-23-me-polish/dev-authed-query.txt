@@ -1,0 +1,4 @@
+raindrop_note authed ok: true row: true note matches archive (stripped): true mine: true telegram: false telegram verbatim: true block.next_step: false why_saved: true
+telegram authed ok: true row: true note matches archive (stripped): true mine: false telegram: true telegram verbatim: true block.next_step: true why_saved: false
+block authed ok: true row: true note matches archive (stripped): true mine: false telegram: false telegram verbatim: true block.next_step: true why_saved: true
+no identity: Not allowed | wrong email: Not allowed
