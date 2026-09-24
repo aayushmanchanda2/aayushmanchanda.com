@@ -1,0 +1,153 @@
+{
+  "base": "http://localhost:4396/",
+  "label": "vet-306",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-24-vet-306",
+  "at": "2026-09-24T09:08:56.840Z",
+  "shots": [
+    {
+      "route": "/tools",
+      "url": "http://localhost:4396/tools",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "tools-390-light.png",
+      "status": 200,
+      "clicked": [
+        "[data-view-set=\"list\"]"
+      ],
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/sites",
+      "url": "http://localhost:4396/sites",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "sites-390-light.png",
+      "status": 200,
+      "clicked": [
+        "[data-view-set=\"list\"]"
+      ],
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4396/tools",
+      "width": 1024,
+      "height": 1366,
+      "theme": "light",
+      "png": "tools-1024-light.png",
+      "status": 200,
+      "clicked": [
+        "[data-view-set=\"list\"]"
+      ],
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/sites",
+      "url": "http://localhost:4396/sites",
+      "width": 1024,
+      "height": 1366,
+      "theme": "light",
+      "png": "sites-1024-light.png",
+      "status": 200,
+      "clicked": [
+        "[data-view-set=\"list\"]"
+      ],
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4396/tools",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "tools-390-dark.png",
+      "status": 200,
+      "clicked": [
+        "[data-view-set=\"list\"]"
+      ],
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/sites",
+      "url": "http://localhost:4396/sites",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "sites-390-dark.png",
+      "status": 200,
+      "clicked": [
+        "[data-view-set=\"list\"]"
+      ],
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools",
+      "url": "http://localhost:4396/tools",
+      "width": 1024,
+      "height": 1366,
+      "theme": "dark",
+      "png": "tools-1024-dark.png",
+      "status": 200,
+      "clicked": [
+        "[data-view-set=\"list\"]"
+      ],
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    },
+    {
+      "route": "/sites",
+      "url": "http://localhost:4396/sites",
+      "width": 1024,
+      "height": 1366,
+      "theme": "dark",
+      "png": "sites-1024-dark.png",
+      "status": 200,
+      "clicked": [
+        "[data-view-set=\"list\"]"
+      ],
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [
+        "img.logo.dev"
+      ],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}

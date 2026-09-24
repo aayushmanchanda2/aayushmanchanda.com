@@ -1,0 +1,811 @@
+{
+  "base": "http://localhost:4397",
+  "forceStatic": true,
+  "misses": 60,
+  "results": [
+    {
+      "browser": "chromium",
+      "size": "1024x1366",
+      "page": "tools",
+      "rows": 86,
+      "hits": [
+        {
+          "row": 0,
+          "column": "name",
+          "ok": false,
+          "hit": "Roughdraft"
+        },
+        {
+          "row": 0,
+          "column": "middle",
+          "ok": false,
+          "hit": "Roughdraft"
+        },
+        {
+          "row": 0,
+          "column": "date",
+          "ok": false,
+          "hit": "Roughdraft"
+        },
+        {
+          "row": 43,
+          "column": "name",
+          "ok": true,
+          "hit": "slot-text"
+        },
+        {
+          "row": 43,
+          "column": "middle",
+          "ok": true,
+          "hit": "slot-text"
+        },
+        {
+          "row": 43,
+          "column": "date",
+          "ok": true,
+          "hit": "slot-text"
+        },
+        {
+          "row": 85,
+          "column": "name",
+          "ok": true,
+          "hit": "Roughdraft"
+        },
+        {
+          "row": 85,
+          "column": "middle",
+          "ok": true,
+          "hit": "Roughdraft"
+        },
+        {
+          "row": 85,
+          "column": "date",
+          "ok": true,
+          "hit": "Roughdraft"
+        }
+      ],
+      "tap": {
+        "want": "/tools/paperclip",
+        "got": "/tools/roughdraft/",
+        "ok": false
+      }
+    },
+    {
+      "browser": "chromium",
+      "size": "1024x1366",
+      "page": "tools?skipped",
+      "rows": 8,
+      "hits": [
+        {
+          "row": 0,
+          "column": "name",
+          "ok": false,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 0,
+          "column": "middle",
+          "ok": false,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 0,
+          "column": "date",
+          "ok": false,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 4,
+          "column": "name",
+          "ok": false,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 4,
+          "column": "middle",
+          "ok": false,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 4,
+          "column": "date",
+          "ok": false,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 7,
+          "column": "name",
+          "ok": true,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 7,
+          "column": "middle",
+          "ok": true,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 7,
+          "column": "date",
+          "ok": true,
+          "hit": "Papercuts"
+        }
+      ],
+      "tap": {
+        "want": "/tools/cloudflare-os",
+        "got": "/tools/papercuts/",
+        "ok": false
+      }
+    },
+    {
+      "browser": "chromium",
+      "size": "1024x1366",
+      "page": "sites",
+      "rows": 31,
+      "hits": [
+        {
+          "row": 0,
+          "column": "name",
+          "ok": false,
+          "hit": "Inspora"
+        },
+        {
+          "row": 0,
+          "column": "middle",
+          "ok": false,
+          "hit": "Inspora"
+        },
+        {
+          "row": 0,
+          "column": "date",
+          "ok": false,
+          "hit": "Inspora"
+        },
+        {
+          "row": 15,
+          "column": "name",
+          "ok": true,
+          "hit": "Wall of Portfolios"
+        },
+        {
+          "row": 15,
+          "column": "middle",
+          "ok": true,
+          "hit": "Wall of Portfolios"
+        },
+        {
+          "row": 15,
+          "column": "date",
+          "ok": true,
+          "hit": "Wall of Portfolios"
+        },
+        {
+          "row": 30,
+          "column": "name",
+          "ok": true,
+          "hit": "Inspora"
+        },
+        {
+          "row": 30,
+          "column": "middle",
+          "ok": true,
+          "hit": "Inspora"
+        },
+        {
+          "row": 30,
+          "column": "date",
+          "ok": true,
+          "hit": "Inspora"
+        }
+      ],
+      "tap": {
+        "want": "/sites/arc-from-the-browser-company",
+        "got": "/sites/inspora/",
+        "ok": false
+      }
+    },
+    {
+      "browser": "chromium",
+      "size": "1366x1024",
+      "page": "tools",
+      "rows": 86,
+      "hits": [
+        {
+          "row": 0,
+          "column": "name",
+          "ok": false,
+          "hit": "Roughdraft"
+        },
+        {
+          "row": 0,
+          "column": "middle",
+          "ok": false,
+          "hit": "Roughdraft"
+        },
+        {
+          "row": 0,
+          "column": "date",
+          "ok": false,
+          "hit": "Roughdraft"
+        },
+        {
+          "row": 43,
+          "column": "name",
+          "ok": true,
+          "hit": "slot-text"
+        },
+        {
+          "row": 43,
+          "column": "middle",
+          "ok": true,
+          "hit": "slot-text"
+        },
+        {
+          "row": 43,
+          "column": "date",
+          "ok": true,
+          "hit": "slot-text"
+        },
+        {
+          "row": 85,
+          "column": "name",
+          "ok": true,
+          "hit": "Roughdraft"
+        },
+        {
+          "row": 85,
+          "column": "middle",
+          "ok": true,
+          "hit": "Roughdraft"
+        },
+        {
+          "row": 85,
+          "column": "date",
+          "ok": true,
+          "hit": "Roughdraft"
+        }
+      ],
+      "tap": {
+        "want": "/tools/paperclip",
+        "got": "/tools/roughdraft/",
+        "ok": false
+      }
+    },
+    {
+      "browser": "chromium",
+      "size": "1366x1024",
+      "page": "tools?skipped",
+      "rows": 8,
+      "hits": [
+        {
+          "row": 0,
+          "column": "name",
+          "ok": false,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 0,
+          "column": "middle",
+          "ok": false,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 0,
+          "column": "date",
+          "ok": false,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 4,
+          "column": "name",
+          "ok": false,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 4,
+          "column": "middle",
+          "ok": false,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 4,
+          "column": "date",
+          "ok": false,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 7,
+          "column": "name",
+          "ok": true,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 7,
+          "column": "middle",
+          "ok": true,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 7,
+          "column": "date",
+          "ok": true,
+          "hit": "Papercuts"
+        }
+      ],
+      "tap": {
+        "want": "/tools/cloudflare-os",
+        "got": "/tools/papercuts/",
+        "ok": false
+      }
+    },
+    {
+      "browser": "chromium",
+      "size": "1366x1024",
+      "page": "sites",
+      "rows": 31,
+      "hits": [
+        {
+          "row": 0,
+          "column": "name",
+          "ok": false,
+          "hit": "Inspora"
+        },
+        {
+          "row": 0,
+          "column": "middle",
+          "ok": false,
+          "hit": "Inspora"
+        },
+        {
+          "row": 0,
+          "column": "date",
+          "ok": false,
+          "hit": "Inspora"
+        },
+        {
+          "row": 15,
+          "column": "name",
+          "ok": true,
+          "hit": "Wall of Portfolios"
+        },
+        {
+          "row": 15,
+          "column": "middle",
+          "ok": true,
+          "hit": "Wall of Portfolios"
+        },
+        {
+          "row": 15,
+          "column": "date",
+          "ok": true,
+          "hit": "Wall of Portfolios"
+        },
+        {
+          "row": 30,
+          "column": "name",
+          "ok": true,
+          "hit": "Inspora"
+        },
+        {
+          "row": 30,
+          "column": "middle",
+          "ok": true,
+          "hit": "Inspora"
+        },
+        {
+          "row": 30,
+          "column": "date",
+          "ok": true,
+          "hit": "Inspora"
+        }
+      ],
+      "tap": {
+        "want": "/sites/arc-from-the-browser-company",
+        "got": "/sites/inspora/",
+        "ok": false
+      }
+    },
+    {
+      "browser": "webkit",
+      "size": "1024x1366",
+      "page": "tools",
+      "rows": 86,
+      "hits": [
+        {
+          "row": 0,
+          "column": "name",
+          "ok": false,
+          "hit": "Roughdraft"
+        },
+        {
+          "row": 0,
+          "column": "middle",
+          "ok": false,
+          "hit": "Roughdraft"
+        },
+        {
+          "row": 0,
+          "column": "date",
+          "ok": false,
+          "hit": "Roughdraft"
+        },
+        {
+          "row": 43,
+          "column": "name",
+          "ok": true,
+          "hit": "slot-text"
+        },
+        {
+          "row": 43,
+          "column": "middle",
+          "ok": true,
+          "hit": "slot-text"
+        },
+        {
+          "row": 43,
+          "column": "date",
+          "ok": true,
+          "hit": "slot-text"
+        },
+        {
+          "row": 85,
+          "column": "name",
+          "ok": true,
+          "hit": "Roughdraft"
+        },
+        {
+          "row": 85,
+          "column": "middle",
+          "ok": true,
+          "hit": "Roughdraft"
+        },
+        {
+          "row": 85,
+          "column": "date",
+          "ok": true,
+          "hit": "Roughdraft"
+        }
+      ],
+      "tap": {
+        "want": "/tools/paperclip",
+        "got": "/tools/roughdraft/",
+        "ok": false
+      }
+    },
+    {
+      "browser": "webkit",
+      "size": "1024x1366",
+      "page": "tools?skipped",
+      "rows": 8,
+      "hits": [
+        {
+          "row": 0,
+          "column": "name",
+          "ok": false,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 0,
+          "column": "middle",
+          "ok": false,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 0,
+          "column": "date",
+          "ok": false,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 4,
+          "column": "name",
+          "ok": false,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 4,
+          "column": "middle",
+          "ok": false,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 4,
+          "column": "date",
+          "ok": false,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 7,
+          "column": "name",
+          "ok": true,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 7,
+          "column": "middle",
+          "ok": true,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 7,
+          "column": "date",
+          "ok": true,
+          "hit": "Papercuts"
+        }
+      ],
+      "tap": {
+        "want": "/tools/cloudflare-os",
+        "got": "/tools/papercuts/",
+        "ok": false
+      }
+    },
+    {
+      "browser": "webkit",
+      "size": "1024x1366",
+      "page": "sites",
+      "rows": 31,
+      "hits": [
+        {
+          "row": 0,
+          "column": "name",
+          "ok": false,
+          "hit": "Inspora"
+        },
+        {
+          "row": 0,
+          "column": "middle",
+          "ok": false,
+          "hit": "Inspora"
+        },
+        {
+          "row": 0,
+          "column": "date",
+          "ok": false,
+          "hit": "Inspora"
+        },
+        {
+          "row": 15,
+          "column": "name",
+          "ok": true,
+          "hit": "Wall of Portfolios"
+        },
+        {
+          "row": 15,
+          "column": "middle",
+          "ok": true,
+          "hit": "Wall of Portfolios"
+        },
+        {
+          "row": 15,
+          "column": "date",
+          "ok": true,
+          "hit": "Wall of Portfolios"
+        },
+        {
+          "row": 30,
+          "column": "name",
+          "ok": true,
+          "hit": "Inspora"
+        },
+        {
+          "row": 30,
+          "column": "middle",
+          "ok": true,
+          "hit": "Inspora"
+        },
+        {
+          "row": 30,
+          "column": "date",
+          "ok": true,
+          "hit": "Inspora"
+        }
+      ],
+      "tap": {
+        "want": "/sites/arc-from-the-browser-company",
+        "got": "/sites/inspora/",
+        "ok": false
+      }
+    },
+    {
+      "browser": "webkit",
+      "size": "1366x1024",
+      "page": "tools",
+      "rows": 86,
+      "hits": [
+        {
+          "row": 0,
+          "column": "name",
+          "ok": false,
+          "hit": "Roughdraft"
+        },
+        {
+          "row": 0,
+          "column": "middle",
+          "ok": false,
+          "hit": "Roughdraft"
+        },
+        {
+          "row": 0,
+          "column": "date",
+          "ok": false,
+          "hit": "Roughdraft"
+        },
+        {
+          "row": 43,
+          "column": "name",
+          "ok": true,
+          "hit": "slot-text"
+        },
+        {
+          "row": 43,
+          "column": "middle",
+          "ok": true,
+          "hit": "slot-text"
+        },
+        {
+          "row": 43,
+          "column": "date",
+          "ok": true,
+          "hit": "slot-text"
+        },
+        {
+          "row": 85,
+          "column": "name",
+          "ok": true,
+          "hit": "Roughdraft"
+        },
+        {
+          "row": 85,
+          "column": "middle",
+          "ok": true,
+          "hit": "Roughdraft"
+        },
+        {
+          "row": 85,
+          "column": "date",
+          "ok": true,
+          "hit": "Roughdraft"
+        }
+      ],
+      "tap": {
+        "want": "/tools/paperclip",
+        "got": "/tools/roughdraft/",
+        "ok": false
+      }
+    },
+    {
+      "browser": "webkit",
+      "size": "1366x1024",
+      "page": "tools?skipped",
+      "rows": 8,
+      "hits": [
+        {
+          "row": 0,
+          "column": "name",
+          "ok": false,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 0,
+          "column": "middle",
+          "ok": false,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 0,
+          "column": "date",
+          "ok": false,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 4,
+          "column": "name",
+          "ok": false,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 4,
+          "column": "middle",
+          "ok": false,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 4,
+          "column": "date",
+          "ok": false,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 7,
+          "column": "name",
+          "ok": true,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 7,
+          "column": "middle",
+          "ok": true,
+          "hit": "Papercuts"
+        },
+        {
+          "row": 7,
+          "column": "date",
+          "ok": true,
+          "hit": "Papercuts"
+        }
+      ],
+      "tap": {
+        "want": "/tools/cloudflare-os",
+        "got": "/tools/papercuts/",
+        "ok": false
+      }
+    },
+    {
+      "browser": "webkit",
+      "size": "1366x1024",
+      "page": "sites",
+      "rows": 31,
+      "hits": [
+        {
+          "row": 0,
+          "column": "name",
+          "ok": false,
+          "hit": "Inspora"
+        },
+        {
+          "row": 0,
+          "column": "middle",
+          "ok": false,
+          "hit": "Inspora"
+        },
+        {
+          "row": 0,
+          "column": "date",
+          "ok": false,
+          "hit": "Inspora"
+        },
+        {
+          "row": 15,
+          "column": "name",
+          "ok": true,
+          "hit": "Wall of Portfolios"
+        },
+        {
+          "row": 15,
+          "column": "middle",
+          "ok": true,
+          "hit": "Wall of Portfolios"
+        },
+        {
+          "row": 15,
+          "column": "date",
+          "ok": true,
+          "hit": "Wall of Portfolios"
+        },
+        {
+          "row": 30,
+          "column": "name",
+          "ok": true,
+          "hit": "Inspora"
+        },
+        {
+          "row": 30,
+          "column": "middle",
+          "ok": true,
+          "hit": "Inspora"
+        },
+        {
+          "row": 30,
+          "column": "date",
+          "ok": true,
+          "hit": "Inspora"
+        }
+      ],
+      "tap": {
+        "want": "/sites/arc-from-the-browser-company",
+        "got": "/sites/inspora/",
+        "ok": false
+      }
+    }
+  ]
+}

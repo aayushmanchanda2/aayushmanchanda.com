@@ -4,8 +4,9 @@
  *
  * briOS's /stack table: Name (icon and name), Description, Category, Verdict,
  * Date. Every row is one link to the tool's own page: a real `<a>` on the name,
- * stretched over the row by its `::after`, so the keyboard gets one stop per
- * row and a right click still offers "open in new tab". The sort buttons sit in
+ * which a press anywhere on the row follows (`lib/row-link.ts`), so the
+ * keyboard gets one stop per row and a right click on the name still offers
+ * "open in new tab". The sort buttons sit in
  * a header that sticks under the top bar.
  *
  * `/tools` puts filters and a grid view (`ToolGrid.astro`) around it; the
@@ -193,6 +194,7 @@ const COLUMNS = ALL.filter((column) => column.id !== drop);
 </style>
 
 <script>
+  import "../lib/row-link";
   import { isSortKey, nextSort, sortItems, type Sort } from "../lib/tools-table";
 
   let sort: Sort = null;
