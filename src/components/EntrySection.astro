@@ -17,9 +17,12 @@ interface Props {
   icon?: "ai" | "pen";
   /** A copy button inside: the section is its `[data-copy-root]` (`lib/copy-flash.ts`). */
   copy?: boolean;
+  /** One level under the entry's title: `h3` where the title is an `h2` (/library's Articles view). */
+  level?: "h2" | "h3";
 }
 
-const { label, id, icon, copy = false } = Astro.props;
+const { label, id, icon, copy = false, level = "h2" } = Astro.props;
+const Head = level;
 const PATHS = {
   ai: "M8 1.75 L9.35 6.65 L14.25 8 L9.35 9.35 L8 14.25 L6.65 9.35 L1.75 8 L6.65 6.65 Z",
   pen: "M10.75 2.25 L13.75 5.25 L5.5 13.5 H2.5 V10.5 Z M9 4 L12 7",
@@ -27,12 +30,12 @@ const PATHS = {
 ---
 
 <section class="sec" aria-labelledby={id} data-copy-root={copy ? "" : undefined}>
-  <h2 class="sec__head" id={id}>
+  <Head class="sec__head" id={id}>
     <slot name="icon">
       {icon && <svg class="sec__icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d={PATHS[icon]} /></svg>}
     </slot>
     {label}
-  </h2>
+  </Head>
   <slot />
   {copy && <p class="visually-hidden" role="status" aria-live="polite" data-copy-status></p>}
 </section>

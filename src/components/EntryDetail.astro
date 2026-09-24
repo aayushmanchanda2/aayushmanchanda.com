@@ -45,6 +45,7 @@ interface Props {
 
 const { entry, level = "h1", why } = Astro.props;
 const Title = level;
+const sectionLevel = level === "h1" ? "h2" : "h3";
 // The hover card itself ships with `LibraryPane`, on both pages that render this.
 const preview = libraryPreview(entry);
 const rows = (pairs: [string, string | null | undefined][]) => pairs.filter((pair): pair is [string, string] => Boolean(pair[1]));
@@ -110,7 +111,7 @@ const source = Boolean(entry.post || entry.video || entry.moments.length || entr
 
 {
   ai && (
-    <EntrySection label="Written by AI" id="sec-ai" icon="ai" copy={Boolean(entry.block?.prompt)}>
+    <EntrySection level={sectionLevel} label="Written by AI" id="sec-ai" icon="ai" copy={Boolean(entry.block?.prompt)}>
       <dl>
         {entry.tldr && (
           <div class="fact tldr">
@@ -134,7 +135,7 @@ const source = Boolean(entry.post || entry.video || entry.moments.length || entr
 
 {
   mine.length > 0 && (
-    <EntrySection label="In my words" id="sec-mine" icon="pen">
+    <EntrySection level={sectionLevel} label="In my words" id="sec-mine" icon="pen">
       <dl class="mine">
         {mine.map(([label, text]) => (
           <div class="fact">
@@ -149,7 +150,7 @@ const source = Boolean(entry.post || entry.video || entry.moments.length || entr
 
 {
   source && (
-    <EntrySection label="The source" id="sec-source">
+    <EntrySection level={sectionLevel} label="The source" id="sec-source">
       <KindIcon slot="icon" kind={entry.kind} />
       {(entry.post || entry.video || entry.moments.length > 0) && (
         <div class="sec__body media">
