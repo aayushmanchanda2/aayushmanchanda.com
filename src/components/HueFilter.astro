@@ -16,6 +16,11 @@
  * `[data-carry-hue]` (the collection chips on /sites) keep the hue, so a
  * collection opens already filtered. A family with no card renders no chip,
  * and the row needs two chips to render at all, the collections row's rule.
+ *
+ * The chip that is on wears a × and is named "Remove filter: Blue", and Clear
+ * shows beside the row whenever a filter is on (VET-309): the colour on /sites,
+ * and always on a collection page, where the collection is one, and where Clear
+ * leads to `all` (/sites) and drops both.
  */
 import "../styles/hues.css";
 import { familyCounts, type HueFamily } from "../lib/hues";
@@ -25,9 +30,11 @@ interface Props {
   groups: SiteGroup[];
   /** The page's own path; every chip links to it with `?hue=`. */
   base: string;
+  /** The whole gallery, when this page is already a subset of it: Clear goes there. */
+  all?: string;
 }
 
-const { groups, base } = Astro.props;
+const { groups, base, all = base } = Astro.props;
 const counts = familyCounts(groups.map((group) => group.primary.palette));
 
 const NAMES: Record<HueFamily, string> = {
@@ -61,9 +68,13 @@ const NAMES: Record<HueFamily, string> = {
               <span class="hue-dot" data-family={family} aria-hidden="true" />
               <span class="hue__name" aria-hidden="true">{NAMES[family]}</span>
               <span class="tag__count" aria-hidden="true">{count}</span>
+              <span class="hue__x" aria-hidden="true">×</span>
             </a>
           </li>
         ))}
+        <li hidden={all === base}>
+          <a class="tag tag--more press" href={all} data-hue-clear aria-label="Clear filters">Clear</a>
+        </li>
       </ul>
       <p class="visually-hidden" role="status" data-hue-status />
     </nav>
@@ -81,6 +92,10 @@ const NAMES: Record<HueFamily, string> = {
   if (nav && status && document.querySelector("[data-hues]")) {
     const chips = [...nav.querySelectorAll<HTMLAnchorElement>("[data-hue-set]")];
     const present = chips.map((chip) => chip.dataset.hueSet ?? "");
+    const clear = nav.querySelector<HTMLAnchorElement>("[data-hue-clear]");
+    for (const chip of chips) chip.dataset.label = chip.getAttribute("aria-label") ?? "";
+    // Clear on this page, not to /sites from a collection. Slash-blind: a static server adds one.
+    const clearsHere = clear !== null && clear.pathname.replace(/\/$/, "") === location.pathname.replace(/\/$/, "");
 
     const apply = (hue: string) => {
       for (const item of document.querySelectorAll<HTMLElement>("[data-hues]")) {
@@ -90,25 +105,33 @@ const NAMES: Record<HueFamily, string> = {
         const on = chip.dataset.hueSet === hue;
         if (on) chip.setAttribute("aria-current", "true");
         else chip.removeAttribute("aria-current");
+        chip.setAttribute("aria-label", on ? `Remove filter: ${chip.dataset.name}` : (chip.dataset.label ?? ""));
         // The chip that is on is the way off.
         chip.search = withHue(location.search, on ? "" : (chip.dataset.hueSet ?? ""));
       }
       for (const link of document.querySelectorAll<HTMLAnchorElement>("[data-carry-hue] a")) {
         link.search = withHue(link.search, hue);
       }
+      // On /sites the colour is the only filter, so Clear goes with it.
+      if (clearsHere && clear?.parentElement) clear.parentElement.hidden = hue === "";
     };
 
-    for (const chip of chips) {
-      chip.addEventListener("click", (event) => {
-        if (event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-        event.preventDefault();
-        const hue = chip.hasAttribute("aria-current") ? "" : (chip.dataset.hueSet ?? "");
-        history.replaceState(history.state, "", `${location.pathname}${withHue(location.search, hue)}`);
-        apply(hue);
-        const shown = document.querySelectorAll("[data-sites-grid] > [data-hues]:not([hidden])").length;
-        status.textContent = hue ? `${shown} ${chip.dataset.name?.toLowerCase()} sites` : `All ${shown} sites`;
-      });
-    }
+    // One listener on the row: a chip press toggles its colour, Clear on its
+    // own page drops it; Clear to another page is a plain link.
+    nav.addEventListener("click", (event) => {
+      if (event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const link = (event.target as Element).closest<HTMLAnchorElement>("[data-hue-set], [data-hue-clear]");
+      if (!link || (link === clear && !clearsHere)) return;
+      event.preventDefault();
+      const hue = link === clear || link.hasAttribute("aria-current") ? "" : (link.dataset.hueSet ?? "");
+      history.replaceState(history.state, "", `${location.pathname}${withHue(location.search, hue)}`);
+      apply(hue);
+      const shown = document.querySelectorAll("[data-sites-grid] > [data-hues]:not([hidden])").length;
+      const name = chips.find((chip) => chip.dataset.hueSet === hue)?.dataset.name?.toLowerCase();
+      status.textContent = hue ? `${shown} ${name} sites` : `All ${shown} sites`;
+      // The pressed control can vanish (Clear hides itself): keep focus on the row.
+      if (link.parentElement?.hidden) chips[0]?.focus();
+    });
 
     apply(readHue(location.search, present));
   }
@@ -142,6 +165,11 @@ const NAMES: Record<HueFamily, string> = {
     }
   }
 
+  /* `.tag` is a flex box, which would outrank the attribute's own display. */
+  .hues__row [hidden] {
+    display: none;
+  }
+
   /* `.press` and `.tag` each name a transition and would race; this is the one. */
   .hue {
     transition-property: transform, background-color, border-color;
@@ -156,6 +184,16 @@ const NAMES: Record<HueFamily, string> = {
 
   .hue[aria-current="true"] .tag__count {
     color: var(--text-primary);
+  }
+
+  /* The way off, on the chip that is on. */
+  .hue__x {
+    display: none;
+    color: var(--text-primary);
+  }
+
+  .hue[aria-current="true"] .hue__x {
+    display: inline;
   }
 
   /* Swatches, not words; the word comes back where colour is not rendered. */

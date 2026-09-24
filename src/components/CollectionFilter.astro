@@ -1,0 +1,40 @@
+---
+/**
+ * CollectionFilter — the Collections row over /sites and over each
+ * `/sites/collection/<slug>` (VET-309): every collection as a chip, the one
+ * this page is on marked, with a × that leads back to /sites. Links inside keep
+ * the colour filter (`data-carry-hue`, `HueFilter.astro`).
+ *
+ * Chips, the pill every collection wears on a site's page, and not the tab row
+ * /library uses: a site can be in three collections or in none, so tabs here
+ * would claim a partition the data does not have.
+ */
+import CollectionChips from "./CollectionChips.astro";
+import { collectionGroups } from "../lib/sites";
+
+interface Props {
+  /** The collection this page shows, if it is one. */
+  current?: string;
+}
+
+const { current } = Astro.props;
+---
+
+<nav class="collections" aria-label="Filter sites by collection" data-carry-hue>
+  <span class="collections__label mono">Collections</span>
+  <CollectionChips collections={collectionGroups.map((group) => group.slug)} current={current} />
+</nav>
+
+<style>
+  /* Takes the row's slack, so its chips wrap beside the layout toggle rather
+     than pushing the toggle onto a line of its own. */
+  .collections {
+    flex: 1 1 20rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    /* 8px inside the group */
+    gap: 0.5rem;
+    color: var(--text-tertiary);
+  }
+</style>

@@ -13,41 +13,52 @@
  *   - `crop` (a gallery card) shows the top of the same file at 8:5. A card is
  *     a thing you skim past; a card that scrolled would be a scroll trap.
  *
- * The crop's box is reserved by `aspect-ratio`; the full shot carries its own
- * `width`/`height` (read off the file, `lib/assets.ts › webpSize`), which is
- * what reserves it on a phone, where the scroller lets it run full height.
+ * Neither mode loads the full file on a phone or in a card (VET-309): the crop
+ * is `lib/thumbs.ts`'s 8:5 copies (AVIF, then WebP, three widths), and the
+ * entry's full page is a 780px copy under 48rem, the original above it.
+ *
+ * Both carry `width`/`height` so their boxes are reserved before the bytes
+ * land: the crop's copy size, the full shot's own (`lib/assets.ts › webpSize`).
  */
 import { webpSize } from "../lib/assets";
+import { cropOf, phoneOf } from "../lib/thumbs";
 interface Props {
   /** Web path of the full-page shot. */
   src: string;
   alt: string;
   /** The top of the capture at 8:5, for a gallery card. */
   crop?: boolean;
-  /** True for above-the-fold shots: skips lazy loading for the LCP candidate. */
+  /** Above the fold: not lazy. */
   eager?: boolean;
+  /** The page's LCP image: `fetchpriority="high"`. One per page. */
+  priority?: boolean;
+  /** The crop's `sizes`: how wide the card is at each breakpoint. */
+  sizes?: string;
 }
 
-const { src, alt, crop = false, eager = false } = Astro.props;
+const { src, alt, crop = false, eager = false, priority = false, sizes = "100vw" } = Astro.props;
 
 /* The full shot's own size: on a phone the scroller lets it run full height
    (`height: auto` below 48rem), and without these the text under it jumped
-   when the bytes landed (VET-281). The crop's box is its aspect-ratio. */
+   when the bytes landed (VET-281). */
 const size = crop ? null : webpSize(src);
+const copies = cropOf(src);
 
 const img = {
-  src,
   alt,
   loading: eager ? ("eager" as const) : ("lazy" as const),
   decoding: "async" as const,
-  fetchpriority: eager ? ("high" as const) : ("auto" as const),
+  fetchpriority: priority ? ("high" as const) : ("auto" as const),
 };
 ---
 
 <span class="frame dotted-grid dotted-grid--fine">
   {
     crop ? (
-      <img class="crop outlined" {...img} />
+      <picture>
+        <source type="image/avif" srcset={copies.avif} sizes={sizes} />
+        <img class="crop outlined" src={copies.src} srcset={copies.webp} sizes={sizes} width={copies.width} height={copies.height} {...img} />
+      </picture>
     ) : (
       /*
         Focusable and named: a scrollable region that only a mouse can reach is
@@ -55,7 +66,10 @@ const img = {
         keys somewhere to land.
       */
       <span class="scroller" tabindex="0" role="region" aria-label={alt}>
-        <img class="scroller__shot" {...img} {...size} />
+        <picture>
+          <source media="(max-width: 48rem)" srcset={phoneOf(src)} />
+          <img class="scroller__shot" src={src} {...img} {...size} />
+        </picture>
       </span>
     )
   }
@@ -70,6 +84,10 @@ const img = {
     /* Sharp corners are the /sites house style: the screenshots supply all the
        softness this page needs. */
     border-radius: 0;
+  }
+
+  picture {
+    display: contents;
   }
 
   /* Anchored to the top so a card shows the masthead, the part of a site you

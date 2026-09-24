@@ -41,6 +41,7 @@
  * entry page all three are already the masthead.
  */
 import type { LibraryEntry, Video } from "../lib/library";
+import { webpSize } from "../lib/assets";
 
 interface Props {
   /** A video entry the pipeline could fetch a poster for. */
@@ -64,6 +65,7 @@ const { video } = entry;
     <img
       class="tile__thumb outlined"
       src={video.thumb}
+      {...webpSize(video.thumb)}
       alt=""
       loading="lazy"
       decoding="async"

@@ -10,11 +10,14 @@
  *
  * Reached from the chips on any entry's details page, and from the line under
  * the standfirst on /sites, which carries its `?hue=` here: the colour row
- * below filters this subset the way it filters the gallery (VET-55).
+ * below filters this subset the way it filters the gallery (VET-55). The same
+ * Collections row sits on top with this one on: its × and Clear lead back to
+ * the whole gallery (VET-309).
  */
 import type { GetStaticPaths, InferGetStaticPropsType } from "astro";
 
 import Base from "../../../layouts/Base.astro";
+import CollectionFilter from "../../../components/CollectionFilter.astro";
 import HueFilter from "../../../components/HueFilter.astro";
 import SiteGrid from "../../../components/SiteGrid.astro";
 import { groupByDomain } from "../../../lib/screens";
@@ -61,7 +64,8 @@ const jsonLd = listJsonLd({
       {lead} {label}.
     </p>
     <div class="controls">
-      <HueFilter groups={groups} base={`/sites/collection/${slug}`} />
+      <CollectionFilter current={slug} />
+      <HueFilter groups={groups} base={`/sites/collection/${slug}`} all="/sites" />
     </div>
   </header>
 
@@ -71,14 +75,13 @@ const jsonLd = listJsonLd({
 </Base>
 
 <style>
-  /* The /sites controls row's place: 16px below the standfirst. */
+  /* The /sites controls row's place: 16px below the standfirst, collections
+     over colours. */
   .controls {
+    display: grid;
+    /* two rows of 44px targets under a finger (VET-307) */
+    gap: 1rem;
     margin-top: 1rem;
-  }
-
-  /* A collection in one colour gets no row, and so no gap for it. */
-  .controls:not(:has(*)) {
-    display: none;
   }
 
   .body {
