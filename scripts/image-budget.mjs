@@ -11,9 +11,16 @@
  *      one `fetchpriority="high"`.
  *   4. /sites, fully scrolled, stays under a total: the fallback `src` of every
  *      picture on it, which is the most a browser can pull.
+ *   5. No raster is over 2x the widest box its kind fills (VET-309b): every
+ *      candidate of an `<img>` and its `<picture>`'s sources, against the
+ *      measured `src/data/image-widths.json` (`scripts/image-widths.mjs`, run
+ *      by hand, since a layout needs a browser and CI has none), and a hover
+ *      card's picture against the card's 400px.
  */
 import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import path from "node:path";
+
+import sharp from "sharp";
 
 const DIST = path.join(process.cwd(), "dist");
 const KB = 1024;
@@ -31,6 +38,15 @@ const BUDGETS = [
 
 /** Every picture /sites can load, scrolled to the end: 779 KB at VET-309 (7,856 KB before), plus room for more saves. */
 const SITES_PAGE_BUDGET = 1000 * KB;
+
+/** Widest box per kind, "<first class> <folder>" (`scripts/image-widths.mjs`). */
+const WIDTHS = /** @type {Record<string, number>} */ (JSON.parse(readFileSync(path.join(process.cwd(), "src", "data", "image-widths.json"), "utf8")));
+
+/** `PreviewCard.astro`: `min(400px, 100vw - 40px)`. */
+const PREVIEW_CARD = 400;
+
+/** Rounding room on "2x": a 1280px shot in a 654px column is 1.96x. */
+const MAX_RATIO = 2.02;
 
 /** A site's full-page shot (not a video poster, `<slug>-thumb.webp`). */
 const FULL_SHOT = /^\/shots\/[a-z0-9-]+(?<!-thumb)\.webp$/;
@@ -73,6 +89,20 @@ function bytes(url) {
   return size < 0 ? null : size;
 }
 
+/** @type {Map<string, Promise<number>>} */
+const pixels = new Map();
+/** A raster's pixel width off its header; 0 for a vector. @param {string} url */
+function pixelWidth(url) {
+  if (!pixels.has(url)) {
+    const file = path.join(DIST, decodeURIComponent(url));
+    pixels.set(url, url.endsWith(".svg") ? Promise.resolve(0) : sharp(file).metadata().then((meta) => meta.width ?? 0));
+  }
+  return /** @type {Promise<number>} */ (pixels.get(url));
+}
+
+/** @type {{ page: string, url: string, kind: string, box: number | undefined }[]} */
+const fits = [];
+
 if (!existsSync(DIST)) {
   console.error("dist/ is not there. Run `npm run build` first.");
   process.exit(1);
@@ -85,9 +115,20 @@ for (const page of htmlFiles(DIST)) {
   const tags = [...html.matchAll(/<(?:img|source)\b[^>]*>|<a\b[^>]*\sdata-preview="\/[^"]*"[^>]*>/g)].map((match) => match[0]);
   let high = 0;
   let total = 0;
+  /** The sources of the `<picture>` being read, owned by its `<img>`. @type {string[]} */
+  let sources = [];
 
   for (const tag of tags) {
     const isImg = tag.startsWith("<img");
+    if (tag.startsWith("<source")) sources.push(...urls(tag).filter((url) => bytes(url) !== null));
+    else if (isImg && attr(tag, "src")?.startsWith("/")) {
+      const kind = `${(attr(tag, "class") ?? "").split(/\s+/).find((c) => c !== "") ?? "(none)"} ${attr(tag, "src")?.split("/")[1]}`;
+      for (const url of [...urls(tag), ...sources]) if (bytes(url) !== null) fits.push({ page, url, kind, box: WIDTHS[kind] });
+      sources = [];
+    } else if (!isImg) {
+      const url = attr(tag, "data-preview");
+      if (url && bytes(url) !== null) fits.push({ page, url, kind: "hover card", box: PREVIEW_CARD });
+    }
     if (isImg && attr(tag, "fetchpriority") === "high") high++;
     for (const url of urls(tag)) {
       checked++;
@@ -112,6 +153,20 @@ for (const page of htmlFiles(DIST)) {
   if (page === "sites/index.html" && total > SITES_PAGE_BUDGET) {
     fail(page, `pictures total ${Math.round(total / KB)} KB, over the ${Math.round(SITES_PAGE_BUDGET / KB)} KB page budget`);
   }
+}
+
+/** One failure per file and kind, not per page it appears on. */
+const seen = new Set();
+for (const { page, url, kind, box } of fits) {
+  const key = `${url} ${kind}`;
+  if (seen.has(key)) continue;
+  seen.add(key);
+  if (box === undefined) {
+    fail(page, `no measured width for "${kind}" (${url}): run scripts/image-widths.mjs`);
+    continue;
+  }
+  const width = await pixelWidth(url);
+  if (width > box * MAX_RATIO) fail(page, `${url} is ${width}px wide for a ${box}px "${kind}", over 2x`);
 }
 
 if (failures.length > 0) {

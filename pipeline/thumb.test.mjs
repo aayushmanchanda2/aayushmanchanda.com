@@ -24,6 +24,7 @@ import test from "node:test";
 import sharp from "sharp";
 
 import { SHOT_FILE } from "./entries.mjs";
+import { POSTER_WIDTH } from "./image-policy.mjs";
 import {
   ThumbError,
   captureThumb,
@@ -151,7 +152,7 @@ test("the best frame is asked for first, and it is the one that lands", async (t
   const written = await readFile(thumb);
   const { format, width } = await sharp(written).metadata();
   assert.equal(format, "webp", "committed as webp, like every other picture here");
-  assert.equal(width, 1280);
+  assert.equal(width, POSTER_WIDTH);
 });
 
 test("a video with no maxres frame falls through to the one every video has", async (t) => {

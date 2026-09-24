@@ -1,12 +1,15 @@
 /**
  * `/thumbs/<name>`: every smaller copy `lib/thumbs.ts` names, one static file each.
  *
- * `og/[...card].jpg.ts`'s shape: cached by content hash in `shot-cache/`,
- * keyed on the shot's bytes and the recipe below, so a warm build encodes only
- * a shot that is new or changed. Not committed, unlike `og-cache/`: sharp runs
- * wherever the site builds (Vercel included), a cold build encodes every copy
- * in about 17s, and committing them would add ~6 MB now and ~170 KB a save.
- * Files no shot needs any more are swept, so the cache is exactly the copies.
+ * `og/[...card].jpg.ts`'s shape: cached by content hash, keyed on the shot's
+ * bytes and the recipe below, so a warm build encodes only a shot that is new
+ * or changed. Files no shot needs any more are swept.
+ *
+ * The cache is `node_modules/.cache/shot-cache`, not committed (VET-309b): the
+ * copies are ~8 MB and a recipe change would rewrite all of them in history,
+ * while `node_modules` is what Vercel's build cache restores between deploys,
+ * and CI and the publish workflow restore the directory with `actions/cache`.
+ * A cold build (a cleared cache) encodes everything in about two minutes.
  */
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, readdirSync, unlinkSync, writeFileSync } from "node:fs";
@@ -17,7 +20,7 @@ import type { APIRoute, GetStaticPaths, InferGetStaticPropsType } from "astro";
 import { PUBLIC_DIR } from "../../lib/assets";
 import { CROP_RATIO, type Variant, variantsOf } from "../../lib/thumbs";
 
-const CACHE = path.join(process.cwd(), "shot-cache");
+const CACHE = path.join(process.cwd(), "node_modules", ".cache", "shot-cache");
 const SHOTS = path.join(PUBLIC_DIR, "shots");
 
 /** Changing a number here re-encodes every copy. Quality per format: design.md §8 "Images". */

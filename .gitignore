@@ -13,6 +13,3 @@ qa/evidence/**/*.png
 # write-then-rename staging files (pipeline/util.mjs › writeAtomic)
 *.tmp
 *.staging
-
-# /thumbs copies, re-encoded at build from public/shots (src/pages/thumbs): ~17s cold
-shot-cache/

@@ -53,6 +53,7 @@ import {
   shotLooksBlank,
 } from "./challenge.mjs";
 import { readDesign } from "./design.mjs";
+import { SHOT_WIDTH, WEBP } from "./image-policy.mjs";
 import { extractPalette } from "./palette.mjs";
 import { trimTrailingBlank } from "./trim.mjs";
 import { describe } from "./util.mjs";
@@ -102,25 +103,10 @@ const MAX_SCROLL_STEPS = 200;
  */
 export const MAX_SHOT_PX = 12_000;
 
-/** Output width. Shots arrive at exactly this width, so it is a floor, not a scale. */
-const WEBP_WIDTH = 1440;
-
 /**
- * Measured against the six seed sites at full height: every one lands between
- * ~55KB and ~230KB, against the ~600KB budget a repo-committed image gets. That
- * is enough headroom to have kept the quality the light/dark crops used rather
- * than trading legibility for bytes nothing was short of — these are design
- * reference shots, and a soft screenshot of a typeface is not a reference.
- *
- * The number that actually bounds the worst case is `MAX_SHOT_PX`, not this one:
- * a dense, image-heavy page held at 12,000px is the only shape that approaches
- * the budget, and no quality setting fixes that without spoiling the other five.
+ * Stored width and quality: `image-policy.mjs`. The page is laid out at 1440
+ * and stored at `SHOT_WIDTH` (1280), 2x the entry column it is shown in.
  */
-const WEBP_QUALITY = 82;
-
-/** Sharp's slowest, smallest setting. Six images a run — the seconds are free. */
-const WEBP_EFFORT = 6;
-
 /** Repo-root `public/shots` — where the site expects to find its imagery. */
 export const DEFAULT_OUT_DIR = fileURLToPath(
   new URL("../public/shots", import.meta.url),
@@ -390,8 +376,8 @@ async function shoot(browser, url, log, slug, date) {
  */
 async function encodeWebp(png) {
   return await sharp(png)
-    .resize({ width: WEBP_WIDTH, fit: "inside", withoutEnlargement: true })
-    .webp({ quality: WEBP_QUALITY, effort: WEBP_EFFORT })
+    .resize({ width: SHOT_WIDTH, fit: "inside", withoutEnlargement: true })
+    .webp(WEBP)
     .toBuffer();
 }
 

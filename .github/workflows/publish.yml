@@ -56,6 +56,16 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # The /thumbs copies (`src/pages/thumbs/[...file].ts`), cached by content
+      # hash under node_modules/.cache, so a build encodes only new shots. After
+      # `npm ci`, which empties node_modules. A partial hit is still a hit.
+      - name: Cache the /thumbs copies
+        uses: actions/cache@v5
+        with:
+          path: node_modules/.cache/shot-cache
+          key: shot-cache-${{ hashFiles('public/shots/**', 'src/pages/thumbs/**', 'src/lib/thumbs.ts') }}
+          restore-keys: shot-cache-
+
       # Before a browser is downloaded and before the token is used. `plan()` is
       # what decides which bookmarks get published and which get dead-lettered,
       # and a run whose decision logic is broken should stop at the cheapest

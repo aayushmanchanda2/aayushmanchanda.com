@@ -33,6 +33,7 @@ import path from "node:path";
 
 import sharp from "sharp";
 
+import { POSTER_WIDTH, WEBP } from "./image-policy.mjs";
 import { bareHost, readCapped } from "./util.mjs";
 
 /** @typedef {import("./types.js").Video} Video */
@@ -82,16 +83,12 @@ const MAGIC = [
 const YOUTUBE_FRAMES = ["maxresdefault", "hqdefault"];
 
 /**
- * The widest a stored poster frame gets. `maxresdefault` arrives at exactly
- * this, so it is a ceiling for the good case and never an upscale for `hqdefault`,
- * which arrives at 480 and should stay there rather than be blown up into
- * something that looks worse than what was fetched.
+ * The widest a stored poster frame gets: `image-policy.mjs`. `maxresdefault`
+ * (1280) comes down to it; `hqdefault` arrives at 480 and is never blown up.
  */
-const THUMB_WIDTH = 1280;
+const THUMB_WIDTH = POSTER_WIDTH;
 
-/** The settings `capture.mjs` landed on, for the same kind of image. */
-const WEBP_QUALITY = 82;
-const WEBP_EFFORT = 6;
+/** `image-policy.mjs`'s, for the same kind of image. */
 
 /* ---------------------------------------------------------------------------
    Reading a video out of its URL
@@ -285,7 +282,7 @@ async function fetchFrame(video, fetch) {
 async function encode(image, width) {
   return await sharp(image)
     .resize({ width, withoutEnlargement: true })
-    .webp({ quality: WEBP_QUALITY, effort: WEBP_EFFORT })
+    .webp(WEBP)
     .toBuffer();
 }
 

@@ -15,13 +15,13 @@
  *
  * Neither mode loads the full file on a phone or in a card (VET-309): the crop
  * is `lib/thumbs.ts`'s 8:5 copies (AVIF, then WebP, three widths), and the
- * entry's full page is a 780px copy under 48rem, the original above it.
+ * entry's full page is AVIF then WebP, a 780px copy under 48rem.
  *
  * Both carry `width`/`height` so their boxes are reserved before the bytes
  * land: the crop's copy size, the full shot's own (`lib/assets.ts › webpSize`).
  */
 import { webpSize } from "../lib/assets";
-import { cropOf, phoneOf } from "../lib/thumbs";
+import { cropOf, fullOf } from "../lib/thumbs";
 interface Props {
   /** Web path of the full-page shot. */
   src: string;
@@ -43,6 +43,7 @@ const { src, alt, crop = false, eager = false, priority = false, sizes = "100vw"
    when the bytes landed (VET-281). */
 const size = crop ? null : webpSize(src);
 const copies = cropOf(src);
+const full = fullOf(src);
 
 const img = {
   alt,
@@ -67,7 +68,9 @@ const img = {
       */
       <span class="scroller" tabindex="0" role="region" aria-label={alt}>
         <picture>
-          <source media="(max-width: 48rem)" srcset={phoneOf(src)} />
+          <source media="(max-width: 48rem)" type="image/avif" srcset={full.phoneAvif} />
+          <source media="(max-width: 48rem)" srcset={full.phoneWebp} />
+          <source type="image/avif" srcset={full.avif} />
           <img class="scroller__shot" src={src} {...img} {...size} />
         </picture>
       </span>
