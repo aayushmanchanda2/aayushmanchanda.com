@@ -1,0 +1,196 @@
+{
+  "base": "http://localhost:4420",
+  "date": "2026-09-24T20:24:02.291Z",
+  "routes": {
+    "/tools": {
+      "lighthouse": {
+        "score": 98,
+        "lcpMs": 2307,
+        "tbtMs": 0,
+        "cls": 0,
+        "totalKB": 305,
+        "imageRequests": 32,
+        "imageKB": 193,
+        "fcpMs": 1541,
+        "lcpElement": "<p class=\"standfirst\" data-astro-cid-e2calspi=\"\">",
+        "documentKB": 27,
+        "tbtMsRuns": [
+          0,
+          0,
+          0
+        ],
+        "lcpMsRuns": [
+          2291,
+          2307,
+          2330
+        ]
+      },
+      "scroll": {
+        "htmlKB": 346,
+        "img": 125,
+        "eager": 0,
+        "high": 0,
+        "fullShotSrc": 0,
+        "loadImageKB": 193,
+        "scrollImageKB": 447,
+        "scrollPx": 7202,
+        "frames": 1559,
+        "fps": 119,
+        "longFrames50": 0,
+        "worstFrameMs": 17
+      }
+    },
+    "/library/answer-ai-design-with-blue-ink-style-illustrations": {
+      "lighthouse": {
+        "score": 98,
+        "lcpMs": 2379,
+        "tbtMs": 0,
+        "cls": 0,
+        "totalKB": 373,
+        "imageRequests": 11,
+        "imageKB": 270,
+        "fcpMs": 1460,
+        "lcpElement": "<dd data-astro-cid-3dkvbi5v=\"\">",
+        "documentKB": 21,
+        "tbtMsRuns": [
+          0,
+          0,
+          0
+        ],
+        "lcpMsRuns": [
+          2378,
+          2379,
+          2381
+        ]
+      },
+      "scroll": {
+        "htmlKB": 91,
+        "img": 5,
+        "eager": 0,
+        "high": 0,
+        "fullShotSrc": 0,
+        "loadImageKB": 270,
+        "scrollImageKB": 270,
+        "scrollPx": 1136,
+        "frames": 347,
+        "fps": 118,
+        "longFrames50": 0,
+        "worstFrameMs": 17
+      }
+    },
+    "/sites/arc-from-the-browser-company": {
+      "lighthouse": {
+        "score": 96,
+        "lcpMs": 2726,
+        "tbtMs": 0,
+        "cls": 0,
+        "totalKB": 238,
+        "imageRequests": 6,
+        "imageKB": 144,
+        "fcpMs": 1301,
+        "lcpElement": "<img class=\"scroller__shot\" src=\"http://localhost:4420/thumbs/arc-from-the-browser-company-full-780.webp\" alt=\"Full page of Arc\" loading=\"eager\" decoding=\"async\" fetchpriority=\"high\" width=\"1440\" height=\"6117\" data-astro-cid-h7q67odh=\"\">",
+        "documentKB": 14,
+        "tbtMsRuns": [
+          0,
+          0,
+          0
+        ],
+        "lcpMsRuns": [
+          2722,
+          2726,
+          2796
+        ]
+      },
+      "scroll": {
+        "htmlKB": 69,
+        "img": 1,
+        "eager": 1,
+        "high": 1,
+        "fullShotSrc": 0,
+        "loadImageKB": 144,
+        "scrollImageKB": 144,
+        "scrollPx": 1650,
+        "frames": 446,
+        "fps": 117,
+        "longFrames50": 0,
+        "worstFrameMs": 18
+      }
+    },
+    "/sites": {
+      "lighthouse": {
+        "score": 95,
+        "lcpMs": 2829,
+        "tbtMs": 0,
+        "cls": 0,
+        "totalKB": 298,
+        "imageRequests": 16,
+        "imageKB": 195,
+        "fcpMs": 1532,
+        "lcpElement": "<p class=\"standfirst\" data-astro-cid-4jgxngw7=\"\">",
+        "documentKB": 21,
+        "tbtMsRuns": [
+          0,
+          0,
+          0
+        ],
+        "lcpMsRuns": [
+          2804,
+          2829,
+          2842
+        ]
+      },
+      "scroll": {
+        "htmlKB": 166,
+        "img": 60,
+        "eager": 4,
+        "high": 1,
+        "fullShotSrc": 0,
+        "loadImageKB": 195,
+        "scrollImageKB": 602,
+        "scrollPx": 8000,
+        "frames": 1740,
+        "fps": 120,
+        "longFrames50": 0,
+        "worstFrameMs": 17
+      }
+    },
+    "/about": {
+      "lighthouse": {
+        "score": 99,
+        "lcpMs": 1995,
+        "tbtMs": 0,
+        "cls": 0,
+        "totalKB": 139,
+        "imageRequests": 9,
+        "imageKB": 51,
+        "fcpMs": 1151,
+        "lcpElement": "<p class=\"bio\" data-astro-cid-ta2fbyqs=\"\">",
+        "documentKB": 12,
+        "tbtMsRuns": [
+          0,
+          0,
+          0
+        ],
+        "lcpMsRuns": [
+          1940,
+          1995,
+          2036
+        ]
+      },
+      "scroll": {
+        "htmlKB": 53,
+        "img": 4,
+        "eager": 1,
+        "high": 0,
+        "fullShotSrc": 0,
+        "loadImageKB": 24,
+        "scrollImageKB": 51,
+        "scrollPx": 1547,
+        "frames": 433,
+        "fps": 119,
+        "longFrames50": 0,
+        "worstFrameMs": 25
+      }
+    }
+  }
+}
