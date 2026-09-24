@@ -1,0 +1,6 @@
+sites-collections {"rows":5,"chipH":21,"gaps":[29,28,29,29],"hit44":true,"rowGap":"24px"}
+sites-hues {"rows":2,"chipH":28,"gaps":[16],"hit44":true,"rowGap":"16px"}
+collection-hues {"rows":2,"chipH":28,"gaps":[16],"hit44":true,"rowGap":"16px"}
+library-tags {"rows":4,"chipH":28,"gaps":[16,16,16],"hit44":true,"rowGap":"16px"}
+entry-tags {"rows":1,"chipH":28,"gaps":[],"hit44":true,"rowGap":"16px"}
+site-facts {"rows":1,"chipH":21,"gaps":[],"hit44":true,"rowGap":"24px"}

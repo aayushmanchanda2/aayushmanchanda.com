@@ -714,6 +714,8 @@ mark[data-color="green"] {
    sets fighting over one name. They share the reading size and ink instead. */
 .doc {
   margin-top: var(--gap-masthead);
+  /* a bare URL is one word: it breaks rather than running under the frame */
+  overflow-wrap: break-word;
   /* rem, not ch: Geist's 1ch is wider than its average glyph, so 62ch ran to
      90 characters a line (design-review, VET-225). */
   max-width: 40rem;
