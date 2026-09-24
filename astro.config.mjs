@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
+import { fileURLToPath } from 'node:url';
 
 import { PAGES } from './src/lib/markdown.ts';
 import { SITE_URL, absolute } from './src/lib/site.ts';
@@ -58,6 +59,24 @@ const clerkConfig = {
   load: (id) => (id === '\0clerk-astro-config' ? 'export const isStaticOutput = (forceStatic) => forceStatic ?? false;' : undefined),
 };
 
+/**
+ * The signed-in module (`src/lib/signed-in.ts`) at a fixed address,
+ * `/signed-in.js`, because the one thing that loads it is an inline script
+ * (`lib/signed-in-check.ts`), which Vite never sees and so cannot hand a
+ * hashed name. Emitted as its own entry, so nothing on a public page imports
+ * it; its imports keep their hashed `/_astro/` names. Outside `/_astro/`, so
+ * Vercel revalidates it instead of caching it for a year.
+ * @type {import('vite').Plugin}
+ */
+const signedInEntry = {
+  name: 'signed-in-entry',
+  apply: 'build',
+  applyToEnvironment: (environment) => environment.name === 'client',
+  buildStart() {
+    this.emitFile({ type: 'chunk', id: fileURLToPath(new URL('./src/lib/signed-in.ts', import.meta.url)), fileName: 'signed-in.js' });
+  },
+};
+
 // https://astro.build/config
 export default defineConfig({
   /**
@@ -97,7 +116,7 @@ export default defineConfig({
    */
   prefetch: { prefetchAll: false, defaultStrategy: "hover" },
 
-  vite: { plugins: [clerkConfig] },
+  vite: { plugins: [clerkConfig, signedInEntry] },
 
   integrations: [
     sitemap({

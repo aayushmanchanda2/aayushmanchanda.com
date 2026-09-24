@@ -6,7 +6,8 @@
  * a filter would make this the containing block for the menu panel's
  * `position: fixed` and clip it to the bar. A press on its empty stretch
  * scrolls to the top (script below). `Base.astro` works out the items and the
- * trail; this draws them. The `bar` slot is /me's "Sign out" (`SignOut.astro`).
+ * trail; this draws them. While Aayush is signed in, `lib/signed-in.ts` adds
+ * "Private" and "Sign out" at its end.
  */
 import Breadcrumbs from "./Breadcrumbs.astro";
 import MobileNav from "./MobileNav.astro";
@@ -33,7 +34,6 @@ const { navItems, pathname, trail } = Astro.props;
   >
     Search <kbd data-palette-hint>&#8984;K</kbd>
   </button>
-  <slot name="bar" />
 </header>
 
 <script>

@@ -35,6 +35,7 @@ import { FEEDS, getSections } from "../lib/sections";
 import { absolute } from "../lib/site";
 import { PREPAINT, THEME_COLORS } from "../lib/theme";
 import { PREPAINT as SOUND_PREPAINT } from "../lib/ui-sound";
+import { signedInCheck } from "../lib/signed-in-check";
 
 interface Props {
   title?: string;
@@ -329,7 +330,7 @@ const markdownVariant = variant === null ? null : absolute(variant);
     */}
     <span class="visually-hidden" aria-live="polite" data-theme-live></span>
 
-    <TopBar navItems={navItems} pathname={pathname} trail={trail}><slot name="bar" slot="bar" /></TopBar>
+    <TopBar navItems={navItems} pathname={pathname} trail={trail} />
     <CommandPalette />
     {/* The UI tick (`lib/ui-sound.ts`): listeners only; no audio until a press. */}
     <script>
@@ -355,6 +356,14 @@ const markdownVariant = variant === null ? null : absolute(variant);
       <Footer />
     </div>
     </div>
+
+    {/*
+      Signed in? A regex over Clerk's `__client_uat` cookie, and only a yes
+      imports the signed-in module (`lib/signed-in-check.ts`, VET-276): the
+      top bar's "Private" and "Sign out", the private rows in the library pane
+      and in the palette. Every other visitor runs this line and loads nothing.
+    */}
+    <script is:inline set:html={signedInCheck(import.meta.env.DEV ? "/src/lib/signed-in.ts" : "/signed-in.js")} />
 
     <style>
       .skip {

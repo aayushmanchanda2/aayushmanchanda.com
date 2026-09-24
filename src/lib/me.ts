@@ -14,7 +14,8 @@
 import { ConvexHttpClient } from "convex/browser";
 
 import { api } from "../../convex/_generated/api.js";
-import { isOwner } from "./private.ts";
+import type { PrivateRow } from "./private.ts";
+import { isOwner, paneRows, toEntries } from "./private.ts";
 
 export interface MeEnv {
   convexUrl: string;
@@ -58,4 +59,19 @@ export const privateApi = api.entries;
 export function privateHeaders(headers: Headers): void {
   headers.set("Cache-Control", "private, no-store");
   headers.set("X-Robots-Tag", "noindex, nofollow");
+}
+
+/**
+ * `/me/api/rows` (VET-276): the private rows as `PaneRow`s, for the signed-in
+ * module on public pages. The same gate as every /me page; anyone it does not
+ * let through gets a bare 404, the answer a missing route gives.
+ */
+export async function rowsResponse(locals: App.Locals): Promise<Response> {
+  const access = await gate(locals);
+  const headers = new Headers();
+  privateHeaders(headers);
+  if (access.state !== "owner") return new Response(null, { status: 404, headers });
+  const rows = toEntries((await access.convex.query(privateApi.list, {})) as PrivateRow[]);
+  headers.set("Content-Type", "application/json");
+  return new Response(JSON.stringify(paneRows(rows)), { headers });
 }

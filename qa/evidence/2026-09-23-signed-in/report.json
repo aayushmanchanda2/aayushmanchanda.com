@@ -1,0 +1,148 @@
+{
+  "checks": [
+    {
+      "name": "signed out /: same JS files and bytes as main",
+      "ok": true,
+      "detail": "16794 -> 16794 bytes, 15 files"
+    },
+    {
+      "name": "signed out /: no signed-in module requested",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "signed out /library: same JS files and bytes as main",
+      "ok": true,
+      "detail": "20893 -> 20893 bytes, 19 files"
+    },
+    {
+      "name": "signed out /library: no signed-in module requested",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "signed out /tools/: same JS files and bytes as main",
+      "ok": true,
+      "detail": "29204 -> 29204 bytes, 22 files"
+    },
+    {
+      "name": "signed out /tools/: no signed-in module requested",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "signed out /sites/: same JS files and bytes as main",
+      "ok": true,
+      "detail": "26538 -> 26538 bytes, 21 files"
+    },
+    {
+      "name": "signed out /sites/: no signed-in module requested",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "signed in /tools/: Private link and one Sign out in the bar",
+      "ok": true,
+      "detail": "{\"link\":\"Private 3\",\"outs\":1}"
+    },
+    {
+      "name": "signed in /about/: Private link and one Sign out in the bar",
+      "ok": true,
+      "detail": "{\"link\":\"Private 3\",\"outs\":1}"
+    },
+    {
+      "name": "/library: every private row is in the pane, lock-marked, with its tip",
+      "ok": true,
+      "detail": "{\"rows\":4,\"locks\":4,\"tips\":1,\"hrefs\":[\"/me/library/fixture-private-article\",\"/me/library/fixture-private-post\",\"/me/library/fixture-private-video\",\"/me/library/fixture-private-also\"],\"segment\":\"Private 3\",\"months\":[\"September 2026 · 14\",\"August 2026 · 7\",\"July 2026 · 4\",\"Also saved · 20\"],\"firstUnderSeptember\":\"post\"}"
+    },
+    {
+      "name": "/library: private rows open /me/library/<slug>",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "/library: the Private segment carries its count",
+      "ok": true,
+      "detail": "Private 3"
+    },
+    {
+      "name": "/library: month headers are rebuilt with counts",
+      "ok": true,
+      "detail": "September 2026 · 14 | August 2026 · 7 | July 2026 · 4 | Also saved · 20"
+    },
+    {
+      "name": "/library: ticking a private tag filters to the private rows carrying it",
+      "ok": true,
+      "detail": "{\"url\":\"?tags=fixture\",\"shown\":[\"private\",\"private\"]}"
+    },
+    {
+      "name": "/library: the Private segment goes to /me/library?kind=private",
+      "ok": true,
+      "detail": "http://127.0.0.1:4330/me/library?kind=private"
+    },
+    {
+      "name": "entry page: the Private segment filters the pane in place",
+      "ok": true,
+      "detail": "{\"url\":\"?kind=private\",\"shown\":[\"private\",\"private\",\"private\",\"private\"]}"
+    },
+    {
+      "name": "⌘K: a private entry is searchable",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "sign out on /tools returns to /tools, controls gone",
+      "ok": true,
+      "detail": "http://127.0.0.1:4330/tools/"
+    },
+    {
+      "name": "fake cookie, real 404 endpoint: page unchanged, no page errors",
+      "ok": true,
+      "detail": "{\"bar\":0,\"rows\":0,\"seg\":0} rows requests 1"
+    },
+    {
+      "name": "fake cookie, Clerk not loadable: page unchanged, no page errors",
+      "ok": true,
+      "detail": "{\"bar\":0,\"rows\":0,\"seg\":0} rows requests 0"
+    }
+  ],
+  "delta": [
+    {
+      "route": "/",
+      "mainJs": 16794,
+      "branchJs": 16794,
+      "mainFiles": 15,
+      "branchFiles": 15,
+      "inlineDelta": 110,
+      "htmlDelta": 127
+    },
+    {
+      "route": "/library",
+      "mainJs": 20893,
+      "branchJs": 20893,
+      "mainFiles": 19,
+      "branchFiles": 19,
+      "inlineDelta": 110,
+      "htmlDelta": 127
+    },
+    {
+      "route": "/tools/",
+      "mainJs": 29204,
+      "branchJs": 29204,
+      "mainFiles": 22,
+      "branchFiles": 22,
+      "inlineDelta": 110,
+      "htmlDelta": 127
+    },
+    {
+      "route": "/sites/",
+      "mainJs": 26538,
+      "branchJs": 26538,
+      "mainFiles": 21,
+      "branchFiles": 21,
+      "inlineDelta": 110,
+      "htmlDelta": 127
+    }
+  ],
+  "pageErrors": []
+}

@@ -11,8 +11,11 @@
  * parser (rightly) refuses any picture that is not a committed path.
  */
 import { isOwner } from "../../convex/owner.ts";
-import type { LibraryEntry } from "./library.ts";
-import { parseLibrary } from "./library.ts";
+import { formatDay, formatMonth } from "./date.ts";
+import type { Kind, LibraryEntry } from "./library.ts";
+import { entryHref, library, parseLibrary, rowSummary } from "./library.ts";
+import { clipText } from "./post.ts";
+import { tagLabel } from "./tags.ts";
 
 export { isOwner };
 
@@ -161,4 +164,61 @@ export function toEntries(rows: PrivateRow[]): LibraryEntry[] {
       }
     })
     .sort((a, b) => b.saved_date.localeCompare(a.saved_date));
+}
+
+/**
+ * A private row as the signed-in module draws it on a public page
+ * (`lib/pane-merge.ts`, VET-276): what `LibraryPane.astro` renders for it,
+ * worked out here so the browser needs no library code.
+ */
+export interface PaneRow {
+  slug: string;
+  href: string;
+  title: string;
+  domain: string;
+  kind: Kind;
+  date: string;
+  /** "Sep 22, 2026", for an "Also saved" row. */
+  day: string;
+  /** Its month header, "September 2026". */
+  month: string;
+  tags: { slug: string; label: string }[];
+  also: boolean;
+  /** The line under the title, cut at 110 like the pane's; a block's tip when it has one. */
+  summary: string | null;
+  tip: boolean;
+  /**
+   * The public row it sits above (its href), or null for the end of its group,
+   * in the order the pane on /me sorts them: newest first, public before
+   * private on the same day, "Also saved" after the main feed.
+   */
+  before: string | null;
+  /** The TLDR, the note and the tip, for the command palette. */
+  lead: string;
+}
+
+export function paneRows(rows: LibraryEntry[], pub: LibraryEntry[] = library): PaneRow[] {
+  const own = new Set(rows);
+  const merged = [...pub, ...rows].sort((a, b) => b.saved_date.localeCompare(a.saved_date));
+  return rows.map((entry) => {
+    const also = Boolean(entry.also_saved);
+    const next = merged.slice(merged.indexOf(entry) + 1).find((other) => !own.has(other) && Boolean(other.also_saved) === also);
+    const summary = also ? null : (entry.block?.tip ?? rowSummary(entry));
+    return {
+      slug: entry.slug,
+      href: privateHref(entry.slug),
+      title: entry.title,
+      domain: entry.domain,
+      kind: entry.kind,
+      date: entry.saved_date,
+      day: formatDay(entry.saved_date),
+      month: formatMonth(entry.saved_date),
+      tags: entry.tags.map((slug) => ({ slug, label: tagLabel(slug) })),
+      also,
+      summary: summary ? clipText(summary, 110) : null,
+      tip: Boolean(entry.block),
+      before: next ? entryHref(next) : null,
+      lead: [entry.tldr, entry.note, entry.block?.tip].filter(Boolean).join(" "),
+    };
+  });
 }
