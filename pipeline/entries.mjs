@@ -674,6 +674,9 @@ export function buildReadingEntry({
     ...(tags.length === 0 ? {} : { tags }),
     ...(post === null ? {} : { post }),
     ...(video === null ? {} : { video: { ...video, thumb: thumbWebPath(slug) } }),
+    // The day any file of it was copied into `public/` (VET-65): a takedown
+    // claim asks when, and every copy of a post lives under `/posts/`.
+    ...(video !== null || JSON.stringify(post ?? null).includes('"/posts/') ? { media_retrieved: date } : {}),
     ...(draft === null ? {} : { draft }),
     ...(why === null ? {} : { why }),
   };

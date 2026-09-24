@@ -655,3 +655,14 @@ test("a long raw title still publishes, cut on a word inside the 60-character ca
   const exact = "a".repeat(TITLE_MAX);
   assert.equal(buildReadingEntry({ bookmark: saved({ title: exact, url: "https://example.com/x" }), slug: "x", date: "2026-09-24" }).title, exact);
 });
+
+test("a post with a copied picture, or a video, is dated the day its media was retrieved (VET-65)", () => {
+  const base = { bookmark: saved(), slug: "s", date: "2026-09-24" };
+  const withAvatar = buildReadingEntry({ ...base, post: { ...post("Hi."), avatar: "/posts/1/avatar.webp" } });
+  const video = buildReadingEntry({ ...base, video: { provider: "youtube", id: "abc" } });
+  const bare = buildReadingEntry({ ...base, post: post("Hi.") });
+
+  assert.equal(withAvatar.media_retrieved, "2026-09-24");
+  assert.equal(video.media_retrieved, "2026-09-24");
+  assert.equal("media_retrieved" in bare, false, "no file copied, no date");
+});

@@ -251,6 +251,8 @@ export interface LibraryEntry {
   block: Block | null;
   /** Kept without a block: a data flag only. Lists show it like any entry, by date, in its kind's format (VET-284). */
   also_saved: boolean;
+  /** ISO day the post's pictures or the video's poster were copied here, for a takedown claim (VET-65). Or null. */
+  media_retrieved: string | null;
 }
 
 /** A point in a video, at `t` whole seconds into `video` (a YouTube id). */
@@ -656,6 +658,7 @@ export function parseLibrary(value: unknown): LibraryEntry[] {
       }),
       block: readCapped(item, "block", where, block),
       also_saved: readFlag(item, "also_saved", where),
+      media_retrieved: item["media_retrieved"] == null ? null : readDate(item, "media_retrieved", where),
     };
   });
 

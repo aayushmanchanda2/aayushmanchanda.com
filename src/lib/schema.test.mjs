@@ -177,6 +177,7 @@ const DIGESTED_ENTRY = {
   moments: [],
   block: null,
   also_saved: false,
+  media_retrieved: null,
 };
 
 /**
@@ -216,6 +217,7 @@ const SAVED_ENTRY = {
   moments: [],
   block: null,
   also_saved: false,
+  media_retrieved: null,
 };
 
 /** @type {import("./sites.ts").Site} */
