@@ -113,6 +113,9 @@ const index = start !== undefined;
       flex: 0 0 350px;
       height: calc(100dvh - var(--bar-h) - var(--frame) - var(--frame-in));
       overflow-y: auto;
+      /* Its own scroll (VET-284, G8): a drag that reaches the pane's end stops
+         there instead of carrying on into the page beside it. */
+      overscroll-behavior: contain;
       /* Arrow-key focus scrolls a row clear of the toolbar and a month header. */
       scroll-padding-top: calc(var(--pane-bar, 5.375rem) + 2.25rem);
       border-right: 1px solid var(--hairline);
