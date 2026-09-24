@@ -1,0 +1,505 @@
+{
+  "base": "http://localhost:4381/",
+  "label": "vet-281-final",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-23-vet-281-final",
+  "at": "2026-09-24T04:28:33.743Z",
+  "shots": [
+    {
+      "route": "/tools/agent-browser",
+      "url": "http://localhost:4381/tools/agent-browser",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "tools_agent_browser-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".sec__head": [],
+        ".out__more": [],
+        ".tool-preview__img": [
+          {
+            "text": "",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/sites/brian-lovin",
+      "url": "http://localhost:4381/sites/brian-lovin",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "sites_brian_lovin-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".sec__head": [],
+        ".out__more": [],
+        ".tool-preview__img": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/jason-liu-codex-operating-system",
+      "url": "http://localhost:4381/library/jason-liu-codex-operating-system",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "library_jason_liu_codex_operating_system-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".sec__head": [
+          {
+            "text": "Written by AI",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "20.3px"
+          },
+          {
+            "text": "postThe source",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "20.3px"
+          }
+        ],
+        ".out__more": [
+          {
+            "text": "14 saved",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".tool-preview__img": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/kind/article",
+      "url": "http://localhost:4381/library/kind/article",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "library_kind_article-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".sec__head": [
+          {
+            "text": "Written by AI",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "20.3px"
+          },
+          {
+            "text": "articleThe source",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "20.3px"
+          }
+        ],
+        ".out__more": [],
+        ".tool-preview__img": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools/agent-browser",
+      "url": "http://localhost:4381/tools/agent-browser",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "tools_agent_browser-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".sec__head": [],
+        ".out__more": [],
+        ".tool-preview__img": [
+          {
+            "text": "",
+            "color": "rgb(23, 23, 23)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/sites/brian-lovin",
+      "url": "http://localhost:4381/sites/brian-lovin",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "sites_brian_lovin-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".sec__head": [],
+        ".out__more": [],
+        ".tool-preview__img": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/jason-liu-codex-operating-system",
+      "url": "http://localhost:4381/library/jason-liu-codex-operating-system",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library_jason_liu_codex_operating_system-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".sec__head": [
+          {
+            "text": "Written by AI",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "20.3px"
+          },
+          {
+            "text": "postThe source",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "20.3px"
+          }
+        ],
+        ".out__more": [
+          {
+            "text": "14 saved",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".tool-preview__img": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/kind/article",
+      "url": "http://localhost:4381/library/kind/article",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library_kind_article-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "styles": {
+        ".sec__head": [
+          {
+            "text": "Written by AI",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "20.3px"
+          },
+          {
+            "text": "articleThe source",
+            "color": "rgb(82, 82, 82)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "20.3px"
+          }
+        ],
+        ".out__more": [],
+        ".tool-preview__img": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools/agent-browser",
+      "url": "http://localhost:4381/tools/agent-browser",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "tools_agent_browser-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".sec__head": [],
+        ".out__more": [],
+        ".tool-preview__img": [
+          {
+            "text": "",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/sites/brian-lovin",
+      "url": "http://localhost:4381/sites/brian-lovin",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "sites_brian_lovin-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".sec__head": [],
+        ".out__more": [],
+        ".tool-preview__img": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/jason-liu-codex-operating-system",
+      "url": "http://localhost:4381/library/jason-liu-codex-operating-system",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "library_jason_liu_codex_operating_system-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".sec__head": [
+          {
+            "text": "Written by AI",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "20.3px"
+          },
+          {
+            "text": "postThe source",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "20.3px"
+          }
+        ],
+        ".out__more": [
+          {
+            "text": "14 saved",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".tool-preview__img": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/kind/article",
+      "url": "http://localhost:4381/library/kind/article",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "library_kind_article-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".sec__head": [
+          {
+            "text": "Written by AI",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "20.3px"
+          },
+          {
+            "text": "articleThe source",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "20.3px"
+          }
+        ],
+        ".out__more": [],
+        ".tool-preview__img": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/tools/agent-browser",
+      "url": "http://localhost:4381/tools/agent-browser",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "tools_agent_browser-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".sec__head": [],
+        ".out__more": [],
+        ".tool-preview__img": [
+          {
+            "text": "",
+            "color": "rgba(255, 255, 255, 0.9)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ]
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/sites/brian-lovin",
+      "url": "http://localhost:4381/sites/brian-lovin",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "sites_brian_lovin-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".sec__head": [],
+        ".out__more": [],
+        ".tool-preview__img": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/jason-liu-codex-operating-system",
+      "url": "http://localhost:4381/library/jason-liu-codex-operating-system",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library_jason_liu_codex_operating_system-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".sec__head": [
+          {
+            "text": "Written by AI",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "20.3px"
+          },
+          {
+            "text": "postThe source",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "20.3px"
+          }
+        ],
+        ".out__more": [
+          {
+            "text": "14 saved",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "16px",
+            "font-weight": "400",
+            "letter-spacing": "normal",
+            "line-height": "25.6px"
+          }
+        ],
+        ".tool-preview__img": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/kind/article",
+      "url": "http://localhost:4381/library/kind/article",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "library_kind_article-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "styles": {
+        ".sec__head": [
+          {
+            "text": "Written by AI",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "20.3px"
+          },
+          {
+            "text": "articleThe source",
+            "color": "rgba(255, 255, 255, 0.7)",
+            "font-size": "14px",
+            "font-weight": "500",
+            "letter-spacing": "normal",
+            "line-height": "20.3px"
+          }
+        ],
+        ".out__more": [],
+        ".tool-preview__img": []
+      },
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}
