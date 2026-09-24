@@ -18,12 +18,13 @@ Zero framework JS ships. Interactions are vanilla scripts inside `.astro` compon
 
 ## Gates
 
-Run all three before calling anything done:
+Run all four before calling anything done:
 
 ```
 npx astro check     # 0 errors, 0 warnings (hints: known baseline of 1)
 npm test            # all pass
 npm run build       # clean
+npm run validate:schema  # JSON-LD valid on every page
 ```
 
 **What a test is for** (Brian Lovin's rule): test copy, hrefs and logic, not CSS source. A test that greps a stylesheet for a property passes while the page looks wrong and fails on a harmless refactor. Look is checked on the real page, below.
