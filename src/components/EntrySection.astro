@@ -1,0 +1,100 @@
+---
+/**
+ * EntrySection — one of an entry page's three boxes (VET-279), so who wrote
+ * what reads at a glance: "Written by AI" (the TLDR, the block, the notes the
+ * agents filed), "In my words" (only what Aayush typed himself) and "The
+ * source" (the piece's own words). A square box in `--hairline-strong`, a
+ * header row in the /tools and /sites table header's voice (`table.css ›
+ * th`), then the content with a `--hairline` between every part: `.fact` rows
+ * (global.css, the /sites field table) or a padded `.sec__body`.
+ */
+interface Props {
+  /** The header's words, sentence case. */
+  label: string;
+  /** The header's id, for `aria-labelledby`. */
+  id: string;
+  /** A glyph before the label; a `slot="icon"` (e.g. `KindIcon`) wins. */
+  icon?: "ai" | "pen";
+  /** A copy button inside: the section is its `[data-copy-root]` (`lib/copy-flash.ts`). */
+  copy?: boolean;
+}
+
+const { label, id, icon, copy = false } = Astro.props;
+const PATHS = {
+  ai: "M8 1.75 L9.35 6.65 L14.25 8 L9.35 9.35 L8 14.25 L6.65 9.35 L1.75 8 L6.65 6.65 Z",
+  pen: "M10.75 2.25 L13.75 5.25 L5.5 13.5 H2.5 V10.5 Z M9 4 L12 7",
+};
+---
+
+<section class="sec" aria-labelledby={id} data-copy-root={copy ? "" : undefined}>
+  <h2 class="sec__head" id={id}>
+    <slot name="icon">
+      {icon && <svg class="sec__icon" viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d={PATHS[icon]} /></svg>}
+    </slot>
+    {label}
+  </h2>
+  <slot />
+  {copy && <p class="visually-hidden" role="status" aria-live="polite" data-copy-status></p>}
+</section>
+
+<style>
+  /* 40px between sections (§2's rhythm); each box keeps the reading measure. */
+  .sec {
+    max-width: 40rem;
+    margin-top: 2.5rem;
+    border: 1px solid var(--hairline-strong);
+  }
+
+  .sec__head {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 40px;
+    padding-inline: 1.25rem;
+    background: var(--surface-2);
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    font-weight: 500;
+    letter-spacing: normal;
+    line-height: 1.45;
+  }
+
+  .sec__icon {
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.25;
+    stroke-linejoin: round;
+  }
+
+  /* One hairline between every part, the header's included. */
+  .sec > :global(* + *:not([data-copy-status])) {
+    border-top: 1px solid var(--hairline);
+  }
+
+  .sec :global(.fact) {
+    padding-inline: 1.25rem;
+    border-bottom: 0;
+  }
+
+  .sec :global(.fact ~ .fact) {
+    border-top: 1px solid var(--hairline);
+  }
+
+  .sec :global(.fact > dt) {
+    font-size: 0.875rem;
+    line-height: 1.6;
+  }
+
+  .sec :global(.fact > dd) {
+    color: var(--text-secondary);
+    line-height: 1.55;
+    text-wrap: pretty;
+  }
+
+  .sec :global(.sec__body) {
+    padding: 1.25rem;
+  }
+</style>

@@ -1,0 +1,121 @@
+{
+  "checks": [
+    {
+      "name": "signed out /: no added JS",
+      "ok": true,
+      "detail": "18577 -> 18577 bytes, inline 2508 -> 2508"
+    },
+    {
+      "name": "signed out /library: no added JS",
+      "ok": true,
+      "detail": "22676 -> 22676 bytes, inline 13604 -> 13604"
+    },
+    {
+      "name": "signed out /library/kind/article: no added JS",
+      "ok": true,
+      "detail": "22805 -> 22805 bytes, inline 11252 -> 10742"
+    },
+    {
+      "name": "signed out /library/jason-liu-codex-operating-system: no added JS",
+      "ok": true,
+      "detail": "23482 -> 23482 bytes, inline 7709 -> 7709"
+    },
+    {
+      "name": "signed out /library/how-gumclaw-works: no added JS",
+      "ok": true,
+      "detail": "23397 -> 23397 bytes, inline 8670 -> 8160"
+    },
+    {
+      "name": "signed out /tools/: no added JS",
+      "ok": true,
+      "detail": "30987 -> 30987 bytes, inline 12312 -> 12312"
+    },
+    {
+      "name": "signed out /sites/: no added JS",
+      "ok": true,
+      "detail": "27593 -> 27593 bytes, inline 5528 -> 5528"
+    },
+    {
+      "name": "/library/jason-liu-codex-operating-system: AI box, then the source, no \"In my words\"",
+      "ok": true,
+      "detail": "Written by AI | The source"
+    },
+    {
+      "name": "/library/how-gumclaw-works: AI box, then the source, no \"In my words\"",
+      "ok": true,
+      "detail": "Written by AI | The source"
+    },
+    {
+      "name": "/library/most-valuable-skill-2026-managing-ai-agents: AI box, then the source, no \"In my words\"",
+      "ok": true,
+      "detail": "Written by AI | The source"
+    },
+    {
+      "name": "phone /library: private rows on top of the All view",
+      "ok": true,
+      "detail": "{\"visible\":true,\"first\":true,\"head\":\"PrivateAll 3\",\"rows\":3,\"locks\":3,\"tips\":1,\"hrefs\":[\"/me/library/fixture-private-article\",\"/me/library/fixture-private-post\",\"/me/library/fixture-private-video\"]}"
+    },
+    {
+      "name": "phone /library: each row lock-marked, tips shown, opens /me/library/<slug>",
+      "ok": true,
+      "detail": "{\"visible\":true,\"first\":true,\"head\":\"PrivateAll 3\",\"rows\":3,\"locks\":3,\"tips\":1,\"hrefs\":[\"/me/library/fixture-private-article\",\"/me/library/fixture-private-post\",\"/me/library/fixture-private-video\"]}"
+    },
+    {
+      "name": "desktop /library: the phone list hides, the pane has the rows",
+      "ok": true,
+      "detail": "{\"phoneVisible\":false,\"pane\":4}"
+    }
+  ],
+  "delta": [
+    {
+      "route": "/",
+      "mainJs": 18577,
+      "branchJs": 18577,
+      "files": 16,
+      "inlineDelta": 0
+    },
+    {
+      "route": "/library",
+      "mainJs": 22676,
+      "branchJs": 22676,
+      "files": 20,
+      "inlineDelta": 0
+    },
+    {
+      "route": "/library/kind/article",
+      "mainJs": 22805,
+      "branchJs": 22805,
+      "files": 21,
+      "inlineDelta": -510
+    },
+    {
+      "route": "/library/jason-liu-codex-operating-system",
+      "mainJs": 23482,
+      "branchJs": 23482,
+      "files": 23,
+      "inlineDelta": 0
+    },
+    {
+      "route": "/library/how-gumclaw-works",
+      "mainJs": 23397,
+      "branchJs": 23397,
+      "files": 22,
+      "inlineDelta": -510
+    },
+    {
+      "route": "/tools/",
+      "mainJs": 30987,
+      "branchJs": 30987,
+      "files": 23,
+      "inlineDelta": 0
+    },
+    {
+      "route": "/sites/",
+      "mainJs": 27593,
+      "branchJs": 27593,
+      "files": 21,
+      "inlineDelta": 0
+    }
+  ],
+  "pageErrors": []
+}

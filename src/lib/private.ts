@@ -34,7 +34,7 @@ export interface RaindropHighlight {
   note: string | null;
 }
 
-/** What the "Why I saved it" card shows (`WhyCard.astro`); every part may be empty. */
+/** A private entry's own parts, which `EntryDetail.astro` splits by who wrote them; every part may be empty. */
 export interface Why {
   mine: string | null;
   /** What he wrote Hermes on Telegram with the link, verbatim. */

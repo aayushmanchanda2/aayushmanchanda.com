@@ -506,6 +506,48 @@ mark[data-color="green"] {
   transform: scale(var(--press-scale));
 }
 
+/* The site's button (VET-279): the view toggle's frame as one control. 32px
+   drawn in a hairline at `--r-md`, 14px sans in `--text-secondary`, full ink
+   on hover; the `::before` takes it to the 40px floor (44px under a finger),
+   the offset trick `.views__btn` uses (`::after` is `.ext`'s arrow). Pair it with `.press`, which names the
+   transition. */
+.ctl {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-height: 32px;
+  padding-inline: 0.75rem;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-md);
+  background: var(--bg);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.45;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.ctl::before {
+  content: "";
+  position: absolute;
+  inset: -4px 0;
+}
+
+@media (pointer: coarse) {
+  .ctl::before {
+    inset: -6px 0;
+  }
+}
+
+@media (hover: hover) {
+  .ctl:hover {
+    border-color: var(--hairline-strong);
+    color: var(--text-primary);
+  }
+}
+
 /* Subtle dotted-grid texture — backdrop for framed screenshots. */
 .dotted-grid {
   background-image: radial-gradient(var(--dot) 1px, transparent 1px);
