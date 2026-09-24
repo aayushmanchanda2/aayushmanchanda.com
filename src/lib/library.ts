@@ -63,7 +63,7 @@ import { SLUG, routeSlug } from "./parse.ts";
 import type { Post } from "./post-schema.ts";
 import { READ, fail, readCommittedPath, readList, readPostObject } from "./post-schema.ts";
 import type { Block, Color } from "./reader.mjs";
-import { CAPS, block, highlights, keyline, moments, postHighlights, prose } from "./reader.mjs";
+import { CAPS, block, highlights, keyline, moments, postHighlights, prose, title } from "./reader.mjs";
 
 import rawLibrary from "../data/library.json" with { type: "json" };
 
@@ -572,6 +572,16 @@ function readCapped<T>(
   }
 }
 
+/** Required, one string, and within `reader.mjs › TITLE_MAX` (VET-283). */
+function readTitle(entry: Record<string, unknown>, where: string): string {
+  const value = readString(entry, "title", where);
+  try {
+    return title(value);
+  } catch (error) {
+    fail(where, error instanceof Error ? error.message : String(error));
+  }
+}
+
 /** Absent or null is false; anything else has to be a boolean. */
 function readFlag(entry: Record<string, unknown>, key: string, where: string): boolean {
   const value = entry[key];
@@ -617,7 +627,7 @@ export function parseLibrary(value: unknown): LibraryEntry[] {
 
     return {
       slug,
-      title: readString(item, "title", where),
+      title: readTitle(item, where),
       // Returned as authored, not as `url.href`, which would rewrite a bare
       // origin with a trailing slash and change what the row shows.
       url: readString(item, "url", where),

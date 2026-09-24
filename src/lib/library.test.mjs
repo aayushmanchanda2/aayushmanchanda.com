@@ -398,3 +398,8 @@ test("a block tip's lead is its first sentence, quotes and all", async () => {
   assert.deepEqual(leadSentence("One sentence only."), ["One sentence only.", ""]);
   assert.deepEqual(leadSentence("Use tools.simonwillison.net first. Then edit."), ["Use tools.simonwillison.net first.", "Then edit."]);
 });
+
+test("a title over 60 characters fails the build (VET-283)", () => {
+  failsWith(entry({ title: "a".repeat(61) }), "a-saved-thing|entry 0", "61 characters; the cap is 60");
+  assert.equal(parseLibrary([entry({ title: "é".repeat(60) })])[0].title.length, 60);
+});

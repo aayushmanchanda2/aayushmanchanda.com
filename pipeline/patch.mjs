@@ -34,7 +34,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import { collectionsFrom, readEntries, urlKey, writeEntries } from "./entries.mjs";
 import { resolvePaths } from "./state.mjs";
 import { isRecord } from "./util.mjs";
-import { CAPS, block, highlights, keyline, moments, postHighlights, prose } from "../src/lib/reader.mjs";
+import { CAPS, block, highlights, keyline, moments, postHighlights, prose, title } from "../src/lib/reader.mjs";
 
 /** @typedef {import("./types.js").Paths} Paths */
 /** @typedef {import("./types.js").Patch} Patch */
@@ -132,7 +132,7 @@ function normalise(field, value, entry) {
 
   switch (field) {
     case "title":
-      return line(value, "the title");
+      return capped(() => title(line(value, "the title")));
     case "tldr":
     case "excerpt":
       return capped(() => prose(value, field, CAPS[field]));
@@ -453,7 +453,7 @@ export async function patchLibrary({
 const USAGE = [
   "usage: node pipeline/patch.mjs (--url <url> | --slug <slug>) [edits]",
   "",
-  "  --title <text>    replace the title (one line)",
+  "  --title <text>    replace the title (one line, 60 characters or fewer)",
   "  --tldr <text>     the source in 25 words or fewer; --tldr '' removes it",
   "  --highlights <json>  [{\"text\":\"…\",\"note\":\"…\",\"color\":\"amber\"}], 1-5 verbatim quotes of 60 words or fewer",
   "  --keyline <text>  a short post's key line, word for word, 15 words or fewer; '' removes it",
