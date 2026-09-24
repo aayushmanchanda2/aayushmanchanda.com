@@ -13,6 +13,16 @@ import { tick } from "./ui-sound.ts";
 
 type Entry = { node: Element; title: string };
 
+/**
+ * Where the panel is off (VET-279): a phone opens the entry's own page. As a
+ * fixed scroll box over a scrollable list, a touch scroll chained into the
+ * list behind (iOS moves the page's scrollbar and leaves the panel's shot at
+ * its first screen), and iOS's collapsing toolbar resized the box and showed
+ * the list through the gap. The page itself scrolls natively. `DetailPanel.astro`'s
+ * phone breakpoint is the same query.
+ */
+export const PANEL_OFF = "(max-width: 48rem)";
+
 /** `checkVisibility` arrived in Safari 17.4; before it, a rendered box is the answer. */
 const visible = (el: Element): boolean => el.checkVisibility?.() ?? el.getClientRects().length > 0;
 
@@ -172,6 +182,7 @@ function wire(
     const link = tile ?? (inner && panel.contains(inner) ? inner : null);
     const slug = link && slugOf(link.href);
     if (link && slug) {
+      if (!isOpen() && matchMedia(PANEL_OFF).matches) return;
       event.preventDefault();
       return open(slug, tile ?? opener);
     }

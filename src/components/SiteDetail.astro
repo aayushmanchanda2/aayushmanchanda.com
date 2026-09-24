@@ -68,7 +68,7 @@ const screens = screensOf(site.slug);
       its `figure`, so the buttons go inside it to keep both on one line.
     */}
     <figcaption class="shot__bar">
-      <span class="shot__caption mono">Full page. Scroll inside the frame</span>
+      <span class="shot__caption mono">Full page<span class="shot__hint">. Scroll inside the frame</span></span>
       <ShotActions src={site.shot} title={site.title} slug={site.slug} />
     </figcaption>
   </figure>
@@ -202,6 +202,14 @@ const screens = screensOf(site.slug);
 
   .shot__caption {
     color: var(--text-tertiary);
+  }
+
+  /* On touch or a phone the shot is in the page's flow (`ShotFrame.astro`),
+     so there is no frame to scroll inside. */
+  @media (pointer: coarse), (max-width: 48rem) {
+    .shot__hint {
+      display: none;
+    }
   }
 
   /* The field table itself (`.facts`, `.fact`) is in global.css. A swatch row

@@ -9,7 +9,7 @@
 - `sites-filters` `nav.collections[aria-label="Filter sites by collection"]` links to `/sites/collection/<slug>`; `/sites/domain/<domain>`.
 - `sites-detail` `/sites/<slug>`: `figure.shot` (ShotFrame, `.shot__caption`), `[data-shot-actions]` with Copy/Download buttons (`aria-label="Copy the <title> screenshot to the clipboard"`, `"Download the <title> screenshot"`), `dl.facts`.
 - `sites-list` the list view (`[data-view-set="list"]`): `table.dtable[data-sites-list]` (`SiteList.astro`, `styles/table.css`), headers Name / Domain / Collections (gray chip pills, unlinked) / Saved; each `tr` carries `data-preview` and one `a.row__link[data-site-open]`. Under 640px only Name shows, the domain under it (`.row__phone`).
-- `sites-panel` a click on a tile or row opens `[data-detail-panel][data-open]` (`DetailPanel.astro`, shared with /tools); over 48rem it casts a left-edge shadow and dims the gallery 5% light, 8% dark (a `box-shadow` spread, so it takes no clicks). Drive with `--click 'a[data-panel-open]'`.
+- `sites-panel` a click on a tile or row opens `[data-detail-panel][data-open]` (`DetailPanel.astro`, shared with /tools); over 48rem it casts a left-edge shadow and dims the gallery 5% light, 8% dark (a `box-shadow` spread, so it takes no clicks). Drive with `--click 'a[data-panel-open]'`. Under 48rem there is no panel (VET-279, `lib/detail-panel.ts › PANEL_OFF`): the tap follows the link to the entry's page, and on touch or a phone the shot sits full height in the page's flow. Touch proof: `qa/evidence/2026-09-23-vet-279-scroll/probe.mjs` (CDP touch gestures at 375x812).
 - `sites-design-panel` `.found` (`.found__head`, `.found__title`, `.found__note`, `.found__md`) on sites with a captured `design`.
 
 ## How to get to it (user POV)

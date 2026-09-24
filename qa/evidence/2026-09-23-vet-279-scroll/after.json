@@ -1,0 +1,48 @@
+{
+  "/sites/": {
+    "start": {
+      "url": "/sites/arc-from-the-browser-company/",
+      "panelOpen": false,
+      "panelTop": null,
+      "pageY": 0,
+      "pageMax": 1628,
+      "shotBottom": 1346,
+      "listRowsOnPage": 0,
+      "underPanel": null
+    },
+    "end": {
+      "url": "/sites/arc-from-the-browser-company/",
+      "panelOpen": false,
+      "panelTop": null,
+      "pageY": 1628,
+      "pageMax": 1628,
+      "shotBottom": -282,
+      "listRowsOnPage": 0,
+      "underPanel": null
+    },
+    "shotBottomSeen": true
+  },
+  "/tools/": {
+    "start": {
+      "url": "/tools/paperclip/",
+      "panelOpen": false,
+      "panelTop": null,
+      "pageY": 0,
+      "pageMax": 50,
+      "shotBottom": null,
+      "listRowsOnPage": 0,
+      "underPanel": null
+    },
+    "end": {
+      "url": "/tools/paperclip/",
+      "panelOpen": false,
+      "panelTop": null,
+      "pageY": 50,
+      "pageMax": 50,
+      "shotBottom": null,
+      "listRowsOnPage": 0,
+      "underPanel": null
+    },
+    "shotBottomSeen": false
+  }
+}

@@ -92,7 +92,7 @@ const img = {
        declare, so this is the only thing reserving the box before the bytes
        land. Tall enough to read a layout, short enough that the page's own
        scroll is still reachable past the bottom of it. */
-    height: clamp(20rem, 70vh, 46rem);
+    height: clamp(20rem, 70dvh, 46rem);
     overflow-y: auto;
     overflow-x: hidden;
     /* `auto`, stated rather than left to the default, because the obvious thing
@@ -125,6 +125,18 @@ const img = {
        `::-webkit-scrollbar` rules below entirely. */
     scrollbar-width: thin;
     scrollbar-color: var(--hairline-strong) transparent;
+  }
+
+  /* On touch and on a phone the shot is the page (VET-279): full height in the
+     flow, scrolled by the page itself. A box of nested scroll under a finger
+     caught every swipe that started on it, which on a phone is most of the
+     screen, and on iOS the page moved while the shot stayed on its first
+     screen. */
+  @media (pointer: coarse), (max-width: 48rem) {
+    .scroller {
+      height: auto;
+      overflow: visible;
+    }
   }
 
   /* Same line, two steps louder — the frame IS the focus ring. */
