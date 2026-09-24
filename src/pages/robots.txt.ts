@@ -44,8 +44,9 @@ const BODY = `# aayushmanchanda.com
 # Everything here is public and meant to be read, by people and by agents
 # alike, except /me: one signed-in reader's private pages, disallowed below.
 #
-# Every page also has a markdown variant. Send "Accept: text/markdown" to any
-# page URL, or append .md to it. Start at ${absolute("/llms.txt")}.
+# The home page and every section page have a markdown variant: send
+# "Accept: text/markdown" to the page, or append .md to it (/tools.md).
+# Start at ${absolute("/llms.txt")}.
 
 User-agent: *
 Allow: /

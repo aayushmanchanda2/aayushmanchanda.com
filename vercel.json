@@ -186,14 +186,16 @@
     {
       "src": "^/(tools|sites|library|experiments|notes)/?$",
       "headers": {
-        "Vary": "Accept, Accept-Encoding"
+        "Vary": "Accept, Accept-Encoding",
+        "Link": "<https://aayushmanchanda.com/$1.md>; rel=\"alternate\"; type=\"text/markdown\""
       },
       "continue": true
     },
     {
       "src": "^/$",
       "headers": {
-        "Vary": "Accept, Accept-Encoding"
+        "Vary": "Accept, Accept-Encoding",
+        "Link": "<https://aayushmanchanda.com/index.md>; rel=\"alternate\"; type=\"text/markdown\""
       },
       "continue": true
     },
