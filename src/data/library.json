@@ -1866,6 +1866,45 @@
         "title": "How I make launch videos with AI",
         "cover": "/posts/2102878602316652828/cover.webp"
       }
+    },
+    "tldr": "Jake Moran turns product context into story angles, approved still-frame storyboards, then reusable HTML, CSS, and JavaScript launch-video scenes with HyperFrames.",
+    "highlights": [
+      {
+        "text": "Then I ask the agent to build one still frame per scene and lay them out in a grid - a contact sheet, basically a page of thumbnails, one for each row of the table.",
+        "note": "Approve the visual sequence before spending time on motion.",
+        "color": "amber"
+      },
+      {
+        "text": "The rule I push hardest: everything on screen is real UI. Anyone who uses the product knows what it looks like, and an invented button breaks it for all of them.",
+        "note": "Real product details make the video credible to existing users.",
+        "color": "blue"
+      },
+      {
+        "text": "A HyperFrames video is a folder of HTML files, so once a scene works, you can reuse it in the next video.",
+        "note": "Working scenes become reusable launch-video templates.",
+        "color": "green"
+      }
+    ],
+    "excerpt": "I've generated 20M+ views from videos made using HyperFrames. Here's how I start every launch video project. dump context and ideas, storyboard, animate. So what is HyperFrames? HyperFrames is an open source framework that turns HTML into video.",
+    "block": {
+      "best_for": "Teams making launch videos with coding agents",
+      "tip": "Approve a contact-sheet storyboard before animation, and keep every on-screen product detail grounded in real UI.",
+      "needs": [
+        "Product context",
+        "Real product screenshots or Figma frames",
+        "A reference video if available",
+        "Claude Code",
+        "HyperFrames"
+      ],
+      "prompt": {
+        "text": "Propose five story angles from this context, then turn the selected angle into a scene-by-scene storyboard.",
+        "ours": true
+      },
+      "start_here": [
+        "Dump the launch context and source material",
+        "Choose one of five story angles",
+        "Approve one still frame per scene before animation"
+      ]
     }
   }
 ]
