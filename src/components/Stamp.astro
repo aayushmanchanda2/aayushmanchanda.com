@@ -95,4 +95,20 @@ const updated = feed
       display: none;
     }
   }
+
+  /* On touch (VET-285, H3): a fast fling on an iPad outruns the painter, and
+     a tile not yet painted shows the canvas colour, which was the mat's, so
+     the mat smeared through the page. The canvas is paper there; the mat
+     layer still draws every gutter and hole. The paper's lift goes too: two
+     drop-shadows over a window-sized masked layer is the costliest thing to
+     redraw when a fling makes iOS repaint the fixed layers. */
+  @media (pointer: coarse) {
+    :global(:root) {
+      background: var(--bg);
+    }
+
+    .mat__shade {
+      filter: none;
+    }
+  }
 </style>
