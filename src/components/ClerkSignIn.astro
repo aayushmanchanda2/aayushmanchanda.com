@@ -2,11 +2,53 @@
 /**
  * Clerk's sign-in form, and the one script that loads Clerk (VET-274). Only
  * `MeGate.astro` renders this, so no public page carries Clerk code.
+ *
+ * Styled with the site's tokens (Clerk applies `elements` as inline CSS, so
+ * var() resolves and follows the theme). The page already says "Private", so
+ * Clerk's own header, card chrome and the sign-up footer are hidden: one
+ * account exists, created in the Clerk dashboard, and sign-ups are off.
  */
 import { SignIn } from "@clerk/astro/components";
+
+const appearance = {
+  elements: {
+    rootBox: { width: "100%" },
+    cardBox: { width: "100%", boxShadow: "none", border: "none", borderRadius: "0" },
+    card: { background: "transparent", boxShadow: "none", padding: "0", gap: "1rem" },
+    header: { display: "none" },
+    footer: { background: "transparent", paddingInline: "0" },
+    footerAction: { display: "none" },
+    formFieldLabel: { color: "var(--text-secondary)", fontFamily: "var(--font-sans)", fontSize: "0.875rem" },
+    formFieldInput: {
+      background: "var(--bg)",
+      color: "var(--text-primary)",
+      border: "1px solid var(--hairline-strong)",
+      borderRadius: "var(--r-md)",
+      boxShadow: "none",
+      fontFamily: "var(--font-sans)",
+      fontSize: "1rem",
+      minHeight: "44px",
+    },
+    formButtonPrimary: {
+      background: "var(--text-primary)",
+      color: "var(--bg)",
+      borderRadius: "var(--r-md)",
+      boxShadow: "none",
+      fontFamily: "var(--font-sans)",
+      fontSize: "0.9375rem",
+      textTransform: "none",
+      minHeight: "44px",
+      "&:hover": { background: "var(--text-secondary)" },
+    },
+    otpCodeFieldInput: { border: "1px solid var(--hairline-strong)", color: "var(--text-primary)" },
+    formResendCodeLink: { color: "var(--accent)" },
+    identityPreviewText: { color: "var(--text-primary)" },
+    identityPreviewEditButton: { color: "var(--accent)" },
+  },
+};
 ---
 
-<SignIn routing="hash" forceRedirectUrl={Astro.url.pathname} />
+<SignIn routing="hash" forceRedirectUrl={Astro.url.pathname} appearance={appearance} />
 
 <script>
   import { runInjectionScript } from "@clerk/astro/internal";
