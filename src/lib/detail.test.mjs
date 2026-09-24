@@ -121,7 +121,7 @@ test("every optional block is gated on the field it draws", () => {
   for (const [field, block] of [
     ["entry.video", "<VideoFacade"],
     ["entry.digest", "<DigestBlocks"],
-    ["entry.draft", "<DraftBlock"],
+    ["entry.draft", '<div class="sec__body"><DraftBlock'],
   ]) {
     assert.match(
       route,
@@ -131,25 +131,21 @@ test("every optional block is gated on the field it draws", () => {
   }
 });
 
-test("a drafted opinion never reaches the component that draws his own sentences", () => {
+test("a drafted opinion never reaches the box that holds his own words (VET-279)", () => {
   const route = code(read(ROUTE));
 
-  // `VoiceBlocks` is the /tools and /sites idiom for a sentence he wrote. The
-  // top-level `why` is his; `draft.why` is his pipeline's, in the third person,
-  // and the two are separate fields precisely so no rendering bug can swap them.
-  assert.match(
-    route,
-    /<VoiceBlocks why=\{entry\.why\} \/>/,
-    "the entry page hands VoiceBlocks something other than the entry's own `why`",
-  );
-  assert.ok(
-    !/VoiceBlocks[^>]*draft/.test(route),
-    "a drafted why reaches VoiceBlocks, which would print his pipeline's sentence in the register the site reserves for his",
-  );
+  // "In my words" holds only what he typed: his Raindrop and Telegram notes
+  // and the entry's top-level `why`. `draft.why` is his pipeline's, in the
+  // third person, and the two are separate fields so no rendering bug can swap them.
+  const mine = route.match(/const mine = rows\(\[(.*)\]\);/)?.[1] ?? "";
+  assert.match(mine, /entry\.why\]/, "\"In my words\" no longer reads the entry's own `why`");
+  assert.match(mine, /why\?\.mine/, "\"In my words\" lost his Raindrop note");
+  assert.ok(!/draft|note\]|tldr|block/.test(mine), `something he did not write reached "In my words": ${mine}`);
   assert.ok(
     !/DraftBlock[^>]*entry\.why/.test(route),
     "the entry's own `why` reaches DraftBlock, which would label a sentence he wrote as one he did not",
   );
+  assert.match(route, /mine\.length > 0 && \(/, "an empty \"In my words\" box renders; no words, no box");
 });
 
 test("the draft block says what it is, at full ink, and dates itself", () => {
@@ -193,10 +189,10 @@ test("the page holds the whole post, drawn from the repo, at a reading measure",
 
   assert.match(
     route,
-    /\{\s*entry\.post && \(\s*<div class="thing">\s*<PostCard post=\{entry\.post\} url=\{entry\.url\} mode="page" keyline=\{entry\.keyline\} \/>/,
+    /\{entry\.post && <PostCard post=\{entry\.post\} url=\{entry\.url\} mode="page" keyline=\{entry\.keyline\} \/>\}/,
     "the post's page no longer draws the post in page mode, gated on the entry having one",
   );
-  assert.match(route, /\.thing \{[^}]*max-width: 40rem;/, "the post lost its reading measure");
+  assert.match(read("components/EntrySection.astro"), /\.sec \{[^}]*max-width: 40rem;/, "the post's box lost its reading measure");
   assert.match(
     card,
     /const text = grid \? clipText\(post\.text, POST_CARD_MAX\) : post\.text;/,
@@ -204,8 +200,8 @@ test("the page holds the whole post, drawn from the repo, at a reading measure",
   );
   assert.match(
     route,
-    /\{entry\.note && !entry\.post && <p class="standfirst note">/,
-    "a readable post shows its note as the standfirst again. For a post the note is a copy of its words.",
+    /\["Filed note", entry\.post \? null : entry\.note\]/,
+    "a readable post shows its filed note again. For a post the note is a copy of its words.",
   );
 
   const longest = library
@@ -246,14 +242,16 @@ test("a row offers the page and the thing, and the domain link survives both", (
   );
 });
 
-test("an article reads TLDR, highlights, excerpt, note, digest, then the way out (VET-246)", () => {
+test("an entry reads what AI wrote, then his words, then the source and the way out (VET-279)", () => {
   const detail = read(ROUTE);
   const order = [
-    '<p class="lead">{entry.tldr}',
-    "<ReaderBlocks highlights={entry.highlights}",
-    '<p class="standfirst note">',
+    'label="Written by AI"',
+    "<dd>{entry.tldr}</dd>",
     "<DigestBlocks",
-    'entry.kind === "article"',
+    'label="In my words"',
+    'label="The source"',
+    "<ReaderBlocks highlights={entry.highlights}",
+    'entry.kind === "article" && (',
   ].map((marker) => detail.indexOf(marker));
 
   assert.ok(order.every((at) => at > -1), `a block is missing: ${order}`);

@@ -138,3 +138,30 @@ export function mergePane(rows: PaneRow[]): void {
   }
   document.body.append(el("script", "", filter.text));
 }
+
+/**
+ * A phone has no pane (it hides under 48rem of the split), and /library's All
+ * view is the page: the private rows go on top of it, the pane's own rows
+ * with lock and tip, under a heading cloned from the view's own so its
+ * scoped styles hold (VET-279). Hidden again wherever the pane shows.
+ */
+const PHONE_CSS = ".me-phone .pane{display:flex;flex-direction:column;gap:2px}.me-phone .pane li>a{margin-inline:-.875rem}@container split (width >= 48rem){.me-phone{display:none}}";
+
+export function mergePhone(rows: PaneRow[]): void {
+  const shown = rows.filter((row) => !row.also);
+  const head = document.querySelector<HTMLElement>('[data-view=""] .mix__head:has(a)');
+  const part = head?.parentElement;
+  const link = head?.querySelector("a");
+  if (!head || !part?.parentElement || !link || shown.length === 0) return;
+  const title = head.cloneNode(false) as HTMLElement;
+  title.id = "mix-private";
+  title.append(Object.assign(head.firstElementChild?.cloneNode(false) ?? el("span", ""), { textContent: "Private" }), Object.assign(link.cloneNode(false), { href: "/me/library", textContent: `All ${shown.length}` }));
+  const items = shown.map(rowItem);
+  for (const item of items) delete item.dataset.tags;
+  const section = part.cloneNode(false) as HTMLElement;
+  section.classList.add("me-phone");
+  section.setAttribute("aria-labelledby", title.id);
+  section.append(title, el("ul", "pane", ...items));
+  part.parentElement.prepend(section);
+  document.head.append(el("style", "", PHONE_CSS));
+}

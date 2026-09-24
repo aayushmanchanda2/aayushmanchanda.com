@@ -2,7 +2,8 @@
 /**
  * ReaderBlocks — what a saved piece says in its own words (VET-246): up to five
  * passages as pull-quotes under a highlighter, then the excerpt, quoted and
- * cited. Never the piece itself: `lib/reader.mjs` caps both, and that cap is
+ * cited, then his own Raindrop highlights on a private entry, as `.fact` rows of "The source" box (`EntrySection.astro`, VET-279).
+ * Never the piece itself: `lib/reader.mjs` caps both, and that cap is
  * the copyright line.
  *
  * The mark is drawn whole in the markup. `styles/prose.css › .hl` arms it (0% wide) only
@@ -13,22 +14,25 @@
 import Doodle from "./Doodle.astro";
 import EntryLink from "./EntryLink.astro";
 import type { Highlight } from "../lib/library";
+import type { RaindropHighlight } from "../lib/private";
 
 interface Props {
   highlights: Highlight[];
   excerpt: string | null;
   url: string;
   domain: string;
+  /** His own Raindrop highlights, on a private entry. */
+  mine?: RaindropHighlight[];
 }
 
-const { highlights, excerpt, url, domain } = Astro.props;
+const { highlights, excerpt, url, domain, mine = [] } = Astro.props;
 ---
 
 {
   highlights.length > 0 && (
-    <section class="block" aria-labelledby="highlights">
-      <h2 class="accent-bar" id="highlights">Highlights</h2>
-      <div class="pulled">
+    <div class="fact">
+      <dt>Highlights</dt>
+      <dd class="pulled">
         <Doodle class="pulled__bracket" shape="bracket" variant={2} stroke={1.5} stretch draw />
         <ul class="quotes">
           {highlights.map((highlight) => (
@@ -42,21 +46,44 @@ const { highlights, excerpt, url, domain } = Astro.props;
             </li>
           ))}
         </ul>
-      </div>
-    </section>
+      </dd>
+    </div>
   )
 }
 
 {
   excerpt && (
-    <figure class="block excerpt">
-      <blockquote cite={url}>
-        <p>{excerpt}</p>
-      </blockquote>
-      <figcaption class="quote__note">
-        From <cite><EntryLink href={url}>{domain}</EntryLink></cite>
-      </figcaption>
-    </figure>
+    <div class="fact">
+      <dt>Excerpt</dt>
+      <dd>
+        <figure class="excerpt">
+          <blockquote cite={url}>
+            <p>{excerpt}</p>
+          </blockquote>
+          <figcaption class="quote__note">
+            From <cite><EntryLink href={url}>{domain}</EntryLink></cite>
+          </figcaption>
+        </figure>
+      </dd>
+    </div>
+  )
+}
+
+{
+  mine.length > 0 && (
+    <div class="fact">
+      <dt>My highlights</dt>
+      <dd>
+        <ul class="quotes">
+          {mine.map((mark) => (
+            <li>
+              <mark class="hl">{mark.text}</mark>
+              {mark.note && <p class="quote__note">{mark.note}</p>}
+            </li>
+          ))}
+        </ul>
+      </dd>
+    </div>
   )
 }
 
@@ -68,11 +95,6 @@ const { highlights, excerpt, url, domain } = Astro.props;
 </script>
 
 <style>
-  .block {
-    max-width: 40rem;
-    margin-top: 2.5rem;
-  }
-
   /* The pull-quotes sit inside a pen bracket (VET-251), indented to the
      excerpt, so the two quoted blocks start on one edge. */
   .pulled {
@@ -92,18 +114,18 @@ const { highlights, excerpt, url, domain } = Astro.props;
   .quotes {
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
   }
 
-  /* A pull-quote: the reading size a step up, in primary ink. */
+  /* A pull-quote: a step over the row's reading size, in primary ink. */
   .quote p {
-    font-size: 1.25rem;
+    font-size: 1.0625rem;
     line-height: 1.6;
     color: var(--text-primary);
   }
 
   .quote__note {
-    margin-top: 0.5rem;
+    margin-top: 0.375rem;
     color: var(--text-tertiary);
     font-size: 0.875rem;
     line-height: 1.6;
@@ -119,7 +141,6 @@ const { highlights, excerpt, url, domain } = Astro.props;
     padding-left: 1rem;
     border-left: 2px solid var(--hairline-strong);
     color: var(--text-secondary);
-    font-size: 1.125rem;
     line-height: 1.6;
   }
 </style>

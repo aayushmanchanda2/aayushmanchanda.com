@@ -14,13 +14,14 @@
  * not ask again.
  *
  * With the rows it adds "Private N" and "Sign out" to the top bar, merges the
- * rows into a library pane when the page has one (`lib/pane-merge.ts`), and
+ * rows into a library pane when the page has one (`lib/pane-merge.ts`; on a
+ * phone, where the pane hides, on top of /library's All view), and
  * puts them in ⌘K. Sign out is Clerk's own, in place, and lands back on this
  * page signed out (on a /me page, home, since /me would only ask him to sign in).
  */
 import { runInjectionScript } from "@clerk/astro/internal";
 
-import { LOCK_SVG, mergePane } from "./pane-merge";
+import { LOCK_SVG, mergePane, mergePhone } from "./pane-merge";
 import type { PaneRow } from "./private";
 import type { SearchEntry } from "./search";
 
@@ -108,6 +109,7 @@ const rows = clerk && (await privateRows(clerk));
 if (clerk && rows) {
   if (document.readyState === "loading") await new Promise((done) => document.addEventListener("DOMContentLoaded", done, { once: true }));
   bar(clerk, rows.filter((row) => !row.also).length);
+  mergePhone(rows);
   mergePane(rows);
   search(rows);
 }

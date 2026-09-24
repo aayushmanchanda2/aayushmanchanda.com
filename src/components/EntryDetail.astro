@@ -1,43 +1,60 @@
 ---
 /**
  * EntryDetail — a library entry's detail: the header (title, the domain as
- * the one way out, the strip of facts whose values are filter links, the TLDR
- * as the lead), then the optional blocks in reading order: the thing itself
- * (post or video) and a video's moments, the piece's own words (highlights, excerpt), his note, the
- * digest, the draft, his own `why`, and on an article the way out (VET-246).
+ * the one way out, the strip of facts whose values are filter links), then
+ * three boxes so who wrote what reads at a glance (VET-279, `EntrySection`):
  *
- * Lifted out of `pages/library/[slug].astro` (VET-258) so /library's Articles
- * view can open the newest article beside the pane with the same markup. There
- * the title is an `h2` linking to the entry's page, because the page already
- * has its `h1`. The reasoning for each block is in `[slug].astro`'s header and
- * design.md §3.
+ *   - **Written by AI**: the TLDR, the block, the digest, the filed note and,
+ *     on a private entry, why it was saved and the sweep's note. The agents
+ *     drafted every one of these, the public `note` included.
+ *   - **In my words**: only what he typed himself (his Raindrop and Telegram
+ *     notes, his own `why`). Absent when there is none; no empty box.
+ *   - **The source**: the post or video, its moments, the piece's highlights
+ *     and excerpt, his Raindrop highlights, and on an article the way out.
+ *
+ * Shared by `pages/library/[slug].astro`, /library's Articles view (the
+ * title an `h2` linking to the entry there) and `PrivateEntry.astro`, which
+ * passes `why`. design.md §3 has the reasoning.
  */
 import DigestBlocks from "./DigestBlocks.astro";
 import DraftBlock from "./DraftBlock.astro";
 import EntryBlock from "./EntryBlock.astro";
 import EntryLink from "./EntryLink.astro";
+import EntrySection from "./EntrySection.astro";
 import KindChip from "./KindChip.astro";
+import KindIcon from "./KindIcon.astro";
 import Moments from "./Moments.astro";
 import TagChips from "./TagChips.astro";
 import PostCard from "./PostCard.astro";
 import ReaderBlocks from "./ReaderBlocks.astro";
 import VideoFacade from "./VideoFacade.astro";
-import VoiceBlocks from "./VoiceBlocks.astro";
 import type { LibraryEntry } from "../lib/library";
+import type { Why } from "../lib/private";
 import { entryHref } from "../lib/library";
 import { libraryPreview } from "../lib/assets";
 import { formatDay } from "../lib/date";
+import { VOICE_FIELDS } from "../lib/markdown";
 
 interface Props {
   entry: LibraryEntry;
   /** `h2` where the page has its own `h1`; the title then links to the entry. */
   level?: "h1" | "h2";
+  /** A private entry's own parts (`lib/private.ts › whyOf`). */
+  why?: Why;
 }
 
-const { entry, level = "h1" } = Astro.props;
+const { entry, level = "h1", why } = Astro.props;
 const Title = level;
 // The hover card itself ships with `LibraryPane`, on both pages that render this.
 const preview = libraryPreview(entry);
+const rows = (pairs: [string, string | null | undefined][]) => pairs.filter((pair): pair is [string, string] => Boolean(pair[1]));
+// The filed note is not on a read post: there it copies the card (VET-221).
+const filed = rows([["Filed note", entry.post ? null : entry.note], ["Why it’s here", why?.why], ["Hermes", why?.sweep]]);
+// His words only. A drafted `why` is the draft's, never one of these.
+const mine = rows([["Raindrop note", why?.mine], ["Telegram", why?.telegram], [VOICE_FIELDS.find((field) => field.key === "why")?.label ?? "Why", entry.why]]);
+const marks = why?.highlights ?? [];
+const ai = Boolean(entry.tldr || entry.block || entry.digest || entry.draft || filed.length);
+const source = Boolean(entry.post || entry.video || entry.moments.length || entry.highlights.length || entry.excerpt || marks.length || entry.kind === "article");
 ---
 
 <header>
@@ -49,20 +66,10 @@ const preview = libraryPreview(entry);
   </p>
 
   {/*
-    A `ul`, so the facts are separate items to anything reading the page out
-    loud. The dots are separators drawn by CSS between the items, never
-    characters in the content. Every value that can be a way back out into
-    the collection is one — the save.design anatomy, same as /tools — and
-    since VET-63 that includes the tags, which is what makes the thinnest
-    page here a page with somewhere to go.
-
-    The dates are the honest ones and there are up to three: `saved` is when
-    the link came in, `digested` is the day the verdict below was last true,
-    and `drafted` is the day the pipeline had its go. An opinion with an old
-    date on it is a warning, which is the whole reason they are printed.
-
-    The tags come last on a line of their own (VET-223): mid-row they wrapped
-    as one indented block on a phone, orphaning a separator either side.
+    A `ul`, so a screen reader hears separate facts; the dots are CSS. Every
+    value that can lead back into the collection is a link (the save.design
+    anatomy, as /tools). Up to three honest dates: saved, digested, drafted.
+    The tags take their own line (VET-223).
   */}
   <ul class="strip mono">
     <li class="strip__item">
@@ -96,111 +103,109 @@ const preview = libraryPreview(entry);
     }
   </ul>
 
-  {/* The block card (VET-273), then what the source says in a sentence (VET-233). */}
-  {entry.block && <EntryBlock block={entry.block} />}
-  {entry.tldr && <p class="lead">{entry.tldr}</p>}
 </header>
 
-{/*
-  The thing itself, when the site has it: the post drawn from the repo in
-  full (`PostCard.astro`, no embed, so the page is final on first paint), or
-  the video's poster. An article has neither and renders neither.
-*/}
 {
-  entry.post && (
-    <div class="thing">
-      <PostCard post={entry.post} url={entry.url} mode="page" keyline={entry.keyline} />
-    </div>
+  ai && (
+    <EntrySection label="Written by AI" id="sec-ai" icon="ai" copy={Boolean(entry.block?.prompt)}>
+      <dl>
+        {entry.tldr && (
+          <div class="fact tldr">
+            <dt>TLDR</dt>
+            <dd>{entry.tldr}</dd>
+          </div>
+        )}
+        {entry.block && <EntryBlock block={entry.block} />}
+        {entry.digest && <DigestBlocks digest={entry.digest} />}
+        {filed.map(([label, text]) => (
+          <div class="fact">
+            <dt>{label}</dt>
+            <dd>{text}</dd>
+          </div>
+        ))}
+      </dl>
+      {entry.draft && <div class="sec__body"><DraftBlock draft={entry.draft} /></div>}
+    </EntrySection>
   )
 }
-{entry.video && <VideoFacade entry={{ ...entry, video: entry.video }} />}
-<Moments moments={entry.moments} />
 
-<ReaderBlocks highlights={entry.highlights} excerpt={entry.excerpt} url={entry.url} domain={entry.domain} />
-
-{/* His note, after the piece speaks. Not on a read post: there it copies the card (VET-221). */}
-{entry.note && !entry.post && <p class="standfirst note">{entry.note}</p>}
-
-{entry.digest && <DigestBlocks digest={entry.digest} />}
-{entry.draft && <DraftBlock draft={entry.draft} />}
-
-{/*
-  His own `why`, through the component /tools and /sites render his sentences
-  with, under the label that list already fixes. Only the entry's top-level
-  `why` reaches it: a drafted one is somebody else's agent talking and it goes
-  in the box above, in the third person, where it is labelled as such.
-*/}
-<VoiceBlocks why={entry.why} />
-
-{/* The piece itself is off this site, and on an article this is the last word. */}
 {
-  entry.kind === "article" && (
-    <p class="full">
-      <EntryLink class="full__link ext press" href={entry.url} {...preview}>Read the full article</EntryLink>
-    </p>
+  mine.length > 0 && (
+    <EntrySection label="In my words" id="sec-mine" icon="pen">
+      <dl class="mine">
+        {mine.map(([label, text]) => (
+          <div class="fact">
+            <dt>{label}</dt>
+            <dd>{text}</dd>
+          </div>
+        ))}
+      </dl>
+    </EntrySection>
+  )
+}
+
+{
+  source && (
+    <EntrySection label="The source" id="sec-source">
+      <KindIcon slot="icon" kind={entry.kind} />
+      {(entry.post || entry.video || entry.moments.length > 0) && (
+        <div class="sec__body media">
+          {entry.post && <PostCard post={entry.post} url={entry.url} mode="page" keyline={entry.keyline} />}
+          {entry.video && <VideoFacade entry={{ ...entry, video: entry.video }} />}
+          <Moments moments={entry.moments} />
+        </div>
+      )}
+      {(entry.highlights.length > 0 || entry.excerpt || marks.length > 0) && (
+        <dl>
+          <ReaderBlocks highlights={entry.highlights} excerpt={entry.excerpt} url={entry.url} domain={entry.domain} mine={marks} />
+        </dl>
+      )}
+      {entry.kind === "article" && (
+        <p class="sec__body">
+          <EntryLink class="ext ctl press" href={entry.url} {...preview}>Read the full article</EntryLink>
+        </p>
+      )}
+    </EntrySection>
   )
 }
 
 <style>
-  /* --- the metadata strip --------------------------------------------------
-     The /tools strip, verbatim in its reasoning: between the title and the
-     standfirst because the strip is what the title is, quiet furniture rather
-     than prose, separators in the list item and never in a link's text. */
-
-  /* **The row gap is 1.25rem and it is a hit area, not a rhythm.** The /tools
-     strip this is otherwise copied from takes `gap: 0 0.7rem`, because nothing
-     on it claims more room than it draws. This one carries chips that do: a tag
-     reaches 0.375rem above and below its 28px box (`styles/chip.css ›
-     .tag::after`) and the kind chip 0.62rem above and below its 20.3px one
-     (`.strip__chip::after` below). With the lines welded together that
-     overreach lands on whatever is on the line before it — measured at 375px
-     before this gap existed, a tag's target covered the kind chip by 9.9px.
-     design.md §4: adjacent targets may touch, never overlap. The kind chip's
-     overreach is the larger, so it sets the number: 2 × 0.62rem.
-
-     The column gap is 0.5rem, ui-skills' `gap-2`, and `.strip__item` takes the
-     same so the separator dot stays centred. */
+  /* The /tools strip. **The 1.25rem row gap is a hit area, not a rhythm**: a
+     tag reaches 0.375rem past its box and the kind chip 0.62rem, so wrapped
+     lines need 2 × 0.62rem or one target covers the next (measured 9.9px at
+     375px before it). Adjacent targets may touch, never overlap (design.md §4). */
   .strip {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     gap: 1.25rem 0.5rem;
-    /* title to meta strip is 16px, and so is strip to standfirst: §2's rhythm,
-       8 within a group, 16 between groups, 40 between sections */
+    /* title to strip is 16px: §2's rhythm, 8 / 16 / 40 */
     margin-top: 1rem;
     color: var(--text-tertiary);
   }
 
-  .lead {
-    max-width: 40rem;
-    margin-top: 1rem;
-    color: var(--text-primary);
-    font-size: 1.25rem;
-    line-height: 1.5;
-  }
-
-  .note,
-  .full {
-    margin-top: 2.5rem;
-  }
-
-  /* The one large control on the page: 48px, a hairline box, accent on hover. */
-  .full :global(.full__link) {
-    display: inline-flex;
-    align-items: center;
-    min-height: 48px;
-    padding: 0 1.25rem;
-    border: 1px solid var(--hairline-strong);
-    border-radius: var(--r-md);
-    color: var(--text-primary);
+  /* The TLDR: the lead line, what the source says in a sentence (VET-233). */
+  .tldr dd {
     font-size: 1.125rem;
-    font-weight: 600;
-    text-decoration: none;
+    line-height: 1.5;
+    color: var(--text-primary);
   }
 
-  .full :global(.full__link:hover) {
-    border-color: var(--accent);
-    color: var(--accent);
+  /* His words are the loudest lines on the page, his line breaks kept. */
+  .mine dd {
+    font-size: 1.0625rem;
+    color: var(--text-primary);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  /* The post or video fills the box's padded body; the moments sit under it. */
+  .media > :global(*) {
+    margin-top: 0;
+  }
+
+  .media > :global(* + *) {
+    margin-top: 1.25rem;
   }
 
   .strip__item {
@@ -209,22 +214,14 @@ const preview = libraryPreview(entry);
     gap: 0.5rem;
   }
 
-  /* The alt-text form, so the separator has no accessible name and a screen
-     reader reads the facts rather than "middle dot" between each of them. It is
-     what `layouts/Base.astro › .foot__meta` already uses and what design.md §6
-     says a strip should join it in on touch. */
+  /* The alt-text form, so a screen reader never reads "middle dot". */
   .strip__item + .strip__item::before {
     content: "\00b7" / "";
     color: var(--hairline-strong);
   }
 
-  /* The tag chips bring their own 0.75rem row gap, which is the hit-area
-     arithmetic `TagChips.astro` explains and not a rhythm this row chose.
-
-     A line to themselves, and no separator: a dot in front of a row that
-     starts a line is the orphan this rule exists to remove. The strip's
-     1.25rem row gap above them is the hit-area arithmetic again, the kind
-     chip's 0.62rem reach plus the tag's 0.375rem, with room over. */
+  /* The tags on a line of their own with no separator: a dot starting a line
+     is the orphan this removes (VET-223). */
   .strip__item--tags {
     flex-basis: 100%;
   }
@@ -238,23 +235,13 @@ const preview = libraryPreview(entry);
     position: relative;
     display: inline-flex;
     text-decoration: none;
-    /* The same band as its neighbours above, which it was outside: the opacity
-       step used to snap while the two links either side of it faded. */
     transition-property: opacity;
     transition-duration: var(--dur);
     transition-timing-function: var(--ease);
   }
 
-  /* design.md §4's 40px floor, taken the way `chip.css › .tag::after` takes it:
-     0.62rem of dead space above and below a 20.3px box, offsets rather than a
-     centring transform so nothing rests on one and reduced motion has nothing
-     to undo, and horizontal only so it cannot swallow the domain link beside
-     it. §4's stated exception is for text — a word in a row of words — and this
-     is a box, and the tags beside it on this line claim 40px too.
-
-     The row gap above is what keeps the two hit boxes from meeting: 20px of gap
-     against the 19.84px two of these overreach into it leaves them touching,
-     with a sixth of a pixel to spare. Tight, and touching is the rule. */
+  /* design.md §4's 40px floor, `chip.css › .tag::after`'s offsets: 0.62rem
+     past a 20.3px box, horizontal only so it cannot swallow the domain link. */
   .strip__chip::after {
     content: "";
     position: absolute;
@@ -267,9 +254,8 @@ const preview = libraryPreview(entry);
 
   /* --- the header ---------------------------------------------------------- */
 
-  /* The detail header's second line: the domain, linked out, 8px under the
-     title so the two read as one group. briOS sets it tertiary; here it is a
-     control, so --text-secondary (design.md §4, the ink floor). */
+  /* The domain, linked out, 8px under the title: a control, so
+     --text-secondary (design.md §4, the ink floor). */
   .out {
     margin-top: 0.5rem;
     overflow-wrap: anywhere;
@@ -285,12 +271,6 @@ const preview = libraryPreview(entry);
 
   .out :global(a:hover) {
     color: var(--accent);
-  }
-
-  /* The post at reading width, 40px under the header like every block after it. */
-  .thing {
-    max-width: 40rem;
-    margin-top: 2.5rem;
   }
 
   .title-link {

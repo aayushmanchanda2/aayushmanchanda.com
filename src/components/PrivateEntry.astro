@@ -2,15 +2,15 @@
 /**
  * A private entry at /me/library/<slug> (VET-274): the public entry page's
  * anatomy (`pages/library/[slug].astro`) with the private rows merged into the
- * pane, "Why I saved it" on top ("Sign out" is the top bar's, `lib/signed-in.ts`). The filed note moves
- * into the card, so `EntryDetail` does not print it a second time. Rendered by
+ * pane, and his own parts (`lib/private.ts › whyOf`) split by who wrote them
+ * across `EntryDetail`'s three boxes (VET-279). "Sign out" is the top bar's
+ * (`lib/signed-in.ts`). Rendered by
  * the real route and by the dev-only fixture, so both show the same thing.
  */
 import Base from "../layouts/Base.astro";
 import EntryDetail from "./EntryDetail.astro";
 import EntryNav from "./EntryNav.astro";
 import PrivatePane from "./PrivatePane.astro";
-import WhyCard from "./WhyCard.astro";
 import type { LibraryEntry } from "../lib/library";
 import type { Why } from "../lib/private";
 import { privateHref } from "../lib/private";
@@ -33,8 +33,7 @@ const step = (offset: number) => {
 <Base title={`${entry.title} · Private · Aayush Manchanda`} description="Private." noindex full>
   <PrivatePane slot="pane" rows={rows} current={entry.slug} />
   <div class="detail">
-    <WhyCard why={why} />
-    <EntryDetail entry={{ ...entry, note: null }} />
+    <EntryDetail entry={entry} why={why} />
     <EntryNav label="Private entries" close={{ href: "/me/library", aria: "Close and go back to the private library" }} prev={step(-1)} next={step(1)} />
   </div>
 </Base>
