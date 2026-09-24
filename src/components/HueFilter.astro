@@ -1,0 +1,176 @@
+---
+/**
+ * HueFilter — browse /sites by colour (VET-55): one chip per colour family the
+ * page's cards are in (`lib/hues.ts`), a dot and a count, `?hue=<family>`.
+ *
+ * The filter row's box (`chip.css › .tag`, the /library tag filter's facet:
+ * a hairline box, the count after it, 40px to the pointer, 44px to a finger)
+ * with a dot where the word goes, because the colour is what a reader scans
+ * for. The name is in the accessible name, and in forced colours on screen.
+ *
+ * The URL is the state, as on /library: a press replaces the history entry,
+ * a family not on the page reads as All, and the chip that is on clears it.
+ * Every item carrying `data-hues` (a `SiteGrid` card, a `SiteList` row) is
+ * hidden or shown, so the Grid/List toggle, the detail panel's step past
+ * hidden cards and `row-link.ts` all see one filtered set. Links inside
+ * `[data-carry-hue]` (the collection chips on /sites) keep the hue, so a
+ * collection opens already filtered. A family with no card renders no chip,
+ * and the row needs two chips to render at all, the collections row's rule.
+ */
+import "../styles/hues.css";
+import { familyCounts, type HueFamily } from "../lib/hues";
+import type { SiteGroup } from "../lib/screens";
+
+interface Props {
+  groups: SiteGroup[];
+  /** The page's own path; every chip links to it with `?hue=`. */
+  base: string;
+}
+
+const { groups, base } = Astro.props;
+const counts = familyCounts(groups.map((group) => group.primary.palette));
+
+const NAMES: Record<HueFamily, string> = {
+  red: "Red",
+  orange: "Orange",
+  brown: "Brown",
+  yellow: "Yellow",
+  green: "Green",
+  teal: "Teal",
+  blue: "Blue",
+  purple: "Purple",
+  pink: "Pink",
+  mono: "Black and white",
+};
+---
+
+{
+  counts.length >= 2 && (
+    <nav class="hues" aria-label="Filter sites by colour" data-hue-filter>
+      <span class="hues__label mono" aria-hidden="true">Colour</span>
+      <ul class="hues__row">
+        {counts.map(({ family, count }) => (
+          <li>
+            <a
+              class="tag hue press"
+              href={`${base}?hue=${family}`}
+              data-hue-set={family}
+              data-name={NAMES[family]}
+              aria-label={`${NAMES[family]}, ${count} ${count === 1 ? "site" : "sites"}`}
+            >
+              <span class="hue-dot" data-family={family} aria-hidden="true" />
+              <span class="hue__name" aria-hidden="true">{NAMES[family]}</span>
+              <span class="tag__count" aria-hidden="true">{count}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="visually-hidden" role="status" data-hue-status />
+    </nav>
+  )
+}
+
+<script>
+  import { readHue, withHue } from "../lib/hues";
+
+  const nav = document.querySelector<HTMLElement>("[data-hue-filter]");
+  const status = nav?.querySelector<HTMLElement>("[data-hue-status]");
+
+  // Only where there are cards to filter: /design draws the row as a
+  // specimen, and there a chip is a plain link to /sites.
+  if (nav && status && document.querySelector("[data-hues]")) {
+    const chips = [...nav.querySelectorAll<HTMLAnchorElement>("[data-hue-set]")];
+    const present = chips.map((chip) => chip.dataset.hueSet ?? "");
+
+    const apply = (hue: string) => {
+      for (const item of document.querySelectorAll<HTMLElement>("[data-hues]")) {
+        item.hidden = hue !== "" && !(item.dataset.hues ?? "").split(" ").includes(hue);
+      }
+      for (const chip of chips) {
+        const on = chip.dataset.hueSet === hue;
+        if (on) chip.setAttribute("aria-current", "true");
+        else chip.removeAttribute("aria-current");
+        // The chip that is on is the way off.
+        chip.search = withHue(location.search, on ? "" : (chip.dataset.hueSet ?? ""));
+      }
+      for (const link of document.querySelectorAll<HTMLAnchorElement>("[data-carry-hue] a")) {
+        link.search = withHue(link.search, hue);
+      }
+    };
+
+    for (const chip of chips) {
+      chip.addEventListener("click", (event) => {
+        if (event.button || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+        event.preventDefault();
+        const hue = chip.hasAttribute("aria-current") ? "" : (chip.dataset.hueSet ?? "");
+        history.replaceState(history.state, "", `${location.pathname}${withHue(location.search, hue)}`);
+        apply(hue);
+        const shown = document.querySelectorAll("[data-sites-grid] > [data-hues]:not([hidden])").length;
+        status.textContent = hue ? `${shown} ${chip.dataset.name?.toLowerCase()} sites` : `All ${shown} sites`;
+      });
+    }
+
+    apply(readHue(location.search, present));
+  }
+</script>
+
+<style>
+  .hues {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-tertiary);
+  }
+
+  /* The /library tag row's numbers: lines 0.75rem apart so two 40px targets
+     touch and never overlap, 1rem under a finger (44px). */
+  .hues__row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 0.5rem;
+    margin: 0;
+  }
+
+  .hues__row li {
+    display: flex;
+  }
+
+  @media (pointer: coarse) {
+    .hues__row {
+      row-gap: 1rem;
+    }
+  }
+
+  /* `.press` and `.tag` each name a transition and would race; this is the one. */
+  .hue {
+    transition-property: transform, background-color, border-color;
+  }
+
+  /* On: the tag's current state (ink border), plus the fill the view toggle's
+     pressed button wears, so it reads as held rather than hovered. */
+  .hue[aria-current="true"] {
+    border-color: var(--text-primary);
+    background: var(--hairline);
+  }
+
+  .hue[aria-current="true"] .tag__count {
+    color: var(--text-primary);
+  }
+
+  /* Swatches, not words; the word comes back where colour is not rendered. */
+  .hue__name {
+    display: none;
+  }
+
+  @media (forced-colors: active) {
+    .hue__name {
+      display: inline;
+    }
+
+    .hue[aria-current="true"] {
+      border-width: 2px;
+      border-color: Highlight;
+    }
+  }
+</style>

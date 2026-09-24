@@ -1,0 +1,52 @@
+/* ==========================================================================
+   The colour families on /sites (VET-55, `lib/hues.ts`, `HueFilter.astro`).
+
+   One dot per family, and the dot IS the label: a reader looking for "the
+   blue sites" scans for blue, not for the word. So these are the one set of
+   colours on the site that are not tuned to a contrast bar against the page:
+   a yellow held to 3:1 on white is mustard, and a mustard dot would answer a
+   different question. The edge does the separating instead, an inset
+   `--hairline-strong` ring that keeps a pale dot on white and a dark one on
+   black. The accessible name carries the family in words, and forced colours
+   shows the word too (`HueFilter.astro`).
+
+   Same in both themes on purpose: a site's blue does not change with ours, so
+   there is no dark block here for `theme.test` to pair.
+   ========================================================================== */
+
+.hue-dot {
+  --dot: oklch(0.6 0 0);
+
+  display: inline-block;
+  flex: none;
+  width: 0.875rem;
+  height: 0.875rem;
+  border-radius: 50%;
+  background: var(--dot);
+  box-shadow: inset 0 0 0 1px var(--hairline-strong);
+}
+
+.hue-dot[data-family="red"] { --dot: oklch(0.62 0.22 25); }
+.hue-dot[data-family="orange"] { --dot: oklch(0.72 0.18 50); }
+.hue-dot[data-family="brown"] { --dot: oklch(0.45 0.08 55); }
+.hue-dot[data-family="yellow"] { --dot: oklch(0.88 0.17 95); }
+.hue-dot[data-family="green"] { --dot: oklch(0.64 0.16 145); }
+.hue-dot[data-family="teal"] { --dot: oklch(0.7 0.12 190); }
+.hue-dot[data-family="blue"] { --dot: oklch(0.6 0.2 255); }
+.hue-dot[data-family="purple"] { --dot: oklch(0.58 0.2 300); }
+.hue-dot[data-family="pink"] { --dot: oklch(0.72 0.17 350); }
+
+/* Black and white, split on the diagonal. */
+.hue-dot[data-family="mono"] {
+  background: linear-gradient(135deg, oklch(0.18 0 0) 50%, oklch(0.97 0 0) 50%);
+}
+
+/* A forced palette would repaint every dot Canvas: keep the real colour (it is
+   content, the way a screenshot is) and ring it in the system ink. */
+@media (forced-colors: active) {
+  .hue-dot {
+    forced-color-adjust: none;
+    box-shadow: none;
+    outline: 1px solid CanvasText;
+  }
+}

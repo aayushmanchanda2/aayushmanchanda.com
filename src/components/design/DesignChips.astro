@@ -1,6 +1,7 @@
 ---
 /** /design, the chips: every vocabulary rendered by the component that ships it. */
 import CollectionChips from "../CollectionChips.astro";
+import HueFilter from "../HueFilter.astro";
 import KindChip from "../KindChip.astro";
 import StatusChip from "../StatusChip.astro";
 import TagChips from "../TagChips.astro";
@@ -8,7 +9,7 @@ import VerdictBadge from "../VerdictBadge.astro";
 import { STATUSES } from "../../lib/experiments";
 import { KINDS, library, libraryTags } from "../../lib/library";
 import { monogram } from "../../lib/post";
-import { collectionGroups } from "../../lib/sites";
+import { collectionGroups, siteGroups } from "../../lib/sites";
 import { MONOGRAM_HUES, hueSlot } from "../../lib/tags";
 import { VERDICTS } from "../../lib/tools";
 
@@ -95,6 +96,10 @@ const monogramSpecimen = Array.from({ length: MONOGRAM_HUES }, (_, hue) =>
       <dd><TagChips tags={tagSpecimen} /></dd>
     </div>
     <div class="spec__row">
+      <dt class="code">hue</dt>
+      <dd><HueFilter groups={siteGroups} base="/sites" /></dd>
+    </div>
+    <div class="spec__row">
       <dt class="code">monogram</dt>
       <dd>
         <ul class="chips chips--monogram">
@@ -115,6 +120,16 @@ const monogramSpecimen = Array.from({ length: MONOGRAM_HUES }, (_, hue) =>
     somewhere on a scale, and the fill is what says so; a library tag names
     a subject, and one subject is not better than another. So it takes no
     colour at all: a grey outlined box with the word in it.
+  </p>
+
+  <p>
+    The hue row is <a href="/sites">/sites</a> by colour: the tag&rsquo;s box
+    with a dot where the word goes, and the count of sites after it. The
+    families come off each capture&rsquo;s stored palette at build time,
+    greys and creams left out, so a site with no colour left is black and
+    white. A dot is the one colour here held to no contrast bar, because a
+    yellow dark enough for 3:1 on white is mustard; its hairline edge does
+    that job. Press one to open the gallery filtered.
   </p>
 
   <p>

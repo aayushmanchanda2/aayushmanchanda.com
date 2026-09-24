@@ -15,6 +15,7 @@ import AppIcon from "./AppIcon.astro";
 import CollectionChips from "./CollectionChips.astro";
 import PreviewCard from "./PreviewCard.astro";
 import { formatDay } from "../lib/date";
+import { paletteFamilies } from "../lib/hues";
 import { previewAttributes } from "../lib/preview-card";
 import type { SiteGroup } from "../lib/screens";
 
@@ -37,7 +38,10 @@ const { groups } = Astro.props;
   <tbody>
     {
       groups.map(({ primary, screens }) => (
-        <tr {...previewAttributes({ image: primary.shot, name: primary.title, domain: primary.domain, note: primary.like })}>
+        <tr
+          {...previewAttributes({ image: primary.shot, name: primary.title, domain: primary.domain, note: primary.like })}
+          data-hues={paletteFamilies(primary.palette).join(" ")}
+        >
           <td>
             <span class="row__name">
               <AppIcon tool={{ slug: primary.slug, name: primary.title, url: primary.url, logoDomain: primary.logoDomain }} size={32} />
