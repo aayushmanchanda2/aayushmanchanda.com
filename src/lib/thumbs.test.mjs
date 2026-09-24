@@ -9,6 +9,7 @@ import { cropOf, phoneOf, posterSrcset, previewOf, variantsOf } from "./thumbs.t
 
 const SHOT = "/shots/arc-from-the-browser-company.webp";
 const built = new Set(variantsOf(SHOT).map((variant) => `/thumbs/${variant.name}`));
+/** @param {string} srcset */
 const candidates = (srcset) => srcset.split(", ").map((candidate) => candidate.split(" ")[0]);
 
 test("every path a site shot's pictures name is a copy the build writes", () => {
