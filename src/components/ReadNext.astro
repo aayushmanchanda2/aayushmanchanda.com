@@ -1,0 +1,31 @@
+---
+/**
+ * "Read next" under a note or a tip, "Related" under a library entry or a
+ * tool (VET-56): an accent-bar head over `EntryList` rows. Renders nothing
+ * when there is nothing to list.
+ */
+import EntryList from "./EntryList.astro";
+import type { Entry } from "../lib/entry-list";
+
+interface Props {
+  entries: Entry[];
+  label?: string;
+}
+
+const { entries, label = "Read next" } = Astro.props;
+---
+
+{
+  entries.length > 0 && (
+    <nav class="next" aria-labelledby="read-next">
+      <h2 class="accent-bar" id="read-next">{label}</h2>
+      <EntryList entries={entries} />
+    </nav>
+  )
+}
+
+<style>
+  .next {
+    margin-top: clamp(3rem, 8vw, 5rem);
+  }
+</style>

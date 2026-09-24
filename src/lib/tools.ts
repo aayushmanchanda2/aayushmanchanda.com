@@ -1,25 +1,19 @@
 /**
  * The /tools data boundary.
  *
- * `src/data/tools.json` is hand-edited today and appended to by the publish
- * pipeline later, so it is untrusted input until it has been parsed. Everything
- * below runs once at build time and throws on the first bad entry: broken data
- * must fail `astro build` loudly rather than render as a half-empty row.
+ * `src/data/tools.json` is hand-edited and appended to by the pipeline, so it
+ * is untrusted until parsed. Everything below runs once at build and throws on
+ * the first bad entry. Past this module the types are earned: no `as` casts.
  *
- * Past this module the types are earned, so the rest of the site can trust
- * them. Nothing here uses an `as` cast to skip that work.
- *
- * The generic half of the parse (slug, date, non-empty string, display name)
- * comes from `lib/parse.ts`. What stays here is what only /tools knows: the
- * verdicts, the URL rule, the product-versus-repository split (the repo shape
- * itself is `lib/links.ts › githubRepo`), the category-collision check, and
- * every error message, written for the person who has to fix the file.
+ * The generic half of the parse comes from `lib/parse.ts`; what only /tools
+ * knows (verdicts, the URL and repo rules, category collisions) stays here.
  */
 
 import { githubRepo, readLogoDomain } from "./links";
 import type { Fail } from "./parse";
 import { SLUG, readers, routeSlug } from "./parse";
 import { NEW_CATEGORY, descriptionProblem, noteProblem } from "./tool-copy";
+import { readHistory, type VerdictStep } from "./verdict-history";
 
 import rawTools from "../data/tools.json";
 
@@ -59,6 +53,8 @@ export interface Tool {
   description?: string;
   /** ISO calendar date (YYYY-MM-DD) the verdict was last true. */
   status_date: string;
+  /** Earlier verdicts, oldest first; empty for most (`lib/verdict-history.ts`, VET-54). */
+  verdict_history: VerdictStep<Verdict>[];
 
   /* --- the voice fields: four optional sentences, null on most entries, written
      by hand only. A null renders nothing; a stand-in sentence would be the site
@@ -217,6 +213,7 @@ export function parseTools(value: unknown): Tool[] {
     const description = readOptional(item, "description", where);
     if (description === null) console.warn(`src/data/tools.json: ${where} "${slug}" has no description`);
     const note = readString(item, "note", where);
+    const status_date = readDate(item, "status_date", where);
     const copyProblem = (description === null ? null : descriptionProblem(description)) ?? noteProblem(note);
     if (copyProblem !== null) fail(where, copyProblem);
 
@@ -231,7 +228,8 @@ export function parseTools(value: unknown): Tool[] {
       verdict,
       note,
       ...(description === null ? {} : { description }),
-      status_date: readDate(item, "status_date", where),
+      status_date,
+      verdict_history: readHistory(item["verdict_history"], where, VERDICTS, status_date),
       like: readOptional(item, "like", where),
       dislike: readOptional(item, "dislike", where),
       why: readOptional(item, "why", where),

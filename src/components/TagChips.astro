@@ -72,4 +72,12 @@ const { tags } = Astro.props;
   .tags li {
     display: flex;
   }
+
+  /* Under a finger a tag reaches 8px each way (chip.css, VET-307), so its lines
+     sit 16px apart to keep two targets touching, never overlapping. */
+  @media (pointer: coarse) {
+    .tags {
+      row-gap: 1rem;
+    }
+  }
 </style>

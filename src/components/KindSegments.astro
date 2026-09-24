@@ -130,4 +130,11 @@ const selected = current === null ? "" : current;
     font-family: var(--font-mono);
     font-size: 0.75rem;
   }
+
+  /* 44px under a finger (VET-307). */
+  @media (pointer: coarse) {
+    .seg__item::after {
+      inset: -8px 0;
+    }
+  }
 </style>

@@ -1,0 +1,61 @@
+{
+  "base": "http://localhost:4391/",
+  "label": "vet-307",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-24-vet-307",
+  "at": "2026-09-24T10:20:49.488Z",
+  "shots": [
+    {
+      "route": "/design",
+      "url": "http://localhost:4391/design",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "design-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/design",
+      "url": "http://localhost:4391/design",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "design-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/design",
+      "url": "http://localhost:4391/design",
+      "width": 390,
+      "height": 844,
+      "theme": "dark",
+      "png": "design-390-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/design",
+      "url": "http://localhost:4391/design",
+      "width": 1280,
+      "height": 800,
+      "theme": "dark",
+      "png": "design-1280-dark.png",
+      "status": 200,
+      "dataTheme": "dark",
+      "bodyBg": "rgb(0, 0, 0)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}

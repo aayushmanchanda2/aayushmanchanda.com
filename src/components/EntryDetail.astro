@@ -69,12 +69,7 @@ const source = Boolean(entry.post || entry.video || entry.moments.length || entr
     {host && <a class="out__more" href={`/library/domain/${host.slug}`}>{host.entries.length} saved</a>}
   </p>
 
-  {/*
-    A `ul`, so a screen reader hears separate facts; the dots are CSS. Every
-    value that can lead back into the collection is a link (the save.design
-    anatomy, as /tools). Up to three honest dates: saved, digested, drafted.
-    The tags take their own line (VET-223).
-  */}
+  {/* A `ul` of facts (dots are CSS); every value is a filter link. Tags take their own line (VET-223). */}
   <ul class="strip mono">
     <li class="strip__item">
       <a class="strip__chip" href={`/library/kind/${entry.kind}`}>
@@ -157,6 +152,9 @@ const source = Boolean(entry.post || entry.video || entry.moments.length || entr
           {entry.post && <PostCard post={entry.post} url={entry.url} mode="page" keyline={entry.keyline} />}
           {entry.video && <VideoFacade entry={{ ...entry, video: entry.video }} />}
           <Moments moments={entry.moments} />
+          {entry.media_retrieved && (entry.post || entry.video) && (
+            <p class="media__saved mono">Media saved <time datetime={entry.media_retrieved}>{formatDay(entry.media_retrieved)}</time></p>
+          )}
         </div>
       )}
       {(entry.highlights.length > 0 || entry.excerpt || marks.length > 0) && (
@@ -210,6 +208,11 @@ const source = Boolean(entry.post || entry.video || entry.moments.length || entr
 
   .media > :global(* + *) {
     margin-top: 1.25rem;
+  }
+
+  /* When the copies here were made (VET-65): meta, so tertiary. */
+  .media__saved {
+    color: var(--text-tertiary);
   }
 
   .strip__item {
@@ -291,6 +294,24 @@ const source = Boolean(entry.post || entry.video || entry.moments.length || entr
   @media (hover: hover) {
     .title-link:hover {
       color: var(--accent);
+    }
+  }
+
+  /* 44px under a finger (VET-307): the kind chip reaches further, and the
+     host links grow by padding and give it back by margin; 8px more under the
+     host line keeps its targets off the kind chip's. */
+  @media (pointer: coarse) {
+    .strip__chip::after {
+      inset: -0.75rem 0;
+    }
+
+    .out {
+      padding-bottom: 0.5rem;
+    }
+
+    .out :global(a) {
+      padding-block: 12px;
+      margin-block: -12px;
     }
   }
 </style>

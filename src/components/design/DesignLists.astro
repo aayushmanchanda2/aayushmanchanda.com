@@ -1,0 +1,119 @@
+---
+/**
+ * /design, lists: the data table and its row delegation, the library rows
+ * with month headers and a private row, the tag filter, the post wall and the
+ * palette's empty state. Public entries plus one synthetic private row.
+ */
+import "../../styles/table.css";
+import LibraryRows from "../LibraryRows.astro";
+import LibraryTags from "../LibraryTags.astro";
+import PostWall from "../PostWall.astro";
+import { library, parseLibrary } from "../../lib/library";
+
+/** The newest entry of the two latest months, so two month headers show. */
+const months = [...new Set(library.map((entry) => entry.saved_date.slice(0, 7)))].sort().reverse().slice(0, 2);
+const rows = months.flatMap((month) => library.filter((entry) => entry.saved_date.startsWith(month)).slice(0, 2));
+
+/** Made up for this page: no private entry is ever in this repo. */
+const [locked] = parseLibrary([
+  { slug: "example-private-row", title: "A row only I can see", url: "https://example.com/", domain: "example.com", saved_date: rows[0]!.saved_date, kind: "article", note: "Signed-in rows merge in by date, with a lock." },
+]);
+
+const posts = library.filter((entry) => entry.post !== null).slice(0, 4);
+
+const TABLE = [
+  { name: "Tools", href: "/tools", note: "Software I ran, with a dated verdict" },
+  { name: "Sites", href: "/sites", note: "Websites I saved for their design" },
+  { name: "Library", href: "/library", note: "Articles, posts and videos I saved" },
+];
+---
+
+<section>
+  <h2 class="sheet__head mono">Lists</h2>
+  <p>
+    /tools and /sites share one table. The whole row is the target: a press
+    anywhere on it opens the row's one link, and the link is the tab stop. No
+    stretched <span class="code">::after</span>, because iPadOS doesn't make a
+    table row a containing block, so every row's overlay covered the table and
+    the last row took every tap.
+  </p>
+  <table class="dtable specimen">
+    <thead>
+      <tr><th scope="col">Name</th><th scope="col">What</th></tr>
+    </thead>
+    <tbody>
+      {TABLE.map((row) => (
+        <tr>
+          <td><span class="row__name"><a class="row__link" href={row.href}>{row.name}</a></span></td>
+          <td>{row.note}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+
+  <p>
+    Library rows sit under month headers, each with its count. Signed in, my
+    private rows merge in by date and carry a lock. The one below is made up.
+  </p>
+  <div class="specimen specimen--box">
+    <LibraryRows entries={rows} extra={locked ? [locked] : []} />
+  </div>
+  <p>
+    Signed in, the top bar adds "Private" with a count and "Sign out", and my
+    rows join the pane and ⌘K. Signed out, a page carries one 110-byte check
+    and nothing else. /me is the one page built on request.
+  </p>
+  <p>
+    The sign-in form is Clerk's, restyled with plain CSS on its <span class="code">cl-</span>
+    classes: no card, a square 44px field with a hairline, one solid ink button. Clerk loads only on /me, so it isn't drawn
+    here.
+  </p>
+
+  <p>
+    Tags filter the list from a native disclosure. Tick two and you get entries
+    with both. On /library each count follows the filter.
+  </p>
+  <div class="specimen">
+    <LibraryTags />
+  </div>
+
+  <p>
+    Posts are a masonry wall: CSS columns, 4, 3, 2 or 1 by the wall's own width,
+    each card lifted by a hairline edge and two soft shadows.
+  </p>
+  <div class="specimen">
+    <PostWall entries={posts} compact />
+  </div>
+
+  <p>
+    Before you type, ⌘K shows five groups: Go to, Browse, Recent saves, Actions
+    and Try searching. The arrows walk across all of them.
+  </p>
+  <p class="specimen">
+    <button type="button" class="ctl press" data-palette-open>Open the palette</button>
+  </p>
+</section>
+
+<script>
+  import "../../lib/row-link";
+</script>
+
+<style>
+  .specimen {
+    margin-top: 1.5rem;
+  }
+
+  .specimen--box {
+    border: 1px solid var(--hairline);
+  }
+
+  /* The shipped table bleeds past a full-width shell; on this column it sits flush. */
+  .dtable.specimen {
+    width: 100%;
+    margin-inline: 0;
+  }
+
+  .dtable.specimen :global(:is(th, td):first-child) {
+    padding-left: 0.75rem;
+  }
+</style>

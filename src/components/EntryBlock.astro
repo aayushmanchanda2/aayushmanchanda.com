@@ -152,9 +152,14 @@ const [lead, rest] = leadSentence(block.tip);
     color: var(--text-secondary);
   }
 
-  .blk__est,
   .blk__steps li::before {
     color: var(--text-tertiary);
+  }
+
+  /* On the chip's --surface-3, --text-tertiary is 4.35:1: under AA (VET-307).
+     The parentheses keep it apart from the time. */
+  .blk__est {
+    color: var(--text-secondary);
   }
 
   .blk__chips {

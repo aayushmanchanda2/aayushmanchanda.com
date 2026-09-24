@@ -151,6 +151,15 @@ const hints: Hint[] = [
       display: none;
     }
   }
+
+  /* 44px under a finger (VET-307): the hints are the page's only way on. */
+  @media (pointer: coarse) {
+    .hint {
+      justify-content: center;
+      min-width: 44px;
+      padding-block: 0.75rem;
+    }
+  }
 </style>
 
 <script>

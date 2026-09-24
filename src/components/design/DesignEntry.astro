@@ -1,0 +1,71 @@
+---
+/**
+ * /design, an entry page's parts: the three boxes, the block with its prompt
+ * card and Copy, and the one button. Synthetic content, shipped components.
+ */
+import EntryBlock from "../EntryBlock.astro";
+import EntrySection from "../EntrySection.astro";
+import { block } from "../../lib/reader.mjs";
+
+const specimen = block({
+  best_for: "Anyone who hands a first draft to an agent.",
+  tip: "Ask for the plan before the code. Read the plan, then let it write.",
+  time: { text: "10 minutes", source: "estimate" },
+  needs: ["an agent", "a repo"],
+  prompt: { text: "Before you write any code, write plan.md: the goal, the steps, and how you'll check each one.", ours: true },
+  start_here: ["Open the repo in your agent.", "Paste the prompt.", "Read plan.md before you say go."],
+});
+---
+
+<section>
+  <h2 class="sheet__head mono">Entries</h2>
+  <p>
+    A library entry is up to three boxes, so you can see who wrote what. Written
+    by AI holds what the agents drafted. In my words holds only what I typed, and
+    is left out when there's nothing. The source holds the piece's own words.
+  </p>
+
+  <EntrySection level="h3" label="Written by AI" id="design-ai" icon="ai" copy>
+    <dl>
+      <div class="fact tldr">
+        <dt>TLDR</dt>
+        <dd>Plans written by the agent beat plans written for it.</dd>
+      </div>
+      <EntryBlock block={specimen} />
+    </dl>
+  </EntrySection>
+
+  <EntrySection level="h3" label="In my words" id="design-mine" icon="pen">
+    <dl>
+      <div class="fact">
+        <dt>Raindrop note</dt>
+        <dd>Try this on the next site ticket.</dd>
+      </div>
+    </dl>
+  </EntrySection>
+
+  <EntrySection level="h3" label="The source" id="design-source">
+    <div class="sec__body">
+      <a class="ext ctl press" href="https://github.com/aayushmanchanda2/aayushmanchanda.com/blob/main/design.md" rel="noopener" target="_blank">Read design.md</a>
+    </div>
+  </EntrySection>
+
+  <p>
+    Copy always does something. It tries the clipboard, then a hidden field and
+    the copy command inside the same click, then selects the text and says
+    "Press ⌘C". Block your clipboard and press Copy above to see the last step.
+  </p>
+  <p>
+    There's one button, <span class="code">.ctl</span>: 32px, a hairline box, 14px
+    secondary ink, 40px of target (44 under a finger). Copy and "Read the full
+    article" both use it. Controls in a bar or a caption stay text.
+  </p>
+</section>
+
+<style>
+  .tldr dd {
+    font-size: 1.125rem;
+    line-height: 1.5;
+    color: var(--text-primary);
+  }
+</style>

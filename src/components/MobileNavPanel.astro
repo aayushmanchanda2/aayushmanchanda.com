@@ -293,4 +293,20 @@ const current = normalize(pathname);
       transition-delay: 0s, 0s;
     }
   }
+
+  /* 44px under a finger (VET-307). */
+  @media (pointer: coarse) {
+    .mnav__search {
+      min-height: 44px;
+    }
+  }
+
+  /* A forced palette keeps background images, so the blue's gradient and grain
+     stayed under backplated words (VET-307). Plain Canvas, with an edge. */
+  @media (forced-colors: active) {
+    .mnav__panel {
+      background: Canvas;
+      border-inline-end: 1px solid CanvasText;
+    }
+  }
 </style>

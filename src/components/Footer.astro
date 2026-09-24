@@ -377,4 +377,41 @@ const year = new Date().getFullYear();
       content: none;
     }
   }
+
+  /* 44px under a finger (VET-307): the 40px box one step out. */
+  @media (pointer: coarse) {
+    .foot__link--glyph::before {
+      left: -15px;
+      top: -15px;
+      width: 44px;
+      height: 44px;
+    }
+  }
+
+  /* The text links stay text on a mouse (design.md §4); under a finger they
+     grow a 44px box by padding, and take the same space back by margin, so
+     the row does not move (VET-307). */
+  @media (pointer: coarse) {
+    .foot__quiet,
+    .foot__link:not(.foot__link--glyph) {
+      padding: 11px 4px;
+      margin: -11px -4px;
+    }
+
+    /* Glyphs 44px apart centre to centre, and wrapped lines 22px apart, so
+       no two targets overlap. */
+    .foot__toggles {
+      gap: 2rem;
+    }
+
+    .foot__meta {
+      row-gap: 1.5rem;
+    }
+  }
+
+  @media (pointer: coarse) and (max-width: 599px) {
+    .foot__row {
+      column-gap: 2rem;
+    }
+  }
 </style>

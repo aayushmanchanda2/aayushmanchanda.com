@@ -11,7 +11,7 @@ import { getCollection, render } from "astro:content";
 
 import Base from "../../layouts/Base.astro";
 import Doodle from "../../components/Doodle.astro";
-import EntryList from "../../components/EntryList.astro";
+import ReadNext from "../../components/ReadNext.astro";
 import { tipEntry } from "../../lib/entry-list";
 import { readNext } from "../../lib/read-next";
 import { tipJsonLd } from "../../lib/schema";
@@ -49,14 +49,7 @@ const { title, emoji, summary } = tip.data;
     <Doodle class="tip__check" shape="check" variant={2} color="green" draw />
   </article>
 
-  {
-    next.length > 0 && (
-      <nav class="next" aria-labelledby="read-next">
-        <h2 class="accent-bar" id="read-next">Read next</h2>
-        <EntryList entries={next.map(tipEntry)} />
-      </nav>
-    )
-  }
+  <ReadNext entries={next.map(tipEntry)} />
 </Base>
 
 <style>
@@ -104,9 +97,5 @@ const { title, emoji, summary } = tip.data;
         height: 26px;
       }
     }
-  }
-
-  .next {
-    margin-top: clamp(3rem, 8vw, 5rem);
   }
 </style>

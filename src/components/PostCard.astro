@@ -250,4 +250,17 @@ const initial = monogram(post.author);
     font-size: 0.875rem;
   }
 
+  /* 44px under a finger (VET-307): the ↗ and Read more, the same room back by margin. */
+  @media (pointer: coarse) {
+    .pc__out {
+      width: 44px;
+      height: 44px;
+      margin: -0.875rem -0.875rem -0.875rem auto;
+    }
+
+    .pc__more {
+      padding-block: 11px;
+      margin-block: -11px;
+    }
+  }
 </style>

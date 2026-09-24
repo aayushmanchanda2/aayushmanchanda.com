@@ -24,6 +24,7 @@
  */
 import EntryLink from "./EntryLink.astro";
 import VerdictBadge from "./VerdictBadge.astro";
+import VerdictHistory from "./VerdictHistory.astro";
 import VoiceBlocks from "./VoiceBlocks.astro";
 import AppIcon from "./AppIcon.astro";
 import { assetFor } from "../lib/assets";
@@ -110,6 +111,8 @@ const outCard = (href: string) =>
     dislike={tool.dislike}
     try={tool.try}
   />
+
+  <VerdictHistory tool={tool} />
 
   {
     /*
@@ -267,5 +270,15 @@ const outCard = (href: string) =>
   .source__link + .source__link::before {
     content: "\00b7" / "";
     color: var(--hairline-strong);
+  }
+
+  /* 44px under a finger (VET-307): the strip's links and the Source links grow
+     by padding and give it back by margin, so nothing on the page moves. */
+  @media (pointer: coarse) {
+    .strip a,
+    .source__link a {
+      padding-block: 11px;
+      margin-block: -11px;
+    }
   }
 </style>

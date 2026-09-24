@@ -133,7 +133,8 @@ test("the wall is reached from the Posts view and All's mix, and from nowhere el
   // The component does not name itself outside its own comments, so the sweep
   // finds callers and nothing else.
   const callers = walk("").filter((file) => code(read(file)).includes("PostWall"));
-  assert.deepEqual(callers, ["components/LibraryMix.astro", "components/LibraryViews.astro"]);
+  // /design draws it as a specimen, which is the one caller that is not a view.
+  assert.deepEqual(callers, ["components/LibraryMix.astro", "components/LibraryViews.astro", "components/design/DesignLists.astro"]);
 
   assert.match(
     code(read("components/LibraryViews.astro")),

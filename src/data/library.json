@@ -28,6 +28,7 @@
         }
       ]
     },
+    "media_retrieved": "2026-09-23",
     "highlights": [
       {
         "text": "He never reads code. He does not have an IDE installed.",
@@ -82,6 +83,7 @@
       "id": "mR-WAvEPRwE",
       "thumb": "/shots/anthropic-agents-that-run-for-hours-thumb.webp"
     },
+    "media_retrieved": "2026-08-31",
     "moments": [
       {
         "t": 1209,
@@ -177,6 +179,7 @@
       "id": "vJEy3nP2_C8",
       "thumb": "/shots/most-valuable-skill-2026-managing-ai-agents-thumb.webp"
     },
+    "media_retrieved": "2026-08-31",
     "moments": [
       {
         "t": 637,
@@ -242,6 +245,7 @@
         }
       ]
     },
+    "media_retrieved": "2026-09-23",
     "highlights": [
       {
         "text": "The only job left is to understand what you don't like, put it into words, and tell the AI.",
@@ -342,6 +346,7 @@
       "text": "Built a little agent automation where I paste a link to a cool website I want to save:\n\n→ checks for duplicates in my notion db\n→ extracts metadata (favicon, x handle, title)\n→ ai classifies as personal site or company/product\n→ pings a small endpoint to capture light and dark mode screenshots\n→ adds the site + all details to my notion db\n→ purges the cache on my /sites page\n→ replies with a tweet draft (in case I want to share)\n\nIt's probably slightly inefficient compared to making this fully deterministic, but I like having an agent take care of it because I can say things like:\n\n- oh, that site you captured has a weird loading state, recapture after waiting 3 seconds\n- review all sites I've saved in the notion db and see if we accidentally captured loading states/403 errors and re-process\n\nYesterday I tried to save a link that 403d so I had my agent wire up a rotating residential proxy to get around it. Look ma no hands!\n\n→ https://t.co/FJoD3DIiFD\n\n(most recently saved https://t.co/cYP0qqWvTk by @shedsgns)",
       "avatar": "/posts/2091209219609628826/avatar.webp"
     },
+    "media_retrieved": "2026-09-23",
     "highlights": [
       {
         "text": "It's probably slightly inefficient compared to making this fully deterministic, but I like having an agent take care of it",
@@ -401,6 +406,7 @@
         }
       ]
     },
+    "media_retrieved": "2026-09-23",
     "keyline": "mine all my conversations on disk and tell me how I work",
     "block": {
       "best_for": "Anyone who's used an AI assistant for months and kept the chat history.",
@@ -438,6 +444,7 @@
       "text": "If you want people to read your stuff please follow Orwell's rules. These LLMs are not your friends. They write with so much damn passive voice, incoherent figures of speech, and unnecessary -ly words.\n\nOrwell's rules:\n1. Never use a metaphor, simile, or other figure of speech which you are used to seeing in print.\n2. Never use a long word where a short one will do.\n3. If it is possible to cut a word out, always cut it out.\n4. Never use the passive where you can use the active.\n5. Never use a foreign phrase, a scientific word, or a jargon word if you can think of an everyday English equivalent.\n6. Break any of these rules sooner than say anything outright barbarous.",
       "avatar": "/posts/2092819538505273544/avatar.webp"
     },
+    "media_retrieved": "2026-09-23",
     "highlights": [
       {
         "text": "They write with so much damn passive voice, incoherent figures of speech, and unnecessary -ly words.",
@@ -543,6 +550,7 @@
         "cover": "/posts/2093504999158600161/cover.webp"
       }
     },
+    "media_retrieved": "2026-09-23",
     "highlights": [
       {
         "text": "No one would ever trust anything that has nothing to lose, and AI agents have nothing to lose.",
@@ -942,6 +950,7 @@
         }
       ]
     },
+    "media_retrieved": "2026-09-23",
     "keyline": "My LLM cliché highlighter is up to 38 patterns now",
     "block": {
       "best_for": "Anyone who sends AI-drafted copy to customers.",
@@ -1007,6 +1016,7 @@
         "cover": "/posts/2094485724171223409/cover.webp"
       }
     },
+    "media_retrieved": "2026-09-23",
     "also_saved": true
   },
   {
@@ -1142,6 +1152,7 @@
       "id": "vey_dBnDTAU",
       "thumb": "/shots/how-a-professional-writer-writes-with-ai-thumb.webp"
     },
+    "media_retrieved": "2026-09-14",
     "moments": [
       {
         "t": 486,
@@ -1225,6 +1236,7 @@
         "cover": "/posts/2095907541431775260/cover.webp"
       }
     },
+    "media_retrieved": "2026-09-23",
     "block": {
       "best_for": "Agencies and service businesses doing AI work for 2 or more clients.",
       "tip": "Give each client its own folder and a context.md with their ICP, offer, personas, what works and what doesn't. Decide which source wins when they disagree, before an agent runs.",
@@ -1281,6 +1293,7 @@
         "avatar": "/posts/2095950432883368091/avatar.webp"
       }
     },
+    "media_retrieved": "2026-09-23",
     "highlights": [
       {
         "text": "plain curl got 7% blocked but OpenSERP's headless browser got 100% blocked",
@@ -1454,6 +1467,7 @@
       "id": "kPN564Kol14",
       "thumb": "/shots/l8-principal-building-a-full-stack-app-with-agentic-engineer-thumb.webp"
     },
+    "media_retrieved": "2026-09-22",
     "moments": [
       {
         "t": 61,
@@ -1499,6 +1513,7 @@
         }
       ]
     },
+    "media_retrieved": "2026-09-23",
     "keyline": "here's how i shipped 2,500 PRs last month to production",
     "also_saved": true
   },
@@ -1635,6 +1650,7 @@
       "text": "Prompt in Claude Tag\n\n\"Recreate Market Street, San Francisco as it stood on April 17, 1906, the afternoon before the earthquake, in Blender.\n\nScope: the Ferry Building up Market to Fifth Street, including the Palace Hotel, the Call Building, the Chronicle Building, Lotta's Fountain and the Emporium.\n\nBefore modeling anything, build a source file from: the 1899-1905 Sanborn fire insurance maps (footprints, heights, materials, occupants), the Miles Brothers film \"A Trip Down Market Street\" (April 1906), period photographs from OpenSFHistory, the Library of Congress and the David Rumsey collection, and USGS topography. Record every building with footprint, height, facade material, occupant, and the source for each fact with a confidence level.\n\nBuild everything in Blender Python. No downloaded meshes, textures or HDRIs. Write reusable generators (Victorian commercial facade, mansard roof, bay windows, awnings, painted signage, gas and electric street lamps, cable car, horse-drawn wagon, early automobile) and assemble the street from the source file, so every building traces back to data.\n\nProvide a 10 second video up the street.\"",
       "avatar": "/posts/2102466524934271381/avatar.webp"
     },
+    "media_retrieved": "2026-09-23",
     "highlights": [
       {
         "text": "Record every building with footprint, height, facade material, occupant, and the source for each fact with a confidence level.",
@@ -1672,6 +1688,7 @@
         }
       ]
     },
+    "media_retrieved": "2026-09-23",
     "tldr": "Julia Fedorin interviews Brooke Joseph, who left Waterloo without graduating, interned at 12-person Sky, joined OpenAI when it acquired Sky, and researches computer-use agents.",
     "block": {
       "best_for": "Students and early-career engineers weighing a small-startup job against finishing a degree.",
@@ -1709,6 +1726,7 @@
         }
       ]
     },
+    "media_retrieved": "2026-09-23",
     "tldr": "Polar for GTM takes an ICP, finds accounts and decision makers, enriches leads, updates sheets, preps follow-ups, and saves the workflow to rerun.",
     "block": {
       "best_for": "Founders and small sales teams doing outbound research by hand.",
@@ -1744,6 +1762,7 @@
       "text": "here's a prompt to improve your agent harness based on what we've learned at cursor. enjoy",
       "avatar": "/posts/2102853511637774551/avatar.webp"
     },
+    "media_retrieved": "2026-09-24",
     "tldr": "Cursor shares a prompt shaped by lessons from improving its agent harness."
   },
   {
@@ -1772,6 +1791,7 @@
         "cover": "/posts/2100631407676829995/cover.webp"
       }
     },
+    "media_retrieved": "2026-09-24",
     "tldr": "BugBasher used public restaurant inspection data for cold outreach and earned $75 from pest-control referrals in four weeks.",
     "highlights": [
       {
@@ -1830,6 +1850,7 @@
         }
       ]
     },
+    "media_retrieved": "2026-09-24",
     "tldr": "Eight recurring AI coding mistakes include over-orchestration, preserving stale context, tool sprawl, code-quality anxiety, and unnecessary branch or worktree habits.",
     "block": {
       "best_for": "Developers reviewing how they work with coding agents",
@@ -1868,6 +1889,7 @@
         "cover": "/posts/2102878602316652828/cover.webp"
       }
     },
+    "media_retrieved": "2026-09-24",
     "tldr": "Jake Moran turns product context into story angles, approved still-frame storyboards, then reusable HTML, CSS, and JavaScript launch-video scenes with HyperFrames.",
     "highlights": [
       {

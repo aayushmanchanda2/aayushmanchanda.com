@@ -188,8 +188,31 @@ const COLUMNS = ALL.filter((column) => column.id !== drop);
     }
   }
 
+  /* 640 to 899px (a tablet, or a laptop at 200% zoom): the fixed columns left
+     the description a few pixels and its header ran into Category (VET-307).
+     It moves under the name, as on a phone; the other columns stay. */
+  @media (min-width: 640px) and (max-width: 899px) {
+    .th--desc,
+    .cell--desc {
+      display: none;
+    }
+
+    .cell--name { white-space: normal; }
+
+    .row__desc--phone {
+      display: -webkit-box;
+    }
+  }
+
   :global(html[data-tools-view="grid"]) .table {
     display: none;
+  }
+
+  /* 44px under a finger (VET-307): the header grows with it. */
+  @media (pointer: coarse) {
+    .sort {
+      min-height: 44px;
+    }
   }
 </style>
 

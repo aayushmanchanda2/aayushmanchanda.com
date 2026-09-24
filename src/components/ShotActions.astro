@@ -150,4 +150,11 @@ const { src, title, slug } = Astro.props;
   .act[data-flash] .act__label--flash {
     opacity: 1;
   }
+
+  /* 44px under a finger (VET-307). */
+  @media (pointer: coarse) {
+    .act {
+      min-height: 44px;
+    }
+  }
 </style>

@@ -33,6 +33,8 @@ async function main() {
         const post = await postFrom({ url: entry.url, saved: entry.post ?? null, publicDir: PUBLIC_DIR });
         if (post === null) return;
         entry.post = post;
+        // Files already here keep their first day; this run's are dated today (VET-65).
+        if (JSON.stringify(post).includes('"/posts/')) entry.media_retrieved ??= new Date().toISOString().slice(0, 10);
         if (post["removed"]) removed.push(entry.slug);
         console.log(`ok     ${entry.slug}`);
       } catch (error) {

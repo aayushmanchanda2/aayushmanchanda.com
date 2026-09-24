@@ -97,6 +97,7 @@ const FULL_TOOL = {
   description: "Control plane for a company run by agents",
   note: "Agent org control plane.",
   status_date: "2026-08-17",
+  verdict_history: [],
   why: "I wanted one place to see what the agents are doing.",
   like: "Boots clean and the telemetry is off by default.",
   dislike: "The docs assume you already run Postgres.",
@@ -119,6 +120,7 @@ const BARE_TOOL = {
   verdict: "watching",
   note: "Saved from Raindrop. Not tested yet.",
   status_date: "2026-08-19",
+  verdict_history: [],
   why: null,
   like: null,
   dislike: null,
@@ -177,6 +179,7 @@ const DIGESTED_ENTRY = {
   moments: [],
   block: null,
   also_saved: false,
+  media_retrieved: null,
 };
 
 /**
@@ -216,6 +219,7 @@ const SAVED_ENTRY = {
   moments: [],
   block: null,
   also_saved: false,
+  media_retrieved: null,
 };
 
 /** @type {import("./sites.ts").Site} */

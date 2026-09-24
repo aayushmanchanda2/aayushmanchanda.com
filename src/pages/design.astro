@@ -39,8 +39,11 @@
  * stay here and reach into them as `.sheet :global(…)`.
  */
 import DesignChips from "../components/design/DesignChips.astro";
+import DesignEntry from "../components/design/DesignEntry.astro";
+import DesignFrame from "../components/design/DesignFrame.astro";
 import DesignInteractions from "../components/design/DesignInteractions.astro";
 import DesignLinks from "../components/design/DesignLinks.astro";
+import DesignLists from "../components/design/DesignLists.astro";
 import DesignMark from "../components/design/DesignMark.astro";
 import DesignTokens from "../components/design/DesignTokens.astro";
 import DesignType from "../components/design/DesignType.astro";
@@ -56,7 +59,7 @@ const jsonLd = designJsonLd();
 <Base
   title="Design · Aayush Manchanda"
   trail={[{ name: "Design", path: "/design" }]}
-  description="The design language of this site: the mark, the colour tokens, the type scale, the chip palette and the interaction rules, rendered by the components themselves."
+  description="The design language of this site: the mark, the tokens, the type, the chips, entries, lists and the frame, drawn by the components themselves."
   jsonLd={jsonLd}
 >
   <header>
@@ -74,6 +77,9 @@ const jsonLd = designJsonLd();
     <DesignChips />
     <DesignLinks />
     <DesignInteractions />
+    <DesignEntry />
+    <DesignLists />
+    <DesignFrame />
 
     <!-- ------------------------------------------------------------------ -->
 
@@ -106,7 +112,7 @@ const jsonLd = designJsonLd();
   }
 
 
-  .sheet :global(section) {
+  .sheet > :global(section) {
     padding-block: clamp(1.75rem, 4vw, 2.25rem);
     border-bottom: 1px solid var(--hairline);
   }
@@ -119,7 +125,7 @@ const jsonLd = designJsonLd();
   }
 
 
-  .sheet :global(section > p) {
+  .sheet > :global(section) > :global(p) {
     margin-top: 0.85rem;
     font-size: 1rem;
     line-height: 1.7;
