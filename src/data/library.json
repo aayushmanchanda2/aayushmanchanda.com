@@ -1670,6 +1670,17 @@
           "h": 1080
         }
       ]
+    },
+    "tldr": "Julia Fedorin interviews Brooke Joseph, who left Waterloo without graduating, interned at 12-person Sky, joined OpenAI when it acquired Sky, and researches computer-use agents.",
+    "block": {
+      "best_for": "Students and early-career engineers weighing a small-startup job against finishing a degree.",
+      "tip": "Skip to 18:54 for computer use explained, then 25:14 for when not to let an agent use your computer.",
+      "needs": [],
+      "start_here": [
+        "Start at 18:54, where computer use is explained.",
+        "Then 25:14, on when not to let an agent use your computer.",
+        "For the career story, 03:43 covers why she takes roles she’s “unqualified” for."
+      ]
     }
   },
   {
@@ -1695,6 +1706,24 @@
           "w": 1920,
           "h": 1080
         }
+      ]
+    },
+    "tldr": "Polar for GTM takes an ICP, finds accounts and decision makers, enriches leads, updates sheets, preps follow-ups, and saves the workflow to rerun.",
+    "block": {
+      "best_for": "Founders and small sales teams doing outbound research by hand.",
+      "tip": "Once a run works, save the workflow and run it again.",
+      "needs": [
+        "Polar for GTM",
+        "a written ICP"
+      ],
+      "prompt": {
+        "text": "Here is our ICP: [who we sell to]. Find [number] accounts that fit, research each company, find the decision maker, enrich the lead, add them to [sheet], and prep a follow-up for anyone who replied.",
+        "ours": true
+      },
+      "start_here": [
+        "Write down your ICP.",
+        "Give Polar the ICP and the job you want done.",
+        "Save the workflow and run it again."
       ]
     }
   },
