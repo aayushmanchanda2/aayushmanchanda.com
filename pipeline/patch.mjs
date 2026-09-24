@@ -466,7 +466,7 @@ const USAGE = [
   "  --digest <json>   all four fields; --digest '' removes it",
   "  --block <json>    {\"best_for\":\"…\",\"tip\":\"…\",\"needs\":[…],\"start_here\":[1-3 steps]}, optional",
   "                    \"time\":{\"text\":\"…\",\"source\":\"stated|estimate\"} and \"prompt\":{\"text\":\"…\",\"ours\":true}; '' removes it",
-  "  --also-saved true|false  move the entry to (or out of) the quieter Also saved group",
+  "  --also-saved true|false  flag the entry as kept without a block (lists show it as any other)",
   "  --no-commit       write the file and stop, so the diff can be read first",
 ].join("\n");
 

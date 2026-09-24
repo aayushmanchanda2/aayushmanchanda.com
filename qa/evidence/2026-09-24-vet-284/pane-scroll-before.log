@@ -1,0 +1,3 @@
+# First run of pane-scroll.mjs, before `overscroll-behavior: contain` on the pane (same build otherwise).
+# A drag on a pane already at its end carried on into the page: the pane "stays fixed" while the detail moves.
+FAIL 1024x1366 /library/kind/post/ pane 971->971 (page 0->497); detail drag: page 497->994, pane stays 971

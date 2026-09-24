@@ -37,19 +37,19 @@ addEventListener("pagehide",s);p.addEventListener("click",s);
  * The library's one filtering model (VET-282), `?kind=post&tags=a,b&q=words`
  * in the URL. The URL is the state; an unknown value reads as All.
  *
- *   - **Entries.** Every row in the list: the main feed and the "Also saved"
- *     group (`data-also`) alike. "All" means every entry. Also saved stays its
- *     own group at the bottom, under its own header.
+ *   - **Entries.** Every row in the list, one dated list under month headers.
+ *     "All" means every entry. An `also_saved` entry is a row like any other
+ *     (VET-284): no separate group, in the list or in any view.
  *   - **Filters.** Kind (one segment, "" is All), tags (AND: a row carries
  *     every one; the old single `?tag=` still reads) and text (`q`: every word
- *     is somewhere in the row's text). All three apply to both groups, and to
+ *     is somewhere in the row's text). All three apply to every row, and to
  *     the view's items (`[data-view] [data-tags]`), All's editorial mix too.
  *   - **Counts.** Every number counts the same rows, the list's first copy
  *     (the pane's; /library's phone list mirrors it): the live count
  *     (`[data-filter-count]`) is the rows shown; a segment's count
  *     (`[data-kind-count]`, "" for All) is the rows the tags and text leave
  *     of that kind, so All's count is the live count whenever All is on; a
- *     month or "Also saved" header counts the rows shown under it and hides
+ *     month header counts the rows shown under it and hides
  *     at 0; a tag's count is the shown rows that carry it, and a tag at 0 is
  *     disabled and sorted last (R5-4). A view group (`[data-filter-group]`)
  *     counts its shown items into `[data-group-count]` and hides at 0. The

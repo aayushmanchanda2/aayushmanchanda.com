@@ -36,26 +36,22 @@ const el = <K extends keyof HTMLElementTagNameMap>(tag: K, className: string, ..
 
 function rowItem(row: PaneRow): HTMLLIElement {
   const small = el("small", "");
-  if (!row.also) {
-    const icon = small.appendChild(el("i", "ki", row.kind));
-    icon.dataset.kind = row.kind;
-  }
+  const icon = small.appendChild(el("i", "ki", row.kind));
+  icon.dataset.kind = row.kind;
   small.insertAdjacentHTML("beforeend", LOCK_SVG);
   small.append(el("span", "", row.domain));
-  if (row.also) small.append(Object.assign(el("time", "", row.day), { dateTime: row.date }));
   const link = Object.assign(el("a", "", el("b", "", row.title), small), { href: row.href });
   if (row.summary) link.append(el("span", row.tip ? "tip" : "", row.summary));
   const item = el("li", "", link);
   item.dataset.kind = "private";
   item.dataset.tags = row.tags.map((tag) => tag.slug).join(" ");
-  if (row.also) item.dataset.also = "";
   return item;
 }
 
-const header = (label: string, also = false): HTMLLIElement => {
+const header = (label: string): HTMLLIElement => {
   const count = el("span", "tabular-nums", "0");
   count.setAttribute("data-month-count", "");
-  const li = el("li", `pane__month mono${also ? " pane__also" : ""}`, `${label} · `, count);
+  const li = el("li", "pane__month mono", `${label} · `, count);
   li.setAttribute("data-month", "");
   return li;
 };
@@ -63,27 +59,23 @@ const header = (label: string, also = false): HTMLLIElement => {
 /** The rows into the list, and the month headers redrawn around them. */
 function place(list: HTMLElement, rows: PaneRow[]): void {
   // Each public row learns its month from the header above it, then the
-  // month headers go; "Also saved" stays as the boundary between the groups.
+  // month headers go.
   const monthOf = new Map<Element, string>();
   let month = "";
   for (const li of [...list.children]) {
-    if (li.classList.contains("pane__also")) break;
     if (li.hasAttribute("data-month")) {
       month = li.firstChild?.textContent?.replace(/ · $/, "") ?? "";
       li.remove();
     } else monthOf.set(li, month);
   }
-  let also = list.querySelector<HTMLLIElement>(":scope > .pane__also");
-  if (!also && rows.some((row) => row.also)) list.append((also = header("Also saved", true)));
   const byHref = new Map([...list.querySelectorAll<HTMLAnchorElement>(":scope > li > a")].map((a) => [a.pathname, a.parentElement]));
   for (const row of rows) {
     const item = rowItem(row);
-    if (!row.also) monthOf.set(item, row.month);
-    list.insertBefore(item, (row.before && byHref.get(row.before)) || (row.also ? null : also));
+    monthOf.set(item, row.month);
+    list.insertBefore(item, (row.before && byHref.get(row.before)) || null);
   }
   month = "";
   for (const li of [...list.children]) {
-    if (li === also) break;
     const own = monthOf.get(li) ?? "";
     if (own !== month) li.before(header((month = own)));
   }

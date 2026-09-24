@@ -116,10 +116,11 @@ test("every picture a post card would draw is a file in this repository", () => 
    The wall is one route's layout
    --------------------------------------------------------------------------- */
 
-test("nothing lays content out in columns", () => {
-  // The posts wall was the one multi-column box and it is a grid now, so posts
-  // read newest first across. A multi-column box reads down-then-across.
-  for (const file of walk("")) {
+test("nothing but the posts wall lays content out in columns", () => {
+  // A multi-column box reads down-then-across. The posts wall is the one
+  // place that trade is taken: Aayush asked for masonry (VET-284), cards as
+  // tall as their posts, and columns are the JS-free way to it.
+  for (const file of walk("").filter((file) => file !== "components/PostWall.astro")) {
     const source = code(read(file));
     assert.ok(
       !/(^|[;{\s])(column-width|column-count|columns)\s*:/.test(source),
@@ -302,6 +303,8 @@ test("a long post's steps and bullets become real lists (VET-264)", () => {
     { kind: "ol", items: ["Read.\nThen reread.", "Write."], start: 1 },
   ]);
   assert.deepEqual(postBlocks("Why: - They never compared me. - They always believed in me. - They made time. " + "x".repeat(160)).map((b) => b.kind), ["p", "ul"]);
+  assert.deepEqual(postBlocks("Into:\n•Why\n•What"), [{ kind: "p", text: "Into:" }, { kind: "ul", items: ["Why", "What"], start: 1 }], "a bullet with no space after it");
+  assert.deepEqual(postBlocks("-5% today\n-3% tomorrow"), [{ kind: "p", text: "-5% today\n-3% tomorrow" }], "a minus sign is not a bullet");
   assert.deepEqual(postBlocks("0:00 - Intro\n1:20 - Demo"), [{ kind: "p", text: "0:00 - Intro\n1:20 - Demo" }], "a chapter list stays put");
   assert.deepEqual(postBlocks("1. a\n2. b\n1. c").map((b) => b.kind === "p" ? b.text : b.start), [1, 1], "a restart is a new list");
 });

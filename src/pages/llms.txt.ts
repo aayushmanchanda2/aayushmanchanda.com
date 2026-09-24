@@ -19,7 +19,7 @@
 import type { APIRoute } from "astro";
 
 import { PAGES } from "../lib/markdown";
-import { alsoSaved, digested, kindGroups, library } from "../lib/library";
+import { digested, kindGroups, library } from "../lib/library";
 import { FEEDS, getSections } from "../lib/sections";
 import { sites } from "../lib/sites";
 import { categories, tools, verdictGroups } from "../lib/tools";
@@ -115,7 +115,7 @@ saved post's page carries the full post; its card cuts off at 280 characters.
 A block labelled as a draft was written by his pipeline and isn't his verdict.
 ${entries(library.filter((entry) => entry.block !== null).length)} open with a short version: who it's for, the tip,
 the time it takes, what you need, a prompt to copy (marked when the site wrote
-it) and where to start. ${entries(alsoSaved.length)} sit under Also saved: kept, not featured.
+it) and where to start.
 /library.md carries every row and every short version as markdown.
 
 ## Pages

@@ -3,6 +3,8 @@
  *
  * One-off, and safe to re-run: media already in `public/posts/` is not fetched
  * again, and a post that fails keeps what it had. `node pipeline/backfill-posts.mjs`
+ * reads every post; `... backfill-posts.mjs <slug> [<slug>...]` only those (VET-284:
+ * one post that lost its avatar, without re-reading the other seventeen).
  */
 
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -16,7 +18,8 @@ const PUBLIC_DIR = fileURLToPath(new URL("../public", import.meta.url));
 
 async function main() {
   const entries = /** @type {Record<string, any>[]} */ (await readEntries(LIBRARY_JSON));
-  const posts = entries.filter((entry) => entry["kind"] === "post");
+  const only = process.argv.slice(2);
+  const posts = entries.filter((entry) => entry["kind"] === "post" && (only.length === 0 || only.includes(entry["slug"])));
 
   /** @type {string[]} */
   const failed = [];

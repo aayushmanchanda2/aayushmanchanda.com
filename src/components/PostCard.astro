@@ -108,10 +108,11 @@ const initial = monogram(post.author);
     color: var(--text-primary);
   }
 
-  /* A tile lifts off the page (E7, VET-282), so neighbours read as separate
-     posts: `--card-bg` and `--card-shadow`, tuned per theme in global.css. */
+  /* A tile lifts off the page (E7, VET-282; VET-284), so neighbours read as
+     separate posts: `--card-edge`, `--card-bg` and `--card-shadow`, tuned per
+     theme in global.css. Its height is its content's (the masonry wall). */
   .pc--grid {
-    height: 100%;
+    border-color: var(--card-edge);
     background: var(--card-bg);
     box-shadow: var(--card-shadow);
   }
@@ -212,17 +213,6 @@ const initial = monogram(post.author);
     }
   }
 
-  /* A tile's media is one 16:10 box whatever it holds, so a four-photo post
-     is no taller than a one-photo post and rows stay close in height. */
-  .pc--grid > :global(.pm) {
-    aspect-ratio: 16 / 10;
-  }
-
-  .pc--grid > :global(.pm) :global(:is(img, video)) {
-    height: 100%;
-    aspect-ratio: auto;
-  }
-
   /* A quoted post on a tile is who and what; the rest is on the entry. */
   .pc--grid .pc--quoted :is(:global(.pm), .pc__cover, .pc__foot) {
     display: none;
@@ -243,6 +233,7 @@ const initial = monogram(post.author);
   }
 
   .pc__article-title {
+    overflow-wrap: anywhere;
     font-size: 1.0625rem;
     font-weight: 600;
     line-height: 1.35;

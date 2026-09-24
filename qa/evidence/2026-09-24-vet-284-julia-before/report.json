@@ -1,0 +1,35 @@
+{
+  "base": "https://aayushmanchandacom.vercel.app/",
+  "label": "vet-284-julia-before",
+  "dir": "/Users/aayushmanchanda/Downloads/Aayush/aayushmanchanda.com/qa/evidence/2026-09-24-vet-284-julia-before",
+  "at": "2026-09-24T06:37:21.205Z",
+  "shots": [
+    {
+      "route": "/library/she-left-waterloo-without-graduating-now-she-s-a-member-of-t/",
+      "url": "https://aayushmanchandacom.vercel.app/library/she-left-waterloo-without-graduating-now-she-s-a-member-of-t/",
+      "width": 390,
+      "height": 844,
+      "theme": "light",
+      "png": "library_she_left_waterloo_without_graduating_now_she_s_a_member_of_t-390-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/library/she-left-waterloo-without-graduating-now-she-s-a-member-of-t/",
+      "url": "https://aayushmanchandacom.vercel.app/library/she-left-waterloo-without-graduating-now-she-s-a-member-of-t/",
+      "width": 1280,
+      "height": 800,
+      "theme": "light",
+      "png": "library_she_left_waterloo_without_graduating_now_she_s_a_member_of_t-1280-light.png",
+      "status": 200,
+      "dataTheme": "light",
+      "bodyBg": "rgb(255, 255, 255)",
+      "thirdPartyHosts": [],
+      "pageErrors": []
+    }
+  ],
+  "failures": []
+}

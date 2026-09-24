@@ -60,7 +60,10 @@ const blocks = postBlocks(text).map((block) =>
 </script>
 
 <style>
+  /* Words, links and URLs break anywhere rather than widen the card (VET-284). */
   .pt {
+    min-width: 0;
+    word-break: break-word;
     display: flex;
     flex-direction: column;
     gap: 0.75em;

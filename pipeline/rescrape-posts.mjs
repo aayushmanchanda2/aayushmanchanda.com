@@ -1,9 +1,9 @@
 /**
  * rescrape-posts.mjs — give long saved posts their paragraphs back (VET-246).
  *
- * `parsePost` used to flatten a post to one line, and X returns its breaks only
- * over the first 280 characters, so every long post past that was one wall of
- * text. This re-reads each post over 280 characters through Firecrawl and takes
+ * `parsePost` used to flatten a post to one line, then (until VET-284) each
+ * paragraph to one line, and X returns its breaks only over the first 280
+ * characters, so a long post past that lost them. This re-reads each post over 280 characters through Firecrawl and takes
  * the new text only when it is the same words: the breaks are the one thing it
  * is allowed to change. Anything else is logged and left alone.
  *
@@ -24,12 +24,12 @@ const LONG = 280;
 
 
 /**
- * The scraped text when it is the saved words with more paragraph breaks, else null.
+ * The scraped text when it is the saved words with more line breaks, else null.
  * @param {string} saved @param {string} scraped @returns {string | null}
  */
 export function rebroken(saved, scraped) {
   if (oneLine(saved) !== oneLine(scraped)) return null;
-  const breaks = (/** @type {string} */ text) => text.split("\n\n").length;
+  const breaks = (/** @type {string} */ text) => text.split("\n").length;
   return breaks(scraped) > breaks(saved) ? scraped : null;
 }
 

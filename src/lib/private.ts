@@ -11,7 +11,7 @@
  * parser (rightly) refuses any picture that is not a committed path.
  */
 import { isOwner } from "../../convex/owner.ts";
-import { formatDay, formatMonth } from "./date.ts";
+import { formatMonth } from "./date.ts";
 import type { Kind, LibraryEntry } from "./library.ts";
 import { entryHref, library, parseLibrary, rowSummary } from "./library.ts";
 import { clipText } from "./post.ts";
@@ -178,19 +178,16 @@ export interface PaneRow {
   domain: string;
   kind: Kind;
   date: string;
-  /** "Sep 22, 2026", for an "Also saved" row. */
-  day: string;
   /** Its month header, "September 2026". */
   month: string;
   tags: { slug: string; label: string }[];
-  also: boolean;
   /** The line under the title, cut at 110 like the pane's; a block's tip when it has one. */
   summary: string | null;
   tip: boolean;
   /**
-   * The public row it sits above (its href), or null for the end of its group,
+   * The public row it sits above (its href), or null for the end of the list,
    * in the order the pane on /me sorts them: newest first, public before
-   * private on the same day, "Also saved" after the main feed.
+   * private on the same day.
    */
   before: string | null;
   /** The TLDR, the note and the tip, for the command palette. */
@@ -201,9 +198,8 @@ export function paneRows(rows: LibraryEntry[], pub: LibraryEntry[] = library): P
   const own = new Set(rows);
   const merged = [...pub, ...rows].sort((a, b) => b.saved_date.localeCompare(a.saved_date));
   return rows.map((entry) => {
-    const also = Boolean(entry.also_saved);
-    const next = merged.slice(merged.indexOf(entry) + 1).find((other) => !own.has(other) && Boolean(other.also_saved) === also);
-    const summary = also ? null : (entry.block?.tip ?? rowSummary(entry));
+    const next = merged.slice(merged.indexOf(entry) + 1).find((other) => !own.has(other));
+    const summary = entry.block?.tip ?? rowSummary(entry);
     return {
       slug: entry.slug,
       href: privateHref(entry.slug),
@@ -211,10 +207,8 @@ export function paneRows(rows: LibraryEntry[], pub: LibraryEntry[] = library): P
       domain: entry.domain,
       kind: entry.kind,
       date: entry.saved_date,
-      day: formatDay(entry.saved_date),
       month: formatMonth(entry.saved_date),
       tags: entry.tags.map((slug) => ({ slug, label: tagLabel(slug) })),
-      also,
       summary: summary ? clipText(summary, 110) : null,
       tip: Boolean(entry.block),
       before: next ? entryHref(next) : null,

@@ -131,8 +131,15 @@ const [lead, rest] = leadSentence(block.tip);
 
   /* chip.css's tag, inert: a fill instead of an outline and the 4px corner an
      inline code chip takes, because the 8px outlined tag is a link (design.md
-     §3). It wraps, since a need can be a whole phrase. */
+     §3). It wraps, since a need can be a whole phrase, and a URL in one breaks
+     anywhere inside the column (VET-284: Simon's "tools.simonwillison.net/..."
+     need is one token). `word-break` as well, since it is the one that also
+     shrinks a flex item's min-content in every engine. */
   .blk__tag {
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    word-break: break-word;
     display: inline-flex;
     align-items: center;
     gap: 0.375rem;

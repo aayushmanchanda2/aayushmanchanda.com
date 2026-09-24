@@ -1,8 +1,8 @@
 ---
 /**
  * LibraryRows — the library list itself: every entry, newest first, under a
- * header per month by `saved_date` (VET-267), then the quieter "Also saved"
- * group (VET-273). `LibraryPane.astro` draws it beside every library page;
+ * header per month by `saved_date` (VET-267). An `also_saved` entry is a row
+ * like any other (VET-284). `LibraryPane.astro` draws it beside every library page;
  * /library draws it a second time as the phone's list (`LibraryViews.astro`,
  * VET-282), where the pane is hidden. `lib/library-pane.ts › FILTER` filters
  * every copy, and `lib/pane-merge.ts` merges private rows into each.
@@ -20,7 +20,7 @@ import { entryHref, rowSummary } from "../lib/library";
 import { privateHref } from "../lib/private";
 import { clipText } from "../lib/post";
 import { libraryPreview } from "../lib/assets";
-import { formatDay, formatMonth } from "../lib/date";
+import { formatMonth } from "../lib/date";
 
 interface Props {
   entries: LibraryEntry[];
@@ -34,29 +34,26 @@ interface Props {
 
 const { entries, current, extra = [], preview = false } = Astro.props;
 
-/** Month headers over the main feed: "2026-09" -> its count. "Also saved" follows it (VET-273). */
-const byDate = [...entries, ...extra].sort((a, b) => b.saved_date.localeCompare(a.saved_date));
-const [main, also] = [byDate.filter((entry) => !entry.also_saved), byDate.filter((entry) => entry.also_saved)];
+/** Month headers over every row: "2026-09" -> its count. */
+const rows = [...entries, ...extra].sort((a, b) => b.saved_date.localeCompare(a.saved_date));
 const months = new Map<string, number>();
-for (const entry of main) months.set(entry.saved_date.slice(0, 7), (months.get(entry.saved_date.slice(0, 7)) ?? 0) + 1);
-const opens = (i: number) => i === 0 || main[i]!.saved_date.slice(0, 7) !== main[i - 1]!.saved_date.slice(0, 7);
+for (const entry of rows) months.set(entry.saved_date.slice(0, 7), (months.get(entry.saved_date.slice(0, 7)) ?? 0) + 1);
+const opens = (i: number) => i === 0 || rows[i]!.saved_date.slice(0, 7) !== rows[i - 1]!.saved_date.slice(0, 7);
 ---
 
 <ul class="rows" data-rows>
   {
-    [...main, ...also].map((entry, i) => {
-      const quiet = entry.also_saved;
-      const summary = quiet ? null : (entry.block?.tip ?? rowSummary(entry));
+    rows.map((entry, i) => {
+      const summary = entry.block?.tip ?? rowSummary(entry);
       const own = extra.includes(entry);
       return (
         <>
-        {!quiet && opens(i) && (
+        {opens(i) && (
           <li class="pane__month mono" data-month>
             {formatMonth(entry.saved_date)} · <span class="tabular-nums" data-month-count>{months.get(entry.saved_date.slice(0, 7))}</span>
           </li>
         )}
-        {i === main.length && <li class="pane__month pane__also mono" data-month>Also saved · <span class="tabular-nums" data-month-count>{also.length}</span></li>}
-        <li data-kind={own ? "private" : entry.kind} data-tags={entry.tags.join(" ")} data-also={quiet ? "" : undefined}>
+        <li data-kind={own ? "private" : entry.kind} data-tags={entry.tags.join(" ")}>
           <a
             href={own ? privateHref(entry.slug) : entryHref(entry)}
             data-astro-prefetch="hover"
@@ -65,10 +62,9 @@ const opens = (i: number) => i === 0 || main[i]!.saved_date.slice(0, 7) !== main
           >
             <b>{entry.title}</b>
             <small>
-              {!quiet && <KindIcon kind={entry.kind} />}
+              <KindIcon kind={entry.kind} />
               {own && <LockGlyph />}
               <span>{entry.domain}</span>
-              {quiet && <time datetime={entry.saved_date}>{formatDay(entry.saved_date)}</time>}
             </small>
             {summary && <span class:list={[entry.block && "tip"]}>{clipText(summary, 110)}</span>}
           </a>
@@ -95,24 +91,8 @@ const opens = (i: number) => i === 0 || main[i]!.saved_date.slice(0, 7) !== main
     font-weight: 500;
     color: var(--text-secondary);
   }
-  /* Quieter than a month: the rows under it are kept, not featured (VET-273). */
-  .rows .pane__also {
-    margin-top: 1.5rem;
-    color: var(--text-tertiary);
-  }
-
   .rows .pane__month .tabular-nums {
     color: var(--text-tertiary);
-  }
-
-  .rows li[data-also] b {
-    font-weight: 400;
-    color: var(--text-secondary);
-  }
-
-  .rows li[data-also] time::before {
-    content: "\00b7" / "";
-    margin-right: 0.4rem;
   }
 
   .rows li > a {
@@ -172,6 +152,11 @@ const opens = (i: number) => i === 0 || main[i]!.saved_date.slice(0, 7) !== main
 
   /* The kind glyph, then the domain (VET-245); the glyph carries the kind's
      word for a screen reader. */
+  .rows small > span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
   .rows small {
     display: flex;
     align-items: center;
@@ -184,6 +169,7 @@ const opens = (i: number) => i === 0 || main[i]!.saved_date.slice(0, 7) !== main
   /* The TLDR line (`lib/library.ts › rowSummary` says what stands in until
      there is one). */
   .rows li > a > span {
+    overflow-wrap: anywhere;
     margin-top: 0.125rem;
     font-size: 0.875rem;
     line-height: 1.45;

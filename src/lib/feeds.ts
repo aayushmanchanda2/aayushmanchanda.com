@@ -50,7 +50,7 @@ function libraryItems(): FeedItem[] {
     // The TLDR says what the piece is; a digest is his agents' call on it and follows.
     const text = entry.digest
       ? paragraphs(entry.tldr, entry.digest.verdict, entry.digest.why)
-      : paragraphs(entry.why, rowSummary(entry) ?? (entry.post?.article ? null : entry.post?.text));
+      : paragraphs(entry.why, rowSummary(entry));
     // Quoted passages only, never the piece (VET-246), and a video's moments at their time (VET-264).
     const quotes = [
       ...entry.highlights.map((highlight) => escapeXml(highlight.text)),

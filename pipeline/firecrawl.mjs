@@ -491,10 +491,12 @@ const ENTITIES = [
  * Markdown decoration out, the post's paragraphs in.
  *
  * Images go entirely (the post's media comes from X's record, not from here),
- * links keep their text, and whitespace collapses to single spaces inside each
- * paragraph. The blank lines between paragraphs survive as `\n\n`: a long post
- * used to arrive as one wall of text past X's first 280 characters (VET-246),
- * and `lib/post.ts › postParagraphs` splits on exactly this.
+ * links keep their text, and spaces collapse inside each line. The blank lines
+ * between paragraphs survive as `\n\n` (VET-246: a long post used to arrive as
+ * one wall of text past X's first 280 characters), and so does a single line
+ * break inside one (VET-284): the x-twitter post-processor writes the post's
+ * own lines, so a bullet list or a run of timestamps is one per line, and
+ * joining them ran them together. `lib/post.ts › postBlocks` reads both.
  *
  * The entity pass at the end is the half that came out of reading real
  * responses: Firecrawl HTML-escapes the ampersands and angle brackets a person
@@ -517,7 +519,13 @@ function flatten(body) {
       .replace(/^[ \t]*>[ \t]?/gm, "")
       .replace(/\*\*(.+?)\*\*/gs, "$1")
       .split(/\n[ \t]*\n/)
-      .map((paragraph) => paragraph.replace(/\s+/g, " ").trim())
+      .map((paragraph) =>
+        paragraph
+          .split("\n")
+          .map((line) => line.replace(/\s+/g, " ").trim())
+          .filter((line) => line !== "")
+          .join("\n"),
+      )
       .filter((paragraph) => paragraph !== "")
       .join("\n\n")
   );

@@ -74,7 +74,7 @@ export const FIXTURE_ROWS: PrivateRow[] = [
   },
   {
     slug: "fixture-private-also",
-    title: "An invented row kept under Also saved",
+    title: "An invented row kept without a block",
     url: "https://example.org/notes/also",
     domain: "example.org",
     saved_date: "2026-07-30",
