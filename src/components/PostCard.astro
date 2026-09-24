@@ -108,8 +108,12 @@ const initial = monogram(post.author);
     color: var(--text-primary);
   }
 
+  /* A tile lifts off the page (E7, VET-282), so neighbours read as separate
+     posts: `--card-bg` and `--card-shadow`, tuned per theme in global.css. */
   .pc--grid {
     height: 100%;
+    background: var(--card-bg);
+    box-shadow: var(--card-shadow);
   }
 
   .pc--quoted {
