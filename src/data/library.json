@@ -1828,6 +1828,17 @@
           "h": 1080
         }
       ]
+    },
+    "tldr": "Eight recurring AI coding mistakes include over-orchestration, preserving stale context, tool sprawl, code-quality anxiety, and unnecessary branch or worktree habits.",
+    "block": {
+      "best_for": "Developers reviewing how they work with coding agents",
+      "tip": "Check these eight habits against your workflow before adding another tool or orchestration layer.",
+      "needs": [],
+      "start_here": [
+        "Update how you talk to newer models",
+        "Stop treating context and old conversations as sacred",
+        "Question extra orchestration, tools, branches, and worktrees"
+      ]
     }
   },
   {
