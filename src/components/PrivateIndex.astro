@@ -5,11 +5,11 @@
  * Notes shows its list: kind segments with "Private", the tags, month
  * headers, each row's tip, lock-marked private rows and "Also saved" last.
  * One list and one `FILTER`, so a phone gets the same filters a desktop does.
- * "Sign out" sits in the bar and in the list's header.
+ * "Private" and "Sign out" sit in the top bar, from `lib/signed-in.ts`, as on
+ * every page while he is signed in.
  */
 import Base from "../layouts/Base.astro";
 import PrivatePane from "./PrivatePane.astro";
-import SignOut from "./SignOut.astro";
 import type { LibraryEntry } from "../lib/library";
 
 interface Props {
@@ -20,12 +20,8 @@ const { rows } = Astro.props;
 ---
 
 <Base title="Private library · Aayush Manchanda" description="Private." noindex full>
-  <SignOut slot="bar" bar />
   <section class="plist">
-    <div class="plist__head">
-      <h1 class="page-title">Private <span class="plist__count tabular-nums">{rows.length}</span></h1>
-      <SignOut />
-    </div>
+    <h1 class="page-title plist__head">Private <span class="plist__count tabular-nums">{rows.length}</span></h1>
     <PrivatePane rows={rows} />
   </section>
 </Base>
@@ -37,10 +33,6 @@ const { rows } = Astro.props;
   }
 
   .plist__head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
     margin-bottom: 1rem;
   }
 

@@ -10,7 +10,7 @@ Zero framework JS ships. Interactions are vanilla scripts inside `.astro` compon
 
 ## Private /me (VET-274)
 
-`/me/*` is the one on-demand route (the Vercel adapter, Clerk, Convex); every other page is prerendered, and a /me change must leave `dist/` byte-identical apart from `sitemap` dates. **This repo is public: no private entry, note, media, email or secret ever enters it.** The rows live in Convex (`convex/`), loaded by `scripts/private-import.mjs` from the private folder next to this repo; `scripts/private-setup-wizard.sh` sets every key. `astro preview` does not run with the adapter: see `.claude/skills/verify-site/SKILL.md`.
+`/me/*` is the one on-demand route (the Vercel adapter, Clerk, Convex); every other page is prerendered, and a /me change must leave `dist/` byte-identical apart from `sitemap` dates. One exception, on purpose (VET-276): every page carries a ~110-byte inline check (`lib/signed-in-check.ts`) that imports `/signed-in.js` only when Clerk's `__client_uat` cookie is non-zero; that module (`lib/signed-in.ts`) adds "Private" and "Sign out" to the top bar, merges the private rows from `/me/api/rows` into the library pane and ⌘K. A signed-out visitor's JS must stay byte-identical to main: `qa/evidence/2026-09-23-signed-in/check.mjs` measures it. **This repo is public: no private entry, note, media, email or secret ever enters it.** The rows live in Convex (`convex/`), loaded by `scripts/private-import.mjs` from the private folder next to this repo; `scripts/private-setup-wizard.sh` sets every key. `astro preview` does not run with the adapter: see `.claude/skills/verify-site/SKILL.md`.
 
 ## Before you touch UI
 
