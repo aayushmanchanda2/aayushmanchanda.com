@@ -2258,7 +2258,18 @@
     "domain": "claude.dev",
     "saved_date": "2026-09-24",
     "kind": "article",
-    "note": "Anthropic’s developer publication collects practical writing and videos on Claude, Claude Code, agents, skills, context engineering, and production lessons."
+    "note": "Anthropic’s developer publication collects practical writing and videos on Claude, Claude Code, agents, skills, context engineering, and production lessons.",
+    "tldr": "Anthropic's developer blog collects practical engineering notes, playbooks, and videos on building with Claude, including context engineering, skills, caching, and tool design.",
+    "block": {
+      "best_for": "Developers building production workflows with Claude",
+      "tip": "Start with the article closest to your current bottleneck, then use the category filters to go deeper.",
+      "needs": [],
+      "start_here": [
+        "Read the featured performance case study.",
+        "Browse Engineering, Playbooks, or Skills for the problem you are solving.",
+        "Use the linked videos for team workflow examples."
+      ]
+    }
   },
   {
     "slug": "thinking-in-systems-shipping-in-loops",
