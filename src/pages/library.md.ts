@@ -31,7 +31,6 @@ import {
 import type { Kind, LibraryEntry } from "../lib/library";
 import {
   KINDS,
-  alsoSaved,
   digested,
   kindGroups,
   library,
@@ -144,15 +143,6 @@ export const GET: APIRoute = () => {
               "Blocks",
               "The short version of an entry: who it's for, the tip, the time it takes, what you need, a prompt to copy and where to start. A prompt marked as ours was written for this site, not quoted.",
               ...blocked.map(blockMarkdown),
-            ),
-          ]),
-      ...(alsoSaved.length === 0
-        ? []
-        : [
-            section(
-              "Also saved",
-              "Kept but not featured: each still has its page and is in the table above.",
-              list(alsoSaved.map((entry) => `${link(entry.title, absolute(`/library/${entry.slug}`))} (${entry.domain}, ${entry.saved_date})`)),
             ),
           ]),
       section(

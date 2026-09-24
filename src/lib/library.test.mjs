@@ -17,7 +17,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 
-import { KINDS, PROVIDERS, feed, library, parseLibrary } from "./library.ts";
+import { KINDS, PROVIDERS, kindGroups, library, parseLibrary, rowSummary } from "./library.ts";
 
 /**
  * A minimal valid entry. Every test below is this plus one thing wrong.
@@ -404,8 +404,19 @@ test("a title over 60 characters fails the build (VET-283)", () => {
   assert.equal(parseLibrary([entry({ title: "é".repeat(60) })])[0].title.length, 60);
 });
 
-test("no main-feed entry is bare: one with no TLDR waits in Also saved (VET-283)", () => {
-  assert.ok(feed.length > 0);
-  for (const entry of feed) assert.notEqual(entry.tldr, null, `${entry.slug} is in the main feed with no TLDR`);
-  assert.ok(library.filter((entry) => entry.tldr === null).every((entry) => entry.also_saved));
+test("no entry is bare: one with no TLDR still shows a teaser line (VET-283, VET-284)", () => {
+  for (const entry of library) assert.ok(rowSummary(entry), `${entry.slug} has no teaser line`);
+  const post = parseOne({ kind: "post", url: "https://x.com/a/status/1", domain: "x.com", post: POST, note: "@a: the same words" });
+  assert.equal(rowSummary(post), POST.text, "a post with no TLDR leads with its own words");
+  assert.equal(rowSummary(parseOne({ note: "A note." })), "A note.");
+  assert.equal(rowSummary(parseOne({ tldr: "The source in a sentence.", note: "A note." })), "The source in a sentence.");
+});
+
+test("one count per kind: each view lists every entry of its kind, also_saved or not (VET-284)", () => {
+  assert.ok(library.some((entry) => entry.also_saved), "the data still carries the flag");
+  for (const { kind, entries } of kindGroups) {
+    assert.equal(entries.length, library.filter((entry) => entry.kind === kind).length);
+  }
+  // The Posts wall draws a card per post, so every public post must carry one.
+  for (const entry of library.filter((entry) => entry.kind === "post")) assert.ok(entry.post, `${entry.slug} has no post to draw`);
 });

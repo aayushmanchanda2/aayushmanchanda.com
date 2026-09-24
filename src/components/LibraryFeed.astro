@@ -11,39 +11,42 @@
  * it (`lib/library-pane.ts › FILTER`).
  *
  * An entry with a block shows its tip on the one line instead of the TLDR
- * (VET-273). `quiet` is the "Also saved" list: title, domain and date only.
+ * (VET-273), else the teaser (`lib/library.ts › rowSummary`), so an entry
+ * with no TLDR yet still says something (VET-284).
  */
 import KindIcon from "./KindIcon.astro";
 import type { LibraryEntry } from "../lib/library";
-import { entryHref } from "../lib/library";
+import { entryHref, rowSummary } from "../lib/library";
 import { formatDay } from "../lib/date";
 
 interface Props {
   entries: LibraryEntry[];
   filterable?: boolean;
-  quiet?: boolean;
 }
 
-const { entries, filterable = false, quiet = false } = Astro.props;
+const { entries, filterable = false } = Astro.props;
 ---
 
-<ul class:list={["feed", quiet && "feed--quiet"]}>
+<ul class="feed">
   {
-    entries.map((entry) => (
-      <li data-tags={filterable ? entry.tags.join(" ") : undefined}>
-        <a href={entryHref(entry)} data-astro-prefetch="hover">
-          {!quiet && <KindIcon kind={entry.kind} />}
-          <span class="feed__body">
-            <b>{entry.title}</b>
-            {!quiet && (entry.block?.tip ?? entry.tldr) && <span class="feed__tldr">{entry.block?.tip ?? entry.tldr}</span>}
-            <small>
-              <span>{entry.domain}</span>
-              <time datetime={entry.saved_date}>{formatDay(entry.saved_date)}</time>
-            </small>
-          </span>
-        </a>
-      </li>
-    ))
+    entries.map((entry) => {
+      const line = entry.block?.tip ?? rowSummary(entry);
+      return (
+        <li data-tags={filterable ? entry.tags.join(" ") : undefined}>
+          <a href={entryHref(entry)} data-astro-prefetch="hover">
+            <KindIcon kind={entry.kind} />
+            <span class="feed__body">
+              <b>{entry.title}</b>
+              {line && <span class="feed__tldr">{line}</span>}
+              <small>
+                <span>{entry.domain}</span>
+                <time datetime={entry.saved_date}>{formatDay(entry.saved_date)}</time>
+              </small>
+            </span>
+          </a>
+        </li>
+      );
+    })
   }
 </ul>
 
@@ -105,15 +108,6 @@ const { entries, filterable = false, quiet = false } = Astro.props;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  .feed--quiet a {
-    padding-block: 0.5rem;
-  }
-
-  .feed--quiet b {
-    font-weight: 400;
-    color: var(--text-secondary);
   }
 
   .feed small {

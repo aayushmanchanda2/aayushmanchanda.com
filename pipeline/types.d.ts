@@ -180,7 +180,7 @@ export interface Patch {
   } | null;
   /** The entry's block (VET-273), held to `src/lib/reader.mjs › block`. */
   block?: import("../src/lib/reader.mjs").Block | null;
-  /** true moves the entry under "Also saved"; false removes the key. */
+  /** true flags the entry as kept without a block (a data flag, VET-284); false removes the key. */
   also_saved?: boolean | null;
 }
 

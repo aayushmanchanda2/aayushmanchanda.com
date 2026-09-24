@@ -9,21 +9,21 @@
  * Every item carries its tags and follows the filter (VET-282,
  * `lib/library-pane.ts`): a part hides when nothing in it matches, and when
  * nothing featured matches at all, one line says the list beside has them.
- * "All N" counts every entry of the kind, both groups, as its segment does.
+ * "All N" counts every entry of the kind, as its segment does.
  */
 import KindIcon from "./KindIcon.astro";
 import PostWall from "./PostWall.astro";
 import VideoGrid from "./VideoGrid.astro";
-import { KIND_LABELS, entryHref, feed, kindGroups } from "../lib/library";
+import { KIND_LABELS, entryHref, kindGroups, library } from "../lib/library";
 import type { Kind } from "../lib/library";
 import { formatDay } from "../lib/date";
 
-const of = (kind: Kind) => feed.filter((entry) => entry.kind === kind);
+const of = (kind: Kind) => library.filter((entry) => entry.kind === kind);
 const [reading] = of("article");
 const highlight = reading?.highlights[0];
 const total = (kind: Kind) => kindGroups.find((group) => group.kind === kind)?.entries.length ?? 0;
 
-/** The parts after the lead article: kind and its newest few, from the main feed. */
+/** The parts after the lead article: kind and its newest few. */
 const parts = [
   { kind: "post" as const, entries: of("post").filter((entry) => entry.post !== null).slice(0, 4) },
   { kind: "video" as const, entries: of("video").slice(0, 2) },

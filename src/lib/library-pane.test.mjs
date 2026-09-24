@@ -84,11 +84,12 @@ test("Up, Down, Home and End walk the pane rows and stop at the ends", () => {
  * tag checkboxes, a chip row, a count, an empty state and the entry's hint
  * row; with `home`, two tagged items in the route's view.
  *
- * With `also`, an "Also saved" header and two rows follow the four (VET-273).
+ * With `older`, an older month's header and two rows follow the four: one
+ * list, every entry dated (VET-284 dropped the "Also saved" group).
  *
- * @param {{ search?: string, current?: number, home?: string, start?: string, pathname?: string, also?: boolean }} options
+ * @param {{ search?: string, current?: number, home?: string, start?: string, pathname?: string, older?: boolean }} options
  */
-function filter({ search = "", current = 1, home, start, pathname = "/library/e1", also = false }) {
+function filter({ search = "", current = 1, home, start, pathname = "/library/e1", older = false }) {
   /** @param {Record<string, string>} attrs */
   const el = (attrs = {}) => {
     /** @type {Record<string, (event: object) => void>} */
@@ -142,15 +143,15 @@ function filter({ search = "", current = 1, home, start, pathname = "/library/e1
     Object.assign(a, { parentNode: li });
     return li;
   });
-  const alsoHead = Object.assign(el(), { dataset: {}, monthCount: el() });
-  Object.assign(alsoHead, { querySelector: () => alsoHead.monthCount });
-  const alsoRows = (also ? [["post", "agents"], ["article", "design"]] : []).map(([kind, tags], index) => {
+  const olderHead = Object.assign(el(), { dataset: {}, monthCount: el() });
+  Object.assign(olderHead, { querySelector: () => olderHead.monthCount });
+  const olderRows = (older ? [["post", "agents"], ["article", "design"]] : []).map(([kind, tags], index) => {
     const a = Object.assign(el(), { href: `/library/a${index}` });
-    const li = Object.assign(el({ "data-also": "" }), { dataset: { kind, tags }, firstElementChild: a, textContent: `Also ${index}`, querySelector: () => ({ textContent: `Also ${index}` }) });
+    const li = Object.assign(el(), { dataset: { kind, tags }, firstElementChild: a, textContent: `Older ${index}`, querySelector: () => ({ textContent: `Older ${index}` }) });
     Object.assign(a, { parentNode: li });
     return li;
   });
-  const listItems = [month, ...rows, ...(also ? [alsoHead, ...alsoRows] : [])];
+  const listItems = [month, ...rows, ...(older ? [olderHead, ...olderRows] : [])];
   const rowList = { querySelectorAll: () => listItems };
   const segs = ["", "article", "post", "video"].map((kind) => Object.assign(el(), { dataset: { kindSet: kind } }));
   const segCounts = ["", "article", "post", "video"].map((kind) => Object.assign(el(), { dataset: { kindCount: kind } }));
@@ -216,7 +217,7 @@ function filter({ search = "", current = 1, home, start, pathname = "/library/e1
     box.checked = on;
     box.on.change?.({});
   };
-  return { list, rows, month, alsoHead, alsoRows, segs, segCounts, boxes, chips, summary, count, empty, nav, replaced, items, location: { ...location, replaced: replacedTo }, tick };
+  return { list, rows, month, olderHead, olderRows, segs, segCounts, boxes, chips, summary, count, empty, nav, replaced, items, location: { ...location, replaced: replacedTo }, tick };
 }
 
 const shown = (/** @type {{ hidden: boolean }[]} */ rows) => rows.map((row) => (row.hidden ? 0 : 1)).join("");
@@ -353,54 +354,54 @@ test("a tag the filter leaves at 0 is disabled and sorted last; a ticked one nev
   assert.deepEqual(ticked.list.children.slice(-2).map((label) => label.tag), ["design", "agents"]);
 });
 
-/* The filtering model (VET-282): All is every entry, Also saved is a group at
-   the bottom, every filter applies to both groups, and every count agrees. */
+/* The filtering model (VET-282, VET-284): All is every entry in one dated
+   list, every filter applies to every row, and every count agrees. */
 
 const counts = (/** @type {ReturnType<typeof filter>} */ pane) =>
   Object.fromEntries(pane.segCounts.map((c) => [c.dataset.kindCount || "all", c.textContent]));
 
-test("All counts every entry, the main feed and Also saved together, the same in every place", () => {
-  const pane = filter({ also: true, current: -1 });
-  assert.equal(shown([...pane.rows, ...pane.alsoRows]), "111111");
+test("All counts every entry across every month, the same in every place", () => {
+  const pane = filter({ older: true, current: -1 });
+  assert.equal(shown([...pane.rows, ...pane.olderRows]), "111111");
   assert.equal(pane.count.textContent, "6 entries");
   assert.deepEqual(counts(pane), { all: 6, article: 2, post: 3, video: 1 });
-  assert.equal(pane.alsoHead.monthCount.textContent, 2);
+  assert.equal(pane.olderHead.monthCount.textContent, 2);
 });
 
-test("select tag X: the list shows exactly the N entries carrying it across both groups, and the count reads N", () => {
-  const pane = filter({ also: true, current: -1 });
+test("select tag X: the list shows exactly the N entries carrying it in every month, and the count reads N", () => {
+  const pane = filter({ older: true, current: -1 });
   pane.tick("agents", true);
-  // agents: rows 0, 1, 3 in the main feed and the first Also saved row.
+  // agents: rows 0, 1, 3 in the newer month and the first older row.
   assert.equal(shown(pane.rows), "1101");
-  assert.equal(shown(pane.alsoRows), "10");
-  const n = [...pane.rows, ...pane.alsoRows].filter((row) => !row.hidden).length;
+  assert.equal(shown(pane.olderRows), "10");
+  const n = [...pane.rows, ...pane.olderRows].filter((row) => !row.hidden).length;
   assert.equal(n, 4);
   assert.equal(pane.count.textContent, `${n} entries`);
   assert.equal(counts(pane).all, n, "All's segment reads the same N as the live count");
   assert.deepEqual(counts(pane), { all: 4, article: 1, post: 2, video: 1 });
   assert.equal(pane.month.monthCount.textContent, 3);
-  assert.equal(pane.alsoHead.monthCount.textContent, 1);
-  assert.equal(pane.alsoHead.hidden, false);
+  assert.equal(pane.olderHead.monthCount.textContent, 1);
+  assert.equal(pane.olderHead.hidden, false);
 });
 
-test("a kind and a tag narrow Also saved too; its header hides when nothing under it shows", () => {
-  const pane = filter({ also: true, current: -1, search: "?kind=video&tags=agents" });
-  assert.equal(shown([...pane.rows, ...pane.alsoRows]), "000100");
+test("a kind and a tag narrow every month; a header hides when nothing under it shows", () => {
+  const pane = filter({ older: true, current: -1, search: "?kind=video&tags=agents" });
+  assert.equal(shown([...pane.rows, ...pane.olderRows]), "000100");
   assert.equal(pane.count.textContent, "1 entry");
-  assert.equal(pane.alsoHead.hidden, true);
+  assert.equal(pane.olderHead.hidden, true);
   // A segment counts what pressing it would show under the same tags.
   assert.deepEqual(counts(pane), { all: 4, article: 1, post: 2, video: 1 });
 });
 
 test("text search is a filter like the others, carried in the URL and on every row", () => {
-  const pane = filter({ also: true, current: -1, search: "?q=also%200" });
-  assert.equal(shown([...pane.rows, ...pane.alsoRows]), "000010");
+  const pane = filter({ older: true, current: -1, search: "?q=older%200" });
+  assert.equal(shown([...pane.rows, ...pane.olderRows]), "000010");
   assert.equal(pane.count.textContent, "1 entry");
-  assert.ok(pane.alsoRows[0]?.firstElementChild.search === "?q=also%200");
+  assert.ok(pane.olderRows[0]?.firstElementChild.search === "?q=older%200");
 });
 
 test("the view's items follow the filter on All too (B6's editorial mix)", () => {
-  const index = filter({ home: "/library", start: "", pathname: "/library", current: -1, also: true });
+  const index = filter({ home: "/library", start: "", pathname: "/library", current: -1, older: true });
   assert.deepEqual(index.items.map((item) => item.hidden), [false, false]);
   index.tick("design", true);
   assert.deepEqual(index.items.map((item) => item.hidden), [true, false]);

@@ -80,7 +80,7 @@ test("/me/api/rows: no identity or the wrong email is a bare 404; the owner gets
 const entry = (slug, saved_date, extra = {}) =>
   toEntry({ slug, title: slug, url: `https://example.com/${slug}`, domain: "example.com", saved_date, kind: "article", ...extra });
 
-test("a private row sits above the public row the /me pane puts after it, in its own group", () => {
+test("a private row sits above the public row the /me pane puts after it, also_saved or not (VET-284)", () => {
   const pub = [entry("pub-sep", "2026-09-10"), entry("pub-aug", "2026-08-10"), entry("pub-also", "2026-09-01", { also_saved: true })];
   const block = { best_for: "Me.", tip: "The tip.", needs: [], start_here: ["Go."], next_step: "Open it." };
   const rows = paneRows(
@@ -91,11 +91,10 @@ test("a private row sits above the public row the /me pane puts after it, in its
     rows.map((row) => [row.slug, row.before, row.month]),
     [
       ["newest", "/library/pub-sep", "September 2026"],
-      ["same-day", "/library/pub-aug", "September 2026"],
+      ["same-day", "/library/pub-also", "September 2026"],
       ["oldest", null, "July 2026"],
       ["kept", "/library/pub-also", "September 2026"],
     ],
   );
   assert.deepEqual([rows[0].summary, rows[0].tip, rows[0].tags], ["The tip.", true, [{ slug: "agents", label: "agents" }]]);
-  assert.equal(rows[3].summary, null, "an Also saved row has no summary line");
 });

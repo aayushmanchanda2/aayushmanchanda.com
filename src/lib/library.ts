@@ -249,7 +249,7 @@ export interface LibraryEntry {
   moments: Moment[];
   /** Best for, the tip, time, needs, a prompt to copy, where to start (VET-273). Or null. */
   block: Block | null;
-  /** Kept, but out of the main feed: listed under "Also saved" (VET-273). A public entry with no `tldr` is held here until it has one (VET-283). */
+  /** Kept without a block: a data flag only. Lists show it like any entry, by date, in its kind's format (VET-284). */
   also_saved: boolean;
 }
 
@@ -708,26 +708,24 @@ export function entryHref(entry: Pick<LibraryEntry, "slug">): string {
 }
 
 /**
- * The line under a row's title in the /library/<slug> list pane: the TLDR
- * once there is one, the note until then. A post the pipeline could read gets
- * no fallback, because its note is its own words and its title already is.
- * A row whose entry has a block shows its tip instead (the pane, VET-273).
+ * The teaser line under a row's title in the list pane: the TLDR once there
+ * is one; until then a post's own words (its title is a rewrite since
+ * VET-283, and its note is the same words behind "@handle:"; an X Article's
+ * body is never republished, so not its), else the note,
+ * else the source's opening. No entry shows without one (VET-284). A row
+ * whose entry has a block shows its tip instead (the pane, VET-273).
  */
 export function rowSummary(entry: LibraryEntry): string | null {
-  return entry.tldr ?? (entry.post ? null : entry.note);
+  const words = entry.post && !entry.post.article ? entry.post.text || null : null;
+  return entry.tldr ?? words ?? entry.note ?? entry.excerpt;
 }
 
 /* ---------------------------------------------------------------------------
    Derived views — computed once, at build time
    --------------------------------------------------------------------------- */
 
-/**
- * Newest save first; ties keep the order they were written in the JSON. An
- * entry with no TLDR yet is Also saved, never a bare main-feed row (VET-283);
- * the /me archive's own rows are not held to it.
- */
+/** Newest save first; ties keep the order they were written in the JSON. */
 export const library: LibraryEntry[] = parseLibrary(rawLibrary)
-  .map((entry) => (entry.tldr === null ? { ...entry, also_saved: true } : entry))
   .map((entry, index) => ({ entry, index }))
   .sort((a, b) =>
     a.entry.saved_date === b.entry.saved_date
@@ -735,13 +733,6 @@ export const library: LibraryEntry[] = parseLibrary(rawLibrary)
       : b.entry.saved_date.localeCompare(a.entry.saved_date),
   )
   .map(({ entry }) => entry);
-
-// The build names every entry held in Also saved only for want of a TLDR (VET-283).
-for (const item of rawLibrary as { slug: string; tldr?: unknown; also_saved?: unknown }[]) {
-  if (item.tldr == null && item.also_saved !== true) {
-    console.warn(`src/data/library.json: "${item.slug}" has no tldr, so it sits in Also saved until one is patched in`);
-  }
-}
 
 /**
  * The entries somebody has actually read, in the order the list renders them.
@@ -756,10 +747,6 @@ for (const item of rawLibrary as { slug: string; tldr?: unknown; also_saved?: un
 export const digested: DigestedEntry[] = library.filter(
   (entry): entry is DigestedEntry => entry.digest !== null,
 );
-
-/** The main feed, and the quieter "Also saved" group under it (VET-273). Same order as `library`. */
-export const feed: LibraryEntry[] = library.filter((entry) => !entry.also_saved);
-export const alsoSaved: LibraryEntry[] = library.filter((entry) => entry.also_saved);
 
 /** Kinds in vocabulary order, empty ones dropped: no page without entries. */
 export const kindGroups: KindGroup[] = KINDS.map((kind) => ({
