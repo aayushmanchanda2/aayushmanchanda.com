@@ -1,0 +1,198 @@
+{
+  "base": "http://localhost:4396",
+  "fails": 0,
+  "out": [
+    {
+      "browser": "chromium",
+      "name": "desktop click row 1 description opens it in the panel",
+      "ok": true,
+      "detail": "/tools/hermes open=true"
+    },
+    {
+      "browser": "chromium",
+      "name": "desktop click row 4 description opens it in the panel",
+      "ok": true,
+      "detail": "/tools/cloudflare-os open=true"
+    },
+    {
+      "browser": "chromium",
+      "name": "Tab reaches a row link and rings the row",
+      "ok": true,
+      "detail": "Paperclip: solid 2px"
+    },
+    {
+      "browser": "chromium",
+      "name": "tools grid tile 0",
+      "ok": true,
+      "detail": "want /tools/paperclip got /tools/paperclip"
+    },
+    {
+      "browser": "chromium",
+      "name": "tools grid tile 20",
+      "ok": true,
+      "detail": "want /tools/markdown-preview got /tools/markdown-preview"
+    },
+    {
+      "browser": "chromium",
+      "name": "tools grid tile 60",
+      "ok": true,
+      "detail": "want /tools/bucko got /tools/bucko"
+    },
+    {
+      "browser": "chromium",
+      "name": "sites grid card 0",
+      "ok": true,
+      "detail": "want /sites/arc-from-the-browser-company got /sites/arc-from-the-browser-company"
+    },
+    {
+      "browser": "chromium",
+      "name": "sites grid card 10",
+      "ok": true,
+      "detail": "want /sites/mike-barton got /sites/mike-barton"
+    },
+    {
+      "browser": "chromium",
+      "name": "sites grid card 25",
+      "ok": true,
+      "detail": "want /sites/otherkind got /sites/otherkind"
+    },
+    {
+      "browser": "chromium",
+      "name": "verdict page (skipped) row 0 date",
+      "ok": true,
+      "detail": "want /tools/cloudflare-os got /tools/cloudflare-os"
+    },
+    {
+      "browser": "chromium",
+      "name": "category page (agent-infra) row 0 date",
+      "ok": true,
+      "detail": "want /tools/paperclip got /tools/paperclip"
+    },
+    {
+      "browser": "chromium",
+      "name": "library: Videos on a post shows /library/kind/video",
+      "ok": true,
+      "detail": "path /library/kind/video"
+    },
+    {
+      "browser": "chromium",
+      "name": "library: Posts on a post keeps it and filters in place",
+      "ok": true,
+      "detail": "/library/eight-mistakes-people-make-coding-with-ai?kind=post"
+    },
+    {
+      "browser": "chromium",
+      "name": "library: a tapped pane row opens its entry",
+      "ok": true,
+      "detail": "/library/how-i-make-launch-videos-with-ai"
+    },
+    {
+      "browser": "chromium",
+      "name": "mat reaches the bottom on /sites/ after 1366 -> 1536",
+      "ok": true,
+      "detail": "{\"mat\":1536,\"stamp\":1522.1875,\"h\":1536}"
+    },
+    {
+      "browser": "chromium",
+      "name": "mat reaches the bottom on /about/ after 1366 -> 1536",
+      "ok": true,
+      "detail": "{\"mat\":1536,\"stamp\":1522.1875,\"h\":1536}"
+    },
+    {
+      "browser": "webkit",
+      "name": "desktop click row 1 description opens it in the panel",
+      "ok": true,
+      "detail": "/tools/hermes open=true"
+    },
+    {
+      "browser": "webkit",
+      "name": "desktop click row 4 description opens it in the panel",
+      "ok": true,
+      "detail": "/tools/cloudflare-os open=true"
+    },
+    {
+      "browser": "webkit",
+      "name": "Tab reaches a row link and rings the row",
+      "ok": true,
+      "detail": "Paperclip: solid 2px"
+    },
+    {
+      "browser": "webkit",
+      "name": "tools grid tile 0",
+      "ok": true,
+      "detail": "want /tools/paperclip got /tools/paperclip"
+    },
+    {
+      "browser": "webkit",
+      "name": "tools grid tile 20",
+      "ok": true,
+      "detail": "want /tools/markdown-preview got /tools/markdown-preview"
+    },
+    {
+      "browser": "webkit",
+      "name": "tools grid tile 60",
+      "ok": true,
+      "detail": "want /tools/bucko got /tools/bucko"
+    },
+    {
+      "browser": "webkit",
+      "name": "sites grid card 0",
+      "ok": true,
+      "detail": "want /sites/arc-from-the-browser-company got /sites/arc-from-the-browser-company"
+    },
+    {
+      "browser": "webkit",
+      "name": "sites grid card 10",
+      "ok": true,
+      "detail": "want /sites/mike-barton got /sites/mike-barton"
+    },
+    {
+      "browser": "webkit",
+      "name": "sites grid card 25",
+      "ok": true,
+      "detail": "want /sites/otherkind got /sites/otherkind"
+    },
+    {
+      "browser": "webkit",
+      "name": "verdict page (skipped) row 0 date",
+      "ok": true,
+      "detail": "want /tools/cloudflare-os got /tools/cloudflare-os"
+    },
+    {
+      "browser": "webkit",
+      "name": "category page (agent-infra) row 0 date",
+      "ok": true,
+      "detail": "want /tools/paperclip got /tools/paperclip"
+    },
+    {
+      "browser": "webkit",
+      "name": "library: Videos on a post shows /library/kind/video",
+      "ok": true,
+      "detail": "path /library/kind/video"
+    },
+    {
+      "browser": "webkit",
+      "name": "library: Posts on a post keeps it and filters in place",
+      "ok": true,
+      "detail": "/library/eight-mistakes-people-make-coding-with-ai?kind=post"
+    },
+    {
+      "browser": "webkit",
+      "name": "library: a tapped pane row opens its entry",
+      "ok": true,
+      "detail": "/library/how-i-make-launch-videos-with-ai"
+    },
+    {
+      "browser": "webkit",
+      "name": "mat reaches the bottom on /sites/ after 1366 -> 1536",
+      "ok": true,
+      "detail": "{\"mat\":1536,\"stamp\":1522.1875,\"h\":1536}"
+    },
+    {
+      "browser": "webkit",
+      "name": "mat reaches the bottom on /about/ after 1366 -> 1536",
+      "ok": true,
+      "detail": "{\"mat\":1536,\"stamp\":1522.1875,\"h\":1536}"
+    }
+  ]
+}

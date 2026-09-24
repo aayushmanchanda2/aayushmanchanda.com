@@ -131,8 +131,13 @@ body {
   --major: oklch(0.97 0.04 var(--mat-h) / 0.16);
   --minor: oklch(0.97 0.04 var(--mat-h) / 0.07);
 
+  /* Sized off `dvh`, not `inset: 0` (VET-306): when iPadOS Safari's toolbar
+     collapsed, a fixed box's bottom stayed where the toolbar had been and the
+     page scrolled on below the frame. `.stamp` does the same. */
   position: fixed;
-  inset: 0;
+  inset: 0 0 auto;
+  height: 100vh;
+  height: 100dvh;
   /* over the bar (30) and the site panel (20); under the preview card (50),
      the menu (70, 80) and the palette (100) */
   z-index: 40;
@@ -148,6 +153,11 @@ body {
 @supports not (mask-composite: exclude) {
   .mat {
     display: none;
+  }
+
+  /* its gap fill (below) would be the only mat on screen; `html` outranks it */
+  html .stamp {
+    box-shadow: none;
   }
 }
 
@@ -242,10 +252,16 @@ body {
   --cover: calc(var(--keyline) + var(--clear));
 
   position: fixed;
-  inset: var(--mat-w);
+  inset: var(--mat-w) var(--mat-w) auto;
+  height: calc(100vh - 2 * var(--mat-w));
+  height: calc(100dvh - 2 * var(--mat-w));
   z-index: 40;
   pointer-events: none;
   border: var(--band) solid var(--bg);
+  /* If the window still outgrows the frame, the gap below it is mat, not the
+     page: a solid shadow reaching half a window down (under `.mat`, so it
+     only ever shows past the mat's own edge). */
+  box-shadow: 0 50vh 0 var(--mat-w) var(--mat);
   background:
     linear-gradient(var(--bg) var(--cover), transparent calc(var(--cover) + 8px)),
     linear-gradient(to top, var(--bg) var(--cover), transparent calc(var(--cover) + 8px));

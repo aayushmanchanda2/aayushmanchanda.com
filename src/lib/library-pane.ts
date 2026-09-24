@@ -66,8 +66,11 @@ addEventListener("pagehide",s);p.addEventListener("click",s);
  * copy on the page is wired. Each list keeps one tab stop (the roving
  * tabindex), on its `aria-current` row or its first shown one.
  *
- * On an entry page a plain click on a segment filters in place (a modifier
- * click still opens the kind page), a change replaces the history entry (Back
+ * On an entry page a plain click on a segment filters in place when the open
+ * entry is of that kind (or All); a kind that leaves the entry out follows the
+ * segment's link, tags and text kept, so the right side shows what that kind's
+ * page shows rather than an entry the list no longer has (VET-306). A modifier
+ * click still opens the kind page, a change replaces the history entry (Back
  * still means the previous entry), and every row link and the hint row's
  * close, prev and next carry the query; prev and next step to the nearest
  * shown row. On /library and `/library/kind/<kind>` the pane carries
@@ -123,6 +126,8 @@ ring(s);}
 function set(f){history.replaceState(null,"",location.pathname+query(home?{kind:"",tags:f.tags,q:f.q}:f));apply(f);}
 segs.forEach(function(g){g.addEventListener("click",function(e){if(e.button||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;var f=read(),k=g.dataset.kindSet;
 if(home){if(k===f.kind)e.preventDefault();else g.search=query({kind:"",tags:f.tags,q:f.q});return;}
+var cur=root.querySelector('[data-rows] > li > [aria-current="page"]'),own=cur&&cur.parentNode.dataset.kind;
+if(k&&own&&own!==k){var p=new URLSearchParams(g.search);p.delete("tags");p.delete("q");if(f.tags.length)p.set("tags",f.tags.join(","));if(f.q)p.set("q",f.q);p=String(p);g.search=p&&"?"+p;return;}
 e.preventDefault();f.kind=k;set(f);});});
 boxes.forEach(function(b){b.addEventListener("change",function(){var f=read();f.tags=f.tags.filter(function(t){return t!==b.value;});if(b.checked)f.tags.push(b.value);set(f);});});
 fields.forEach(function(i){i.addEventListener("input",function(){var f=read();f.q=i.value.trim();set(f);});});

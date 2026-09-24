@@ -42,7 +42,7 @@
 }
 
 .dtable tbody tr {
-  position: relative;
+  cursor: pointer;
 }
 
 .dtable tbody tr:hover {
@@ -77,20 +77,16 @@
   white-space: nowrap;
 }
 
-/* The stretched link: the row is the target, the anchor is the one tab stop,
-   and the focus ring goes round the row rather than round the name. */
-.dtable .row__link::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: var(--r-lg);
-}
-
+/* The row is the target (`lib/row-link.ts` hands a press anywhere on it to
+   the name's link), the anchor is the one tab stop, and the focus ring goes
+   round the row rather than round the name. Not a stretched `::after`
+   (VET-306): iPadOS WebKit ignores `position: relative` on a `<tr>`, so every
+   row's overlay covered the table and the last row took every tap. */
 .dtable .row__link:focus-visible {
   outline: none;
 }
 
-.dtable .row__link:focus-visible::after {
+.dtable tbody tr:has(.row__link:focus-visible) {
   outline: 2px solid var(--accent);
   outline-offset: -2px;
 }

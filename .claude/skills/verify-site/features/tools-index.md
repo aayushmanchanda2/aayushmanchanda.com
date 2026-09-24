@@ -4,7 +4,7 @@
 
 ## Sub-features
 
-- `tools-table` `table` > `tbody[data-tool-rows]` > `tr.row[data-tool]` (attributes `data-verdict`, `data-category` (slug), `data-sort-name|category|verdict|date`, `data-index`). Name cell `.row__link` is stretched over the row.
+- `tools-table` `table` > `tbody[data-tool-rows]` > `tr.row[data-tool]` (attributes `data-verdict`, `data-category` (slug), `data-sort-name|category|verdict|date`, `data-index`). Name cell `.row__link` is the row's one link; a press anywhere on the row follows it (`lib/row-link.ts`, VET-306).
 - `tools-sort` `th[data-sort-key] > button.sort` (name, category, verdict, date); state is `aria-sort` on the `th`. Cycle: natural direction (date newest first), reverse, file order.
 - `tools-filters` `#filter-verdict`, `#filter-category` (`[data-filter]`), count `[data-filter-count]` (aria-live), empty state `[data-filter-empty]`.
 - `tools-grid` `ul[data-tool-rows] > li.tile[data-tool] > a.tile__link` (60px `.app-icon`, `.tile__name`), shown when `html[data-tools-view="grid"]`.

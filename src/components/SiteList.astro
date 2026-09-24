@@ -6,8 +6,9 @@
  * domain under it, the way the /tools table keeps one column on a phone.
  *
  * The rows carry the hover preview card (`lib/preview-card.ts`): here the row
- * is words, so the picture is what the card adds. Each row is one stretched
- * link to `/sites/<slug>`, which `DetailPanel.astro` opens in the slide-over.
+ * is words, so the picture is what the card adds. Each row is one link to
+ * `/sites/<slug>` (a press anywhere on it follows the name's, `lib/row-link.ts`),
+ * which `DetailPanel.astro` opens in the slide-over.
  */
 import "../styles/table.css";
 import AppIcon from "./AppIcon.astro";
@@ -65,6 +66,10 @@ const { groups } = Astro.props;
 </table>
 
 <PreviewCard />
+
+<script>
+  import "../lib/row-link";
+</script>
 
 <style>
   .list {

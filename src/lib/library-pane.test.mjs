@@ -266,15 +266,28 @@ test("one tab stop, on the current row, or the first shown row when the filter h
 });
 
 test("a plain click filters in place and replaces the URL; a modifier click is left alone", () => {
+  // The open entry (e1) is a post, so Posts keeps it and filters in place.
   const pane = filter({ search: "?tags=design" });
   let prevented = false;
-  pane.segs[1]?.on.click?.({ button: 0, preventDefault: () => (prevented = true) });
+  pane.segs[2]?.on.click?.({ button: 0, preventDefault: () => (prevented = true) });
   assert.ok(prevented);
-  assert.deepEqual(pane.replaced, ["/library/e1?kind=article&tags=design"]);
+  assert.deepEqual(pane.replaced, ["/library/e1?kind=post&tags=design"]);
 
   const modified = filter({});
   modified.segs[2]?.on.click?.({ button: 0, metaKey: true, preventDefault: () => assert.fail("took a cmd-click") });
   assert.deepEqual(modified.replaced, []);
+});
+
+test("a kind that leaves the open entry out follows its link, tags and text kept (VET-306)", () => {
+  const pane = filter({ search: "?tags=agents&q=entry" });
+  pane.segs[3]?.on.click?.({ button: 0, preventDefault: () => assert.fail("kept a post open under Videos") });
+  assert.equal(pane.segs[3]?.search, "?tags=agents&q=entry");
+  assert.deepEqual(pane.replaced, []);
+
+  // All always holds the open entry.
+  let prevented = false;
+  pane.segs[0]?.on.click?.({ button: 0, preventDefault: () => (prevented = true) });
+  assert.ok(prevented);
 });
 
 test("ticking two tags narrows with AND, writes ?tags=a,b, and close, prev and next follow", () => {
