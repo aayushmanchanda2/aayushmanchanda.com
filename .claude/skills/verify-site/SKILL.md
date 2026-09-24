@@ -75,4 +75,5 @@ Leaves `qa/evidence/` alone. Nothing else is created: each shoot run launches an
 ## Helpers
 
 - `shoot.mjs` — the harness above. Executable; always invoke with `node` from the repo root.
+- `overflow.mjs` — the sideways-bleed check (VET-284, G9): at 320 and 390, /library, every kind view and entry pages, no sideways scroll, no box past the viewport, no line of text, picture, code or table past its container. `node .claude/skills/verify-site/overflow.mjs [base]` (default `http://localhost:4384`); exit 1 names each bleed. Run it after any change to post text, titles, chips or the library views.
 - `features/` — the feature map. Maintain it with `/maintain-verification-skill` when routes or selectors change.

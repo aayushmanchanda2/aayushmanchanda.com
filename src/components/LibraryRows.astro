@@ -152,6 +152,11 @@ const opens = (i: number) => i === 0 || rows[i]!.saved_date.slice(0, 7) !== rows
 
   /* The kind glyph, then the domain (VET-245); the glyph carries the kind's
      word for a screen reader. */
+  .rows small > span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
   .rows small {
     display: flex;
     align-items: center;
@@ -164,6 +169,7 @@ const opens = (i: number) => i === 0 || rows[i]!.saved_date.slice(0, 7) !== rows
   /* The TLDR line (`lib/library.ts › rowSummary` says what stands in until
      there is one). */
   .rows li > a > span {
+    overflow-wrap: anywhere;
     margin-top: 0.125rem;
     font-size: 0.875rem;
     line-height: 1.45;

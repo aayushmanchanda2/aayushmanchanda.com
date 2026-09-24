@@ -577,7 +577,7 @@ Five things are worth not re-deriving.
 2. `npm test` → all pass (642 at the time of writing).
 3. `npm run build` → clean, then `npm run validate:schema` → clean. The second reads `dist/`, so it is only meaningful after the first, and it is a separate CI step for the same reason: a failure should name which of the two broke.
 4. **Both themes, and both forced states.** Four looks, not two: OS light, OS dark, and then a pinned theme fighting each of them — `data-theme="dark"` on a light OS is the one that catches a token declared in only one of the two dark blocks. Every colour is a token; a hex outside `styles/` is the bug.
-5. **Mobile.** At 375px: the top bar's trail (a long title ellipses; home gives way first) and its search glyph, the menu panel, the row reflows at 599/639, the palette as a sheet with its ×, /library All as the Notes list.
+5. **Mobile.** At 375px: the top bar's trail (a long title ellipses; home gives way first) and its search glyph, the menu panel, the row reflows at 599/639, the palette as a sheet with its ×, /library All as the Notes list. Then `node .claude/skills/verify-site/overflow.mjs` against the build: at 320 and 390 nothing scrolls sideways and no line of text, link, title, chip, picture or code passes its container (VET-284; post text, chips and titles carry `overflow-wrap: anywhere`, and a flex item that holds words also `min-width: 0`).
 6. **Reduced motion.** Turn it on and look again. Nothing resting on a transform may be left displaced; nothing may sit invisible waiting out a stagger delay.
 7. **Live verification against the real page.** `npm run dev`, open it, and press the thing you changed. Reading the built HTML is not verification.
 
