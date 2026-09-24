@@ -48,6 +48,23 @@ export function assetFor(dir: keyof typeof FILES, slug: string): string | null {
 }
 
 /**
+ * A committed WebP's pixel size, read off its header (no decoder): the
+ * `width`/`height` a full-page shot needs so its box is reserved before the
+ * bytes land (`ShotFrame.astro`). Handles the three WebP chunk layouts.
+ */
+export function webpSize(publicPath: string): { width: number; height: number } | null {
+  const b = readFileSync(path.join(PUBLIC_DIR, publicPath)).subarray(0, 30);
+  const chunk = b.toString("ascii", 12, 16);
+  if (chunk === "VP8X") return { width: 1 + b.readUIntLE(24, 3), height: 1 + b.readUIntLE(27, 3) };
+  if (chunk === "VP8 ") return { width: b.readUInt16LE(26) & 0x3fff, height: b.readUInt16LE(28) & 0x3fff };
+  if (chunk === "VP8L") {
+    const bits = b.readUInt32LE(21);
+    return { width: 1 + (bits & 0x3fff), height: 1 + ((bits >> 14) & 0x3fff) };
+  }
+  return null;
+}
+
+/**
  * The hover card on a link to a /library entry or out to its source: an
  * article's captured og:image or shot (`pipeline/preview.mjs library`), a
  * video's poster. Nothing for a post, which renders in full on its page, or an
