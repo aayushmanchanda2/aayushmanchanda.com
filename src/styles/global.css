@@ -546,9 +546,10 @@ mark[data-color="green"] {
   inset: -4px 0;
 }
 
+/* -7px, not -6px: the inset is measured inside the 1px border, so -6px drew 42px. */
 @media (pointer: coarse) {
   .ctl::before {
-    inset: -6px 0;
+    inset: -7px 0;
   }
 }
 

@@ -99,4 +99,13 @@ const total = library.length + privateCount;
     color: var(--text-tertiary);
     white-space: nowrap;
   }
+
+  /* 44px under a finger (VET-307). */
+  @media (pointer: coarse) {
+    .lsearch,
+    .lsearch input {
+      min-height: 44px;
+      height: 44px;
+    }
+  }
 </style>

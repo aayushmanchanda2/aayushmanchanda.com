@@ -264,6 +264,14 @@
   inset: -0.375rem 0;
 }
 
+/* 44px under a finger (VET-307): 8px past each edge, so a wrapped row needs
+   1rem. -9px because the inset is measured inside the 1px border. */
+@media (pointer: coarse) {
+  .tag::after {
+    inset: -9px 0;
+  }
+}
+
 .tag:hover,
 .tag:focus-visible {
   background: var(--hairline);

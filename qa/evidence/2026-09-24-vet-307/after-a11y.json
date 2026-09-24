@@ -1,0 +1,627 @@
+{
+  "base": "http://localhost:4391",
+  "tag": "after",
+  "at": "2026-09-24T10:46:53.785Z",
+  "forced": [
+    "forced-light-1280-home",
+    "forced-light-1280-tools",
+    "forced-light-1280-sites_about-brian-lovin",
+    "forced-light-1280-library_anatomy-of-an-agent-harness",
+    "forced-light-1280-design",
+    "forced-light-1280-menu",
+    "forced-light-1280-palette",
+    "forced-light-390-home",
+    "forced-light-390-tools",
+    "forced-light-390-sites_about-brian-lovin",
+    "forced-light-390-library_anatomy-of-an-agent-harness",
+    "forced-light-390-design",
+    "forced-light-390-menu",
+    "forced-light-390-palette",
+    "forced-dark-1280-home",
+    "forced-dark-1280-tools",
+    "forced-dark-1280-sites_about-brian-lovin",
+    "forced-dark-1280-library_anatomy-of-an-agent-harness",
+    "forced-dark-1280-design",
+    "forced-dark-1280-menu",
+    "forced-dark-1280-palette",
+    "forced-dark-390-home",
+    "forced-dark-390-tools",
+    "forced-dark-390-sites_about-brian-lovin",
+    "forced-dark-390-library_anatomy-of-an-agent-harness",
+    "forced-dark-390-design",
+    "forced-dark-390-menu",
+    "forced-dark-390-palette"
+  ],
+  "zoom": {
+    "/": [],
+    "/tools/": [],
+    "/tools/agent-browser/": [],
+    "/sites/": [],
+    "/sites/about-brian-lovin/": [],
+    "/library/": [],
+    "/library/kind/post/": [],
+    "/library/anatomy-of-an-agent-harness/": [],
+    "/library/make-money-make-no-mistakes/": [],
+    "/notes/": [],
+    "/design/": [],
+    "/about/": []
+  },
+  "touch": {
+    "390": {
+      "/": {
+        "checked": 14,
+        "covered": 1,
+        "fails": []
+      },
+      "/tools/": {
+        "checked": 18,
+        "covered": 1,
+        "fails": []
+      },
+      "/tools/agent-browser/": {
+        "checked": 16,
+        "covered": 1,
+        "fails": []
+      },
+      "/sites/": {
+        "checked": 17,
+        "covered": 1,
+        "fails": []
+      },
+      "/sites/about-brian-lovin/": {
+        "checked": 19,
+        "covered": 1,
+        "fails": []
+      },
+      "/library/": {
+        "checked": 17,
+        "covered": 1,
+        "fails": []
+      },
+      "/library/kind/post/": {
+        "checked": 21,
+        "covered": 1,
+        "fails": []
+      },
+      "/library/anatomy-of-an-agent-harness/": {
+        "checked": 19,
+        "covered": 1,
+        "fails": []
+      },
+      "/library/make-money-make-no-mistakes/": {
+        "checked": 19,
+        "covered": 1,
+        "fails": []
+      },
+      "/notes/": {
+        "checked": 13,
+        "covered": 1,
+        "fails": []
+      },
+      "/design/": {
+        "checked": 29,
+        "covered": 1,
+        "fails": []
+      },
+      "/about/": {
+        "checked": 13,
+        "covered": 1,
+        "fails": []
+      },
+      "menu": {
+        "checked": 5,
+        "covered": 0,
+        "fails": []
+      },
+      "palette": {
+        "checked": 22,
+        "covered": 17,
+        "fails": []
+      }
+    },
+    "1024": {
+      "/": {
+        "checked": 14,
+        "covered": 1,
+        "fails": []
+      },
+      "/tools/": {
+        "checked": 19,
+        "covered": 1,
+        "fails": []
+      },
+      "/tools/agent-browser/": {
+        "checked": 17,
+        "covered": 1,
+        "fails": []
+      },
+      "/sites/": {
+        "checked": 17,
+        "covered": 1,
+        "fails": []
+      },
+      "/sites/about-brian-lovin/": {
+        "checked": 20,
+        "covered": 1,
+        "fails": []
+      },
+      "/library/": {
+        "checked": 24,
+        "covered": 1,
+        "fails": []
+      },
+      "/library/kind/post/": {
+        "checked": 24,
+        "covered": 1,
+        "fails": []
+      },
+      "/library/anatomy-of-an-agent-harness/": {
+        "checked": 26,
+        "covered": 1,
+        "fails": []
+      },
+      "/library/make-money-make-no-mistakes/": {
+        "checked": 26,
+        "covered": 1,
+        "fails": []
+      },
+      "/notes/": {
+        "checked": 13,
+        "covered": 1,
+        "fails": []
+      },
+      "/design/": {
+        "checked": 29,
+        "covered": 1,
+        "fails": []
+      },
+      "/about/": {
+        "checked": 13,
+        "covered": 1,
+        "fails": []
+      },
+      "menu": {
+        "checked": 5,
+        "covered": 0,
+        "fails": []
+      },
+      "palette": {
+        "checked": 29,
+        "covered": 24,
+        "fails": []
+      }
+    }
+  },
+  "labels": {
+    "light /": [],
+    "light /tools/": [],
+    "light /tools/agent-browser/": [],
+    "light /sites/": [],
+    "light /sites/about-brian-lovin/": [],
+    "light /library/": [],
+    "light /library/kind/post/": [],
+    "light /library/anatomy-of-an-agent-harness/": [],
+    "light /library/make-money-make-no-mistakes/": [],
+    "light /notes/": [],
+    "light /design/": [],
+    "light /about/": [],
+    "light palette": [],
+    "dark /": [],
+    "dark /tools/": [],
+    "dark /tools/agent-browser/": [],
+    "dark /sites/": [],
+    "dark /sites/about-brian-lovin/": [],
+    "dark /library/": [],
+    "dark /library/kind/post/": [],
+    "dark /library/anatomy-of-an-agent-harness/": [],
+    "dark /library/make-money-make-no-mistakes/": [],
+    "dark /notes/": [],
+    "dark /design/": [],
+    "dark /about/": [],
+    "dark palette": []
+  },
+  "contrast": {
+    "light /": {
+      "checked": 57,
+      "fails": [],
+      "unknownBackground": [
+        "p.standfirst",
+        "span.mark",
+        "h2.index__title",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "light /tools/": {
+      "checked": 458,
+      "fails": [],
+      "unknownBackground": [
+        "span.mark",
+        "button.sort",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "light /tools/agent-browser/": {
+      "checked": 40,
+      "fails": [],
+      "unknownBackground": [
+        "li.strip__item",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "light /sites/": {
+      "checked": 96,
+      "fails": [],
+      "unknownBackground": [
+        "span.mark",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "light /sites/about-brian-lovin/": {
+      "checked": 43,
+      "fails": [],
+      "unknownBackground": [
+        "span.shot__caption",
+        "span.shot__hint",
+        "span.act__label",
+        "dt.mono",
+        "a.",
+        "time.",
+        "a.ext",
+        "span.found__title",
+        "span.found__groups",
+        "a.hint",
+        "kbd.hint__key",
+        "a.foot__link",
+        "dt.",
+        "dd.tabular-nums",
+        "button.foot__quiet",
+        "kbd.",
+        "a.foot__quiet",
+        "p.foot__legal",
+        "span.tabular-nums"
+      ]
+    },
+    "light /library/": {
+      "checked": 213,
+      "fails": [],
+      "unknownBackground": [
+        "a.seg__item",
+        "summary.ltags__sum",
+        "li.pane__month",
+        "span.mark",
+        "span.lead__kicker",
+        "a.",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "light /library/kind/post/": {
+      "checked": 221,
+      "fails": [],
+      "unknownBackground": [
+        "a.seg__item",
+        "summary.ltags__sum",
+        "li.pane__month",
+        "span.mark",
+        "span.pm__watch",
+        "p.",
+        "li.",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "light /library/anatomy-of-an-agent-harness/": {
+      "checked": 224,
+      "fails": [],
+      "unknownBackground": [
+        "a.seg__item",
+        "summary.ltags__sum",
+        "li.pane__month",
+        "span.",
+        "li.strip__item",
+        "h2.sec__head",
+        "figcaption.quote__note",
+        "a.hint",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "light /library/make-money-make-no-mistakes/": {
+      "checked": 227,
+      "fails": [],
+      "unknownBackground": [
+        "a.seg__item",
+        "summary.ltags__sum",
+        "li.pane__month",
+        "span.tip",
+        "b.",
+        "li.strip__item",
+        "h2.sec__head",
+        "span.blk__tag",
+        "p.media__saved",
+        "figcaption.quote__note",
+        "a.hint",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "light /notes/": {
+      "checked": 31,
+      "fails": [],
+      "unknownBackground": [
+        "span.mark",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "light /design/": {
+      "checked": 304,
+      "fails": [],
+      "unknownBackground": [
+        "p.",
+        "div.mono",
+        "h3.sec__head",
+        "dd.",
+        "span.blk__tag",
+        "li.pane__month",
+        "summary.ltags__sum",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "light /about/": {
+      "checked": 56,
+      "fails": [],
+      "unknownBackground": [
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "light palette": {
+      "checked": 122,
+      "fails": [],
+      "unknownBackground": [
+        "kbd.palette__esc",
+        "div.palette__group",
+        "span.palette__row-title",
+        "span.palette__row-sub",
+        "time.palette__row-date",
+        "p.standfirst",
+        "span.mark",
+        "h2.index__title",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "dark /": {
+      "checked": 57,
+      "fails": [],
+      "unknownBackground": [
+        "p.standfirst",
+        "span.mark",
+        "h2.index__title",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "dark /tools/": {
+      "checked": 458,
+      "fails": [],
+      "unknownBackground": [
+        "span.mark",
+        "button.sort",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "dark /tools/agent-browser/": {
+      "checked": 40,
+      "fails": [],
+      "unknownBackground": [
+        "li.strip__item",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "dark /sites/": {
+      "checked": 96,
+      "fails": [],
+      "unknownBackground": [
+        "span.mark",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "dark /sites/about-brian-lovin/": {
+      "checked": 43,
+      "fails": [],
+      "unknownBackground": [
+        "span.shot__caption",
+        "span.shot__hint",
+        "span.act__label",
+        "dt.mono",
+        "a.",
+        "time.",
+        "a.ext",
+        "span.found__title",
+        "span.found__groups",
+        "a.hint",
+        "kbd.hint__key",
+        "a.foot__link",
+        "dt.",
+        "dd.tabular-nums",
+        "button.foot__quiet",
+        "kbd.",
+        "a.foot__quiet",
+        "p.foot__legal",
+        "span.tabular-nums"
+      ]
+    },
+    "dark /library/": {
+      "checked": 213,
+      "fails": [],
+      "unknownBackground": [
+        "a.seg__item",
+        "summary.ltags__sum",
+        "li.pane__month",
+        "span.mark",
+        "span.lead__kicker",
+        "a.",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "dark /library/kind/post/": {
+      "checked": 221,
+      "fails": [],
+      "unknownBackground": [
+        "a.seg__item",
+        "summary.ltags__sum",
+        "li.pane__month",
+        "span.mark",
+        "span.pm__watch",
+        "p.",
+        "li.",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "dark /library/anatomy-of-an-agent-harness/": {
+      "checked": 224,
+      "fails": [],
+      "unknownBackground": [
+        "a.seg__item",
+        "summary.ltags__sum",
+        "li.pane__month",
+        "span.",
+        "li.strip__item",
+        "h2.sec__head",
+        "figcaption.quote__note",
+        "a.hint",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "dark /library/make-money-make-no-mistakes/": {
+      "checked": 227,
+      "fails": [],
+      "unknownBackground": [
+        "a.seg__item",
+        "summary.ltags__sum",
+        "li.pane__month",
+        "span.tip",
+        "b.",
+        "li.strip__item",
+        "h2.sec__head",
+        "span.blk__tag",
+        "p.media__saved",
+        "figcaption.quote__note",
+        "a.hint",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "dark /notes/": {
+      "checked": 31,
+      "fails": [],
+      "unknownBackground": [
+        "span.mark",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "dark /design/": {
+      "checked": 304,
+      "fails": [],
+      "unknownBackground": [
+        "p.",
+        "div.mono",
+        "h3.sec__head",
+        "dd.",
+        "span.blk__tag",
+        "li.pane__month",
+        "summary.ltags__sum",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "dark /about/": {
+      "checked": 56,
+      "fails": [],
+      "unknownBackground": [
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "dark palette": {
+      "checked": 122,
+      "fails": [],
+      "unknownBackground": [
+        "kbd.palette__esc",
+        "div.palette__group",
+        "span.palette__row-title",
+        "span.palette__row-sub",
+        "time.palette__row-date",
+        "p.standfirst",
+        "span.mark",
+        "h2.index__title",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    }
+  },
+  "focus": {
+    "/": {
+      "stops": 25,
+      "invisible": []
+    },
+    "/tools/": {
+      "stops": 40,
+      "invisible": []
+    },
+    "/tools/agent-browser/": {
+      "stops": 20,
+      "invisible": []
+    },
+    "/sites/": {
+      "stops": 40,
+      "invisible": []
+    },
+    "/sites/about-brian-lovin/": {
+      "stops": 27,
+      "invisible": []
+    },
+    "/library/": {
+      "stops": 33,
+      "invisible": []
+    },
+    "/library/kind/post/": {
+      "stops": 40,
+      "invisible": []
+    },
+    "/library/anatomy-of-an-agent-harness/": {
+      "stops": 33,
+      "invisible": []
+    },
+    "/library/make-money-make-no-mistakes/": {
+      "stops": 32,
+      "invisible": []
+    },
+    "/notes/": {
+      "stops": 18,
+      "invisible": []
+    },
+    "/design/": {
+      "stops": 40,
+      "invisible": []
+    },
+    "/about/": {
+      "stops": 21,
+      "invisible": []
+    }
+  }
+}

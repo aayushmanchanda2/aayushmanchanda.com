@@ -94,6 +94,14 @@ const [top, rest] = [tags.slice(0, TOP), tags.slice(TOP)];
     gap: 0.75rem 0.5rem;
   }
 
+  /* Under a finger the target is 44px (chip.css), so the lines move to 1rem. */
+  @media (pointer: coarse) {
+    .ltags__chips,
+    .ltags__list {
+      row-gap: 1rem;
+    }
+  }
+
   .ltags__chips[hidden] {
     display: none;
   }

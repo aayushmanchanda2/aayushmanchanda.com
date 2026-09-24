@@ -218,4 +218,12 @@ const form = newsletterForm(NEWSLETTER_ACTION);
   .news__submit:hover {
     color: var(--accent);
   }
+
+  /* 44px under a finger (VET-307). */
+  @media (pointer: coarse) {
+    .news__input,
+    .news__submit {
+      min-height: 44px;
+    }
+  }
 </style>

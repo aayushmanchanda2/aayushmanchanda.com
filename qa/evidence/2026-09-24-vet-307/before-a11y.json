@@ -1,0 +1,3377 @@
+{
+  "base": "http://localhost:4391",
+  "tag": "before",
+  "at": "2026-09-24T10:39:54.185Z",
+  "forced": [
+    "forced-light-1280-home",
+    "forced-light-1280-tools",
+    "forced-light-1280-sites_about-brian-lovin",
+    "forced-light-1280-library_anatomy-of-an-agent-harness",
+    "forced-light-1280-design",
+    "forced-light-1280-menu",
+    "forced-light-1280-palette",
+    "forced-light-390-home",
+    "forced-light-390-tools",
+    "forced-light-390-sites_about-brian-lovin",
+    "forced-light-390-library_anatomy-of-an-agent-harness",
+    "forced-light-390-design",
+    "forced-light-390-menu",
+    "forced-light-390-palette",
+    "forced-dark-1280-home",
+    "forced-dark-1280-tools",
+    "forced-dark-1280-sites_about-brian-lovin",
+    "forced-dark-1280-library_anatomy-of-an-agent-harness",
+    "forced-dark-1280-design",
+    "forced-dark-1280-menu",
+    "forced-dark-1280-palette",
+    "forced-dark-390-home",
+    "forced-dark-390-tools",
+    "forced-dark-390-sites_about-brian-lovin",
+    "forced-dark-390-library_anatomy-of-an-agent-harness",
+    "forced-dark-390-design",
+    "forced-dark-390-menu",
+    "forced-dark-390-palette"
+  ],
+  "zoom": {
+    "/": [],
+    "/tools/": [],
+    "/tools/agent-browser/": [],
+    "/sites/": [],
+    "/sites/about-brian-lovin/": [],
+    "/library/": [],
+    "/library/kind/post/": [],
+    "/library/anatomy-of-an-agent-harness/": [],
+    "/library/make-money-make-no-mistakes/": [],
+    "/notes/": [],
+    "/design/": [],
+    "/about/": []
+  },
+  "touch": {
+    "390": {
+      "/": {
+        "checked": 14,
+        "covered": 1,
+        "fails": [
+          {
+            "el": "input.news__input",
+            "text": "",
+            "box": "305x40",
+            "miss": [
+              "top:section.news",
+              "bottom:form.news__form"
+            ]
+          },
+          {
+            "el": "button.news__submit.mono",
+            "text": "Subscribe",
+            "box": "98x40",
+            "miss": [
+              "top:form.news__form",
+              "bottom:div.shell"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "GitHub",
+            "box": "44x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "X",
+            "box": "14x14",
+            "miss": [
+              "left:ul.foot__links",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "left:div.foot__row",
+              "right:span.foot__toggles",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:span.foot__toggles",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.foot__quiet.foot__search",
+            "text": "Search ⌘K",
+            "box": "84x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:ul.foot__meta"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "About",
+            "box": "38x22",
+            "miss": [
+              "left:ul.foot__meta",
+              "right:ul.foot__meta",
+              "top:footer.foot",
+              "bottom:a.foot__quiet"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "Contact",
+            "box": "51x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:ul.foot__meta"
+            ]
+          }
+        ]
+      },
+      "/tools/": {
+        "checked": 18,
+        "covered": 1,
+        "fails": [
+          {
+            "el": "button.sort",
+            "text": "Name",
+            "box": "42x40",
+            "miss": [
+              "top:main.shell__main",
+              "bottom:td.cell"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "GitHub",
+            "box": "44x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "X",
+            "box": "14x14",
+            "miss": [
+              "left:ul.foot__links",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "left:div.foot__row",
+              "right:span.foot__toggles",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:span.foot__toggles",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.foot__quiet.foot__search",
+            "text": "Search ⌘K",
+            "box": "84x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:ul.foot__meta"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "About",
+            "box": "38x22",
+            "miss": [
+              "left:ul.foot__meta",
+              "right:ul.foot__meta",
+              "top:footer.foot",
+              "bottom:a.foot__quiet"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "Contact",
+            "box": "51x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:ul.foot__meta"
+            ]
+          }
+        ]
+      },
+      "/tools/agent-browser/": {
+        "checked": 16,
+        "covered": 1,
+        "fails": [
+          {
+            "el": "a.strip__chip",
+            "text": "using",
+            "box": "54x21",
+            "miss": [
+              "top:header.",
+              "bottom:header."
+            ]
+          },
+          {
+            "el": "a.",
+            "text": "web access",
+            "box": "75x22",
+            "miss": [
+              "top:header.",
+              "bottom:header."
+            ]
+          },
+          {
+            "el": "a.ext",
+            "text": "Website",
+            "box": "71x26",
+            "miss": [
+              "top:p.source",
+              "bottom:main.shell__main"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "GitHub",
+            "box": "44x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "X",
+            "box": "14x14",
+            "miss": [
+              "left:ul.foot__links",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "left:div.foot__row",
+              "right:span.foot__toggles",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:span.foot__toggles",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.foot__quiet.foot__search",
+            "text": "Search ⌘K",
+            "box": "84x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:ul.foot__meta"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "About",
+            "box": "38x22",
+            "miss": [
+              "left:ul.foot__meta",
+              "right:ul.foot__meta",
+              "top:footer.foot",
+              "bottom:a.foot__quiet"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "Contact",
+            "box": "51x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:ul.foot__meta"
+            ]
+          }
+        ]
+      },
+      "/sites/": {
+        "checked": 17,
+        "covered": 1,
+        "fails": [
+          {
+            "el": "a.chip.chip--link",
+            "text": "dark by default",
+            "box": "131x21",
+            "miss": [
+              "top:nav.collections",
+              "bottom:a.chip"
+            ]
+          },
+          {
+            "el": "a.chip.chip--link",
+            "text": "design engineering",
+            "box": "154x21",
+            "miss": [
+              "top:nav.collections",
+              "bottom:a.chip"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "GitHub",
+            "box": "44x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "X",
+            "box": "14x14",
+            "miss": [
+              "left:ul.foot__links",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "left:div.foot__row",
+              "right:span.foot__toggles",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:span.foot__toggles",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.foot__quiet.foot__search",
+            "text": "Search ⌘K",
+            "box": "84x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:ul.foot__meta"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "About",
+            "box": "38x22",
+            "miss": [
+              "left:ul.foot__meta",
+              "right:ul.foot__meta",
+              "top:footer.foot",
+              "bottom:a.foot__quiet"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "Contact",
+            "box": "51x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:ul.foot__meta"
+            ]
+          }
+        ]
+      },
+      "/sites/about-brian-lovin/": {
+        "checked": 19,
+        "covered": 1,
+        "fails": [
+          {
+            "el": "button.act.mono",
+            "text": "Copy the Brian Lovin screensho",
+            "box": "112x40",
+            "miss": [
+              "top:figure.shot",
+              "bottom:article.detail"
+            ]
+          },
+          {
+            "el": "a.act.mono",
+            "text": "Download the Brian Lovin scree",
+            "box": "101x40",
+            "miss": [
+              "top:figure.shot",
+              "bottom:article.detail"
+            ]
+          },
+          {
+            "el": "a.hint.press",
+            "text": "Close and go back to Sites",
+            "box": "33x37",
+            "miss": [
+              "left:div.shell",
+              "right:ul.hints__row",
+              "top:main.shell__main",
+              "bottom:div.shell"
+            ]
+          },
+          {
+            "el": "a.hint.press",
+            "text": "Previous site: Ana Howard",
+            "box": "27x37",
+            "miss": [
+              "left:li.hints__item",
+              "right:li.hints__item",
+              "top:main.shell__main",
+              "bottom:div.shell"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "GitHub",
+            "box": "44x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "X",
+            "box": "14x14",
+            "miss": [
+              "left:ul.foot__links",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "left:div.foot__row",
+              "right:span.foot__toggles",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:span.foot__toggles",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.foot__quiet.foot__search",
+            "text": "Search ⌘K",
+            "box": "84x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:ul.foot__meta"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "About",
+            "box": "38x22",
+            "miss": [
+              "left:ul.foot__meta",
+              "right:ul.foot__meta",
+              "top:footer.foot",
+              "bottom:a.foot__quiet"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "Contact",
+            "box": "51x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:ul.foot__meta"
+            ]
+          }
+        ]
+      },
+      "/library/": {
+        "checked": 17,
+        "covered": 1,
+        "fails": [
+          {
+            "el": "input.",
+            "text": "Search the library",
+            "box": "257x40",
+            "miss": [
+              "top:main.shell__main",
+              "bottom:div.ltools"
+            ]
+          },
+          {
+            "el": "a.seg__item",
+            "text": "All45",
+            "box": "55x28",
+            "miss": [
+              "top:div.ltools",
+              "bottom:div.ltools"
+            ]
+          },
+          {
+            "el": "a.seg__item",
+            "text": "Articles23",
+            "box": "87x28",
+            "miss": [
+              "top:div.ltools",
+              "bottom:div.ltools"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "GitHub",
+            "box": "44x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "X",
+            "box": "14x14",
+            "miss": [
+              "left:ul.foot__links",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "left:div.foot__row",
+              "right:span.foot__toggles",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:span.foot__toggles",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.foot__quiet.foot__search",
+            "text": "Search ⌘K",
+            "box": "84x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:ul.foot__meta"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "About",
+            "box": "38x22",
+            "miss": [
+              "left:ul.foot__meta",
+              "right:ul.foot__meta",
+              "top:footer.foot",
+              "bottom:a.foot__quiet"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "Contact",
+            "box": "51x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:ul.foot__meta"
+            ]
+          }
+        ]
+      },
+      "/library/kind/post/": {
+        "checked": 21,
+        "covered": 1,
+        "fails": [
+          {
+            "el": "input.",
+            "text": "Search the library",
+            "box": "257x40",
+            "miss": [
+              "top:main.shell__main",
+              "bottom:div.ltools"
+            ]
+          },
+          {
+            "el": "a.seg__item",
+            "text": "All45",
+            "box": "55x28",
+            "miss": [
+              "top:div.ltools",
+              "bottom:div.ltools"
+            ]
+          },
+          {
+            "el": "a.seg__item",
+            "text": "Articles23",
+            "box": "87x28",
+            "miss": [
+              "top:div.ltools",
+              "bottom:div.ltools"
+            ]
+          },
+          {
+            "el": "a.pc__more",
+            "text": "Read more",
+            "box": "69x22",
+            "miss": [
+              "top:article.pc",
+              "bottom:article.pc"
+            ]
+          },
+          {
+            "el": "a.pc__out.ext",
+            "text": "Original post on X",
+            "box": "40x40",
+            "miss": [
+              "left:footer.pc__foot",
+              "right:article.pc",
+              "top:article.pc",
+              "bottom:article.pc"
+            ]
+          },
+          {
+            "el": "a.pc__more",
+            "text": "Read more",
+            "box": "69x22",
+            "miss": [
+              "top:article.pc",
+              "bottom:article.pc"
+            ]
+          },
+          {
+            "el": "a.pc__out.ext",
+            "text": "Original post on X",
+            "box": "40x40",
+            "miss": [
+              "left:footer.pc__foot",
+              "right:article.pc",
+              "top:article.pc",
+              "bottom:article.pc"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "GitHub",
+            "box": "44x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "X",
+            "box": "14x14",
+            "miss": [
+              "left:ul.foot__links",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "left:div.foot__row",
+              "right:span.foot__toggles",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:span.foot__toggles",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.foot__quiet.foot__search",
+            "text": "Search ⌘K",
+            "box": "84x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:ul.foot__meta"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "About",
+            "box": "38x22",
+            "miss": [
+              "left:ul.foot__meta",
+              "right:ul.foot__meta",
+              "top:footer.foot",
+              "bottom:a.foot__quiet"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "Contact",
+            "box": "51x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:ul.foot__meta"
+            ]
+          }
+        ]
+      },
+      "/library/anatomy-of-an-agent-harness/": {
+        "checked": 19,
+        "covered": 1,
+        "fails": [
+          {
+            "el": "a.ext",
+            "text": "langchain.com",
+            "box": "118x21",
+            "miss": [
+              "top:h1.page-title",
+              "bottom:a.strip__chip"
+            ]
+          },
+          {
+            "el": "a.strip__chip",
+            "text": "article",
+            "box": "70x21",
+            "miss": [
+              "bottom:ul.strip"
+            ]
+          },
+          {
+            "el": "a.tag",
+            "text": "agents",
+            "box": "64x28",
+            "miss": [
+              "top:ul.strip",
+              "bottom:div.detail"
+            ]
+          },
+          {
+            "el": "a.tag",
+            "text": "harnesses",
+            "box": "84x28",
+            "miss": [
+              "top:ul.strip",
+              "bottom:div.detail"
+            ]
+          },
+          {
+            "el": "a.hint.press",
+            "text": "Close and go back to Library",
+            "box": "33x37",
+            "miss": [
+              "left:div.shell",
+              "right:ul.hints__row",
+              "top:div.detail",
+              "bottom:div.shell"
+            ]
+          },
+          {
+            "el": "a.hint.press",
+            "text": "Previous entry: An agent that ",
+            "box": "27x37",
+            "miss": [
+              "left:li.hints__item",
+              "right:li.hints__item",
+              "top:div.detail",
+              "bottom:div.shell"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "GitHub",
+            "box": "44x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "X",
+            "box": "14x14",
+            "miss": [
+              "left:ul.foot__links",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "left:div.foot__row",
+              "right:span.foot__toggles",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:span.foot__toggles",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.foot__quiet.foot__search",
+            "text": "Search ⌘K",
+            "box": "84x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:ul.foot__meta"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "About",
+            "box": "38x22",
+            "miss": [
+              "left:ul.foot__meta",
+              "right:ul.foot__meta",
+              "top:footer.foot",
+              "bottom:a.foot__quiet"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "Contact",
+            "box": "51x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:ul.foot__meta"
+            ]
+          }
+        ]
+      },
+      "/library/make-money-make-no-mistakes/": {
+        "checked": 19,
+        "covered": 1,
+        "fails": [
+          {
+            "el": "a.ext",
+            "text": "x.com",
+            "box": "56x21",
+            "miss": [
+              "top:h1.page-title",
+              "bottom:a.strip__chip"
+            ]
+          },
+          {
+            "el": "a.out__more",
+            "text": "18 saved",
+            "box": "82x21",
+            "miss": [
+              "top:h1.page-title",
+              "bottom:header."
+            ]
+          },
+          {
+            "el": "a.strip__chip",
+            "text": "post",
+            "box": "47x21",
+            "miss": [
+              "bottom:div.detail"
+            ]
+          },
+          {
+            "el": "a.pc__out.ext",
+            "text": "Original post on X",
+            "box": "40x40",
+            "miss": [
+              "left:footer.pc__foot",
+              "right:article.pc",
+              "top:article.pc",
+              "bottom:article.pc"
+            ]
+          },
+          {
+            "el": "a.hint.press",
+            "text": "Close and go back to Library",
+            "box": "33x37",
+            "miss": [
+              "left:div.shell",
+              "right:ul.hints__row",
+              "top:div.detail",
+              "bottom:div.shell"
+            ]
+          },
+          {
+            "el": "a.hint.press",
+            "text": "Previous entry: Cursor's promp",
+            "box": "27x37",
+            "miss": [
+              "left:li.hints__item",
+              "right:li.hints__item",
+              "top:div.detail",
+              "bottom:div.shell"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "GitHub",
+            "box": "44x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "X",
+            "box": "14x14",
+            "miss": [
+              "left:ul.foot__links",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "left:div.foot__row",
+              "right:span.foot__toggles",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:span.foot__toggles",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.foot__quiet.foot__search",
+            "text": "Search ⌘K",
+            "box": "84x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:ul.foot__meta"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "About",
+            "box": "38x22",
+            "miss": [
+              "left:ul.foot__meta",
+              "right:ul.foot__meta",
+              "top:footer.foot",
+              "bottom:a.foot__quiet"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "Contact",
+            "box": "51x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:ul.foot__meta"
+            ]
+          }
+        ]
+      },
+      "/notes/": {
+        "checked": 13,
+        "covered": 1,
+        "fails": [
+          {
+            "el": "a.foot__link.press",
+            "text": "GitHub",
+            "box": "44x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "X",
+            "box": "14x14",
+            "miss": [
+              "left:ul.foot__links",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "left:div.foot__row",
+              "right:span.foot__toggles",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:span.foot__toggles",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.foot__quiet.foot__search",
+            "text": "Search ⌘K",
+            "box": "84x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:ul.foot__meta"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "About",
+            "box": "38x22",
+            "miss": [
+              "left:ul.foot__meta",
+              "right:ul.foot__meta",
+              "top:footer.foot",
+              "bottom:a.foot__quiet"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "Contact",
+            "box": "51x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:ul.foot__meta"
+            ]
+          }
+        ]
+      },
+      "/design/": {
+        "checked": 29,
+        "covered": 1,
+        "fails": [
+          {
+            "el": "a.tag",
+            "text": "agency",
+            "box": "66x28",
+            "miss": [
+              "top:div.spec__row",
+              "bottom:a.tag"
+            ]
+          },
+          {
+            "el": "a.tag",
+            "text": "agents",
+            "box": "64x28",
+            "miss": [
+              "top:div.spec__row",
+              "bottom:ul.tags"
+            ]
+          },
+          {
+            "el": "button.pressbox.press",
+            "text": "0.985a gallery card on /sites",
+            "box": "305x42",
+            "miss": [
+              "bottom:ul.presses"
+            ]
+          },
+          {
+            "el": "button.ctl.press",
+            "text": "CopyCopy the prompt",
+            "box": "79x32",
+            "miss": [
+              "bottom:dd.blk__prompt"
+            ]
+          },
+          {
+            "el": "a.ext.ctl",
+            "text": "Read design.md",
+            "box": "146x32",
+            "miss": [
+              "bottom:div.sec__body"
+            ]
+          },
+          {
+            "el": "a.pc__more",
+            "text": "Read more",
+            "box": "69x22",
+            "miss": [
+              "top:article.pc",
+              "bottom:article.pc"
+            ]
+          },
+          {
+            "el": "a.pc__out.ext",
+            "text": "Original post on X",
+            "box": "40x40",
+            "miss": [
+              "left:footer.pc__foot",
+              "right:article.pc",
+              "top:article.pc",
+              "bottom:article.pc"
+            ]
+          },
+          {
+            "el": "a.pc__more",
+            "text": "Read more",
+            "box": "69x22",
+            "miss": [
+              "top:article.pc",
+              "bottom:article.pc"
+            ]
+          },
+          {
+            "el": "a.pc__out.ext",
+            "text": "Original post on X",
+            "box": "40x40",
+            "miss": [
+              "left:footer.pc__foot",
+              "right:article.pc",
+              "top:article.pc",
+              "bottom:article.pc"
+            ]
+          },
+          {
+            "el": "button.ctl.press",
+            "text": "Open the palette",
+            "box": "133x32",
+            "miss": [
+              "bottom:section."
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "GitHub",
+            "box": "44x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "X",
+            "box": "14x14",
+            "miss": [
+              "left:ul.foot__links",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "left:div.foot__row",
+              "right:span.foot__toggles",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:span.foot__toggles",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.foot__quiet.foot__search",
+            "text": "Search ⌘K",
+            "box": "84x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:ul.foot__meta"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "About",
+            "box": "38x22",
+            "miss": [
+              "left:ul.foot__meta",
+              "right:ul.foot__meta",
+              "top:footer.foot",
+              "bottom:a.foot__quiet"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "Contact",
+            "box": "51x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:ul.foot__meta"
+            ]
+          }
+        ]
+      },
+      "/about/": {
+        "checked": 13,
+        "covered": 1,
+        "fails": [
+          {
+            "el": "a.foot__link.press",
+            "text": "GitHub",
+            "box": "44x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "X",
+            "box": "14x14",
+            "miss": [
+              "left:ul.foot__links",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "left:div.foot__row",
+              "right:span.foot__toggles",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:span.foot__toggles",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:div.foot__row"
+            ]
+          },
+          {
+            "el": "button.foot__quiet.foot__search",
+            "text": "Search ⌘K",
+            "box": "84x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:ul.foot__meta"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "About",
+            "box": "38x22",
+            "miss": [
+              "left:ul.foot__meta",
+              "right:ul.foot__meta",
+              "top:footer.foot",
+              "bottom:a.foot__quiet"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "Contact",
+            "box": "51x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:ul.foot__meta"
+            ]
+          }
+        ]
+      },
+      "menu": {
+        "checked": 5,
+        "covered": 0,
+        "fails": [
+          {
+            "el": "button.mnav__search.mono",
+            "text": "Search",
+            "box": "76x40",
+            "miss": [
+              "bottom:div.mnav__panel"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "right:div.mnav__panel",
+              "bottom:div.mnav__panel"
+            ]
+          }
+        ]
+      },
+      "palette": {
+        "checked": 22,
+        "covered": 17,
+        "fails": [
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:div.palette__legend",
+              "right:div.palette__legend",
+              "top:div.palette__legend",
+              "bottom:body."
+            ]
+          }
+        ]
+      }
+    },
+    "1024": {
+      "/": {
+        "checked": 14,
+        "covered": 1,
+        "fails": [
+          {
+            "el": "input.news__input",
+            "text": "",
+            "box": "406x40",
+            "miss": [
+              "top:section.news",
+              "bottom:div.shell"
+            ]
+          },
+          {
+            "el": "button.news__submit.mono",
+            "text": "Subscribe",
+            "box": "98x40",
+            "miss": [
+              "top:section.news",
+              "bottom:div.shell"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "GitHub",
+            "box": "44x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "X",
+            "box": "14x14",
+            "miss": [
+              "left:ul.foot__links",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "left:div.foot__row",
+              "right:span.foot__toggles",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:span.foot__toggles",
+              "right:footer.foot",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.foot__quiet.foot__search",
+            "text": "Search ⌘K",
+            "box": "84x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "About",
+            "box": "38x22",
+            "miss": [
+              "left:li.",
+              "right:ul.foot__meta",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "Contact",
+            "box": "51x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          }
+        ]
+      },
+      "/tools/": {
+        "checked": 19,
+        "covered": 1,
+        "fails": [
+          {
+            "el": "button.sort",
+            "text": "Name",
+            "box": "42x40",
+            "miss": [
+              "top:main.shell__main",
+              "bottom:td.cell"
+            ]
+          },
+          {
+            "el": "button.sort",
+            "text": "Category",
+            "box": "64x40",
+            "miss": [
+              "top:main.shell__main",
+              "bottom:td.cell"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "GitHub",
+            "box": "44x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "X",
+            "box": "14x14",
+            "miss": [
+              "left:ul.foot__links",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "left:div.foot__row",
+              "right:span.foot__toggles",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:span.foot__toggles",
+              "right:footer.foot",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.foot__quiet.foot__search",
+            "text": "Search ⌘K",
+            "box": "84x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "About",
+            "box": "38x22",
+            "miss": [
+              "left:li.",
+              "right:ul.foot__meta",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "Contact",
+            "box": "51x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          }
+        ]
+      },
+      "/tools/agent-browser/": {
+        "checked": 17,
+        "covered": 1,
+        "fails": [
+          {
+            "el": "a.strip__chip",
+            "text": "using",
+            "box": "54x21",
+            "miss": [
+              "top:header.",
+              "bottom:header."
+            ]
+          },
+          {
+            "el": "a.",
+            "text": "web access",
+            "box": "75x22",
+            "miss": [
+              "top:header.",
+              "bottom:header."
+            ]
+          },
+          {
+            "el": "a.ext",
+            "text": "Website",
+            "box": "71x26",
+            "miss": [
+              "top:p.source",
+              "bottom:main.shell__main"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "GitHub",
+            "box": "44x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "X",
+            "box": "14x14",
+            "miss": [
+              "left:ul.foot__links",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "left:div.foot__row",
+              "right:span.foot__toggles",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:span.foot__toggles",
+              "right:footer.foot",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.foot__quiet.foot__search",
+            "text": "Search ⌘K",
+            "box": "84x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "About",
+            "box": "38x22",
+            "miss": [
+              "left:li.",
+              "right:ul.foot__meta",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "Contact",
+            "box": "51x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          }
+        ]
+      },
+      "/sites/": {
+        "checked": 17,
+        "covered": 1,
+        "fails": [
+          {
+            "el": "a.chip.chip--link",
+            "text": "dark by default",
+            "box": "131x21",
+            "miss": [
+              "top:nav.collections",
+              "bottom:a.chip"
+            ]
+          },
+          {
+            "el": "a.chip.chip--link",
+            "text": "design engineering",
+            "box": "154x21",
+            "miss": [
+              "top:nav.collections",
+              "bottom:a.chip"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "GitHub",
+            "box": "44x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "X",
+            "box": "14x14",
+            "miss": [
+              "left:ul.foot__links",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "left:div.foot__row",
+              "right:span.foot__toggles",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:span.foot__toggles",
+              "right:footer.foot",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.foot__quiet.foot__search",
+            "text": "Search ⌘K",
+            "box": "84x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "About",
+            "box": "38x22",
+            "miss": [
+              "left:li.",
+              "right:ul.foot__meta",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "Contact",
+            "box": "51x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          }
+        ]
+      },
+      "/sites/about-brian-lovin/": {
+        "checked": 20,
+        "covered": 1,
+        "fails": [
+          {
+            "el": "button.act.mono",
+            "text": "Copy the Brian Lovin screensho",
+            "box": "112x40",
+            "miss": [
+              "top:figure.shot",
+              "bottom:article.detail"
+            ]
+          },
+          {
+            "el": "a.act.mono",
+            "text": "Download the Brian Lovin scree",
+            "box": "101x40",
+            "miss": [
+              "top:figure.shot",
+              "bottom:article.detail"
+            ]
+          },
+          {
+            "el": "a.hint.press",
+            "text": "Close and go back to Sites",
+            "box": "33x37",
+            "miss": [
+              "left:div.shell",
+              "right:ul.hints__row",
+              "top:main.shell__main",
+              "bottom:div.shell"
+            ]
+          },
+          {
+            "el": "a.hint.press",
+            "text": "Previous site: Ana Howard",
+            "box": "27x37",
+            "miss": [
+              "left:li.hints__item",
+              "right:li.hints__item",
+              "top:main.shell__main",
+              "bottom:div.shell"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "GitHub",
+            "box": "44x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "X",
+            "box": "14x14",
+            "miss": [
+              "left:ul.foot__links",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "left:div.foot__row",
+              "right:span.foot__toggles",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:span.foot__toggles",
+              "right:footer.foot",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.foot__quiet.foot__search",
+            "text": "Search ⌘K",
+            "box": "84x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "About",
+            "box": "38x22",
+            "miss": [
+              "left:li.",
+              "right:ul.foot__meta",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "Contact",
+            "box": "51x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          }
+        ]
+      },
+      "/library/": {
+        "checked": 24,
+        "covered": 1,
+        "fails": [
+          {
+            "el": "input.",
+            "text": "Search the library",
+            "box": "277x40",
+            "miss": [
+              "top:div.pane__bar",
+              "bottom:div.ltools"
+            ]
+          },
+          {
+            "el": "a.seg__item",
+            "text": "All45",
+            "box": "60x28",
+            "miss": [
+              "top:div.ltools",
+              "bottom:div.ltools"
+            ]
+          },
+          {
+            "el": "a.seg__item",
+            "text": "Articles23",
+            "box": "92x28",
+            "miss": [
+              "top:div.ltools",
+              "bottom:div.ltools"
+            ]
+          },
+          {
+            "el": "a.pc__more",
+            "text": "Read more",
+            "box": "69x22",
+            "miss": [
+              "top:article.pc",
+              "bottom:article.pc"
+            ]
+          },
+          {
+            "el": "a.pc__out.ext",
+            "text": "Original post on X",
+            "box": "40x40",
+            "miss": [
+              "left:footer.pc__foot",
+              "right:article.pc",
+              "top:article.pc",
+              "bottom:article.pc"
+            ]
+          },
+          {
+            "el": "a.pc__more",
+            "text": "Read more",
+            "box": "69x22",
+            "miss": [
+              "top:article.pc",
+              "bottom:article.pc"
+            ]
+          },
+          {
+            "el": "a.pc__out.ext",
+            "text": "Original post on X",
+            "box": "40x40",
+            "miss": [
+              "left:footer.pc__foot",
+              "right:article.pc",
+              "top:article.pc",
+              "bottom:article.pc"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "GitHub",
+            "box": "44x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "X",
+            "box": "14x14",
+            "miss": [
+              "left:ul.foot__links",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "left:div.foot__row",
+              "right:span.foot__toggles",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:span.foot__toggles",
+              "right:footer.foot",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.foot__quiet.foot__search",
+            "text": "Search ⌘K",
+            "box": "84x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "About",
+            "box": "38x22",
+            "miss": [
+              "left:li.",
+              "right:ul.foot__meta",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "Contact",
+            "box": "51x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          }
+        ]
+      },
+      "/library/kind/post/": {
+        "checked": 24,
+        "covered": 1,
+        "fails": [
+          {
+            "el": "input.",
+            "text": "Search the library",
+            "box": "277x40",
+            "miss": [
+              "top:div.pane__bar",
+              "bottom:div.ltools"
+            ]
+          },
+          {
+            "el": "a.seg__item",
+            "text": "All45",
+            "box": "60x28",
+            "miss": [
+              "top:div.ltools",
+              "bottom:div.ltools"
+            ]
+          },
+          {
+            "el": "a.seg__item",
+            "text": "Articles23",
+            "box": "92x28",
+            "miss": [
+              "top:div.ltools",
+              "bottom:div.ltools"
+            ]
+          },
+          {
+            "el": "a.pc__more",
+            "text": "Read more",
+            "box": "69x22",
+            "miss": [
+              "top:article.pc",
+              "bottom:article.pc"
+            ]
+          },
+          {
+            "el": "a.pc__out.ext",
+            "text": "Original post on X",
+            "box": "40x40",
+            "miss": [
+              "left:footer.pc__foot",
+              "right:article.pc",
+              "top:article.pc",
+              "bottom:article.pc"
+            ]
+          },
+          {
+            "el": "a.pc__more",
+            "text": "Read more",
+            "box": "69x22",
+            "miss": [
+              "top:article.pc",
+              "bottom:article.pc"
+            ]
+          },
+          {
+            "el": "a.pc__out.ext",
+            "text": "Original post on X",
+            "box": "40x40",
+            "miss": [
+              "left:footer.pc__foot",
+              "right:article.pc",
+              "top:article.pc",
+              "bottom:article.pc"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "GitHub",
+            "box": "44x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "X",
+            "box": "14x14",
+            "miss": [
+              "left:ul.foot__links",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "left:div.foot__row",
+              "right:span.foot__toggles",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:span.foot__toggles",
+              "right:footer.foot",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.foot__quiet.foot__search",
+            "text": "Search ⌘K",
+            "box": "84x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "About",
+            "box": "38x22",
+            "miss": [
+              "left:li.",
+              "right:ul.foot__meta",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "Contact",
+            "box": "51x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          }
+        ]
+      },
+      "/library/anatomy-of-an-agent-harness/": {
+        "checked": 26,
+        "covered": 1,
+        "fails": [
+          {
+            "el": "input.",
+            "text": "Search the library",
+            "box": "277x40",
+            "miss": [
+              "top:div.pane__bar",
+              "bottom:div.ltools"
+            ]
+          },
+          {
+            "el": "a.seg__item",
+            "text": "All45",
+            "box": "60x28",
+            "miss": [
+              "top:div.ltools",
+              "bottom:div.ltools"
+            ]
+          },
+          {
+            "el": "a.seg__item",
+            "text": "Articles23",
+            "box": "92x28",
+            "miss": [
+              "top:div.ltools",
+              "bottom:div.ltools"
+            ]
+          },
+          {
+            "el": "a.ext",
+            "text": "langchain.com",
+            "box": "118x21",
+            "miss": [
+              "top:h1.page-title",
+              "bottom:a.strip__chip"
+            ]
+          },
+          {
+            "el": "a.strip__chip",
+            "text": "article",
+            "box": "70x21",
+            "miss": [
+              "bottom:ul.strip"
+            ]
+          },
+          {
+            "el": "a.tag",
+            "text": "agents",
+            "box": "64x28",
+            "miss": [
+              "top:ul.strip",
+              "bottom:div.detail"
+            ]
+          },
+          {
+            "el": "a.tag",
+            "text": "harnesses",
+            "box": "84x28",
+            "miss": [
+              "top:ul.strip",
+              "bottom:div.detail"
+            ]
+          },
+          {
+            "el": "a.hint.press",
+            "text": "Close and go back to Library",
+            "box": "33x37",
+            "miss": [
+              "left:div.shell",
+              "right:ul.hints__row",
+              "top:div.detail",
+              "bottom:div.shell"
+            ]
+          },
+          {
+            "el": "a.hint.press",
+            "text": "Previous entry: An agent that ",
+            "box": "27x37",
+            "miss": [
+              "left:li.hints__item",
+              "right:li.hints__item",
+              "top:div.detail",
+              "bottom:div.shell"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "GitHub",
+            "box": "44x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "X",
+            "box": "14x14",
+            "miss": [
+              "left:ul.foot__links",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "left:div.foot__row",
+              "right:span.foot__toggles",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:span.foot__toggles",
+              "right:footer.foot",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.foot__quiet.foot__search",
+            "text": "Search ⌘K",
+            "box": "84x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "About",
+            "box": "38x22",
+            "miss": [
+              "left:li.",
+              "right:ul.foot__meta",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "Contact",
+            "box": "51x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          }
+        ]
+      },
+      "/library/make-money-make-no-mistakes/": {
+        "checked": 26,
+        "covered": 1,
+        "fails": [
+          {
+            "el": "input.",
+            "text": "Search the library",
+            "box": "277x40",
+            "miss": [
+              "top:div.pane__bar",
+              "bottom:div.ltools"
+            ]
+          },
+          {
+            "el": "a.seg__item",
+            "text": "All45",
+            "box": "60x28",
+            "miss": [
+              "top:div.ltools",
+              "bottom:div.ltools"
+            ]
+          },
+          {
+            "el": "a.seg__item",
+            "text": "Articles23",
+            "box": "92x28",
+            "miss": [
+              "top:div.ltools",
+              "bottom:div.ltools"
+            ]
+          },
+          {
+            "el": "a.ext",
+            "text": "x.com",
+            "box": "56x21",
+            "miss": [
+              "top:h1.page-title",
+              "bottom:a.strip__chip"
+            ]
+          },
+          {
+            "el": "a.out__more",
+            "text": "18 saved",
+            "box": "82x21",
+            "miss": [
+              "top:h1.page-title",
+              "bottom:header."
+            ]
+          },
+          {
+            "el": "a.strip__chip",
+            "text": "post",
+            "box": "47x21",
+            "miss": [
+              "bottom:div.detail"
+            ]
+          },
+          {
+            "el": "a.pc__out.ext",
+            "text": "Original post on X",
+            "box": "40x40",
+            "miss": [
+              "left:footer.pc__foot",
+              "right:article.pc",
+              "top:article.pc",
+              "bottom:article.pc"
+            ]
+          },
+          {
+            "el": "a.hint.press",
+            "text": "Close and go back to Library",
+            "box": "33x37",
+            "miss": [
+              "left:div.shell",
+              "right:ul.hints__row",
+              "top:div.detail",
+              "bottom:div.shell"
+            ]
+          },
+          {
+            "el": "a.hint.press",
+            "text": "Previous entry: Cursor's promp",
+            "box": "27x37",
+            "miss": [
+              "left:li.hints__item",
+              "right:li.hints__item",
+              "top:div.detail",
+              "bottom:div.shell"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "GitHub",
+            "box": "44x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "X",
+            "box": "14x14",
+            "miss": [
+              "left:ul.foot__links",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "left:div.foot__row",
+              "right:span.foot__toggles",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:span.foot__toggles",
+              "right:footer.foot",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.foot__quiet.foot__search",
+            "text": "Search ⌘K",
+            "box": "84x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "About",
+            "box": "38x22",
+            "miss": [
+              "left:li.",
+              "right:ul.foot__meta",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "Contact",
+            "box": "51x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          }
+        ]
+      },
+      "/notes/": {
+        "checked": 13,
+        "covered": 1,
+        "fails": [
+          {
+            "el": "a.foot__link.press",
+            "text": "GitHub",
+            "box": "44x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "X",
+            "box": "14x14",
+            "miss": [
+              "left:ul.foot__links",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "left:div.foot__row",
+              "right:span.foot__toggles",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:span.foot__toggles",
+              "right:footer.foot",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.foot__quiet.foot__search",
+            "text": "Search ⌘K",
+            "box": "84x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "About",
+            "box": "38x22",
+            "miss": [
+              "left:li.",
+              "right:ul.foot__meta",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "Contact",
+            "box": "51x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          }
+        ]
+      },
+      "/design/": {
+        "checked": 29,
+        "covered": 1,
+        "fails": [
+          {
+            "el": "a.tag",
+            "text": "agency",
+            "box": "66x28",
+            "miss": [
+              "top:div.spec__row",
+              "bottom:div.spec__row"
+            ]
+          },
+          {
+            "el": "a.tag",
+            "text": "agents",
+            "box": "64x28",
+            "miss": [
+              "top:div.spec__row",
+              "bottom:div.spec__row"
+            ]
+          },
+          {
+            "el": "button.pressbox.press",
+            "text": "0.96the default: a chip, a but",
+            "box": "658x42",
+            "miss": [
+              "bottom:ul.presses"
+            ]
+          },
+          {
+            "el": "button.pressbox.press",
+            "text": "0.985a gallery card on /sites",
+            "box": "658x42",
+            "miss": [
+              "bottom:ul.presses"
+            ]
+          },
+          {
+            "el": "button.ctl.press",
+            "text": "CopyCopy the prompt",
+            "box": "79x32",
+            "miss": [
+              "bottom:dd.blk__prompt"
+            ]
+          },
+          {
+            "el": "a.ext.ctl",
+            "text": "Read design.md",
+            "box": "146x32",
+            "miss": [
+              "bottom:div.sec__body"
+            ]
+          },
+          {
+            "el": "a.pc__more",
+            "text": "Read more",
+            "box": "69x22",
+            "miss": [
+              "top:article.pc",
+              "bottom:article.pc"
+            ]
+          },
+          {
+            "el": "a.pc__out.ext",
+            "text": "Original post on X",
+            "box": "40x40",
+            "miss": [
+              "left:footer.pc__foot",
+              "right:article.pc",
+              "top:article.pc",
+              "bottom:article.pc"
+            ]
+          },
+          {
+            "el": "a.pc__more",
+            "text": "Read more",
+            "box": "69x22",
+            "miss": [
+              "top:article.pc",
+              "bottom:article.pc"
+            ]
+          },
+          {
+            "el": "a.pc__out.ext",
+            "text": "Original post on X",
+            "box": "40x40",
+            "miss": [
+              "left:footer.pc__foot",
+              "right:article.pc",
+              "top:article.pc",
+              "bottom:article.pc"
+            ]
+          },
+          {
+            "el": "button.ctl.press",
+            "text": "Open the palette",
+            "box": "133x32",
+            "miss": [
+              "bottom:section."
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "GitHub",
+            "box": "44x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "X",
+            "box": "14x14",
+            "miss": [
+              "left:ul.foot__links",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "left:div.foot__row",
+              "right:span.foot__toggles",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:span.foot__toggles",
+              "right:footer.foot",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.foot__quiet.foot__search",
+            "text": "Search ⌘K",
+            "box": "84x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "About",
+            "box": "38x22",
+            "miss": [
+              "left:li.",
+              "right:ul.foot__meta",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "Contact",
+            "box": "51x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          }
+        ]
+      },
+      "/about/": {
+        "checked": 13,
+        "covered": 1,
+        "fails": [
+          {
+            "el": "a.foot__link.press",
+            "text": "GitHub",
+            "box": "44x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__link.press",
+            "text": "X",
+            "box": "14x14",
+            "miss": [
+              "left:ul.foot__links",
+              "right:div.foot__row",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "left:div.foot__row",
+              "right:span.foot__toggles",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:span.foot__toggles",
+              "right:footer.foot",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "button.foot__quiet.foot__search",
+            "text": "Search ⌘K",
+            "box": "84x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "About",
+            "box": "38x22",
+            "miss": [
+              "left:li.",
+              "right:ul.foot__meta",
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          },
+          {
+            "el": "a.foot__quiet.press",
+            "text": "Contact",
+            "box": "51x22",
+            "miss": [
+              "top:footer.foot",
+              "bottom:footer.foot"
+            ]
+          }
+        ]
+      },
+      "menu": {
+        "checked": 5,
+        "covered": 0,
+        "fails": [
+          {
+            "el": "button.mnav__search.mono",
+            "text": "Search",
+            "box": "76x40",
+            "miss": [
+              "bottom:div.mnav__panel"
+            ]
+          },
+          {
+            "el": "button.tt.press",
+            "text": "Theme: light. Switch to dark.",
+            "box": "14x14",
+            "miss": [
+              "right:div.mnav__panel",
+              "bottom:div.mnav__panel"
+            ]
+          }
+        ]
+      },
+      "palette": {
+        "checked": 29,
+        "covered": 24,
+        "fails": [
+          {
+            "el": "button.st.press",
+            "text": "Sound",
+            "box": "14x14",
+            "miss": [
+              "left:div.palette__legend",
+              "right:div.palette__legend",
+              "top:div.palette__legend",
+              "bottom:div.palette__scrim"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "labels": {
+    "light /": [],
+    "light /tools/": [],
+    "light /tools/agent-browser/": [],
+    "light /sites/": [],
+    "light /sites/about-brian-lovin/": [],
+    "light /library/": [],
+    "light /library/kind/post/": [],
+    "light /library/anatomy-of-an-agent-harness/": [],
+    "light /library/make-money-make-no-mistakes/": [],
+    "light /notes/": [],
+    "light /design/": [],
+    "light /about/": [],
+    "light palette": [],
+    "dark /": [],
+    "dark /tools/": [],
+    "dark /tools/agent-browser/": [],
+    "dark /sites/": [],
+    "dark /sites/about-brian-lovin/": [],
+    "dark /library/": [],
+    "dark /library/kind/post/": [],
+    "dark /library/anatomy-of-an-agent-harness/": [],
+    "dark /library/make-money-make-no-mistakes/": [],
+    "dark /notes/": [],
+    "dark /design/": [],
+    "dark /about/": [],
+    "dark palette": []
+  },
+  "contrast": {
+    "light /": {
+      "checked": 57,
+      "fails": [],
+      "unknownBackground": [
+        "p.standfirst",
+        "span.mark",
+        "h2.index__title",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "light /tools/": {
+      "checked": 458,
+      "fails": [],
+      "unknownBackground": [
+        "span.mark",
+        "button.sort",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "light /tools/agent-browser/": {
+      "checked": 40,
+      "fails": [],
+      "unknownBackground": [
+        "li.strip__item",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "light /sites/": {
+      "checked": 96,
+      "fails": [],
+      "unknownBackground": [
+        "span.mark",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "light /sites/about-brian-lovin/": {
+      "checked": 43,
+      "fails": [],
+      "unknownBackground": [
+        "span.shot__caption",
+        "span.shot__hint",
+        "span.act__label",
+        "dt.mono",
+        "a.",
+        "time.",
+        "a.ext",
+        "span.found__title",
+        "span.found__groups",
+        "a.hint",
+        "kbd.hint__key",
+        "a.foot__link",
+        "dt.",
+        "dd.tabular-nums",
+        "button.foot__quiet",
+        "kbd.",
+        "a.foot__quiet",
+        "p.foot__legal",
+        "span.tabular-nums"
+      ]
+    },
+    "light /library/": {
+      "checked": 213,
+      "fails": [],
+      "unknownBackground": [
+        "a.seg__item",
+        "summary.ltags__sum",
+        "li.pane__month",
+        "span.mark",
+        "span.lead__kicker",
+        "a.",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "light /library/kind/post/": {
+      "checked": 221,
+      "fails": [],
+      "unknownBackground": [
+        "a.seg__item",
+        "summary.ltags__sum",
+        "li.pane__month",
+        "span.mark",
+        "span.pm__watch",
+        "p.",
+        "li.",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "light /library/anatomy-of-an-agent-harness/": {
+      "checked": 224,
+      "fails": [
+        {
+          "el": "span.",
+          "text": "langchain.com",
+          "ratio": 4.35,
+          "floor": 4.5,
+          "color": "rgb(115, 115, 115)",
+          "bg": "rgb(245, 245, 245)"
+        }
+      ],
+      "unknownBackground": [
+        "a.seg__item",
+        "summary.ltags__sum",
+        "li.pane__month",
+        "span.",
+        "li.strip__item",
+        "h2.sec__head",
+        "figcaption.quote__note",
+        "a.hint",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "light /library/make-money-make-no-mistakes/": {
+      "checked": 227,
+      "fails": [
+        {
+          "el": "span.",
+          "text": "x.com",
+          "ratio": 4.35,
+          "floor": 4.5,
+          "color": "rgb(115, 115, 115)",
+          "bg": "rgb(245, 245, 245)"
+        }
+      ],
+      "unknownBackground": [
+        "a.seg__item",
+        "summary.ltags__sum",
+        "li.pane__month",
+        "span.tip",
+        "b.",
+        "li.strip__item",
+        "h2.sec__head",
+        "span.blk__tag",
+        "p.media__saved",
+        "figcaption.quote__note",
+        "a.hint",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "light /notes/": {
+      "checked": 31,
+      "fails": [],
+      "unknownBackground": [
+        "span.mark",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "light /design/": {
+      "checked": 304,
+      "fails": [
+        {
+          "el": "span.blk__est",
+          "text": "(estimate)",
+          "ratio": 4.35,
+          "floor": 4.5,
+          "color": "rgb(115, 115, 115)",
+          "bg": "rgb(245, 245, 245)"
+        }
+      ],
+      "unknownBackground": [
+        "p.",
+        "div.mono",
+        "h3.sec__head",
+        "dd.",
+        "span.blk__tag",
+        "li.pane__month",
+        "summary.ltags__sum",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "light /about/": {
+      "checked": 56,
+      "fails": [],
+      "unknownBackground": [
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "light palette": {
+      "checked": 122,
+      "fails": [],
+      "unknownBackground": [
+        "kbd.palette__esc",
+        "div.palette__group",
+        "span.palette__row-title",
+        "span.palette__row-sub",
+        "time.palette__row-date",
+        "p.standfirst",
+        "span.mark",
+        "h2.index__title",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "dark /": {
+      "checked": 57,
+      "fails": [],
+      "unknownBackground": [
+        "p.standfirst",
+        "span.mark",
+        "h2.index__title",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "dark /tools/": {
+      "checked": 458,
+      "fails": [],
+      "unknownBackground": [
+        "span.mark",
+        "button.sort",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "dark /tools/agent-browser/": {
+      "checked": 40,
+      "fails": [],
+      "unknownBackground": [
+        "li.strip__item",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "dark /sites/": {
+      "checked": 96,
+      "fails": [],
+      "unknownBackground": [
+        "span.mark",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "dark /sites/about-brian-lovin/": {
+      "checked": 43,
+      "fails": [],
+      "unknownBackground": [
+        "span.shot__caption",
+        "span.shot__hint",
+        "span.act__label",
+        "dt.mono",
+        "a.",
+        "time.",
+        "a.ext",
+        "span.found__title",
+        "span.found__groups",
+        "a.hint",
+        "kbd.hint__key",
+        "a.foot__link",
+        "dt.",
+        "dd.tabular-nums",
+        "button.foot__quiet",
+        "kbd.",
+        "a.foot__quiet",
+        "p.foot__legal",
+        "span.tabular-nums"
+      ]
+    },
+    "dark /library/": {
+      "checked": 213,
+      "fails": [],
+      "unknownBackground": [
+        "a.seg__item",
+        "summary.ltags__sum",
+        "li.pane__month",
+        "span.mark",
+        "span.lead__kicker",
+        "a.",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "dark /library/kind/post/": {
+      "checked": 221,
+      "fails": [],
+      "unknownBackground": [
+        "a.seg__item",
+        "summary.ltags__sum",
+        "li.pane__month",
+        "span.mark",
+        "span.pm__watch",
+        "p.",
+        "li.",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "dark /library/anatomy-of-an-agent-harness/": {
+      "checked": 224,
+      "fails": [],
+      "unknownBackground": [
+        "a.seg__item",
+        "summary.ltags__sum",
+        "li.pane__month",
+        "span.",
+        "li.strip__item",
+        "h2.sec__head",
+        "figcaption.quote__note",
+        "a.hint",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "dark /library/make-money-make-no-mistakes/": {
+      "checked": 227,
+      "fails": [],
+      "unknownBackground": [
+        "a.seg__item",
+        "summary.ltags__sum",
+        "li.pane__month",
+        "span.tip",
+        "b.",
+        "li.strip__item",
+        "h2.sec__head",
+        "span.blk__tag",
+        "p.media__saved",
+        "figcaption.quote__note",
+        "a.hint",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "dark /notes/": {
+      "checked": 31,
+      "fails": [],
+      "unknownBackground": [
+        "span.mark",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "dark /design/": {
+      "checked": 304,
+      "fails": [],
+      "unknownBackground": [
+        "p.",
+        "div.mono",
+        "h3.sec__head",
+        "dd.",
+        "span.blk__tag",
+        "li.pane__month",
+        "summary.ltags__sum",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "dark /about/": {
+      "checked": 56,
+      "fails": [],
+      "unknownBackground": [
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    },
+    "dark palette": {
+      "checked": 122,
+      "fails": [],
+      "unknownBackground": [
+        "kbd.palette__esc",
+        "div.palette__group",
+        "span.palette__row-title",
+        "span.palette__row-sub",
+        "time.palette__row-date",
+        "p.standfirst",
+        "span.mark",
+        "h2.index__title",
+        "button.foot__quiet",
+        "p.foot__legal"
+      ]
+    }
+  },
+  "focus": {
+    "/": {
+      "stops": 25,
+      "invisible": []
+    },
+    "/tools/": {
+      "stops": 40,
+      "invisible": []
+    },
+    "/tools/agent-browser/": {
+      "stops": 20,
+      "invisible": []
+    },
+    "/sites/": {
+      "stops": 40,
+      "invisible": []
+    },
+    "/sites/about-brian-lovin/": {
+      "stops": 27,
+      "invisible": []
+    },
+    "/library/": {
+      "stops": 33,
+      "invisible": []
+    },
+    "/library/kind/post/": {
+      "stops": 40,
+      "invisible": []
+    },
+    "/library/anatomy-of-an-agent-harness/": {
+      "stops": 33,
+      "invisible": []
+    },
+    "/library/make-money-make-no-mistakes/": {
+      "stops": 32,
+      "invisible": []
+    },
+    "/notes/": {
+      "stops": 18,
+      "invisible": []
+    },
+    "/design/": {
+      "stops": 40,
+      "invisible": []
+    },
+    "/about/": {
+      "stops": 21,
+      "invisible": []
+    }
+  }
+}

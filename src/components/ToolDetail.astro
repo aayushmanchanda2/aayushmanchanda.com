@@ -271,4 +271,14 @@ const outCard = (href: string) =>
     content: "\00b7" / "";
     color: var(--hairline-strong);
   }
+
+  /* 44px under a finger (VET-307): the strip's links and the Source links grow
+     by padding and give it back by margin, so nothing on the page moves. */
+  @media (pointer: coarse) {
+    .strip a,
+    .source__link a {
+      padding-block: 11px;
+      margin-block: -11px;
+    }
+  }
 </style>

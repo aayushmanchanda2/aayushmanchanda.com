@@ -296,4 +296,22 @@ const source = Boolean(entry.post || entry.video || entry.moments.length || entr
       color: var(--accent);
     }
   }
+
+  /* 44px under a finger (VET-307): the kind chip reaches further, and the
+     host links grow by padding and give it back by margin; 8px more under the
+     host line keeps its targets off the kind chip's. */
+  @media (pointer: coarse) {
+    .strip__chip::after {
+      inset: -0.75rem 0;
+    }
+
+    .out {
+      padding-bottom: 0.5rem;
+    }
+
+    .out :global(a) {
+      padding-block: 12px;
+      margin-block: -12px;
+    }
+  }
 </style>

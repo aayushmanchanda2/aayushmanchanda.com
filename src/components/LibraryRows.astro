@@ -137,6 +137,12 @@ const opens = (i: number) => i === 0 || rows[i]!.saved_date.slice(0, 7) !== rows
     background: var(--surface-selected);
     box-shadow: var(--shadow-contrast);
   }
+
+  /* --text-tertiary is 4.35:1 on a lit row's neutral 100, under AA: the meta
+     line steps up to secondary there (VET-307). */
+  .rows li > a:is([aria-current="page"], :hover) small {
+    color: var(--text-secondary);
+  }
   /* 14px UI text throughout the row (design.md §2). */
   .rows b {
     font-size: 0.875rem;

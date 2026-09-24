@@ -61,4 +61,22 @@ const { collections, linked = true } = Astro.props;
     gap: 0.4rem;
     margin: 0;
   }
+
+  /* 44px under a finger (VET-307): each chip reaches 12px up and down, so the
+     lines sit 24px apart and two targets touch without overlapping. */
+  @media (pointer: coarse) {
+    .collections {
+      row-gap: 1.5rem;
+    }
+
+    .collections :global(.chip--link) {
+      position: relative;
+    }
+
+    .collections :global(.chip--link)::after {
+      content: "";
+      position: absolute;
+      inset: -12px 0;
+    }
+  }
 </style>
