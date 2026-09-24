@@ -44,12 +44,16 @@ export function initPalette(root: HTMLElement): void {
    */
   let entries: SearchEntry[] | null = null;
   let loading: Promise<void> | null = null;
+  /** The empty palette's rows, inline in the page (`CommandPalette.astro`), so they paint on the first open. */
+  const home = JSON.parse(document.querySelector("[data-palette-home]")?.textContent || "[]") as SearchEntry[];
   const load = (): Promise<void> =>
     (loading ??= fetch("/search.json")
       .then((response) => (response.ok ? response.json() : Promise.reject(response.status)))
       .then((data: SearchEntry[]) => {
         entries = data;
-        if (open) render(input.value);
+        // The empty palette already shows the same rows; drawing them again
+        // would only reload their icons.
+        if (open && input.value.trim()) render(input.value);
       })
       .catch(() => {
         loading = null;
@@ -70,11 +74,12 @@ export function initPalette(root: HTMLElement): void {
   // Const arrows, not `function`s: a hoisted function would lose the guard's
   // non-null narrowing (`lib/mnav.ts › setOpen` has the same note).
   const render = (query: string): void => {
-    if (!entries) {
+    const pool = entries ?? (query.trim() === "" ? home : null);
+    if (!pool) {
       status.textContent = "Loading search";
       return;
     }
-    const hits = search(entries, query, RESULT_LIMIT);
+    const hits = search(pool, query, RESULT_LIMIT);
 
     rows = renderRows(results, hits, tokenize(query));
 
@@ -134,9 +139,24 @@ export function initPalette(root: HTMLElement): void {
    * browser. The keyboard shortcut passes nothing and falls back to whatever
    * was focused, which for a shortcut is the right answer.
    */
-  const setOpen = (next: boolean, trigger?: HTMLElement | null): void => {
+  /**
+   * Opening pushes a history entry (VET-282, E6), so Android's back button,
+   * the iOS edge swipe and the browser's Back close the palette instead of
+   * leaving the page. `how` says who is closing: "pop" is that Back (the
+   * entry is already gone), "nav" is a row being followed (its page replaces
+   * the entry), anything else steps back off the entry.
+   */
+  let pushed = false;
+  const setOpen = (next: boolean, trigger?: HTMLElement | null, how?: "pop" | "nav"): void => {
     if (next === open) return;
     open = next;
+    if (next) {
+      history.pushState({ palette: true }, "");
+      pushed = true;
+    } else if (pushed) {
+      pushed = false;
+      if (!how) history.back();
+    }
 
     /**
      * Synchronously, because the two surfaces in the header's precedence note
@@ -194,8 +214,10 @@ export function initPalette(root: HTMLElement): void {
       return;
     }
     const href = row.href;
-    setOpen(false);
-    window.location.href = href;
+    const replace = pushed;
+    setOpen(false, null, "nav");
+    if (replace) window.location.replace(href);
+    else window.location.href = href;
   };
 
   /* --- wiring ------------------------------------------------------------ */
@@ -243,12 +265,18 @@ export function initPalette(root: HTMLElement): void {
     if (row) setActive(rows.indexOf(row));
   });
 
+  // A plain press on a row goes through `go`, so the history entry is
+  // replaced rather than stepped back from mid-navigation; a modifier press
+  // is the browser's (a new tab) and the palette stays.
   results.addEventListener("click", (event) => {
-    const command = (event.target as HTMLElement).closest<HTMLAnchorElement>("[data-palette-action], [data-palette-query]");
-    if (command) event.preventDefault();
-    return command ? go(command) : setOpen(false);
+    const row = (event.target as HTMLElement).closest<HTMLAnchorElement>("[data-palette-row]");
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    return row ? go(row) : setOpen(false);
   });
   scrim.addEventListener("click", () => setOpen(false));
+  root.querySelector("[data-palette-close]")?.addEventListener("click", () => setOpen(false));
+  addEventListener("popstate", () => setOpen(false, null, "pop"));
   // The footer's sound toggle is for the pointer; keep focus in the field.
   root.querySelector("[data-sound-toggle]")?.addEventListener("pointerdown", (event) => event.preventDefault());
 

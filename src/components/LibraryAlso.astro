@@ -1,0 +1,42 @@
+---
+/**
+ * LibraryAlso — the "Also saved" group at the foot of a /library view
+ * (VET-273): kept entries that left the main feed, as the quiet
+ * `LibraryFeed`. Every view has one since VET-282, because "All" and each
+ * kind count both groups: a segment that says 14 posts must list 14 posts.
+ * It follows the filter like any view group (`lib/library-pane.ts`, the
+ * filtering model): its items carry their tags, its count is what shows, and
+ * it hides when nothing under it does.
+ */
+import LibraryFeed from "./LibraryFeed.astro";
+import type { Kind } from "../lib/library";
+import { alsoSaved } from "../lib/library";
+
+interface Props {
+  /** The view's kind; "" for All. */
+  kind: Kind | "";
+}
+
+const { kind } = Astro.props;
+const entries = alsoSaved.filter((entry) => !kind || entry.kind === kind);
+---
+
+{
+  entries.length > 0 && (
+    <section class="also" aria-labelledby={`also-${kind || "all"}`} data-filter-group>
+      <h2 class="mix__head mono" id={`also-${kind || "all"}`}>
+        <span>Also saved</span>
+        <span class="tabular-nums" data-group-count>{entries.length}</span>
+      </h2>
+      <LibraryFeed entries={entries} filterable quiet />
+    </section>
+  )
+}
+
+<style>
+  /* The feed's own 48rem, so the head's count sits over the list's edge. */
+  .also {
+    max-width: 48rem;
+    margin-top: 2.5rem;
+  }
+</style>

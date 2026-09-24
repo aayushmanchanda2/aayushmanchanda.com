@@ -1,11 +1,10 @@
 /**
  * show-all.ts — the one "Show all N" / "Show fewer" toggle (QA phase 2, B11):
- * the /library tag filter row (`TagFilters.astro`) and a site's design panel
- * groups (`lib/site-detail.ts`). The tail is in the HTML, so with scripting off
+ * a site's design panel groups (`lib/site-detail.ts`). The tail is in the HTML, so with scripting off
  * everything shows and the button never does; the caller reveals the button.
  *
- * No imports and nothing from outside its own body, because `TagFilters`
- * inlines it by `toString()` to hide the tail before the first paint.
+ * No imports and nothing from outside its own body, so a caller can inline it
+ * by `toString()` to hide the tail before the first paint.
  */
 export function showAll(button: HTMLElement, tail: Iterable<Element>): void {
   const items = [...tail];

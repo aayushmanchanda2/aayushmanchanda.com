@@ -21,6 +21,17 @@
  * views never open the palette, so it is a request on demand now.
  */
 import SoundToggle from "./SoundToggle.astro";
+import { buildSearchIndex } from "../lib/search-index";
+
+/**
+ * The empty palette's rows (Go to, Browse, Recent saves, Actions, Try
+ * searching), inline, so they paint with the panel on the first open (VET-282,
+ * E5). They used to arrive with `/search.json`, 139 KB, so a first ⌘K drew
+ * the search glyph over an empty panel and the rows popped in later. About
+ * 8.6 KB raw per page; typed queries still wait for the index. `<` is escaped
+ * so a title can never close the script element.
+ */
+const home = JSON.stringify((await buildSearchIndex()).filter((entry) => entry.group)).replace(/</g, "\\u003c");
 ---
 
 <div
@@ -69,6 +80,12 @@ import SoundToggle from "./SoundToggle.astro";
         spellcheck="false"
       />
       <kbd class="palette__esc mono">Esc</kbd>
+      {/* Touch has no Esc (VET-282, E6): a 44px ×, shown where the pointer is coarse. */}
+      <button class="palette__close" type="button" data-palette-close aria-label="Close search">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 4 L12 12 M12 4 L4 12"></path>
+        </svg>
+      </button>
     </div>
 
     <div
@@ -90,6 +107,8 @@ import SoundToggle from "./SoundToggle.astro";
     </div>
   </div>
 </div>
+
+<script is:inline type="application/json" data-palette-home set:html={home} />
 
 <script>
   import { initPalette } from "../lib/palette";

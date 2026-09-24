@@ -128,11 +128,11 @@ test("nothing lays content out in columns", () => {
   }
 });
 
-test("the wall is reached from the Posts view and from nowhere else", () => {
+test("the wall is reached from the Posts view and All's mix, and from nowhere else", () => {
   // The component does not name itself outside its own comments, so the sweep
-  // finds callers and nothing else. One caller is the whole point.
+  // finds callers and nothing else.
   const callers = walk("").filter((file) => code(read(file)).includes("PostWall"));
-  assert.deepEqual(callers, ["components/LibraryViews.astro"]);
+  assert.deepEqual(callers, ["components/LibraryMix.astro", "components/LibraryViews.astro"]);
 
   assert.match(
     code(read("components/LibraryViews.astro")),
@@ -259,7 +259,7 @@ test("nothing builds a /library URL of its own", () => {
     "components/PostWall.astro",
     "components/LibraryList.astro",
     "components/LibraryFeed.astro",
-    "components/LibraryViews.astro",
+    "components/LibraryMix.astro",
   ]) {
     const source = code(read(name));
     assert.match(source, /import \{[^}]*\bentryHref\b[^}]*\}/, `${name} no longer reads the seam`);

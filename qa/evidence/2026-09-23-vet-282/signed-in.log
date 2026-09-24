@@ -1,0 +1,4 @@
+PASS phone list: every private row, lock-marked, main feed and Also saved — {"notesVisible":true,"priv":4,"locks":4,"alsoPriv":1,"rows":45,"count":"45 entries","all":"45","privateSeg":"4"}
+PASS phone list: count, All and the list agree, private rows included — {"notesVisible":true,"priv":4,"locks":4,"alsoPriv":1,"rows":45,"count":"45 entries","all":"45","privateSeg":"4"}
+PASS phone list: a private tag filters to exactly its private rows — {"shown":["private","private"],"count":"2 entries"}
+PASS no page errors

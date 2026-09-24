@@ -1,0 +1,150 @@
+---
+/**
+ * LibraryMix — /library All's editorial front page (QA phase 2, B6), beside
+ * the pane: the newest article as a card with its TLDR and first highlight,
+ * the latest four posts as compact `PostCard`s and the latest two videos,
+ * each with a link to its kind. On a phone the list is the page instead
+ * (`LibraryViews.astro`), so this shows from 48rem of the split.
+ *
+ * Every item carries its tags and follows the filter (VET-282,
+ * `lib/library-pane.ts`): a part hides when nothing in it matches, and when
+ * nothing featured matches at all, one line says the list beside has them.
+ * "All N" counts every entry of the kind, both groups, as its segment does.
+ */
+import KindIcon from "./KindIcon.astro";
+import PostWall from "./PostWall.astro";
+import VideoGrid from "./VideoGrid.astro";
+import { KIND_LABELS, entryHref, feed, kindGroups } from "../lib/library";
+import type { Kind } from "../lib/library";
+import { formatDay } from "../lib/date";
+
+const of = (kind: Kind) => feed.filter((entry) => entry.kind === kind);
+const [reading] = of("article");
+const highlight = reading?.highlights[0];
+const total = (kind: Kind) => kindGroups.find((group) => group.kind === kind)?.entries.length ?? 0;
+
+/** The parts after the lead article: kind and its newest few, from the main feed. */
+const parts = [
+  { kind: "post" as const, entries: of("post").filter((entry) => entry.post !== null).slice(0, 4) },
+  { kind: "video" as const, entries: of("video").slice(0, 2) },
+].filter((part) => part.entries.length > 0);
+---
+
+<div class="mix" data-filter-group>
+  {reading && (
+    <a class="lead" href={entryHref(reading)} data-astro-prefetch="hover" data-tags={reading.tags.join(" ")}>
+      <span class="lead__kicker mono"><KindIcon kind="article" /> Latest article</span>
+      <b class="lead__title">{reading.title}</b>
+      {reading.tldr && <p class="lead__tldr">{reading.tldr}</p>}
+      {highlight && (
+        <blockquote class="lead__quote">
+          <mark data-color={highlight.color}>{highlight.text}</mark>
+        </blockquote>
+      )}
+      <small class="lead__meta">
+        <span>{reading.domain}</span>
+        <time datetime={reading.saved_date}>{formatDay(reading.saved_date)}</time>
+      </small>
+    </a>
+  )}
+  {parts.map((part) => (
+    <section class="mix__part" aria-labelledby={`mix-${part.kind}`} data-filter-group>
+      <h2 class="mix__head mono" id={`mix-${part.kind}`}>
+        <span>Latest {KIND_LABELS[part.kind].toLowerCase()}</span>
+        <a href={`/library/kind/${part.kind}`}>All <span class="tabular-nums" data-kind-count={part.kind}>{total(part.kind)}</span></a>
+      </h2>
+      {part.kind === "post" ? <PostWall entries={part.entries} compact /> : <VideoGrid entries={part.entries} />}
+    </section>
+  ))}
+</div>
+<p class="mix__none">Nothing featured here matches. The list has every entry that does.</p>
+
+<style>
+  /* The lead card, then one part per kind, 40px apart (design.md §2). */
+  .mix {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  .mix[hidden] {
+    display: none;
+  }
+
+  .mix__none {
+    display: none;
+    color: var(--text-secondary);
+  }
+
+  .mix[hidden] + .mix__none {
+    display: block;
+  }
+
+  /* The lead: the post card's surface and lift (E7, VET-282), one link to
+     the entry. */
+  .lead {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: 48rem;
+    padding: 1.25rem;
+    border: 1px solid var(--hairline);
+    background: var(--card-bg);
+    box-shadow: var(--card-shadow);
+    color: var(--text-primary);
+    text-decoration: none;
+  }
+
+  .lead[hidden] {
+    display: none;
+  }
+
+  @media (hover: hover) {
+    .lead:hover {
+      border-color: var(--hairline-strong);
+    }
+
+    .lead:hover .lead__title {
+      color: var(--accent);
+    }
+  }
+
+  .lead__kicker {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-tertiary);
+  }
+
+  .lead__title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+  }
+
+  .lead__tldr {
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .lead__quote {
+    margin-top: 0.5rem;
+    padding-left: 1rem;
+    border-left: 3px solid var(--hairline-strong);
+    line-height: 1.6;
+  }
+
+  .lead__meta {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 0.25rem;
+    font-size: 0.8125rem;
+    color: var(--text-tertiary);
+  }
+
+  .lead__meta > * + *::before {
+    content: "\00b7" / "";
+    margin-right: 0.4rem;
+  }
+</style>

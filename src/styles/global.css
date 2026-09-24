@@ -93,6 +93,14 @@
      and the few percent it dims the gallery by. */
   --panel-shadow: light-dark(rgb(0 0 0 / 0.08), rgb(0 0 0 / 0.6));
   --panel-dim: light-dark(rgb(0 0 0 / 0.05), rgb(0 0 0 / 0.08));
+  /* A card that sits up off the page (E7, VET-282): the post tiles and All's
+     lead. Light: the page's white lifted by a tight contact shadow and a soft
+     ambient one. Dark: a shade off black with a lit top rim, since a shadow
+     on black barely shows. Soft, so it never fights the stamp's frame. */
+  --card-bg: light-dark(#ffffff, #0d0d0d);
+  --card-shadow: inset 0 1px 0 light-dark(rgb(255 255 255 / 0), rgb(255 255 255 / 0.06)),
+    0 1px 2px light-dark(rgb(0 0 0 / 0.04), rgb(0 0 0 / 0.5)),
+    0 6px 16px -6px light-dark(rgb(0 0 0 / 0.1), rgb(0 0 0 / 0.6));
   /* White in both themes: under a transparent logo (`AppIcon`, the palette),
      the way a home screen flattens one; and a label over a picture
      (`PostMedia › .pm__watch`) on its scrim. */

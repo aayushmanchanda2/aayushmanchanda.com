@@ -4,36 +4,37 @@
  * The list pane beside it (`LibraryPane.astro`) is the index; this is what the
  * kind shows:
  *
- *   - **All**: an editorial front page (QA phase 2, B6), not a second copy of
- *     the pane: the newest article as a card with its TLDR and first
- *     highlight, the latest four posts as compact `PostCard`s, the latest two
- *     videos, each with a link to its kind, then the quieter "Also saved"
- *     list (VET-273): kept entries that left the main feed.
+ *   - **All**: beside the pane, the editorial front page (`LibraryMix.astro`).
+ *     On a phone, where the pane hides, the list is the page (VET-282): Apple
+ *     Notes on iPhone, a large title that folds into the top bar as it
+ *     scrolls away, the search field and the filters under it, then the rows
+ *     as inset groups under their month headers (`LibraryNotes.astro`). A row
+ *     opens its entry, whose top bar reads
+ *     "‹ Library" (`Breadcrumbs.astro`).
  *   - **Articles**: list-detail. Beside the pane, the newest article opens here
  *     through `EntryDetail`, the entry page's own markup, the way Notes opens
- *     on the latest note; a "pick one" empty state would be a click that
- *     shows nothing. On a phone there is no pane, so the view is the list.
+ *     on the latest note. On a phone there is no pane, so the view is the list.
  *   - **Posts**: the `PostWall` grid of `PostCard`s.
  *   - **Videos**: `VideoGrid`, posters at 16:9.
  *
- * A route renders only its own view (B15): `/library` All, and
- * `/library/kind/<kind>` its kind, so the other three are not shipped on every
- * page. A segment press on these routes follows its link to the other route
- * (`lib/library-pane.ts › FILTER`, at the foot of this component, which also
- * runs the tag filter over the view's `[data-tags]` items).
+ * Every view ends with its "Also saved" group (`LibraryAlso.astro`): All and
+ * each kind count both groups (the filtering model in `lib/library-pane.ts`).
+ * A route renders only its own view (B15), and `FILTER`, at the foot of this
+ * component, runs the kind, tag and text filter over the view's items.
  */
 import Mark from "./Mark.astro";
 import EntryDetail from "./EntryDetail.astro";
-import KindIcon from "./KindIcon.astro";
+import LibraryAlso from "./LibraryAlso.astro";
 import LibraryFeed from "./LibraryFeed.astro";
+import LibraryMix from "./LibraryMix.astro";
+import LibraryNotes from "./LibraryNotes.astro";
 import LibraryTags from "./LibraryTags.astro";
 import LibraryToolbar from "./LibraryToolbar.astro";
 import PostWall from "./PostWall.astro";
 import VideoGrid from "./VideoGrid.astro";
 import type { Kind } from "../lib/library";
-import { KIND_BLURBS, KIND_LABELS, alsoSaved, entryHref, feed } from "../lib/library";
+import { KIND_BLURBS, feed } from "../lib/library";
 import { FILTER, PREPAINT } from "../lib/library-pane";
-import { formatDay } from "../lib/date";
 
 interface Props {
   /** The view this route shows: its kind, "" for All. */
@@ -42,22 +43,15 @@ interface Props {
 
 const { start } = Astro.props;
 
-// The main feed only; "Also saved" entries sit in their own list under All (VET-273).
+// The main feed; each view's "Also saved" entries sit in its own group (VET-273).
 const of = (kind: Kind) => feed.filter((entry) => entry.kind === kind);
 const articles = of("article");
 const [reading] = articles;
 const posts = of("post").filter((entry) => entry.post !== null);
 const videos = of("video");
-const highlight = reading?.highlights[0];
-
-/** The All view's sections after the lead article: kind, how many, all of that kind. */
-const more = [
-  { kind: "post" as const, entries: posts.slice(0, 4), total: of("post").length },
-  { kind: "video" as const, entries: videos.slice(0, 2), total: videos.length },
-].filter((section) => section.entries.length > 0);
 ---
 
-<h1 class="page-title"><Mark shape="underline-double" variant={3}>Library</Mark></h1>
+<h1 class="page-title" data-large-title><Mark shape="underline-double" variant={3}>Library</Mark></h1>
 
 <div class="views__bar">
   <LibraryToolbar />
@@ -71,42 +65,11 @@ const more = [
         Articles, posts and videos I saved to read or watch. My agents digested
         some: cliff notes and a call on whether they&rsquo;re worth your time.
       </p>
-      <div class="view__body mix">
-        {reading && (
-          <a class="lead" href={entryHref(reading)} data-astro-prefetch="hover">
-            <span class="lead__kicker mono"><KindIcon kind="article" /> Latest article</span>
-            <b class="lead__title">{reading.title}</b>
-            {reading.tldr && <p class="lead__tldr">{reading.tldr}</p>}
-            {highlight && (
-              <blockquote class="lead__quote">
-                <mark data-color={highlight.color}>{highlight.text}</mark>
-              </blockquote>
-            )}
-            <small class="lead__meta">
-              <span>{reading.domain}</span>
-              <time datetime={reading.saved_date}>{formatDay(reading.saved_date)}</time>
-            </small>
-          </a>
-        )}
-        {more.map((section) => (
-          <section class="mix__part" aria-labelledby={`mix-${section.kind}`}>
-            <h2 class="mix__head mono" id={`mix-${section.kind}`}>
-              <span>Latest {KIND_LABELS[section.kind].toLowerCase()}</span>
-              <a href={`/library/kind/${section.kind}`}>All {section.total}</a>
-            </h2>
-            {section.kind === "post" ? <PostWall entries={section.entries} compact /> : <VideoGrid entries={section.entries} />}
-          </section>
-        ))}
-        {alsoSaved.length > 0 && (
-          <section class="mix__part" aria-labelledby="mix-also">
-            <h2 class="mix__head mono" id="mix-also">
-              <span>Also saved</span>
-              <span class="tabular-nums">{alsoSaved.length}</span>
-            </h2>
-            <LibraryFeed entries={alsoSaved} quiet />
-          </section>
-        )}
+      <div class="view__body view__mix">
+        <LibraryMix />
+        <LibraryAlso kind="" />
       </div>
+      <LibraryNotes />
     </section>
   )
 }
@@ -123,6 +86,7 @@ const more = [
         <p class="standfirst">{KIND_BLURBS.article}</p>
         <div class="view__body">
           <LibraryFeed entries={articles} filterable />
+          <LibraryAlso kind="article" />
         </div>
       </div>
     </section>
@@ -135,6 +99,7 @@ const more = [
       <p class="standfirst">{KIND_BLURBS.post}</p>
       <div class="view__body">
         <PostWall entries={posts} />
+        <LibraryAlso kind="post" />
       </div>
     </section>
   )
@@ -146,6 +111,7 @@ const more = [
       <p class="standfirst">{KIND_BLURBS.video}</p>
       <div class="view__body">
         <VideoGrid entries={videos} />
+        <LibraryAlso kind="video" />
       </div>
     </section>
   )
@@ -153,6 +119,19 @@ const more = [
 
 <script is:inline set:html={FILTER} />
 <script is:inline set:html={PREPAINT} />
+<script>
+  // The large title folds into the top bar (iOS): while it is on screen the
+  // bar's own "Library" steps aside, and it comes back as the title scrolls
+  // under the bar. All only, where the bar's last step is "Library" too; a
+  // kind route's bar names the kind. Without scripting the bar keeps it.
+  const title = document.querySelector('[data-large-title]:has(~ [data-view=""])');
+  const root = document.documentElement;
+  if (title) {
+    new IntersectionObserver(([seen]) => root.toggleAttribute("data-title-shown", !!seen?.isIntersecting), {
+      rootMargin: "-100px 0px 0px 0px",
+    }).observe(title);
+  }
+</script>
 
 <style>
   /* The phone toolbar: the pane (and its toolbar) hides under 48rem of the
@@ -164,86 +143,11 @@ const more = [
     margin-top: 1.5rem;
   }
 
-  @container split (width >= 48rem) {
-    .views__bar {
-      display: none;
-    }
-  }
-
   .view__body {
     margin-top: var(--gap-masthead);
   }
 
-  /* All: the lead card, then one part per kind, 40px apart (design.md §2). */
-  .mix {
-    display: flex;
-    flex-direction: column;
-    gap: 2.5rem;
-  }
-
-  /* The lead: the post card's surface (a hairline on the page, sharp
-     corners), one link to the entry. */
-  .lead {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    max-width: 48rem;
-    padding: 1.25rem;
-    border: 1px solid var(--hairline);
-    color: var(--text-primary);
-    text-decoration: none;
-  }
-
-  @media (hover: hover) {
-    .lead:hover {
-      border-color: var(--hairline-strong);
-    }
-
-    .lead:hover .lead__title {
-      color: var(--accent);
-    }
-  }
-
-  .lead__kicker {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: var(--text-tertiary);
-  }
-
-  .lead__title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    line-height: 1.35;
-    letter-spacing: -0.01em;
-  }
-
-  .lead__tldr {
-    color: var(--text-secondary);
-    line-height: 1.6;
-  }
-
-  .lead__quote {
-    margin-top: 0.5rem;
-    padding-left: 1rem;
-    border-left: 3px solid var(--hairline-strong);
-    line-height: 1.6;
-  }
-
-  .lead__meta {
-    display: flex;
-    gap: 0.4rem;
-    margin-top: 0.25rem;
-    font-size: 0.8125rem;
-    color: var(--text-tertiary);
-  }
-
-  .lead__meta > * + *::before {
-    content: "\00b7" / "";
-    margin-right: 0.4rem;
-  }
-
-  .mix__head {
+  .view :global(.mix__head) {
     display: flex;
     justify-content: space-between;
     gap: 1rem;
@@ -251,7 +155,7 @@ const more = [
     color: var(--text-tertiary);
   }
 
-  .mix__head a {
+  .view :global(.mix__head a) {
     color: var(--text-secondary);
     text-decoration: underline;
     text-decoration-color: var(--hairline-strong);
@@ -259,9 +163,40 @@ const more = [
   }
 
   @media (hover: hover) {
-    .mix__head a:hover {
+    .view :global(.mix__head a:hover) {
       color: var(--accent);
       text-decoration-color: currentColor;
+    }
+  }
+
+  /* The phone's list (All, under 48rem): the page is the list, as in Notes. */
+  .view__mix,
+  .view[data-view=""] .standfirst {
+    display: none;
+  }
+
+  /* The bar's "Library" steps aside while the large title shows (the script
+     above), on a phone where the title folds into the bar. */
+  @media (max-width: 767px) {
+    :global(.crumbs__here) {
+      transition-property: opacity;
+      transition-duration: var(--dur-fast);
+      transition-timing-function: var(--ease);
+    }
+
+    :global(html[data-title-shown] .crumbs__here) {
+      opacity: 0;
+    }
+  }
+
+  @container split (width >= 48rem) {
+    .views__bar {
+      display: none;
+    }
+
+    .view__mix,
+    .view[data-view=""] .standfirst {
+      display: block;
     }
   }
 

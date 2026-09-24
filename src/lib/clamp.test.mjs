@@ -60,7 +60,7 @@ const code = (source) => source.replace(/\{?\/\*[\s\S]*?\*\/\}?/g, "");
  */
 const LISTINGS = [
   "components/LibraryList.astro",
-  "components/LibraryPane.astro",
+  "components/LibraryRows.astro",
   "components/PreviewCard.astro",
   "components/ToolGrid.astro",
   "components/ToolList.astro",

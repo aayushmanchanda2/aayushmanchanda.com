@@ -224,8 +224,8 @@ const EXPECTED = [
      * survived the build, which is what it was before the split.
      *
      * The one-segment pattern cannot collide with the filter group below:
-     * /library/kind/<kind>, /library/domain/<host> and /library/tag/<tag> are
-     * all two segments deep.
+     * /library/kind/<kind> and /library/domain/<host> are both two segments
+     * deep.
      */
     name: "library details (digested)",
     match: (page) => /^library\/[^/]+\/index\.html$/.test(page),
@@ -253,7 +253,7 @@ const EXPECTED = [
   {
     name: "filter",
     match: (page) =>
-      /^(tools\/(category|verdict)|sites\/(collection|domain)|library\/(kind|domain|tag))\/[^/]+\/index\.html$/.test(
+      /^(tools\/(category|verdict)|sites\/(collection|domain)|library\/(kind|domain))\/[^/]+\/index\.html$/.test(
         page,
       ),
     types: ["ItemList", "BreadcrumbList"],

@@ -45,7 +45,14 @@ const { entries } = Astro.props;
   .vgrid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(15rem, 100%), 1fr));
-    gap: 2rem 1rem;
+    gap: 1.25rem 1rem;
+  }
+
+  /* A hairline over every tile (E8, VET-282), so a column of posters reads
+     as a list of items rather than one run of pictures and captions. */
+  .vgrid li {
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--hairline);
   }
 
   .vtile {

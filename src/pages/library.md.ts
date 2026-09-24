@@ -74,7 +74,7 @@ function blockMarkdown(entry: LibraryEntry & { block: NonNullable<LibraryEntry["
 
 export const GET: APIRoute = () => {
   // Tags as the slugs rather than as the words the chips read, because a slug
-  // is what `/library/tag/<slug>` is built from and an agent reading this table
+  // is what `/library?tags=<slug>` filters by and an agent reading this table
   // is being handed the route, not the prose.
   const rows = library.map((entry) => [
     link(entry.title, absolute(`/library/${entry.slug}`)),
@@ -132,7 +132,7 @@ export const GET: APIRoute = () => {
         list(
           libraryTags.map(
             (group) =>
-              `${group.slug} (${group.entries.length}): ${absolute(`/library/tag/${group.slug}`)}`,
+              `${group.slug} (${group.entries.length}): ${absolute(`/library?tags=${group.slug}`)}`,
           ),
         ),
       ),

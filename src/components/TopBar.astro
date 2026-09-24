@@ -6,8 +6,9 @@
  * a filter would make this the containing block for the menu panel's
  * `position: fixed` and clip it to the bar. A press on its empty stretch
  * scrolls to the top (script below). `Base.astro` works out the items and the
- * trail; this draws them. While Aayush is signed in, `lib/signed-in.ts` adds
- * "Private" and "Sign out" at its end.
+ * trail; this draws them. Search is on every width: the word and ⌘K from
+ * 600px, the glyph alone on a phone (VET-282). While Aayush is signed in,
+ * `lib/signed-in.ts` adds "Private" and "Sign out" at its end.
  */
 import Breadcrumbs from "./Breadcrumbs.astro";
 import MobileNav from "./MobileNav.astro";
@@ -32,7 +33,11 @@ const { navItems, pathname, trail } = Astro.props;
     data-palette-open
     data-mnav-inert
   >
-    Search <kbd data-palette-hint>&#8984;K</kbd>
+    <svg class="bar__glyph" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+      <circle cx="7" cy="7" r="4.5"></circle>
+      <path d="M10.5 10.5 L14 14" stroke-linecap="round"></path>
+    </svg>
+    <span class="bar__word">Search</span> <kbd data-palette-hint>&#8984;K</kbd>
   </button>
 </header>
 
@@ -98,9 +103,38 @@ const { navItems, pathname, trail } = Astro.props;
     outline-offset: -2px;
   }
 
-  /* A phone's bar is the trail's: search is one press away in the menu. */
+  .bar__glyph {
+    display: none;
+  }
+
+  /* A phone gets the glyph alone, top right and always there (VET-282, E4):
+     a 44px target, the word kept for a screen reader, no key to legend. */
   @media (max-width: 599px) {
     .bar__search {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      color: var(--text-primary);
+    }
+
+    .bar__glyph {
+      display: block;
+      width: 1.125rem;
+      height: 1.125rem;
+    }
+
+    .bar__word {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    .bar__search kbd {
       display: none;
     }
   }

@@ -7,9 +7,8 @@
  * (VET-258). It keeps what the old rows list showed that mattered: title,
  * kind, source and date.
  *
- * `filterable` writes the tags onto each row, so the pane's tag select narrows
- * it (`lib/library-pane.ts › FILTER`). The All view's latest twelve leave it
- * off: a "latest" list that a filter could empty would be a different list.
+ * `filterable` writes the tags onto each row, so the library's filter narrows
+ * it (`lib/library-pane.ts › FILTER`).
  *
  * An entry with a block shows its tip on the one line instead of the TLDR
  * (VET-273). `quiet` is the "Also saved" list: title, domain and date only.
@@ -52,8 +51,13 @@ const { entries, filterable = false, quiet = false } = Astro.props;
   .feed {
     display: flex;
     flex-direction: column;
-    gap: 2px;
     max-width: 48rem;
+  }
+
+  /* A hairline between two items (E8, VET-282): a phone's Articles list is
+     a column of titles, and without a rule they run together. */
+  .feed li + li {
+    border-top: 1px solid var(--hairline);
   }
 
   /* The pane row's look: a 12px-radius block, hover instant and the same
