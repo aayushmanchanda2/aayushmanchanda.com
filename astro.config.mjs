@@ -35,7 +35,10 @@ const MARKDOWN_VARIANTS = Object.values(PAGES).map((page) => absolute(page.md));
 
 const LASTMOD = lastmods();
 
-/** A built page that asks not to be indexed (`Base.astro › noindex`) is not in the sitemap. */
+/**
+ * A built page that asks not to be indexed (`Base.astro › noindex`) is not in the sitemap.
+ * @param {string} page
+ */
 const noindexed = (page) => {
   const file = fileURLToPath(new URL(`./dist${new URL(page).pathname}index.html`, import.meta.url));
   return existsSync(file) && readFileSync(file, 'utf8').includes('<meta name="robots" content="noindex"');
