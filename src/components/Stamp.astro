@@ -6,6 +6,7 @@
  * it is `aria-hidden`; `styles/frame.css` draws it.
  */
 import { formatDay } from "../lib/date";
+import { experiments } from "../lib/experiments";
 import { feedItems } from "../lib/feeds";
 import { FEED_SECTIONS, type FeedSection, getSections } from "../lib/sections";
 
@@ -21,9 +22,14 @@ const { href, index } = Astro.props;
 const current = (await getSections()).find((section) => section.href === href);
 const denomination = current && (index ? `${current.name} · ${current.count}` : current.name);
 
-/** The section's newest entry, the date its feed would say it last changed. */
+/** The section's newest entry, the date its feed would say it last changed.
+    /experiments has no feed, so its newest start date stands in (VET-280). */
 const feed = index && FEED_SECTIONS.find((section): section is FeedSection => section === href);
-const updated = feed ? (await feedItems(feed)).map((item) => item.date).sort().at(-1) : undefined;
+const updated = feed
+  ? (await feedItems(feed)).map((item) => item.date).sort().at(-1)
+  : index && href === "/experiments"
+    ? experiments.map((experiment) => experiment.started).sort().at(-1)
+    : undefined;
 ---
 
 <div class="stamp" aria-hidden="true">
