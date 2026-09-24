@@ -439,16 +439,16 @@ test("every {@id} reference resolves inside its own graph", () => {
 
 // --- URLs ------------------------------------------------------------------
 
-test("pageUrl builds the directory-format URL Astro actually serves", () => {
+test("pageUrl builds the one URL a page is served at, with no trailing slash", () => {
   assert.equal(pageUrl("/"), `${ORIGIN}/`);
-  assert.equal(pageUrl("/tools"), `${ORIGIN}/tools/`);
-  assert.equal(pageUrl("/tools/paperclip"), `${ORIGIN}/tools/paperclip/`);
-  // Idempotent, so a caller that already has the slash cannot double it.
-  assert.equal(pageUrl("/tools/"), `${ORIGIN}/tools/`);
+  assert.equal(pageUrl("/tools"), `${ORIGIN}/tools`);
+  assert.equal(pageUrl("/tools/paperclip"), `${ORIGIN}/tools/paperclip`);
+  // A slashed path comes back in the one spelling.
+  assert.equal(pageUrl("/tools/"), `${ORIGIN}/tools`);
 });
 
 test("anchorUrl points at a row on a page that has no page of its own", () => {
-  assert.equal(anchorUrl("/experiments", "aayushos"), `${ORIGIN}/experiments/#aayushos`);
+  assert.equal(anchorUrl("/experiments", "aayushos"), `${ORIGIN}/experiments#aayushos`);
 });
 
 // --- home ------------------------------------------------------------------
@@ -489,7 +489,7 @@ test("about is an AboutPage whose subject is the Person it carries", () => {
 
   const page = at(document, 0);
   assert.equal(page["name"], "About");
-  assert.equal(page["url"], `${ORIGIN}/about/`);
+  assert.equal(page["url"], `${ORIGIN}/about`);
   assert.equal(page["mainEntity"]["@id"], PERSON_ID);
 
   // No crumb, because the page draws none: it is reached from the footer.
@@ -517,7 +517,7 @@ test("contact is a ContactPage, and it never carries the address", () => {
 
   const page = at(document, 0);
   assert.equal(page["name"], "Contact");
-  assert.equal(page["url"], `${ORIGIN}/contact/`);
+  assert.equal(page["url"], `${ORIGIN}/contact`);
   assert.equal(page["mainEntity"]["@id"], PERSON_ID);
 
   /*
@@ -540,8 +540,8 @@ test("design is one WebPage and claims nothing the page cannot show", () => {
 
   const page = at(document, 0);
   assert.equal(page["name"], "Design");
-  assert.equal(page["url"], `${ORIGIN}/design/`);
-  assert.equal(page["@id"], `${ORIGIN}/design/#webpage`);
+  assert.equal(page["url"], `${ORIGIN}/design`);
+  assert.equal(page["@id"], `${ORIGIN}/design#webpage`);
 
   /*
    * The parity rule, at its shortest. The page is a specimen sheet: its content
@@ -573,15 +573,15 @@ test("what the reader sees on /contact is what the Person node claims", () => {
 
 test("a list counts what it carries and numbers it from one", () => {
   const entries = [
-    { name: "One", url: `${ORIGIN}/tools/one/` },
-    { name: "Two", url: `${ORIGIN}/tools/two/` },
-    { name: "Three", url: `${ORIGIN}/tools/three/` },
+    { name: "One", url: `${ORIGIN}/tools/one` },
+    { name: "Two", url: `${ORIGIN}/tools/two` },
+    { name: "Three", url: `${ORIGIN}/tools/three` },
   ];
   const list = at(listJsonLd({ name: "Tools", path: "/tools", entries }), 0);
 
   assert.equal(list["@type"], "ItemList");
   assert.equal(list["name"], "Tools");
-  assert.equal(list["url"], `${ORIGIN}/tools/`);
+  assert.equal(list["url"], `${ORIGIN}/tools`);
   assert.equal(list["numberOfItems"], 3);
   assert.deepEqual(
     list["itemListElement"].map((/** @type {Record<string, any>} */ item) => item["position"]),
@@ -629,8 +629,8 @@ test("only a filter page gets a crumb, because only a filter page draws one", ()
     ]),
     [
       [1, "Aayush Manchanda", `${ORIGIN}/`],
-      [2, "Tools", `${ORIGIN}/tools/`],
-      [3, "agent infra", `${ORIGIN}/tools/category/agent-infra/`],
+      [2, "Tools", `${ORIGIN}/tools`],
+      [3, "agent infra", `${ORIGIN}/tools/category/agent-infra`],
     ],
     "three steps, as the top bar prints them: home, the section, the page",
   );
@@ -667,7 +667,7 @@ test("a tool is a SoftwareApplication reviewed by the Person", () => {
   assert.equal(review["itemReviewed"]["@id"], software["@id"]);
   assert.equal(review["author"]["@id"], PERSON_ID);
   assert.equal(review["datePublished"], "2026-08-17");
-  assert.equal(review["url"], `${ORIGIN}/tools/paperclip/`);
+  assert.equal(review["url"], `${ORIGIN}/tools/paperclip`);
 });
 
 test("the software's url is the link the page's Source line actually offers", () => {
@@ -730,7 +730,7 @@ test("a site page is about the site, and owns the screenshot", () => {
   const shot = at(document, 1);
 
   assert.equal(page["name"], "Save.design");
-  assert.equal(page["url"], `${ORIGIN}/sites/save-design/`);
+  assert.equal(page["url"], `${ORIGIN}/sites/save-design`);
   assert.equal(page["dateCreated"], "2026-08-26");
 
   // Theirs.
@@ -753,7 +753,7 @@ test("a digested entry is a Review of an external thing, by the Person, dated th
   assert.deepEqual(typesIn(document), ["Review", "Person", "BreadcrumbList"]);
 
   const review = at(document, 0);
-  assert.equal(review["url"], `${ORIGIN}/library/how-gumclaw-works/`);
+  assert.equal(review["url"], `${ORIGIN}/library/how-gumclaw-works`);
   assert.equal(review["author"]["@id"], PERSON_ID);
   assert.equal(review["datePublished"], "2026-08-27", "the digest's date, not the save's");
 
@@ -827,8 +827,8 @@ test("digestReviewBody is the page's own sentences, in the order the page stacks
    --------------------------------------------------------------------------- */
 
 test("a library row's list URL is the entry's own page, digested or not", () => {
-  assert.equal(libraryRowUrl(DIGESTED_ENTRY), `${ORIGIN}/library/how-gumclaw-works/`);
-  assert.equal(libraryRowUrl(SAVED_ENTRY), `${ORIGIN}/library/a-saved-video/`);
+  assert.equal(libraryRowUrl(DIGESTED_ENTRY), `${ORIGIN}/library/how-gumclaw-works`);
+  assert.equal(libraryRowUrl(SAVED_ENTRY), `${ORIGIN}/library/a-saved-video`);
 });
 
 test("an entry with no digest is a WebPage about the thing, and no Review", () => {
@@ -841,7 +841,7 @@ test("an entry with no digest is a WebPage about the thing, and no Review", () =
 
   const page = at(document, 0);
   assert.equal(page["name"], "How the harness actually runs");
-  assert.equal(page["url"], `${ORIGIN}/library/a-saved-video/`);
+  assert.equal(page["url"], `${ORIGIN}/library/a-saved-video`);
   assert.equal(page["dateCreated"], "2026-08-14", "the saved date the strip prints");
   assert.equal(page["description"], SAVED_ENTRY.note, "the standfirst, and only when there is one");
 

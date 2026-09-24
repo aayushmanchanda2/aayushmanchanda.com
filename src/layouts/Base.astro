@@ -139,14 +139,15 @@ const trail: Crumb[] = trailOf(jsonLd) ??
   (section ? [{ name: section.label, path: section.href }] : []);
 
 /**
- * The canonical URL for this page.
+ * The canonical URL for this page, with no trailing slash: the spelling every
+ * internal link uses, and the only one Vercel serves (`vercel.json` 308s `/x/`).
  *
  * Built through `absolute()` rather than `Astro.site`, though the two hold the
  * same value: `Astro.site` is typed `URL | undefined`, and reading the origin
  * from the module that owns it keeps the DNS cutover a genuinely one-line
  * change instead of one line plus a fallback that could quietly disagree.
  */
-const canonical = absolute(pathname);
+const canonical = absolute(normalize(pathname));
 
 const image = Astro.props.image ?? (await ogImageFor(normalize(pathname)));
 const ogImage = absolute(image.src);

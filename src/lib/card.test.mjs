@@ -245,7 +245,7 @@ test("the row, the card, the tile and the graph send a reader to the same place"
 
     assert.equal(href, `/library/${entry.slug}`);
     assert.ok(
-      claimed.endsWith(`${href}/`),
+      claimed.endsWith(href),
       `${entry.slug}: the graph claims ${claimed} where the markup points at ${href}`,
     );
   }

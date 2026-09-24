@@ -76,13 +76,16 @@ export function absolutizeHtml(html: string, origin: string): string {
 
 export function renderFeed(channel: Channel, origin: string): string {
   const url = (path: string) => escapeXml(new URL(path, origin).href);
-  // With the trailing slash, so link and guid are the page's canonical URL.
-  const page = (path: string) => url(path.replace(/\/?$/, "/"));
+  // The link is the page's canonical URL, no trailing slash (VET-281). The
+  // guid keeps the slashed spelling it shipped with: it still resolves (a
+  // 308), and changing it would show every reader every item again as new.
+  const page = (path: string) => url(path.length > 1 ? path.replace(/\/$/, "") : path);
+  const guid = (path: string) => url(path.replace(/\/?$/, "/"));
   const items = channel.items.map(
     (item) => `    <item>
       <title>${escapeXml(item.title)}</title>
       <link>${page(item.path)}</link>
-      <guid isPermaLink="true">${page(item.path)}</guid>
+      <guid isPermaLink="true">${guid(item.path)}</guid>
       <pubDate>${rfc822(item.date)}</pubDate>
       <category>${escapeXml(item.section)}</category>
       <description>${escapeXml(absolutizeHtml(item.html, origin))}</description>

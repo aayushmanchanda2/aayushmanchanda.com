@@ -135,15 +135,15 @@ const PERSON_DESCRIPTION =
  * A page's canonical URL, in the exact form `Base.astro` puts in the canonical
  * link.
  *
- * Astro builds directory-format routes, so every page's real URL ends in a
- * slash. Emitting `/tools/paperclip` in the graph while the canonical link says
- * `/tools/paperclip/` would hand a crawler two URLs for one page and let it
- * decide whether they are the same document. `scripts/validate-schema.mjs`
+ * No trailing slash (VET-281): every internal link is written `/tools/paperclip`,
+ * and `vercel.json` 308s `/tools/paperclip/` there, so that is the page's one
+ * URL. Emitting another spelling in the graph than the canonical link says
+ * would hand a crawler two URLs for one page. `scripts/validate-schema.mjs`
  * compares the two on every built page, so this cannot drift on its own.
  */
 export function pageUrl(path: string): string {
-  const trimmed = path.endsWith("/") ? path.slice(0, -1) : path;
-  return absolute(`${trimmed}/`);
+  const trimmed = path.length > 1 && path.endsWith("/") ? path.slice(0, -1) : path;
+  return absolute(trimmed);
 }
 
 /** A URL for one row of a page that has no page of its own (`/experiments`). */

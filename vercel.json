@@ -211,7 +211,7 @@
       "headers": {
         "Content-Type": "text/markdown; charset=utf-8",
         "Vary": "Accept, Accept-Encoding",
-        "Link": "<https://aayushmanchanda.com/$1/>; rel=\"canonical\""
+        "Link": "<https://aayushmanchanda.com/$1>; rel=\"canonical\""
       },
       "continue": true
     },
@@ -221,6 +221,13 @@
         "Content-Type": "text/plain; charset=utf-8"
       },
       "continue": true
+    },
+    {
+      "src": "^/(.+)/$",
+      "status": 308,
+      "headers": {
+        "Location": "/$1"
+      }
     },
     {
       "handle": "filesystem"

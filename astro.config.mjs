@@ -4,6 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
 import { fileURLToPath } from 'node:url';
 
+import { lastmods } from './src/lib/lastmod.ts';
 import { PAGES } from './src/lib/markdown.ts';
 import { SITE_URL, absolute } from './src/lib/site.ts';
 
@@ -30,6 +31,8 @@ import { SITE_URL, absolute } from './src/lib/site.ts';
  * the sitemap, which is backwards for this site.
  */
 const MARKDOWN_VARIANTS = Object.values(PAGES).map((page) => absolute(page.md));
+
+const LASTMOD = lastmods();
 
 /**
  * The /me harness (`src/fixtures/MeFixture.astro`): a route under `astro dev`
@@ -123,17 +126,19 @@ export default defineConfig({
       customPages: MARKDOWN_VARIANTS,
 
       /**
-       * A build-time `lastmod` on every entry, so an agent can tell how stale
-       * the site is without fetching each page.
-       *
-       * Build time rather than per-page content dates: this site rebuilds when
-       * its content changes (the publish pipeline commits, Vercel rebuilds), so
-       * the two are the same date in practice, and Astro does not hand the
-       * integration a per-route content date to use instead. The markdown
-       * variants carry a real per-section `last-updated` in their frontmatter
-       * for anything that needs the precise answer.
+       * One URL per page, the one every internal link and the canonical use:
+       * no trailing slash (`vercel.json` 308s the slashed spelling). And a
+       * `lastmod` only where the page prints a date (`lib/lastmod.ts`): the
+       * build time on every URL told a crawler every page changed on every
+       * deploy, which is the same as telling it nothing.
        */
-      lastmod: new Date(),
+      serialize(item) {
+        const page = new URL(item.url).pathname.replace(/(.)\/$/, '$1');
+        item.url = absolute(page);
+        const date = LASTMOD.get(page.replace(/(\/index)?\.md$/, '') || '/');
+        if (date) item.lastmod = date;
+        return item;
+      },
 
       /**
        * `/robots.txt` and `/llms.txt` are instructions to a crawler, not
