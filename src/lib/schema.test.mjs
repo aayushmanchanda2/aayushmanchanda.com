@@ -748,31 +748,34 @@ test("a site page is about the site, and owns the screenshot", () => {
 
 // --- library ---------------------------------------------------------------
 
-test("a digested entry is a Review of an external thing, by the Person, dated the digest", () => {
+test("a digested entry is a WebPage the Person publishes, never a Review he wrote", () => {
   const document = libraryJsonLd(DIGESTED_ENTRY);
-  assert.deepEqual(typesIn(document), ["Review", "Person", "BreadcrumbList"]);
+  assert.deepEqual(typesIn(document), ["WebPage", "Person", "BreadcrumbList"]);
 
-  const review = at(document, 0);
-  assert.equal(review["url"], `${ORIGIN}/library/how-gumclaw-works`);
-  assert.equal(review["author"]["@id"], PERSON_ID);
-  assert.equal(review["datePublished"], "2026-08-27", "the digest's date, not the save's");
+  const page = at(document, 0);
+  assert.equal(page["url"], `${ORIGIN}/library/how-gumclaw-works`);
+  assert.equal(page["publisher"]["@id"], PERSON_ID, "he put it on his site");
+  assert.equal(page["author"], undefined, "an agent wrote the digest, so nobody is its author here");
+  assert.equal(page["abstract"], digestReviewBody(DIGESTED_ENTRY));
+  assert.equal(page["dateModified"], "2026-08-27", "the digest's date");
+  assert.ok(!serialize(document).includes('"Review"'), "no Review anywhere in the graph");
 
   /*
    * Theirs, nested — the same call `siteJsonLd` makes about its `about`. The
    * piece is external, so it gets no `@id` on this origin and no property the
    * page cannot show: a title, its own URL, and the kind translated to a type.
    */
-  assert.deepEqual(review["itemReviewed"], {
+  assert.deepEqual(page["about"], {
     "@type": "Article",
     name: "How Gumclaw Works",
     url: "https://gumclaw.github.io/how-i-work/",
   });
 });
 
-test("the kind decides what the reviewed thing is", () => {
+test("the kind decides what the saved thing is", () => {
   /** @param {import("./library.ts").Kind} kind */
   const asKind = (kind) =>
-    at(libraryJsonLd({ ...DIGESTED_ENTRY, kind }), 0)["itemReviewed"]["@type"];
+    at(libraryJsonLd({ ...DIGESTED_ENTRY, kind }), 0)["about"]["@type"];
 
   assert.equal(asKind("article"), "Article");
   assert.equal(asKind("post"), "SocialMediaPosting");
@@ -845,8 +848,7 @@ test("an entry with no digest is a WebPage about the thing, and no Review", () =
   assert.equal(page["dateCreated"], "2026-08-14", "the saved date the strip prints");
   assert.equal(page["description"], SAVED_ENTRY.note, "the standfirst, and only when there is one");
 
-  // Theirs, nested, typed by the kind — the same shape the digested branch
-  // gives `itemReviewed`.
+  // Theirs, nested, typed by the kind — the same shape the digested branch has.
   assert.deepEqual(page["about"], {
     "@type": "VideoObject",
     name: "How the harness actually runs",
