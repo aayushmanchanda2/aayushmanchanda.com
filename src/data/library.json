@@ -1997,7 +1997,40 @@
     "domain": "colossus.com",
     "saved_date": "2026-09-24",
     "kind": "article",
-    "note": "Brie Wolfson's 60-day dispatch from Cursor examines its in-person culture, person-first recruiting, deep-work norms, and focus on product craft over financial milestones."
+    "note": "Brie Wolfson's 60-day dispatch from Cursor examines its in-person culture, person-first recruiting, deep-work norms, and focus on product craft over financial milestones.",
+    "tldr": "Brie Wolfson reports on Cursor’s in-person culture, talent-first recruiting, deep-work norms, dogfooding, constructive friction, and focus on raising expert developers’ ceiling.",
+    "highlights": [
+      {
+        "text": "Michael often says he wants Cursor to be a “haven for self-motivated individual contributors.” And so far, it is.",
+        "note": "Individual contributors hold the highest status in the company.",
+        "color": "amber"
+      },
+      {
+        "text": "Because Cursor team members are Cursor’s ideal users, everyone is looking for product-market fit internally on the features and infrastructure they believe in.",
+        "note": "Heavy dogfooding makes internal adoption an early product signal.",
+        "color": "blue"
+      },
+      {
+        "text": "At Cursor, critics are also problem-solvers. The “friction” here works because everyone genuinely wants the best for the product and each other.",
+        "note": "Feedback is paired with ownership and help.",
+        "color": "green"
+      }
+    ],
+    "excerpt": "Editor’s note: This is the first installment in a series of Company Dispatches, in which a member of Colossus or Positive Sum temporarily embeds with a company, either as an employee, investor, or informal observer, and reports back on their impressions.",
+    "block": {
+      "best_for": "Leaders designing a high-agency product culture",
+      "tip": "Treat recruiting as finding exceptional people, then give owners ambitious work and protect deep work.",
+      "needs": [
+        "A product the team can dogfood",
+        "High trust in individual contributors",
+        "Direct, constructive feedback"
+      ],
+      "start_here": [
+        "Recruit around people, not job specs",
+        "Give one owner an ambitious problem",
+        "Run silent fuzz sessions before major releases"
+      ]
+    }
   },
   {
     "slug": "writing-rust-code-that-s-faster-than-state-of-the-art-librar",
