@@ -14,20 +14,18 @@
  * not ask again.
  *
  * With the rows it adds "Private N" and "Sign out" to the top bar, merges the
- * rows into a library pane when the page has one (`lib/pane-merge.ts`; on a
- * phone, where the pane hides, on top of /library's All view), and
+ * rows into every copy of the library list on the page (`lib/pane-merge.ts`), and
  * puts them in ⌘K. Sign out is Clerk's own, in place, and lands back on this
  * page signed out (on a /me page, home, since /me would only ask him to sign in).
  */
 import { runInjectionScript } from "@clerk/astro/internal";
 
-import { LOCK_SVG, mergePane, mergePhone } from "./pane-merge";
+import { LOCK_SVG, mergePane } from "./pane-merge";
 import type { PaneRow } from "./private";
 import type { SearchEntry } from "./search";
 
 const CSS = `
-.me-bar{display:flex;align-items:center;flex-shrink:0;margin-left:auto}
-@media (min-width:600px){.me-bar{margin-left:.25rem}}
+.me-bar{display:flex;align-items:center;flex-shrink:0;margin-left:.25rem}
 @media (max-width:599px){.me-bar__word{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}}
 .me-bar__item{display:inline-flex;align-items:center;gap:.375rem;min-height:40px;padding:.625rem .5rem;color:var(--text-secondary);text-decoration:none;cursor:pointer;transition-property:color;transition-duration:var(--dur-fast);transition-timing-function:var(--ease)}
 .me-bar__item .tabular-nums{color:var(--text-tertiary)}
@@ -108,8 +106,7 @@ const clerk = await signedIn();
 const rows = clerk && (await privateRows(clerk));
 if (clerk && rows) {
   if (document.readyState === "loading") await new Promise((done) => document.addEventListener("DOMContentLoaded", done, { once: true }));
-  bar(clerk, rows.filter((row) => !row.also).length);
-  mergePhone(rows);
+  bar(clerk, rows.length);
   mergePane(rows);
   search(rows);
 }
