@@ -1,0 +1,95 @@
+---
+/**
+ * LibraryNotes — /library All's list on a phone (VET-282, E1): the rows
+ * (`LibraryRows.astro`, the pane's own list drawn a second time) shown the
+ * way Apple Notes shows notes on an iPhone. The pane hides under 48rem of the
+ * split, so this shows exactly there. `FILTER` filters it with the pane's
+ * copy, and `lib/pane-merge.ts` adds private rows (lock badges) to both.
+ */
+import LibraryRows from "./LibraryRows.astro";
+import { library } from "../lib/library";
+---
+
+<div class="notes">
+  <LibraryRows entries={library} />
+  <p class="notes__empty" data-filter-empty hidden>No entries match these filters. <a href="/library">Show all</a></p>
+</div>
+
+<style>
+  .notes__empty {
+    padding-block: 1.5rem;
+    color: var(--text-secondary);
+  }
+
+  /* Notes' row: a 16px bold title, then the kind and host, then the summary. */
+  .notes :global(.rows b) {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  /* Pressed shows on the press, not the release (apple-design §1). */
+  .notes :global(.rows li > a:active) {
+    background: linear-gradient(var(--hairline), var(--hairline)), var(--row-bg, transparent);
+  }
+
+  /* Inset grouped (variant A of two, VET-282; the plain edge-to-edge list
+     lost: `qa/evidence/2026-09-23-vet-282/e1-variants.png`): each month a
+     rounded card of rows on a raised fill, its header above it. `FILTER`
+     marks each group's first and last shown row (`data-edge`), so the
+     corners follow the filter. */
+  .notes {
+    --row-bg: var(--surface-selected);
+
+    margin-top: 1rem;
+  }
+
+  .notes :global(.rows) {
+    gap: 0;
+    padding: 0;
+  }
+
+  .notes :global(.rows .pane__month) {
+    padding: 1.5rem 0.25rem 0.5rem;
+    background: none;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .notes :global(.rows .pane__also) {
+    margin-top: 0.5rem;
+    color: var(--text-secondary);
+  }
+
+  .notes :global(.rows li:not([data-month]) > a) {
+    padding: 0.75rem 1rem;
+    border-radius: 0;
+    background: var(--row-bg);
+    box-shadow: none;
+  }
+
+  .notes :global(.rows [data-edge~="first"] > a) {
+    border-start-start-radius: var(--r-lg);
+    border-start-end-radius: var(--r-lg);
+  }
+
+  .notes :global(.rows [data-edge~="last"] > a) {
+    border-end-start-radius: var(--r-lg);
+    border-end-end-radius: var(--r-lg);
+  }
+
+  .notes :global(.rows li > a::before) {
+    inset-inline: 1rem 0;
+  }
+
+  .notes :global(.rows [data-edge~="first"] > a::before) {
+    display: none;
+  }
+
+  @container split (width >= 48rem) {
+    .notes {
+      display: none;
+    }
+  }
+</style>

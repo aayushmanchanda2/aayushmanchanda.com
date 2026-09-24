@@ -3,7 +3,8 @@
  * Breadcrumbs — the trail in the top bar: `Aayush Manchanda / Tools / Notion`.
  *
  * Home is the first link, so the name is the way home from anywhere; a
- * three-step trail under 640px drops it, so the title is readable.
+ * three-step trail under 640px drops it, so the title is readable, and its
+ * parent becomes iOS's back button, "‹ Library" (VET-282).
  * The last step is the page itself: plain text with `aria-current`, never a
  * link to where the reader already is. `Base.astro` works out the trail, from
  * the page's `BreadcrumbList` when it has one, so the JSON-LD and this markup
@@ -91,12 +92,51 @@ const steps = [HOME, ...Astro.props.trail];
   /* Three deep on a phone, home steps out so the page's own title has room
      (it was a few characters at 390). The name is still one tap away in Menu. */
   @media (max-width: 639px) {
+    /* The bar holds search on a phone too (VET-282), and signed in it holds
+       "Private" and "Sign out": home gives way first, to an ellipsis. */
+    .crumbs__step:first-child {
+      flex-shrink: 1;
+    }
+
     .crumbs__list:has(> :nth-child(3)) > .crumbs__step:first-child {
       display: none;
     }
 
     .crumbs__list:has(> :nth-child(3)) > .crumbs__step:nth-child(2)::before {
       content: none;
+    }
+
+    /* iOS's back button (VET-282): on an entry the parent reads "‹ Library"
+       and the slash before the title goes, so the trail is a way back first.
+       The chevron is drawn, so it is never read out; the link's name stays. */
+    .crumbs__list:has(> :nth-child(3)) > .crumbs__step:nth-last-child(2) .crumbs__link {
+      display: flex;
+      align-items: center;
+      gap: 0.125rem;
+      padding-left: 0.25rem;
+      color: var(--accent);
+    }
+
+    .crumbs__list:has(> :nth-child(3)) > .crumbs__step:nth-last-child(2) .crumbs__link::before {
+      content: "";
+      flex: none;
+      width: 1rem;
+      height: 1rem;
+      background: currentColor;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 3L5 8l5 5'/%3E%3C/svg%3E") center / contain no-repeat;
+    }
+
+    .crumbs__list:has(> :nth-child(3)) > .crumbs__step:last-child::before {
+      content: none;
+    }
+  }
+
+  /* A forced palette repaints backgrounds to Canvas, which would erase the
+     masked chevron; paint it in the link's own system colour. */
+  @media (forced-colors: active) {
+    .crumbs__link::before {
+      forced-color-adjust: none;
+      background: LinkText;
     }
   }
 
