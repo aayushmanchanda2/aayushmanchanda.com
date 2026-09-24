@@ -426,6 +426,12 @@ test("a list the post wrote one per line stays one per line (VET-284, the Waterl
   assert.equal(parsePost(markdown, POST_URL)?.text, "Get into:\n\n•Why she takes jobs\n•What makes software magical\n\n(00:00) Intro\n(02:00) First job");
 });
 
+test("an Article's own headings stay in the text; only the thread ends it (VET-285)", () => {
+  // "Make money, make no mistakes" stopped at its first `## Setup`.
+  const markdown = postMarkdown({ text: "Intro line.\n\n## Setup\nIt runs on Devin.\n\n### Language\nIt switched languages." });
+  assert.equal(parsePost(markdown, POST_URL)?.text, "Intro line.\n\nSetup\n\nIt runs on Devin.\n\nLanguage\n\nIt switched languages.");
+});
+
 test("the URL is the second source for a handle the heading did not give", () => {
   const markdown = ["Posted: 2026-07-26", "", "## Post", "", "No heading, no author line.", ""].join(
     "\n",

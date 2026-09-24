@@ -442,9 +442,17 @@ function postedDate(markdown) {
   return new Date(time).toISOString().slice(0, 10);
 }
 
-/** The body heading, and whatever heading ends it. */
+/**
+ * The body heading, and the post-processor's own sections that end it. Not any
+ * heading (VET-285): an X Article carries its own `## Setup`-style headings,
+ * and "Make money, make no mistakes" stopped at its first one.
+ * ponytail: the three section names seen in real responses; a new one would run
+ * into the text until it is added here.
+ */
 const POST_HEADING = /^#{1,3}\s+Post\s*$/im;
-const NEXT_HEADING = /^#{1,3}\s+\S/m;
+const NEXT_HEADING = /^#{1,3}[ \t]+(?:Thread|Top Comments|Engagement)[ \t]*$/im;
+/** A heading inside the post's own words: kept as its own paragraph, markers off. */
+const BODY_HEADING = /^#{1,6}[ \t]+(.+)$/gm;
 
 /**
  * x.com paths whose first segment is the site's own routing rather than a
@@ -518,6 +526,7 @@ function flatten(body) {
       // this line is on the ordinary path, not an exotic one.
       .replace(/^[ \t]*>[ \t]?/gm, "")
       .replace(/\*\*(.+?)\*\*/gs, "$1")
+      .replace(BODY_HEADING, "\n$1\n")
       .split(/\n[ \t]*\n/)
       .map((paragraph) =>
         paragraph
