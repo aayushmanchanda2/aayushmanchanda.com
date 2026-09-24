@@ -1,0 +1,26 @@
+PASS All, no filter: count = every entry, both groups — {"count":41,"all":41,"notes":41}
+PASS All, tag "agents": list shows exactly N across both groups, count, All and each kind agree — {"N":9,"count":9,"segs":{"all":9,"article":3,"post":4,"video":2},"byKind":{"post":4,"article":3,"video":2},"also":3}
+PASS All, tag "harnesses": list shows exactly N across both groups, count, All and each kind agree — {"N":5,"count":5,"segs":{"all":5,"article":2,"post":2,"video":1},"byKind":{"post":2,"article":2,"video":1},"also":2}
+PASS All, tag "second-brain": list shows exactly N across both groups, count, All and each kind agree — {"N":2,"count":2,"segs":{"all":2,"article":0,"post":2,"video":0},"byKind":{"post":2},"also":0}
+PASS All, tag "agency": list shows exactly N across both groups, count, All and each kind agree — {"N":1,"count":1,"segs":{"all":1,"article":1,"post":0,"video":0},"byKind":{"article":1},"also":0}
+PASS All, tag "design": list shows exactly N across both groups, count, All and each kind agree — {"N":1,"count":1,"segs":{"all":1,"article":1,"post":0,"video":0},"byKind":{"article":1},"also":1}
+PASS All, tag "founders": list shows exactly N across both groups, count, All and each kind agree — {"N":1,"count":1,"segs":{"all":1,"article":0,"post":1,"video":0},"byKind":{"post":1},"also":0}
+PASS All, tag "go-to-market": list shows exactly N across both groups, count, All and each kind agree — {"N":1,"count":1,"segs":{"all":1,"article":0,"post":1,"video":0},"byKind":{"post":1},"also":0}
+PASS All, tag "writing": list shows exactly N across both groups, count, All and each kind agree — {"N":1,"count":1,"segs":{"all":1,"article":0,"post":1,"video":0},"byKind":{"post":1},"also":0}
+PASS article, tag "agents": view items = count = segment — {"items":3,"count":3,"seg":3,"alsoGroup":2}
+PASS post, tag "agents": view items = count = segment — {"items":4,"count":4,"seg":4,"alsoGroup":0}
+PASS video, tag "agents": view items = count = segment — {"items":2,"count":2,"seg":2,"alsoGroup":1}
+PASS Posts: a tag tap narrows the cards and Also saved, and the counts follow — {"before":14,"after":4,"count":4}
+PASS Top bar: search glyph visible, top right, 44px — {"visible":true,"w":44,"h":44,"right":26.59375,"top":24.59375,"name":"Search ⌘K"}
+PASS Palette: rows render title text with their icons on first paint (index still loading) — {"open":true,"rows":27,"titled":27,"icons":27,"indexRequests":1}
+PASS Palette: a visible 44px × closes it, and the page stays — {"close":{"visible":true,"w":44,"h":44},"open":false,"url":"/library"}
+PASS Palette: Back (Android back, iOS swipe) closes it and stays on the page — {"open":false,"url":"/library"}
+PASS Palette: a tap on the backdrop above the sheet closes it
+PASS Palette: a row opens its page, and Back comes straight back — went /sites, back at /library
+PASS /library/tag/agents → 308 /library?tags=agents (vercel.json) — {"status":308,"location":"/library?tags=agents"}
+PASS /library/tag/agents/ → 308 /library?tags=agents (vercel.json) — {"status":308,"location":"/library?tags=agents"}
+PASS /library/tag/go-to-market.md → 308 /library?tags=go-to-market (vercel.json) — {"status":308,"location":"/library?tags=go-to-market"}
+PASS sitemap lists no /library/tag/ page
+PASS an entry's tag chip links to /library?tags=<tag> — /library?tags=agents
+PASS Desktop All, tag "writing": pane rows = count = All; the mix shows only matches — {"rows":1,"count":"1 entry","all":"1","mix":0,"mixCarry":true}
+PASS no page errors — http://localhost:4364/sites/: AbortError: Transition was skipped

@@ -1,0 +1,135 @@
+{
+  "base": "http://localhost:4364",
+  "results": [
+    {
+      "name": "All, no filter: count = every entry, both groups",
+      "ok": true,
+      "detail": "{\"count\":41,\"all\":41,\"notes\":41}"
+    },
+    {
+      "name": "All, tag \"agents\": list shows exactly N across both groups, count, All and each kind agree",
+      "ok": true,
+      "detail": "{\"N\":9,\"count\":9,\"segs\":{\"all\":9,\"article\":3,\"post\":4,\"video\":2},\"byKind\":{\"post\":4,\"article\":3,\"video\":2},\"also\":3}"
+    },
+    {
+      "name": "All, tag \"harnesses\": list shows exactly N across both groups, count, All and each kind agree",
+      "ok": true,
+      "detail": "{\"N\":5,\"count\":5,\"segs\":{\"all\":5,\"article\":2,\"post\":2,\"video\":1},\"byKind\":{\"post\":2,\"article\":2,\"video\":1},\"also\":2}"
+    },
+    {
+      "name": "All, tag \"second-brain\": list shows exactly N across both groups, count, All and each kind agree",
+      "ok": true,
+      "detail": "{\"N\":2,\"count\":2,\"segs\":{\"all\":2,\"article\":0,\"post\":2,\"video\":0},\"byKind\":{\"post\":2},\"also\":0}"
+    },
+    {
+      "name": "All, tag \"agency\": list shows exactly N across both groups, count, All and each kind agree",
+      "ok": true,
+      "detail": "{\"N\":1,\"count\":1,\"segs\":{\"all\":1,\"article\":1,\"post\":0,\"video\":0},\"byKind\":{\"article\":1},\"also\":0}"
+    },
+    {
+      "name": "All, tag \"design\": list shows exactly N across both groups, count, All and each kind agree",
+      "ok": true,
+      "detail": "{\"N\":1,\"count\":1,\"segs\":{\"all\":1,\"article\":1,\"post\":0,\"video\":0},\"byKind\":{\"article\":1},\"also\":1}"
+    },
+    {
+      "name": "All, tag \"founders\": list shows exactly N across both groups, count, All and each kind agree",
+      "ok": true,
+      "detail": "{\"N\":1,\"count\":1,\"segs\":{\"all\":1,\"article\":0,\"post\":1,\"video\":0},\"byKind\":{\"post\":1},\"also\":0}"
+    },
+    {
+      "name": "All, tag \"go-to-market\": list shows exactly N across both groups, count, All and each kind agree",
+      "ok": true,
+      "detail": "{\"N\":1,\"count\":1,\"segs\":{\"all\":1,\"article\":0,\"post\":1,\"video\":0},\"byKind\":{\"post\":1},\"also\":0}"
+    },
+    {
+      "name": "All, tag \"writing\": list shows exactly N across both groups, count, All and each kind agree",
+      "ok": true,
+      "detail": "{\"N\":1,\"count\":1,\"segs\":{\"all\":1,\"article\":0,\"post\":1,\"video\":0},\"byKind\":{\"post\":1},\"also\":0}"
+    },
+    {
+      "name": "article, tag \"agents\": view items = count = segment",
+      "ok": true,
+      "detail": "{\"items\":3,\"count\":3,\"seg\":3,\"alsoGroup\":2}"
+    },
+    {
+      "name": "post, tag \"agents\": view items = count = segment",
+      "ok": true,
+      "detail": "{\"items\":4,\"count\":4,\"seg\":4,\"alsoGroup\":0}"
+    },
+    {
+      "name": "video, tag \"agents\": view items = count = segment",
+      "ok": true,
+      "detail": "{\"items\":2,\"count\":2,\"seg\":2,\"alsoGroup\":1}"
+    },
+    {
+      "name": "Posts: a tag tap narrows the cards and Also saved, and the counts follow",
+      "ok": true,
+      "detail": "{\"before\":14,\"after\":4,\"count\":4}"
+    },
+    {
+      "name": "Top bar: search glyph visible, top right, 44px",
+      "ok": true,
+      "detail": "{\"visible\":true,\"w\":44,\"h\":44,\"right\":26.59375,\"top\":24.59375,\"name\":\"Search ⌘K\"}"
+    },
+    {
+      "name": "Palette: rows render title text with their icons on first paint (index still loading)",
+      "ok": true,
+      "detail": "{\"open\":true,\"rows\":27,\"titled\":27,\"icons\":27,\"indexRequests\":1}"
+    },
+    {
+      "name": "Palette: a visible 44px × closes it, and the page stays",
+      "ok": true,
+      "detail": "{\"close\":{\"visible\":true,\"w\":44,\"h\":44},\"open\":false,\"url\":\"/library\"}"
+    },
+    {
+      "name": "Palette: Back (Android back, iOS swipe) closes it and stays on the page",
+      "ok": true,
+      "detail": "{\"open\":false,\"url\":\"/library\"}"
+    },
+    {
+      "name": "Palette: a tap on the backdrop above the sheet closes it",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "Palette: a row opens its page, and Back comes straight back",
+      "ok": true,
+      "detail": "went /sites, back at /library"
+    },
+    {
+      "name": "/library/tag/agents → 308 /library?tags=agents (vercel.json)",
+      "ok": true,
+      "detail": "{\"status\":308,\"location\":\"/library?tags=agents\"}"
+    },
+    {
+      "name": "/library/tag/agents/ → 308 /library?tags=agents (vercel.json)",
+      "ok": true,
+      "detail": "{\"status\":308,\"location\":\"/library?tags=agents\"}"
+    },
+    {
+      "name": "/library/tag/go-to-market.md → 308 /library?tags=go-to-market (vercel.json)",
+      "ok": true,
+      "detail": "{\"status\":308,\"location\":\"/library?tags=go-to-market\"}"
+    },
+    {
+      "name": "sitemap lists no /library/tag/ page",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "an entry's tag chip links to /library?tags=<tag>",
+      "ok": true,
+      "detail": "/library?tags=agents"
+    },
+    {
+      "name": "Desktop All, tag \"writing\": pane rows = count = All; the mix shows only matches",
+      "ok": true,
+      "detail": "{\"rows\":1,\"count\":\"1 entry\",\"all\":\"1\",\"mix\":0,\"mixCarry\":true}"
+    },
+    {
+      "name": "no page errors",
+      "ok": true,
+      "detail": "http://localhost:4364/sites/: AbortError: Transition was skipped"
+    }
+  ]
+}

@@ -34,7 +34,9 @@ const entries = alsoSaved.filter((entry) => !kind || entry.kind === kind);
 }
 
 <style>
+  /* The feed's own 48rem, so the head's count sits over the list's edge. */
   .also {
+    max-width: 48rem;
     margin-top: 2.5rem;
   }
 </style>
