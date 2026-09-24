@@ -35,6 +35,7 @@ const updated = feed
 <div class="stamp" aria-hidden="true">
   <span class="stamp__mark">2026</span>
   {denomination && <span class="stamp__mark stamp__mark--end">{denomination}</span>}
+  {["top", "bottom", "left", "right"].map((edge) => <i class="stamp__edge" data-edge={edge}></i>)}
 </div>
 <div class="mat" aria-hidden="true"><div class="mat__shade"><div class="mat__paper"></div></div></div>
 {
@@ -92,6 +93,22 @@ const updated = feed
   @media (max-width: 599px) {
     .postmark__waves {
       display: none;
+    }
+  }
+
+  /* On touch (VET-285, H3): a fast fling on an iPad outruns the painter, and
+     a tile not yet painted shows the canvas colour, which was the mat's, so
+     the mat smeared through the page. The canvas is paper there; the mat
+     layer still draws every gutter and hole. The paper's lift goes too: two
+     drop-shadows over a window-sized masked layer is the costliest thing to
+     redraw when a fling makes iOS repaint the fixed layers. */
+  @media (pointer: coarse) {
+    :global(:root) {
+      background: var(--bg);
+    }
+
+    .mat__shade {
+      filter: none;
     }
   }
 </style>

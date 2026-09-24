@@ -11,7 +11,7 @@
 - `tools-filter-category` /tools/category/<slug>: table without the Category column.
 - `tools-filter-verdict` /tools/verdict/<verdict>: table without the Verdict column.
 - `tools-marks` `.app-icon`: an `<img src="/icons/<slug>.webp">`, or `.app-icon__letter` where there is none.
-- `tools-panel` on /tools a row or tile (`a[data-panel-open]`) opens `[data-detail-panel][data-open]` (`DetailPanel.astro`), URL `/tools/<slug>`; filters and the toggle stay usable beside it. Scripted proof: `qa/evidence/2026-09-23-r5-2/check.mjs`. Under 48rem there is no panel (VET-279, `lib/detail-panel.ts › PANEL_OFF`): the tap follows the link to the entry's page, and on touch or a phone the shot sits full height in the page's flow. Touch proof: `qa/evidence/2026-09-23-vet-279-scroll/probe.mjs` (CDP touch gestures at 375x812).
+- `tools-panel` on /tools a row or tile (`a[data-panel-open]`) opens `[data-detail-panel][data-open]` (`DetailPanel.astro`), URL `/tools/<slug>`; filters and the toggle stay usable beside it. Scripted proof: `qa/evidence/2026-09-23-r5-2/check.mjs`. Under 1100px or on touch there is no panel (VET-279, VET-285, `lib/detail-panel.ts › PANEL_OFF`): the tap follows the link to the entry's page, and on touch or a phone the shot sits full height in the page's flow. Touch proof: `qa/evidence/2026-09-23-vet-279-scroll/probe.mjs` (CDP touch gestures at 375x812).
 - `tools-preview` rows and tiles carry `data-preview` (`/previews/<slug>.webp`, empty for the icon-only card) and `data-preview-name|domain|description|note`. The shared card is `.preview-card`, built on first hover; open is `[data-open]`, icon-only is `[data-no-image]`, flipped is `[data-side="top"]`.
 
 ## How to get to it (user POV)

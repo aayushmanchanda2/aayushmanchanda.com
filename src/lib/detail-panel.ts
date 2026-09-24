@@ -18,10 +18,14 @@ type Entry = { node: Element; title: string };
  * fixed scroll box over a scrollable list, a touch scroll chained into the
  * list behind (iOS moves the page's scrollbar and leaves the panel's shot at
  * its first screen), and iOS's collapsing toolbar resized the box and showed
- * the list through the gap. The page itself scrolls natively. `DetailPanel.astro`'s
- * phone breakpoint is the same query.
+ * the list through the gap. The page itself scrolls natively.
+ *
+ * A tablet too (VET-285): under 1100px, or on any touch screen. On an iPad the
+ * panel left too little list beside it (half of /sites' two columns sat under
+ * it in portrait) and could not be scrolled; the entry's own page, a plain
+ * link, is the one path that worked there.
  */
-export const PANEL_OFF = "(max-width: 48rem)";
+export const PANEL_OFF = "(max-width: 1099.98px), (pointer: coarse)";
 
 /** `checkVisibility` arrived in Safari 17.4; before it, a rendered box is the answer. */
 const visible = (el: Element): boolean => el.checkVisibility?.() ?? el.getClientRects().length > 0;

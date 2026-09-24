@@ -1,0 +1,1707 @@
+{
+  "base": "http://localhost:4391",
+  "taps": [
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/tools/",
+      "view": "list",
+      "verdict": null,
+      "pick": "first",
+      "of": 86,
+      "want": "/tools/paperclip",
+      "hitAtCentre": "/tools/paperclip",
+      "got": "/tools/paperclip/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/tools/",
+      "view": "list",
+      "verdict": null,
+      "pick": "middle",
+      "of": 86,
+      "want": "/tools/slot-text-tiny-text-roll-animation",
+      "hitAtCentre": "/tools/slot-text-tiny-text-roll-animation",
+      "got": "/tools/slot-text-tiny-text-roll-animation/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/tools/",
+      "view": "list",
+      "verdict": null,
+      "pick": "last",
+      "of": 86,
+      "want": "/tools/roughdraft",
+      "hitAtCentre": "/tools/roughdraft",
+      "got": "/tools/roughdraft/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/tools/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "first",
+      "of": 86,
+      "want": "/tools/paperclip",
+      "hitAtCentre": "/tools/paperclip",
+      "got": "/tools/paperclip/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/tools/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "middle",
+      "of": 86,
+      "want": "/tools/slot-text-tiny-text-roll-animation",
+      "hitAtCentre": "/tools/slot-text-tiny-text-roll-animation",
+      "got": "/tools/slot-text-tiny-text-roll-animation/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/tools/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "last",
+      "of": 86,
+      "want": "/tools/roughdraft",
+      "hitAtCentre": "/tools/roughdraft",
+      "got": "/tools/roughdraft/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/tools/",
+      "view": "list",
+      "verdict": "using",
+      "pick": "first",
+      "of": 8,
+      "want": "/tools/paperclip",
+      "hitAtCentre": "/tools/paperclip",
+      "got": "/tools/paperclip/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/tools/",
+      "view": "list",
+      "verdict": "using",
+      "pick": "middle",
+      "of": 8,
+      "want": "/tools/agent-browser",
+      "hitAtCentre": "/tools/agent-browser",
+      "got": "/tools/agent-browser/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/tools/",
+      "view": "list",
+      "verdict": "using",
+      "pick": "last",
+      "of": 8,
+      "want": "/tools/emilkowalski-skills-design-and-animation-skills-for-agents",
+      "hitAtCentre": "/tools/emilkowalski-skills-design-and-animation-skills-for-agents",
+      "got": "/tools/emilkowalski-skills-design-and-animation-skills-for-agents/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/tools/",
+      "view": "grid",
+      "verdict": "using",
+      "pick": "first",
+      "of": 8,
+      "want": "/tools/paperclip",
+      "hitAtCentre": "/tools/paperclip",
+      "got": "/tools/paperclip/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/tools/",
+      "view": "grid",
+      "verdict": "using",
+      "pick": "middle",
+      "of": 8,
+      "want": "/tools/agent-browser",
+      "hitAtCentre": "/tools/agent-browser",
+      "got": "/tools/agent-browser/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/tools/",
+      "view": "grid",
+      "verdict": "using",
+      "pick": "last",
+      "of": 8,
+      "want": "/tools/emilkowalski-skills-design-and-animation-skills-for-agents",
+      "hitAtCentre": "/tools/emilkowalski-skills-design-and-animation-skills-for-agents",
+      "got": "/tools/emilkowalski-skills-design-and-animation-skills-for-agents/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/sites/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "first",
+      "of": 31,
+      "want": "/sites/arc-from-the-browser-company",
+      "hitAtCentre": "/sites/arc-from-the-browser-company",
+      "got": "/sites/arc-from-the-browser-company/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/sites/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "middle",
+      "of": 31,
+      "want": "/sites/wall-of-portfolios",
+      "hitAtCentre": "/sites/wall-of-portfolios",
+      "got": "/sites/wall-of-portfolios/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/sites/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "last",
+      "of": 31,
+      "want": "/sites/inspora",
+      "hitAtCentre": "/sites/inspora",
+      "got": "/sites/inspora/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/sites/",
+      "view": "list",
+      "verdict": null,
+      "pick": "first",
+      "of": 31,
+      "want": "/sites/arc-from-the-browser-company",
+      "hitAtCentre": "/sites/arc-from-the-browser-company",
+      "got": "/sites/arc-from-the-browser-company/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/sites/",
+      "view": "list",
+      "verdict": null,
+      "pick": "middle",
+      "of": 31,
+      "want": "/sites/wall-of-portfolios",
+      "hitAtCentre": "/sites/wall-of-portfolios",
+      "got": "/sites/wall-of-portfolios/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/sites/",
+      "view": "list",
+      "verdict": null,
+      "pick": "last",
+      "of": 31,
+      "want": "/sites/inspora",
+      "hitAtCentre": "/sites/inspora",
+      "got": "/sites/inspora/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/sites/collection/portfolios/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "first",
+      "of": 9,
+      "want": "/sites/mother-design-brand-strategy-and-design",
+      "hitAtCentre": "/sites/mother-design-brand-strategy-and-design",
+      "got": "/sites/mother-design-brand-strategy-and-design/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/sites/collection/portfolios/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "middle",
+      "of": 9,
+      "want": "/sites/wall-of-portfolios",
+      "hitAtCentre": "/sites/wall-of-portfolios",
+      "got": "/sites/wall-of-portfolios/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/sites/collection/portfolios/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "last",
+      "of": 9,
+      "want": "/sites/atishay-tuli-creative-frontend-developer",
+      "hitAtCentre": "/sites/atishay-tuli-creative-frontend-developer",
+      "got": "/sites/atishay-tuli-creative-frontend-developer/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/tools/",
+      "view": "list",
+      "verdict": null,
+      "pick": "first",
+      "of": 86,
+      "want": "/tools/paperclip",
+      "hitAtCentre": "/tools/paperclip",
+      "got": "/tools/paperclip/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/tools/",
+      "view": "list",
+      "verdict": null,
+      "pick": "middle",
+      "of": 86,
+      "want": "/tools/slot-text-tiny-text-roll-animation",
+      "hitAtCentre": "/tools/slot-text-tiny-text-roll-animation",
+      "got": "/tools/slot-text-tiny-text-roll-animation/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/tools/",
+      "view": "list",
+      "verdict": null,
+      "pick": "last",
+      "of": 86,
+      "want": "/tools/roughdraft",
+      "hitAtCentre": "/tools/roughdraft",
+      "got": "/tools/roughdraft/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/tools/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "first",
+      "of": 86,
+      "want": "/tools/paperclip",
+      "hitAtCentre": "/tools/paperclip",
+      "got": "/tools/paperclip/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/tools/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "middle",
+      "of": 86,
+      "want": "/tools/slot-text-tiny-text-roll-animation",
+      "hitAtCentre": "/tools/slot-text-tiny-text-roll-animation",
+      "got": "/tools/slot-text-tiny-text-roll-animation/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/tools/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "last",
+      "of": 86,
+      "want": "/tools/roughdraft",
+      "hitAtCentre": "/tools/roughdraft",
+      "got": "/tools/roughdraft/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/tools/",
+      "view": "list",
+      "verdict": "using",
+      "pick": "first",
+      "of": 8,
+      "want": "/tools/paperclip",
+      "hitAtCentre": "/tools/paperclip",
+      "got": "/tools/paperclip/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/tools/",
+      "view": "list",
+      "verdict": "using",
+      "pick": "middle",
+      "of": 8,
+      "want": "/tools/agent-browser",
+      "hitAtCentre": "/tools/agent-browser",
+      "got": "/tools/agent-browser/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/tools/",
+      "view": "list",
+      "verdict": "using",
+      "pick": "last",
+      "of": 8,
+      "want": "/tools/emilkowalski-skills-design-and-animation-skills-for-agents",
+      "hitAtCentre": "/tools/emilkowalski-skills-design-and-animation-skills-for-agents",
+      "got": "/tools/emilkowalski-skills-design-and-animation-skills-for-agents/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/tools/",
+      "view": "grid",
+      "verdict": "using",
+      "pick": "first",
+      "of": 8,
+      "want": "/tools/paperclip",
+      "hitAtCentre": "/tools/paperclip",
+      "got": "/tools/paperclip/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/tools/",
+      "view": "grid",
+      "verdict": "using",
+      "pick": "middle",
+      "of": 8,
+      "want": "/tools/agent-browser",
+      "hitAtCentre": "/tools/agent-browser",
+      "got": "/tools/agent-browser/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/tools/",
+      "view": "grid",
+      "verdict": "using",
+      "pick": "last",
+      "of": 8,
+      "want": "/tools/emilkowalski-skills-design-and-animation-skills-for-agents",
+      "hitAtCentre": "/tools/emilkowalski-skills-design-and-animation-skills-for-agents",
+      "got": "/tools/emilkowalski-skills-design-and-animation-skills-for-agents/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/sites/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "first",
+      "of": 31,
+      "want": "/sites/arc-from-the-browser-company",
+      "hitAtCentre": "/sites/arc-from-the-browser-company",
+      "got": "/sites/arc-from-the-browser-company/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/sites/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "middle",
+      "of": 31,
+      "want": "/sites/wall-of-portfolios",
+      "hitAtCentre": "/sites/wall-of-portfolios",
+      "got": "/sites/wall-of-portfolios/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/sites/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "last",
+      "of": 31,
+      "want": "/sites/inspora",
+      "hitAtCentre": "/sites/inspora",
+      "got": "/sites/inspora/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/sites/",
+      "view": "list",
+      "verdict": null,
+      "pick": "first",
+      "of": 31,
+      "want": "/sites/arc-from-the-browser-company",
+      "hitAtCentre": "/sites/arc-from-the-browser-company",
+      "got": "/sites/arc-from-the-browser-company/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/sites/",
+      "view": "list",
+      "verdict": null,
+      "pick": "middle",
+      "of": 31,
+      "want": "/sites/wall-of-portfolios",
+      "hitAtCentre": "/sites/wall-of-portfolios",
+      "got": "/sites/wall-of-portfolios/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/sites/",
+      "view": "list",
+      "verdict": null,
+      "pick": "last",
+      "of": 31,
+      "want": "/sites/inspora",
+      "hitAtCentre": "/sites/inspora",
+      "got": "/sites/inspora/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/sites/collection/portfolios/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "first",
+      "of": 9,
+      "want": "/sites/mother-design-brand-strategy-and-design",
+      "hitAtCentre": "/sites/mother-design-brand-strategy-and-design",
+      "got": "/sites/mother-design-brand-strategy-and-design/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/sites/collection/portfolios/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "middle",
+      "of": 9,
+      "want": "/sites/wall-of-portfolios",
+      "hitAtCentre": "/sites/wall-of-portfolios",
+      "got": "/sites/wall-of-portfolios/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/sites/collection/portfolios/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "last",
+      "of": 9,
+      "want": "/sites/atishay-tuli-creative-frontend-developer",
+      "hitAtCentre": "/sites/atishay-tuli-creative-frontend-developer",
+      "got": "/sites/atishay-tuli-creative-frontend-developer/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/tools/",
+      "view": "list",
+      "verdict": null,
+      "pick": "first",
+      "of": 86,
+      "want": "/tools/paperclip",
+      "hitAtCentre": "/tools/paperclip",
+      "got": "/tools/paperclip/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/tools/",
+      "view": "list",
+      "verdict": null,
+      "pick": "middle",
+      "of": 86,
+      "want": "/tools/slot-text-tiny-text-roll-animation",
+      "hitAtCentre": "/tools/slot-text-tiny-text-roll-animation",
+      "got": "/tools/slot-text-tiny-text-roll-animation/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/tools/",
+      "view": "list",
+      "verdict": null,
+      "pick": "last",
+      "of": 86,
+      "want": "/tools/roughdraft",
+      "hitAtCentre": "/tools/roughdraft",
+      "got": "/tools/roughdraft/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/tools/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "first",
+      "of": 86,
+      "want": "/tools/paperclip",
+      "hitAtCentre": "/tools/paperclip",
+      "got": "/tools/paperclip/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/tools/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "middle",
+      "of": 86,
+      "want": "/tools/slot-text-tiny-text-roll-animation",
+      "hitAtCentre": "/tools/slot-text-tiny-text-roll-animation",
+      "got": "/tools/slot-text-tiny-text-roll-animation/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/tools/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "last",
+      "of": 86,
+      "want": "/tools/roughdraft",
+      "hitAtCentre": "/tools/roughdraft",
+      "got": "/tools/roughdraft/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/tools/",
+      "view": "list",
+      "verdict": "using",
+      "pick": "first",
+      "of": 8,
+      "want": "/tools/paperclip",
+      "hitAtCentre": "/tools/paperclip",
+      "got": "/tools/paperclip/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/tools/",
+      "view": "list",
+      "verdict": "using",
+      "pick": "middle",
+      "of": 8,
+      "want": "/tools/agent-browser",
+      "hitAtCentre": "/tools/agent-browser",
+      "got": "/tools/agent-browser/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/tools/",
+      "view": "list",
+      "verdict": "using",
+      "pick": "last",
+      "of": 8,
+      "want": "/tools/emilkowalski-skills-design-and-animation-skills-for-agents",
+      "hitAtCentre": "/tools/emilkowalski-skills-design-and-animation-skills-for-agents",
+      "got": "/tools/emilkowalski-skills-design-and-animation-skills-for-agents/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/tools/",
+      "view": "grid",
+      "verdict": "using",
+      "pick": "first",
+      "of": 8,
+      "want": "/tools/paperclip",
+      "hitAtCentre": "/tools/paperclip",
+      "got": "/tools/paperclip/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/tools/",
+      "view": "grid",
+      "verdict": "using",
+      "pick": "middle",
+      "of": 8,
+      "want": "/tools/agent-browser",
+      "hitAtCentre": "/tools/agent-browser",
+      "got": "/tools/agent-browser/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/tools/",
+      "view": "grid",
+      "verdict": "using",
+      "pick": "last",
+      "of": 8,
+      "want": "/tools/emilkowalski-skills-design-and-animation-skills-for-agents",
+      "hitAtCentre": "/tools/emilkowalski-skills-design-and-animation-skills-for-agents",
+      "got": "/tools/emilkowalski-skills-design-and-animation-skills-for-agents/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/sites/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "first",
+      "of": 31,
+      "want": "/sites/arc-from-the-browser-company",
+      "hitAtCentre": "/sites/arc-from-the-browser-company",
+      "got": "/sites/arc-from-the-browser-company/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/sites/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "middle",
+      "of": 31,
+      "want": "/sites/wall-of-portfolios",
+      "hitAtCentre": "/sites/wall-of-portfolios",
+      "got": "/sites/wall-of-portfolios/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/sites/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "last",
+      "of": 31,
+      "want": "/sites/inspora",
+      "hitAtCentre": "/sites/inspora",
+      "got": "/sites/inspora/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/sites/",
+      "view": "list",
+      "verdict": null,
+      "pick": "first",
+      "of": 31,
+      "want": "/sites/arc-from-the-browser-company",
+      "hitAtCentre": "/sites/arc-from-the-browser-company",
+      "got": "/sites/arc-from-the-browser-company/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/sites/",
+      "view": "list",
+      "verdict": null,
+      "pick": "middle",
+      "of": 31,
+      "want": "/sites/wall-of-portfolios",
+      "hitAtCentre": "/sites/wall-of-portfolios",
+      "got": "/sites/wall-of-portfolios/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/sites/",
+      "view": "list",
+      "verdict": null,
+      "pick": "last",
+      "of": 31,
+      "want": "/sites/inspora",
+      "hitAtCentre": "/sites/inspora",
+      "got": "/sites/inspora/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/sites/collection/portfolios/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "first",
+      "of": 9,
+      "want": "/sites/mother-design-brand-strategy-and-design",
+      "hitAtCentre": "/sites/mother-design-brand-strategy-and-design",
+      "got": "/sites/mother-design-brand-strategy-and-design/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/sites/collection/portfolios/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "middle",
+      "of": 9,
+      "want": "/sites/wall-of-portfolios",
+      "hitAtCentre": "/sites/wall-of-portfolios",
+      "got": "/sites/wall-of-portfolios/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/sites/collection/portfolios/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "last",
+      "of": 9,
+      "want": "/sites/atishay-tuli-creative-frontend-developer",
+      "hitAtCentre": "/sites/atishay-tuli-creative-frontend-developer",
+      "got": "/sites/atishay-tuli-creative-frontend-developer/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/tools/",
+      "view": "list",
+      "verdict": null,
+      "pick": "first",
+      "of": 86,
+      "want": "/tools/paperclip",
+      "hitAtCentre": "/tools/paperclip",
+      "got": "/tools/paperclip/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/tools/",
+      "view": "list",
+      "verdict": null,
+      "pick": "middle",
+      "of": 86,
+      "want": "/tools/slot-text-tiny-text-roll-animation",
+      "hitAtCentre": "/tools/slot-text-tiny-text-roll-animation",
+      "got": "/tools/slot-text-tiny-text-roll-animation/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/tools/",
+      "view": "list",
+      "verdict": null,
+      "pick": "last",
+      "of": 86,
+      "want": "/tools/roughdraft",
+      "hitAtCentre": "/tools/roughdraft",
+      "got": "/tools/roughdraft/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/tools/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "first",
+      "of": 86,
+      "want": "/tools/paperclip",
+      "hitAtCentre": "/tools/paperclip",
+      "got": "/tools/paperclip/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/tools/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "middle",
+      "of": 86,
+      "want": "/tools/slot-text-tiny-text-roll-animation",
+      "hitAtCentre": "/tools/slot-text-tiny-text-roll-animation",
+      "got": "/tools/slot-text-tiny-text-roll-animation/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/tools/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "last",
+      "of": 86,
+      "want": "/tools/roughdraft",
+      "hitAtCentre": "/tools/roughdraft",
+      "got": "/tools/roughdraft/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/tools/",
+      "view": "list",
+      "verdict": "using",
+      "pick": "first",
+      "of": 8,
+      "want": "/tools/paperclip",
+      "hitAtCentre": "/tools/paperclip",
+      "got": "/tools/paperclip/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/tools/",
+      "view": "list",
+      "verdict": "using",
+      "pick": "middle",
+      "of": 8,
+      "want": "/tools/agent-browser",
+      "hitAtCentre": "/tools/agent-browser",
+      "got": "/tools/agent-browser/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/tools/",
+      "view": "list",
+      "verdict": "using",
+      "pick": "last",
+      "of": 8,
+      "want": "/tools/emilkowalski-skills-design-and-animation-skills-for-agents",
+      "hitAtCentre": "/tools/emilkowalski-skills-design-and-animation-skills-for-agents",
+      "got": "/tools/emilkowalski-skills-design-and-animation-skills-for-agents/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/tools/",
+      "view": "grid",
+      "verdict": "using",
+      "pick": "first",
+      "of": 8,
+      "want": "/tools/paperclip",
+      "hitAtCentre": "/tools/paperclip",
+      "got": "/tools/paperclip/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/tools/",
+      "view": "grid",
+      "verdict": "using",
+      "pick": "middle",
+      "of": 8,
+      "want": "/tools/agent-browser",
+      "hitAtCentre": "/tools/agent-browser",
+      "got": "/tools/agent-browser/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/tools/",
+      "view": "grid",
+      "verdict": "using",
+      "pick": "last",
+      "of": 8,
+      "want": "/tools/emilkowalski-skills-design-and-animation-skills-for-agents",
+      "hitAtCentre": "/tools/emilkowalski-skills-design-and-animation-skills-for-agents",
+      "got": "/tools/emilkowalski-skills-design-and-animation-skills-for-agents/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/sites/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "first",
+      "of": 31,
+      "want": "/sites/arc-from-the-browser-company",
+      "hitAtCentre": "/sites/arc-from-the-browser-company",
+      "got": "/sites/arc-from-the-browser-company/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/sites/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "middle",
+      "of": 31,
+      "want": "/sites/wall-of-portfolios",
+      "hitAtCentre": "/sites/wall-of-portfolios",
+      "got": "/sites/wall-of-portfolios/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/sites/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "last",
+      "of": 31,
+      "want": "/sites/inspora",
+      "hitAtCentre": "/sites/inspora",
+      "got": "/sites/inspora/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/sites/",
+      "view": "list",
+      "verdict": null,
+      "pick": "first",
+      "of": 31,
+      "want": "/sites/arc-from-the-browser-company",
+      "hitAtCentre": "/sites/arc-from-the-browser-company",
+      "got": "/sites/arc-from-the-browser-company/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/sites/",
+      "view": "list",
+      "verdict": null,
+      "pick": "middle",
+      "of": 31,
+      "want": "/sites/wall-of-portfolios",
+      "hitAtCentre": "/sites/wall-of-portfolios",
+      "got": "/sites/wall-of-portfolios/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/sites/",
+      "view": "list",
+      "verdict": null,
+      "pick": "last",
+      "of": 31,
+      "want": "/sites/inspora",
+      "hitAtCentre": "/sites/inspora",
+      "got": "/sites/inspora/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/sites/collection/portfolios/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "first",
+      "of": 9,
+      "want": "/sites/mother-design-brand-strategy-and-design",
+      "hitAtCentre": "/sites/mother-design-brand-strategy-and-design",
+      "got": "/sites/mother-design-brand-strategy-and-design/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/sites/collection/portfolios/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "middle",
+      "of": 9,
+      "want": "/sites/wall-of-portfolios",
+      "hitAtCentre": "/sites/wall-of-portfolios",
+      "got": "/sites/wall-of-portfolios/",
+      "panelOpen": false
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/sites/collection/portfolios/",
+      "view": "grid",
+      "verdict": null,
+      "pick": "last",
+      "of": 9,
+      "want": "/sites/atishay-tuli-creative-frontend-developer",
+      "hitAtCentre": "/sites/atishay-tuli-creative-frontend-developer",
+      "got": "/sites/atishay-tuli-creative-frontend-developer/",
+      "panelOpen": false
+    }
+  ],
+  "scroll": [
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/tools/",
+      "column": "page",
+      "before": {
+        "page": 0,
+        "max": 1700,
+        "box": null
+      },
+      "after": {
+        "page": 386,
+        "max": 1700,
+        "box": null
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/sites/",
+      "column": "page",
+      "before": {
+        "page": 0,
+        "max": 4492,
+        "box": null
+      },
+      "after": {
+        "page": 396,
+        "max": 4492,
+        "box": null
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/tools/paperclip/",
+      "column": "page",
+      "before": {
+        "page": 0,
+        "max": 87,
+        "box": null
+      },
+      "after": {
+        "page": 87,
+        "max": 87,
+        "box": null
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/tools/roughdraft/",
+      "column": "page",
+      "before": {
+        "page": 0,
+        "max": 59,
+        "box": null
+      },
+      "after": {
+        "page": 59,
+        "max": 59,
+        "box": null
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/sites/about-brian-lovin/",
+      "column": "page",
+      "before": {
+        "page": 0,
+        "max": 1865,
+        "box": null
+      },
+      "after": {
+        "page": 397,
+        "max": 1865,
+        "box": null
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/sites/inspora/",
+      "column": "page",
+      "before": {
+        "page": 0,
+        "max": 1842,
+        "box": null
+      },
+      "after": {
+        "page": 396,
+        "max": 1842,
+        "box": null
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "route": "/library/",
+      "column": "none: one column at this width"
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/tools/",
+      "column": "page",
+      "before": {
+        "page": 0,
+        "max": 1425,
+        "box": null
+      },
+      "after": {
+        "page": 407,
+        "max": 1425,
+        "box": null
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/sites/",
+      "column": "page",
+      "before": {
+        "page": 0,
+        "max": 3055,
+        "box": null
+      },
+      "after": {
+        "page": 407,
+        "max": 3055,
+        "box": null
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/tools/paperclip/",
+      "column": "page",
+      "before": {
+        "page": 0,
+        "max": 335,
+        "box": null
+      },
+      "after": {
+        "page": 335,
+        "max": 335,
+        "box": null
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/tools/roughdraft/",
+      "column": "page",
+      "before": {
+        "page": 0,
+        "max": 306,
+        "box": null
+      },
+      "after": {
+        "page": 306,
+        "max": 306,
+        "box": null
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/sites/about-brian-lovin/",
+      "column": "page",
+      "before": {
+        "page": 0,
+        "max": 2112,
+        "box": null
+      },
+      "after": {
+        "page": 387,
+        "max": 2112,
+        "box": null
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/sites/inspora/",
+      "column": "page",
+      "before": {
+        "page": 0,
+        "max": 2089,
+        "box": null
+      },
+      "after": {
+        "page": 398,
+        "max": 2089,
+        "box": null
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/library/",
+      "column": "left (pane)",
+      "before": {
+        "page": 0,
+        "max": 1031,
+        "box": 0
+      },
+      "after": {
+        "page": 0,
+        "max": 1031,
+        "box": 395
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "route": "/library/",
+      "column": "right (page)",
+      "before": {
+        "page": 0,
+        "max": 1031,
+        "box": 395
+      },
+      "after": {
+        "page": 395,
+        "max": 1031,
+        "box": 395
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/tools/",
+      "column": "page",
+      "before": {
+        "page": 0,
+        "max": 1589,
+        "box": null
+      },
+      "after": {
+        "page": 401,
+        "max": 1589,
+        "box": null
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/sites/",
+      "column": "page",
+      "before": {
+        "page": 0,
+        "max": 4503,
+        "box": null
+      },
+      "after": {
+        "page": 400,
+        "max": 4503,
+        "box": null
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/tools/paperclip/",
+      "column": "page",
+      "before": {
+        "page": 0,
+        "max": 0,
+        "box": null
+      },
+      "after": {
+        "page": 0,
+        "max": 0,
+        "box": null
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/tools/roughdraft/",
+      "column": "page",
+      "before": {
+        "page": 0,
+        "max": 0,
+        "box": null
+      },
+      "after": {
+        "page": 0,
+        "max": 0,
+        "box": null
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/sites/about-brian-lovin/",
+      "column": "page",
+      "before": {
+        "page": 0,
+        "max": 1752,
+        "box": null
+      },
+      "after": {
+        "page": 400,
+        "max": 1752,
+        "box": null
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/sites/inspora/",
+      "column": "page",
+      "before": {
+        "page": 0,
+        "max": 1730,
+        "box": null
+      },
+      "after": {
+        "page": 400,
+        "max": 1730,
+        "box": null
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/library/",
+      "column": "left (pane)",
+      "before": {
+        "page": 0,
+        "max": 1504,
+        "box": 0
+      },
+      "after": {
+        "page": 0,
+        "max": 1504,
+        "box": 400
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "route": "/library/",
+      "column": "right (page)",
+      "before": {
+        "page": 0,
+        "max": 1504,
+        "box": 400
+      },
+      "after": {
+        "page": 401,
+        "max": 1504,
+        "box": 400
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/tools/",
+      "column": "page",
+      "before": {
+        "page": 0,
+        "max": 1383,
+        "box": null
+      },
+      "after": {
+        "page": 391,
+        "max": 1383,
+        "box": null
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/sites/",
+      "column": "page",
+      "before": {
+        "page": 0,
+        "max": 3316,
+        "box": null
+      },
+      "after": {
+        "page": 393,
+        "max": 3316,
+        "box": null
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/tools/paperclip/",
+      "column": "page",
+      "before": {
+        "page": 0,
+        "max": 329,
+        "box": null
+      },
+      "after": {
+        "page": 329,
+        "max": 329,
+        "box": null
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/tools/roughdraft/",
+      "column": "page",
+      "before": {
+        "page": 0,
+        "max": 298,
+        "box": null
+      },
+      "after": {
+        "page": 298,
+        "max": 298,
+        "box": null
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/sites/about-brian-lovin/",
+      "column": "page",
+      "before": {
+        "page": 0,
+        "max": 2100,
+        "box": null
+      },
+      "after": {
+        "page": 391,
+        "max": 2100,
+        "box": null
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/sites/inspora/",
+      "column": "page",
+      "before": {
+        "page": 0,
+        "max": 2078,
+        "box": null
+      },
+      "after": {
+        "page": 394,
+        "max": 2078,
+        "box": null
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/library/",
+      "column": "left (pane)",
+      "before": {
+        "page": 0,
+        "max": 1011,
+        "box": 0
+      },
+      "after": {
+        "page": 0,
+        "max": 1011,
+        "box": 390
+      }
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "route": "/library/",
+      "column": "right (page)",
+      "before": {
+        "page": 0,
+        "max": 1011,
+        "box": 390
+      },
+      "after": {
+        "page": 400,
+        "max": 1011,
+        "box": 390
+      }
+    }
+  ],
+  "fling": [
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "canvas": "rgb(255, 255, 255)",
+      "paper": "rgb(255, 255, 255)",
+      "matFilter": "none",
+      "frames": 90,
+      "matFixedEveryFrame": true,
+      "shots": [
+        {
+          "file": "fling-iPadgen7-0.png",
+          "pageY": 314
+        },
+        {
+          "file": "fling-iPadgen7-1.png",
+          "pageY": 705
+        },
+        {
+          "file": "fling-iPadgen7-2.png",
+          "pageY": 966
+        }
+      ]
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "canvas": "rgb(255, 255, 255)",
+      "paper": "rgb(255, 255, 255)",
+      "matFilter": "none",
+      "frames": 90,
+      "matFixedEveryFrame": true,
+      "shots": [
+        {
+          "file": "fling-iPadPro11-0.png",
+          "pageY": 165
+        },
+        {
+          "file": "fling-iPadPro11-1.png",
+          "pageY": 533
+        },
+        {
+          "file": "fling-iPadPro11-2.png",
+          "pageY": 1083
+        }
+      ]
+    }
+  ],
+  "webkit": [
+    {
+      "ok": true,
+      "route": "/library/",
+      "over": "pane",
+      "page": 0,
+      "max": 1022,
+      "box": 400
+    },
+    {
+      "ok": true,
+      "route": "/sites/ panel",
+      "over": "shot",
+      "page": 0,
+      "max": 3459,
+      "box": 400
+    }
+  ],
+  "band": [
+    {
+      "ok": true,
+      "where": "iPad (gen 7) portrait 810x1080",
+      "engine": "chromium",
+      "hits": [
+        "stamp__edge",
+        "stamp__edge",
+        "stamp__edge",
+        "stamp__edge"
+      ]
+    },
+    {
+      "ok": true,
+      "where": "iPad (gen 7) landscape 1080x810",
+      "engine": "chromium",
+      "hits": [
+        "stamp__edge",
+        "stamp__edge",
+        "stamp__edge",
+        "stamp__edge"
+      ]
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 portrait 834x1194",
+      "engine": "chromium",
+      "hits": [
+        "stamp__edge",
+        "stamp__edge",
+        "stamp__edge",
+        "stamp__edge"
+      ]
+    },
+    {
+      "ok": true,
+      "where": "iPad Pro 11 landscape 1194x834",
+      "engine": "chromium",
+      "hits": [
+        "stamp__edge",
+        "stamp__edge",
+        "stamp__edge",
+        "stamp__edge"
+      ]
+    },
+    {
+      "ok": true,
+      "where": "1280x820",
+      "engine": "webkit",
+      "hits": [
+        "stamp__edge",
+        "stamp__edge"
+      ]
+    }
+  ],
+  "fails": 0
+}
