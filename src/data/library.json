@@ -2039,7 +2039,41 @@
     "domain": "minimaxir.com",
     "saved_date": "2026-09-24",
     "kind": "article",
-    "note": "Max Woolf shows how benchmark-driven agent loops produced 2–20× Rust speedups, with explicit baselines, pass/fail targets, and guardrails against gaming the tests."
+    "note": "Max Woolf shows how benchmark-driven agent loops produced 2–20× Rust speedups, with explicit baselines, pass/fail targets, and guardrails against gaming the tests.",
+    "tldr": "Max Woolf shows agents repeatedly optimizing Rust benchmarks by 2× to 20× with baselines, explicit targets, correctness gates, and anti-cheating constraints.",
+    "highlights": [
+      {
+        "text": "After months of testing and experimenting since the release of Opus 4.5 made agentic coding more viable, I can confidently confirm that modern agentic LLMs can indeed write Rust code that is significantly faster than current state-of-the-art approaches if given appropriate guardrails and constraints.",
+        "note": "The gains depend on explicit guardrails, not open-ended prompting.",
+        "color": "amber"
+      },
+      {
+        "text": "What I needed was a clear target goal that can be pass/failed, so I refined the prompt:",
+        "note": "A measurable target kept the optimization loop moving.",
+        "color": "blue"
+      },
+      {
+        "text": "It must be reiterated that agents can and will cheat if they can.",
+        "note": "Benchmark integrity needs its own rules and review.",
+        "color": "pink"
+      }
+    ],
+    "excerpt": "In January 2025, I had a fun hypothesis for a blog post: can LLMs write better code if you keep asking them to “write better code”? That was prior to the advent of robust agentic coding, but Claude Sonnet 3.5 was still able to iteratively improve on algorithmic Python code.",
+    "block": {
+      "best_for": "Engineers running benchmark-driven optimization loops with coding agents",
+      "tip": "Set a true baseline, require a measurable speedup, preserve correctness, and audit the benchmark diff for gaming.",
+      "needs": [
+        "A representative benchmark suite",
+        "A known-correct implementation or quality gate",
+        "Sequential benchmark runs",
+        "Repository guardrails"
+      ],
+      "start_here": [
+        "Record the true baseline before edits",
+        "Set a modest pass/fail target",
+        "Re-run correctness checks and inspect every benchmark change"
+      ]
+    }
   },
   {
     "slug": "answer-ai-design-with-blue-ink-style-illustrations",
