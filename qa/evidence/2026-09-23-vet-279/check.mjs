@@ -59,13 +59,15 @@ async function scripts(base, route) {
   return { bytes: [...js.values()].reduce((a, b) => a + b, 0), files: js.size, inline, urls: [...js.keys()] };
 }
 
-// 1. Signed out.
+// 1. Signed out. The one expected change: /tools and /sites carry the phone
+// guard in `lib/detail-panel.ts` (`PANEL_OFF`, the second VET-279 commit), 55 bytes.
+const PANEL_GUARD = { "/tools/": 55, "/sites/": 55 };
 for (const route of ["/", "/library", "/library/kind/article", "/library/jason-liu-codex-operating-system", "/library/how-gumclaw-works", "/tools/", "/sites/"]) {
   const [main, branch] = [await scripts(MAIN, route), await scripts(BRANCH, route)];
   report.delta.push({ route, mainJs: main.bytes, branchJs: branch.bytes, files: branch.files, inlineDelta: branch.inline - main.inline });
   // Inline may only shrink: an article no longer renders the empty Moments,
   // so its 510-byte seek script (inert with no moments) is not shipped.
-  check(`signed out ${route}: no added JS`, main.bytes === branch.bytes && main.files === branch.files && branch.inline <= main.inline && !branch.urls.some((u) => u.includes("signed-in")), `${main.bytes} -> ${branch.bytes} bytes, inline ${main.inline} -> ${branch.inline}`);
+  check(`signed out ${route}: no added JS${PANEL_GUARD[route] ? " but the panel guard" : ""}`, main.bytes + (PANEL_GUARD[route] ?? 0) === branch.bytes && main.files === branch.files && branch.inline <= main.inline && !branch.urls.some((u) => u.includes("signed-in")), `${main.bytes} -> ${branch.bytes} bytes, inline ${main.inline} -> ${branch.inline}`);
 }
 
 // 2. Public entries.

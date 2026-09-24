@@ -26,14 +26,14 @@
       "detail": "23397 -> 23397 bytes, inline 8670 -> 8160"
     },
     {
-      "name": "signed out /tools/: no added JS",
+      "name": "signed out /tools/: no added JS but the panel guard",
       "ok": true,
-      "detail": "30987 -> 30987 bytes, inline 12312 -> 12312"
+      "detail": "30987 -> 31042 bytes, inline 12312 -> 12312"
     },
     {
-      "name": "signed out /sites/: no added JS",
+      "name": "signed out /sites/: no added JS but the panel guard",
       "ok": true,
-      "detail": "27593 -> 27593 bytes, inline 5528 -> 5528"
+      "detail": "27593 -> 27648 bytes, inline 5528 -> 5528"
     },
     {
       "name": "/library/jason-liu-codex-operating-system: AI box, then the source, no \"In my words\"",
@@ -105,14 +105,14 @@
     {
       "route": "/tools/",
       "mainJs": 30987,
-      "branchJs": 30987,
+      "branchJs": 31042,
       "files": 23,
       "inlineDelta": 0
     },
     {
       "route": "/sites/",
       "mainJs": 27593,
-      "branchJs": 27593,
+      "branchJs": 27648,
       "files": 21,
       "inlineDelta": 0
     }
