@@ -214,3 +214,14 @@ export function block(value) {
     ...(raw.next_step != null && { next_step: lines([raw.next_step], "block.next_step", 1, 1)[0] }),
   };
 }
+
+/**
+ * A block tip split after its first sentence, so the page can mark the lead
+ * with the highlighter and leave the rest plain (VET-277). A tip that is one
+ * sentence comes back whole, with an empty rest.
+ * @param {string} tip @returns {[string, string]}
+ */
+export function leadSentence(tip) {
+  const match = /^(.+?[.!?]["”]?)\s+(\S.*)$/s.exec(tip);
+  return match ? [match[1], match[2]] : [tip, ""];
+}

@@ -6,6 +6,7 @@
  * (`ThemeToggle.astro`), so there is one theme code path.
  */
 
+import { copyText } from "./copy-flash";
 import type { Action } from "./search";
 import { isTheme, nextTheme } from "./theme";
 import { soundOn, toggleSound } from "./ui-sound";
@@ -25,10 +26,7 @@ export async function runAction(row: HTMLElement, action: Action): Promise<strin
   if (action === "sound") toggleSound();
   if (action === "theme") document.querySelector<HTMLButtonElement>("[data-theme-toggle]")?.click();
   if (action === "copy") {
-    done = await navigator.clipboard.writeText(location.href).then(
-      () => "Link copied",
-      () => "Couldn't copy the link",
-    );
+    done = (await copyText(location.href, row)) === "copied" ? "Link copied" : "Couldn't copy the link";
   }
   const [title, sub] = actionText(action);
   const titleNode = row.querySelector(".palette__row-title");

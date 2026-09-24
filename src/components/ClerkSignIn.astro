@@ -3,55 +3,122 @@
  * Clerk's sign-in form, and the one script that loads Clerk (VET-274). Only
  * `MeGate.astro` renders this, so no public page carries Clerk code.
  *
- * Styled with the site's tokens (Clerk applies `elements` as inline CSS, so
- * var() resolves and follows the theme). The page already says "Private", so
- * Clerk's own header, card chrome and the sign-up footer are hidden: one
- * account exists, created in the Clerk dashboard, and sign-ups are off.
+ * The page already says "Private", so Clerk's header and the sign-up footer
+ * are hidden: one account exists, created in the Clerk dashboard, and sign-ups
+ * are off. The look is plain CSS on Clerk's stable `cl-` class names below,
+ * not `appearance.elements` (VET-277): Clerk writes its own rules as a class
+ * plus `[data-variant]`, which outranked the single class `elements` compiles
+ * to, so those styles never landed. Its card also sat at -1px inside an
+ * `overflow: hidden` box, which clipped the field's edges and focus ring.
  */
 import { SignIn } from "@clerk/astro/components";
 
 const appearance = {
   elements: {
-    rootBox: { width: "100%" },
-    cardBox: { width: "100%", boxShadow: "none", border: "none", borderRadius: "0" },
-    card: { background: "transparent", boxShadow: "none", padding: "0", gap: "1rem" },
     header: { display: "none" },
-    footer: { background: "transparent", paddingInline: "0" },
     footerAction: { display: "none" },
-    formFieldLabel: { color: "var(--text-secondary)", fontFamily: "var(--font-sans)", fontSize: "0.875rem" },
-    formFieldInput: {
-      background: "var(--bg)",
-      color: "var(--text-primary)",
-      border: "1px solid var(--hairline-strong)",
-      borderRadius: "var(--r-md)",
-      boxShadow: "none",
-      fontFamily: "var(--font-sans)",
-      fontSize: "1rem",
-      minHeight: "44px",
-    },
-    formButtonPrimary: {
-      background: "var(--text-primary)",
-      color: "var(--bg)",
-      borderRadius: "var(--r-md)",
-      boxShadow: "none",
-      fontFamily: "var(--font-sans)",
-      fontSize: "0.9375rem",
-      textTransform: "none",
-      minHeight: "44px",
-      "&:hover": { background: "var(--text-secondary)" },
-    },
-    otpCodeFieldInput: { border: "1px solid var(--hairline-strong)", color: "var(--text-primary)" },
-    formResendCodeLink: { color: "var(--accent)" },
-    identityPreviewText: { color: "var(--text-primary)" },
-    identityPreviewEditButton: { color: "var(--accent)" },
   },
 };
 ---
 
-<SignIn routing="hash" forceRedirectUrl={Astro.url.pathname} appearance={appearance} />
+<div class="signin">
+  <SignIn routing="hash" forceRedirectUrl={Astro.url.pathname} appearance={appearance} />
+</div>
 
 <script>
   import { runInjectionScript } from "@clerk/astro/internal";
 
   void runInjectionScript({});
 </script>
+
+<style>
+  /* Flush with the text column: no card, no inset, nothing clipped. */
+  .signin :global(:is(.cl-rootBox, .cl-cardBox, .cl-card, .cl-footer)) {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .signin :global(.cl-card) {
+    gap: 1.25rem;
+  }
+
+  .signin :global(.cl-formFieldLabel) {
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: var(--text-secondary);
+  }
+
+  /* The newsletter field's recipe (NewsletterSignup.astro › .news__input):
+     square, a hairline that firms on hover and focus, the global focus ring. */
+  .signin :global(:is(.cl-formFieldInput, .cl-otpCodeFieldInput)[data-variant]) {
+    min-height: 44px;
+    max-height: none;
+    padding-inline: 0.75rem;
+    border: 1px solid var(--hairline);
+    border-radius: 0;
+    box-shadow: none;
+    background: var(--bg);
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 1rem;
+    transition-property: border-color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .signin :global(:is(.cl-formFieldInput, .cl-otpCodeFieldInput)[data-variant]:is(:hover, :focus)) {
+    border-color: var(--hairline-strong);
+    box-shadow: none;
+  }
+
+  .signin :global(:is(.cl-formFieldInput, .cl-otpCodeFieldInput)[data-variant]:focus-visible) {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .signin :global(.cl-formFieldInput::placeholder) {
+    color: var(--text-tertiary);
+  }
+
+  /* One solid ink button, no gradient sheen, no ▸. */
+  .signin :global(.cl-formButtonPrimary[data-variant]) {
+    min-height: 44px;
+    border-radius: 0;
+    box-shadow: none;
+    background: var(--text-primary);
+    color: var(--bg);
+    font: inherit;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    text-transform: none;
+    transition-property: background-color;
+    transition-duration: var(--dur-fast);
+    transition-timing-function: var(--ease);
+  }
+
+  .signin :global(.cl-formButtonPrimary[data-variant]::after),
+  .signin :global(.cl-buttonArrowIcon) {
+    display: none;
+  }
+
+  @media (hover: hover) {
+    .signin :global(.cl-formButtonPrimary[data-variant]:hover) {
+      background: var(--text-secondary);
+    }
+  }
+
+  .signin :global(:is(.cl-formResendCodeLink, .cl-identityPreviewEditButton)) {
+    color: var(--accent);
+  }
+
+  .signin :global(.cl-identityPreviewText) {
+    color: var(--text-primary);
+  }
+</style>

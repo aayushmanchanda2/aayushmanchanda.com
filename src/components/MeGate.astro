@@ -48,7 +48,9 @@ const { state } = Astro.props;
     text-wrap: pretty;
   }
 
+  /* Room for the form before Clerk paints it, so nothing below jumps. */
   .gate__widget {
     min-height: 22rem;
+    margin-top: 0.75rem;
   }
 </style>

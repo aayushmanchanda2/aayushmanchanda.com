@@ -389,3 +389,12 @@ test("a block reads whole, drops what is absent, and holds its rules (VET-273)",
   assert.equal("next_step" in (parseOne({ block: { ...good, next_step: null } }).block ?? {}), false);
   failsWith(entry({ block: { ...good, next_step: "One.\nTwo." } }), "block.next_step");
 });
+
+test("a block tip's lead is its first sentence, quotes and all", async () => {
+  const { leadSentence } = await import("./reader.mjs");
+  assert.deepEqual(leadSentence("Ask the agent first. Jason Liu calls it a heartbeat."), ["Ask the agent first.", "Jason Liu calls it a heartbeat."]);
+  assert.deepEqual(leadSentence('Sell outcomes. Yaman\'s line: "Accountability caps variance."'), ["Sell outcomes.", 'Yaman\'s line: "Accountability caps variance."']);
+  assert.deepEqual(leadSentence('Point AI at a chore. "A leader can arrange for relief." Then stop.'), ["Point AI at a chore.", '"A leader can arrange for relief." Then stop.']);
+  assert.deepEqual(leadSentence("One sentence only."), ["One sentence only.", ""]);
+  assert.deepEqual(leadSentence("Use tools.simonwillison.net first. Then edit."), ["Use tools.simonwillison.net first.", "Then edit."]);
+});
