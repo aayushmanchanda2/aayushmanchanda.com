@@ -1,0 +1,72 @@
+---
+/**
+ * /design, the frame and the devices: the stamp, the mat, the touch rules, the
+ * tablet rule (read live off this screen) and the share card.
+ */
+---
+
+<section>
+  <h2 class="sheet__head mono">Frame</h2>
+  <p>
+    Every page is a stamp on a cutting mat. The perforation is a mask cut out of
+    the mat, so the mat shows through every hole. The edge is four strips that
+    catch pointers, never one window-sized layer with a hole in it: Safari routes
+    a scroll by a layer's box and ignores its clip.
+  </p>
+  <p>
+    The mat and the stamp are <span class="code">100dvh</span> tall, so they
+    follow the window when iPad Safari's toolbar collapses. On a touch screen the
+    canvas behind them is paper and the paper's lift is dropped, because a fast
+    fling paints unfinished tiles in the canvas colour.
+  </p>
+  <p>
+    Under 1100px, or on any touch screen, there's no slide-over: a row on /tools
+    or /sites opens the entry's own page. This screen, right now:
+  </p>
+  <dl class="spec" data-device>
+    <div class="spec__row">
+      <dt class="mono spec__label">Pointer</dt>
+      <dd data-device-pointer>fine</dd>
+    </div>
+    <div class="spec__row">
+      <dt class="mono spec__label">Slide-over</dt>
+      <dd data-device-panel>on</dd>
+    </div>
+    <div class="spec__row">
+      <dt class="mono spec__label">Window height</dt>
+      <dd class="tabular-nums" data-device-height>--</dd>
+    </div>
+  </dl>
+
+  <p>
+    A shared link shows the stamp too: the domain in an ink pill, the section in
+    a chip of its mat's colour, the title, and a picture when there is one. Sized
+    to read on a 300px message card.
+  </p>
+  <img class="card outlined" src="/og/tools.jpg" alt="The share card for /tools" width="1200" height="630" loading="lazy" decoding="async" />
+</section>
+
+<script>
+  import { PANEL_OFF } from "../../lib/detail-panel";
+
+  const set = (key: string, text: string) => {
+    const slot = document.querySelector(`[data-device-${key}]`);
+    if (slot) slot.textContent = text;
+  };
+  const read = () => {
+    set("pointer", matchMedia("(pointer: coarse)").matches ? "coarse (touch)" : "fine");
+    set("panel", matchMedia(PANEL_OFF).matches ? "off, rows open the page" : "on");
+    set("height", `${innerHeight}px`);
+  };
+  read();
+  addEventListener("resize", read);
+</script>
+
+<style>
+  .card {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin-top: 1.5rem;
+  }
+</style>
