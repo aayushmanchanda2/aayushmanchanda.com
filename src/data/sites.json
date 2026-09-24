@@ -3176,5 +3176,47 @@
     "collections": [
       "portfolios"
     ]
+  },
+  {
+    "slug": "ghost",
+    "title": "Ghost",
+    "url": "https://ghost.ai/",
+    "domain": "ghost.ai",
+    "saved_date": "2026-09-24",
+    "shot": "/shots/ghost.webp",
+    "palette": [
+      "#f9f9f9",
+      "#b2eef7",
+      "#088bed",
+      "#8ed4ea",
+      "#743735",
+      "#e94f17"
+    ],
+    "design": {
+      "read_date": "2026-09-24",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#0a0a0a"
+        },
+        {
+          "name": "text",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "accent",
+          "hex": "#0000ee"
+        }
+      ],
+      "type": [],
+      "spacing": [
+        {
+          "name": "3",
+          "value": "12px"
+        }
+      ],
+      "radius": []
+    },
+    "collections": []
   }
 ]
