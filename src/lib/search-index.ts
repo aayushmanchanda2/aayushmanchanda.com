@@ -78,6 +78,12 @@ const STATIC_PAGES: readonly SearchEntry[] = [
     terms: "about aayush manchanda who bio orbis vetted",
   },
   {
+    title: "Now",
+    section: SECTION.pages,
+    href: "/now",
+    terms: "now currently building testing learning hiring where winnipeg",
+  },
+  {
     title: "Contact",
     section: SECTION.pages,
     href: "/contact",

@@ -15,6 +15,7 @@
  */
 
 import { kindGroups, KIND_LABELS, libraryTags } from "./library";
+import { nowDate } from "./now";
 import type { Glyph, SearchEntry } from "./search";
 import { search } from "./search";
 import type { Section, SectionHref } from "./sections";
@@ -54,9 +55,13 @@ function suggestions(index: readonly SearchEntry[]): string[] {
 export function paletteHome(sections: readonly Section[], index: readonly SearchEntry[]): SearchEntry[] {
   const row = (group: string, entry: Omit<SearchEntry, "group">): SearchEntry => ({ ...entry, group });
 
-  const goTo = sections.map((section) =>
-    row("Go to", { title: section.name, section: "", href: section.href, sub: section.blurb, glyph: SECTION_GLYPHS[section.href] }),
-  );
+  const goTo = [
+    ...sections.map((section) =>
+      row("Go to", { title: section.name, section: "", href: section.href, sub: section.blurb, glyph: SECTION_GLYPHS[section.href] }),
+    ),
+    // After the sections, as in the nav (VET-57).
+    row("Go to", { title: "Now", section: "", href: "/now", sub: `Updated ${nowDate()}`, glyph: "note" }),
+  ];
 
   const browse = [
     ...verdictGroups.map((group) =>

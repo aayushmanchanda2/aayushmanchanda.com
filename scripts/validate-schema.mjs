@@ -190,6 +190,12 @@ const EXPECTED = [
     types: ["WebPage", "BreadcrumbList"],
   },
   {
+    name: "now",
+    match: (page) => page === "now/index.html",
+    types: ["WebPage", "BreadcrumbList"],
+    requires: { WebPage: ["dateModified"] },
+  },
+  {
     name: "site details",
     match: (page) => /^sites\/[^/]+\/index\.html$/.test(page),
     types: ["WebPage", "ImageObject", "BreadcrumbList"],

@@ -184,7 +184,22 @@
       }
     },
     {
-      "src": "^/(tools|sites|library|experiments|notes)/?$",
+      "src": "^/now/?$",
+      "has": [
+        {
+          "type": "header",
+          "key": "accept",
+          "value": ".*text/markdown.*"
+        }
+      ],
+      "dest": "/now.md",
+      "headers": {
+        "Content-Type": "text/markdown; charset=utf-8",
+        "Vary": "Accept, Accept-Encoding"
+      }
+    },
+    {
+      "src": "^/(tools|sites|library|experiments|notes|now)/?$",
       "headers": {
         "Vary": "Accept, Accept-Encoding",
         "Link": "<https://aayushmanchanda.com/$1.md>; rel=\"alternate\"; type=\"text/markdown\""
@@ -209,7 +224,7 @@
       "continue": true
     },
     {
-      "src": "^/(tools|sites|library|experiments|notes)\\.md$",
+      "src": "^/(tools|sites|library|experiments|notes|now)\\.md$",
       "headers": {
         "Content-Type": "text/markdown; charset=utf-8",
         "Vary": "Accept, Accept-Encoding",

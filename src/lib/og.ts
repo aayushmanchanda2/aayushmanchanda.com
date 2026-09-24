@@ -1,6 +1,6 @@
 /**
  * The share cards (VET-281): one 1200x630 stamp per section index, tool, site,
- * library entry, note, tip, /about and /experiments, drawn by `lib/og-render.ts`
+ * library entry, note, tip, /about, /now and /experiments, drawn by `lib/og-render.ts`
  * and served from `pages/og/[...card].jpg.ts` at `/og/<page>.jpg`.
  *
  * This module is the list, and nothing but data: `layouts/Base.astro` reads it
@@ -12,6 +12,7 @@ import { getCollection } from "astro:content";
 
 import { assetFor } from "./assets";
 import { library } from "./library";
+import { nowDate } from "./now";
 import { monogram } from "./post";
 import { CATALOGUE, SECTION_HREFS, type SectionHref } from "./sections";
 import { sites } from "./sites";
@@ -89,9 +90,12 @@ async function build(): Promise<OgCard[]> {
     label: "About",
   };
 
+  const now: OgCard = { ...base, page: "/now", section: "now", title: "Now", line: `Updated ${nowDate()}`, label: "" };
+
   return [
     ...indexes,
     about,
+    now,
     ...tools.map((tool) => {
       const logo = assetFor("icons", tool.slug);
       return {
@@ -150,6 +154,6 @@ export async function ogImageFor(page: string): Promise<OgImage> {
   const cards = await ogCards();
   const card =
     cards.find((c) => c.page === page) ??
-    cards.find((c) => c.page !== "/about" && page.startsWith(`${c.page}/`) && !c.page.slice(1).includes("/"));
+    cards.find((c) => c.page !== "/about" && c.page !== "/now" && page.startsWith(`${c.page}/`) && !c.page.slice(1).includes("/"));
   return card ? { src: cardPath(card.page), alt: cardAlt(card), width: OG_WIDTH, height: OG_HEIGHT } : SITE_CARD;
 }

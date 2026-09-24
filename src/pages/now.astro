@@ -1,0 +1,87 @@
+---
+/**
+ * /now (VET-57): what Aayush is building, testing and learning, and where.
+ *
+ * The words and the date live in `lib/now.ts`, shared with `/now.md`; the
+ * tool counts are counted from `data/tools.json` at build. A footer-page
+ * document (`global.css › .doc`): mono labels, one hairline per part, the
+ * lines as a list under each. In the nav, with its own mat and postmark.
+ */
+import Base from "../layouts/Base.astro";
+import { NOW_ASK, NOW_UPDATED, nowDate, nowGroups, toolCounts, type Part } from "../lib/now";
+import { nowJsonLd } from "../lib/schema";
+import { tools } from "../lib/tools";
+
+const groups = nowGroups(toolCounts(tools));
+const external = (href: string) => href.startsWith("https://");
+---
+
+<Base
+  title="Now · Aayush Manchanda"
+  description="What Aayush Manchanda is building, testing and learning right now."
+  jsonLd={nowJsonLd()}
+>
+  <header>
+    <h1 class="page-title">Now</h1>
+    <p class="standfirst">Updated <time datetime={NOW_UPDATED}>{nowDate()}</time></p>
+  </header>
+
+  <div class="doc">
+    {
+      groups.map((group) => {
+        const line = (parts: Part[]) =>
+          parts.map((part) =>
+            typeof part === "string" ? (
+              part
+            ) : (
+              <a href={part.href} rel={external(part.href) ? "noopener" : undefined}>
+                {part.text}
+              </a>
+            ),
+          );
+        return (
+          <section>
+            <h2 class="doc__head mono">{group.head}</h2>
+            {group.list ? (
+              <ul class="now__list">
+                {group.lines.map((parts) => (
+                  <li>{line(parts)}</li>
+                ))}
+              </ul>
+            ) : (
+              group.lines.map((parts) => <p>{line(parts)}</p>)
+            )}
+          </section>
+        );
+      })
+    }
+    <section>
+      <p class="now__ask">
+        {NOW_ASK.map((part) => (typeof part === "string" ? part : <a href={part.href}>{part.text}</a>))}
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  /* `.doc p`'s reading size and ink, as a list: `.prose`'s tertiary markers and 8px between lines. */
+  .now__list {
+    margin-top: 0.85rem;
+    padding-left: 1.25em;
+    list-style: disc;
+    font-size: 1.125rem;
+    line-height: 1.6;
+  }
+
+  .now__list li::marker {
+    color: var(--text-tertiary);
+  }
+
+  .now__list li + li {
+    margin-top: 0.5rem;
+  }
+
+  .doc .now__ask {
+    margin-top: 0;
+  }
+</style>
