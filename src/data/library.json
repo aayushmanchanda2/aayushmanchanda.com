@@ -1955,7 +1955,40 @@
         "title": "How I built a $300K ARR consumer app in 8 months"
       }
     },
-    "media_retrieved": "2026-09-24"
+    "media_retrieved": "2026-09-24",
+    "tldr": "Akshaya details how he validated, built, and marketed a healthcare app to 00K ARR in eight months with a small AI-assisted team.",
+    "highlights": [
+      {
+        "text": "Now that AI has made it so easy to build an app, you should be spending as much time figuring the right things to build as you are actually building it.",
+        "note": "Validate what to build before accelerating the build.",
+        "color": "amber"
+      },
+      {
+        "text": "Before you even start building anything, start a TikTok & Instagram account and start posting founder-POV content talking about your app.",
+        "note": "Test demand with content before committing to the product.",
+        "color": "blue"
+      },
+      {
+        "text": "Make a Posthog dashboard to track your entire funnel: app install → go through onboarding questions → paywall conversion rates → app usage → retention.",
+        "note": "Instrument the full customer journey after launch.",
+        "color": "green"
+      }
+    ],
+    "excerpt": "It’s now more easier than ever to build a software business with AI. In this article, I’m going to go through my exact process & journey building a 00K+ ARR consumer app in the healthcare space.",
+    "block": {
+      "best_for": "Founders validating and launching consumer apps",
+      "tip": "Prove demand with niche content and a feature mockup before building the full product.",
+      "needs": [
+        "A specific consumer problem",
+        "A testable feature mockup",
+        "Analytics and error monitoring"
+      ],
+      "start_here": [
+        "Research demand in niche communities",
+        "Post founder-led content around a mockup",
+        "Build one or two core features behind onboarding and a paywall"
+      ]
+    }
   },
   {
     "slug": "inside-cursor",
