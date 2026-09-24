@@ -24,6 +24,7 @@
  */
 import EntryLink from "./EntryLink.astro";
 import VerdictBadge from "./VerdictBadge.astro";
+import VerdictHistory from "./VerdictHistory.astro";
 import VoiceBlocks from "./VoiceBlocks.astro";
 import AppIcon from "./AppIcon.astro";
 import { assetFor } from "../lib/assets";
@@ -110,6 +111,8 @@ const outCard = (href: string) =>
     dislike={tool.dislike}
     try={tool.try}
   />
+
+  <VerdictHistory tool={tool} />
 
   {
     /*

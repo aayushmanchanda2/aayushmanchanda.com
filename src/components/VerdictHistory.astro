@@ -1,0 +1,73 @@
+---
+/**
+ * A tool's verdicts over time, newest first (VET-54, `lib/verdict-history.ts`).
+ * Renders only when the verdict has changed at least once.
+ */
+import VerdictBadge from "./VerdictBadge.astro";
+import { formatDay } from "../lib/date";
+import type { Tool } from "../lib/tools";
+import { verdictHistory } from "../lib/verdict-history";
+
+interface Props {
+  tool: Tool;
+}
+
+const steps = verdictHistory(Astro.props.tool);
+---
+
+{
+  steps.length >= 2 && (
+    <section class="vh" aria-labelledby="vh-head">
+      <h2 class="vh__head mono" id="vh-head">Verdict history</h2>
+      <ol class="vh__list">
+        {steps.map((step) => (
+          <li class="vh__step mono">
+            <VerdictBadge verdict={step.verdict} />
+            <time datetime={step.date}>{formatDay(step.date)}</time>
+          </li>
+        ))}
+      </ol>
+    </section>
+  )
+}
+
+<style>
+  .vh {
+    margin-top: 2.5rem;
+  }
+
+  .vh__head {
+    color: var(--text-tertiary);
+  }
+
+  /* A hairline rail down the left, one dot per verdict on it. */
+  .vh__list {
+    margin: 0.5rem 0 0;
+    padding: 0 0 0 1rem;
+    list-style: none;
+    border-left: 1px solid var(--hairline-strong);
+  }
+
+  .vh__step {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 2rem;
+    color: var(--text-tertiary);
+  }
+
+  .vh__step::before {
+    content: "";
+    position: absolute;
+    left: calc(-1rem - 3.5px);
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--text-quaternary);
+  }
+
+  .vh__step:first-child::before {
+    background: var(--text-secondary);
+  }
+</style>
