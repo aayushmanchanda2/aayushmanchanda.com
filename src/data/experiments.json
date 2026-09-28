@@ -1,5 +1,16 @@
 [
   {
+    "slug": "vetted-tools",
+    "name": "vetted.tools",
+    "status": "running",
+    "one_liner": "Vetted's site, rebuilt from a blank Next.js app: a tool directory, AI use cases, and Vetty, a stop-motion mascot who hides in the footer.",
+    "started": "2026-08-31",
+    "links": [
+      "https://vetted.tools/?utm_source=aayushmanchanda.com",
+      "https://vetted.tools/work/vetted-tools?utm_source=aayushmanchanda.com"
+    ]
+  },
+  {
     "slug": "publish-pipeline",
     "name": "The publish pipeline",
     "status": "running",
