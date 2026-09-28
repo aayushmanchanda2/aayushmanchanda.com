@@ -53,7 +53,7 @@ export function nowGroups({ total, using, watching }: ToolCounts): NowGroup[] {
         ["The Vetted team. I’m hiring, so ", { text: "get in touch", href: "/contact" }, " if that’s you."],
         [
           "A rebuild of ",
-          { text: "vetted.tools", href: "https://vetted.tools" },
+          { text: "vetted.tools", href: "https://vetted.tools/?utm_source=aayushmanchanda.com" },
           ", led by a library of AI use cases with the tool directory underneath.",
         ],
       ],
