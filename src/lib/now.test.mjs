@@ -22,14 +22,12 @@ const library = JSON.parse(read("../data/library.json"));
 const text = (/** @type {any[]} */ parts) => parts.map((part) => (typeof part === "string" ? part : part.text)).join("");
 
 test("the tool counts are counted from tools.json", () => {
-  const using = tools.filter((tool) => tool.verdict === "using").length;
-  const watching = tools.filter((tool) => tool.verdict === "watching").length;
-  assert.ok(using > 0 && watching > 0);
-  assert.deepEqual(toolCounts(tools), { total: tools.length, using, watching });
+  assert.ok(tools.length > 0);
+  assert.deepEqual(toolCounts(tools), { total: tools.length });
 
   const lines = nowGroups(toolCounts(tools)).flatMap((group) => group.lines.map(text));
   assert.ok(
-    lines.includes(`Agent tools, on my own companies first. /tools has ${tools.length} so far: ${using} in daily use, ${watching} saved to try.`),
+    lines.includes(`Agent tools, on my own companies first. /tools has the ${tools.length} I use every week.`),
   );
 });
 

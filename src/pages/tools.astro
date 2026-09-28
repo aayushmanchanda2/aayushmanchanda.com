@@ -6,7 +6,7 @@ import ToolDetail from "../components/ToolDetail.astro";
 import ToolGrid from "../components/ToolGrid.astro";
 import ToolList from "../components/ToolList.astro";
 import { listJsonLd, pageUrl } from "../lib/schema";
-import { VERDICT_LABELS, categories, tools, verdictGroups } from "../lib/tools";
+import { categories, tools } from "../lib/tools";
 import ViewToggle from "../components/ViewToggle.astro";
 import { TOOLS_VIEW } from "../lib/view-toggle";
 
@@ -29,26 +29,24 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
 
 <Base
   title="Tools · Aayush Manchanda"
-  description="Software Aayush Manchanda installed and ran, with a dated verdict on each."
+  description="The tools and apps Aayush Manchanda uses every week, and why each one stays."
   jsonLd={jsonLd}
   full
 >
   <h1 class="page-title"><Mark color="green">Tools</Mark></h1>
-  <p class="standfirst">Software I installed and ran, with a dated verdict on each.</p>
+  <p class="standfirst">
+    What I use every week, and why each one stays. The rest I've tried are in
+    the <a class="ext" href="https://vetted.tools/tools?utm_source=aayushmanchanda.com" rel="noopener" target="_blank">vetted.tools directory</a>.
+  </p>
 
   {/*
     Filters, layout and count in one row directly above the table. The
-    filters are native selects synced to `?verdict=&category=` (script below).
+    filter is a native select synced to `?category=` (script below).
     The layout toggle is `ViewToggle.astro`, which also carries the pre-paint
     pass, so it sits before the table. All of it sits at the left, inside the
     520px the open panel leaves the list, so it stays usable beside it.
   */}
   <div class="controls">
-    <label class="visually-hidden" for="filter-verdict">Verdict</label>
-    <select class="select" id="filter-verdict" data-filter="verdict">
-      <option value="">All verdicts</option>
-      {verdictGroups.map((group) => <option value={group.verdict}>{VERDICT_LABELS[group.verdict]}</option>)}
-    </select>
     <label class="visually-hidden" for="filter-category">Category</label>
     <select class="select" id="filter-category" data-filter="category">
       <option value="">All categories</option>
@@ -60,9 +58,9 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
     <p class="jiggle-hint" data-jiggle-hint hidden>Long-press an icon</p>
   </div>
 
-  <ToolList tools={tools} />
+  <ToolList tools={tools} drop="verdict" why />
   <ToolGrid tools={tools} />
-  <p class="empty" data-filter-empty hidden>No tools match both filters. <a href="/tools">Show all</a></p>
+  <p class="empty" data-filter-empty hidden>No tools in that category. <a href="/tools">Show all</a></p>
   <DetailPanel base="/tools" listWidth="min(520px, 45vw)" />
 </Base>
 
@@ -107,20 +105,13 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
     text-align: center;
   }
 
-  /* A phone gives the two selects the first line, count and layout the next.
+  /* A phone gives the select half the first line, count and layout the rest.
      16px text, because iOS zooms the page into any field set smaller. */
   @media (max-width: 639px) {
     .select {
       flex: 1 1 calc(50% - 0.25rem);
       min-width: 0;
       font-size: 1rem;
-    }
-  }
-
-  /* Under 360 two selects side by side cut "All categories" short: one each. */
-  @media (max-width: 359px) {
-    .select {
-      flex-basis: 100%;
     }
   }
 </style>
@@ -131,23 +122,18 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
 
   /* --- filters: the URL is the state ------------------------------------- */
 
-  const verdict = document.querySelector<HTMLSelectElement>('[data-filter="verdict"]');
   const category = document.querySelector<HTMLSelectElement>('[data-filter="category"]');
   const counter = document.querySelector<HTMLElement>("[data-filter-count]");
   const empty = document.querySelector<HTMLElement>("[data-filter-empty]");
 
-  if (verdict && category && counter && empty) {
-    const values = (select: HTMLSelectElement) =>
-      [...select.options].map((option) => option.value).filter(Boolean);
+  // Every tool here is one he uses, so the verdict filter went and stays "".
+  if (category && counter && empty) {
+    const categories = [...category.options].map((option) => option.value).filter(Boolean);
 
     const apply = (filters: Filters) => {
-      verdict.value = filters.verdict;
       category.value = filters.category;
       for (const item of document.querySelectorAll<HTMLElement>("[data-tool]")) {
-        item.hidden = !matches(
-          { verdict: item.dataset.verdict ?? "", category: item.dataset.category ?? "" },
-          filters,
-        );
+        item.hidden = !matches({ verdict: "", category: item.dataset.category ?? "" }, filters);
       }
       // Count the table's rows only: the grid holds the same tools again.
       const shown = document.querySelectorAll("tr[data-tool]:not([hidden])").length;
@@ -155,16 +141,14 @@ const count = (n: number) => `${n} ${n === 1 ? "tool" : "tools"}`;
       empty.hidden = shown > 0;
     };
 
-    const fromUrl = () => apply(readFilters(location.search, values(verdict), values(category)));
+    const fromUrl = () => apply(readFilters(location.search, [], categories));
 
     // A push per change, so Back steps through the filters a reader tried.
-    for (const select of [verdict, category]) {
-      select.addEventListener("change", () => {
-        const filters = { verdict: verdict.value, category: category.value };
-        history.pushState(null, "", `${location.pathname}${filterSearch(filters)}`);
-        apply(filters);
-      });
-    }
+    category.addEventListener("change", () => {
+      const filters = { verdict: "", category: category.value };
+      history.pushState(null, "", `${location.pathname}${filterSearch(filters)}`);
+      apply(filters);
+    });
 
     window.addEventListener("popstate", fromUrl);
     fromUrl();

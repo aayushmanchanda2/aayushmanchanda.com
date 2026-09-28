@@ -26,13 +26,15 @@ interface Props {
   tools: Tool[];
   /** The column a filter page already states in its h1: one value on every row. */
   drop?: "category" | "verdict";
+  /** /tools: the column says why he keeps each one (`note`), wrapped, not what it is. */
+  why?: boolean;
 }
 
-const { tools, drop } = Astro.props;
+const { tools, drop, why = false } = Astro.props;
 
 const ALL: { id: string; label: string; sort: SortKey | null }[] = [
   { id: "name", label: "Name", sort: "name" },
-  { id: "desc", label: "Description", sort: null },
+  { id: "desc", label: why ? "Why I use it" : "Description", sort: null },
   { id: "category", label: "Category", sort: "category" },
   { id: "verdict", label: "Verdict", sort: "verdict" },
   { id: "date", label: "Date", sort: "date" },
@@ -40,7 +42,7 @@ const ALL: { id: string; label: string; sort: SortKey | null }[] = [
 const COLUMNS = ALL.filter((column) => column.id !== drop);
 ---
 
-<table class="table dtable">
+<table class:list={["table dtable", why && "dtable--why"]}>
   <thead class="thead">
     <tr class="head">
       {
@@ -75,10 +77,10 @@ const COLUMNS = ALL.filter((column) => column.id !== drop);
                 </span>
               )}
             </span>
-            <p class="row__desc row__desc--phone">{tool.description ?? tool.note}</p>
+            <p class="row__desc row__desc--phone">{why ? tool.note : (tool.description ?? tool.note)}</p>
           </td>
           <td class="cell cell--desc">
-            <p class="row__desc">{tool.description ?? tool.note}</p>
+            <p class="row__desc">{why ? tool.note : (tool.description ?? tool.note)}</p>
           </td>
           {drop !== "category" && <td class="cell cell--category">{tool.category}</td>}
           {drop !== "verdict" && (
@@ -136,6 +138,11 @@ const COLUMNS = ALL.filter((column) => column.id !== drop);
     white-space: nowrap;
     color: var(--text-tertiary);
     text-overflow: ellipsis;
+  }
+
+  /* A reason is read, not scanned: it wraps rather than truncating. */
+  .dtable--why .row__desc {
+    white-space: normal;
   }
 
   /* The phone copy under the name: two lines, the listing clamp. */

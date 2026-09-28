@@ -74,7 +74,7 @@ export const GET: APIRoute = () => {
     page: PAGES.tools,
     title: "Tools",
     description:
-      "Software Aayush Manchanda installed and ran, with a dated verdict on each.",
+      "The tools and apps Aayush Manchanda uses every week, and why each one stays. Everything else he tested is in the vetted.tools directory: https://vetted.tools/tools",
     updated: newest(tools.map((tool) => tool.status_date)),
     blocks: [
       table(["Tool", "Repo", "Verdict", "Category", "Updated", "Description", "Note"], rows),
