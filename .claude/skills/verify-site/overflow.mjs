@@ -53,8 +53,11 @@ function scan() {
     return r.right - parseFloat(s.paddingRight) - parseFloat(s.borderRightWidth);
   };
   const block = (el) => {
-    while (el && (getComputedStyle(el).display.startsWith("inline") ||
-      getComputedStyle(el).display === "contents" || !el.getBoundingClientRect().width)) el = el.parentElement;
+    while (el) {
+      const display = getComputedStyle(el).display;
+      if (!display.startsWith("inline") && display !== "contents") break;
+      el = el.parentElement;
+    }
     return el;
   };
   if (document.documentElement.scrollWidth > vw + 1) out.push(`page scrolls sideways: ${document.documentElement.scrollWidth} > ${vw}`);
