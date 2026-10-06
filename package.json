@@ -14,7 +14,8 @@
     "og": "node scripts/og.mjs",
     "test": "node --experimental-strip-types --disable-warning=ExperimentalWarning --test pipeline/*.test.mjs src/lib/*.test.mjs",
     "validate:schema": "node scripts/validate-schema.mjs && node scripts/image-budget.mjs",
-    "doodles": "node scripts/doodles.mjs"
+    "doodles": "node scripts/doodles.mjs",
+    "e2e": "node scripts/e2e-run.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.3",
@@ -29,7 +30,11 @@
     "esbuild": true
   },
   "devDependencies": {
+    "@ai-sdk/openai": "4.0.83",
     "@astrojs/check": "^0.9.10",
+    "@e2e-dev/web": "0.12.0",
+    "ai": "7.0.127",
+    "e2e": "0.17.0",
     "playwright": "^1.62.1",
     "sharp": "^0.35.3",
     "typescript": "^6.0.3"
