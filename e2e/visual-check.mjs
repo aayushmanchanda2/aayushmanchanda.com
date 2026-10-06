@@ -4,7 +4,10 @@ import { chromium } from 'playwright';
 
 const port = 4331;
 const base = `http://127.0.0.1:${port}`;
-const routes = ['/', '/library/', '/library/kind/article/', '/tools/', '/sites/', '/notes/', '/experiments/', '/about/', '/now/', '/contact/', '/privacy/', '/design/'];
+const fixturePort = 4332;
+const fixtureBase = `http://127.0.0.1:${fixturePort}`;
+const indexRoutes = ['/', '/library/', '/library/kind/article/', '/tools/', '/sites/', '/notes/', '/experiments/', '/about/', '/now/', '/contact/', '/privacy/', '/design/', '/404.html'];
+const fixtureRoutes = ['entry', 'post', 'video', 'index', 'sign-in', 'unconfigured', 'not-found'].map((state) => `/me/fixture/${state}`);
 const out = '.e2e/screenshots';
 mkdirSync(out, { recursive: true });
 
@@ -14,25 +17,68 @@ const scanSource = source.slice(source.indexOf('function scan() {'), source.inde
 if (!scanSource.startsWith('function scan() {')) throw new Error('verify-site overflow scanner moved');
 const scan = /** @type {() => string[]} */ (new Function(`${scanSource}\nreturn scan();`));
 
-try {
-  const occupied = await fetch(base).then(() => true, () => false);
-  if (occupied) throw new Error(`Port ${port} is already in use`);
-} catch (error) {
-  if (error instanceof Error && error.message.includes('already in use')) throw error;
+for (const [address, number] of /** @type {Array<[string, number]>} */ ([[base, port], [fixtureBase, fixturePort]])) {
+  const occupied = await fetch(address).then(() => true, () => false);
+  if (occupied) throw new Error(`Port ${number} is already in use`);
 }
 
 const server = spawn('python3', ['-m', 'http.server', String(port), '--bind', '127.0.0.1', '--directory', 'dist'], { stdio: 'ignore' });
+const fixtureServer = spawn('node', ['node_modules/astro/bin/astro.mjs', 'dev', '--host', '127.0.0.1', '--port', String(fixturePort)], {
+  stdio: 'ignore',
+  env: { ...process.env, ASTRO_DEV_BACKGROUND: '0' }, // Suppress Astro's agent-detected background daemon.
+});
 let browser;
 const report = [];
 try {
-  let ready = false;
-  for (let i = 0; i < 100; i++) {
-    ready = await fetch(base).then((response) => response.ok, () => false);
-    if (ready) break;
-    await new Promise((resolve) => setTimeout(resolve, 100));
+  for (const [address, label] of [[base, 'static'], [fixtureBase, 'fixture']]) {
+    let ready = false;
+    for (let i = 0; i < 120; i++) {
+      ready = await fetch(address).then((response) => response.ok, () => false);
+      if (ready) break;
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+    if (!ready) throw new Error(`Visual check ${label} server did not start`);
   }
-  if (!ready) throw new Error('Visual check static server did not start');
   browser = await chromium.launch();
+
+  // Resolve detail pages from their current index links: cron imports can change slugs.
+  const discovery = await browser.newPage();
+  /** @param {string} route @param {string} selector */
+  async function linked(route, selector) {
+    await discovery.goto(base + route, { waitUntil: 'load' });
+    const href = await discovery.locator(selector).first().getAttribute('href');
+    if (!href || new URL(href, base).origin !== base) throw new Error(`Missing local detail link: ${route} ${selector}`);
+    return new URL(href, base).pathname;
+  }
+  const detailRoutes = [
+    await linked('/library/', 'nav[data-pane] [data-rows] a[href]'),
+    await linked('/tools/', 'a[data-panel-open]:visible'),
+    await linked('/sites/', 'a[data-panel-open]:visible'),
+    await linked('/notes/', 'section[aria-labelledby^="y"] a[href^="/notes/"]'),
+    await linked('/notes/', 'section[aria-labelledby="how-i-work"] a[href^="/notes/"]'),
+  ];
+  await discovery.close();
+  const routes = [...indexRoutes, ...detailRoutes.map((route) => new URL(route, base).pathname)];
+  /** @param {import('playwright').Page} page @param {string} url */
+  async function inspect(page, url) {
+    for (let attempt = 0; attempt < 3; attempt++) {
+      try {
+        const response = await page.goto(url, { waitUntil: 'networkidle' });
+        await page.evaluate(() => document.fonts.ready);
+        const state = await page.evaluate(() => ({
+          theme: document.documentElement.dataset.theme,
+          bg: getComputedStyle(document.body).backgroundColor,
+          // The nav panel normally animates; reduced motion must shorten that actual transition.
+          navTransition: document.querySelector('[data-mnav-panel]') ? getComputedStyle(/** @type {Element} */ (document.querySelector('[data-mnav-panel]'))).transitionDuration : '',
+        }));
+        return { status: response?.status() ?? 0, state, findings: await page.evaluate(scan) };
+      } catch (error) {
+        // Astro dev can replace a fixture document once as it starts warming.
+        if (attempt === 2 || !String(error).includes('Execution context was destroyed')) throw error;
+      }
+    }
+    throw new Error(`Could not inspect ${url}`);
+  }
   for (const theme of /** @type {const} */ (['light', 'dark'])) {
     const context = await browser.newContext({
       viewport: { width: 375, height: 812 },
@@ -44,24 +90,30 @@ try {
     await context.addInitScript((value) => localStorage.setItem('theme', value), theme);
     await context.route('**/*', (route) => {
       const url = new URL(route.request().url());
-      return url.origin === base ? route.continue() : route.abort();
+      return [base, fixtureBase].includes(url.origin) ? route.continue() : route.abort();
     });
     const page = await context.newPage();
-    for (const route of routes) {
-      const response = await page.goto(base + route, { waitUntil: 'load' });
-      await page.evaluate(() => document.fonts.ready);
-      const state = await page.evaluate(() => ({
-        theme: document.documentElement.dataset.theme,
-        motion: matchMedia('(prefers-reduced-motion: reduce)').matches,
-        bg: getComputedStyle(document.body).backgroundColor,
-      }));
-      const overflow = await page.evaluate(scan);
+    for (const route of [...routes, ...fixtureRoutes]) {
+      const origin = route.startsWith('/me/') ? fixtureBase : base;
+      const { status, state, findings } = await inspect(page, origin + route);
+      // Subpixel glyph overhang can round to a 1–3px range beyond a text box
+      // without increasing scrollWidth. Keep it in the report, but fail spills.
+      const minorOverhang = findings.filter((issue) => {
+        const match = /^text in .+ right (\d+) > its box (\d+)/.exec(issue);
+        return match && Number(match[1]) - Number(match[2]) <= 3;
+      });
+      const overflow = findings.filter((issue) => !minorOverhang.includes(issue));
       const shot = `${route.replaceAll('/', '_') || 'home'}-${theme}-375-reduced.png`;
       await page.screenshot({ path: `${out}/${shot}`, animations: 'disabled' });
-      const result = { route, status: response?.status(), ...state, overflow, screenshot: shot };
+      const result = { route, origin, status, ...state, overflow, minorOverhang, screenshot: shot };
       report.push(result);
-      if (result.status !== 200 || state.theme !== theme || !state.motion || overflow.length) {
-        throw new Error(`${route} ${theme}: HTTP ${result.status}, theme ${state.theme}, motion ${state.motion}, overflow ${overflow.slice(0, 3).join('; ')}`);
+      const transitions = state.navTransition.split(',').map((duration) => {
+        const seconds = parseFloat(duration);
+        return duration.trim().endsWith('ms') ? seconds / 1000 : seconds;
+      });
+      const statusOK = route === '/me/fixture/not-found' ? [200, 404].includes(result.status) : result.status === 200;
+      if (!statusOK || state.theme !== theme || !state.navTransition || transitions.some((seconds) => seconds > 0.001) || overflow.length) {
+        throw new Error(`${route} ${theme}: HTTP ${result.status}, theme ${state.theme}, nav transition ${state.navTransition}, overflow ${overflow.slice(0, 3).join('; ')}`);
       }
     }
     await context.close();
@@ -84,7 +136,7 @@ try {
       reducedMotion: 'reduce',
     });
     if (look.stored !== 'system') await context.addInitScript((value) => localStorage.setItem('theme', value), look.stored);
-    await context.route('**/*', (route) => new URL(route.request().url()).origin === base ? route.continue() : route.abort());
+    await context.route('**/*', (route) => [base, fixtureBase].includes(new URL(route.request().url()).origin) ? route.continue() : route.abort());
     const page = await context.newPage();
     for (const route of ['/', '/tools/', '/library/', '/sites/']) {
       const response = await page.goto(base + route, { waitUntil: 'load' });
@@ -109,6 +161,10 @@ try {
   if (server.exitCode === null) {
     server.kill('SIGTERM');
     await new Promise((resolve) => server.once('exit', resolve));
+  }
+  if (fixtureServer.exitCode === null) {
+    fixtureServer.kill('SIGTERM');
+    await new Promise((resolve) => fixtureServer.once('exit', resolve));
   }
 }
 console.log(`Visual checks passed: ${report.length} mobile looks, reduced motion on; screenshots in ${out}`);

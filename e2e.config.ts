@@ -35,6 +35,7 @@ export default {
         command: {
           executable: 'node',
           args: ['node_modules/astro/bin/astro.mjs', 'dev', '--host', '127.0.0.1', '--port', '4330'],
+          env: { ASTRO_DEV_BACKGROUND: '0' },
           startupTimeout: 120_000,
           log: '.e2e/logs/fixture.log',
         },

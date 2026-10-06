@@ -1,5 +1,6 @@
 import { test } from '@e2e-dev/web';
 import { expect } from 'e2e';
+import { chromium } from 'playwright';
 import { localOnly, path } from './support';
 
 test('notes list opens a note and a tip', async ({ app, browser }) => {
@@ -25,11 +26,23 @@ test('experiments index has dated rows', async ({ app, browser }) => {
 
 test('copy button confirms the copied value', async ({ app, browser }) => {
   await localOnly(app.baseUrl, browser, 'public');
-  await browser.goto('/design/', { waitUntil: 'networkidle' });
-  const button = browser.locator('button[data-copy]:visible').first();
-  await expect(button).toBeVisible();
-  await button.tap();
-  await expect(browser.locator('button[data-copy]:visible [data-copy-label]').first()).toContainText(/copied|Press .*C/i);
+  const ownBrowser = await chromium.launch();
+  try {
+    const context = await ownBrowser.newContext();
+    const origin = new URL(app.baseUrl!).origin;
+    await context.grantPermissions(['clipboard-read', 'clipboard-write'], { origin });
+    await context.route('**/*', (route) => new URL(route.request().url()).origin === origin ? route.continue() : route.abort());
+    const page = await context.newPage();
+    await page.goto(new URL('/design/', origin).href, { waitUntil: 'networkidle' });
+    const button = page.locator('button[data-copy]:visible').first();
+    const value = await button.getAttribute('data-copy');
+    expect(value).toBeTruthy();
+    await button.click();
+    await button.locator('[data-copy-label]').getByText('copied', { exact: true }).waitFor();
+    expect(await page.evaluate(() => navigator.clipboard.readText())).toBe(value!);
+  } finally {
+    await ownBrowser.close();
+  }
 });
 
 for (const view of ['entry', 'post', 'video', 'index', 'sign-in', 'unconfigured', 'not-found']) {

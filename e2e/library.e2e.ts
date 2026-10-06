@@ -1,25 +1,35 @@
 import { test } from '@e2e-dev/web';
 import { expect } from 'e2e';
-import { localOnly, path } from './support';
+import { localOnly } from './support';
 
 test('library kind, tag, and domain filters lead to an entry', async ({ app, browser }) => {
   await localOnly(app.baseUrl, browser, 'public');
-  await app.open('/library/');
+  await browser.goto('/library/', { waitUntil: 'networkidle' });
   await expect(browser.locator('[data-view=""]')).toBeVisible();
   await browser.locator('a[data-kind-set="article"]:visible').first().tap();
-  expect(await path(browser)).toMatch(/\/library\/kind\/article\/?$/);
+  await expect(browser).toHaveURL(/\/library\/kind\/article\/?$/);
+  const before = await browser.locator('nav[data-pane] [data-rows] > li[data-tags]:visible').count();
   await browser.locator('details.ltags__box:visible > summary').first().tap();
   await browser.locator('label.ltags__tag:visible').first().tap();
-  expect(new URL(await browser.url()).searchParams.has('tags')).toBe(true);
-  await browser.goto('/library/');
+  await expect(browser).toHaveURL(/[?&]tags=/);
+  expect(await browser.locator('nav[data-pane] [data-rows] > li[data-tags]:visible').count()).toBeLessThan(before);
+  await browser.goto('/library/', { waitUntil: 'networkidle' });
   const entry = browser.locator('nav[data-pane] [data-rows] a').first();
   await entry.tap();
-  expect(await path(browser)).toMatch(/^\/library\/[^/]+\/?$/);
+  await expect(browser).toHaveURL(/\/library\/[^/]+\/?(?:\?.*)?$/);
   await expect(browser.locator('h1.page-title--entry')).toBeVisible();
-  const domain = browser.locator('a[href^="/library/domain/"]:visible').first();
-  if (await domain.count()) await domain.tap();
-  else await browser.goto('/library/domain/x-com/');
-  expect(await path(browser)).toMatch(/^\/library\/domain\//);
+  await browser.goto('/library/', { waitUntil: 'networkidle' });
+  const withDomain = await browser.evaluate(() => {
+    const rows = [...document.querySelectorAll<HTMLAnchorElement>('nav[data-pane] [data-rows] li[data-kind] > a')];
+    const domain = (row: HTMLAnchorElement) => row.querySelector('small span')?.textContent?.trim() ?? '';
+    return rows.find((row) => domain(row) && rows.some((other) => other !== row && domain(other) === domain(row)))?.href ?? null;
+  });
+  expect(withDomain).toBeTruthy();
+  await browser.goto(withDomain!);
+  const domain = browser.locator('a[href*="/library/domain/"]:visible').first();
+  await expect(domain).toBeVisible();
+  await domain.tap();
+  await expect(browser).toHaveURL(/\/library\/domain\/[^/]+\/?$/);
 });
 
 test('library search narrows the list at phone width', async ({ app, browser }) => {
@@ -39,8 +49,27 @@ test('agent finds articles, then opens one detail', async ({ app, browser, agent
   await localOnly(app.baseUrl, browser, 'public');
   await app.open('/library/');
   await agent.act('Use the Articles kind filter in the library. Stay on this site.');
-  expect(await path(browser)).toMatch(/\/library\/kind\/article\/?$/);
+  await expect(browser).toHaveURL(/\/library\/kind\/article\/?$/);
   await browser.locator('nav[data-pane] [data-rows] > li:not([hidden]) > a').first().tap();
-  expect(await path(browser)).toMatch(/^\/library\/[^/]+\/?$/);
+  await expect(browser).toHaveURL(/\/library\/[^/]+\/?(?:\?.*)?$/);
   await expect(browser.locator('h1.page-title--entry')).toBeVisible();
+});
+
+for (const kind of ['post', 'video'] as const) {
+  test(`library ${kind} view renders entries`, async ({ app, browser }) => {
+    await localOnly(app.baseUrl, browser, 'public');
+    await browser.goto('/library/', { waitUntil: 'networkidle' });
+    await browser.locator(`a[data-kind-set="${kind}"]:visible`).first().tap();
+    await expect(browser).toHaveURL(new RegExp(`/library/kind/${kind}/?$`));
+    await expect(browser.locator(`[data-view="${kind}"]`)).toBeVisible();
+    expect(await browser.locator(`[data-view="${kind}"] a[href*="/library/"]`).count()).toBeGreaterThan(0);
+  });
+}
+
+test('library Articles view shows an inline detail', async ({ app, browser }) => {
+  await localOnly(app.baseUrl, browser, 'public');
+  await browser.goto('/library/', { waitUntil: 'networkidle' });
+  await browser.locator('a[data-kind-set="article"]:visible').first().tap();
+  await expect(browser).toHaveURL(/\/library\/kind\/article\/?$/);
+  await expect(browser.locator('[data-view="article"] .view__reader h2.page-title--entry')).toBeVisible();
 });
