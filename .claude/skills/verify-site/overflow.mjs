@@ -52,7 +52,11 @@ function scan() {
     const r = el.getBoundingClientRect(), s = getComputedStyle(el);
     return r.right - parseFloat(s.paddingRight) - parseFloat(s.borderRightWidth);
   };
-  const block = (el) => { while (el && getComputedStyle(el).display.startsWith("inline")) el = el.parentElement; return el; };
+  const block = (el) => {
+    while (el && (getComputedStyle(el).display.startsWith("inline") ||
+      getComputedStyle(el).display === "contents" || !el.getBoundingClientRect().width)) el = el.parentElement;
+    return el;
+  };
   if (document.documentElement.scrollWidth > vw + 1) out.push(`page scrolls sideways: ${document.documentElement.scrollWidth} > ${vw}`);
   // Every box: its right edge inside the viewport.
   for (const el of document.body.querySelectorAll("*")) {
