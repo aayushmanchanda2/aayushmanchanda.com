@@ -3201,7 +3201,39 @@
         "cover": "/posts/2105311793631633565/cover.webp"
       }
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "Personal agents win by combining identity context with observed behavior, delivering value before demanding setup, and learning without mistaking fleeting actions for preferences.",
+    "highlights": [
+      {
+        "text": "The paradox is that the agent needs context on me to show me its value. And I need to see its value before I’m willing to spend the time giving it context.",
+        "note": "Agents need context to prove value, but users need value before investing in setup.",
+        "color": "amber"
+      },
+      {
+        "text": "That foundation is called Identity Context: this is not what we do, but who we are. Our background, relationships, career, upbringing, and the circumstances that give our choices meaning.",
+        "note": "Identity gives behavioral observations a stable place and meaning.",
+        "color": "blue"
+      },
+      {
+        "text": "The agents that get identity context right will build a compounding advantage. They can be useful sooner, make better sense of what we tell them, and earn the trust to keep learning. Each good interaction gives the next one a better place to begin.",
+        "note": "Better context compounds through usefulness, trust, and continued learning.",
+        "color": "green"
+      }
+    ],
+    "excerpt": "The rise of Instinct kicked off a new consumer AI wave that may be a winner take all market. This week alone, I’ve tried more than a dozen new personal agents and not a single one had the key ingredient to come out on top.",
+    "block": {
+      "best_for": "Product teams building personal agents",
+      "tip": "Use identity context to interpret behavioral signals before turning them into lasting preferences.",
+      "needs": [
+        "Identity context",
+        "Behavioral observations"
+      ],
+      "start_here": [
+        "Seed the agent with background and relationships",
+        "Use that identity to interpret new actions",
+        "Separate enduring interests from temporary obligations"
+      ]
+    }
   },
   {
     "slug": "rip-vector-database",
