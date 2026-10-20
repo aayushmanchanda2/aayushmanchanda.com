@@ -2544,7 +2544,33 @@
     "domain": "claude.dev",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "Thariq Shihipar maps Claude Code effort levels to the work: low for fast iteration, high for verification and edge cases, max for difficult autonomous runs."
+    "note": "Thariq Shihipar maps Claude Code effort levels to the work: low for fast iteration, high for verification and edge cases, max for difficult autonomous runs.",
+    "tldr": "Higher effort increases Claude judgment, verification, and edge-case testing; use low effort to build and high effort to verify.",
+    "highlights": [
+      {
+        "text": "At a high level, I found that effort was a great way of modulating how much verification and edgecase testing Claude did and how much of its own judgement it used.",
+        "note": "Effort changes behavior, not just token use.",
+        "color": "amber"
+      },
+      {
+        "text": "For normal software engineering, I’m running a loop of getting the model to interview me then implementing on low effort, reviewing what it built, and then running verification on high effort.",
+        "note": "A practical effort split for everyday coding.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "What effort really is and when to use which level in Claude Code, from my own tests of three builds and a deep dive into Terminal-Bench 3.0 on Opus 5.5 and Fable 5.1.",
+    "block": {
+      "best_for": "Claude Code users choosing effort levels",
+      "tip": "Implement on low effort, review the result, then verify on high effort.",
+      "needs": [
+        "Claude Code"
+      ],
+      "start_here": [
+        "Use low effort for implementation.",
+        "Review what Claude built.",
+        "Run verification on high effort."
+      ]
+    }
   },
   {
     "slug": "how-to-use-jev-1-as-an-embedder",
