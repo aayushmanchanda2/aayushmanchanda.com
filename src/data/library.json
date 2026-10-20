@@ -3049,7 +3049,7 @@
   },
   {
     "slug": "deedy-s-opus-5-5-video-generation-workflow",
-    "title": "I've spend 10+ hrs perfecting how to get the best out of…",
+    "title": "Deedy's Opus 5.5 Video Workflow",
     "url": "https://x.com/deedydas/status/2104957026199900220?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
     "domain": "x.com",
     "saved_date": "2026-10-20",
@@ -3072,7 +3072,22 @@
         }
       ]
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "Deedy's workflow uses Claude Code, multimodal APIs, motion tools, ffmpeg, subtitles, and a critic pass to produce videos end to end.",
+    "block": {
+      "best_for": "AI video makers building a repeatable production workflow",
+      "tip": "Generate reference images and an animatic before the full video to improve consistency.",
+      "needs": [
+        "Claude Code",
+        "OpenRouter API",
+        "ffmpeg"
+      ],
+      "start_here": [
+        "Specify the output, aspect ratio, length, and style",
+        "Generate reference images and an animatic",
+        "Run caption and critic passes on the final video"
+      ]
+    }
   },
   {
     "slug": "box-s-aaron-levie-on-reinventing-yourself-in-the-ai-age-and",
