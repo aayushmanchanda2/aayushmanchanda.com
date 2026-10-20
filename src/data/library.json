@@ -2362,12 +2362,26 @@
   },
   {
     "slug": "100-motion-themes-saas-motion-kit",
-    "title": "100 Motion Themes — saas-motion-kit",
+    "title": "101 Motion Themes — saas-motion-kit",
     "url": "https://tugrawork-creator.github.io/saas-motion-kit/",
     "domain": "tugrawork-creator.github.io",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "A library of 100 storyboard systems for 45-second software demos, each with key frames, components, motion techniques and Claude Code handoff notes."
+    "note": "A library of 100 storyboard systems for 45-second software demos, each with key frames, components, motion techniques and Claude Code handoff notes.",
+    "tldr": "A catalog of 101 motion directions for one SaaS product story, each with keyframes, components, techniques, and adaptation notes.",
+    "block": {
+      "best_for": "Choosing a motion direction for a SaaS launch video",
+      "tip": "Pick one theme, then adapt its keyframes, component kit, and motion techniques to your product.",
+      "needs": [
+        "A product story",
+        "Claude Code with HyperFrames"
+      ],
+      "start_here": [
+        "Browse themes by visual approach",
+        "Choose one with the right readability, trust, and effort tradeoff",
+        "Adapt the supplied frames and components to your product"
+      ]
+    }
   },
   {
     "slug": "jev-studied-438-122-apps-doing-10k-mo-the-bar-is-low",
