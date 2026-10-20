@@ -3218,5 +3218,1004 @@
       "radius": []
     },
     "collections": []
+  },
+  {
+    "slug": "art-and-design-inspiration-the-best-new-work",
+    "title": "creativeboom.com",
+    "url": "https://www.creativeboom.com/work/",
+    "domain": "creativeboom.com",
+    "saved_date": "2026-10-20",
+    "shot": "/shots/art-and-design-inspiration-the-best-new-work.webp",
+    "palette": [
+      "#fdfdfc",
+      "#2f2e2c",
+      "#51504b",
+      "#b3b2b0",
+      "#d0d1d1",
+      "#91928e"
+    ],
+    "design": {
+      "read_date": "2026-10-20",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "surface",
+          "hex": "#fbf7ef"
+        },
+        {
+          "name": "text",
+          "hex": "#000000"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#666666"
+        },
+        {
+          "name": "border",
+          "hex": "#000000"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Roobert",
+          "fontSize": "60px",
+          "fontWeight": "500",
+          "lineHeight": "66px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "ABC Diatype",
+          "fontSize": "16px",
+          "fontWeight": "700",
+          "lineHeight": "24px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "body",
+          "fontFamily": "ABC Diatype",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "label",
+          "fontFamily": "ABC Diatype",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "22px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "6px",
+          "value": "6px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "5",
+          "value": "20px"
+        },
+        {
+          "name": "6",
+          "value": "24px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "5px"
+        },
+        {
+          "name": "card-2",
+          "value": "6px"
+        }
+      ]
+    },
+    "collections": []
+  },
+  {
+    "slug": "the-working-assembly",
+    "title": "The Working Assembly",
+    "url": "https://www.theworkingassembly.com/",
+    "domain": "theworkingassembly.com",
+    "saved_date": "2026-10-20",
+    "shot": "/shots/the-working-assembly.webp",
+    "palette": [
+      "#faf8f6",
+      "#ead7c9",
+      "#312911",
+      "#6d544b",
+      "#959494",
+      "#b3b0ad"
+    ],
+    "design": {
+      "read_date": "2026-10-20",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#faf8f6"
+        },
+        {
+          "name": "surface",
+          "hex": "#0e0e0e"
+        },
+        {
+          "name": "text",
+          "hex": "#0e0e0e"
+        },
+        {
+          "name": "border",
+          "hex": "#0e0e0e"
+        }
+      ],
+      "type": [
+        {
+          "name": "heading",
+          "fontFamily": "neue-haas-grotesk-text",
+          "fontSize": "60px",
+          "fontWeight": "700",
+          "lineHeight": "57px",
+          "letterSpacing": "-0.6px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "neue-haas-grotesk-text",
+          "fontSize": "16px",
+          "fontWeight": "500",
+          "lineHeight": "24px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        },
+        {
+          "name": "5",
+          "value": "20px"
+        },
+        {
+          "name": "6",
+          "value": "24px"
+        },
+        {
+          "name": "8",
+          "value": "32px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "image",
+          "value": "8px"
+        },
+        {
+          "name": "card",
+          "value": "70px"
+        }
+      ]
+    },
+    "collections": []
+  },
+  {
+    "slug": "startup-product-launch-videos-from-x-what-ships",
+    "title": "What Ships",
+    "url": "http://whatships.com/",
+    "domain": "whatships.com",
+    "saved_date": "2026-10-20",
+    "shot": "/shots/startup-product-launch-videos-from-x-what-ships.webp",
+    "palette": [
+      "#f8f8f8",
+      "#2d2c2c",
+      "#d2d1d0",
+      "#4d4d4c",
+      "#b0b1af",
+      "#908f8d"
+    ],
+    "design": {
+      "read_date": "2026-10-20",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#fafafa"
+        },
+        {
+          "name": "surface",
+          "hex": "#f4f4f5"
+        },
+        {
+          "name": "text",
+          "hex": "#52525b"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#71717a"
+        },
+        {
+          "name": "border",
+          "hex": "#52525b"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Geist Variable",
+          "fontSize": "36px",
+          "fontWeight": "500",
+          "lineHeight": "39.6px",
+          "letterSpacing": "-1.08px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "IBM Plex Mono",
+          "fontSize": "10px",
+          "fontWeight": "500",
+          "lineHeight": "16px",
+          "letterSpacing": "0.4px"
+        },
+        {
+          "name": "label",
+          "fontFamily": "IBM Plex Mono",
+          "fontSize": "11px",
+          "fontWeight": "500",
+          "lineHeight": "20px",
+          "letterSpacing": "0.44px"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "2px",
+          "value": "2px"
+        },
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "5px",
+          "value": "5px"
+        },
+        {
+          "name": "10px",
+          "value": "10px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        }
+      ],
+      "radius": []
+    },
+    "collections": []
+  },
+  {
+    "slug": "what-ships-startup-launch-videos-from-x",
+    "title": "What Ships",
+    "url": "https://whatships.com/",
+    "domain": "whatships.com",
+    "saved_date": "2026-10-20",
+    "shot": "/shots/what-ships-startup-launch-videos-from-x.webp",
+    "palette": [
+      "#f8f8f8",
+      "#2d2c2c",
+      "#d2d1d0",
+      "#4d4d4c",
+      "#b0b1af",
+      "#908f8d"
+    ],
+    "design": {
+      "read_date": "2026-10-20",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#fafafa"
+        },
+        {
+          "name": "surface",
+          "hex": "#f4f4f5"
+        },
+        {
+          "name": "text",
+          "hex": "#52525b"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#71717a"
+        },
+        {
+          "name": "border",
+          "hex": "#52525b"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Geist Variable",
+          "fontSize": "36px",
+          "fontWeight": "500",
+          "lineHeight": "39.6px",
+          "letterSpacing": "-1.08px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "IBM Plex Mono",
+          "fontSize": "10px",
+          "fontWeight": "500",
+          "lineHeight": "16px",
+          "letterSpacing": "0.4px"
+        },
+        {
+          "name": "label",
+          "fontFamily": "IBM Plex Mono",
+          "fontSize": "11px",
+          "fontWeight": "500",
+          "lineHeight": "20px",
+          "letterSpacing": "0.44px"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "2px",
+          "value": "2px"
+        },
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "5px",
+          "value": "5px"
+        },
+        {
+          "name": "10px",
+          "value": "10px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        }
+      ],
+      "radius": []
+    },
+    "collections": []
+  },
+  {
+    "slug": "launchr-catalog",
+    "title": "Launchr Catalog",
+    "url": "https://launchrcatalog.com/",
+    "domain": "launchrcatalog.com",
+    "saved_date": "2026-10-20",
+    "shot": "/shots/launchr-catalog.webp",
+    "palette": [
+      "#fdfdfd",
+      "#2f302d",
+      "#4f504e",
+      "#6f706e",
+      "#8e8f8d",
+      "#b1b2b0"
+    ],
+    "design": {
+      "read_date": "2026-10-20",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "surface",
+          "hex": "#1f2124"
+        },
+        {
+          "name": "text",
+          "hex": "#000000"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#62656b"
+        },
+        {
+          "name": "border",
+          "hex": "#ecedef"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "graphik",
+          "fontSize": "18px",
+          "fontWeight": "500",
+          "lineHeight": "26px",
+          "letterSpacing": "-0.18px"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "graphik",
+          "fontSize": "13px",
+          "fontWeight": "500",
+          "lineHeight": "21px",
+          "letterSpacing": "-0.18px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "-apple-system",
+          "fontSize": "12px",
+          "fontWeight": "400",
+          "lineHeight": "19.5px",
+          "letterSpacing": "-0.14px"
+        },
+        {
+          "name": "label",
+          "fontFamily": "graphik",
+          "fontSize": "13px",
+          "fontWeight": "400",
+          "lineHeight": "21px",
+          "letterSpacing": "-0.18px"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "5px",
+          "value": "5px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "10px",
+          "value": "10px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        },
+        {
+          "name": "5",
+          "value": "20px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "6px"
+        },
+        {
+          "name": "card-2",
+          "value": "8px"
+        },
+        {
+          "name": "card-3",
+          "value": "10px"
+        }
+      ]
+    },
+    "collections": []
+  },
+  {
+    "slug": "propaganda-the-internet-is-our-playground",
+    "title": "Propaganda",
+    "url": "https://propaganda.build/#",
+    "domain": "propaganda.build",
+    "saved_date": "2026-10-20",
+    "shot": "/shots/propaganda-the-internet-is-our-playground.webp",
+    "palette": [
+      "#ffffff",
+      "#bababa",
+      "#710fd3",
+      "#8d31e9",
+      "#472ee6",
+      "#ff2b32"
+    ],
+    "design": {
+      "read_date": "2026-10-20",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "surface",
+          "hex": "#8eaded"
+        },
+        {
+          "name": "text",
+          "hex": "#000000"
+        },
+        {
+          "name": "border",
+          "hex": "#dbdbdb"
+        }
+      ],
+      "type": [
+        {
+          "name": "heading",
+          "fontFamily": "Instrument Serif",
+          "fontSize": "30px",
+          "fontWeight": "400",
+          "lineHeight": "34.5px",
+          "letterSpacing": "-0.3px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "Geist",
+          "fontSize": "18px",
+          "fontWeight": "400",
+          "lineHeight": "22px",
+          "letterSpacing": "-0.18px"
+        },
+        {
+          "name": "label",
+          "fontFamily": "Geist",
+          "fontSize": "16px",
+          "fontWeight": "500",
+          "lineHeight": "24px",
+          "letterSpacing": "-0.48px"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "2px",
+          "value": "2px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        },
+        {
+          "name": "8",
+          "value": "32px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "4px"
+        },
+        {
+          "name": "card-2",
+          "value": "6px"
+        },
+        {
+          "name": "card-3",
+          "value": "20px"
+        }
+      ]
+    },
+    "collections": []
+  },
+  {
+    "slug": "presa-brand-identity-design-studio",
+    "title": "Presa",
+    "url": "https://www.presa.studio/",
+    "domain": "presa.studio",
+    "saved_date": "2026-10-20",
+    "shot": "/shots/presa-brand-identity-design-studio.webp",
+    "palette": [
+      "#ffffff",
+      "#142902",
+      "#b7daf3",
+      "#112ff6",
+      "#11b0fa",
+      "#1070f7"
+    ],
+    "design": {
+      "read_date": "2026-10-20",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "surface",
+          "hex": "#f5f5f5"
+        },
+        {
+          "name": "text",
+          "hex": "#111111"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#525252"
+        }
+      ],
+      "type": [
+        {
+          "name": "body",
+          "fontFamily": "suisse",
+          "fontSize": "19px",
+          "fontWeight": "400",
+          "lineHeight": "28.5px",
+          "letterSpacing": "-0.32px"
+        },
+        {
+          "name": "label",
+          "fontFamily": "suisse",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "21px",
+          "letterSpacing": "-0.32px"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "6px",
+          "value": "6px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "10",
+          "value": "40px"
+        }
+      ],
+      "radius": []
+    },
+    "collections": []
+  },
+  {
+    "slug": "kobbe-web-analytics-that-respect-your-visitors",
+    "title": "Kobbe",
+    "url": "https://kobbe.io/",
+    "domain": "kobbe.io",
+    "saved_date": "2026-10-20",
+    "shot": "/shots/kobbe-web-analytics-that-respect-your-visitors.webp",
+    "palette": [
+      "#f9f8f7",
+      "#2c2c2c",
+      "#b3b2ac",
+      "#d3d2ce",
+      "#75736f",
+      "#93928d"
+    ],
+    "design": {
+      "read_date": "2026-10-20",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#faf9f8"
+        },
+        {
+          "name": "surface",
+          "hex": "#f5f3f0"
+        },
+        {
+          "name": "text",
+          "hex": "#2b2b2b"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#75736e"
+        },
+        {
+          "name": "border",
+          "hex": "#e4e2dd"
+        }
+      ],
+      "type": [
+        {
+          "name": "body",
+          "fontFamily": "Inter",
+          "fontSize": "14px",
+          "fontWeight": "500",
+          "lineHeight": "20px",
+          "letterSpacing": "-0.35px"
+        },
+        {
+          "name": "label",
+          "fontFamily": "Inter",
+          "fontSize": "14px",
+          "fontWeight": "500",
+          "lineHeight": "20px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        },
+        {
+          "name": "8",
+          "value": "32px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "8px"
+        },
+        {
+          "name": "card-2",
+          "value": "10px"
+        }
+      ]
+    },
+    "collections": []
+  },
+  {
+    "slug": "albina-nikiforova",
+    "title": "Albina Nikiforova",
+    "url": "https://albinanikiforova.com/",
+    "domain": "albinanikiforova.com",
+    "saved_date": "2026-10-20",
+    "shot": "/shots/albina-nikiforova.webp",
+    "palette": [
+      "#f5e3c9",
+      "#6f512c",
+      "#4c3114",
+      "#8f724a",
+      "#ae966e",
+      "#d8c7ae"
+    ],
+    "design": {
+      "read_date": "2026-10-20",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#f5e3c9"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Cardo",
+          "fontSize": "68px",
+          "fontWeight": "400",
+          "lineHeight": "74.8px",
+          "letterSpacing": "0.68px"
+        },
+        {
+          "name": "label",
+          "fontFamily": "Alegreya Sans",
+          "fontSize": "16.4px",
+          "fontWeight": "400",
+          "lineHeight": "24.6px",
+          "letterSpacing": "2.62px"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        },
+        {
+          "name": "8",
+          "value": "32px"
+        },
+        {
+          "name": "20",
+          "value": "80px"
+        }
+      ],
+      "radius": []
+    },
+    "collections": []
+  },
+  {
+    "slug": "firstindex",
+    "title": "FirstIndex",
+    "url": "https://firstindex.co/",
+    "domain": "firstindex.co",
+    "saved_date": "2026-10-20",
+    "shot": "/shots/firstindex.webp",
+    "palette": [
+      "#ffffff",
+      "#111111",
+      "#333333",
+      "#d8d8fd",
+      "#2f2ff1",
+      "#555456"
+    ],
+    "design": {
+      "read_date": "2026-10-20",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "surface",
+          "hex": "#111111"
+        },
+        {
+          "name": "text",
+          "hex": "#111111"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#555555"
+        },
+        {
+          "name": "accent",
+          "hex": "#0000ee"
+        },
+        {
+          "name": "border",
+          "hex": "#0000ee"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Martina Plantijn",
+          "fontSize": "124px",
+          "fontWeight": "400",
+          "lineHeight": "116.56px",
+          "letterSpacing": "-3.72px"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "Martina Plantijn",
+          "fontSize": "72px",
+          "fontWeight": "500",
+          "lineHeight": "72px",
+          "letterSpacing": "-1.8px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "Geist",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "label",
+          "fontFamily": "Geist",
+          "fontSize": "16px",
+          "fontWeight": "500",
+          "lineHeight": "24px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "6px",
+          "value": "6px"
+        },
+        {
+          "name": "10px",
+          "value": "10px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        },
+        {
+          "name": "6",
+          "value": "24px"
+        }
+      ],
+      "radius": []
+    },
+    "collections": []
+  },
+  {
+    "slug": "adil-mania",
+    "title": "Adil Mania",
+    "url": "https://www.adilmania.com/",
+    "domain": "adilmania.com",
+    "saved_date": "2026-10-20",
+    "shot": "/shots/adil-mania.webp",
+    "palette": [
+      "#f0eee6",
+      "#181819",
+      "#2c364c",
+      "#b1b0ac",
+      "#d3d1cb",
+      "#90908d"
+    ],
+    "design": {
+      "read_date": "2026-10-20",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#f0eee6"
+        },
+        {
+          "name": "text",
+          "hex": "#191919"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#656158"
+        }
+      ],
+      "type": [
+        {
+          "name": "body",
+          "fontFamily": "Exposure",
+          "fontSize": "32px",
+          "fontWeight": "400",
+          "lineHeight": "51.2px",
+          "letterSpacing": "-0.58px"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "3px",
+          "value": "3px"
+        },
+        {
+          "name": "7",
+          "value": "28px"
+        },
+        {
+          "name": "9",
+          "value": "36px"
+        },
+        {
+          "name": "12",
+          "value": "48px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "image",
+          "value": "3px"
+        },
+        {
+          "name": "full",
+          "value": "9999px"
+        }
+      ]
+    },
+    "collections": []
   }
 ]

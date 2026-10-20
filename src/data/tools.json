@@ -918,5 +918,410 @@
     "description": "Local-first Markdown reviewer with inline comments",
     "note": "Saved, not tried yet.",
     "status_date": "2026-09-23"
+  },
+  {
+    "slug": "storycast",
+    "name": "Storycast",
+    "url": "https://storycast-fawn.vercel.app/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "runlayer",
+    "name": "Runlayer",
+    "url": "https://www.runlayer.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Runlayer is an AI control plane for securing what agents can do while helping teams delegate more work to them.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "sf-compute",
+    "name": "SF Compute",
+    "url": "https://sfcompute.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "video-use-edit-videos-with-coding-agents",
+    "name": "video-use",
+    "url": "https://video-use.com/",
+    "repo": "https://github.com/browser-use/video-use",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "tapkit",
+    "name": "TapKit",
+    "url": "https://www.tapkit.ai/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "wajo-fo",
+    "name": "Wajo",
+    "url": "https://wajo.ai/join-wajo",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "cue-your-personal-agents",
+    "name": "Cue",
+    "url": "https://cue.im/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "whattheport",
+    "name": "WhatThePort",
+    "url": "https://whattheport.dev/#",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "paper-shaders-ultra-fast-zero-dependency-shaders",
+    "name": "Paper Shaders",
+    "url": "https://shaders.paper.design/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A zero-dependency shader library with React components and GLSL effects for paper texture, glass, water, dithering, and halftones.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "introducing-echo-a-writing-model",
+    "name": "echo.fulcrum.inc",
+    "url": "https://echo.fulcrum.inc/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "letter-treat-marketing-as-an-engineering-problem",
+    "name": "Letter",
+    "url": "https://letter.dev/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A programmable marketing platform with APIs for AI search visibility, writing, outbound, and customer proof.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "cua-spaces-a-free-space-for-every-agent",
+    "name": "Cua Spaces",
+    "url": "https://spaces.cua.ai/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "wallpad-your-phone-is-the-remote-for-the-office-tvs",
+    "name": "Wallpad",
+    "url": "https://flocrivello.com/wallpad/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "timeless-type-family",
+    "name": "Timeless Type Family",
+    "url": "https://www.timeless.co/type",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Four matching variable typefaces: Grotesk, Sans, Serif and Text, with italics and free licensing for personal and commercial use.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "opensource-ui-free-react-ui-library-next-js-components-copy",
+    "name": "Opensource UI",
+    "url": "https://opensourceui.in/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Bidyut Kundu's MIT-licensed React and Next.js component library pairs live previews with copy-paste TypeScript and Tailwind source.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "emdash-agent-skills",
+    "name": "EmDash agent skills",
+    "url": "https://emdashcms.com/",
+    "repo": "https://github.com/emdash-cms/emdash",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "EmDash’s public skill set covers site building, plugin creation, browser work and adversarial review for its Astro-based CMS.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "boat-sandboxes-for-agents",
+    "name": "boat",
+    "url": "https://boat.dev/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Persistent Ubuntu sandboxes for long-running agents, with SSH, Docker, fast snapshot forks, a virtual desktop and SDK access.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "clef",
+    "name": "Clef",
+    "url": "https://huggingface.co/Cloudflare/clef",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "one-never-keep-an-agent-waiting",
+    "name": "getone.one",
+    "url": "https://getone.one/?utm_source=send_to_mac",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "simplified-technical-english-skill",
+    "name": "0xpili/simplified-technical-english",
+    "url": null,
+    "repo": "https://github.com/0xpili/simplified-technical-english",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "e2e-ai-end-to-end-testing-for-web-and-mobile",
+    "name": "e2e",
+    "url": "https://tester.army/e2e",
+    "repo": "https://github.com/tester-army/e2e",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "arc-ui-animated-react-components-for-shadcn-and-next-js",
+    "name": "Arc UI",
+    "url": "https://uiarc.dev/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "fluid-functionalism",
+    "name": "Fluid Functionalism",
+    "url": "https://www.fluidfunctionalism.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A shadcn/ui component library where motion carries information, from predictive hover targets to interruptible spring transitions.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "export-your-x-bookmarks-as-markdown",
+    "name": "ilo.so",
+    "url": "https://ilo.so/export-x-bookmarks",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "hyperframes-html-is-now-a-video-format",
+    "name": "HyperFrames",
+    "url": "https://www.hyperframes.dev/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "graphical",
+    "name": "Graphical",
+    "url": "https://www.graphicalui.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A theme builder for coding-agent projects that exports tokens, React components, GUI.md references, and interface-building skills.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "rising-ui-landscape-playground",
+    "name": "Rising UI",
+    "url": "https://rising.ojieame.design/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A browser playground for composing surreal UI landscapes from editable layers, with controls for colour, scale, visibility and reveal.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "paper-mono",
+    "name": "Paper Mono",
+    "url": "https://paper.design/mono",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A free open-source monospace family with variable weights, coding ligatures, box-drawing characters and thoughtful UI typography.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "treg-to-openrouter-for-agent-tools-and-data-pay-per-call",
+    "name": "treg.to",
+    "url": "https://treg.to/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A pay-per-call catalog that gives agents one key for 3,800+ SEO, enrichment, ads, social, and scraping endpoints across 109 providers.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "honcho-memory-that-reasons",
+    "name": "Honcho",
+    "url": "https://honcho.dev/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "paperclip-evidence-api",
+    "name": "Paperclip Evidence API",
+    "url": "https://paperclip.gxl.ai/evidence-api",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "kie-ai-one-api-for-ai-models",
+    "name": "Kie.ai",
+    "url": "https://kie.ai/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "One API for video, image, music, and language models, with a single wallet and no charge for failed generations.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "anatomy-a-skill-for-claude-code",
+    "name": "Anatomy",
+    "url": "https://skills.wheresryan.sh/anatomy",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "seo-skills-for-ai-agents",
+    "name": "Illyism/seo-skills",
+    "url": "https://il.ly/skills",
+    "repo": "https://github.com/Illyism/seo-skills",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "superdesign-ai-design-agent-for-your-ide",
+    "name": "SuperDesign",
+    "url": "http://superdesign.dev/ide-extension",
+    "repo": "https://github.com/superdesigndev/superdesign",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "better-design-open-source-claude-design",
+    "name": "Better Design",
+    "url": "https://better-design.com/",
+    "repo": "https://github.com/marvkr/better-design",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "paper-shaders",
+    "name": "Paper Shaders",
+    "url": "https://shaders.paper.design/",
+    "repo": "https://github.com/paper-design/shaders",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "pond",
+    "name": "Pond",
+    "url": "https://pond.raphaelsalaja.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A free, open-source Mac app that saves X, Instagram, Pinterest, and other bookmarks into a local folder.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "better-claude",
+    "name": "better-claude",
+    "url": "https://betterclaude.dev/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Small Claude Code plugins for image previews, usage meters, queued prompts, model and effort shortcuts, and cleaner commits.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "pele-mermaid-diagrams-as-themeable-svg",
+    "name": "Pele",
+    "url": "https://pele.run/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A zero-dependency Mermaid renderer that outputs themeable SVG, with CSS-variable theming and responsive layouts.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "developer-roadmaps-roadmap-sh",
+    "name": "Developer Roadmaps",
+    "url": "https://roadmap.sh/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Community-built roadmaps for developer roles and skills, including Claude Code, AI agents, product design, and infrastructure.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "scrawl-show-an-agent-the-problem-on-your-mac",
+    "name": "Scrawl",
+    "url": "https://scrawl.kitlangton.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A Mac capture tool that packages your voice, clicks, drawings, frames, and transcript into evidence a coding agent can inspect.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "fx0",
+    "name": "fx0",
+    "url": "https://fx0.vercel.dev/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
+  },
+  {
+    "slug": "earshot",
+    "name": "earshot",
+    "url": null,
+    "repo": "https://github.com/Leonxlnx/earshot",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-20"
   }
 ]

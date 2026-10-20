@@ -2359,5 +2359,1356 @@
     },
     "media_retrieved": "2026-09-24",
     "tldr": "A one-hour course on using Claude to build and automate projects."
+  },
+  {
+    "slug": "100-motion-themes-saas-motion-kit",
+    "title": "100 Motion Themes — saas-motion-kit",
+    "url": "https://tugrawork-creator.github.io/saas-motion-kit/",
+    "domain": "tugrawork-creator.github.io",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "A library of 100 storyboard systems for 45-second software demos, each with key frames, components, motion techniques and Claude Code handoff notes."
+  },
+  {
+    "slug": "jev-studied-438-122-apps-doing-10k-mo-the-bar-is-low",
+    "title": "Jev studied 438,122 apps doing $10k/mo+ for me. The bar is…",
+    "url": "https://x.com/chhddavid/status/2103052210904989770?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@chhddavid",
+    "post": {
+      "id": "2103052210904989770",
+      "author": "David Ch",
+      "handle": "chhddavid",
+      "date": "2026-09-24",
+      "text": "x.com/i/article/2101…",
+      "avatar": "/posts/2103052210904989770/avatar.webp",
+      "links": [
+        {
+          "text": "x.com/i/article/2101…",
+          "href": "https://x.com/i/article/2101604783157108736"
+        }
+      ],
+      "article": {
+        "title": "Jev studied 438,122 apps doing $10k/mo+ for me. The bar is stupidly low",
+        "cover": "/posts/2103052210904989770/cover.webp"
+      }
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "muse-ai-connectors-could-be-the-app-store-moment-for-ai",
+    "title": "Muse AI Connectors COULD be the App Store moment for AI…",
+    "url": "https://x.com/gregisenberg/status/2103198565065523426?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@gregisenberg: Muse AI Connectors COULD be the App Store moment for AI, and I think BILLIONS of dollars are up for grabs. youtube.com/watch?v=84q4WA… When Apple opened the App Store in 2008, it gave developers access to millions of iPhone users, and less than two years later Apple had paid them",
+    "post": {
+      "id": "2103198565065523426",
+      "author": "GREG ISENBERG",
+      "handle": "gregisenberg",
+      "date": "2026-09-24",
+      "text": "Muse AI Connectors COULD be the App Store moment for AI, and I think BILLIONS of dollars are up for grabs.\n\nyoutube.com/watch?v=84q4WA…\n\nWhen Apple opened the App Store in 2008, it gave developers access to millions of iPhone users, and less than two years later Apple had paid them",
+      "avatar": "/posts/2103198565065523426/avatar.webp",
+      "links": [
+        {
+          "text": "youtube.com/watch?v=84q4WA…",
+          "href": "https://youtube.com/watch?v=84q4WA3kA8Q"
+        }
+      ],
+      "media": [
+        {
+          "type": "video",
+          "poster": "/posts/2103198565065523426/1-poster.webp",
+          "w": 640,
+          "h": 360
+        }
+      ]
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "getting-started-your-first-rl-run-with-jev-as-the-reward-mod",
+    "title": "Getting started: your first RL run with Jev as the reward…",
+    "url": "https://x.com/sophiamyang/status/2102861619889918023?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@sophiamyang",
+    "post": {
+      "id": "2102861619889918023",
+      "author": "Sophia Yang",
+      "handle": "sophiamyang",
+      "date": "2026-09-23",
+      "text": "x.com/i/article/2102…",
+      "avatar": "/posts/2102861619889918023/avatar.webp",
+      "links": [
+        {
+          "text": "x.com/i/article/2102…",
+          "href": "https://x.com/i/article/2102843650124259328"
+        }
+      ],
+      "article": {
+        "title": "Getting started: your first RL run with Jev as the reward model",
+        "cover": "/posts/2102861619889918023/cover.webp"
+      }
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "75m-founder-reveals-his-agentic-engineering-setup",
+    "title": "$75M founder reveals his Agentic Engineering setup",
+    "url": "https://www.youtube.com/watch?v=QBfXiWvM0qc",
+    "domain": "youtube.com",
+    "saved_date": "2026-10-20",
+    "kind": "video",
+    "note": "Alex Lieberman and 10X engineering director Dan break down AI-native company transformation, markdown-first agent context and linting the whole software delivery process.",
+    "video": {
+      "provider": "youtube",
+      "id": "QBfXiWvM0qc",
+      "thumb": "/shots/75m-founder-reveals-his-agentic-engineering-setup-thumb.webp"
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "why-i-m-building-muse",
+    "title": "Why We're Building Muse",
+    "url": "https://x.com/alexandr_wang/status/2103551714536439951?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@alexandr_wang: Here’s to the wanting. Here’s to the dreaming. Here’s to everyone. x.com/i/article/1884…",
+    "post": {
+      "id": "2103551714536439951",
+      "author": "Alexandr Wang",
+      "handle": "alexandr_wang",
+      "date": "2026-09-25",
+      "text": "Here’s to the wanting. Here’s to the dreaming. Here’s to everyone. x.com/i/article/1884…",
+      "avatar": "/posts/2103551714536439951/avatar.webp",
+      "links": [
+        {
+          "text": "x.com/i/article/1884…",
+          "href": "https://x.com/i/article/1884367148363177984"
+        }
+      ],
+      "article": {
+        "title": "Why We're Building Muse",
+        "cover": "/posts/2103551714536439951/cover.webp"
+      }
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "using-claude-code-spending-your-effort",
+    "title": "Using Claude Code: Spending your effort",
+    "url": "https://claude.dev/blog/spending-your-effort/",
+    "domain": "claude.dev",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "Thariq Shihipar maps Claude Code effort levels to the work: low for fast iteration, high for verification and edge cases, max for difficult autonomous runs."
+  },
+  {
+    "slug": "how-to-use-jev-1-as-an-embedder",
+    "title": "How to use jev #1: As an embedder",
+    "url": "https://x.com/kieranklaassen/status/2103537214575743221?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@kieranklaassen",
+    "post": {
+      "id": "2103537214575743221",
+      "author": "Kieran Klaassen",
+      "handle": "kieranklaassen",
+      "date": "2026-09-25",
+      "text": "How to use jev #1: As an embedder",
+      "avatar": "/posts/2103537214575743221/avatar.webp",
+      "media": [
+        {
+          "type": "video",
+          "src": "/posts/2103537214575743221/1.mp4",
+          "poster": "/posts/2103537214575743221/1-poster.webp",
+          "w": 1280,
+          "h": 1280
+        }
+      ],
+      "quoted": {
+        "id": "2103522599414501550",
+        "author": "Kieran Klaassen",
+        "handle": "kieranklaassen",
+        "date": "2026-09-25",
+        "text": "I've been using Jev for all kinds of things. This morning I had a realization I kind of like:\n\nUse it to make non-black-box embeddings.\n\nInstead of an embedding model spitting out 1,536 numbers that mean nothing, you ask Jev questions about each document. The answers become the",
+        "avatar": "/posts/2103522599414501550/avatar.webp"
+      }
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "jev-as-a-non-black-box-embedder",
+    "title": "I've been using Jev for all kinds of things. This morning…",
+    "url": "https://x.com/kieranklaassen/status/2103522599414501550?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@kieranklaassen: I've been using Jev for all kinds of things. This morning I had a realization I kind of like: Use it to make non-black-box embeddings. Instead of an embedding model spitting out 1,536 numbers that mean nothing, you ask Jev questions about each document. The answers become the",
+    "post": {
+      "id": "2103522599414501550",
+      "author": "Kieran Klaassen",
+      "handle": "kieranklaassen",
+      "date": "2026-09-25",
+      "text": "I've been using Jev for all kinds of things. This morning I had a realization I kind of like:\n\nUse it to make non-black-box embeddings.\n\nInstead of an embedding model spitting out 1,536 numbers that mean nothing, you ask Jev questions about each document. The answers become the",
+      "avatar": "/posts/2103522599414501550/avatar.webp"
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "jev-use-cases-18-areas-2-304-projects",
+    "title": "Jev use cases: 18 areas, 2,304 projects",
+    "url": "https://calibrateddecisions.com/use-cases",
+    "domain": "calibrateddecisions.com",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "A directory of 2,304 Jev projects across 18 use cases, from agent routing and search to support, safety, sales and coding."
+  },
+  {
+    "slug": "ai-starter-pack-for-the-x-curious",
+    "title": "AI starter pack for the X-curious",
+    "url": "https://xstarterpack.com/",
+    "domain": "xstarterpack.com",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "A copyable agent prompt that cleans up an X feed and follows roughly 200 AI accounts across research, policy, business and practical use."
+  },
+  {
+    "slug": "how-to-run-your-product-team-like-a-research-lab",
+    "title": "How to run your product team like a research lab",
+    "url": "https://youtube.com/watch?v=DqF08Dz3nok&si=bCu7mu5GrZOIqLGk",
+    "domain": "youtube.com",
+    "saved_date": "2026-10-20",
+    "kind": "video",
+    "note": "Dan Shipper's case for a one- or two-person AI lab that runs parallel experiments, dogfoods them, and graduates only repeatable winners into the product.",
+    "video": {
+      "provider": "youtube",
+      "id": "DqF08Dz3nok",
+      "thumb": "/shots/how-to-run-your-product-team-like-a-research-lab-thumb.webp"
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "lilysai-ai-summaries-for-video-audio-pdfs-and-websites",
+    "title": "LilysAI — AI summaries for video, audio, PDFs, and websites",
+    "url": "https://lilys.ai/en",
+    "domain": "lilys.ai",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "LilysAI turns videos, PDFs, articles, books, and audio into summaries, explanations, and deeper notes in one workspace."
+  },
+  {
+    "slug": "coding-is-dead-long-live-coding",
+    "title": "Coding is dead, long live Coding",
+    "url": "https://x.com/poteto/status/2103571281014861957?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@poteto",
+    "post": {
+      "id": "2103571281014861957",
+      "author": "lauren",
+      "handle": "poteto",
+      "date": "2026-09-25",
+      "text": "x.com/i/article/2103…",
+      "avatar": "/posts/2103571281014861957/avatar.webp",
+      "links": [
+        {
+          "text": "x.com/i/article/2103…",
+          "href": "https://x.com/i/article/2103566873501835264"
+        }
+      ],
+      "article": {
+        "title": "Coding is dead, long live Coding",
+        "cover": "/posts/2103571281014861957/cover.webp"
+      }
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "why-ai-is-booming-but-productivity-isn-t",
+    "title": "Why AI is booming, but productivity isn't",
+    "url": "https://x.com/chamath/status/2103546630192685350?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@chamath",
+    "post": {
+      "id": "2103546630192685350",
+      "author": "Chamath Palihapitiya",
+      "handle": "chamath",
+      "date": "2026-09-25",
+      "text": "x.com/i/article/2103…",
+      "avatar": "/posts/2103546630192685350/avatar.webp",
+      "links": [
+        {
+          "text": "x.com/i/article/2103…",
+          "href": "https://x.com/i/article/2103544725286629376"
+        }
+      ],
+      "article": {
+        "title": "Why AI is booming, but productivity isn't",
+        "cover": "/posts/2103546630192685350/cover.webp"
+      }
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "we-re-open-sourcing-the-company-brain-how-we-designed-the-mu",
+    "title": "We're open sourcing the company brain, Here's how we…",
+    "url": "https://x.com/dhravyashah/status/2103668051468300701?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@DhravyaShah: We're open sourcing the company brain, a multi-player slack harness that we worked on for months, it's an AI employee with all the knowledge of your company. You can deploy it with one click in minutes. I go over the full architecture, in this blog! x.com/i/article/2103…",
+    "post": {
+      "id": "2103668051468300701",
+      "author": "Dhravya Shah",
+      "handle": "DhravyaShah",
+      "date": "2026-09-26",
+      "text": "We're open sourcing the company brain, a multi-player slack harness that we worked on for months, it's an AI employee with all the knowledge of your company. \nYou can deploy it with one click in minutes.\n\nI go over the full architecture, in this blog! x.com/i/article/2103…",
+      "avatar": "/posts/2103668051468300701/avatar.webp",
+      "links": [
+        {
+          "text": "x.com/i/article/2103…",
+          "href": "https://x.com/i/article/2103652547227750400"
+        }
+      ],
+      "article": {
+        "title": "We're open sourcing the company brain, Here's how we designed the multi-player harness",
+        "cover": "/posts/2103668051468300701/cover.webp"
+      }
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "clay-s-ai-writing-policy",
+    "title": "We instituted an official AI Writing Policy at @Clay…",
+    "url": "https://x.com/vxanand/status/2104576879415988453?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@vxanand: We instituted an official AI Writing Policy at @Clay. Massive thanks to @sophiebits on our engineering team who wrote this. Originally this was just for eng, but other teams found it so helpful we expanded it company-wide. Here are the four guiding principles: 1. You must",
+    "post": {
+      "id": "2104576879415988453",
+      "author": "Varun Anand",
+      "handle": "vxanand",
+      "date": "2026-09-28",
+      "text": "We instituted an official AI Writing Policy at @Clay. \n\nMassive thanks to @sophiebits on our engineering team who wrote this. \n\nOriginally this was just for eng, but other teams found it so helpful we expanded it company-wide.\n\nHere are the four guiding principles:\n\n1. You must",
+      "avatar": "/posts/2104576879415988453/avatar.webp",
+      "media": [
+        {
+          "type": "photo",
+          "src": "/posts/2104576879415988453/1.webp",
+          "w": 1280,
+          "h": 2490
+        }
+      ]
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "introducing-forge-the-open-source-pipeline-for-generating-sd",
+    "title": "Introducing Forge: the open source pipeline for generating…",
+    "url": "https://blog.cloudflare.com/forge-open-source-generation-pipeline/",
+    "domain": "blog.cloudflare.com",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "Cloudflare’s open-source Forge pipeline runs in CI to generate and preview SDKs, CLIs, docs, and other agent-facing surfaces from API definitions."
+  },
+  {
+    "slug": "inside-the-personal-ai-assistant-growing-10-a-day-instinct-f",
+    "title": "Inside the Personal AI Assistant Growing 10% a Day |…",
+    "url": "https://youtube.com/watch?v=Am7IWP8IpEc&si=NF-49swJGoxTKeer",
+    "domain": "youtube.com",
+    "saved_date": "2026-10-20",
+    "kind": "video",
+    "note": "An 85-minute conversation with Instinct’s founder on building a proactive personal agent through text, email, and voice, including trust controls, agent-to-agent coordination, and why software may collapse into one interface.",
+    "video": {
+      "provider": "youtube",
+      "id": "Am7IWP8IpEc",
+      "thumb": "/shots/inside-the-personal-ai-assistant-growing-10-a-day-instinct-f-thumb.webp"
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "deedy-s-opus-5-5-video-generation-workflow",
+    "title": "I've spend 10+ hrs perfecting how to get the best out of…",
+    "url": "https://x.com/deedydas/status/2104957026199900220?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@deedydas: I've spend 10+ hrs perfecting how to get the best out of Opus 5.5 for video generation workflow: - Use it with Claude Code, not the app. - Use OpenRouter API to access all the other models (image gen, video gen, audio gen) with one key - Use Gemini 3.8 TTS and make it create a",
+    "post": {
+      "id": "2104957026199900220",
+      "author": "Deedy",
+      "handle": "deedydas",
+      "date": "2026-09-29",
+      "text": "I've spend 10+ hrs perfecting how to get the best out of Opus 5.5 for video generation workflow:\n\n- Use it with Claude Code, not the app.\n- Use OpenRouter API to access all the other models (image gen, video gen, audio gen) with one key\n- Use Gemini 3.8 TTS and make it create a",
+      "avatar": "/posts/2104957026199900220/avatar.webp",
+      "media": [
+        {
+          "type": "video",
+          "src": "/posts/2104957026199900220/1.mp4",
+          "poster": "/posts/2104957026199900220/1-poster.webp",
+          "w": 1920,
+          "h": 1080
+        }
+      ]
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "box-s-aaron-levie-on-reinventing-yourself-in-the-ai-age-and",
+    "title": "Box's Aaron Levie: On Reinventing Yourself in the AI Age…",
+    "url": "https://youtube.com/watch?v=NE4CLThMPGU&si=TRbYGBjCrYrjXeIk",
+    "domain": "youtube.com",
+    "saved_date": "2026-10-20",
+    "kind": "video",
+    "note": "Aaron Levie explains why the applied AI layer is bigger than a model wrapper: the work is bridging models into real enterprise workflows, adapting the company, and earning distribution.",
+    "video": {
+      "provider": "youtube",
+      "id": "NE4CLThMPGU",
+      "thumb": "/shots/box-s-aaron-levie-on-reinventing-yourself-in-the-ai-age-and-thumb.webp"
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "why-llms-can-t-write-well-and-how-sherpa-fixes-it",
+    "title": "Why LLMs can't write well and how Sherpa fixes it",
+    "url": "https://x.com/rohannayak2/status/2105334948551139678?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@RohanNayak2",
+    "post": {
+      "id": "2105334948551139678",
+      "author": "Rohan Nayak",
+      "handle": "RohanNayak2",
+      "date": "2026-09-30",
+      "text": "x.com/i/article/2105…",
+      "avatar": "/posts/2105334948551139678/avatar.webp",
+      "links": [
+        {
+          "text": "x.com/i/article/2105…",
+          "href": "https://x.com/i/article/2105334942058381312"
+        }
+      ],
+      "article": {
+        "title": "Why LLMs can't write well and how Sherpa fixes it",
+        "cover": "/posts/2105334948551139678/cover.webp"
+      }
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "predicting-the-winner-of-personal-agents",
+    "title": "Predicting The Winner of Personal Agents",
+    "url": "https://x.com/hunterrice/status/2105311793631633565?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@hunterrice: After a decade of scaling consumer apps to 250 million users, here is my prediction of who will win in this new boom of agents: x.com/i/article/2105…",
+    "post": {
+      "id": "2105311793631633565",
+      "author": "Hunter Rice",
+      "handle": "hunterrice",
+      "date": "2026-09-30",
+      "text": "After a decade of scaling consumer apps to 250 million users, here is my prediction of who will win in this new boom of agents: x.com/i/article/2105…",
+      "avatar": "/posts/2105311793631633565/avatar.webp",
+      "links": [
+        {
+          "text": "x.com/i/article/2105…",
+          "href": "https://x.com/i/article/2105306548511846400"
+        }
+      ],
+      "article": {
+        "title": "Predicting The Winner of Personal Agents",
+        "cover": "/posts/2105311793631633565/cover.webp"
+      }
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "rip-vector-database",
+    "title": "RIP, vector database",
+    "url": "https://turbopuffer.com/blog/rip-vector-database",
+    "domain": "turbopuffer.com",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "Turbopuffer explains why it is demoting vector search from the primary index to a secondary one as its system grows into a general search database."
+  },
+  {
+    "slug": "clone-a-boring-utility-site-jonathan-s-jam-ad-funded-tool-po",
+    "title": "Clone a boring utility site (Jonathan's Jam) — ad-funded…",
+    "url": "https://www.youtube.com/watch?v=1Bvz8oItqGY",
+    "domain": "youtube.com",
+    "saved_date": "2026-10-20",
+    "kind": "video",
+    "note": "27min Hostinger sponsorship. The build is filler; the useful 4 minutes are the RPM maths (pageviews x RPM/1000) and the keyword method: filter for difficulty under 10, then check whether Google already ranks brand-new low-authority sites for that query. Affiliate beats AdSense early.",
+    "tags": [
+      "adsense",
+      "business-model",
+      "programmatic",
+      "seo",
+      "utility-sites"
+    ],
+    "video": {
+      "provider": "youtube",
+      "id": "1Bvz8oItqGY",
+      "thumb": "/shots/clone-a-boring-utility-site-jonathan-s-jam-ad-funded-tool-po-thumb.webp"
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "learn-the-latent",
+    "title": "Learn | The Latent",
+    "url": "https://thelatent.co/learn",
+    "domain": "thelatent.co",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "The Latent explains AI concepts from first principles with concise definitions and comparisons, making technical topics easier to learn and teach."
+  },
+  {
+    "slug": "masterclass-how-fdes-make-1m-yr-deploying-ai-agents-greg-ise",
+    "title": "Masterclass: How FDEs make $1M/yr deploying AI agents…",
+    "url": "https://www.youtube.com/watch?v=1a5HxU52vCQ",
+    "domain": "youtube.com",
+    "saved_date": "2026-10-20",
+    "kind": "video",
+    "note": "The concrete version of the FDE pitch. Process-map first, then sort every step into delete / plain code / agentic / human. Build inside the client's system of record, never ask them to migrate. Baseline KPIs before you build so you can prove the delta at 6 months. Real numbers: AP invoice cost 31 to 6 dollars, straight-through 18 to 87 percent.",
+    "tags": [
+      "agents",
+      "consulting",
+      "fde",
+      "offer-design",
+      "process-mining"
+    ],
+    "video": {
+      "provider": "youtube",
+      "id": "1a5HxU52vCQ",
+      "thumb": "/shots/masterclass-how-fdes-make-1m-yr-deploying-ai-agents-greg-ise-thumb.webp"
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "imagine-two-people-using-ai-every-day-for-ten-years",
+    "title": "Imagine two people using AI every day for ten years. One…",
+    "url": "https://x.com/daraladje/status/2105727764678824235?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@daraladje: Imagine two people using AI every day for ten years. One becomes much better at thinking. The other can barely think without it. I’m already seeing hints of the second outcome: people producing results they can’t explain or defend. It feels like the beginning of Idiocracy. I",
+    "post": {
+      "id": "2105727764678824235",
+      "author": "Dara",
+      "handle": "daraladje",
+      "date": "2026-10-01",
+      "text": "Imagine two people using AI every day for ten years. One becomes much better at thinking. The other can barely think without it.\n\nI’m already seeing hints of the second outcome: people producing results they can’t explain or defend. It feels like the beginning of Idiocracy.\n\nI",
+      "avatar": "/posts/2105727764678824235/avatar.webp",
+      "media": [
+        {
+          "type": "video",
+          "poster": "/posts/2105727764678824235/1-poster.webp",
+          "w": 3840,
+          "h": 2160
+        }
+      ]
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "introducing-ideogram-4-5",
+    "title": "Introducing Ideogram 4.5, the most precise edit model…",
+    "url": "https://x.com/ideogram_ai/status/2105327223431737780?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@ideogram_ai: Introducing Ideogram 4.5, the most precise edit model. With each edit, leading models add artifacts, pixel shifts, and color changes. Ideogram 4.5 eliminates artifact buildup, making multi-turn editing possible. Live in Ideogram, the API, and launch partners. Open weights soon.",
+    "post": {
+      "id": "2105327223431737780",
+      "author": "Ideogram",
+      "handle": "ideogram_ai",
+      "date": "2026-09-30",
+      "text": "Introducing Ideogram 4.5, the most precise edit model.\n\nWith each edit, leading models add artifacts, pixel shifts, and color changes. Ideogram 4.5 eliminates artifact buildup, making multi-turn editing possible.\n\nLive in Ideogram, the API, and launch partners. Open weights soon.",
+      "avatar": "/posts/2105327223431737780/avatar.webp",
+      "media": [
+        {
+          "type": "video",
+          "src": "/posts/2105327223431737780/1.mp4",
+          "poster": "/posts/2105327223431737780/1-poster.webp",
+          "w": 3840,
+          "h": 2160
+        }
+      ]
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "alpha-gen-beta",
+    "title": "The last drop of VFX Week: Alpha Gen (Beta). Give it an…",
+    "url": "https://x.com/ltx_io/status/2106015208221393339?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@ltx_io: The last drop of VFX Week: Alpha Gen (Beta). Give it an ordinary RGB clip and get back an alpha matte that matches your plate frame for frame. No green screen, no masks, no prompt. Built for the edges that are hard to key or roto: hair, fur, smoke, fire, glass, water. 🧵",
+    "post": {
+      "id": "2106015208221393339",
+      "author": "LTX.io",
+      "handle": "ltx_io",
+      "date": "2026-10-02",
+      "text": "The last drop of VFX Week: Alpha Gen (Beta).\n\nGive it an ordinary RGB clip and get back an alpha matte that matches your plate frame for frame. No green screen, no masks, no prompt.\n\nBuilt for the edges that are hard to key or roto: hair, fur, smoke, fire, glass, water. 🧵",
+      "avatar": "/posts/2106015208221393339/avatar.webp",
+      "media": [
+        {
+          "type": "video",
+          "src": "/posts/2106015208221393339/1.mp4",
+          "poster": "/posts/2106015208221393339/1-poster.webp",
+          "w": 1920,
+          "h": 1080
+        }
+      ]
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "muse-gadgets",
+    "title": "🚨 MUSE ECOSYSTEM ALERT 🚨 today we are announcing Muse…",
+    "url": "https://x.com/alexandr_wang/status/2106113742266089526?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@alexandr_wang: 🚨 MUSE ECOSYSTEM ALERT 🚨 today we are announcing Muse Gadgets! this is an open-source ESP32 firmware and Linux SDK for anyone to make hardware that works with Muse we are also releasing our own gadget—Muse Home Link—to enable your muse to work with your smart devices (TV,",
+    "post": {
+      "id": "2106113742266089526",
+      "author": "Alexandr Wang",
+      "handle": "alexandr_wang",
+      "date": "2026-10-02",
+      "text": "🚨 MUSE ECOSYSTEM ALERT 🚨\n\ntoday we are announcing Muse Gadgets!\n\nthis is an open-source ESP32 firmware and Linux SDK for anyone to make hardware that works with Muse\n\nwe are also releasing our own gadget—Muse Home Link—to enable your muse to work with your smart devices (TV,",
+      "avatar": "/posts/2106113742266089526/avatar.webp",
+      "media": [
+        {
+          "type": "photo",
+          "src": "/posts/2106113742266089526/1.webp",
+          "w": 1552,
+          "h": 1192
+        }
+      ]
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "how-i-use-6-claude-subs-and-3-codex-subs",
+    "title": "A lot of people have been asking me “how do I actually use…",
+    "url": "https://x.com/theo/status/2106119810509881791?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@theo: A lot of people have been asking me “how do I actually use 6 Claude subs and 3 Codex subs?” I got drunk as I tried to explain it. IMO this is one of my best videos ever. Early apologies if it gets you banned 💀",
+    "post": {
+      "id": "2106119810509881791",
+      "author": "Theo - t3.gg",
+      "handle": "theo",
+      "date": "2026-10-02",
+      "text": "A lot of people have been asking me “how do I actually use 6 Claude subs and 3 Codex subs?” I got drunk as I tried to explain it.  \n\nIMO this is one of my best videos ever. Early apologies if it gets you banned 💀",
+      "avatar": "/posts/2106119810509881791/avatar.webp",
+      "media": [
+        {
+          "type": "video",
+          "poster": "/posts/2106119810509881791/1-poster.webp",
+          "w": 3840,
+          "h": 2160
+        }
+      ]
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "introducing-phonon-2",
+    "title": "Introducing Phonon-2: a new standard in speech recognition…",
+    "url": "https://x.com/yoitsmanan/status/2104990913886031993?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@yoitsmanan: Introducing Phonon-2: a new standard in speech recognition per byte. At just a tiny 164MB download, it is more accurate on average than OpenAI's Whisper large ( a model 10X its size) Transcribe an hour of audio in just 20 seconds on a MacBook Air! Open weights, CC-BY-4.0,",
+    "post": {
+      "id": "2104990913886031993",
+      "author": "Manan Gupta",
+      "handle": "yoitsmanan",
+      "date": "2026-09-29",
+      "text": "Introducing Phonon-2: a new standard in speech recognition per byte.\n\nAt just a tiny 164MB download, it is more accurate on average than OpenAI's Whisper large ( a model 10X its size)\n\nTranscribe an hour of audio in just 20 seconds on a  MacBook Air! \n\nOpen weights, CC-BY-4.0,",
+      "avatar": "/posts/2104990913886031993/avatar.webp",
+      "media": [
+        {
+          "type": "photo",
+          "src": "/posts/2104990913886031993/1.webp",
+          "w": 2400,
+          "h": 1500
+        }
+      ]
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "mcp-events-plugins-openai-developers",
+    "title": "MCP Events – Plugins | OpenAI Developers",
+    "url": "https://developers.openai.com/plugins/build/mcp-events",
+    "domain": "developers.openai.com",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "OpenAI's MCP Events guide shows how ChatGPT can react to server-side updates through signed webhooks instead of polling."
+  },
+  {
+    "slug": "on-claude-consciousness-this-lecture-by-antikythera-is-worth",
+    "title": "on 'claude consciousness' this lecture by Antikythera is…",
+    "url": "https://x.com/rhyssullivan/status/2106440095469539697?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@RhysSullivan: on 'claude consciousness' this lecture by Antikythera is worth a watch it poses a way that you're able to reason about intelligent systems from the principals that create them, with some great examples of intelligence from first principles youtube.com/watch?v=gs38tM…",
+    "post": {
+      "id": "2106440095469539697",
+      "author": "Rhys",
+      "handle": "RhysSullivan",
+      "date": "2026-10-03",
+      "text": "on 'claude consciousness' this lecture by Antikythera is worth a watch \n\nit poses a way that you're able to reason about intelligent systems from the principals that create them, with some great examples of intelligence from first principles\n\nyoutube.com/watch?v=gs38tM…",
+      "avatar": "/posts/2106440095469539697/avatar.webp",
+      "links": [
+        {
+          "text": "youtube.com/watch?v=gs38tM…",
+          "href": "https://www.youtube.com/watch?v=gs38tMxZseA"
+        }
+      ]
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "codex-computer-use-works-as-a-local-mcp-server",
+    "title": "everyone thinks codex computer use only works inside codex…",
+    "url": "https://x.com/argofowl/status/2106389732322091475?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@argofowl: everyone thinks codex computer use only works inside codex it doesn't, it's a local mcp server in the chatgpt mac app and claude code can just call it, even headless with claude -p same 8-task test: opus 5.5 on codex's engine got 6/8, codex itself got 6/8, cua driver got 3-4/8",
+    "post": {
+      "id": "2106389732322091475",
+      "author": "🥔🥔🥔",
+      "handle": "argofowl",
+      "date": "2026-10-03",
+      "text": "everyone thinks codex computer use only works inside codex\n\nit doesn't, it's a local mcp server in the chatgpt mac app and claude code can just call it, even headless with claude -p\n\nsame 8-task test: opus 5.5 on codex's engine got 6/8, codex itself got 6/8, cua driver got 3-4/8",
+      "avatar": "/posts/2106389732322091475/avatar.webp",
+      "media": [
+        {
+          "type": "video",
+          "src": "/posts/2106389732322091475/1.mp4",
+          "poster": "/posts/2106389732322091475/1-poster.webp",
+          "w": 1920,
+          "h": 1080
+        }
+      ]
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "emdash-1-0-the-stable-cms-with-a-secure-plugin-registry",
+    "title": "EmDash 1.0: the stable CMS with a secure plugin registry",
+    "url": "https://blog.cloudflare.com/emdash-cms-plugin-registry/",
+    "domain": "blog.cloudflare.com",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "EmDash 1.0 turns the Astro-based CMS into a stable open-source publishing stack with an API, CLI, MCP server and sandboxed plugin registry."
+  },
+  {
+    "slug": "a-code-only-prompt-for-a-22-second-ai-launch-film",
+    "title": "this is my best project yet and its fucking insane a…",
+    "url": "https://x.com/twoclipping/status/2106526359589675085?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@twoclipping: this is my best project yet and its fucking insane a studio would charge you $2k+ for this this cost me basically $0 and its all pure code from opus 5.5 the prompt doesnt even need a single mcp tool steal it and drop your brand in ↓ <inputs> Ask me for: my product's name, a",
+    "post": {
+      "id": "2106526359589675085",
+      "author": "zero",
+      "handle": "twoclipping",
+      "date": "2026-10-03",
+      "text": "this is my best project yet and its fucking insane\n\na studio would charge you $2k+ for this\n\nthis cost me basically $0 and its all pure code from opus 5.5\n\nthe prompt doesnt even need a single mcp tool\n\nsteal it and drop your brand in ↓\n\n<inputs>\nAsk me for: my product's name, a",
+      "avatar": "/posts/2106526359589675085/avatar.webp",
+      "media": [
+        {
+          "type": "video",
+          "src": "/posts/2106526359589675085/1.mp4",
+          "poster": "/posts/2106526359589675085/1-poster.webp",
+          "w": 1080,
+          "h": 1080
+        }
+      ]
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "indent-one-shared-coworker-for-your-whole-company",
+    "title": "Indent · One shared coworker for your whole company",
+    "url": "https://indent.com/",
+    "domain": "indent.com",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "An AI coworker that works from Slack and pull requests, shares what teammates teach it, and can diagnose, test, and deliver code changes."
+  },
+  {
+    "slug": "i-am-begging-you-to-start-writing-online",
+    "title": "I am begging you to start writing online",
+    "url": "https://x.com/dickiebush/status/2106763420053774713?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@dickiebush",
+    "post": {
+      "id": "2106763420053774713",
+      "author": "Dickie Bush",
+      "handle": "dickiebush",
+      "date": "2026-10-04",
+      "text": "x.com/i/article/2106…",
+      "avatar": "/posts/2106763420053774713/avatar.webp",
+      "links": [
+        {
+          "text": "x.com/i/article/2106…",
+          "href": "https://x.com/i/article/2106761119159160832"
+        }
+      ],
+      "article": {
+        "title": "I am begging you to start writing online",
+        "cover": "/posts/2106763420053774713/cover.webp"
+      }
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "julia-pintar-playkit-5m-from-inbound-content-zero-outbound-z",
+    "title": "Julia Pintar (PlayKit) — $5M from inbound content, zero…",
+    "url": "https://www.youtube.com/watch?v=HTLk7NS76G0",
+    "domain": "youtube.com",
+    "saved_date": "2026-10-20",
+    "kind": "video",
+    "note": "Two years, no outbound and no ad spend, 5M dollars revenue, majority of clients from X. Method: publish the full playbook rather than case studies, soft DM-only CTA to create friction on a high-ticket offer, 20-30 minutes of handwritten stream-of-consciousness daily, post 3-10 times a day on X, start long and cut down. Directly relevant to the standing decision to start posting on X now.",
+    "tags": [
+      "content",
+      "distribution",
+      "inbound",
+      "writing",
+      "x"
+    ],
+    "video": {
+      "provider": "youtube",
+      "id": "HTLk7NS76G0",
+      "thumb": "/shots/julia-pintar-playkit-5m-from-inbound-content-zero-outbound-z-thumb.webp"
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "every-agentic-engineering-hack-i-know-october-2026-attack-of",
+    "title": "Every Agentic Engineering Hack I Know (October 2026)…",
+    "url": "https://x.com/mvanhorn/status/2107139054907388097?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@mvanhorn",
+    "post": {
+      "id": "2107139054907388097",
+      "author": "Matt Van Horn",
+      "handle": "mvanhorn",
+      "date": "2026-10-05",
+      "text": "x.com/i/article/2106…",
+      "avatar": "/posts/2107139054907388097/avatar.webp",
+      "links": [
+        {
+          "text": "x.com/i/article/2106…",
+          "href": "https://x.com/i/article/2106810118751051777"
+        }
+      ],
+      "article": {
+        "title": "Every Agentic Engineering Hack I Know (October 2026): Attack of the Personal Agents",
+        "cover": "/posts/2107139054907388097/cover.webp"
+      }
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "design-systems-for-ai-agents",
+    "title": "Design Systems for AI Agents",
+    "url": "https://www.lukew.com/ff/2164/design-systems-for-ai-agents",
+    "domain": "lukew.com",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "Luke Wroblewski shows how code-native design systems can steer every AI agent toward the same tokens, components, and brand rules."
+  },
+  {
+    "slug": "does-your-ai-agent-actually-work-a-guide-to-eval-driven-deve",
+    "title": "Does Your AI Agent Actually Work? A Guide to Eval-Driven…",
+    "url": "https://x.com/businessbarista/status/2107220247396626756?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@businessbarista: Hot take: evals are the #1 thing keeping companies from becoming AI-native. If you want to understand evals, read this guide on eval-driven development. Shoutout @jake_klaris for the awesome read. x.com/i/article/2107…",
+    "post": {
+      "id": "2107220247396626756",
+      "author": "Alex Lieberman",
+      "handle": "businessbarista",
+      "date": "2026-10-05",
+      "text": "Hot take: evals are the #1 thing keeping companies from becoming AI-native. \n\nIf you want to understand evals, read this guide on eval-driven development.\n\nShoutout @jake_klaris for the awesome read. x.com/i/article/2107…",
+      "avatar": "/posts/2107220247396626756/avatar.webp",
+      "links": [
+        {
+          "text": "x.com/i/article/2107…",
+          "href": "https://x.com/i/article/2107213448148893696"
+        }
+      ],
+      "article": {
+        "title": "Does Your AI Agent Actually Work? A Guide to Eval-Driven Development",
+        "cover": "/posts/2107220247396626756/cover.webp"
+      }
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "roma-the-to-do-list-that-does-itself",
+    "title": "Roma — The to-do list that does itself",
+    "url": "https://roma.app/",
+    "domain": "roma.app",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "An agentic to-do app that turns rambling input into clear tasks, starts the work, and brings back artifacts for review across Mac and iPhone."
+  },
+  {
+    "slug": "how-ai-agents-use-websites-where-they-fail-and-what-to-fix",
+    "title": "How AI Agents Use Websites, Where They Fail, and What to Fix",
+    "url": "https://merj.com/blog/agent-interaction-research",
+    "domain": "merj.com",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "MERJ tested browser agents across 100 tasks and found that accessibility defects cause many failures, while only task-level testing reveals whether critical journeys actually work."
+  },
+  {
+    "slug": "you-don-t-have-to-write-code-to-be-technical",
+    "title": "You Don’t Have to Write Code to Be Technical",
+    "url": "https://leverageloops.substack.com/p/you-dont-have-to-write-code-to-be",
+    "domain": "leverageloops.substack.com",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "Brandon Galang argues that technical work is framing the problem, testing the result, and fixing what breaks, even when an agent writes the code."
+  },
+  {
+    "slug": "melius-the-ai-native-operating-system-for-creatives",
+    "title": "Melius – the AI-native operating system for creatives",
+    "url": "https://www.melius.com/",
+    "domain": "melius.com",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "Melius puts image and video models on one canvas, with agent-run workflows for concepts, campaign variants, and everyday creative work."
+  },
+  {
+    "slug": "the-scroll-stopping-carousel-prompt",
+    "title": "The Scroll-Stopping Carousel Prompt",
+    "url": "https://drive.google.com/file/d/1n-yx6aFAjLdKEMFj3elxCvgEN1C1Y2hk/view",
+    "domain": "drive.google.com",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "Meg Kilgore’s eight-slide carousel structure holds the reveal until slide seven, then gives a fill-in-the-blanks Claude prompt for writing the deck."
+  },
+  {
+    "slug": "gpt-6-and-intelligent-ui-for-everyone",
+    "title": "GPT‑6 and Intelligent UI for everyone",
+    "url": "https://openai.com/index/gpt-6-for-everyone/",
+    "domain": "openai.com",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "OpenAI introduces GPT‑6 with Intelligent UI: ChatGPT can build visual, interactive answers and start responding while it continues to reason."
+  },
+  {
+    "slug": "littlebird-ai-assistant-with-a-memory-of-your-work",
+    "title": "Littlebird: AI assistant with a memory of your work",
+    "url": "https://littlebird.ai/",
+    "domain": "littlebird.ai",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "An always-on work assistant that observes your screen and meetings, then carries that context into notes, drafts, routines and other AI tools."
+  },
+  {
+    "slug": "agentphone-phone-numbers-for-ai-agents",
+    "title": "AgentPhone | Phone Numbers for AI Agents",
+    "url": "https://agentphone.ai/",
+    "domain": "agentphone.ai",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "AgentPhone gives AI agents US or Canadian phone numbers for calls and messages through one webhook, with transcription and MCP, Python, Node, and REST integrations."
+  },
+  {
+    "slug": "agentmail-email-inbox-api-for-ai-agents",
+    "title": "AgentMail | Email Inbox API for AI Agents",
+    "url": "https://www.agentmail.to/",
+    "domain": "agentmail.to",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "AgentMail gives AI agents real inboxes for two-way email, with threads, attachments, realtime events, custom domains, SDKs, and MCP support."
+  },
+  {
+    "slug": "influence-without-authority-gabriel-valdivia",
+    "title": "Influence without authority — Gabriel Valdivia",
+    "url": "https://www.gabrielvaldivia.com/notes/influence-without-authority",
+    "domain": "gabrielvaldivia.com",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "Gabriel Valdivia argues that IC designers build influence through craft, memorable storytelling, portable artifacts, and reusable systems rather than managerial authority."
+  },
+  {
+    "slug": "grok-bot-marketplace",
+    "title": "Grok Bot Marketplace",
+    "url": "https://x.ai/bot/marketplace",
+    "domain": "x.ai",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "A marketplace of ready-made Grok Bots for engineering, sales, marketing, recruiting, research, and operations, with many actions held for human approval."
+  },
+  {
+    "slug": "how-to-make-a-scroll-stopping-ad-with-ai-no-experience-neede",
+    "title": "How to make a scroll-stopping ad with AI (no experience…",
+    "url": "https://x.com/elevencreative/status/2107908837131145679?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@ElevenCreative: We're launching a $100k creative competition and we want you to join. The only requirement: Make an ad with an original AI jingle in ElevenCreative. Entries close November 1st. Here's our step-by-step guide with prompts included. x.com/i/article/2107…",
+    "post": {
+      "id": "2107908837131145679",
+      "author": "ElevenCreative",
+      "handle": "ElevenCreative",
+      "date": "2026-10-07",
+      "text": "We're launching a $100k creative competition and we want you to join. \n\nThe only requirement: Make an ad with an original AI jingle in ElevenCreative. \n\nEntries close November 1st. \n\nHere's our step-by-step guide with prompts included. x.com/i/article/2107…",
+      "avatar": "/posts/2107908837131145679/avatar.webp",
+      "links": [
+        {
+          "text": "x.com/i/article/2107…",
+          "href": "https://x.com/i/article/2107881202376208385"
+        }
+      ],
+      "article": {
+        "title": "How to make a scroll-stopping ad with AI (no experience needed)",
+        "cover": "/posts/2107908837131145679/cover.webp"
+      }
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "creative-intelligence-2026",
+    "title": "Creative Intelligence 2026",
+    "url": "https://contralabs.com/creative-intelligence-report-2026?utm_source=twitter&utm_medium=organic_social&utm_campaign=oct2026creativeintelligencereport",
+    "domain": "contralabs.com",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "Contra Labs surveyed more than 150,000 creative professionals to map AI adoption, everyday workflows, tool use, and earnings across creative disciplines."
+  },
+  {
+    "slug": "voyager-the-open-harness-for-creative-work",
+    "title": "Voyager: the open harness for creative work",
+    "url": "https://voyager.so/",
+    "domain": "voyager.so",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "An open harness built for creative work, connecting frontier and open models to creative tools while keeping the workflow extensible."
+  },
+  {
+    "slug": "youtube-playbook-for-technical-creators",
+    "title": "YouTube Playbook for Technical Creators",
+    "url": "https://howtoyoutube.dev/",
+    "domain": "howtoyoutube.dev",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "A practical checklist for packaging, scripting, recording, editing, and publishing technical YouTube videos without judging the strategy too early."
+  },
+  {
+    "slug": "what-can-you-build-with-jev-rubric-labs",
+    "title": "What can you build with Jev? | Rubric Labs",
+    "url": "https://rubriclabs.com/blog/what-can-you-build-with-jev",
+    "domain": "rubriclabs.com",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "Rubric Labs tests Jev, a fast decision model that scores predefined answers, across notification triage, semantic search, spelling, settings search, and email rewriting."
+  },
+  {
+    "slug": "ask-claude-animations-to-review-john-lasseter-s-principles",
+    "title": "Ask your Claude animations to review John Lasseters…",
+    "url": "https://x.com/shwinnabego/status/2108573799302205935?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@Shwinnabego: Ask your Claude animations to review John Lasseters principles of animation",
+    "post": {
+      "id": "2108573799302205935",
+      "author": "Ashwinn",
+      "handle": "Shwinnabego",
+      "date": "2026-10-09",
+      "text": "Ask your Claude animations to review John Lasseters principles of animation",
+      "avatar": "/posts/2108573799302205935/avatar.webp",
+      "quoted": {
+        "id": "2108341013383454743",
+        "author": "Oren John",
+        "handle": "orenmeetsworld",
+        "date": "2026-10-08",
+        "text": "for god sakes ask your claude animation videos to slow down",
+        "avatar": "/posts/2108341013383454743/avatar.webp"
+      }
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "claude-made-this-product-launch-video-and-landing-page",
+    "title": "Idk what's cooler: this feature or that Claude made the…",
+    "url": "https://x.com/avanteprice/status/2108338739877425160?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@AvantePrice: Idk what's cooler: this feature or that Claude made the entire video and landing page from the PRD and Designs. posh.vip/3pl",
+    "post": {
+      "id": "2108338739877425160",
+      "author": "Avante Price",
+      "handle": "AvantePrice",
+      "date": "2026-10-08",
+      "text": "Idk what's cooler: this feature or that Claude made the entire video and landing page from the PRD and Designs. posh.vip/3pl",
+      "avatar": "/posts/2108338739877425160/avatar.webp",
+      "links": [
+        {
+          "text": "posh.vip/3pl",
+          "href": "https://posh.vip/3pl"
+        }
+      ],
+      "media": [
+        {
+          "type": "video",
+          "src": "/posts/2108338739877425160/1.mp4",
+          "poster": "/posts/2108338739877425160/1-poster.webp",
+          "w": 1920,
+          "h": 1080
+        }
+      ]
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "if-your-team-is-too-busy-doing-their-normal-job-to-experimen",
+    "title": "if your team is too busy doing their 'normal job' to…",
+    "url": "https://ghuntley.com/replaced/",
+    "domain": "ghuntley.com",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "Geoffrey Huntley argues that teams need protected time to experiment with AI because treating adoption as extra work leaves people and companies behind."
+  },
+  {
+    "slug": "the-engineer-to-of-girlie-pipeline",
+    "title": "The engineer to OF girlie pipeline",
+    "url": "https://alexine.rip/the-engineer-to-of-girlie-pipeline.html",
+    "domain": "alexine.rip",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "Alexine Le Port argues that cheaper software makes attention and trust scarce, pushing engineers to become the public face of what they build."
+  },
+  {
+    "slug": "cheeky-pint-mark-zuckerberg-and-alexandr-wang-on-muse-wonder",
+    "title": "Cheeky Pint is back! Mark Zuckerberg @finkd and Alexandr…",
+    "url": "https://x.com/collision/status/2109714250226905248?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@collision: Cheeky Pint is back! Mark Zuckerberg @finkd and Alexandr Wang @alexandr_wang came to the pub to discuss their new frontier model, Muse Wonder. 00:00:24 Muse’s breakout use cases 00:07:28 The model is the product 00:14:35 Muse Wonder 00:24:56 How frontier models are built",
+    "post": {
+      "id": "2109714250226905248",
+      "author": "John Collison",
+      "handle": "collision",
+      "date": "2026-10-12",
+      "text": "Cheeky Pint is back! Mark Zuckerberg @finkd and Alexandr Wang @alexandr_wang came to the pub to discuss their new frontier model, Muse Wonder.\n\n00:00:24 Muse’s breakout use cases\n00:07:28 The model is the product\n00:14:35 Muse Wonder\n00:24:56 How frontier models are built",
+      "avatar": "/posts/2109714250226905248/avatar.webp",
+      "media": [
+        {
+          "type": "video",
+          "poster": "/posts/2109714250226905248/1-poster.webp",
+          "w": 1280,
+          "h": 720
+        }
+      ]
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "slashdocs-by-razorpay",
+    "title": "SlashDocs by Razorpay",
+    "url": "https://razorpay.com/slash-docs/",
+    "domain": "razorpay.com",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "A self-hosted, open-source workspace where teams publish interactive agent outputs, comment inline, and let agents revise them through MCP."
+  },
+  {
+    "slug": "how-to-be-more-ambitious-a-tutorial-for-humans-with-models",
+    "title": "How to be more ambitious: A tutorial for humans with models",
+    "url": "https://felixrieseberg.com/how-to-be-more-ambitious-a-tutorial-for-humans-with-models/",
+    "domain": "felixrieseberg.com",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "Felix Rieseberg frames ambitious model use as more than speed: raise the altitude, depth, and range of the work."
+  },
+  {
+    "slug": "competitive-skills-by-lmty",
+    "title": "Competitive Skills by LMTY",
+    "url": "https://github.com/LMTYdotcom/skills",
+    "domain": "github.com",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "An open-source pack of agent skills for competitive briefings, positioning, pricing, launches, deal prep and sales enablement."
+  },
+  {
+    "slug": "from-one-idea-to-an-open-source-repo",
+    "title": "From one idea to an open-source repo",
+    "url": "https://yangyixxxx.github.io/lead-signal-listener/showcase.html",
+    "domain": "yangyixxxx.github.io",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "Yang Yi’s full agent chat log shows a lead-listening app going from an idea to a bilingual open-source release on real treg.to data."
+  },
+  {
+    "slug": "how-i-use-basecamp-as-a-solopreneur",
+    "title": "How I Use Basecamp as a Solopreneur",
+    "url": "https://x.com/jawestenberg/status/2110294844241326359?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@jawestenberg: Why Basecamp is ~the system of record for solo builders (and how I use it) x.com/i/article/2110…",
+    "post": {
+      "id": "2110294844241326359",
+      "author": "JA Westenberg",
+      "handle": "jawestenberg",
+      "date": "2026-10-14",
+      "text": "Why Basecamp is ~the system of record for solo builders (and how I use it) x.com/i/article/2110…",
+      "avatar": "/posts/2110294844241326359/avatar.webp",
+      "links": [
+        {
+          "text": "x.com/i/article/2110…",
+          "href": "https://x.com/i/article/2110289376659767296"
+        }
+      ],
+      "article": {
+        "title": "How I Use Basecamp as a Solopreneur",
+        "cover": "/posts/2110294844241326359/cover.webp"
+      }
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "how-to-avoid-ai-brain-rot",
+    "title": "Here is the full talk:",
+    "url": "https://x.com/milescranmer/status/2111105654211608847?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@MilesCranmer",
+    "post": {
+      "id": "2111105654211608847",
+      "author": "Miles Cranmer",
+      "handle": "MilesCranmer",
+      "date": "2026-10-16",
+      "text": "Here is the full talk:",
+      "avatar": "/posts/2111105654211608847/avatar.webp",
+      "media": [
+        {
+          "type": "video",
+          "poster": "/posts/2111105654211608847/1-poster.webp",
+          "w": 1920,
+          "h": 1080
+        }
+      ],
+      "quoted": {
+        "id": "2110683420217286882",
+        "author": "Miles Cranmer",
+        "handle": "MilesCranmer",
+        "date": "2026-10-15",
+        "text": "Had fun writing this talk for our MPhil students today:\n    \"How to avoid AI Brain Rot\"\n\nDiscussing how to avoid intelligence atrophy from AI use in work and study. And how to stand out on an ever-narrowing bell curve",
+        "avatar": "/posts/2110683420217286882/avatar.webp",
+        "media": [
+          {
+            "type": "photo",
+            "src": "/posts/2110683420217286882/1.webp",
+            "w": 2164,
+            "h": 1206
+          }
+        ]
+      }
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "how-to-use-writing-to-sharpen-your-thinking",
+    "title": "How to Use Writing to Sharpen Your Thinking:",
+    "url": "https://x.com/tferriss/status/2111510662040142209?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@tferriss",
+    "post": {
+      "id": "2111510662040142209",
+      "author": "Tim Ferriss",
+      "handle": "tferriss",
+      "date": "2026-10-17",
+      "text": "How to Use Writing to Sharpen Your Thinking:",
+      "avatar": "/posts/2111510662040142209/avatar.webp",
+      "media": [
+        {
+          "type": "video",
+          "src": "/posts/2111510662040142209/1.mp4",
+          "poster": "/posts/2111510662040142209/1-poster.webp",
+          "w": 3840,
+          "h": 2160
+        }
+      ]
+    },
+    "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "how-i-use-claude-as-my-second-brain-for-stock-research",
+    "title": "How I Use Claude as My Second Brain for Stock Research",
+    "url": "https://treasure-hunting.co/p/how-i-use-claude-as-my-second-brain",
+    "domain": "treasure-hunting.co",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "Sebastian Krog shows how he pairs Claude Code with an Obsidian vault split into raw, wiki, and outputs so stock research stays grounded and reusable."
+  },
+  {
+    "slug": "cinetic",
+    "title": "cinetic",
+    "url": "https://github.com/Leonxlnx/cinetic",
+    "domain": "github.com",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "An agent skill for directing cinematic launch films from code, with concept development, brand rules, measured motion, sound, and automated QA."
+  },
+  {
+    "slug": "reverse-brand-prompt-for-claude-opus-agentic-coding-mode",
+    "title": "Reverse-brand prompt for Claude (Opus, agentic coding mode)",
+    "url": "https://gist.github.com/amirmushichge/ede82d51439e4bd70817c329e36c4cc7",
+    "domain": "gist.github.com",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "A detailed Claude Code prompt for turning a public website into an unofficial, measured brand guide with responsive tokens, reconstructed components, and explicit safety limits."
+  },
+  {
+    "slug": "you-can-use-ai-to-edit-videos-for-you-here-s-how",
+    "title": "You can use AI to edit videos for you, here's how",
+    "url": "https://forwardfuture.com/newsletter/originals/you-can-use-ai-to-edit-videos-for-you-here-s-how",
+    "domain": "forwardfuture.com",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "A professional editor explains how to delegate cuts, B-roll, subtitles and revisions to AI while keeping creative judgment in the loop."
   }
 ]
