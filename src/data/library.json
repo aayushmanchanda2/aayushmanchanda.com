@@ -2984,7 +2984,39 @@
     "domain": "blog.cloudflare.com",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "Cloudflare’s open-source Forge pipeline runs in CI to generate and preview SDKs, CLIs, docs, and other agent-facing surfaces from API definitions."
+    "note": "Cloudflare’s open-source Forge pipeline runs in CI to generate and preview SDKs, CLIs, docs, and other agent-facing surfaces from API definitions.",
+    "tldr": "Cloudflare Forge is an open-source, pluggable pipeline that generates SDKs, CLIs, docs and libraries, with preview builds for every API change.",
+    "highlights": [
+      {
+        "text": "Forge is an open source, pluggable generation pipeline that anyone can deploy and run for free.",
+        "color": "amber"
+      },
+      {
+        "text": "We built Forge because we needed it ourselves in order to treat agents as our customers.",
+        "note": "Agent-ready product surfaces are now part of the API contract.",
+        "color": "green"
+      },
+      {
+        "text": "It lints every change, and then generates preview builds of the CLI, docs, and SDKs with just your changes highlighted that you can install to test.",
+        "note": "Preview generation moves compatibility checks into each pull request.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "Today we’re introducing Forge, a fresh approach to generating SDKs, CLIs, docs, and libraries. Forge is an open source, pluggable generation pipeline that anyone can deploy and run for free. Forge is early in its life, but already generates the output required for the cf CLI, and over the next few months will power Cloudflare’s API documentation, SDKs, and much more.",
+    "block": {
+      "best_for": "API teams that need to generate and preview SDKs, CLIs and documentation across many services.",
+      "tip": "Run generation in CI on every API repository and create installable previews before changes merge.",
+      "needs": [
+        "an API repository",
+        "CI",
+        "generation targets such as SDKs, CLIs or docs"
+      ],
+      "start_here": [
+        "Choose one API and one generated surface.",
+        "Run Forge in CI for every change.",
+        "Install and test the generated preview before merging."
+      ]
+    }
   },
   {
     "slug": "inside-the-personal-ai-assistant-growing-10-a-day-instinct-f",
