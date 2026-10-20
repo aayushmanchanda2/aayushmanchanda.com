@@ -2622,7 +2622,7 @@
   },
   {
     "slug": "jev-as-a-non-black-box-embedder",
-    "title": "I've been using Jev for all kinds of things. This morning…",
+    "title": "Jev as a non-black-box embedder",
     "url": "https://x.com/kieranklaassen/status/2103522599414501550?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
     "domain": "x.com",
     "saved_date": "2026-10-20",
@@ -2636,7 +2636,20 @@
       "text": "I've been using Jev for all kinds of things. This morning I had a realization I kind of like:\n\nUse it to make non-black-box embeddings.\n\nInstead of an embedding model spitting out 1,536 numbers that mean nothing, you ask Jev questions about each document. The answers become the",
       "avatar": "/posts/2103522599414501550/avatar.webp"
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "Instead of opaque numeric vectors, Jev answers questions about each document so the answers become a readable embedding.",
+    "block": {
+      "best_for": "People who want readable document representations",
+      "tip": "Replace opaque vectors with answers to questions about each document.",
+      "needs": [
+        "Jev",
+        "Documents"
+      ],
+      "start_here": [
+        "Ask Jev questions about each document.",
+        "Use the answers as its embedding."
+      ]
+    }
   },
   {
     "slug": "jev-use-cases-18-areas-2-304-projects",
