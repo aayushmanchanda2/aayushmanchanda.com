@@ -4109,5 +4109,42 @@
     "saved_date": "2026-10-20",
     "kind": "article",
     "note": "A professional editor explains how to delegate cuts, B-roll, subtitles and revisions to AI while keeping creative judgment in the loop."
+  },
+  {
+    "slug": "idealab-ai",
+    "title": "Idealab.ai",
+    "url": "https://idealab.ai/",
+    "domain": "idealab.ai",
+    "saved_date": "2026-10-20",
+    "kind": "article",
+    "note": "Idealab.ai gives entrepreneurs a free catalog of business ideas, then helps refine one and start building it."
+  },
+  {
+    "slug": "motion-engineering-build-a-video-studio-around-opus-5-5",
+    "title": "Motion Engineering: Build a Video Studio Around Opus 5.5",
+    "url": "https://x.com/0xwhrrari/status/2105643919119696297?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
+    "domain": "x.com",
+    "saved_date": "2026-10-20",
+    "kind": "post",
+    "note": "@0xwhrrari: Opus 5.5 can make a video The hard part is making the next one better That takes a studio, not a prompt I broke down how to build it ↓ x.com/i/article/2105…",
+    "post": {
+      "id": "2105643919119696297",
+      "author": "rari",
+      "handle": "0xwhrrari",
+      "date": "2026-10-01",
+      "text": "Opus 5.5 can make a video\n\nThe hard part is making the next one better\n\nThat takes a studio, not a prompt\n\nI broke down how to build it ↓ x.com/i/article/2105…",
+      "avatar": "/posts/2105643919119696297/avatar.webp",
+      "links": [
+        {
+          "text": "x.com/i/article/2105…",
+          "href": "https://x.com/i/article/2105626165704572928"
+        }
+      ],
+      "article": {
+        "title": "Motion Engineering: Build a Video Studio Around Opus 5.5",
+        "cover": "/posts/2105643919119696297/cover.webp"
+      }
+    },
+    "media_retrieved": "2026-10-20"
   }
 ]

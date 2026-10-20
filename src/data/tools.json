@@ -1332,5 +1332,14 @@
     "verdict": "watching",
     "note": "Saved from Raindrop. Not tested yet.",
     "status_date": "2026-10-20"
+  },
+  {
+    "slug": "glassy-ui",
+    "name": "Glassy UI",
+    "url": "https://glassyui.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Glassy UI ships 37 free React glass components plus React Native versions, installed with shadcn so you own the source.",
+    "status_date": "2026-10-20"
   }
 ]

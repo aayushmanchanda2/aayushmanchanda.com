@@ -892,9 +892,10 @@
     "at": "2026-10-20T05:14:36.070Z"
   },
   "1865186247": {
-    "kind": "pending",
+    "kind": "failed",
     "attempts": 3,
-    "lastError": "fiscal-ai-the-modern-financial-data-platform answered with a bot wall, not the page: Vercel security checkpoint (Vercel Security Checkpoint)"
+    "lastError": "fiscal-ai-the-modern-financial-data-platform answered with a bot wall, not the page: Vercel security checkpoint (Vercel Security Checkpoint)",
+    "at": "2026-10-20T19:22:32.438Z"
   },
   "1865230874": {
     "kind": "published",
@@ -1371,9 +1372,10 @@
     "at": "2026-10-20T05:14:36.070Z"
   },
   "1879138583": {
-    "kind": "pending",
+    "kind": "failed",
     "attempts": 3,
-    "lastError": "prompt-motion answered with a bot wall, not the page: Cloudflare interstitial (Just a moment)"
+    "lastError": "prompt-motion answered with a bot wall, not the page: Cloudflare interstitial (Just a moment)",
+    "at": "2026-10-20T19:22:32.438Z"
   },
   "1879139650": {
     "kind": "published",
@@ -1664,9 +1666,10 @@
     "at": "2026-10-20T05:14:36.070Z"
   },
   "1894943125": {
-    "kind": "pending",
+    "kind": "failed",
     "attempts": 3,
-    "lastError": "shot of https://www.darshitapatankar.com/ exceeded 45000ms"
+    "lastError": "shot of https://www.darshitapatankar.com/ exceeded 45000ms",
+    "at": "2026-10-20T19:22:32.438Z"
   },
   "1894952486": {
     "kind": "published",
@@ -1697,5 +1700,23 @@
     "slug": "beam-share-windows-between-your-macs",
     "section": "tools",
     "at": "2026-10-20T14:22:57.002Z"
+  },
+  "1895844027": {
+    "kind": "published",
+    "slug": "idealab-ai",
+    "section": "reading",
+    "at": "2026-10-20T19:22:32.438Z"
+  },
+  "1895846435": {
+    "kind": "published",
+    "slug": "glassy-ui",
+    "section": "tools",
+    "at": "2026-10-20T19:22:32.438Z"
+  },
+  "1895856945": {
+    "kind": "published",
+    "slug": "motion-engineering-build-a-video-studio-around-opus-5-5",
+    "section": "reading",
+    "at": "2026-10-20T19:22:32.438Z"
   }
 }
