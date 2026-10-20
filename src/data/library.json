@@ -3145,7 +3145,35 @@
         "cover": "/posts/2105334948551139678/cover.webp"
       }
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "Pocket FM's Sherpa combines hierarchical planning, structured story memory, specialized prose models, and critics, trained against writer edits and audience behavior.",
+    "highlights": [
+      {
+        "text": "Creative writing requires tension, emotion, creation and slow resolution of conflict, character traits that go beyond one-liners, and variations in pace. Users must be led to wrong conclusions while receiving clues that keep them hooked.",
+        "note": "Good creative writing optimizes the audience's experience, not just the correctness of the answer.",
+        "color": "amber"
+      },
+      {
+        "text": "A Narrative World Model keeps a structured record of what has happened, what each character knows, and which promises the story still owes the audience.",
+        "note": "Sherpa keeps story facts, character knowledge, and unresolved promises in structured state.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "As we pivoted to AI-written shows, countless people told us this would kill Pocket FM. After six long months, I almost believed them. But then our ecosystem exploded, and not despite AI writing but because of it. Within <2 years, our AI has helped writers create 161 blockbusters on Pocket, including a $100M IP.",
+    "block": {
+      "best_for": "Teams building long-form serialized fiction with AI",
+      "tip": "Separate planning, persistent story state, prose generation, and critique instead of relying on one general-purpose prompt.",
+      "needs": [
+        "A story plan",
+        "Structured canon",
+        "Writer and audience feedback"
+      ],
+      "start_here": [
+        "Plan arcs, episodes, and scenes",
+        "Track character knowledge and unresolved setups",
+        "Draft with critics for continuity and scene quality"
+      ]
+    }
   },
   {
     "slug": "predicting-the-winner-of-personal-agents",
