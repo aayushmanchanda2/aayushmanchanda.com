@@ -3242,7 +3242,33 @@
     "domain": "turbopuffer.com",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "Turbopuffer explains why it is demoting vector search from the primary index to a secondary one as its system grows into a general search database."
+    "note": "Turbopuffer explains why it is demoting vector search from the primary index to a secondary one as its system grows into a general search database.",
+    "tldr": "Turbopuffer v3 replaces its vector-first storage architecture with a new primary index, making ANN secondary while speeding text, regex, vector, and SQL queries.",
+    "highlights": [
+      {
+        "text": "We've pushed the vector-primary architecture as far as we can, and it's time to move on.",
+        "note": "The vector index stops dictating every query plan.",
+        "color": "amber"
+      },
+      {
+        "text": "turbopuffer v3 changes how documents and indexes are laid out, written, compacted, and queried in turbopuffer.",
+        "note": "The change reaches the full storage architecture.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "We are changing turbopuffer's storage architecture to take search to the next level. turbopuffer v3 changes how documents and indexes are laid out, written, compacted, and queried in turbopuffer.",
+    "block": {
+      "best_for": "Teams evaluating search infrastructure beyond vector-only workloads",
+      "tip": "Treat vector search as one index in a broader search database.",
+      "needs": [
+        "Search workloads that mix vectors with text, regex, or SQL"
+      ],
+      "start_here": [
+        "Read the v1 to v3 architecture history",
+        "Compare vector-primary constraints with the new primary index",
+        "Follow future v3 implementation updates"
+      ]
+    }
   },
   {
     "slug": "clone-a-boring-utility-site-jonathan-s-jam-ad-funded-tool-po",
