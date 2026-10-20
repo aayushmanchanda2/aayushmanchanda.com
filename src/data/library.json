@@ -3455,7 +3455,7 @@
   },
   {
     "slug": "alpha-gen-beta",
-    "title": "The last drop of VFX Week: Alpha Gen (Beta). Give it an…",
+    "title": "Alpha Gen Creates Video Alpha Mattes",
     "url": "https://x.com/ltx_io/status/2106015208221393339?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
     "domain": "x.com",
     "saved_date": "2026-10-20",
@@ -3478,7 +3478,21 @@
         }
       ]
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "LTX Alpha Gen turns ordinary RGB video into frame-matched alpha mattes without green screens, masks, or prompts, including difficult edges.",
+    "block": {
+      "best_for": "Creating alpha mattes from ordinary RGB video",
+      "tip": "Try it on hair, fur, smoke, fire, glass, or water where keying is difficult.",
+      "needs": [
+        "An RGB video clip",
+        "LTX Alpha Gen beta access"
+      ],
+      "start_here": [
+        "Upload an RGB clip",
+        "Run Alpha Gen",
+        "Export the frame-matched alpha matte"
+      ]
+    }
   },
   {
     "slug": "muse-gadgets",
