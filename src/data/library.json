@@ -3496,7 +3496,7 @@
   },
   {
     "slug": "muse-gadgets",
-    "title": "🚨 MUSE ECOSYSTEM ALERT 🚨 today we are announcing Muse…",
+    "title": "Muse Gadgets Opens Muse to Hardware",
     "url": "https://x.com/alexandr_wang/status/2106113742266089526?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
     "domain": "x.com",
     "saved_date": "2026-10-20",
@@ -3518,7 +3518,21 @@
         }
       ]
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "Muse Gadgets is open-source ESP32 firmware and a Linux SDK for building hardware that works with Muse.",
+    "block": {
+      "best_for": "Building hardware that works with Muse",
+      "tip": "Choose the ESP32 firmware or Linux SDK for the device you are making.",
+      "needs": [
+        "ESP32 hardware or a Linux device",
+        "Muse"
+      ],
+      "start_here": [
+        "Choose the firmware or SDK",
+        "Connect your hardware to Muse",
+        "Test the device integration"
+      ]
+    }
   },
   {
     "slug": "how-i-use-6-claude-subs-and-3-codex-subs",
