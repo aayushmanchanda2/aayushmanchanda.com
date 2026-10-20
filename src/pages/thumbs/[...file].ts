@@ -26,6 +26,9 @@ const SHOTS = path.join(PUBLIC_DIR, "shots");
 /** Changing a number here re-encodes every copy. Quality per format: design.md §8 "Images". */
 const RECIPE = { webp: { quality: 75, effort: 6 }, avif: { quality: 50, effort: 4 } };
 
+/** `scripts/image-budget.mjs › BUDGETS` for /thumbs/. */
+const THUMB_BUDGET = 420 * 1024;
+
 const TYPES = { webp: "image/webp", avif: "image/avif" } as const;
 
 async function encode(shot: string, variant: Variant): Promise<Buffer> {
@@ -36,7 +39,17 @@ async function encode(shot: string, variant: Variant): Promise<Buffer> {
     image.extract({ left: 0, top: 0, width, height: Math.min(height, Math.round(width / CROP_RATIO)) });
   }
   image.resize({ width: variant.width, withoutEnlargement: true });
-  return variant.format === "avif" ? image.avif(RECIPE.avif).toBuffer() : image.webp(RECIPE.webp).toBuffer();
+  if (variant.format === "webp") return image.webp(RECIPE.webp).toBuffer();
+  // A busy, tall page can come out over `scripts/image-budget.mjs`'s /thumbs
+  // ceiling at the recipe's quality and fail CI, so step down until it fits.
+  // ponytail: the floor of 30 can still miss on an extreme page; cap the shot's height then.
+  let quality = RECIPE.avif.quality;
+  let out = await image.clone().avif({ ...RECIPE.avif, quality }).toBuffer();
+  while (out.length > THUMB_BUDGET && quality > 30) {
+    quality -= 10;
+    out = await image.clone().avif({ ...RECIPE.avif, quality }).toBuffer();
+  }
+  return out;
 }
 
 export const getStaticPaths = (async () => {
