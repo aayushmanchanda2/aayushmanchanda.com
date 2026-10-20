@@ -100,7 +100,10 @@ export const NEW_TOOL_CATEGORY = "unsorted";
 /** Used when the bookmark has no excerpt. `tools.ts` rejects an empty note. */
 export const NEW_TOOL_NOTE = "Saved from Raindrop. Not tested yet.";
 
-/** `src/lib/tool-copy.ts › noteProblem`, which fails the build: 20 words at most, no em dash. */
+/**
+ * `src/lib/tool-copy.ts › noteProblem`, which fails the build: 20 words at most, no em dash.
+ * @param {string} text
+ */
 const fitsToolNote = (text) => text !== "" && text.split(" ").length <= 20 && !text.includes("—");
 
 /**
