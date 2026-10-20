@@ -2788,7 +2788,35 @@
         "cover": "/posts/2103571281014861957/cover.webp"
       }
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "Lauren argues that AI ends hand-written code as the default craft while opening programming to more people through natural-language building.",
+    "highlights": [
+      {
+        "text": "The craft of writing code will disappear. Yes, there are still Italian shoe makers around. But look at your feet.",
+        "note": "The essay separates coding as a craft from programming as intent.",
+        "color": "amber"
+      },
+      {
+        "text": "Builders using AI will produce things we could never do before.",
+        "color": "green"
+      },
+      {
+        "text": "What I used to be limited in by my own ability, I can now will into existence if I can figure out the right incantations, the right prompts and context, to drive an agent towards the vision I see so clearly in my head.",
+        "note": "Prompts and context become the new building material.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "To my friends mourning the loss of their most loved activity, I feel your pain. I got into programming as a hobby, my first introductions to it being in high school and discovering the <marquee> tag. Ever since that joyful discovery, I couldn't stop myself from making things, tinkering, and looking forward to the thrill of solving the next problem.",
+    "block": {
+      "best_for": "Programmers and AI builders wrestling with what coding becomes when natural language is the interface.",
+      "tip": "Treat natural-language programming as a new way to express intent, while respecting the craft and systems that made it possible.",
+      "needs": [],
+      "start_here": [
+        "Read the argument for why coding as a craft can disappear while programming continues.",
+        "Try expressing one small build entirely through goals, prompts and context.",
+        "Compare what becomes possible with what hand-written code once limited."
+      ]
+    }
   },
   {
     "slug": "why-ai-is-booming-but-productivity-isn-t",
