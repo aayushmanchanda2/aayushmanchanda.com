@@ -3102,7 +3102,22 @@
       "id": "NE4CLThMPGU",
       "thumb": "/shots/box-s-aaron-levie-on-reinventing-yourself-in-the-ai-age-and-thumb.webp"
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "Aaron Levie argues model intelligence still needs application software, enterprise integrations, domain expertise, and change management to become usable workflows.",
+    "block": {
+      "best_for": "Founders and AI transformation teams",
+      "tip": "Treat the application layer as the bridge between models and real enterprise workflows.",
+      "needs": [
+        "A target workflow",
+        "Relevant business data",
+        "Domain expertise"
+      ],
+      "start_here": [
+        "Map the workflow around the model",
+        "Identify data, human, and legacy-system blockers",
+        "Choose models by accuracy and cost for each task"
+      ]
+    }
   },
   {
     "slug": "why-llms-can-t-write-well-and-how-sherpa-fixes-it",
