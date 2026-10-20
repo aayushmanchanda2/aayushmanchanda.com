@@ -100,6 +100,23 @@ export const NEW_TOOL_CATEGORY = "unsorted";
 /** Used when the bookmark has no excerpt. `tools.ts` rejects an empty note. */
 export const NEW_TOOL_NOTE = "Saved from Raindrop. Not tested yet.";
 
+/** `src/lib/tool-copy.ts › noteProblem`, which fails the build: 20 words at most, no em dash. */
+const fitsToolNote = (text) => text !== "" && text.split(" ").length <= 20 && !text.includes("—");
+
+/**
+ * The excerpt as a note the build accepts. One note over the cap fails the
+ * whole run, so nothing publishes until someone edits it: an em dash becomes
+ * a comma, a long note keeps its first sentence, and one with no short first
+ * sentence gets the stand-in.
+ * @param {string} excerpt
+ */
+export function toolNote(excerpt) {
+  const text = oneLine(excerpt).replace(/\s*—\s*/g, ", ");
+  if (fitsToolNote(text)) return text;
+  const first = text.match(/^.*?[.!?](?= |$)/)?.[0] ?? "";
+  return fitsToolNote(first) ? first : NEW_TOOL_NOTE;
+}
+
 /**
  * The shot filenames the pipeline owns; anything else in the dir is left alone.
  *
@@ -534,7 +551,7 @@ export function buildToolEntry({ bookmark, slug, date }) {
     ...(repo === null ? {} : { repo }),
     category: NEW_TOOL_CATEGORY,
     verdict: NEW_TOOL_VERDICT,
-    note: bookmark.excerpt === "" ? NEW_TOOL_NOTE : bookmark.excerpt,
+    note: toolNote(bookmark.excerpt),
     status_date: date,
   };
 }
