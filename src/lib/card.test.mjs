@@ -230,7 +230,8 @@ test("the monogram is the first letter of the name, and never a mystery glyph", 
     if (entry.post === null) continue;
     assert.match(
       monogram(entry.post.author),
-      /^[\p{L}\p{N}]$/u,
+      // Empty is fine: a name with no letter draws no circle (asserted above).
+      /^[\p{L}\p{N}]?$/u,
       `"${entry.post.author}" would put something other than one letter in a coloured circle`,
     );
   }

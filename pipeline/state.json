@@ -878,5 +878,817 @@
     "slug": "claude-full-course-1-hour-build-automate-anything",
     "section": "reading",
     "at": "2026-09-24T21:36:47.244Z"
+  },
+  "1864999559": {
+    "kind": "published",
+    "slug": "storycast",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1865085519": {
+    "kind": "published",
+    "slug": "runlayer",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1865186247": {
+    "kind": "pending",
+    "attempts": 1,
+    "lastError": "fiscal-ai-the-modern-financial-data-platform answered with a bot wall, not the page: Vercel security checkpoint (Vercel Security Checkpoint)"
+  },
+  "1865230874": {
+    "kind": "published",
+    "slug": "art-and-design-inspiration-the-best-new-work",
+    "section": "sites",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1865233933": {
+    "kind": "published",
+    "slug": "the-working-assembly",
+    "section": "sites",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1865703161": {
+    "kind": "published",
+    "slug": "100-motion-themes-saas-motion-kit",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1865705511": {
+    "kind": "published",
+    "slug": "jev-studied-438-122-apps-doing-10k-mo-the-bar-is-low",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1865706333": {
+    "kind": "published",
+    "slug": "muse-ai-connectors-could-be-the-app-store-moment-for-ai",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1865710366": {
+    "kind": "published",
+    "slug": "sf-compute",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1865710684": {
+    "kind": "published",
+    "slug": "getting-started-your-first-rl-run-with-jev-as-the-reward-mod",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1865716122": {
+    "kind": "published",
+    "slug": "75m-founder-reveals-his-agentic-engineering-setup",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1865818806": {
+    "kind": "published",
+    "slug": "why-i-m-building-muse",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1865819835": {
+    "kind": "published",
+    "slug": "video-use-edit-videos-with-coding-agents",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1865820296": {
+    "kind": "published",
+    "slug": "using-claude-code-spending-your-effort",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1865853854": {
+    "kind": "published",
+    "slug": "how-to-use-jev-1-as-an-embedder",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1865854066": {
+    "kind": "published",
+    "slug": "jev-as-a-non-black-box-embedder",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1865859072": {
+    "kind": "published",
+    "slug": "jev-use-cases-18-areas-2-304-projects",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1865911408": {
+    "kind": "published",
+    "slug": "ai-starter-pack-for-the-x-curious",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1865912878": {
+    "kind": "published",
+    "slug": "how-to-run-your-product-team-like-a-research-lab",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1865943058": {
+    "kind": "published",
+    "slug": "lilysai-ai-summaries-for-video-audio-pdfs-and-websites",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1866428337": {
+    "kind": "published",
+    "slug": "startup-product-launch-videos-from-x-what-ships",
+    "section": "sites",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1866430238": {
+    "kind": "published",
+    "slug": "coding-is-dead-long-live-coding",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1866430934": {
+    "kind": "published",
+    "slug": "why-ai-is-booming-but-productivity-isn-t",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1866580331": {
+    "kind": "published",
+    "slug": "we-re-open-sourcing-the-company-brain-how-we-designed-the-mu",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1869185080": {
+    "kind": "published",
+    "slug": "tapkit",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1869202172": {
+    "kind": "published",
+    "slug": "clay-s-ai-writing-policy",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1869218475": {
+    "kind": "published",
+    "slug": "wajo-fo",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1869226476": {
+    "kind": "published",
+    "slug": "cue-your-personal-agents",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1869244326": {
+    "kind": "published",
+    "slug": "introducing-forge-the-open-source-pipeline-for-generating-sd",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1869248811": {
+    "kind": "published",
+    "slug": "whattheport",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1869391653": {
+    "kind": "published",
+    "slug": "what-ships-startup-launch-videos-from-x",
+    "section": "sites",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1869391722": {
+    "kind": "published",
+    "slug": "launchr-catalog",
+    "section": "sites",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1869453209": {
+    "kind": "failed",
+    "attempts": 3,
+    "lastError": "x.com and twitter.com block headless capture — save the product's URL, not the tweet",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1869457572": {
+    "kind": "published",
+    "slug": "paper-shaders-ultra-fast-zero-dependency-shaders",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1869495296": {
+    "kind": "published",
+    "slug": "inside-the-personal-ai-assistant-growing-10-a-day-instinct-f",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1870096697": {
+    "kind": "published",
+    "slug": "deedy-s-opus-5-5-video-generation-workflow",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1871869003": {
+    "kind": "published",
+    "slug": "box-s-aaron-levie-on-reinventing-yourself-in-the-ai-age-and",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1871874241": {
+    "kind": "published",
+    "slug": "propaganda-the-internet-is-our-playground",
+    "section": "sites",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1872144807": {
+    "kind": "published",
+    "slug": "why-llms-can-t-write-well-and-how-sherpa-fixes-it",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1872906394": {
+    "kind": "published",
+    "slug": "introducing-echo-a-writing-model",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1872960752": {
+    "kind": "published",
+    "slug": "letter-treat-marketing-as-an-engineering-problem",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1872961297": {
+    "kind": "published",
+    "slug": "predicting-the-winner-of-personal-agents",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1872961642": {
+    "kind": "published",
+    "slug": "rip-vector-database",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1873235483": {
+    "kind": "published",
+    "slug": "clone-a-boring-utility-site-jonathan-s-jam-ad-funded-tool-po",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1873238079": {
+    "kind": "published",
+    "slug": "learn-the-latent",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1873313940": {
+    "kind": "published",
+    "slug": "masterclass-how-fdes-make-1m-yr-deploying-ai-agents-greg-ise",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1873314534": {
+    "kind": "published",
+    "slug": "imagine-two-people-using-ai-every-day-for-ten-years",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1873315776": {
+    "kind": "published",
+    "slug": "presa-brand-identity-design-studio",
+    "section": "sites",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1874649005": {
+    "kind": "published",
+    "slug": "introducing-ideogram-4-5",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1874837893": {
+    "kind": "published",
+    "slug": "cua-spaces-a-free-space-for-every-agent",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1875006630": {
+    "kind": "published",
+    "slug": "alpha-gen-beta",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1875007934": {
+    "kind": "published",
+    "slug": "muse-gadgets",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1875008033": {
+    "kind": "published",
+    "slug": "wallpad-your-phone-is-the-remote-for-the-office-tvs",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1875008374": {
+    "kind": "published",
+    "slug": "how-i-use-6-claude-subs-and-3-codex-subs",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1875344440": {
+    "kind": "published",
+    "slug": "introducing-phonon-2",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1875763776": {
+    "kind": "published",
+    "slug": "kobbe-web-analytics-that-respect-your-visitors",
+    "section": "sites",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1876002260": {
+    "kind": "published",
+    "slug": "timeless-type-family",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1876004663": {
+    "kind": "published",
+    "slug": "mcp-events-plugins-openai-developers",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1876005058": {
+    "kind": "published",
+    "slug": "on-claude-consciousness-this-lecture-by-antikythera-is-worth",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1876010184": {
+    "kind": "published",
+    "slug": "opensource-ui-free-react-ui-library-next-js-components-copy",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1876530278": {
+    "kind": "published",
+    "slug": "codex-computer-use-works-as-a-local-mcp-server",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1876539452": {
+    "kind": "published",
+    "slug": "emdash-agent-skills",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1876542984": {
+    "kind": "published",
+    "slug": "emdash-1-0-the-stable-cms-with-a-secure-plugin-registry",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1876549508": {
+    "kind": "published",
+    "slug": "boat-sandboxes-for-agents",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1876552115": {
+    "kind": "published",
+    "slug": "clef",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1876700654": {
+    "kind": "published",
+    "slug": "one-never-keep-an-agent-waiting",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1876703435": {
+    "kind": "published",
+    "slug": "simplified-technical-english-skill",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1876704348": {
+    "kind": "published",
+    "slug": "a-code-only-prompt-for-a-22-second-ai-launch-film",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1876708382": {
+    "kind": "published",
+    "slug": "e2e-ai-end-to-end-testing-for-web-and-mobile",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1876800346": {
+    "kind": "published",
+    "slug": "indent-one-shared-coworker-for-your-whole-company",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1876886297": {
+    "kind": "published",
+    "slug": "i-am-begging-you-to-start-writing-online",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1876931893": {
+    "kind": "published",
+    "slug": "albina-nikiforova",
+    "section": "sites",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1876936784": {
+    "kind": "published",
+    "slug": "julia-pintar-playkit-5m-from-inbound-content-zero-outbound-z",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1877111188": {
+    "kind": "published",
+    "slug": "arc-ui-animated-react-components-for-shadcn-and-next-js",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1877658413": {
+    "kind": "published",
+    "slug": "fluid-functionalism",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1877663316": {
+    "kind": "published",
+    "slug": "export-your-x-bookmarks-as-markdown",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1877836808": {
+    "kind": "published",
+    "slug": "hyperframes-html-is-now-a-video-format",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1878062740": {
+    "kind": "published",
+    "slug": "graphical",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1878062924": {
+    "kind": "published",
+    "slug": "every-agentic-engineering-hack-i-know-october-2026-attack-of",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1878131747": {
+    "kind": "published",
+    "slug": "design-systems-for-ai-agents",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1878175636": {
+    "kind": "published",
+    "slug": "does-your-ai-agent-actually-work-a-guide-to-eval-driven-deve",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1879137644": {
+    "kind": "published",
+    "slug": "firstindex",
+    "section": "sites",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1879138583": {
+    "kind": "pending",
+    "attempts": 1,
+    "lastError": "prompt-motion answered with a bot wall, not the page: Cloudflare interstitial (Just a moment)"
+  },
+  "1879139650": {
+    "kind": "published",
+    "slug": "roma-the-to-do-list-that-does-itself",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1879140565": {
+    "kind": "published",
+    "slug": "how-ai-agents-use-websites-where-they-fail-and-what-to-fix",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1879321571": {
+    "kind": "published",
+    "slug": "rising-ui-landscape-playground",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1879448338": {
+    "kind": "published",
+    "slug": "you-don-t-have-to-write-code-to-be-technical",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1879450395": {
+    "kind": "published",
+    "slug": "melius-the-ai-native-operating-system-for-creatives",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1880066241": {
+    "kind": "pending",
+    "attempts": 1,
+    "lastError": "shot of https://www.juliaalvarenga.com/ exceeded 45000ms"
+  },
+  "1880068699": {
+    "kind": "published",
+    "slug": "the-scroll-stopping-carousel-prompt",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1880148956": {
+    "kind": "published",
+    "slug": "gpt-6-and-intelligent-ui-for-everyone",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1880151803": {
+    "kind": "published",
+    "slug": "paper-mono",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1880191119": {
+    "kind": "published",
+    "slug": "littlebird-ai-assistant-with-a-memory-of-your-work",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1880294577": {
+    "kind": "published",
+    "slug": "treg-to-openrouter-for-agent-tools-and-data-pay-per-call",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1880294616": {
+    "kind": "published",
+    "slug": "honcho-memory-that-reasons",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1880294664": {
+    "kind": "published",
+    "slug": "agentphone-phone-numbers-for-ai-agents",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1880294898": {
+    "kind": "published",
+    "slug": "agentmail-email-inbox-api-for-ai-agents",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1880295338": {
+    "kind": "published",
+    "slug": "paperclip-evidence-api",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1880299414": {
+    "kind": "published",
+    "slug": "influence-without-authority-gabriel-valdivia",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1880306689": {
+    "kind": "published",
+    "slug": "grok-bot-marketplace",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1880478296": {
+    "kind": "published",
+    "slug": "how-to-make-a-scroll-stopping-ad-with-ai-no-experience-neede",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1881454494": {
+    "kind": "published",
+    "slug": "creative-intelligence-2026",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1881481471": {
+    "kind": "published",
+    "slug": "voyager-the-open-harness-for-creative-work",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1881725678": {
+    "kind": "published",
+    "slug": "adil-mania",
+    "section": "sites",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1881768885": {
+    "kind": "published",
+    "slug": "youtube-playbook-for-technical-creators",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1881791764": {
+    "kind": "published",
+    "slug": "kie-ai-one-api-for-ai-models",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1882460056": {
+    "kind": "published",
+    "slug": "what-can-you-build-with-jev-rubric-labs",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1882464464": {
+    "kind": "published",
+    "slug": "ask-claude-animations-to-review-john-lasseter-s-principles",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1882468050": {
+    "kind": "published",
+    "slug": "claude-made-this-product-launch-video-and-landing-page",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1883232052": {
+    "kind": "published",
+    "slug": "if-your-team-is-too-busy-doing-their-normal-job-to-experimen",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1884744267": {
+    "kind": "published",
+    "slug": "anatomy-a-skill-for-claude-code",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1886977609": {
+    "kind": "published",
+    "slug": "the-engineer-to-of-girlie-pipeline",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1886979560": {
+    "kind": "published",
+    "slug": "cheeky-pint-mark-zuckerberg-and-alexandr-wang-on-muse-wonder",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1887128930": {
+    "kind": "published",
+    "slug": "slashdocs-by-razorpay",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1888219153": {
+    "kind": "published",
+    "slug": "how-to-be-more-ambitious-a-tutorial-for-humans-with-models",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1888242073": {
+    "kind": "published",
+    "slug": "competitive-skills-by-lmty",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1888242588": {
+    "kind": "published",
+    "slug": "from-one-idea-to-an-open-source-repo",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1888973097": {
+    "kind": "published",
+    "slug": "seo-skills-for-ai-agents",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1889630920": {
+    "kind": "published",
+    "slug": "superdesign-ai-design-agent-for-your-ide",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1889633149": {
+    "kind": "published",
+    "slug": "better-design-open-source-claude-design",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1889634836": {
+    "kind": "published",
+    "slug": "paper-shaders",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1890577117": {
+    "kind": "published",
+    "slug": "how-i-use-basecamp-as-a-solopreneur",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1890858158": {
+    "kind": "published",
+    "slug": "pond",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1891912584": {
+    "kind": "published",
+    "slug": "how-to-avoid-ai-brain-rot",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1892134162": {
+    "kind": "published",
+    "slug": "better-claude",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1893293443": {
+    "kind": "published",
+    "slug": "pele-mermaid-diagrams-as-themeable-svg",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1893317072": {
+    "kind": "published",
+    "slug": "how-to-use-writing-to-sharpen-your-thinking",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1894166931": {
+    "kind": "published",
+    "slug": "how-i-use-claude-as-my-second-brain-for-stock-research",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1894167360": {
+    "kind": "published",
+    "slug": "developer-roadmaps-roadmap-sh",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1894941478": {
+    "kind": "published",
+    "slug": "scrawl-show-an-agent-the-problem-on-your-mac",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1894942054": {
+    "kind": "published",
+    "slug": "fx0",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1894943125": {
+    "kind": "pending",
+    "attempts": 1,
+    "lastError": "shot of https://www.darshitapatankar.com/ exceeded 45000ms"
+  },
+  "1894952486": {
+    "kind": "published",
+    "slug": "earshot",
+    "section": "tools",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1894952871": {
+    "kind": "published",
+    "slug": "cinetic",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1894999584": {
+    "kind": "published",
+    "slug": "reverse-brand-prompt-for-claude-opus-agentic-coding-mode",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1895142112": {
+    "kind": "published",
+    "slug": "you-can-use-ai-to-edit-videos-for-you-here-s-how",
+    "section": "reading",
+    "at": "2026-10-20T05:14:36.070Z"
   }
 }

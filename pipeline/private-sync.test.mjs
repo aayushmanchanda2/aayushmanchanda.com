@@ -41,3 +41,10 @@ test("with a secret missing it skips cleanly and makes no request", async () => 
   assert.deepEqual(result, { sent: 0 });
   assert.equal(calls, 0);
 });
+
+test("every field a private row carries is one the Convex schema accepts", async () => {
+  const { entryFields } = await import("../convex/schema.ts");
+  const row = toPrivateRow(bookmark({ note: "why I kept it", cover: "https://img.example/c.jpg" }), "Internal/Tools", "2026-09-23");
+  const unknown = Object.keys(row).filter((key) => !(key in entryFields));
+  assert.deepEqual(unknown, [], "an extra field makes /import answer 400 for the whole batch");
+});

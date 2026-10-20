@@ -666,3 +666,21 @@ test("a post with a copied picture, or a video, is dated the day its media was r
   assert.equal(video.media_retrieved, "2026-09-24");
   assert.equal("media_retrieved" in bare, false, "no file copied, no date");
 });
+
+test("a tool note always passes the build's cap, whatever the sweep wrote", async () => {
+  const { toolNote, NEW_TOOL_NOTE } = await import("./entries.mjs");
+  const { noteProblem } = await import("../src/lib/tool-copy.ts");
+  const long = "A Mac capture tool that packages your voice, clicks, drawings, frames, and transcript into tidy evidence that a coding agent can open and inspect later.";
+  const cases = {
+    "Issue tracker.": "Issue tracker.",
+    "": NEW_TOOL_NOTE,
+    "Fast Mermaid renderer — no deps.": "Fast Mermaid renderer, no deps.",
+    [`Zero-dependency Mermaid renderer. ${long}`]: "Zero-dependency Mermaid renderer.",
+    [long]: NEW_TOOL_NOTE,
+  };
+  for (const [excerpt, want] of Object.entries(cases)) {
+    const note = toolNote(excerpt);
+    assert.equal(note, want);
+    assert.equal(noteProblem(note), null, note);
+  }
+});
