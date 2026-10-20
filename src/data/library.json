@@ -2653,12 +2653,25 @@
   },
   {
     "slug": "jev-use-cases-18-areas-2-304-projects",
-    "title": "Jev use cases: 18 areas, 2,304 projects",
+    "title": "Jev use cases: 18 areas, 4,153 projects",
     "url": "https://calibrateddecisions.com/use-cases",
     "domain": "calibrateddecisions.com",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "A directory of 2,304 Jev projects across 18 use cases, from agent routing and search to support, safety, sales and coding."
+    "note": "A directory of 2,304 Jev projects across 18 use cases, from agent routing and search to support, safety, sales and coding.",
+    "tldr": "A directory of 4,153 Jev projects across 18 areas, from agents and code review to safety, search, and everyday apps.",
+    "block": {
+      "best_for": "Finding concrete Jev patterns by domain",
+      "tip": "Start with the closest domain, then scan its projects for one bounded decision to copy.",
+      "needs": [
+        "A use case requiring a bounded decision"
+      ],
+      "start_here": [
+        "Choose one of the 18 areas.",
+        "Open the closest category.",
+        "Look for a pick, rank, or yes-or-no pattern."
+      ]
+    }
   },
   {
     "slug": "ai-starter-pack-for-the-x-curious",
