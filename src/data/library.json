@@ -3378,7 +3378,7 @@
   },
   {
     "slug": "imagine-two-people-using-ai-every-day-for-ten-years",
-    "title": "Imagine two people using AI every day for ten years. One…",
+    "title": "AI Can Strengthen or Weaken Thinking",
     "url": "https://x.com/daraladje/status/2105727764678824235?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
     "domain": "x.com",
     "saved_date": "2026-10-20",
@@ -3400,7 +3400,18 @@
         }
       ]
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "Dara contrasts AI use that strengthens thinking with dependence that produces work users cannot explain or defend.",
+    "block": {
+      "best_for": "People deciding how to use AI without outsourcing judgment",
+      "tip": "Make sure you can explain and defend AI-assisted work.",
+      "needs": [],
+      "start_here": [
+        "Use AI on a real task",
+        "Explain the result without the model",
+        "Defend the choices in your own words"
+      ]
+    }
   },
   {
     "slug": "introducing-ideogram-4-5",
