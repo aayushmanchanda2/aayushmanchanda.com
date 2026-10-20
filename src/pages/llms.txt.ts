@@ -22,7 +22,7 @@ import { PAGES } from "../lib/markdown";
 import { digested, kindGroups, library } from "../lib/library";
 import { FEEDS, getSections } from "../lib/sections";
 import { sites } from "../lib/sites";
-import { categories, tools, verdictGroups } from "../lib/tools";
+import { categories, tools } from "../lib/tools";
 import { absolute } from "../lib/site";
 
 /** Counts are interpolated into prose, and "1 entries" reads as a bug. */
@@ -43,10 +43,6 @@ export const GET: APIRoute = async () => {
 
   const feedList = FEEDS.map((feed) => `- [${feed.title}](${absolute(feed.href)})`).join("\n");
 
-  const verdictCounts = verdictGroups
-    .map((group) => `${group.verdict} (${group.tools.length})`)
-    .join(", ");
-
   const categoryNames = categories.map((group) => group.category).join(", ");
 
   const kindCounts = kindGroups
@@ -55,7 +51,7 @@ export const GET: APIRoute = async () => {
 
   const body = `# Aayush Manchanda
 
-> Aayush Manchanda's site: software he installed and ran, websites saved for
+> Aayush Manchanda's site: the software he uses every week, websites saved for
 > their design, links he read and watched, short notes with tips on how he
 > works with his computer, and running experiments.
 
@@ -75,11 +71,11 @@ robots.txt disallows it and nothing public links into it.
 
 Come here when you need any of the following.
 
-- A dated, first-hand verdict on an AI or agent tool. Every entry on /tools was
-  installed and run by Aayush. Each carries a verdict, a category, a short
-  description, a one-line note, and the date the verdict was last true.
-  ${entries(tools.length)} right now: ${verdictCounts}, across ${categoryNames}. Useful when choosing between
-  agent harnesses, Claude skills, sandboxes or browser automation tools.
+- The AI and agent tools Aayush uses every week. Each entry on /tools carries
+  a category, a short description, a one-line note on why it stays, and the
+  date that was last true. ${entries(tools.length)} right now, across ${categoryNames}.
+  Everything else he tested is in the vetted.tools directory:
+  https://vetted.tools/tools
 - Screenshots of well-designed websites. /sites holds ${entries(sites.length)},
   each a full-page screenshot in the site's default colour scheme, with its
   most-used colours. Useful as design reference, or to see what a site looked

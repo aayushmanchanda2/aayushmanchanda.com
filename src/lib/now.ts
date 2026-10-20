@@ -27,8 +27,6 @@ export interface NowGroup {
 
 export interface ToolCounts {
   total: number;
-  using: number;
-  watching: number;
 }
 
 /** "2026-09-24" -> "September 24, 2026", the words the page prints. */
@@ -39,12 +37,11 @@ export function nowDate(iso: string = NOW_UPDATED): string {
 }
 
 /** Counted from the tools data at build, so the line never goes stale. */
-export function toolCounts(tools: readonly { verdict: string }[]): ToolCounts {
-  const count = (verdict: string) => tools.filter((tool) => tool.verdict === verdict).length;
-  return { total: tools.length, using: count("using"), watching: count("watching") };
+export function toolCounts(tools: readonly unknown[]): ToolCounts {
+  return { total: tools.length };
 }
 
-export function nowGroups({ total, using, watching }: ToolCounts): NowGroup[] {
+export function nowGroups({ total }: ToolCounts): NowGroup[] {
   return [
     {
       head: "Building",
@@ -65,7 +62,7 @@ export function nowGroups({ total, using, watching }: ToolCounts): NowGroup[] {
         [
           "Agent tools, on my own companies first. ",
           { text: "/tools", href: "/tools" },
-          ` has ${total} so far: ${using} in daily use, ${watching} saved to try.`,
+          ` has the ${total} I use every week.`,
         ],
         ["Design and review questions go to Claude Fable, Claude Opus and GPT-5.6 Sol at the same time, through pstack."],
         [

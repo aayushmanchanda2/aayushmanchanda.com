@@ -1,12 +1,12 @@
 # Tools index
 
-/tools is a sortable table (briOS /stack): icon and name, description, category, verdict pill, date. Every row links to `/tools/<slug>`. Two native selects filter by verdict and category and sync to `?verdict=&category=`. A List/Grid toggle swaps the table for an iOS-style icon grid, and the choice persists across reloads. Category and verdict pages render the same table with their subset.
+/tools is a sortable table (briOS /stack) of only the tools Aayush uses: icon and name, "Why I use it" (the note, wrapped), category, date. The standfirst links the vetted.tools directory for everything else. Every row links to `/tools/<slug>`. One native select filters by category and syncs to `?category=`. A List/Grid toggle swaps the table for an iOS-style icon grid, and the choice persists across reloads. Category and verdict pages render the same table with their subset.
 
 ## Sub-features
 
 - `tools-table` `table` > `tbody[data-tool-rows]` > `tr.row[data-tool]` (attributes `data-verdict`, `data-category` (slug), `data-sort-name|category|verdict|date`, `data-index`). Name cell `.row__link` is the row's one link; a press anywhere on the row follows it (`lib/row-link.ts`, VET-306).
 - `tools-sort` `th[data-sort-key] > button.sort` (name, category, verdict, date); state is `aria-sort` on the `th`. Cycle: natural direction (date newest first), reverse, file order.
-- `tools-filters` `#filter-verdict`, `#filter-category` (`[data-filter]`), count `[data-filter-count]` (aria-live), empty state `[data-filter-empty]`.
+- `tools-filters` `#filter-category` (`[data-filter]`), count `[data-filter-count]` (aria-live), empty state `[data-filter-empty]`.
 - `tools-grid` `ul[data-tool-rows] > li.tile[data-tool] > a.tile__link` (60px `.app-icon`, `.tile__name`), shown when `html[data-tools-view="grid"]`.
 - `tools-filter-category` /tools/category/<slug>: table without the Category column.
 - `tools-filter-verdict` /tools/verdict/<verdict>: table without the Verdict column.
@@ -17,7 +17,7 @@
 ## How to get to it (user POV)
 
 - Tools in the Menu panel or the top bar trail, or open `/tools` directly.
-- Pick a Verdict or Category in the selects above the table; press a column header to sort; press `List` or `Grid` after the selects.
+- Pick a Category in the select above the table; press a column header to sort; press `List` or `Grid` after the selects.
 - From a tool detail page, the verdict chip (`/tools/verdict/<verdict>`) or category link (`/tools/category/<slug>`).
 
 ## Driving it with shoot.mjs
@@ -27,7 +27,7 @@ Preconditions:
 - Doctor passes. Current filter slugs: `ls dist/tools/category dist/tools/verdict` (e.g. `agent-infra`, `using`).
 
 - **Table baseline.** `node .claude/skills/verify-site/shoot.mjs --base http://localhost:4329 --routes /tools --label tools-list --styles '.row__link,.row__desc,.sort,[data-filter-count]'`. Screenshots show the table; first row under 300px at 1280.
-- **Query filters.** `... --routes '/tools?verdict=using,/tools?category=agent-infra&verdict=watching' --label tools-query`. Use a label separate from the filter pages: `/tools?verdict=using` and `/tools/verdict/using` slug to the same PNG name.
+- **Query filters.** `... --routes '/tools?category=agent-skills' --label tools-query`. Use a label separate from the filter pages: `/tools?category=agent-skills` and `/tools/category/agent-skills` slug to the same PNG name.
 - **Grid via the button.** `... --routes /tools --label tools-grid --click '[data-tools-view-set="grid"]'`. Pressed button text is `Grid`; screenshots show 60px squircles, four across at 390.
 - **Filter pages.** `... --routes /tools/category/agent-infra,/tools/verdict/using --label tools-filters --styles '.page-title'`. Both `200`.
 - **Sort, filter round-trip, row click, Back.** `shoot.mjs` has no select or back step; `qa/evidence/2026-09-22-vet-227/interactions.mjs` is the scripted check (run from the repo root with the base URL as its argument) and writes `interactions.json`.

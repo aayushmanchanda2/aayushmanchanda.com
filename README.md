@@ -1,6 +1,6 @@
 # aayushmanchanda.com
 
-A personal site that fills itself. Tools I actually ran, sites whose craft I keep
+A personal site that fills itself. The tools I use every week, sites whose craft I keep
 coming back to, notes, and whatever experiment is running.
 
 Astro 7 static build, git as the database, deployed on Vercel. No CMS and no

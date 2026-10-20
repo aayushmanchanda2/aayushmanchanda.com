@@ -59,7 +59,7 @@ export interface Section {
 export const CATALOGUE: Record<SectionHref, Omit<Section, "href" | "count" | "md">> = {
   "/tools": {
     name: "Tools",
-    blurb: "Software I installed and ran, with a verdict on each.",
+    blurb: "Tools and apps I use every week, and why.",
   },
   "/sites": {
     name: "Sites",
