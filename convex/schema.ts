@@ -40,6 +40,8 @@ export const entryFields = {
     why_saved: text,
     telegram_note: text,
     sweep_note: v.union(v.string(), v.null()),
+    /** The Raindrop cover image, sent by `pipeline/private-sync.mjs`. */
+    cover: v.optional(v.string()),
 };
 
 export default defineSchema({
