@@ -2471,7 +2471,8 @@
         "cover": "/posts/2102861619889918023/cover.webp"
       }
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "A getting-started guide to running a first reinforcement learning experiment with Jev as the reward model."
   },
   {
     "slug": "75m-founder-reveals-his-agentic-engineering-setup",
