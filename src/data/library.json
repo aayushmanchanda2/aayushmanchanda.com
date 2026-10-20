@@ -2747,7 +2747,20 @@
     "domain": "lilys.ai",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "LilysAI turns videos, PDFs, articles, books, and audio into summaries, explanations, and deeper notes in one workspace."
+    "note": "LilysAI turns videos, PDFs, articles, books, and audio into summaries, explanations, and deeper notes in one workspace.",
+    "tldr": "LilysAI turns videos, audio, PDFs, websites, and text into source-linked reports with templates, charts, mind maps, translation, and research chat.",
+    "block": {
+      "best_for": "Researchers who need to verify summaries against original source material.",
+      "tip": "Use source links to check answers before relying on the generated report.",
+      "needs": [
+        "A video, audio file, PDF, website, or text source"
+      ],
+      "start_here": [
+        "Add the source material.",
+        "Choose one of the 30-plus report templates.",
+        "Open cited passages to verify the output."
+      ]
+    }
   },
   {
     "slug": "coding-is-dead-long-live-coding",
