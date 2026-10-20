@@ -2844,7 +2844,39 @@
         "cover": "/posts/2103546630192685350/cover.webp"
       }
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "Chamath argues AI ROI depends less on token costs than on redesigning work, deleting bad processes, and reducing human coordination bottlenecks.",
+    "highlights": [
+      {
+        "text": "AI lowers the cost of doing things, but does nothing about whether they were worth doing in the first place.",
+        "note": "Cheap execution does not repair bad work design.",
+        "color": "amber"
+      },
+      {
+        "text": "The tools were identical. What separated the leaders was how they rebuilt their work around them.",
+        "note": "Workflow redesign created the gap.",
+        "color": "green"
+      },
+      {
+        "text": "Question every process and requirement\nDelete what you can\nSimplify what’s left\nSpeed it up\nOnly then automate.",
+        "note": "The proposed order for automation.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "In June, I wrote that vibe coding was dead and that ROI-driven analysis of AI was about to go from a nice-to-have to a necessity. Here's what AI ROI is and why it's tricky to see in GDP numbers so far: At its simplest, we need to understand two metrics: cost and value.",
+    "block": {
+      "best_for": "Owners deciding where AI can produce a measurable return inside an existing business.",
+      "tip": "Question, delete and simplify a process before speeding it up or automating it.",
+      "needs": [
+        "a workflow to review",
+        "a way to measure cost and value"
+      ],
+      "start_here": [
+        "Pick one workflow where AI is already being used.",
+        "Delete unnecessary approvals and steps before automating anything.",
+        "Measure whether saved production time survives coordination and review."
+      ]
+    }
   },
   {
     "slug": "we-re-open-sourcing-the-company-brain-how-we-designed-the-mu",
