@@ -3360,7 +3360,21 @@
       "id": "1a5HxU52vCQ",
       "thumb": "/shots/masterclass-how-fdes-make-1m-yr-deploying-ai-agents-greg-ise-thumb.webp"
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "A forward-deployed engineering playbook: map real processes, classify each step, build inside existing systems, baseline KPIs, and prove gains over time.",
+    "block": {
+      "best_for": "Consultants and teams deploying agents into operational workflows",
+      "tip": "Map and baseline the real process before deciding where agents belong.",
+      "needs": [
+        "Access to process owners and systems of record",
+        "Baseline cycle-time, accuracy, and cost data"
+      ],
+      "start_here": [
+        "Interview operators and mine system records",
+        "Classify every step as delete, code, agent, or human",
+        "Deploy one workflow and measure the delta"
+      ]
+    }
   },
   {
     "slug": "imagine-two-people-using-ai-every-day-for-ten-years",
