@@ -3314,7 +3314,31 @@
     "domain": "thelatent.co",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "The Latent explains AI concepts from first principles with concise definitions and comparisons, making technical topics easier to learn and teach."
+    "note": "The Latent explains AI concepts from first principles with concise definitions and comparisons, making technical topics easier to learn and teach.",
+    "tldr": "The Latent offers concise AI concepts and comparisons, starting with fundamentals and extending into models, tokens, training, inference, and evaluation.",
+    "highlights": [
+      {
+        "text": "Explainers, primers and context for the AI topics in the news: how models are built, trained, run and measured, written for readers who want the mechanics behind the headlines.",
+        "note": "The collection focuses on mechanics rather than headlines.",
+        "color": "amber"
+      },
+      {
+        "text": "Training creates or adapts the model, while inference puts that model to work.",
+        "note": "A compact distinction between two core concepts.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "Explainers, primers and context for the AI topics in the news: how models are built, trained, run and measured, written for readers who want the mechanics behind the headlines.",
+    "block": {
+      "best_for": "Readers learning AI mechanics from first principles",
+      "tip": "Start with the three-part fundamentals sequence before jumping into comparisons.",
+      "needs": [],
+      "start_here": [
+        "Read What Is Artificial Intelligence?",
+        "Read What Is an LLM?",
+        "Read What Are Model Weights?"
+      ]
+    }
   },
   {
     "slug": "masterclass-how-fdes-make-1m-yr-deploying-ai-agents-greg-ise",
