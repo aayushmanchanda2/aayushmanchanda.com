@@ -2487,7 +2487,26 @@
       "id": "QBfXiWvM0qc",
       "thumb": "/shots/75m-founder-reveals-his-agentic-engineering-setup-thumb.webp"
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "10X argues agentic engineering works best when teams treat structured Markdown, conventions, validation, and project history as a context layer around code.",
+    "block": {
+      "best_for": "Teams redesigning software delivery around coding agents",
+      "tip": "Invest more time in plans, conventions, and validation than in manually executing code.",
+      "time": {
+        "text": "51 minutes",
+        "source": "stated"
+      },
+      "needs": [
+        "A project repository",
+        "Markdown plans and conventions",
+        "A validation loop"
+      ],
+      "start_here": [
+        "Separate code from project-management context",
+        "Define structured artifacts for epics, specs, and conventions",
+        "Load the right context at session start and validate drift"
+      ]
+    }
   },
   {
     "slug": "why-i-m-building-muse",
