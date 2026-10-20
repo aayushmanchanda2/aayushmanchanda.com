@@ -161,6 +161,8 @@ test("linkLabel drops the protocol noise and keeps the path", () => {
   assert.equal(linkLabel("https://github.com/block/buzz"), "github.com/block/buzz");
   assert.equal(linkLabel("https://www.trysynara.com/"), "trysynara.com", "www and bare slash go");
   assert.equal(linkLabel("https://eve.dev"), "eve.dev");
+  assert.equal(linkLabel("https://vetted.tools/?utm_source=aayushmanchanda.com"), "vetted.tools", "utm tags go");
+  assert.equal(linkLabel("https://youtube.com/watch?v=abc&utm_medium=x"), "youtube.com/watch?v=abc", "other params stay");
 });
 
 test("no mark names a host other than this site and img.logo.dev", () => {

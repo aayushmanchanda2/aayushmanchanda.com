@@ -70,6 +70,8 @@ export function absolutize(link: string): string {
 /** `github.com/block/buzz` — the link without the protocol noise. */
 export function linkLabel(url: string): string {
   const parsed = new URL(url);
+  // A referral tag is for the other site's analytics, not for the reader.
+  for (const key of [...parsed.searchParams.keys()]) if (key.startsWith("utm_")) parsed.searchParams.delete(key);
   const path = parsed.pathname === "/" ? "" : parsed.pathname.replace(/\/+$/, "");
   return `${parsed.hostname.replace(/^www\./, "")}${path}${parsed.search}`;
 }
