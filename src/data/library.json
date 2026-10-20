@@ -2574,7 +2574,7 @@
   },
   {
     "slug": "how-to-use-jev-1-as-an-embedder",
-    "title": "How to use jev #1: As an embedder",
+    "title": "Use Jev as an interpretable embedder",
     "url": "https://x.com/kieranklaassen/status/2103537214575743221?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
     "domain": "x.com",
     "saved_date": "2026-10-20",
@@ -2605,7 +2605,20 @@
         "avatar": "/posts/2103522599414501550/avatar.webp"
       }
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "Jev can create interpretable embeddings by answering questions about each document and turning those answers into document representations.",
+    "block": {
+      "best_for": "People exploring interpretable document embeddings",
+      "tip": "Use answers from Jev questions as the document embedding.",
+      "needs": [
+        "Jev",
+        "Documents"
+      ],
+      "start_here": [
+        "Ask Jev questions about each document.",
+        "Use the answers as its embedding."
+      ]
+    }
   },
   {
     "slug": "jev-as-a-non-black-box-embedder",
