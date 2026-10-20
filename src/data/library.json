@@ -3290,7 +3290,22 @@
       "id": "1Bvz8oItqGY",
       "thumb": "/shots/clone-a-boring-utility-site-jonathan-s-jam-ad-funded-tool-po-thumb.webp"
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "A sponsored walkthrough of cloning a utility site, modeling ad revenue, adding AdSense and affiliate links, and finding low-competition keywords.",
+    "block": {
+      "best_for": "Builders exploring ad-funded utility sites",
+      "tip": "Validate demand and ranking gaps before building the tool.",
+      "needs": [
+        "A simple utility idea",
+        "Keyword research access",
+        "A domain and site builder"
+      ],
+      "start_here": [
+        "Estimate revenue from pageviews and RPM",
+        "Filter keywords to difficulty 10 or lower",
+        "Check whether new low-authority sites already rank"
+      ]
+    }
   },
   {
     "slug": "learn-the-latent",
