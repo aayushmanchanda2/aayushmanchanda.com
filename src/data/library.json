@@ -2680,7 +2680,35 @@
     "domain": "xstarterpack.com",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "A copyable agent prompt that cleans up an X feed and follows roughly 200 AI accounts across research, policy, business and practical use."
+    "note": "A copyable agent prompt that cleans up an X feed and follows roughly 200 AI accounts across research, policy, business and practical use.",
+    "tldr": "A ready-made prompt cleans up X and follows roughly 200 AI accounts across research, policy, economics, business, and practical use.",
+    "highlights": [
+      {
+        "text": "What it is: A prompt you paste into the ChatGPT or Claude desktop app to get your X feed set up for following AI.",
+        "note": "The whole setup runs from one browser-control prompt.",
+        "color": "amber"
+      },
+      {
+        "text": "Tip for using X after you’re set up: “Like” posts you find interesting. This teaches X what you want to see.",
+        "note": "The feed improves through deliberate feedback.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "Who this is for: People who want to follow AI discourse from multiple perspectives, but find X intimidating, toxic, or hard to approach.",
+    "block": {
+      "best_for": "People who want a broad AI feed without starting from scratch.",
+      "tip": "Like useful posts so X learns what you want to see.",
+      "needs": [
+        "An X account",
+        "ChatGPT or Claude desktop app",
+        "Browser control"
+      ],
+      "start_here": [
+        "Sign in to X on a computer.",
+        "Open ChatGPT or Claude desktop.",
+        "Paste the supplied setup prompt."
+      ]
+    }
   },
   {
     "slug": "how-to-run-your-product-team-like-a-research-lab",
