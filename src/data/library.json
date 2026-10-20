@@ -2942,7 +2942,7 @@
   },
   {
     "slug": "clay-s-ai-writing-policy",
-    "title": "We instituted an official AI Writing Policy at @Clay…",
+    "title": "Clay's AI writing policy",
     "url": "https://x.com/vxanand/status/2104576879415988453?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
     "domain": "x.com",
     "saved_date": "2026-10-20",
@@ -2964,7 +2964,18 @@
         }
       ]
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "Clay's four-part AI writing policy requires authors to own every sentence, use writing to think, respect readers' time, and cut padding.",
+    "block": {
+      "best_for": "Teams that use AI to draft internal documents and external writing.",
+      "tip": "Do not share an AI-assisted document until every idea and sentence represents your own thinking.",
+      "needs": [],
+      "start_here": [
+        "Require the author to stand behind every sentence.",
+        "Spend more time producing a document than asking others to consume it.",
+        "Cut length that does not add meaning."
+      ]
+    }
   },
   {
     "slug": "introducing-forge-the-open-source-pipeline-for-generating-sd",
