@@ -3031,7 +3031,21 @@
       "id": "Am7IWP8IpEc",
       "thumb": "/shots/inside-the-personal-ai-assistant-growing-10-a-day-instinct-f-thumb.webp"
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "Instinct's founder explains a personal assistant that acts through text, email, and calls, with permissioned agent-to-agent coordination.",
+    "block": {
+      "best_for": "Builders designing proactive personal agents",
+      "tip": "Use familiar channels and explicit access levels instead of forcing every interaction into a new app.",
+      "needs": [
+        "Text, email, or voice access",
+        "Permission controls"
+      ],
+      "start_here": [
+        "Choose the everyday channels the agent will use",
+        "Give it a computer to complete tasks end to end",
+        "Set different access levels for trusted people"
+      ]
+    }
   },
   {
     "slug": "deedy-s-opus-5-5-video-generation-workflow",
