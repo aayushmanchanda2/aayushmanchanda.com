@@ -2723,7 +2723,22 @@
       "id": "DqF08Dz3nok",
       "thumb": "/shots/how-to-run-your-product-team-like-a-research-lab-thumb.webp"
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "Dan Shipper argues product teams should separate frontier exploration into tiny labs, discard most experiments, and move repeatable winners through a research pipeline.",
+    "block": {
+      "best_for": "Product leaders balancing AI experiments with roadmap delivery.",
+      "tip": "Run a one-person lab, dogfood experiments, and hand only proven winners to the product team.",
+      "needs": [
+        "One frontier-focused operator",
+        "Real internal work to test against",
+        "A weekly experiment pipeline review"
+      ],
+      "start_here": [
+        "Name the early adopter who will run the lab.",
+        "Choose one real workflow to dogfood.",
+        "Review usage and promote only repeatable winners."
+      ]
+    }
   },
   {
     "slug": "lilysai-ai-summaries-for-video-audio-pdfs-and-websites",
