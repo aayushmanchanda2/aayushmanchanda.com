@@ -2904,7 +2904,41 @@
         "cover": "/posts/2103668051468300701/cover.webp"
       }
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "Dhravya Shah open-sources a Cloudflare-based Slack agent harness with durable turns, scoped memory, approvals, proactivity, steering and silent conclusions.",
+    "highlights": [
+      {
+        "text": "The Company Brain harness is the runtime, policy layer, memory boundary, tool system, and conversation protocol surrounding the models.",
+        "note": "The harness is more than a model wrapper.",
+        "color": "amber"
+      },
+      {
+        "text": "The step budget is an active control mechanism. Near the end, the harness tells the model how many steps remain.",
+        "note": "A practical guard against unfinished agent turns.",
+        "color": "blue"
+      },
+      {
+        "text": "A silent conclusion lets the system optimize for useful outcomes rather than visible activity.",
+        "note": "Investigation does not have to create channel noise.",
+        "color": "green"
+      }
+    ],
+    "excerpt": "It's been just 2 weeks since we discontinued the company brain harness. We had to offboard tons of people to other products, but many of our customers, and others suggested us to open source our work on the company brain. So, we have decided to open source it. You can use it here.",
+    "block": {
+      "best_for": "Teams building a Slack agent that can investigate, act and stay quiet when no intervention is useful.",
+      "tip": "Keep durable organizational memory separate from live transactional state, and suspend the same turn when consequential tools need approval.",
+      "needs": [
+        "Cloudflare Workers and Durable Objects",
+        "Slack",
+        "Postgres",
+        "a model and tool layer"
+      ],
+      "start_here": [
+        "Deploy the open-source Company Brain repository.",
+        "Define channel, memory and approval boundaries before enabling actions.",
+        "Add steering and a silent-conclusion path for long-running turns."
+      ]
+    }
   },
   {
     "slug": "clay-s-ai-writing-policy",
