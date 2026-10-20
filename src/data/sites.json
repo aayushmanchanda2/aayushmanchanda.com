@@ -4217,5 +4217,85 @@
       ]
     },
     "collections": []
+  },
+  {
+    "slug": "julia-alvarenga-portfolio",
+    "title": "Julia Alvarenga",
+    "url": "https://www.juliaalvarenga.com/",
+    "domain": "juliaalvarenga.com",
+    "saved_date": "2026-10-20",
+    "shot": "/shots/julia-alvarenga-portfolio.webp",
+    "palette": [
+      "#583a26",
+      "#f3efe5",
+      "#301e11",
+      "#b5b1ac",
+      "#73716e",
+      "#dac68e"
+    ],
+    "design": {
+      "read_date": "2026-10-20",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#2a1a0f"
+        },
+        {
+          "name": "surface",
+          "hex": "#5a3b26"
+        },
+        {
+          "name": "text",
+          "hex": "#ffffff"
+        }
+      ],
+      "type": [
+        {
+          "name": "body",
+          "fontFamily": "Inter",
+          "fontSize": "58px",
+          "fontWeight": "300",
+          "lineHeight": "68.44px",
+          "letterSpacing": "-0.58px"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "1px",
+          "value": "1px"
+        },
+        {
+          "name": "2px",
+          "value": "2px"
+        },
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "5px",
+          "value": "5px"
+        },
+        {
+          "name": "6",
+          "value": "24px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "button",
+          "value": "2px"
+        },
+        {
+          "name": "card",
+          "value": "4px"
+        },
+        {
+          "name": "button-2",
+          "value": "10px"
+        }
+      ]
+    },
+    "collections": []
   }
 ]

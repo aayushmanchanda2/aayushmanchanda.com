@@ -893,7 +893,7 @@
   },
   "1865186247": {
     "kind": "pending",
-    "attempts": 2,
+    "attempts": 3,
     "lastError": "fiscal-ai-the-modern-financial-data-platform answered with a bot wall, not the page: Vercel security checkpoint (Vercel Security Checkpoint)"
   },
   "1865230874": {
@@ -1372,7 +1372,7 @@
   },
   "1879138583": {
     "kind": "pending",
-    "attempts": 2,
+    "attempts": 3,
     "lastError": "prompt-motion answered with a bot wall, not the page: Cloudflare interstitial (Just a moment)"
   },
   "1879139650": {
@@ -1406,9 +1406,10 @@
     "at": "2026-10-20T05:14:36.070Z"
   },
   "1880066241": {
-    "kind": "pending",
-    "attempts": 2,
-    "lastError": "shot of https://www.juliaalvarenga.com/ exceeded 45000ms"
+    "kind": "published",
+    "slug": "julia-alvarenga-portfolio",
+    "section": "sites",
+    "at": "2026-10-20T14:22:57.002Z"
   },
   "1880068699": {
     "kind": "published",
@@ -1664,7 +1665,7 @@
   },
   "1894943125": {
     "kind": "pending",
-    "attempts": 2,
+    "attempts": 3,
     "lastError": "shot of https://www.darshitapatankar.com/ exceeded 45000ms"
   },
   "1894952486": {
@@ -1690,5 +1691,11 @@
     "slug": "you-can-use-ai-to-edit-videos-for-you-here-s-how",
     "section": "reading",
     "at": "2026-10-20T05:14:36.070Z"
+  },
+  "1895506337": {
+    "kind": "published",
+    "slug": "beam-share-windows-between-your-macs",
+    "section": "tools",
+    "at": "2026-10-20T14:22:57.002Z"
   }
 }
