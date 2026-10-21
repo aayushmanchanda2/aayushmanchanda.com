@@ -5126,7 +5126,34 @@
     "domain": "forwardfuture.com",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "A professional editor explains how to delegate cuts, B-roll, subtitles and revisions to AI while keeping creative judgment in the loop."
+    "note": "A professional editor explains how to delegate cuts, B-roll, subtitles and revisions to AI while keeping creative judgment in the loop.",
+    "tldr": "A professional editor explains how to delegate video-editing busywork to AI through plain-language revisions while keeping human taste and judgment in charge.",
+    "highlights": [
+      {
+        "text": "My computer could now edit videos for me while I watched Disney movies with my daughter.",
+        "note": "The agent can take a pass while the editor steps away.",
+        "color": "amber"
+      },
+      {
+        "text": "This isn't \"push a button, get a video\"",
+        "note": "Useful results still depend on direction and review.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "Hello, reader. My name is Brian, and I have the pleasure of working with Matthew Berman on his team. If you watch the Matthew Berman YouTube channel, you've seen my work.",
+    "block": {
+      "best_for": "Editors testing AI-assisted short-form video workflows.",
+      "tip": "Use plain-language revisions for cuts, B-roll, titles, and subtitles, then review the output yourself.",
+      "needs": [
+        "Source footage",
+        "An AI editing agent"
+      ],
+      "start_here": [
+        "Give the agent one short-form edit.",
+        "Review the first cut for specific mistakes.",
+        "Revise with plain-language direction on frames, B-roll, titles, and subtitles."
+      ]
+    }
   },
   {
     "slug": "idealab-ai",
