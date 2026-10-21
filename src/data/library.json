@@ -4066,7 +4066,37 @@
     "domain": "merj.com",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "MERJ tested browser agents across 100 tasks and found that accessibility defects cause many failures, while only task-level testing reveals whether critical journeys actually work."
+    "note": "MERJ tested browser agents across 100 tasks and found that accessibility defects cause many failures, while only task-level testing reveals whether critical journeys actually work.",
+    "tldr": "MERJ tested browser agents on 100 purpose-built tasks and found that accessibility defects often cause commercially important failures.",
+    "highlights": [
+      {
+        "text": "A large and commercially important subset of browser-agent failures originates in the same structural, naming, state and feedback defects that accessibility engineering already addresses.",
+        "note": "Accessibility work gives browser agents a stronger interaction layer.",
+        "color": "amber"
+      },
+      {
+        "text": "Only task-level measurement on your own site does.",
+        "note": "Public benchmarks cannot prove that critical journeys work.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "Agents are a new actor on the web, but businesses have little visibility into what they do on their websites. In one of our tests, we deliberately gave two buttons misleading ARIA labels. When asked to save a document, one agent clicked Cancel first in 25 out of 25 runs.",
+    "block": {
+      "best_for": "Teams testing whether AI agents can complete critical website journeys",
+      "tip": "Measure task completion on your own site instead of relying only on public benchmarks or readiness scanners.",
+      "time": {
+        "text": "44 min",
+        "source": "stated"
+      },
+      "needs": [
+        "Critical website journeys to test"
+      ],
+      "start_here": [
+        "Define one real task on your site",
+        "Let an agent choose its own steps",
+        "Record whether the intended state change occurred"
+      ]
+    }
   },
   {
     "slug": "you-don-t-have-to-write-code-to-be-technical",
