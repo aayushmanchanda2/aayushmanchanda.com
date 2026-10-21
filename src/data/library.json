@@ -4301,7 +4301,36 @@
     "domain": "gabrielvaldivia.com",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "Gabriel Valdivia argues that IC designers build influence through craft, memorable storytelling, portable artifacts, and reusable systems rather than managerial authority."
+    "note": "Gabriel Valdivia argues that IC designers build influence through craft, memorable storytelling, portable artifacts, and reusable systems rather than managerial authority.",
+    "tldr": "Design influence starts with trusted craft, then grows by making ideas memorable, portable, and reusable beyond the work you personally ship.",
+    "highlights": [
+      {
+        "text": "Individual contributors can develop influence by giving people reasons to trust their judgment, then finding ways for that judgment to travel beyond the things they personally make.",
+        "note": "Influence compounds when sound judgment moves beyond your own artifacts.",
+        "color": "amber"
+      },
+      {
+        "text": "The most influential ICs I've worked with are unusually good storytellers. They find simple ways to describe complicated ideas.",
+        "note": "Memorable language helps other people carry the idea forward.",
+        "color": "blue"
+      },
+      {
+        "text": "Your influence is limited if it only works while you're in the room.",
+        "note": "Portable artifacts let decisions travel without you.",
+        "color": "green"
+      }
+    ],
+    "excerpt": "Some of the most influential designers I’ve worked with had no direct reports. They didn't spend their days assigning work, running performance reviews, or deciding who got promoted. Yet they could change the direction of a project, raise the quality bar of a team, and sometimes change the strategy for the entire company.",
+    "block": {
+      "best_for": "Senior individual-contributor designers building influence without managing people",
+      "tip": "Make your thinking portable so it survives rooms you aren't in.",
+      "needs": [],
+      "start_here": [
+        "Build credibility through strong craft",
+        "Turn complex ideas into phrases people can repeat",
+        "Package decisions into shareable artifacts"
+      ]
+    }
   },
   {
     "slug": "grok-bot-marketplace",
