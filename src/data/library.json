@@ -4562,7 +4562,7 @@
   },
   {
     "slug": "ask-claude-animations-to-review-john-lasseter-s-principles",
-    "title": "Ask your Claude animations to review John Lasseters…",
+    "title": "Review Claude animations against Lasseter’s principles",
     "url": "https://x.com/shwinnabego/status/2108573799302205935?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
     "domain": "x.com",
     "saved_date": "2026-10-20",
@@ -4584,7 +4584,18 @@
         "avatar": "/posts/2108341013383454743/avatar.webp"
       }
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "Ask Claude to review generated animations against John Lasseter’s animation principles, especially pacing that moves too quickly.",
+    "block": {
+      "best_for": "Reviewing Claude-generated animation",
+      "tip": "Ask Claude to critique the animation against John Lasseter’s principles, including whether the pacing needs to slow down.",
+      "needs": [
+        "A Claude-generated animation"
+      ],
+      "start_here": [
+        "Give Claude the animation and ask for a review against Lasseter’s principles"
+      ]
+    }
   },
   {
     "slug": "claude-made-this-product-launch-video-and-landing-page",
