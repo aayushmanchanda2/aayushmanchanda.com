@@ -4654,5 +4654,23 @@
       }
     },
     "media_retrieved": "2026-10-20"
+  },
+  {
+    "slug": "making-every-harness-durable",
+    "title": "Making every harness durable",
+    "url": "https://vercel.com/blog/making-every-harness-durable",
+    "domain": "vercel.com",
+    "saved_date": "2026-10-21",
+    "kind": "article",
+    "note": "Vercel's durable-harness lets Pi, OpenCode, Codex, and Claude Code resume long-running work after crashes and function timeouts."
+  },
+  {
+    "slug": "building-laminar-ramp-s-managed-agents-platform",
+    "title": "Building Laminar: Ramp's Managed Agents Platform",
+    "url": "https://builders.ramp.com/post/building-laminar",
+    "domain": "builders.ramp.com",
+    "saved_date": "2026-10-21",
+    "kind": "article",
+    "note": "Ramp explains why it replaced a patchwork of agent SDKs and frameworks with Laminar, one shared in-house platform for building product agents."
   }
 ]

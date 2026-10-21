@@ -1341,5 +1341,14 @@
     "verdict": "watching",
     "note": "Glassy UI ships 37 free React glass components plus React Native versions, installed with shadcn so you own the source.",
     "status_date": "2026-10-20"
+  },
+  {
+    "slug": "reason-network-let-your-agents-talk-to-each-other",
+    "name": "Reason Network",
+    "url": "https://reasonmachines.com/network",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-21"
   }
 ]
