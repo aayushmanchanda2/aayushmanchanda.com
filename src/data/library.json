@@ -5214,7 +5214,20 @@
         "cover": "/posts/2105643919119696297/cover.webp"
       }
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "Opus 5.5 can make a video, but improving the next one requires a studio rather than a single prompt.",
+    "block": {
+      "best_for": "People building repeatable video workflows with Opus 5.5",
+      "tip": "Treat iteration as a studio workflow, not a single prompt.",
+      "needs": [
+        "Opus 5.5"
+      ],
+      "start_here": [
+        "Make one video with Opus 5.5",
+        "Set up a repeatable studio workflow",
+        "Use each result to improve the next"
+      ]
+    }
   },
   {
     "slug": "making-every-harness-durable",
