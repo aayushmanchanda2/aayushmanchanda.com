@@ -4974,7 +4974,7 @@
   },
   {
     "slug": "how-to-use-writing-to-sharpen-your-thinking",
-    "title": "How to Use Writing to Sharpen Your Thinking:",
+    "title": "Use writing to sharpen your thinking",
     "url": "https://x.com/tferriss/status/2111510662040142209?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
     "domain": "x.com",
     "saved_date": "2026-10-20",
@@ -4997,7 +4997,16 @@
         }
       ]
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "Tim Ferriss shares a video on using writing to sharpen your thinking.",
+    "block": {
+      "best_for": "Anyone who wants to use writing to think more clearly.",
+      "tip": "Watch the video for Ferriss’s method.",
+      "needs": [],
+      "start_here": [
+        "Watch the video."
+      ]
+    }
   },
   {
     "slug": "how-i-use-claude-as-my-second-brain-for-stock-research",
