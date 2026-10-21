@@ -4854,7 +4854,33 @@
     "domain": "yangyixxxx.github.io",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "Yang Yi’s full agent chat log shows a lead-listening app going from an idea to a bilingual open-source release on real treg.to data."
+    "note": "Yang Yi’s full agent chat log shows a lead-listening app going from an idea to a bilingual open-source release on real treg.to data.",
+    "tldr": "A bilingual chat log traces an AI agent building Lead Signal Listener from idea to local app, real-data testing, documentation, and open-source release.",
+    "highlights": [
+      {
+        "text": "A real conversation between @yangyi and an AI agent in NewMax.",
+        "note": "The page preserves the build process, not just the result.",
+        "color": "amber"
+      },
+      {
+        "text": "It starts with “could we build a service that listens for potential customers?” and goes all the way to a local app on the treg.to API: running real data, reworking the UI, adding English and Chinese, writing a setup guide for agents, and publishing it as open source on GitHub.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "A real conversation between @yangyi and an AI agent in NewMax. It starts with “could we build a service that listens for potential customers?” and goes all the way to a local app on the treg.to API: running real data, reworking the UI, adding English and Chinese, writing a setup guide for agents, and publishing it as open source on GitHub.",
+    "block": {
+      "best_for": "Builders who want to study a real agent-led product build from idea to open-source release.",
+      "tip": "Run against real data early, then improve the interface, documentation, and language support before publishing.",
+      "needs": [
+        "NewMax",
+        "treg.to API"
+      ],
+      "start_here": [
+        "Start with a concrete lead-listening question.",
+        "Build a local app against real treg.to data.",
+        "Add setup docs for agents before publishing."
+      ]
+    }
   },
   {
     "slug": "how-i-use-basecamp-as-a-solopreneur",
