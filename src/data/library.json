@@ -4164,7 +4164,37 @@
     "domain": "drive.google.com",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "Meg Kilgore’s eight-slide carousel structure holds the reveal until slide seven, then gives a fill-in-the-blanks Claude prompt for writing the deck."
+    "note": "Meg Kilgore’s eight-slide carousel structure holds the reveal until slide seven, then gives a fill-in-the-blanks Claude prompt for writing the deck.",
+    "tldr": "An eight-slide Instagram carousel prompt that delays the reveal until slide seven, then closes with one clear invitation.",
+    "highlights": [
+      {
+        "text": "Most carousels die because they give away the answer on slide 2. There is nothing left to swipe for.",
+        "note": "The sequence keeps the answer unresolved until the final slides.",
+        "color": "amber"
+      },
+      {
+        "text": "Two rules. Every slide is a headline plus a support line that trails off. And nothing gets named before slide 7, because the whole deck is a held breath.",
+        "note": "Each slide opens the next loop instead of resolving it.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "Eight slides, in the order that makes people swipe. Copy it, paste it into Claude, fill in six blanks.",
+    "block": {
+      "best_for": "Creators writing Instagram carousels in Claude",
+      "tip": "Hold the product reveal until slide seven.",
+      "needs": [
+        "A topic",
+        "A one-line ideal follower",
+        "One proof number",
+        "Three voice words",
+        "A keyword"
+      ],
+      "start_here": [
+        "Fill in the topic, audience, keyword, proof, and voice",
+        "Paste the prompt into Claude",
+        "Review the eight slides, alternate hooks, and caption"
+      ]
+    }
   },
   {
     "slug": "gpt-6-and-intelligent-ui-for-everyone",
