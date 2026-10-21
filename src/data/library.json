@@ -4452,7 +4452,25 @@
     "domain": "voyager.so",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "An open harness built for creative work, connecting frontier and open models to creative tools while keeping the workflow extensible."
+    "note": "An open harness built for creative work, connecting frontier and open models to creative tools while keeping the workflow extensible.",
+    "tldr": "Voyager connects frontier and open AI models to creative tools, with free credits or bring-your-own access.",
+    "highlights": [
+      {
+        "text": "Other harnesses are built for coding. Voyager is built for creative work.",
+        "note": "The product is explicitly tuned for creative rather than coding workflows.",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "The open harness for creative work. Free · 1,000 credits a month · or bring your own Claude or ChatGPT.",
+    "block": {
+      "best_for": "Creative work with AI models",
+      "tip": "Bring your own Claude or ChatGPT, or start with the included monthly credits.",
+      "needs": [],
+      "start_here": [
+        "Choose between the included credits and your own model access",
+        "Use Voyager with the creative tools in your workflow"
+      ]
+    }
   },
   {
     "slug": "youtube-playbook-for-technical-creators",
