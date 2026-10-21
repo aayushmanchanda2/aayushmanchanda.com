@@ -3595,7 +3595,35 @@
     "domain": "developers.openai.com",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "OpenAI's MCP Events guide shows how ChatGPT can react to server-side updates through signed webhooks instead of polling."
+    "note": "OpenAI's MCP Events guide shows how ChatGPT can react to server-side updates through signed webhooks instead of polling.",
+    "tldr": "MCP Events lets ChatGPT subscribe to server updates and act on new messages, comments, content changes, or status changes.",
+    "highlights": [
+      {
+        "text": "MCP Events lets ChatGPT subscribe to updates from your MCP server, such as new messages, content updates, or status changes.",
+        "note": "The core capability is event-driven action from server updates.",
+        "color": "amber"
+      },
+      {
+        "text": "Users choose what to monitor and what ChatGPT should do when an update arrives.",
+        "note": "The user controls both the trigger and the response.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "MCP Events lets ChatGPT subscribe to updates from your MCP server, such as new messages, content updates, or status changes. Users choose what to monitor and what ChatGPT should do when an update arrives.",
+    "block": {
+      "best_for": "Building ChatGPT plugins that react to MCP server updates.",
+      "tip": "Use webhook delivery and persistent subscription storage; polling and streaming are not supported.",
+      "needs": [
+        "An MCP 2.0 server",
+        "Persistent subscription storage",
+        "Outbound HTTPS access to callback URLs"
+      ],
+      "start_here": [
+        "Advertise the events capability in server/discover",
+        "Implement events/list, events/subscribe, and events/unsubscribe",
+        "Send matching events to the callback URL"
+      ]
+    }
   },
   {
     "slug": "on-claude-consciousness-this-lecture-by-antikythera-is-worth",
