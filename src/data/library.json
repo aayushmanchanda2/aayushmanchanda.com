@@ -3662,7 +3662,7 @@
   },
   {
     "slug": "codex-computer-use-works-as-a-local-mcp-server",
-    "title": "everyone thinks codex computer use only works inside codex…",
+    "title": "Codex Computer Use Works Through MCP",
     "url": "https://x.com/argofowl/status/2106389732322091475?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
     "domain": "x.com",
     "saved_date": "2026-10-20",
@@ -3685,7 +3685,21 @@
         }
       ]
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "Codex computer use runs as a local MCP server in the ChatGPT Mac app, so Claude Code can call it headlessly.",
+    "block": {
+      "best_for": "Calling Codex computer use from Claude Code.",
+      "tip": "Connect Claude Code to the local MCP server exposed by the ChatGPT Mac app.",
+      "needs": [
+        "ChatGPT Mac app",
+        "Claude Code"
+      ],
+      "start_here": [
+        "Expose the local MCP server from the ChatGPT Mac app",
+        "Connect Claude Code to that server",
+        "Run Claude Code headlessly with claude -p"
+      ]
+    }
   },
   {
     "slug": "emdash-1-0-the-stable-cms-with-a-secure-plugin-registry",
