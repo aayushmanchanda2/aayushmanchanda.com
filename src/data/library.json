@@ -4105,7 +4105,34 @@
     "domain": "leverageloops.substack.com",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "Brandon Galang argues that technical work is framing the problem, testing the result, and fixing what breaks, even when an agent writes the code."
+    "note": "Brandon Galang argues that technical work is framing the problem, testing the result, and fixing what breaks, even when an agent writes the code.",
+    "tldr": "Brandon Galang argues that agent-assisted builders are technical when they understand the problem, test results, and fix failures.",
+    "highlights": [
+      {
+        "text": "But it can also discount a lot of work: understanding the problem, deciding what matters, trying the result, and staying with it when something breaks.",
+        "note": "Technical contribution includes judgment and iteration, not only typing code.",
+        "color": "amber"
+      },
+      {
+        "text": "Describe what you want, check whether it saves, who can see it, and what happens on bad input. Bring in one real user. Fix what they find.",
+        "note": "A compact testing loop for agent-assisted builders.",
+        "color": "green"
+      }
+    ],
+    "excerpt": "When I moved from product management into a go-to-market engineering role, I felt like I was faking it. Nobody on my team made me feel that way. They were supportive. The doubt was mine. I could build things with agents. I could open pull requests and get them merged.",
+    "block": {
+      "best_for": "Non-coders shipping real products with agents",
+      "tip": "Judge technical work by problem understanding, testing, and iteration, not whether you wrote every line of code.",
+      "needs": [
+        "A real problem to solve",
+        "One user to test the result"
+      ],
+      "start_here": [
+        "Describe the experience you want",
+        "Test core flows and bad input",
+        "Bring in one real user and fix what they find"
+      ]
+    }
   },
   {
     "slug": "melius-the-ai-native-operating-system-for-creatives",
