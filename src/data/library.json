@@ -4908,7 +4908,18 @@
         "cover": "/posts/2110294844241326359/cover.webp"
       }
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "JA Westenberg explains why Basecamp is his system of record as a solo builder and how he uses it.",
+    "block": {
+      "best_for": "Solo builders evaluating Basecamp as their system of record.",
+      "tip": "Read the linked article for Westenberg’s Basecamp workflow.",
+      "needs": [
+        "Basecamp"
+      ],
+      "start_here": [
+        "Read the linked article."
+      ]
+    }
   },
   {
     "slug": "how-to-avoid-ai-brain-rot",
