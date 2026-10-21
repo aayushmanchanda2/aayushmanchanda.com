@@ -4339,7 +4339,18 @@
     "domain": "x.ai",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "A marketplace of ready-made Grok Bots for engineering, sales, marketing, recruiting, research, and operations, with many actions held for human approval."
+    "note": "A marketplace of ready-made Grok Bots for engineering, sales, marketing, recruiting, research, and operations, with many actions held for human approval.",
+    "tldr": "A marketplace of addable Grok Bots for engineering, sales, marketing, operations, research, and other repeatable work.",
+    "block": {
+      "best_for": "People looking for ready-made Grok Bots by function",
+      "tip": "Check each bot's data sources and approval boundaries before adding it.",
+      "needs": [],
+      "start_here": [
+        "Browse a function such as Engineering, Sales, or Marketing",
+        "Read what the bot does and when it asks for approval",
+        "Add the bot you want"
+      ]
+    }
   },
   {
     "slug": "how-to-make-a-scroll-stopping-ad-with-ai-no-experience-neede",
