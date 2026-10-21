@@ -4479,7 +4479,44 @@
     "domain": "howtoyoutube.dev",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "A practical checklist for packaging, scripting, recording, editing, and publishing technical YouTube videos without judging the strategy too early."
+    "note": "A practical checklist for packaging, scripting, recording, editing, and publishing technical YouTube videos without judging the strategy too early.",
+    "tldr": "A checklist for packaging, scripting, recording, editing, and publishing technical YouTube videos, with a weekly cadence and a four-to-six-month evaluation window.",
+    "highlights": [
+      {
+        "text": "Package before you record. The thumbnail is a reason to stop. The title is a reason to click.",
+        "note": "Packaging comes before production.",
+        "color": "amber"
+      },
+      {
+        "text": "Treat the first six minutes as a gladiator pit. Re-engage around 1, 3, and 6 minutes.",
+        "note": "The opening needs deliberate retention beats.",
+        "color": "blue"
+      },
+      {
+        "text": "Judge a strategy after 4–6 months, not 4 videos.",
+        "note": "Evaluate the system over months, not a handful of uploads.",
+        "color": "green"
+      }
+    ],
+    "excerpt": "How a developer YouTube video gets made, from the title to the final cut. The short version is below. The checklist is the part you use on a Tuesday.",
+    "block": {
+      "best_for": "Technical creators building a repeatable YouTube workflow",
+      "tip": "Package the title and thumbnail before recording, then script the first 15 to 20 seconds.",
+      "time": {
+        "text": "4 to 6 months to judge a strategy",
+        "source": "stated"
+      },
+      "needs": [
+        "A title concept",
+        "A thumbnail concept",
+        "A ready recording setup"
+      ],
+      "start_here": [
+        "Define what the viewer clicked for and what they get",
+        "Write the title and draft the thumbnail",
+        "Script the first 15 to 20 seconds word for word"
+      ]
+    }
   },
   {
     "slug": "what-can-you-build-with-jev-rubric-labs",
