@@ -3627,7 +3627,7 @@
   },
   {
     "slug": "on-claude-consciousness-this-lecture-by-antikythera-is-worth",
-    "title": "on 'claude consciousness' this lecture by Antikythera is…",
+    "title": "Reasoning About Intelligence From First Principles",
     "url": "https://x.com/rhyssullivan/status/2106440095469539697?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
     "domain": "x.com",
     "saved_date": "2026-10-20",
@@ -3647,7 +3647,18 @@
         }
       ]
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "Rhys Sullivan recommends an Antikythera lecture on reasoning about intelligent systems from the principles that create them.",
+    "block": {
+      "best_for": "Reasoning about intelligent systems from first principles.",
+      "tip": "Watch the linked Antikythera lecture for examples of intelligence derived from first principles.",
+      "needs": [],
+      "start_here": [
+        "Open the linked YouTube lecture",
+        "Focus on the principles that create intelligent systems",
+        "Compare the examples of intelligence from first principles"
+      ]
+    }
   },
   {
     "slug": "codex-computer-use-works-as-a-local-mcp-server",
