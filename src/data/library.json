@@ -4227,7 +4227,20 @@
     "domain": "agentphone.ai",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "AgentPhone gives AI agents US or Canadian phone numbers for calls and messages through one webhook, with transcription and MCP, Python, Node, and REST integrations."
+    "note": "AgentPhone gives AI agents US or Canadian phone numbers for calls and messages through one webhook, with transcription and MCP, Python, Node, and REST integrations.",
+    "tldr": "AgentPhone gives AI agents US or Canadian numbers for calls and messages through one webhook, with transcription, speech, SDKs, REST, and MCP.",
+    "block": {
+      "best_for": "Developers giving AI agents phone and SMS access.",
+      "tip": "Use one handler for both voice and message events.",
+      "needs": [
+        "An AgentPhone API key"
+      ],
+      "start_here": [
+        "Create an agent.",
+        "Buy a US or Canadian number.",
+        "Handle calls and messages through the unified webhook."
+      ]
+    }
   },
   {
     "slug": "agentmail-email-inbox-api-for-ai-agents",
