@@ -1350,5 +1350,14 @@
     "verdict": "watching",
     "note": "Saved from Raindrop. Not tested yet.",
     "status_date": "2026-10-21"
+  },
+  {
+    "slug": "underdog-bark-3-0",
+    "name": "Underdog Bark 3.0",
+    "url": "https://underdog.ai/bark",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-21"
   }
 ]
