@@ -4044,7 +4044,20 @@
     "domain": "roma.app",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "An agentic to-do app that turns rambling input into clear tasks, starts the work, and brings back artifacts for review across Mac and iPhone."
+    "note": "An agentic to-do app that turns rambling input into clear tasks, starts the work, and brings back artifacts for review across Mac and iPhone.",
+    "tldr": "Roma turns rambling thoughts into tasks, starts the work, and keeps results visible across chat, desktop, and connected apps.",
+    "block": {
+      "best_for": "People who want agents to work from a visible task list",
+      "tip": "Capture the thought in plain language and let Roma turn it into a task.",
+      "needs": [
+        "A Roma account"
+      ],
+      "start_here": [
+        "Capture one task in your own words",
+        "Review the title and saved details",
+        "Return to review the work Roma started"
+      ]
+    }
   },
   {
     "slug": "how-ai-agents-use-websites-where-they-fail-and-what-to-fix",
