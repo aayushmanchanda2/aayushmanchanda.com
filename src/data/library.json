@@ -3937,7 +3937,39 @@
         "cover": "/posts/2107139054907388097/cover.webp"
       }
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "Matt Van Horn shares his stack for orchestrating coding and personal agents, turning painful workflows into skills, and automating work across tools.",
+    "highlights": [
+      {
+        "text": "The moment I have an idea, it's /ce-plan. A bug, a feature, a screenshot of an error, a pasted GitHub issue, a half-formed thought: /ce-plan.",
+        "note": "A single planning reflex captures work before implementation.",
+        "color": "amber"
+      },
+      {
+        "text": "Whenever something is painful, it becomes a skill.",
+        "note": "Repeated friction becomes reusable procedure.",
+        "color": "blue"
+      },
+      {
+        "text": "Compound engineering is still the biggest hack.",
+        "note": "The workflow compounds planning and execution knowledge over time.",
+        "color": "green"
+      }
+    ],
+    "excerpt": "This article was written by an agent calling me on the phone while I pushed a stroller.",
+    "block": {
+      "best_for": "Builders running a team of coding and personal agents.",
+      "tip": "Use one smart orchestrator to call specialist agents, then turn repeated pain into a reusable skill.",
+      "needs": [
+        "Claude Code",
+        "Compound Engineering plugin"
+      ],
+      "start_here": [
+        "Install Compound Engineering",
+        "Send each idea through /ce-plan, then /ce-work",
+        "Turn the next painful workflow into a skill"
+      ]
+    }
   },
   {
     "slug": "design-systems-for-ai-agents",
