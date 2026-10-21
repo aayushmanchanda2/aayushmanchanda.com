@@ -4378,7 +4378,34 @@
         "cover": "/posts/2107908837131145679/cover.webp"
       }
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "ElevenCreative's guide shows how to make an ad with an original AI jingle for its $100,000 creative competition.",
+    "highlights": [
+      {
+        "text": "The only requirement: Make an ad with an original AI jingle in ElevenCreative.",
+        "note": "The competition centers the creative around an original jingle.",
+        "color": "amber"
+      },
+      {
+        "text": "Entries close November 1st.",
+        "note": "The post gives a firm submission deadline.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "We're launching a $100k creative competition and we want you to join.",
+    "block": {
+      "best_for": "Creators entering ElevenCreative's $100,000 competition",
+      "tip": "Build the ad around an original AI jingle and submit before November 1.",
+      "needs": [
+        "ElevenCreative",
+        "An original AI jingle"
+      ],
+      "start_here": [
+        "Open the linked step-by-step guide",
+        "Make an ad with an original AI jingle",
+        "Submit the entry before November 1"
+      ]
+    }
   },
   {
     "slug": "creative-intelligence-2026",
