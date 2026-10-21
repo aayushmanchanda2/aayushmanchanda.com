@@ -3739,7 +3739,7 @@
   },
   {
     "slug": "a-code-only-prompt-for-a-22-second-ai-launch-film",
-    "title": "this is my best project yet and its fucking insane a…",
+    "title": "Code-Only Prompt for an AI Launch Film",
     "url": "https://x.com/twoclipping/status/2106526359589675085?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
     "domain": "x.com",
     "saved_date": "2026-10-20",
@@ -3762,7 +3762,22 @@
         }
       ]
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "A product launch film was made in code with Claude Opus 5.5, using a prompt that requires no MCP tools.",
+    "block": {
+      "best_for": "Making a branded product launch film in code.",
+      "tip": "Start by giving the prompt your product name and brand.",
+      "needs": [
+        "Claude Opus 5.5",
+        "Product name",
+        "Brand"
+      ],
+      "start_here": [
+        "Provide your product name",
+        "Add your brand",
+        "Run the prompt without MCP tools"
+      ]
+    }
   },
   {
     "slug": "indent-one-shared-coworker-for-your-whole-company",
