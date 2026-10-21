@@ -4034,7 +4034,8 @@
         "cover": "/posts/2107220247396626756/cover.webp"
       }
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "A guide to eval-driven development for teams that need to know whether their AI agents actually work."
   },
   {
     "slug": "roma-the-to-do-list-that-does-itself",
