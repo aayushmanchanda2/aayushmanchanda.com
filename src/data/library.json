@@ -5088,7 +5088,36 @@
     "domain": "gist.github.com",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "A detailed Claude Code prompt for turning a public website into an unofficial, measured brand guide with responsive tokens, reconstructed components, and explicit safety limits."
+    "note": "A detailed Claude Code prompt for turning a public website into an unofficial, measured brand guide with responsive tokens, reconstructed components, and explicit safety limits.",
+    "tldr": "A Claude Code prompt builds an unofficial brand guide by measuring a public site, tokenizing its design system, and rebuilding components to verify it.",
+    "highlights": [
+      {
+        "text": "The guide should look and feel like the brand's own site, not like a report. Every value in it is measured, tokenised, and rebuilt to prove the tokens work.",
+        "note": "The reconstruction is the proof that the extracted system works.",
+        "color": "amber"
+      },
+      {
+        "text": "Never copy logos, font files or the brand's images. Describe them and link to the source pages.",
+        "note": "The prompt keeps the analysis useful without copying protected assets.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "Paste everything below the line into Claude Code (or any Claude setup with a shell, a browser and file access). Replace the three settings at the top.",
+    "block": {
+      "best_for": "Designers reverse-engineering a public website into a reusable design system.",
+      "tip": "Keep the result explicitly unofficial and measure every token before rebuilding components.",
+      "needs": [
+        "Claude Code",
+        "A browser",
+        "File access",
+        "A public website URL"
+      ],
+      "start_here": [
+        "Set the URL and image mode.",
+        "Capture the home page and three to five key pages.",
+        "Build the guide from measured tokens and reconstructed components."
+      ]
+    }
   },
   {
     "slug": "you-can-use-ai-to-edit-videos-for-you-here-s-how",
