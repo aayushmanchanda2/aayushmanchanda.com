@@ -4141,7 +4141,21 @@
     "domain": "melius.com",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "Melius puts image and video models on one canvas, with agent-run workflows for concepts, campaign variants, and everyday creative work."
+    "note": "Melius puts image and video models on one canvas, with agent-run workflows for concepts, campaign variants, and everyday creative work.",
+    "tldr": "Melius is a node-based creative canvas that routes prompts across 117 image, video, audio, and text models while keeping every step editable.",
+    "block": {
+      "best_for": "Creative teams building repeatable multi-model production workflows",
+      "tip": "Keep each prompt and output as a node so you can branch, rewire, and rerun the pipeline.",
+      "needs": [
+        "A Melius account",
+        "Credits for generation"
+      ],
+      "start_here": [
+        "Describe the creative result you want",
+        "Let Mel route the workflow and models",
+        "Edit or rerun individual nodes until it lands"
+      ]
+    }
   },
   {
     "slug": "the-scroll-stopping-carousel-prompt",
