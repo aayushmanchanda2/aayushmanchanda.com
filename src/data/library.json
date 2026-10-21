@@ -4923,7 +4923,7 @@
   },
   {
     "slug": "how-to-avoid-ai-brain-rot",
-    "title": "Here is the full talk:",
+    "title": "How to avoid AI brain rot",
     "url": "https://x.com/milescranmer/status/2111105654211608847?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
     "domain": "x.com",
     "saved_date": "2026-10-20",
@@ -4961,7 +4961,16 @@
         ]
       }
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "Miles Cranmer shares a talk on avoiding intelligence atrophy from AI use in work and study.",
+    "block": {
+      "best_for": "People who use AI for work or study and want to avoid intelligence atrophy.",
+      "tip": "Watch the full talk to understand how Cranmer frames AI brain rot and standing out on a narrowing bell curve.",
+      "needs": [],
+      "start_here": [
+        "Watch the full talk."
+      ]
+    }
   },
   {
     "slug": "how-to-use-writing-to-sharpen-your-thinking",
