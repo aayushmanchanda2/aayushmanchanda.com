@@ -3978,7 +3978,35 @@
     "domain": "lukew.com",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "Luke Wroblewski shows how code-native design systems can steer every AI agent toward the same tokens, components, and brand rules."
+    "note": "Luke Wroblewski shows how code-native design systems can steer every AI agent toward the same tokens, components, and brand rules.",
+    "tldr": "Luke Wroblewski shows how code-native design systems steer AI agents toward shared tokens, components, and brand rules while the product keeps changing.",
+    "highlights": [
+      {
+        "text": "Put simply, a design system for agents is a steering layer for a site's design and front-end code.",
+        "note": "The system becomes executable context, not static documentation.",
+        "color": "amber"
+      },
+      {
+        "text": "Agents read it every single time.",
+        "note": "Agent instructions make system reuse automatic.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "For as long as I've been working on design systems, I've seen the same pattern play out: design teams invest a lot of time in creating a system, then struggle to keep it up to date as the actual product evolves.",
+    "block": {
+      "best_for": "Teams letting multiple AI agents change the same website.",
+      "tip": "Keep design tokens and reusable components in code, then tell agents to reuse them.",
+      "needs": [
+        "Design tokens",
+        "Reusable components",
+        "Agent instructions"
+      ],
+      "start_here": [
+        "Define the grid, fonts, colors, and spacing in code",
+        "Document reuse rules in AGENTS.md",
+        "Expose the system as live examples agents can inspect"
+      ]
+    }
   },
   {
     "slug": "does-your-ai-agent-actually-work-a-guide-to-eval-driven-deve",
