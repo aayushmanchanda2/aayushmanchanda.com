@@ -3786,7 +3786,34 @@
     "domain": "indent.com",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "An AI coworker that works from Slack and pull requests, shares what teammates teach it, and can diagnose, test, and deliver code changes."
+    "note": "An AI coworker that works from Slack and pull requests, shares what teammates teach it, and can diagnose, test, and deliver code changes.",
+    "tldr": "Indent is a shared AI coworker that learns across a company, works in Slack and pull requests, and ships tested code changes.",
+    "highlights": [
+      {
+        "text": "What one person teaches it, the whole company gets. Ask it in Slack or tag it on a pull request.",
+        "note": "Shared learning becomes reusable company context.",
+        "color": "amber"
+      },
+      {
+        "text": "Slack message in. Tested pull request out.",
+        "note": "The workflow runs from question through verified code change.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "Indent is one shared coworker for your whole company. What one person teaches it, the whole company gets. Ask it in Slack or tag it on a pull request.",
+    "block": {
+      "best_for": "Teams that want one AI coworker across Slack and code.",
+      "tip": "Teach Indent once so the whole company can reuse the context.",
+      "needs": [
+        "Slack",
+        "Code repositories"
+      ],
+      "start_here": [
+        "Ask Indent a work question in Slack",
+        "Let it diagnose and test the issue",
+        "Review the pull request it opens"
+      ]
+    }
   },
   {
     "slug": "i-am-begging-you-to-start-writing-online",
