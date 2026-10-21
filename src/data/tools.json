@@ -1359,5 +1359,32 @@
     "verdict": "watching",
     "note": "Saved from Raindrop. Not tested yet.",
     "status_date": "2026-10-21"
+  },
+  {
+    "slug": "oneshotprompts-write-motion-design-prompts",
+    "name": "oneshotprompts",
+    "url": "https://oneshotprompts.com/#/motion-design",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Describe the motion you want and get a prompt grounded in 923 motion-design techniques, each with a live example.",
+    "status_date": "2026-10-21"
+  },
+  {
+    "slug": "cua-shared-computers-for-teams-and-computer-use-agents",
+    "name": "Cua",
+    "url": "https://cua.ai/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Shared desktops where people and computer-use agents work side by side, with app teleporting, separate cursors, and self-hosted compute.",
+    "status_date": "2026-10-21"
+  },
+  {
+    "slug": "prd-loop-six-free-skills-for-claude",
+    "name": "PRD Loop",
+    "url": "https://prd-loop-drab.vercel.app/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Six Claude skills that keep one PRD current through scoping, execution, changes, feedback, review, and handoff.",
+    "status_date": "2026-10-21"
   }
 ]

@@ -5233,5 +5233,14 @@
     "saved_date": "2026-10-21",
     "kind": "article",
     "note": "Ramp explains why it replaced a patchwork of agent SDKs and frameworks with Laminar, one shared in-house platform for building product agents."
+  },
+  {
+    "slug": "airops-run-the-strategy-that-wins-ai-discovery",
+    "title": "AirOps | Run the strategy that wins AI discovery",
+    "url": "https://www.airops.com/",
+    "domain": "airops.com",
+    "saved_date": "2026-10-21",
+    "kind": "article",
+    "note": "AirOps combines AI-search strategy, market-share analysis, and content agents into one system for improving how brands appear in AI recommendations."
   }
 ]

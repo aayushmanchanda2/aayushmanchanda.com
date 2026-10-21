@@ -4297,5 +4297,173 @@
       ]
     },
     "collections": []
+  },
+  {
+    "slug": "baked-design-studio",
+    "title": "Baked Design Studio",
+    "url": "https://baked.design/",
+    "domain": "baked.design",
+    "saved_date": "2026-10-21",
+    "shot": "/shots/baked-design-studio.webp",
+    "palette": [
+      "#fcfcfb",
+      "#2d2e2d",
+      "#d3d3d2",
+      "#c3b2a7",
+      "#4e4f4f",
+      "#a8c8db"
+    ],
+    "design": {
+      "read_date": "2026-10-21",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#f2f2f0"
+        },
+        {
+          "name": "surface",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "text",
+          "hex": "#111111"
+        }
+      ],
+      "type": [
+        {
+          "name": "body",
+          "fontFamily": "Inter",
+          "fontSize": "15px",
+          "fontWeight": "400",
+          "lineHeight": "22px",
+          "letterSpacing": "-0.09px"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "2px",
+          "value": "2px"
+        },
+        {
+          "name": "6px",
+          "value": "6px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "10px",
+          "value": "10px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "6px"
+        },
+        {
+          "name": "card-2",
+          "value": "8px"
+        },
+        {
+          "name": "image",
+          "value": "12px"
+        },
+        {
+          "name": "full",
+          "value": "9999px"
+        }
+      ]
+    },
+    "collections": []
+  },
+  {
+    "slug": "design-check-baked-design-studio",
+    "title": "Baked Design Studio",
+    "url": "https://baked.design/design-check/",
+    "domain": "baked.design",
+    "saved_date": "2026-10-21",
+    "shot": "/shots/design-check-baked-design-studio.webp",
+    "palette": [
+      "#fefefe",
+      "#727271",
+      "#d2d2d2",
+      "#aeaeae",
+      "#919190",
+      "#4d4d4d"
+    ],
+    "design": {
+      "read_date": "2026-10-21",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "surface",
+          "hex": "#f4f4f2"
+        },
+        {
+          "name": "text",
+          "hex": "#111111"
+        }
+      ],
+      "type": [
+        {
+          "name": "body",
+          "fontFamily": "Inter",
+          "fontSize": "15px",
+          "fontWeight": "400",
+          "lineHeight": "22px",
+          "letterSpacing": "-0.09px"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "10px",
+          "value": "10px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "14px",
+          "value": "14px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "8px"
+        },
+        {
+          "name": "input",
+          "value": "10px"
+        },
+        {
+          "name": "card-2",
+          "value": "12px"
+        },
+        {
+          "name": "full",
+          "value": "9999px"
+        }
+      ]
+    },
+    "collections": []
   }
 ]

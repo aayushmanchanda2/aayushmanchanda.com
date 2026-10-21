@@ -1742,5 +1742,46 @@
     "slug": "underdog-bark-3-0",
     "section": "tools",
     "at": "2026-10-21T17:22:15.902Z"
+  },
+  "1897098603": {
+    "kind": "published",
+    "slug": "baked-design-studio",
+    "section": "sites",
+    "at": "2026-10-21T21:49:51.193Z"
+  },
+  "1897117623": {
+    "kind": "published",
+    "slug": "design-check-baked-design-studio",
+    "section": "sites",
+    "at": "2026-10-21T21:49:51.193Z"
+  },
+  "1897118296": {
+    "kind": "published",
+    "slug": "airops-run-the-strategy-that-wins-ai-discovery",
+    "section": "reading",
+    "at": "2026-10-21T21:49:51.193Z"
+  },
+  "1897193326": {
+    "kind": "published",
+    "slug": "oneshotprompts-write-motion-design-prompts",
+    "section": "tools",
+    "at": "2026-10-21T21:49:51.193Z"
+  },
+  "1897233156": {
+    "kind": "published",
+    "slug": "cua-shared-computers-for-teams-and-computer-use-agents",
+    "section": "tools",
+    "at": "2026-10-21T21:49:51.193Z"
+  },
+  "1897248752": {
+    "kind": "published",
+    "slug": "prd-loop-six-free-skills-for-claude",
+    "section": "tools",
+    "at": "2026-10-21T21:49:51.193Z"
+  },
+  "1897256482": {
+    "kind": "pending",
+    "attempts": 1,
+    "lastError": "shot of https://aarya.wtf/ exceeded 45000ms"
   }
 }
