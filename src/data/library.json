@@ -4819,7 +4819,33 @@
     "domain": "github.com",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "An open-source pack of agent skills for competitive briefings, positioning, pricing, launches, deal prep and sales enablement."
+    "note": "An open-source pack of agent skills for competitive briefings, positioning, pricing, launches, deal prep and sales enablement.",
+    "tldr": "The open-source LMTY skill pack gives AI assistants repeatable workflows for competitive briefings, positioning, pricing, launches, deal prep, and sales enablement.",
+    "highlights": [
+      {
+        "text": "Your assistant selects the matching skill and follows a repeatable method for completing the work.",
+        "note": "One pack routes plain-English requests into specialized workflows.",
+        "color": "amber"
+      },
+      {
+        "text": "Every skill works on its own.",
+        "note": "LMTY is optional, not required.",
+        "color": "green"
+      }
+    ],
+    "excerpt": "Use your AI assistant for competitive work you already do: researching competitors and market shifts, building positioning and messaging, reviewing pricing and launches, creating battlecards, preparing deals, analyzing wins and losses, and keeping sales enablement current.",
+    "block": {
+      "best_for": "Product marketers and founders who want repeatable agent workflows for competitive work.",
+      "tip": "Start with the competitive briefing, then use the specialized skill for the decision in front of you.",
+      "needs": [
+        "an assistant that supports Agent Skills"
+      ],
+      "start_here": [
+        "Install the skill pack in your assistant.",
+        "Ask for a competitive briefing.",
+        "Use a specialized skill for the next positioning, pricing, launch, or deal question."
+      ]
+    }
   },
   {
     "slug": "from-one-idea-to-an-open-source-repo",
