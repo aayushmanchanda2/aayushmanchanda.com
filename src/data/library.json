@@ -4414,7 +4414,36 @@
     "domain": "contralabs.com",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "Contra Labs surveyed more than 150,000 creative professionals to map AI adoption, everyday workflows, tool use, and earnings across creative disciplines."
+    "note": "Contra Labs surveyed more than 150,000 creative professionals to map AI adoption, everyday workflows, tool use, and earnings across creative disciplines.",
+    "tldr": "Contra combines a survey of 150,000-plus creatives with marketplace data to map AI adoption, workflows, earnings, tools, and emerging careers.",
+    "highlights": [
+      {
+        "text": "We surveyed 150k+ working creative professionals, combined with Contra’s marketplace data, to explore how AI is changing creative work.",
+        "note": "The report pairs survey responses with marketplace behavior.",
+        "color": "amber"
+      },
+      {
+        "text": "Creatives are doing more than ever before with AI adoption taking off.",
+        "note": "Adoption is framed as part of daily creative work.",
+        "color": "blue"
+      },
+      {
+        "text": "The field keeps growing, but what people actually use stays narrow.",
+        "note": "Tool variety is expanding faster than actual usage.",
+        "color": "green"
+      }
+    ],
+    "excerpt": "We surveyed 150k+ working creative professionals, combined with Contra’s marketplace data, to explore how AI is changing creative work. Adoption, emerging workflows, earnings, next-gen AI-native careers, and more.",
+    "block": {
+      "best_for": "Creative leaders comparing AI adoption, tools, workflows, and earnings",
+      "tip": "Use the discipline filters instead of treating creative AI adoption as one market.",
+      "needs": [],
+      "start_here": [
+        "Review adoption by experience level",
+        "Compare tools and models by discipline",
+        "Study the three phases of AI-assisted creative workflows"
+      ]
+    }
   },
   {
     "slug": "voyager-the-open-harness-for-creative-work",
