@@ -5135,7 +5135,31 @@
     "domain": "idealab.ai",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "Idealab.ai gives entrepreneurs a free catalog of business ideas, then helps refine one and start building it."
+    "note": "Idealab.ai gives entrepreneurs a free catalog of business ideas, then helps refine one and start building it.",
+    "tldr": "Idealab.ai turns signals from news, research, patents, and customer complaints into source-backed business ideas with briefs founders can investigate.",
+    "highlights": [
+      {
+        "text": "Every idea comes with a brief to investigate.",
+        "note": "Each idea is packaged as a starting point for due diligence.",
+        "color": "amber"
+      },
+      {
+        "text": "Every claim shows its sources",
+        "note": "The underlying evidence stays visible.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "From a real-world problem to an idea you can build on. Idealab.ai applies Bill Gross’s methods to news, research, patents and customer complaints, and turns what it finds into business ideas with the context to investigate them.",
+    "block": {
+      "best_for": "Founders looking for evidence-backed business ideas to investigate.",
+      "tip": "Use the brief as a starting point, then validate the customer problem yourself.",
+      "needs": [],
+      "start_here": [
+        "Browse an idea grounded in a real-world problem.",
+        "Open its full brief to review costs, timing, competitors, and risks.",
+        "Use the thought partner to personalize it."
+      ]
+    }
   },
   {
     "slug": "motion-engineering-build-a-video-studio-around-opus-5-5",
