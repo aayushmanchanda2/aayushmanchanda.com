@@ -4525,7 +4525,40 @@
     "domain": "rubriclabs.com",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "Rubric Labs tests Jev, a fast decision model that scores predefined answers, across notification triage, semantic search, spelling, settings search, and email rewriting."
+    "note": "Rubric Labs tests Jev, a fast decision model that scores predefined answers, across notification triage, semantic search, spelling, settings search, and email rewriting.",
+    "tldr": "Jev returns probabilities over predefined answers in milliseconds, enabling notification triage, semantic search, spellchecking, settings navigation, and iterative email rewriting.",
+    "highlights": [
+      {
+        "text": "More precisely, it acts as a classifier or scorer: it returns probabilities for predefined answers, and your code determines what action to take.",
+        "note": "The model scores options while application code controls the action.",
+        "color": "amber"
+      },
+      {
+        "text": "One question rarely covers everything you need to know, so it often pays to ask several in one request",
+        "note": "Pair questions when one score cannot establish both relevance and certainty.",
+        "color": "blue"
+      },
+      {
+        "text": "What’s different about Jev is that it’s incredibly fast, cheap, and consistent",
+        "note": "Its speed and cost open up per-item decisions that larger models make impractical.",
+        "color": "green"
+      }
+    ],
+    "excerpt": "Jev is a new model built to evaluate questions with predefined possible answers. It returns answers in a few hundred milliseconds, in a structured format, with a probability for each possible answer.",
+    "block": {
+      "best_for": "Fast, repeated decisions over predefined options",
+      "tip": "Write explicit criteria, provide the relevant context, and let code enforce the confidence threshold.",
+      "needs": [
+        "Predefined possible answers",
+        "Relevant state or context",
+        "A confidence threshold in code"
+      ],
+      "start_here": [
+        "Choose Choice, Score, or Bool for the decision",
+        "Write the criteria in plain language",
+        "Test thresholds against labeled examples"
+      ]
+    }
   },
   {
     "slug": "ask-claude-animations-to-review-john-lasseter-s-principles",
