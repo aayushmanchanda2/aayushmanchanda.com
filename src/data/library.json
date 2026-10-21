@@ -3708,7 +3708,34 @@
     "domain": "blog.cloudflare.com",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "EmDash 1.0 turns the Astro-based CMS into a stable open-source publishing stack with an API, CLI, MCP server and sandboxed plugin registry."
+    "note": "EmDash 1.0 turns the Astro-based CMS into a stable open-source publishing stack with an API, CLI, MCP server and sandboxed plugin registry.",
+    "tldr": "EmDash 1.0 is a stable, open-source Astro CMS with editor tools, agent interfaces, production workflows, and a decentralized plugin registry.",
+    "highlights": [
+      {
+        "text": "Developers build with Astro, editors manage content through the EmDash admin, and agents can work through the API, CLI, or built-in MCP server.",
+        "note": "Each audience gets a native interface.",
+        "color": "amber"
+      },
+      {
+        "text": "Real deployments shaped much of that work, uncovering edge cases and identifying needs that only show up when a site is serving real traffic and being used by real teams of editors.",
+        "note": "The 1.0 release was informed by production use.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "It was not. Today, we are releasing EmDash 1.0: a stable, free, and open source CMS built on Astro.",
+    "block": {
+      "best_for": "Teams that want an Astro CMS editors can use and agents can operate.",
+      "tip": "Use the admin for editors and the API, CLI, or built-in MCP server for agents.",
+      "needs": [
+        "Astro",
+        "A deployment target"
+      ],
+      "start_here": [
+        "Build the site with Astro",
+        "Manage content through the EmDash admin",
+        "Connect agents through the API, CLI, or built-in MCP server"
+      ]
+    }
   },
   {
     "slug": "a-code-only-prompt-for-a-22-second-ai-launch-film",
