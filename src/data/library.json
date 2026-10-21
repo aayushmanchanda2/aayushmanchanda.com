@@ -4713,7 +4713,7 @@
   },
   {
     "slug": "cheeky-pint-mark-zuckerberg-and-alexandr-wang-on-muse-wonder",
-    "title": "Cheeky Pint is back! Mark Zuckerberg @finkd and Alexandr…",
+    "title": "Zuckerberg and Wang on Muse Wonder",
     "url": "https://x.com/collision/status/2109714250226905248?s=12&t=DW-0wk0jkFVJ1u80Y5aIUw",
     "domain": "x.com",
     "saved_date": "2026-10-20",
@@ -4735,7 +4735,18 @@
         }
       ]
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "Mark Zuckerberg and Alexandr Wang discuss Muse’s breakout use cases, product thinking, and how frontier models are built.",
+    "block": {
+      "best_for": "People tracking frontier model strategy",
+      "tip": "Use the chapter markers to jump to Muse’s use cases, product framing, and model-building process.",
+      "needs": [],
+      "start_here": [
+        "Start at 00:00:24 for Muse’s breakout use cases.",
+        "Jump to 00:14:35 for Muse Wonder.",
+        "Watch 00:24:56 for how frontier models are built."
+      ]
+    }
   },
   {
     "slug": "slashdocs-by-razorpay",
