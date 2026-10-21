@@ -3891,7 +3891,25 @@
       "id": "HTLk7NS76G0",
       "thumb": "/shots/julia-pintar-playkit-5m-from-inbound-content-zero-outbound-z-thumb.webp"
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "Julia Pintar explains how daily writing, transparent educational content, and soft calls to action brought PlayKit over $5 million without outbound or ads.",
+    "block": {
+      "best_for": "Founders building inbound demand from X.",
+      "tip": "Publish useful education from real work instead of leading with case studies.",
+      "time": {
+        "text": "20 to 30 minutes daily",
+        "source": "stated"
+      },
+      "needs": [
+        "A real lesson from your work",
+        "An X account"
+      ],
+      "start_here": [
+        "Handwrite without stopping for 20 to 30 minutes",
+        "Turn one lesson into a concrete educational post",
+        "Publish it and save longer ideas for an article"
+      ]
+    }
   },
   {
     "slug": "every-agentic-engineering-hack-i-know-october-2026-attack-of",
