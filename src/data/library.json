@@ -4778,7 +4778,39 @@
     "domain": "felixrieseberg.com",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "Felix Rieseberg frames ambitious model use as more than speed: raise the altitude, depth, and range of the work."
+    "note": "Felix Rieseberg frames ambitious model use as more than speed: raise the altitude, depth, and range of the work.",
+    "tldr": "Felix Rieseberg frames ambitious AI use across speed, altitude, depth, and range, pushing people from task execution toward broader outcomes.",
+    "highlights": [
+      {
+        "text": "Model capabilities don't grow uniformly.",
+        "note": "Ambitious use starts by finding where a model is unusually capable.",
+        "color": "amber"
+      },
+      {
+        "text": "I think of ambition in four types: Speed, Altitude, Depth, and Range.",
+        "note": "The framework expands ambition beyond doing the same task faster.",
+        "color": "blue"
+      },
+      {
+        "text": "To be more ambitious in altitude, ask yourself - what do you want to happen next? What's the goal beyond the goal?",
+        "note": "Altitude means asking for the larger outcome, not only the immediate task.",
+        "color": "green"
+      }
+    ],
+    "excerpt": "I work on Claude. It's an interesting experience: Every day I learn about yet another feat accomplished with or by Claude that I hadn't considered, didn't think possible, or simply lacked the curiosity and time to try. This month, it may have helped discover a new planet, I've seen the first AI music video that I really like, and we are discussing a new era of math.",
+    "block": {
+      "best_for": "People who want to move beyond basic AI task assistance",
+      "tip": "Ask for the outcome beyond the immediate task, then add expert depth and cross-field range.",
+      "needs": [
+        "A real task and its desired outcome",
+        "An AI model"
+      ],
+      "start_here": [
+        "Name the goal beyond the current task.",
+        "Ask how a field-leading expert would approach the underlying problem.",
+        "Bring in methods from another relevant field."
+      ]
+    }
   },
   {
     "slug": "competitive-skills-by-lmty",
