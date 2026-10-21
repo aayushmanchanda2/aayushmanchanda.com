@@ -5272,7 +5272,34 @@
     "domain": "builders.ramp.com",
     "saved_date": "2026-10-21",
     "kind": "article",
-    "note": "Ramp explains why it replaced a patchwork of agent SDKs and frameworks with Laminar, one shared in-house platform for building product agents."
+    "note": "Ramp explains why it replaced a patchwork of agent SDKs and frameworks with Laminar, one shared in-house platform for building product agents.",
+    "tldr": "Ramp built Laminar to replace fragmented agent tooling with one in-house harness for product teams building agents instead of infrastructure.",
+    "highlights": [
+      {
+        "text": "Endlessly exploring and building on a dozen different platforms doesn’t lead to a very cohesive developer experience, nor does it allow us to create the fully seamless product experience we want.",
+        "note": "Tool sprawl undermined both the developer and product experience.",
+        "color": "amber"
+      },
+      {
+        "text": "Our early motto was “build agents, not infrastructure”",
+        "note": "Laminar abstracts the common parts of agent development.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "While much of our team focuses on issuing cards, paying bills, and safely moving money, my job for the past several months has been designing and building out Laminar, the in-house agent harness for Ramp’s agentic products.",
+    "block": {
+      "best_for": "Teams consolidating agent development onto one shared platform",
+      "tip": "Abstract common infrastructure so product builders can focus on agents.",
+      "needs": [
+        "Several agent use cases",
+        "A team that can own shared infrastructure"
+      ],
+      "start_here": [
+        "Inventory the agent SDKs, frameworks, and managed APIs already in use",
+        "Identify common infrastructure product teams should not own",
+        "Move one product agent onto a shared harness and iterate with it as a customer"
+      ]
+    }
   },
   {
     "slug": "airops-run-the-strategy-that-wins-ai-discovery",
