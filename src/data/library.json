@@ -4207,7 +4207,18 @@
     "domain": "littlebird.ai",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "An always-on work assistant that observes your screen and meetings, then carries that context into notes, drafts, routines and other AI tools."
+    "note": "An always-on work assistant that observes your screen and meetings, then carries that context into notes, drafts, routines and other AI tools.",
+    "tldr": "Littlebird is an always-on assistant that remembers work across meetings, messages, docs, and apps, then uses that context to take action.",
+    "block": {
+      "best_for": "People who want an assistant that remembers work across apps.",
+      "tip": "Exclude banking or any app you do not want it to see.",
+      "needs": [],
+      "start_here": [
+        "Connect the work apps you want Littlebird to remember.",
+        "Set exclusions for private apps and sites.",
+        "Create a briefing or meeting routine."
+      ]
+    }
   },
   {
     "slug": "agentphone-phone-numbers-for-ai-agents",
