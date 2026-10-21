@@ -5015,7 +5015,35 @@
     "domain": "treasure-hunting.co",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "Sebastian Krog shows how he pairs Claude Code with an Obsidian vault split into raw, wiki, and outputs so stock research stays grounded and reusable."
+    "note": "Sebastian Krog shows how he pairs Claude Code with an Obsidian vault split into raw, wiki, and outputs so stock research stays grounded and reusable.",
+    "tldr": "Sebastian Krog uses Claude Code with an Obsidian vault split into raw, wiki, and outputs to keep stock research grounded and reusable.",
+    "highlights": [
+      {
+        "text": "You’ll have three folders: raw, wiki and outputs. The raw folder is where you dump all your information. Claude is instructed never to add or change anything in raw.",
+        "note": "Raw sources stay immutable while Claude works on the synthesis layer.",
+        "color": "amber"
+      },
+      {
+        "text": "Usually, Claude’s job is to build and update the wiki from what’s in raw.",
+        "note": "The wiki becomes the maintained layer rather than another input dump.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "AI is great, if it has enough context. If you’re still just using the chat window to research stocks, this article is for you.",
+    "block": {
+      "best_for": "Investors building a durable research system around Claude Code.",
+      "tip": "Keep raw sources immutable, and let Claude update a linked wiki from them.",
+      "needs": [
+        "Claude Code",
+        "Obsidian",
+        "A local folder of source material"
+      ],
+      "start_here": [
+        "Create raw, wiki, and outputs folders.",
+        "Save source material as Markdown in raw.",
+        "Ask Claude to update the wiki from raw."
+      ]
+    }
   },
   {
     "slug": "cinetic",
