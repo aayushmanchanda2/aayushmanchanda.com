@@ -5052,7 +5052,34 @@
     "domain": "github.com",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "An agent skill for directing cinematic launch films from code, with concept development, brand rules, measured motion, sound, and automated QA."
+    "note": "An agent skill for directing cinematic launch films from code, with concept development, brand rules, measured motion, sound, and automated QA.",
+    "tldr": "cinetic is an agent skill for directing branded launch films from code with concept generation, measured motion, synchronized sound, and automated QA.",
+    "highlights": [
+      {
+        "text": "cinetic (cinema + kinetic) is an agent skill that makes your coding agent direct a short film instead of arranging animation components.",
+        "note": "It frames the agent as a director, not just an animation builder.",
+        "color": "amber"
+      },
+      {
+        "text": "Before any code, the agent writes three concepts through different lenses, tests them, and picks one story device the film owns.",
+        "note": "Concept selection happens before implementation.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "Cinematic launch films and motion design from code, directed by your coding agent.",
+    "block": {
+      "best_for": "Teams making short branded launch films with a coding agent.",
+      "tip": "Start with the idea and brand personality before touching animation code.",
+      "needs": [
+        "A coding agent",
+        "Remotion or HyperFrames"
+      ],
+      "start_here": [
+        "Install the skill with npx skills add Leonxlnx/cinetic.",
+        "Give the agent a short film brief.",
+        "Review the concepts before it builds."
+      ]
+    }
   },
   {
     "slug": "reverse-brand-prompt-for-claude-opus-agentic-coding-mode",
