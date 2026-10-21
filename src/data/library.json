@@ -3841,7 +3841,35 @@
         "cover": "/posts/2106763420053774713/cover.webp"
       }
     },
-    "media_retrieved": "2026-10-20"
+    "media_retrieved": "2026-10-20",
+    "tldr": "Dickie Bush argues that original, experience-based writing builds clearer thinking, career opportunity, and a personal knowledge base AI can reuse.",
+    "highlights": [
+      {
+        "text": "You need to go all-in on writing things from your own experience, rather than the experience of others.",
+        "note": "Lived experience is the differentiator in an AI-heavy feed.",
+        "color": "amber"
+      },
+      {
+        "text": "And you need to invest in building your Digital Brain: a living library of your own stories, opinions, and lessons.",
+        "note": "A personal corpus gives AI authentic material to work from.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "I am begging you to start writing online. Especially if any of these sound familiar: You feel your ability to think getting duller. AI has made you work faster, but your brain feels a step slower every time you work without it.",
+    "block": {
+      "best_for": "Writers who want to stand out without publishing AI slop.",
+      "tip": "Write from your own experience before using AI to distribute it.",
+      "needs": [
+        "Personal stories",
+        "Opinions",
+        "Lessons"
+      ],
+      "start_here": [
+        "Choose one lived experience",
+        "Write and publish from it",
+        "Save it in a Digital Brain for reuse"
+      ]
+    }
   },
   {
     "slug": "julia-pintar-playkit-5m-from-inbound-content-zero-outbound-z",
