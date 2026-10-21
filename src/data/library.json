@@ -5236,7 +5236,34 @@
     "domain": "vercel.com",
     "saved_date": "2026-10-21",
     "kind": "article",
-    "note": "Vercel's durable-harness lets Pi, OpenCode, Codex, and Claude Code resume long-running work after crashes and function timeouts."
+    "note": "Vercel's durable-harness lets Pi, OpenCode, Codex, and Claude Code resume long-running work after crashes and function timeouts.",
+    "tldr": "durable-harness lets Pi, OpenCode, Codex, and Claude Code resume cloud work after crashes, disconnects, and function timeouts.",
+    "highlights": [
+      {
+        "text": "With durable-harness, a new function reads completed results from the log and resumes the turn.",
+        "note": "Interrupted work resumes without replaying finished steps.",
+        "color": "amber"
+      },
+      {
+        "text": "If the browser disconnects, the agent keeps running, and reconnecting catches up from the log.",
+        "note": "The agent is not tied to an open client connection.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "Developers are familiar with running coding agents locally through harnesses like Pi, Claude Code, and others. They are reliable daily drivers for generating code, but keeping agents running around the clock requires your computer to be on and awake, which led to the laptop lid memes and Mac mini demand spike.",
+    "block": {
+      "best_for": "Developers running long-lived coding agents in the cloud",
+      "tip": "Use the durable log to resume interrupted turns without repeating completed work.",
+      "needs": [
+        "A coding-agent harness",
+        "Vercel or your own Postgres instance"
+      ],
+      "start_here": [
+        "Choose a harness to run durably",
+        "Configure Vercel or your own Postgres instance",
+        "Run a task and test recovery after an interruption"
+      ]
+    }
   },
   {
     "slug": "building-laminar-ramp-s-managed-agents-platform",
