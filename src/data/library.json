@@ -4173,7 +4173,32 @@
     "domain": "openai.com",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "OpenAI introduces GPT‑6 with Intelligent UI: ChatGPT can build visual, interactive answers and start responding while it continues to reason."
+    "note": "OpenAI introduces GPT‑6 with Intelligent UI: ChatGPT can build visual, interactive answers and start responding while it continues to reason.",
+    "tldr": "GPT-6 brings interactive, visual responses to more ChatGPT users through Intelligent UI that can compose diagrams, forms, charts, and task-specific tools.",
+    "highlights": [
+      {
+        "text": "We’ve trained GPT‑6 to compose responses using text, visuals and interactive elements, choosing how they fit together based on your question.",
+        "note": "The model chooses the mix of text, visuals, and controls.",
+        "color": "amber"
+      },
+      {
+        "text": "The format depends on what you’re asking. A comparison might work best side by side. An explanation might be easier to understand through an interactive diagram.",
+        "note": "The interface adapts to the task instead of using one fixed format.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "Last month we introduced the first GPT‑6 models for paid customers and today we're bringing that next generation of intelligence to more people with a new GPT‑6 model built for more than 1.2 billion people who use ChatGPT each week.",
+    "block": {
+      "best_for": "People who want visual, interactive answers inside ChatGPT.",
+      "tip": "Ask for a comparison, plan, or explanation that benefits from interaction.",
+      "needs": [
+        "ChatGPT access to GPT-6 and Intelligent UI"
+      ],
+      "start_here": [
+        "Ask a question suited to a diagram, comparison, or tool.",
+        "Use the interactive controls inside the response."
+      ]
+    }
   },
   {
     "slug": "littlebird-ai-assistant-with-a-memory-of-your-work",
