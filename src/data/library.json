@@ -4249,7 +4249,20 @@
     "domain": "agentmail.to",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "AgentMail gives AI agents real inboxes for two-way email, with threads, attachments, realtime events, custom domains, SDKs, and MCP support."
+    "note": "AgentMail gives AI agents real inboxes for two-way email, with threads, attachments, realtime events, custom domains, SDKs, and MCP support.",
+    "tldr": "AgentMail gives AI agents programmable inboxes for sending, receiving, threading, and processing email through APIs, webhooks, SDKs, CLI, MCP, and Skills.",
+    "block": {
+      "best_for": "Developers building agents that need their own email inboxes.",
+      "tip": "Use threads to keep replies, forwards, and follow-ups together.",
+      "needs": [
+        "An AgentMail account"
+      ],
+      "start_here": [
+        "Create an inbox with one API call.",
+        "Send or receive a message.",
+        "Trigger workflows from inbox events."
+      ]
+    }
   },
   {
     "slug": "influence-without-authority-gabriel-valdivia",
