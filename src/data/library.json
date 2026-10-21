@@ -5240,7 +5240,7 @@
     "tldr": "durable-harness lets Pi, OpenCode, Codex, and Claude Code resume cloud work after crashes, disconnects, and function timeouts.",
     "highlights": [
       {
-        "text": "With durable-harness, a new function reads completed results from the log and resumes the turn.",
+        "text": "With `durable-harness`, a new function reads completed results from the log and resumes the turn.",
         "note": "Interrupted work resumes without replaying finished steps.",
         "color": "amber"
       },
