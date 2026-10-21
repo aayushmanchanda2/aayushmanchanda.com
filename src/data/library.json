@@ -4685,7 +4685,31 @@
     "domain": "alexine.rip",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "Alexine Le Port argues that cheaper software makes attention and trust scarce, pushing engineers to become the public face of what they build."
+    "note": "Alexine Le Port argues that cheaper software makes attention and trust scarce, pushing engineers to become the public face of what they build.",
+    "tldr": "Alexine Le Port argues that cheaper building shifts tech marketing toward founder identity, asking engineers to become creators as well as product builders.",
+    "highlights": [
+      {
+        "text": "Part of the reason is simple: building got cheaper.",
+        "note": "Cheaper production makes attention and trust the scarce inputs.",
+        "color": "amber"
+      },
+      {
+        "text": "What's scarce is attention and trust, and a person is easier to trust than a logo.",
+        "note": "Creator-led marketing puts a recognizable person ahead of the company account.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "I like that we’re now asking engineers to solve marketing too. After all that talk about product-market fit, the person building the product now needs an audience of their own. Getting it to work was only part of the job. You also need to make people care that you’re the one building it, preferably before you have anything to sell.",
+    "block": {
+      "best_for": "Engineers and founders navigating creator-led marketing",
+      "tip": "Treat distribution and trust as part of the product job, then decide who should own that work.",
+      "needs": [],
+      "start_here": [
+        "Explain what you are building before it is ready to sell.",
+        "Show the work through a person, not only a company account.",
+        "Separate authentic building notes from performative personal branding."
+      ]
+    }
   },
   {
     "slug": "cheeky-pint-mark-zuckerberg-and-alexandr-wang-on-muse-wonder",
