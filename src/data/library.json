@@ -4755,7 +4755,21 @@
     "domain": "razorpay.com",
     "saved_date": "2026-10-20",
     "kind": "article",
-    "note": "A self-hosted, open-source workspace where teams publish interactive agent outputs, comment inline, and let agents revise them through MCP."
+    "note": "A self-hosted, open-source workspace where teams publish interactive agent outputs, comment inline, and let agents revise them through MCP.",
+    "tldr": "SlashDocs is a self-hosted, open-source hub where teams publish interactive HTML, comment inline, and let agents revise documents through MCP.",
+    "block": {
+      "best_for": "Teams using agents to create specs, reports, and dashboards",
+      "tip": "Publish agent-generated HTML from the terminal, then keep review and revision on one durable URL.",
+      "needs": [
+        "A self-hosted deployment",
+        "An AI agent workflow"
+      ],
+      "start_here": [
+        "Publish an agent-generated HTML document from the terminal.",
+        "Share the durable URL with reviewers.",
+        "Let the agent read inline comments through MCP and revise the document."
+      ]
+    }
   },
   {
     "slug": "how-to-be-more-ambitious-a-tutorial-for-humans-with-models",
