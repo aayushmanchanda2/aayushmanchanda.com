@@ -5308,6 +5308,33 @@
     "domain": "airops.com",
     "saved_date": "2026-10-21",
     "kind": "article",
-    "note": "AirOps combines AI-search strategy, market-share analysis, and content agents into one system for improving how brands appear in AI recommendations."
+    "note": "AirOps combines AI-search strategy, market-share analysis, and content agents into one system for improving how brands appear in AI recommendations.",
+    "tldr": "AirOps combines market-share analysis, strategy, content agents, data, and brand governance to help brands earn recommendations in AI discovery.",
+    "highlights": [
+      {
+        "text": "The AirOps platform combines agents, data, brand governance, and expertise to execute your AI search strategy.",
+        "note": "Strategy and execution live in the same system.",
+        "color": "amber"
+      },
+      {
+        "text": "Build a continuous system to research, publish, and refresh content that learns from each run and gets sharper over time.",
+        "note": "The workflow treats content as an operating loop.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "AirOps works with you to set and execute the right AI discovery strategy to earn an agent’s trust and drive growth for your brand.",
+    "block": {
+      "best_for": "Brands trying to improve how they appear in AI recommendations",
+      "tip": "Measure market share with the buyers who matter before choosing channels and content investments.",
+      "needs": [
+        "A defined buyer segment",
+        "Brand and competitor data"
+      ],
+      "start_here": [
+        "Measure brand market share with the buyers who matter",
+        "Identify the channels most likely to influence AI discovery",
+        "Run a continuous research, publishing, and refresh system"
+      ]
+    }
   }
 ]
