@@ -1780,9 +1780,10 @@
     "at": "2026-10-21T21:49:51.193Z"
   },
   "1897256482": {
-    "kind": "pending",
+    "kind": "failed",
     "attempts": 3,
-    "lastError": "shot of https://aarya.wtf/ exceeded 45000ms"
+    "lastError": "shot of https://aarya.wtf/ exceeded 45000ms",
+    "at": "2026-10-22T17:25:29.600Z"
   },
   "1897792218": {
     "kind": "published",
