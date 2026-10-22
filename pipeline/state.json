@@ -1781,7 +1781,13 @@
   },
   "1897256482": {
     "kind": "pending",
-    "attempts": 2,
+    "attempts": 3,
     "lastError": "shot of https://aarya.wtf/ exceeded 45000ms"
+  },
+  "1897792218": {
+    "kind": "published",
+    "slug": "cloudflare-security-audit-skill",
+    "section": "tools",
+    "at": "2026-10-22T12:06:21.201Z"
   }
 }

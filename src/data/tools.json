@@ -1386,5 +1386,15 @@
     "verdict": "watching",
     "note": "Six Claude skills that keep one PRD current through scoping, execution, changes, feedback, review, and handoff.",
     "status_date": "2026-10-21"
+  },
+  {
+    "slug": "cloudflare-security-audit-skill",
+    "name": "cloudflare/security-audit-skill",
+    "url": null,
+    "repo": "https://github.com/cloudflare/security-audit-skill",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Cloudflare’s coding-agent skill runs security audits in six phases, with isolated agents independently verifying machine-readable findings.",
+    "status_date": "2026-10-22"
   }
 ]
