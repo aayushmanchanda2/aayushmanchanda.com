@@ -1396,5 +1396,23 @@
     "verdict": "watching",
     "note": "Cloudflare’s coding-agent skill runs security audits in six phases, with isolated agents independently verifying machine-readable findings.",
     "status_date": "2026-10-22"
+  },
+  {
+    "slug": "fluid-functionalism-2",
+    "name": "Fluid Functionalism",
+    "url": "https://www.fluidfunctionalism.com/docs",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Animated React components for shadcn/ui that share one motion system, with Radix and Base UI versions plus install-ready docs.",
+    "status_date": "2026-10-23"
+  },
+  {
+    "slug": "thumbnail-vault-find-the-right-thumbnail-title-or-idea-for-y",
+    "name": "Thumbnail Vault",
+    "url": "https://thumbnailvault.com/library",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A searchable library of YouTube thumbnail and title combinations, with notes on the click triggers and patterns behind each one.",
+    "status_date": "2026-10-23"
   }
 ]
