@@ -5366,6 +5366,17 @@
     "domain": "productfordesigners.com",
     "saved_date": "2026-10-23",
     "kind": "article",
-    "note": "A growing set of practical questions for choosing interface patterns such as tabs versus sidebars, autosave versus save, and modals versus pages."
+    "note": "A growing set of practical questions for choosing interface patterns such as tabs versus sidebars, autosave versus save, and modals versus pages.",
+    "tldr": "A growing set of question-led cards for choosing interface patterns across navigation, feedback, forms, hierarchy, and flow.",
+    "block": {
+      "best_for": "Defending interface pattern choices in design reviews",
+      "tip": "Frame the choice around what people need to do and what context they need to keep.",
+      "needs": [],
+      "start_here": [
+        "Choose the card closest to your interface decision",
+        "Answer the question on the card",
+        "Use the answer to justify the pattern"
+      ]
+    }
   }
 ]
