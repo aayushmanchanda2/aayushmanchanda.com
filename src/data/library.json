@@ -5378,5 +5378,14 @@
         "Use the answer to justify the pattern"
       ]
     }
+  },
+  {
+    "slug": "dessa-the-conversation-model-trained-only-on-speech",
+    "title": "Dessa - the Conversation Model trained only on speech",
+    "url": "https://block.xyz/dessa",
+    "domain": "block.xyz",
+    "saved_date": "2026-10-23",
+    "kind": "article",
+    "note": "Block's full-duplex speech model is trained from scratch only on human conversation, preserving emotion, pauses and interruptions that text pipelines discard."
   }
 ]
