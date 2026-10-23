@@ -5386,6 +5386,30 @@
     "domain": "block.xyz",
     "saved_date": "2026-10-23",
     "kind": "article",
-    "note": "Block's full-duplex speech model is trained from scratch only on human conversation, preserving emotion, pauses and interruptions that text pipelines discard."
+    "note": "Block's full-duplex speech model is trained from scratch only on human conversation, preserving emotion, pauses and interruptions that text pipelines discard.",
+    "tldr": "Dessa is Block’s full-duplex speech-to-speech model, trained from scratch only on human conversations to preserve emotion, timing, pauses, and cadence.",
+    "highlights": [
+      {
+        "text": "We trained Dessa from scratch on nothing but human conversation. Sounds! No text, no pretrained models.",
+        "note": "Its knowledge and conversational behavior come from raw speech rather than text or a pretrained model.",
+        "color": "amber"
+      },
+      {
+        "text": "Dessa picks what to say, when to say it and how, down to its own voice and personality.",
+        "note": "The demos are live conversations without a person steering the model.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "We believe voice is the most natural way to interact with intelligence, so we created Dessa, the most authentic full-duplex speech model ever built.",
+    "block": {
+      "best_for": "People evaluating native speech models that preserve timing, emotion, and conversational nuance",
+      "tip": "Listen to the live recordings; interruptions, pauses, laughter, volume, and cadence are the core of the demo.",
+      "needs": [],
+      "start_here": [
+        "Listen to Talking about the release",
+        "Hear the model remember a movie title",
+        "Listen to Dessa converse with GPT-Live-1"
+      ]
+    }
   }
 ]
