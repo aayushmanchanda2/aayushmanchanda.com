@@ -5344,7 +5344,20 @@
     "domain": "seo.party",
     "saved_date": "2026-10-23",
     "kind": "article",
-    "note": "A community directory of SEO skills for Claude Code, Codex and Cursor, built around OpenSEO data and one-command installs."
+    "note": "A community directory of SEO skills for Claude Code, Codex and Cursor, built around OpenSEO data and one-command installs.",
+    "tldr": "A community marketplace for OpenSEO skills, including industry workflows, advanced experiments, keyword-gap analysis, audits, and self-contained SEO reports.",
+    "block": {
+      "best_for": "Finding community-built SEO workflows for OpenSEO",
+      "tip": "Start with one narrow industry workflow or advanced experiment instead of adding every skill.",
+      "needs": [
+        "OpenSEO"
+      ],
+      "start_here": [
+        "Browse industry-specific, advanced, or experimental skills",
+        "Choose one that fits how you work",
+        "Use it with OpenSEO"
+      ]
+    }
   },
   {
     "slug": "decision-cards-product-for-designers",
