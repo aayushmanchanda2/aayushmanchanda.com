@@ -1414,5 +1414,33 @@
     "verdict": "watching",
     "note": "A searchable library of YouTube thumbnail and title combinations, with notes on the click triggers and patterns behind each one.",
     "status_date": "2026-10-23"
+  },
+  {
+    "slug": "bklit-ui-charts-data-visualization-components",
+    "name": "Bklit UI",
+    "url": "https://bklit.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A chart and data-visualization component library built for polished product interfaces.",
+    "status_date": "2026-10-23"
+  },
+  {
+    "slug": "firstmate-talk-to-one-agent-ship-with-a-crew",
+    "name": "firstmate",
+    "url": null,
+    "repo": "https://github.com/kunchenguid/firstmate",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "An agent distro that gives one coding agent a crew, with isolated worktrees, visible sessions and finished PR handoffs.",
+    "status_date": "2026-10-23"
+  },
+  {
+    "slug": "monodesk-all-in-one-workspace-for-creative-pros",
+    "name": "MonoDesk",
+    "url": "https://www.monodesk.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A calm client workspace for freelance creatives, covering proposals, project planning, time tracking, invoices, and an AI co-worker.",
+    "status_date": "2026-10-23"
   }
 ]

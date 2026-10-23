@@ -4465,5 +4465,129 @@
       ]
     },
     "collections": []
+  },
+  {
+    "slug": "uncommon-web-a-field-guide-to-stylistically-unusual-web-libr",
+    "title": "Uncommon Web",
+    "url": "https://webdev.teknium.io/#top",
+    "domain": "webdev.teknium.io",
+    "saved_date": "2026-10-23",
+    "shot": "/shots/uncommon-web-a-field-guide-to-stylistically-unusual-web-libr.webp",
+    "palette": [
+      "#0d0c0e",
+      "#28282c",
+      "#8a5184",
+      "#4d4e4d",
+      "#4f2a17",
+      "#6d8a8e"
+    ],
+    "design": {
+      "read_date": "2026-10-23",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#0b0b0c"
+        },
+        {
+          "name": "surface",
+          "hex": "#121214"
+        },
+        {
+          "name": "text",
+          "hex": "#cfcac2"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#a29e97"
+        },
+        {
+          "name": "border",
+          "hex": "#2e2e33"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Instrument Serif",
+          "fontSize": "165.6px",
+          "fontWeight": "400",
+          "lineHeight": "142.42px",
+          "letterSpacing": "-3.31px"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "Instrument Serif",
+          "fontSize": "64px",
+          "fontWeight": "400",
+          "lineHeight": "64px",
+          "letterSpacing": "-0.64px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "Geist",
+          "fontSize": "14.5px",
+          "fontWeight": "400",
+          "lineHeight": "22.48px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "label",
+          "fontFamily": "Geist",
+          "fontSize": "13px",
+          "fontWeight": "400",
+          "lineHeight": "13px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "mono",
+          "fontFamily": "Geist Mono",
+          "fontSize": "12.5px",
+          "fontWeight": "400",
+          "lineHeight": "19.38px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "6px",
+          "value": "6px"
+        },
+        {
+          "name": "7px",
+          "value": "7px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "11px",
+          "value": "11px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "button",
+          "value": "4px"
+        },
+        {
+          "name": "card",
+          "value": "9px"
+        },
+        {
+          "name": "card-2",
+          "value": "16px"
+        },
+        {
+          "name": "full",
+          "value": "9999px"
+        }
+      ]
+    },
+    "collections": []
   }
 ]

@@ -5336,5 +5336,23 @@
         "Run a continuous research, publishing, and refresh system"
       ]
     }
+  },
+  {
+    "slug": "seo-party-community-skills-for-openseo",
+    "title": "SEO.party: Community Skills for OpenSEO",
+    "url": "https://seo.party/?x",
+    "domain": "seo.party",
+    "saved_date": "2026-10-23",
+    "kind": "article",
+    "note": "A community directory of SEO skills for Claude Code, Codex and Cursor, built around OpenSEO data and one-command installs."
+  },
+  {
+    "slug": "decision-cards-product-for-designers",
+    "title": "Decision Cards · Product for Designers",
+    "url": "https://productfordesigners.com/",
+    "domain": "productfordesigners.com",
+    "saved_date": "2026-10-23",
+    "kind": "article",
+    "note": "A growing set of practical questions for choosing interface patterns such as tabs versus sidebars, autosave versus save, and modals versus pages."
   }
 ]
