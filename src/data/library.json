@@ -5484,5 +5484,23 @@
         "Use a factory or one-shot harness when the delivery loop can run with less attention."
       ]
     }
+  },
+  {
+    "slug": "ai-engineering-from-scratch",
+    "title": "AI Engineering from Scratch",
+    "url": "https://aiengineeringfromscratch.com/",
+    "domain": "aiengineeringfromscratch.com",
+    "saved_date": "2026-10-24",
+    "kind": "article",
+    "note": "A free, open-source curriculum that builds the AI stack from raw math to agent loops across Python, TypeScript, Rust and Julia."
+  },
+  {
+    "slug": "building-agents-when-to-fold-subagents-into-your-main-agent",
+    "title": "Building agents: When to fold subagents into your main…",
+    "url": "https://claude.com/resources/articles/building-agents-when-to-fold-subagents-into-your-main-agent-loop",
+    "domain": "claude.com",
+    "saved_date": "2026-10-24",
+    "kind": "article",
+    "note": "Anthropic explains when a single agent with skills beats a web of subagents on quality, cost and latency, and when parallel agents still earn their keep."
   }
 ]

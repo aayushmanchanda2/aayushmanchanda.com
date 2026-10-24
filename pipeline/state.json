@@ -1874,5 +1874,17 @@
     "slug": "my-new-agentic-workflow",
     "section": "reading",
     "at": "2026-10-24T11:16:02.888Z"
+  },
+  "1900712197": {
+    "kind": "published",
+    "slug": "ai-engineering-from-scratch",
+    "section": "reading",
+    "at": "2026-10-24T20:59:10.238Z"
+  },
+  "1900713312": {
+    "kind": "published",
+    "slug": "building-agents-when-to-fold-subagents-into-your-main-agent",
+    "section": "reading",
+    "at": "2026-10-24T20:59:10.238Z"
   }
 }
