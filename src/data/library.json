@@ -5454,6 +5454,35 @@
     "domain": "thebuildingmachine.com",
     "saved_date": "2026-10-24",
     "kind": "article",
-    "note": "Calvin Grunewald reframes multi-agent coding around minimizing human attention, using impact and cost to prioritize work instead of spending the day supervising agents."
+    "note": "Calvin Grunewald reframes multi-agent coding around minimizing human attention, using impact and cost to prioritize work instead of spending the day supervising agents.",
+    "tldr": "Calvin Grunewald reframes agentic coding around minimizing human attention, then maps three workflows to the attention and impact each task deserves.",
+    "highlights": [
+      {
+        "text": "Instead of optimizing for maximizing agent productivity, I changed the optimization function to be minimizing human attention.",
+        "note": "The scarce resource is operator attention, not agent throughput.",
+        "color": "amber"
+      },
+      {
+        "text": "Given a particular item of work, I think about how much attention it needs and then choose the right tool for the job.",
+        "note": "Match the workflow to the attention budget.",
+        "color": "blue"
+      },
+      {
+        "text": "I think focusing on human attention as the metric to minimize is far more interesting and can lead to many more creative insights around work, what agents are good vs bad at, and where to spend my scarce attention resource.",
+        "note": "Velocity matters less than where human judgment is required.",
+        "color": "green"
+      }
+    ],
+    "excerpt": "Check out my previous post on this topic. It sets the stage for the problems addressed by my current workflow. To summarize, over the past 9 months, I scaled my workflow by: Increasing the number of parallel agents running at any given time. Switching from AeroSpace virtual screens to Herdr to see all agents on one screen. Using mobile (Tailscale, Herdr, Moshi) to keep my agents working around the clock.",
+    "block": {
+      "best_for": "Builders who are spending more time supervising coding agents than doing higher-value work.",
+      "tip": "Prioritize work by required human attention and impact, then choose the lightest workflow that fits.",
+      "needs": [],
+      "start_here": [
+        "Estimate the attention and impact of the task.",
+        "Use Claude Code with subagents for high-impact, high-attention work.",
+        "Use a factory or one-shot harness when the delivery loop can run with less attention."
+      ]
+    }
   }
 ]
