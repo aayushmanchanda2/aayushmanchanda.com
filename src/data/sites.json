@@ -4589,5 +4589,117 @@
       ]
     },
     "collections": []
+  },
+  {
+    "slug": "trademarks-symbols-vol-2-kuwayama-1-504-marks-symbools",
+    "title": "symbools",
+    "url": "https://www.symbools.com/",
+    "domain": "symbools.com",
+    "saved_date": "2026-10-24",
+    "shot": "/shots/trademarks-symbols-vol-2-kuwayama-1-504-marks-symbools.webp",
+    "palette": [
+      "#f7f1ed",
+      "#ed2e31",
+      "#73706c",
+      "#d4d1cc",
+      "#2f2d2c",
+      "#53514e"
+    ],
+    "design": {
+      "read_date": "2026-10-24",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#faf5f2"
+        },
+        {
+          "name": "surface",
+          "hex": "#f2ebe6"
+        },
+        {
+          "name": "text",
+          "hex": "#18190f"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#68675f"
+        },
+        {
+          "name": "border",
+          "hex": "#18190f"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Newsreader Variable",
+          "fontSize": "60px",
+          "fontWeight": "300",
+          "lineHeight": "58.2px",
+          "letterSpacing": "-3.3px"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "Newsreader Variable",
+          "fontSize": "26px",
+          "fontWeight": "300",
+          "lineHeight": "26px",
+          "letterSpacing": "-1.04px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "Inter Tight Variable",
+          "fontSize": "13px",
+          "fontWeight": "400",
+          "lineHeight": "17.55px",
+          "letterSpacing": "-0.22px"
+        },
+        {
+          "name": "label",
+          "fontFamily": "Inter Tight Variable",
+          "fontSize": "15px",
+          "fontWeight": "400",
+          "lineHeight": "21.75px",
+          "letterSpacing": "-0.22px"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "6",
+          "value": "24px"
+        },
+        {
+          "name": "25px",
+          "value": "25px"
+        },
+        {
+          "name": "26px",
+          "value": "26px"
+        },
+        {
+          "name": "8",
+          "value": "32px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "image",
+          "value": "2px"
+        },
+        {
+          "name": "card",
+          "value": "10px"
+        },
+        {
+          "name": "button",
+          "value": "20px"
+        }
+      ]
+    },
+    "collections": []
   }
 ]

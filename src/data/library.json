@@ -5411,5 +5411,14 @@
         "Listen to Dessa converse with GPT-Live-1"
       ]
     }
+  },
+  {
+    "slug": "apple-music-made-by-code",
+    "title": "Apple Music, Made by Code",
+    "url": "https://apple-music-effect.transitivebullsh.it/explainer",
+    "domain": "apple-music-effect.transitivebullsh.it",
+    "saved_date": "2026-10-24",
+    "kind": "article",
+    "note": "A technical teardown of Apple Music's liquid logo animation, with a live WebGL simulation and a practical guide to recreating the effect in code or mineral oil."
   }
 ]

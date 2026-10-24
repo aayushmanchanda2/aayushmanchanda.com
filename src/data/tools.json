@@ -1451,5 +1451,15 @@
     "verdict": "watching",
     "note": "Saved from Raindrop. Not tested yet.",
     "status_date": "2026-10-23"
+  },
+  {
+    "slug": "video-editor-skills-for-claude-code",
+    "name": "appariciojunior/video-editor-skills",
+    "url": null,
+    "repo": "https://github.com/appariciojunior/video-editor-skills",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-24"
   }
 ]
