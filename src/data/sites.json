@@ -4701,5 +4701,116 @@
       ]
     },
     "collections": []
+  },
+  {
+    "slug": "diagrams-drawn-with-javascript",
+    "title": "pele-art-diagrams.vercel.app",
+    "url": "https://pele-art-diagrams.vercel.app/",
+    "domain": "pele-art-diagrams.vercel.app",
+    "saved_date": "2026-10-24",
+    "shot": "/shots/diagrams-drawn-with-javascript.webp",
+    "palette": [
+      "#fcfbf9",
+      "#e4dccd",
+      "#b4ca8e",
+      "#352d28",
+      "#544f4c",
+      "#92af6e"
+    ],
+    "design": {
+      "read_date": "2026-10-24",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "surface",
+          "hex": "#f4f0e6"
+        },
+        {
+          "name": "text",
+          "hex": "#161616"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#4a4a4a"
+        },
+        {
+          "name": "accent",
+          "hex": "#1a47b8"
+        },
+        {
+          "name": "border",
+          "hex": "#d9d9d6"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Iowan Old Style",
+          "fontSize": "48px",
+          "fontWeight": "500",
+          "lineHeight": "57.6px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "Iowan Old Style",
+          "fontSize": "30.4px",
+          "fontWeight": "500",
+          "lineHeight": "36.48px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "body",
+          "fontFamily": "Iowan Old Style",
+          "fontSize": "18px",
+          "fontWeight": "400",
+          "lineHeight": "28.8px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "label",
+          "fontFamily": "Iowan Old Style",
+          "fontSize": "16px",
+          "fontWeight": "400",
+          "lineHeight": "25.6px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "mono",
+          "fontFamily": "monospace",
+          "fontSize": "12.8px",
+          "fontWeight": "400",
+          "lineHeight": "19.2px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "14px",
+          "value": "14px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        },
+        {
+          "name": "5",
+          "value": "20px"
+        }
+      ],
+      "radius": []
+    },
+    "collections": []
   }
 ]
