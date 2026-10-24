@@ -5529,6 +5529,38 @@
     "domain": "claude.com",
     "saved_date": "2026-10-24",
     "kind": "article",
-    "note": "Anthropic explains when a single agent with skills beats a web of subagents on quality, cost and latency, and when parallel agents still earn their keep."
+    "note": "Anthropic explains when a single agent with skills beats a web of subagents on quality, cost and latency, and when parallel agents still earn their keep.",
+    "tldr": "Anthropic says fewer subagents can improve agent quality, cost, and latency when progressive context and thin tools replace unnecessary orchestration.",
+    "highlights": [
+      {
+        "text": "They are effective at verification, parallel work, and modular permissioning.",
+        "note": "These are the jobs where subagents remain useful.",
+        "color": "amber"
+      },
+      {
+        "text": "In our comparisons across several enterprise deployments, a single agent with skills frequently outperformed both the one-prompt-for-everything design and the subagent design on quality, and often at a lower cost and latency per task.",
+        "note": "The simpler architecture won across several deployments.",
+        "color": "blue"
+      },
+      {
+        "text": "In these cases feedback is often that most of this structure was doing work the model no longer needed done for it, and that one clear system prompt, 4-5 thin data tools, and firm output guardrails would cover most of the use case.",
+        "note": "Many orchestration layers can collapse into prompt, tools, and guardrails.",
+        "color": "green"
+      }
+    ],
+    "excerpt": "When building agents in Claude Platform, using fewer subagents in favor of progressively disclosed context and tools can improve quality while reducing cost and latency.",
+    "block": {
+      "best_for": "Teams with multi-agent systems that may be adding latency, cost, or inconsistent behavior.",
+      "tip": "Keep subagents only where context bloat, parallel work, tool selection, or conflicting instructions measurably justify them.",
+      "needs": [
+        "An existing agent with multiple subagents",
+        "Quality, cost, and latency measurements"
+      ],
+      "start_here": [
+        "List routers, planners, and domain subagents in the current system.",
+        "Test whether progressive context and thin data tools can replace each one.",
+        "Keep a subagent only when measurable results justify the separate loop."
+      ]
+    }
   }
 ]
