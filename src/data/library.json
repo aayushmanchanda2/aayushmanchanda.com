@@ -5419,6 +5419,32 @@
     "domain": "apple-music-effect.transitivebullsh.it",
     "saved_date": "2026-10-24",
     "kind": "article",
-    "note": "A technical teardown of Apple Music's liquid logo animation, with a live WebGL simulation and a practical guide to recreating the effect in code or mineral oil."
+    "note": "A technical teardown of Apple Music's liquid logo animation, with a live WebGL simulation and a practical guide to recreating the effect in code or mineral oil.",
+    "tldr": "Travis Fischer reconstructs Apple Music's mineral-oil logo animation as a real-time WebGL2 simulation, explaining the optics, physics, and practical methods behind it.",
+    "highlights": [
+      {
+        "text": "Everything was captured in camera.",
+        "note": "The final identity effect was physical, not a rendered approximation.",
+        "color": "amber"
+      },
+      {
+        "text": "Many notes, or high ones, moved the oil too much to read the logo.",
+        "note": "Legibility constrained both the sound and the motion.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "Apple Music's new logo animation was filmed in a tray of mineral oil, rippled by a few low notes. This page takes the effect apart, rebuilds it as a real-time simulation in your browser, and shows how to make your own, in code or in a dish of oil.",
+    "block": {
+      "best_for": "Designers and creative coders studying how a physical brand effect can be rebuilt in WebGL2.",
+      "tip": "Switch off one simulation ingredient at a time to see what creates the effect.",
+      "needs": [
+        "A WebGL2-capable browser"
+      ],
+      "start_here": [
+        "Read how Apple filmed the original effect.",
+        "Toggle the live simulation ingredients one at a time.",
+        "Follow the guide to recreate it in code or mineral oil."
+      ]
+    }
   }
 ]
