@@ -5446,5 +5446,14 @@
         "Follow the guide to recreate it in code or mineral oil."
       ]
     }
+  },
+  {
+    "slug": "my-new-agentic-workflow",
+    "title": "My New Agentic Workflow",
+    "url": "https://thebuildingmachine.com/p/my-new-agentic-workflow?r=2pj09&utm_campaign=post&utm_medium=web&triedRedirect=true",
+    "domain": "thebuildingmachine.com",
+    "saved_date": "2026-10-24",
+    "kind": "article",
+    "note": "Calvin Grunewald reframes multi-agent coding around minimizing human attention, using impact and cost to prioritize work instead of spending the day supervising agents."
   }
 ]
