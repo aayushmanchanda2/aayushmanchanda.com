@@ -5492,7 +5492,35 @@
     "domain": "aiengineeringfromscratch.com",
     "saved_date": "2026-10-24",
     "kind": "article",
-    "note": "A free, open-source curriculum that builds the AI stack from raw math to agent loops across Python, TypeScript, Rust and Julia."
+    "note": "A free, open-source curriculum that builds the AI stack from raw math to agent loops across Python, TypeScript, Rust and Julia.",
+    "tldr": "A free, open-source curriculum that teaches AI systems from raw math before frameworks through interactive terminal lessons in Python, TypeScript, Rust, and Julia.",
+    "highlights": [
+      {
+        "text": "Every algorithm gets built from raw math first. Backprop. Tokenizer. Attention. Agent loop.",
+        "note": "The curriculum teaches internals before abstractions.",
+        "color": "amber"
+      },
+      {
+        "text": "Each lesson runs the same loop: read the problem, derive the math, write the code, run the test, keep the artifact.",
+        "note": "Each lesson produces tested code you keep.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "Every published lesson. Every phase. Every algorithm built from raw math before a single framework gets imported.",
+    "block": {
+      "best_for": "Engineers and students who want to understand AI systems by implementing core algorithms themselves.",
+      "tip": "Start with the placement quiz, then follow the personalized path in your terminal.",
+      "needs": [
+        "Node.js with npx",
+        "A SKILL.md-compatible agent",
+        "A local development environment"
+      ],
+      "start_here": [
+        "Run npx skills add rohitg00/ai-engineering-from-scratch.",
+        "Use start-learning to begin the course.",
+        "Complete one lesson through the read, derive, code, test loop."
+      ]
+    }
   },
   {
     "slug": "building-agents-when-to-fold-subagents-into-your-main-agent",
