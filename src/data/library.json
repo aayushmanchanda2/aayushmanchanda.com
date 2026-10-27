@@ -5625,8 +5625,8 @@
         "color": "blue"
       },
       {
-        "text": "Build fast (chapter 01): core loop end to end on day 1, fake what isn’t built, copy flows from references, ship to TestFlight daily, park other ideas in `docs/later.md`.",
-        "note": "The build sequence prioritizes a complete core loop.",
+        "text": "Before saying done: run checks and tests, and look at the running app.",
+        "note": "The agent must verify the result before declaring completion.",
         "color": "green"
       }
     ],
