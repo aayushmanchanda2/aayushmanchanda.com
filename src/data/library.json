@@ -5562,5 +5562,23 @@
         "Keep a subagent only when measurable results justify the separate loop."
       ]
     }
+  },
+  {
+    "slug": "the-early-access-playbook-v1-0",
+    "title": "The Early Access Playbook v1.0",
+    "url": "https://docs.google.com/document/d/1bo9n52j_M4Nx094TObZQVAq1htlB6h9XlySLgFsH710/mobilebasic",
+    "domain": "docs.google.com",
+    "saved_date": "2026-10-27",
+    "kind": "article",
+    "note": "Hiten Shah’s six-play guide to testing products with real users before faster AI-assisted shipping outruns the learning."
+  },
+  {
+    "slug": "ai-app-playbook-how-to-build-useful-profitable-apps-in-2026",
+    "title": "AI App Playbook — How to Build Useful, Profitable Apps in…",
+    "url": "https://github.com/blakeandersonw/ai-app-playbook/tree/main",
+    "domain": "github.com",
+    "saved_date": "2026-10-27",
+    "kind": "article",
+    "note": "A phase-by-phase playbook for building profitable AI apps, with an opinionated Cloudflare-first stack and concrete launch checks."
   }
 ]
