@@ -5565,12 +5565,44 @@
   },
   {
     "slug": "the-early-access-playbook-v1-0",
-    "title": "The Early Access Playbook v1.0",
+    "title": "The Early Access Playbook v2.0",
     "url": "https://docs.google.com/document/d/1bo9n52j_M4Nx094TObZQVAq1htlB6h9XlySLgFsH710/mobilebasic",
     "domain": "docs.google.com",
     "saved_date": "2026-10-27",
     "kind": "article",
-    "note": "Hiten Shah’s six-play guide to testing products with real users before faster AI-assisted shipping outruns the learning."
+    "note": "Hiten Shah’s six-play guide to testing products with real users before faster AI-assisted shipping outruns the learning.",
+    "tldr": "Hiten Shah’s six-play early-access method turns real customer work into evidence for deciding what to build, change, retest, or stop.",
+    "highlights": [
+      {
+        "text": "The faster you can build, the faster you need to learn.",
+        "note": "Fast shipping only helps when the learning loop keeps pace.",
+        "color": "amber"
+      },
+      {
+        "text": "You can generate a hundred plausible customer conversations without learning what anyone will do with your product.",
+        "note": "Synthetic research cannot replace observed behavior.",
+        "color": "blue"
+      },
+      {
+        "text": "Early access works when the evidence changes what you build. It may change which problem matters, how you solve it, or whether you should continue at all.",
+        "note": "Evidence should change the decision, not merely decorate it.",
+        "color": "green"
+      }
+    ],
+    "excerpt": "Today AI can turn an idea into working software in hours. Teams can ship another version before learning what happened with the last one. I wrote this playbook to help founders and product teams learn while there's still room to change what they're building.",
+    "block": {
+      "best_for": "Founders and product teams deciding what to learn before widening access",
+      "tip": "Track one Working Bet and Learning Thread, then let real use change the next decision.",
+      "needs": [
+        "A product idea, feature, or working prototype",
+        "People who already do the job"
+      ],
+      "start_here": [
+        "Write the five-line Working Bet.",
+        "Get one piece of real evidence from a recent job.",
+        "Record the next decision and what would change it."
+      ]
+    }
   },
   {
     "slug": "ai-app-playbook-how-to-build-useful-profitable-apps-in-2026",
