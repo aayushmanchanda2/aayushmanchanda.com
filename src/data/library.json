@@ -5606,11 +5606,44 @@
   },
   {
     "slug": "ai-app-playbook-how-to-build-useful-profitable-apps-in-2026",
-    "title": "AI App Playbook — How to Build Useful, Profitable Apps in…",
+    "title": "How to Build Useful, Profitable Apps in 2026",
     "url": "https://github.com/blakeandersonw/ai-app-playbook/tree/main",
     "domain": "github.com",
     "saved_date": "2026-10-27",
     "kind": "article",
-    "note": "A phase-by-phase playbook for building profitable AI apps, with an opinionated Cloudflare-first stack and concrete launch checks."
+    "note": "A phase-by-phase playbook for building profitable AI apps, with an opinionated Cloudflare-first stack and concrete launch checks.",
+    "tldr": "A 15-phase, agent-ready playbook for validating, building, launching, and growing profitable AI apps on an opinionated Cloudflare-first stack.",
+    "highlights": [
+      {
+        "text": "Good apps help people get fit, focus, learn, or feel calmer, and people pay for them. This playbook goes from picking a problem to your first profitable month.",
+        "note": "The playbook covers validation through growth, not just implementation.",
+        "color": "amber"
+      },
+      {
+        "text": "Pick a frequent problem AI solves in seconds. Test it with 10 videos and a waitlist",
+        "note": "Demand testing comes before the build gate.",
+        "color": "blue"
+      },
+      {
+        "text": "Build fast (chapter 01): core loop end to end on day 1, fake what isn’t built, copy flows from references, ship to TestFlight daily, park other ideas in `docs/later.md`.",
+        "note": "The build sequence prioritizes a complete core loop.",
+        "color": "green"
+      }
+    ],
+    "excerpt": "This is the stack I would start with today. We initially built EcoGPT on this stack. Good apps help people get fit, focus, learn, or feel calmer, and people pay for them. This playbook goes from picking a problem to your first profitable month.",
+    "block": {
+      "best_for": "Solo builders using coding agents to take an AI app from niche validation to launch",
+      "tip": "Do not pass Gate A until the niche scores at least 25/35 and the waitlist converts at least 10%.",
+      "needs": [
+        "Claude Code or OpenCode",
+        "A Cloudflare account",
+        "A niche to validate"
+      ],
+      "start_here": [
+        "Clone the repository and read AGENTS.md.",
+        "Validate one niche with 10 videos and a waitlist.",
+        "Build the core loop end to end on day 1."
+      ]
+    }
   }
 ]
