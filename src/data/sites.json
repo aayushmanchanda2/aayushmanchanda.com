@@ -4812,5 +4812,117 @@
       "radius": []
     },
     "collections": []
+  },
+  {
+    "slug": "rox-ben-issen",
+    "title": "Ben Issen",
+    "url": "https://benissen.com/projects/rox",
+    "domain": "benissen.com",
+    "saved_date": "2026-10-28",
+    "shot": "/shots/rox-ben-issen.webp",
+    "palette": [
+      "#1b1b1b",
+      "#474747",
+      "#b4b4b4",
+      "#909090",
+      "#6f6f6f",
+      "#cecece"
+    ],
+    "design": {
+      "read_date": "2026-10-28",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#1c1c1c"
+        },
+        {
+          "name": "surface",
+          "hex": "#363636"
+        },
+        {
+          "name": "text",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#bdbdbd"
+        },
+        {
+          "name": "accent",
+          "hex": "#0000ee"
+        },
+        {
+          "name": "border",
+          "hex": "#ffffff"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "system-ui",
+          "fontSize": "14px",
+          "fontWeight": "500",
+          "lineHeight": "18.2px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "system-ui",
+          "fontSize": "14px",
+          "fontWeight": "500",
+          "lineHeight": "18.2px",
+          "letterSpacing": "-0.14px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "system-ui",
+          "fontSize": "14px",
+          "fontWeight": "400",
+          "lineHeight": "19.6px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "2px",
+          "value": "2px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "10px",
+          "value": "10px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "30px",
+          "value": "30px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "10px"
+        },
+        {
+          "name": "card-2",
+          "value": "30px"
+        },
+        {
+          "name": "card-3",
+          "value": "100px"
+        },
+        {
+          "name": "full",
+          "value": "9999px"
+        }
+      ]
+    },
+    "collections": []
   }
 ]

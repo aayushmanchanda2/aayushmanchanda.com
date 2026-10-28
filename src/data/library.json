@@ -5645,5 +5645,14 @@
         "Build the core loop end to end on day 1."
       ]
     }
+  },
+  {
+    "slug": "measuring-ai-performance-on-real-world-work",
+    "title": "Measuring AI performance on real-world work",
+    "url": "https://evals.thriveholdings.com/?benchmark=individual-tax",
+    "domain": "evals.thriveholdings.com",
+    "saved_date": "2026-10-28",
+    "kind": "article",
+    "note": "Thrive Holdings benchmarks AI models on real work from 75+ businesses, pairing task performance with time and cost instead of treating capability as one score."
   }
 ]
