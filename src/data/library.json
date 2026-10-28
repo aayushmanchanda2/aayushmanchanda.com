@@ -5653,6 +5653,20 @@
     "domain": "evals.thriveholdings.com",
     "saved_date": "2026-10-28",
     "kind": "article",
-    "note": "Thrive Holdings benchmarks AI models on real work from 75+ businesses, pairing task performance with time and cost instead of treating capability as one score."
+    "note": "Thrive Holdings benchmarks AI models on real work from 75+ businesses, pairing task performance with time and cost instead of treating capability as one score.",
+    "tldr": "Thrive Holdings compares AI models on real tax preparation, measuring accuracy, speed, cost, and token use across practitioner-ready returns.",
+    "block": {
+      "best_for": "Comparing models for individual tax preparation on accuracy, time, and cost.",
+      "tip": "Compare reasoning levels, not just model names, because cost and runtime vary by effort.",
+      "needs": [
+        "Parsed client tax documents",
+        "A practitioner review step"
+      ],
+      "start_here": [
+        "Open the Individual tax prep benchmark",
+        "Compare accuracy, minutes, and cost per return",
+        "Choose a model and reasoning level for a pilot"
+      ]
+    }
   }
 ]
