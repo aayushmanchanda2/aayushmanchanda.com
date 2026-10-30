@@ -5040,5 +5040,85 @@
       ]
     },
     "collections": []
+  },
+  {
+    "slug": "hebbia-brand-case",
+    "title": "Hebbia Brand Case",
+    "url": "https://design.hebbia.com/brand",
+    "domain": "design.hebbia.com",
+    "saved_date": "2026-10-30",
+    "shot": "/shots/hebbia-brand-case.webp",
+    "palette": [
+      "#100d0b",
+      "#2f302c",
+      "#4c524a",
+      "#677168",
+      "#b3916e",
+      "#8e6d4f"
+    ],
+    "design": {
+      "read_date": "2026-10-30",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#0d0906"
+        },
+        {
+          "name": "surface",
+          "hex": "#0b0806"
+        },
+        {
+          "name": "text",
+          "hex": "#ffffff"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Selecta",
+          "fontSize": "32px",
+          "fontWeight": "700",
+          "lineHeight": "normal",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "body",
+          "fontFamily": "Selecta",
+          "fontSize": "10px",
+          "fontWeight": "400",
+          "lineHeight": "12px",
+          "letterSpacing": "0.1px"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "6px",
+          "value": "6px"
+        },
+        {
+          "name": "7px",
+          "value": "7px"
+        },
+        {
+          "name": "10px",
+          "value": "10px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        },
+        {
+          "name": "5",
+          "value": "20px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "button",
+          "value": "4px"
+        }
+      ]
+    },
+    "collections": []
   }
 ]
