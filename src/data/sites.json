@@ -4924,5 +4924,121 @@
       ]
     },
     "collections": []
+  },
+  {
+    "slug": "interface-lineage",
+    "title": "Interface Lineage",
+    "url": "https://interfacelineage.com/",
+    "domain": "interfacelineage.com",
+    "saved_date": "2026-10-30",
+    "shot": "/shots/interface-lineage.webp",
+    "palette": [
+      "#faf6f4",
+      "#d6d2d0",
+      "#1e1e1d",
+      "#0029f5",
+      "#b4b0b0",
+      "#6b6b6a"
+    ],
+    "design": {
+      "read_date": "2026-10-30",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#faf6f4"
+        },
+        {
+          "name": "surface",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "text",
+          "hex": "#000000"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#0029f5"
+        },
+        {
+          "name": "accent",
+          "hex": "#0029f5"
+        },
+        {
+          "name": "border",
+          "hex": "#68696b"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "FK Raster Roman",
+          "fontSize": "91.99px",
+          "fontWeight": "400",
+          "lineHeight": "110.38px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "FK Raster Roman",
+          "fontSize": "33.28px",
+          "fontWeight": "400",
+          "lineHeight": "38.94px",
+          "letterSpacing": "1.66px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "Tiempos Text",
+          "fontSize": "20.8px",
+          "fontWeight": "400",
+          "lineHeight": "32.24px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "label",
+          "fontFamily": "Space Grotesk",
+          "fontSize": "12.48px",
+          "fontWeight": "500",
+          "lineHeight": "30.4px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "5px",
+          "value": "5px"
+        },
+        {
+          "name": "14px",
+          "value": "14px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        },
+        {
+          "name": "5",
+          "value": "20px"
+        },
+        {
+          "name": "27px",
+          "value": "27px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "button",
+          "value": "4px"
+        },
+        {
+          "name": "card",
+          "value": "9px"
+        },
+        {
+          "name": "full",
+          "value": "9999px"
+        }
+      ]
+    },
+    "collections": []
   }
 ]
