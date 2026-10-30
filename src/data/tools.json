@@ -1470,5 +1470,24 @@
     "verdict": "watching",
     "note": "Saved from Raindrop. Not tested yet.",
     "status_date": "2026-10-29"
+  },
+  {
+    "slug": "appllama-app-design-skill",
+    "name": "Appllama/appllama-skills",
+    "url": "https://appllama.io/mcp",
+    "repo": "https://github.com/Appllama/appllama-skills",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-30"
+  },
+  {
+    "slug": "capy-ai",
+    "name": "Capy AI",
+    "url": "https://capy.ai/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-30"
   }
 ]
