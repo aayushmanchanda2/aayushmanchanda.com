@@ -5120,5 +5120,60 @@
       ]
     },
     "collections": []
+  },
+  {
+    "slug": "opencommerce-openrouter-for-commerce",
+    "title": "OpenCommerce",
+    "url": "https://api.raindrop.io/v2/raindrop/1908254585/file?type=image/png",
+    "domain": "api.raindrop.io",
+    "saved_date": "2026-10-31",
+    "shot": "/shots/opencommerce-openrouter-for-commerce.webp",
+    "palette": [
+      "#ffffff",
+      "#1987e1",
+      "#146fb9",
+      "#0db4e2",
+      "#3153ff",
+      "#2cd4ed"
+    ],
+    "design": {
+      "read_date": "2026-10-31",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "surface",
+          "hex": "#1987e1"
+        },
+        {
+          "name": "accent",
+          "hex": "#1987e1"
+        }
+      ],
+      "type": [],
+      "spacing": [
+        {
+          "name": "5px",
+          "value": "5px"
+        },
+        {
+          "name": "9px",
+          "value": "9px"
+        },
+        {
+          "name": "18px",
+          "value": "18px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "5px"
+        }
+      ]
+    },
+    "collections": []
   }
 ]

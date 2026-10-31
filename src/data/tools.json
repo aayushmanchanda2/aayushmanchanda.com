@@ -1489,5 +1489,23 @@
     "verdict": "watching",
     "note": "Saved from Raindrop. Not tested yet.",
     "status_date": "2026-10-30"
+  },
+  {
+    "slug": "phoneuse-phones-for-ai-agents",
+    "name": "PhoneUse",
+    "url": "https://www.phoneuse.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-10-31"
+  },
+  {
+    "slug": "developer-platform-for-agent-scale-namespace",
+    "name": "Namespace",
+    "url": "https://namespace.so/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Namespace runs isolated Mac, Windows and Linux instances for agent-generated code, with SDK access, devboxes and CI runners.",
+    "status_date": "2026-10-31"
   }
 ]
