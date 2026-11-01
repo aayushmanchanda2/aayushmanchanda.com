@@ -9,8 +9,10 @@
  *      row's hover card and a screen strip take `/thumbs` copies.
  *   3. Every local `<img>` carries `width` and `height`, and a page has at most
  *      one `fetchpriority="high"`.
- *   4. /sites, fully scrolled, stays under a total: the fallback `src` of every
- *      picture on it, which is the most a browser can pull.
+ *   4. /sites, fully scrolled, stays under an average per picture: the fallback
+ *      `src` of each, which is the most a browser can pull. Per picture because
+ *      the gallery has no end: `publish.yml` adds saves, so a page total goes red
+ *      on its own while no picture got heavier.
  *   5. No raster is over 2x the widest box its kind fills (VET-309b): every
  *      candidate of an `<img>` and its `<picture>`'s sources, against the
  *      measured `src/data/image-widths.json` (`scripts/image-widths.mjs`, run
@@ -36,8 +38,8 @@ const BUDGETS = [
   ["/", 150 * KB],
 ];
 
-/** Every picture /sites can load, scrolled to the end: 779 KB at VET-309 (7,856 KB before), plus room for more saves. */
-const SITES_PAGE_BUDGET = 1000 * KB;
+/** A /sites picture on average: the 1000 KB page budget VET-309 set, over the 33 cards it was set for (~24 KB each then and now, ~240 KB as full shots). */
+const SITES_PICTURE_BUDGET = 30 * KB;
 
 /** Widest box per kind, "<first class> <folder>" (`scripts/image-widths.mjs`). */
 const WIDTHS = /** @type {Record<string, number>} */ (JSON.parse(readFileSync(path.join(process.cwd(), "src", "data", "image-widths.json"), "utf8")));
@@ -109,12 +111,13 @@ if (!existsSync(DIST)) {
 }
 
 let checked = 0;
-let sitesTotal = 0;
+let sitesAverage = 0;
 for (const page of htmlFiles(DIST)) {
   const html = readFileSync(path.join(DIST, page), "utf8");
   const tags = [...html.matchAll(/<(?:img|source)\b[^>]*>|<a\b[^>]*\sdata-preview="\/[^"]*"[^>]*>/g)].map((match) => match[0]);
   let high = 0;
   let total = 0;
+  let pictures = 0;
   /** The sources of the `<picture>` being read, owned by its `<img>`. @type {string[]} */
   let sources = [];
 
@@ -144,14 +147,15 @@ for (const page of htmlFiles(DIST)) {
     const src = attr(tag, "src");
     if (isImg && src?.startsWith("/")) {
       total += bytes(src) ?? 0;
+      pictures++;
       if (!src.endsWith(".svg") && (attr(tag, "width") === null || attr(tag, "height") === null)) fail(page, `<img src="${src}"> has no width/height, so its box is not reserved`);
     }
   }
 
   if (high > 1) fail(page, `${high} images ask for fetchpriority="high"; only the LCP should`);
-  if (page === "sites/index.html") sitesTotal = total;
-  if (page === "sites/index.html" && total > SITES_PAGE_BUDGET) {
-    fail(page, `pictures total ${Math.round(total / KB)} KB, over the ${Math.round(SITES_PAGE_BUDGET / KB)} KB page budget`);
+  if (page === "sites/index.html") {
+    sitesAverage = total / pictures;
+    if (sitesAverage > SITES_PICTURE_BUDGET) fail(page, `pictures average ${Math.round(sitesAverage / KB)} KB, over the ${Math.round(SITES_PICTURE_BUDGET / KB)} KB per picture budget`);
   }
 }
 
@@ -173,4 +177,4 @@ if (failures.length > 0) {
   console.error(`image-budget: ${failures.length} failure(s)\n  ${failures.join("\n  ")}`);
   process.exit(1);
 }
-console.log(`image-budget: ${checked} picture references on ${htmlFiles(DIST).length} pages within budget; /sites pictures ${Math.round(sitesTotal / KB)} KB of ${Math.round(SITES_PAGE_BUDGET / KB)} KB`);
+console.log(`image-budget: ${checked} picture references on ${htmlFiles(DIST).length} pages within budget; /sites pictures average ${Math.round(sitesAverage / KB)} KB of ${Math.round(SITES_PICTURE_BUDGET / KB)} KB`);
