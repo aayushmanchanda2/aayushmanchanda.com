@@ -9,10 +9,9 @@ import Base from "../../../layouts/Base.astro";
 import "../../../styles/plaster.css";
 
 const PAGES = [
-  ["/lab/plaster/not-found", "404", "Someone walks in on their own footprints and stops to read a map"],
-  ["/lab/plaster/contact", "Contact", "The queue at the postbox keeps moving: shuffle up, post, walk off"],
+  ["/contact", "Contact", "The queue at the postbox keeps moving: walk up, post, walk off"],
+  ["/library", "Library", "Readers on towels turn pages; one more walks across with a book"],
   ["/lab/plaster/empty", "Empty filter", "Someone keeps digging in clay, nothing comes up, a crowd keeps watching"],
-  ["/lab/plaster/library", "Library", "Readers on towels turn pages; one more walks across with a book"],
 ];
 
 const GROUNDS = [
@@ -29,7 +28,7 @@ const GROUNDS = [
 <Base jsonLd={labJsonLd("/lab/plaster", "Plaster prototypes")} title="Plaster prototypes · Aayush Manchanda" description="Prototypes for plaster art with small figures." trail={[{ name: "Plaster", path: "/lab/plaster" }]} noindex>
   <header>
     <h1 class="page-title">Plaster</h1>
-    <p class="standfirst">Four moving scenes, then still figures on seven grounds and scales.</p>
+    <p class="standfirst">The 404 has the fourth: someone walks in on their own footprints. Below, still figures on seven grounds.</p>
   </header>
 
   <ul class="lab-list">

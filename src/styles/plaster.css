@@ -61,14 +61,24 @@
   background: var(--img) 0 0 / 100% 100% no-repeat;
 }
 
+/* Layers that take turns: standing, walking with a letter, walking without. */
+.spr__layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
 /* The still picture: what the scene looks like when nothing moves. */
 .is-offstage,
-.lost-walker {
+.lost-walker,
+.is-walk-letter,
+.is-walk-empty {
   opacity: 0;
 }
 
 /* Motion runs only while the picture is on screen. */
 .plaster:not([data-play]) .spr,
+.plaster:not([data-play]) .spr__layer,
 .plaster:not([data-play]) .spr__strip {
   animation-play-state: paused !important;
 }

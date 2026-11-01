@@ -5,13 +5,13 @@
 2. **Recommend:** moving plaster scenes where the figures act out the page: the 404 first, then empty filters, then /contact. Smooth, transform-only motion that stops when off screen and is a still picture with reduced motion on.
 3. **Your decision:** white plaster everywhere (quiet), or a coloured ground per section (louder, ties to the section colours).
 
-On the preview, in place on the real pages (branch only, production untouched): [/contact](https://aayushmanchandacom-git-claude-vibrant-dirac-ugx6fd-vettedinc.vercel.app/contact) · [/library](https://aayushmanchandacom-git-claude-vibrant-dirac-ugx6fd-vettedinc.vercel.app/library) · [any missing URL for the 404](https://aayushmanchandacom-git-claude-vibrant-dirac-ugx6fd-vettedinc.vercel.app/this-page-does-not-exist). The empty filter, the ground study and all four side by side: [/lab/plaster](https://aayushmanchandacom-git-claude-vibrant-dirac-ugx6fd-vettedinc.vercel.app/lab/plaster). None of this exists on aayushmanchanda.com itself. Vercel may ask you to log in.
+Live on [/contact](https://aayushmanchanda.com/contact), [/library](https://aayushmanchanda.com/library) and the 404 once merged. The empty-filter scene and the ground study stay on the unlinked, noindex `/lab/plaster`.
 
 ## The four scenes, moving
 
-| 404: walks in on their own footprints, stops, reads the map | Contact: the queue shuffles up, posts, walks off |
+| 404: walks in on their own footprints, stops, reads the map | Contact: people walk in from far off, step up, post, walk off |
 |---|---|
-| ![404](motion/not-found-light-1280.webp) | ![Contact](motion/contact-close.webp) |
+| ![404](motion/not-found-light-1280.webp) | ![Contact](motion/contact-walk.webp) |
 | **Empty filter: keeps digging, nothing comes up, they keep watching** | **Library: pages turn, one more reader walks across** |
 | ![Empty filter](motion/empty-close.webp) | ![Library](motion/library-light-1280.webp) |
 
@@ -43,7 +43,7 @@ Every source below is a search-result snippet. The artist's site, the galleries 
 `feature-research/art-plaster/plaster.mjs`, plain Node, ~25 s for everything:
 1. **Ground:** each knife stroke writes colour and paint height into a height field (flat middle, ridged edges, an arc where the knife lifts). A low light from the upper left reads the height, with shadows marched across it. Written as PNG by hand (`zlib`); the repo's existing `sharp` turns it into WebP.
 2. **Figures:** drawn at 3x so they stay sharp when the browser scales them down. Real proportions: a head a seventh of the height, sloped shoulders, elbows, knees, shoes. Ten different people: coats, a dress, a skirt, shorts, a child, five skin tones, five hairstyles.
-3. **Motion:** each moving thing is a small transparent strip of poses laid over the ground. `components/lab/Plaster.astro` turns the points in `plaster-manifest.json` into keyframes. Only `transform` and `opacity` animate.
+3. **Motion:** each moving thing is a small transparent strip of poses laid over the ground. `components/Plaster.astro` turns the points in `data/plaster-manifest.json` into keyframes. Only `transform` and `opacity` animate. Walkers step: a standing layer and two walking layers take turns, the walking ones flip between two strides four times a second with a small bob.
 4. **Rules it keeps:** a script arms the motion only when reduced motion is off, and pauses it whenever the scene is out of view. Without the script, or with reduced motion, each scene is a finished still (the queue stands in line; the 404 walker is already reading the map). Each theme downloads only its own pictures.
 
 ## Placements
@@ -52,13 +52,13 @@ Every source below is a search-result snippet. The artist's site, the galleries 
 |---|---|---|---|---|
 | 1 | **404** | Walk in on their own footprints, stop, read a map | 72 / 30 | Pushes the link list ~230px down on a phone (still above the fold at 375x812) |
 | 2 | **Empty filters** (/tools, library pane, notes) | Keep digging, nothing comes up, a crowd watches | 33 / 22, only fetched once the empty message shows | Low: seen rarely |
-| 3 | **/contact** | A queue at a red postbox; the frame is already a postage stamp | 110 / 68 | Heaviest: 7 people x 3 poses. A shared walking strip would halve it |
+| 3 | **/contact** | A queue at a red postbox; people walk in from far off and leave into the distance | 171 / 126 | Heaviest: 10 people x 7 poses. One shared atlas would cut requests from 21 to 2 |
 | 4 | **/library** | Readers on towels turn pages; one walks across | 56 / 24 | An index page; a picture above the list costs density |
 | 5 | **/experiments** (not built) | Someone on a ladder looking over a tall ridge of paint | ~60 / ~25 | Crowds the status tally |
 
 **Stay plain:** home, /tools and /sites indexes, notes, about, /now (already has the painted banner), /tokens, privacy, footer (every page pays), share cards (one change redraws 364), the ⌘K "No matches".
 
-**Design rule change:** `design.md` §3 says /tokens and the /now banner are "the one place the site is loud on purpose". Shipping any of this adds a second family, and a moving one. I haven't edited `design.md`; the commit that ships the first scene should.
+**Design rule change:** `design.md` §3 said /tokens and the /now banner were "the one place the site is loud on purpose". It now names plaster scenes as the second painted family, with where they go, how motion works and what they weigh.
 
 **Closeness check:** I couldn't view his images, so I checked against the descriptions. Changed: green, purple and white with a court line (matched "Get Served"), clay with a court line ("Let's Clay"), readers on a beach (his beachgoer theme, moved to a lawn). No skiers, surfers, lane swimmers or tennis.
 
@@ -74,5 +74,4 @@ Chrome trace, 4 s of each scene running at 1280px:
 - Every claim under "The art" is from a search snippet. The artist's site, the galleries and image search were blocked by this session's network policy, so no source page or image was opened. Allowing `wernerbronkhorst.com`, `dellasposa.com`, `ocula.com`, `thisiscolossal.com` would fix it.
 - Real devices: everything above is headless Chromium. Safari and iOS untested, including whether a hidden empty state skips its download (Chromium does).
 - Sideways scroll at 320px: checked at 375 only. The site's `shoot.mjs` and `overflow.mjs` can't launch here (the repo pins a Playwright that doesn't match this container's browser), so I used my own script.
-- The branch also puts the scenes on the real `/contact`, `/library` and 404 so they can be seen in place. That adds the scene script to those pages, so the signed-out JS check in `AGENTS.md` (byte-identical to main) would fail on this branch by design. It's one more reason not to merge it as is.
 - Gates, run here on the final tree: `astro check` 0 errors, 0 warnings, 1 hint (the known baseline); `npm test` 736 pass; `npm run build` clean; `validate:schema` clean, image-budget within budget. The lab pages carry a one-node `WebPage` JSON-LD so the schema gate passes without an exemption.

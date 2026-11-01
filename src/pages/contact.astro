@@ -36,7 +36,7 @@
  * takedown route is not repeated here; /privacy owns it and this page points at
  * it, because two copies of a promise is one copy that can go stale.
  */
-import Plaster from "../components/lab/Plaster.astro";
+import Plaster from "../components/Plaster.astro";
 import Base from "../layouts/Base.astro";
 import { contactJsonLd } from "../lib/schema";
 
@@ -56,7 +56,7 @@ const jsonLd = contactJsonLd();
     </p>
   </header>
 
-  {/* Branch-only prototype (PR #81, do not merge): the moving plaster queue. */}
+  {/* The queue at the postbox: people walk up, post and walk off (design.md, The painted pages). */}
   <Plaster scene="post" />
 
   {/*

@@ -783,7 +783,7 @@ const one = (paints, light = DAY) => ({ fields: [{ until: 1, paints }], light })
  * A living scene: the still part painted into the ground, and the sprites that
  * move over it. `points` are the positions the page animates between, in the
  * ground's own pixels; they go into the manifest with the sprites' sizes.
- * @typedef {{ name: string, width: number, height: number, seed: number, day: Ground, night: Ground, still: (c: Canvas, points: Record<string, number[][]>) => void, sprites: Sprite[], points: Record<string, number[][]> }} Living
+ * @typedef {{ name: string, width: number, height: number, seed: number, day: Ground, night: Ground, still: (c: Canvas, points: Record<string, number[][]>) => void, sprites: Sprite[], points: Record<string, number[][]>, scale?: number }} Living
  */
 
 /** The footprint trail on the 404, and the line the walker follows along it. */
@@ -795,7 +795,7 @@ const lostY = (x) => {
 };
 
 /** Seven different people in the contact queue, a child among them. */
-const QUEUE = ["camel", "dress", "kid", "puffer", "skirt", "elder", "hoodie"].map((name) => PEOPLE[name] ?? PEOPLE.parka);
+const QUEUE = ["camel", "dress", "kid", "puffer", "skirt", "elder", "hoodie", "tee", "overalls", "parka"].map((name) => PEOPLE[name] ?? PEOPLE.parka);
 
 /** @type {Living[]} */
 const LIVING = [
@@ -866,9 +866,12 @@ const LIVING = [
     points: {
       box: [[760, 360]],
       slots: [0, 1, 2, 3, 4].map((k) => [730 - k * 26, 362 + k * 3]),
-      enter: [[440, 384]],
-      leave: [[800, 398], [930, 420]],
+      // People arrive from the far upper left and leave into the far right.
+      enter: [[170, 252]],
+      leave: [[800, 398], [1190, 440]],
     },
+    // Ten people, seven poses each: painted at 2x rather than 3x to keep the page light.
+    scale: 2,
     still(c) {
       const bx = 760;
       const by = 360;
@@ -879,32 +882,38 @@ const LIVING = [
       c.dab(bx - 6, by - 38, bx + 6, by - 38, 1.1, [40, 10, 12], 2);
       c.dab(bx - 11, by - 3, bx + 11, by - 3, 2.2, PAINT.boxDark ?? [120, 18, 22], 2.8);
     },
-    sprites: QUEUE.map((look, k) => {
+    sprites: QUEUE.flatMap((look, k) => {
       const s = look?.child ? 29 : 42 - (k % 3);
       const u = s / 10;
       /** The letter sits in the hand: hands are measured from 7.1 tenths up. @param {Canvas} c @param {number} x @param {number} y @param {number} hx @param {number} hy */
       const letter = (c, x, y, hx, hy) => c.rect(x + hx * u + 1.4, y - 7.1 * u + hy * u - 0.6, 4.2, 2.8, -0.1, PAINT.paper ?? [250, 248, 240], 1.4);
-      return {
-        name: `q${k}`,
-        w: 58,
-        h: 60,
-        ax: 20,
-        ay: 50,
-        frames: [
-          // Waiting, letter in hand.
-          (/** @type {Canvas} */ c, /** @type {number} */ x, /** @type {number} */ y) => {
-            person(c, x, y, s, { arms: [[-1.0, 2.7], [1.9, 1.5]], look });
-            letter(c, x, y, 1.9, 1.5);
-          },
-          // Posting: arm up, letter at the slot.
-          (/** @type {Canvas} */ c, /** @type {number} */ x, /** @type {number} */ y) => {
-            person(c, x, y, s, { arms: [[3.6, -0.6], [-1.0, 2.7]], look });
-            letter(c, x, y, 3.6, -0.6);
-          },
-          // Done, hands empty, walking off.
-          (/** @type {Canvas} */ c, /** @type {number} */ x, /** @type {number} */ y) => person(c, x, y, s, { arms: [[-1.3, 2.8], [1.3, 2.8]], look, stride: 0.6 }),
-        ],
+      const box = { w: 58, h: 60, ax: 20, ay: 50 };
+      /** One walking frame: legs apart one way, arms swinging the other. @param {number} side @param {boolean} holding */
+      const walk = (side, holding) => (/** @type {Canvas} */ c, /** @type {number} */ x, /** @type {number} */ y) => {
+        const arms = holding ? [[-1.1 - side * 0.9, 2.6], [1.9, 1.5]] : [[-1.3 - side * 0.9, 2.7], [1.3 + side * 0.9, 2.7]];
+        person(c, x, y, s, { arms, look, stride: side * 1.6 });
+        if (holding) letter(c, x, y, 1.9, 1.5);
       };
+      return [
+        {
+          // Standing: waiting with the letter, posting it, done.
+          name: `q${k}`,
+          ...box,
+          frames: [
+            (/** @type {Canvas} */ c, /** @type {number} */ x, /** @type {number} */ y) => {
+              person(c, x, y, s, { arms: [[-1.0, 2.7], [1.9, 1.5]], look });
+              letter(c, x, y, 1.9, 1.5);
+            },
+            (/** @type {Canvas} */ c, /** @type {number} */ x, /** @type {number} */ y) => {
+              person(c, x, y, s, { arms: [[3.6, -0.6], [-1.0, 2.7]], look });
+              letter(c, x, y, 3.6, -0.6);
+            },
+            (/** @type {Canvas} */ c, /** @type {number} */ x, /** @type {number} */ y) => person(c, x, y, s, { arms: [[-1.3, 2.8], [1.3, 2.8]], look }),
+          ],
+        },
+        // Walking: two steps with the letter, two without.
+        { name: `q${k}w`, ...box, frames: [walk(1, true), walk(-1, true), walk(1, false), walk(-1, false)] },
+      ];
     }),
   },
   {
@@ -1090,8 +1099,8 @@ for (const scene of LIVING) {
     scene.still(c, scene.points);
     total += await write(`${scene.name}-${mood}`, c.render(ground.light), scene.width, scene.height, false);
     for (const sprite of scene.sprites) {
-      // Painted at 3x, so the browser scales it down and the figure stays sharp.
-      const K = 3;
+      // Painted at 3x (or the scene's own scale), so the browser scales it down and the figure stays sharp.
+      const K = scene.scale ?? 3;
       const w = sprite.w * K;
       const h = sprite.h * K;
       const n = sprite.frames.length;
@@ -1116,4 +1125,4 @@ for (const scene of LIVING) {
   };
   console.log(`${scene.name}: ground and ${scene.sprites.length} sprites, both moods, ${(total / 1024).toFixed(1)} KB`);
 }
-writeFileSync(path.join(process.cwd(), "src", "components", "lab", "plaster-manifest.json"), `${JSON.stringify(manifest, null, 1)}\n`);
+writeFileSync(path.join(process.cwd(), "src", "data", "plaster-manifest.json"), `${JSON.stringify(manifest, null, 1)}\n`);
