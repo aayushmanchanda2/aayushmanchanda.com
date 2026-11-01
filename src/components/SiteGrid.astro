@@ -37,8 +37,12 @@ const STAGGER_CAP = 8;
 /** The first row at the widest breakpoint is above the fold: not lazy. Only the first card, the LCP, is high priority. */
 const EAGER_COUNT = 4;
 
-/** The card's width at each column count (the grid below). */
-const SIZES = "(min-width: 1536px) 25vw, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw";
+/**
+ * The card's width at each column count (the grid below), net of the stamp and
+ * the page's padding, measured from 320 to 2560px. A bare `100vw` has a 2x phone
+ * ask for 750px to fill a 272px card, which is the 960 copy where the 720 will do.
+ */
+const SIZES = "(min-width: 1536px) calc(25vw - 78px), (min-width: 1024px) calc(33vw - 66px), (min-width: 640px) calc(50vw - 70px), calc(100vw - 100px)";
 ---
 
 <ul class="grid" data-sites-grid>
