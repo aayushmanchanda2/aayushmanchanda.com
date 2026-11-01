@@ -84,6 +84,20 @@ test("split view stays cheap: one node per used day per app, not one per calenda
   assert.ok((html.match(/<(rect|path)/g) ?? []).length < 1500);
 });
 
+test("a hostile name renders as text, in every place a name lands", () => {
+  const bad = `x"><img src=y onerror=z>`;
+  const hostile = {
+    generated: "2026-03-03",
+    days: { "2026-03-02": { [bad]: [10, 1, 1] } },
+    weeks: { "2026-03-02": { [bad]: { [bad]: [10, 1, 1] } } },
+  };
+  for (const split of [false, true]) {
+    const html = render(hostile, { metric: "tokens", split, hidden: new Set() });
+    assert.doesNotMatch(html, /<img/);
+    assert.doesNotMatch(html, /class="[^"]*[<>][^"]*"/);
+  }
+});
+
 test("big numbers read short", () => {
   assert.equal(compact(31_963_553_153), "32B");
   assert.equal(compact(1_421_900_000), "1.4B");

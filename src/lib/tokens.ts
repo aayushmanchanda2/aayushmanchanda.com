@@ -49,6 +49,14 @@ const time = (date: string) => Date.parse(`${date}T00:00:00Z`);
 const label = (date: string, options: Intl.DateTimeFormatOptions) =>
   new Intl.DateTimeFormat("en-US", { ...options, timeZone: "UTC" }).format(time(date));
 
+/**
+ * Everything here ends up in `set:html` or `innerHTML`, and app and model names
+ * come from a file a job pushes. The exporter refuses odd names; this is the
+ * second lock, so a bad name renders as text instead of as markup.
+ */
+const escape = (text: string) => text.replace(/[&<>"']/g, (char) => `&#${char.charCodeAt(0)};`);
+const classPart = (name: string) => name.replace(/[^a-z0-9-]/gi, "-");
+
 /** "1.2B", "90M", "838K", "12". */
 export function compact(value: number): string {
   for (const [size, suffix] of [
@@ -145,13 +153,13 @@ export function grid(data: TokenData, apps: string[], metric: Metric, name = "Al
       }
       const parts = entry.rows.slice(0, 2).map((row) => `${row.app} ${show(row.value, metric)}`);
       const tip = `${label(date, { month: "short", day: "numeric" })}: ${show(entry.value, metric)} (${parts.join(", ")})`;
-      squares += `<rect x="${x * STEP}" y="${y * STEP}" width="${CELL}" height="${CELL}" rx="2" class="app-${entry.rows[0]?.app}" fill-opacity="${shade(entry.value)}" data-tip="${tip}"/>`;
+      squares += `<rect x="${x * STEP}" y="${y * STEP}" width="${CELL}" height="${CELL}" rx="2" class="app-${classPart(entry.rows[0]?.app ?? "")}" fill-opacity="${shade(entry.value)}" data-tip="${escape(tip)}"/>`;
     }),
   );
 
   const total = used.reduce((sum, entry) => sum + entry.value, 0);
   const summed = `${name}: ${show(total, metric)} ${metric === "cost" ? "at list price" : metric} across ${used.length} days since March 2026`;
-  return `<div class="tg-grid"><div class="tg-months" aria-hidden="true">${months(weeks)}</div><svg viewBox="0 0 ${weeks.length * STEP - 2} ${7 * STEP - 2}" role="img" aria-label="${summed}"><path class="tg-empty" d="${empty}"/>${squares}</svg></div>`;
+  return `<div class="tg-grid"><div class="tg-months" aria-hidden="true">${months(weeks)}</div><svg viewBox="0 0 ${weeks.length * STEP - 2} ${7 * STEP - 2}" role="img" aria-label="${escape(summed)}"><path class="tg-empty" d="${empty}"/>${squares}</svg></div>`;
 }
 
 /** Weekly stacked bars by model. Square-root height, so a quiet week still shows up beside a 5B one. */
@@ -192,16 +200,16 @@ export function bars(data: TokenData, apps: string[], metric: Metric): string {
         const size = (value / weekTotal) * height;
         y -= size;
         const tip = `Week of ${label(weeks[x] as string, { month: "short", day: "numeric" })}: ${name} ${show(value, metric)}`;
-        return `<rect x="${x * STEP}" y="${y.toFixed(1)}" width="${CELL}" height="${size.toFixed(1)}" class="model-${series.indexOf(name) === MODELS_SHOWN ? "other" : series.indexOf(name)}" data-tip="${tip}"/>`;
+        return `<rect x="${x * STEP}" y="${y.toFixed(1)}" width="${CELL}" height="${size.toFixed(1)}" class="model-${series.indexOf(name) === MODELS_SHOWN ? "other" : series.indexOf(name)}" data-tip="${escape(tip)}"/>`;
       })
       .join("");
   });
 
   const legend = series
     .filter((name) => totals.has(name) || (name === "other" && totals.size > MODELS_SHOWN))
-    .map((name, at) => `<li class="model-${name === "other" ? "other" : at}"><i></i>${name}</li>`)
+    .map((name, at) => `<li class="model-${name === "other" ? "other" : at}"><i></i>${escape(name)}</li>`)
     .join("");
-  return `<div class="tg-bars"><h3 class="tg-label">By model, per week</h3><svg viewBox="0 0 ${weeks.length * STEP - 2} ${BAR_HEIGHT}" role="img" aria-label="Weekly ${metric} by model, biggest models: ${top.slice(0, 3).join(", ")}">${columns.join("")}</svg><ul class="tg-legend">${legend}</ul></div>`;
+  return `<div class="tg-bars"><h3 class="tg-label">By model, per week</h3><svg viewBox="0 0 ${weeks.length * STEP - 2} ${BAR_HEIGHT}" role="img" aria-label="Weekly ${metric} by model, biggest models: ${escape(top.slice(0, 3).join(", "))}">${columns.join("")}</svg><ul class="tg-legend">${legend}</ul></div>`;
 }
 
 /** The whole graph for one state of the controls, at build and in the browser. */
@@ -213,7 +221,7 @@ export function render(data: TokenData, view: View): string {
   const grids = view.split
     ? apps
         .filter((app) => Object.entries(data.days).some(([date, row]) => date >= GRAPH_START && row[app]?.[column]))
-        .map((app) => `<div class="tg-one"><h3 class="tg-label">${app}</h3>${grid(data, [app], view.metric, app)}</div>`)
+        .map((app) => `<div class="tg-one"><h3 class="tg-label">${escape(app)}</h3>${grid(data, [app], view.metric, app)}</div>`)
         .join("")
     : grid(data, apps, view.metric);
   return `<div class="${view.split ? "tg-split" : ""}">${grids}</div>${bars(data, apps, view.metric)}`;
