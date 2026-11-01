@@ -86,6 +86,7 @@ test("split view stays cheap: one node per used day per app, not one per calenda
 
 test("a hostile name renders as text, in every place a name lands", () => {
   const bad = `x"><img src=y onerror=z>`;
+  /** @type {import("./tokens.ts").TokenData} */
   const hostile = {
     generated: "2026-03-03",
     days: { "2026-03-02": { [bad]: [10, 1, 1] } },
