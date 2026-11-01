@@ -1,0 +1,293 @@
+/* ==========================================================================
+   aayushmanchanda.com — /tokens and its banner on /now
+
+   The one place the site is loud on purpose: painted skies, and a colour per
+   app. The hexes live here because `lib/tokens.ts` writes class names into
+   strings and the calendar has to look the same at build and in the browser.
+   ========================================================================== */
+
+/* Each theme fetches only its own sky. Here and not in `global.css`: that file is
+   part of the share-card cache key, so a token there redraws every card on the site. */
+:root {
+  --sky-image: url("/tokens/sky-day.webp");
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --sky-image: url("/tokens/sky-dusk.webp");
+  }
+}
+
+:root[data-theme="dark"] {
+  --sky-image: url("/tokens/sky-dusk.webp");
+}
+
+.app-claude { --app: #f2601a; }
+.app-codex { --app: #00b894; }
+.app-hermes { --app: #e6177f; }
+.app-factory { --app: #2a52f5; }
+.app-warp { --app: #54c000; }
+.app-cursor { --app: #00a8e8; }
+.app-cowork { --app: #8b36f2; }
+.app-continue { --app: #f7b500; }
+
+.model-0 { --app: #2a52f5; }
+.model-1 { --app: #e6177f; }
+.model-2 { --app: #00b894; }
+.model-3 { --app: #f2601a; }
+.model-4 { --app: #8b36f2; }
+.model-5 { --app: #f7b500; }
+.model-6 { --app: #00a8e8; }
+.model-7 { --app: #54c000; }
+.model-8 { --app: #ff4f5f; }
+.model-other { --app: #8c93b8; }
+
+.tg-grid svg,
+.tg-bars svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.tg-grid rect,
+.tg-bars rect {
+  fill: var(--app, #8c93b8);
+}
+
+/* Opacity on the one path, not on its colours: fill and stroke overlap, and two
+   translucent layers would draw a ring inside every empty square. */
+.tg-empty {
+  fill: var(--tg-well);
+  stroke: var(--tg-well);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  opacity: var(--tg-well-alpha);
+}
+
+.tg,
+.tbanner {
+  --tg-well: light-dark(rgb(30 40 90), rgb(255 255 255));
+  --tg-well-alpha: 0.1;
+  --tg-chip: light-dark(rgb(255 255 255 / 0.4), rgb(255 255 255 / 0.1));
+  --tg-chip-on: light-dark(rgb(255 255 255 / 0.85), rgb(255 255 255 / 0.24));
+}
+
+.tg {
+  position: relative;
+}
+
+.tg-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.tg-pills {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--r-pill);
+  background: var(--tg-chip);
+}
+
+.tg button {
+  min-height: 2rem;
+  padding: 0.25rem 0.8rem;
+  border-radius: var(--r-pill);
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.tg-pill,
+.tg-apps button {
+  background: var(--tg-chip);
+}
+
+.tg button[aria-pressed="true"] {
+  background: var(--tg-chip-on);
+  color: var(--text-primary);
+}
+
+.tg-apps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-block: 0.75rem 1.25rem;
+}
+
+/* Every app starts on, so "on" is the quiet state here and "off" is the mark. */
+.tg .tg-apps button[aria-pressed="true"] {
+  background: var(--tg-chip);
+}
+
+.tg .tg-apps button[aria-pressed="false"] {
+  opacity: 0.55;
+  text-decoration: line-through;
+}
+
+.tg-apps i,
+.tg-legend i {
+  display: inline-block;
+  width: 0.5625rem;
+  height: 0.5625rem;
+  margin-right: 0.375rem;
+  border-radius: 50%;
+  background: var(--app);
+}
+
+.tg-apps span {
+  color: var(--text-secondary);
+}
+
+/* A new view fades in on the compositor. `innerHTML` makes new elements, so this
+   runs on every change with nothing to restart. */
+@media (prefers-reduced-motion: no-preference) {
+  .tg-view > * {
+    animation: tg-in 0.24s ease-out;
+  }
+}
+
+@keyframes tg-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+.tg-grid {
+  position: relative;
+  padding-top: 1.25rem;
+}
+
+.tg-months {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1.25rem;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1;
+}
+
+.tg-months span {
+  position: absolute;
+  top: 0;
+}
+
+.tg-label {
+  margin-bottom: 0.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.tg-split {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: 1.5rem 1.75rem;
+}
+
+.tg-bars {
+  margin-top: 2rem;
+}
+
+.tg-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.875rem;
+  margin-top: 0.625rem;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+}
+
+.tg-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  max-width: 22rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--r-md);
+  background: var(--text-primary);
+  color: var(--bg);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  white-space: nowrap;
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* The banner on /now. */
+.tbanner {
+  display: block;
+  /* `.doc`'s measure, so the banner and the text under it share a right edge. */
+  max-width: 40rem;
+  margin-top: 2rem;
+  padding: 0.875rem;
+  border-radius: 1.75rem;
+  background: #2b2350 url("/tokens/band.webp") center / cover;
+  outline-offset: 3px;
+  text-decoration: none;
+}
+
+/* Darker than the page's glass: white type and the app colours both have to
+   hold up on the loudest part of the dusk painting. */
+.tbanner__glass {
+  --glass-tint: rgb(24 16 56 / 0.52);
+  --glass-radius: 1.125rem;
+}
+
+.tbanner__plate {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: end;
+  gap: 1.5rem;
+  padding: 1rem 1.25rem;
+  color: #fff;
+}
+
+.tbanner__total {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  line-height: 1.3;
+}
+
+.tbanner__total strong {
+  display: block;
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.tbanner .tg-months {
+  color: rgb(255 255 255 / 0.8);
+}
+
+.tbanner .tg-empty {
+  --tg-well: #fff;
+  --tg-well-alpha: 0.12;
+}
+
+@media (max-width: 34rem) {
+  /* One scrolling row of chips, so a phone reaches the calendar in one screen. */
+  .tg-apps {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .tg-apps button {
+    flex: none;
+  }
+
+  .tbanner__plate {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}

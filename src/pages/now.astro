@@ -7,6 +7,7 @@
  * document (`global.css › .doc`): mono labels, one hairline per part, the
  * lines as a list under each. In the nav, with its own mat and postmark.
  */
+import TokensBanner from "../components/TokensBanner.astro";
 import Base from "../layouts/Base.astro";
 import { NOW_ASK, NOW_UPDATED, nowDate, nowGroups, toolCounts, type Part } from "../lib/now";
 import { nowJsonLd } from "../lib/schema";
@@ -25,6 +26,8 @@ const external = (href: string) => href.startsWith("https://");
     <h1 class="page-title">Now</h1>
     <p class="standfirst">Updated <time datetime={NOW_UPDATED}>{nowDate()}</time></p>
   </header>
+
+  <TokensBanner />
 
   <div class="doc">
     {

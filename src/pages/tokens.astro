@@ -1,0 +1,133 @@
+---
+/**
+ * /tokens: what my coding agents used, day by day, by app and by model.
+ *
+ * The numbers are `data/tokens.json`, which a weekly job on my Mac pushes here.
+ * Everything else is a build step: the date below is the file's, the totals are
+ * summed from it. Linked from /now, not in the nav.
+ */
+import Glass from "../components/Glass.astro";
+import TokenGraph from "../components/TokenGraph.astro";
+import Base from "../layouts/Base.astro";
+import { nowDate } from "../lib/now";
+import { tokensJsonLd } from "../lib/schema";
+import { compact, summary } from "../lib/tokens";
+import { tokens } from "../lib/tokens-data";
+
+const { tokens: total, cost, activeDays, streak } = summary(tokens);
+const STATS = [
+  [compact(total), "tokens"],
+  [`$${compact(cost)}`, "at list price"],
+  [String(activeDays), "active days"],
+  [String(streak), "day streak"],
+];
+---
+
+<Base
+  full
+  title="Tokens · Aayush Manchanda"
+  description="How many tokens Aayush Manchanda's coding agents have used, day by day, by app and by model."
+  jsonLd={tokensJsonLd(tokens.generated)}
+>
+  <div class="stage">
+    <div class="stage__sky" aria-hidden="true"></div>
+    <Glass class="tokens">
+      <header>
+        <h1 class="page-title">Tokens</h1>
+        <p class="standfirst">
+          What my coding agents burned, counted from their session logs on my Mac. Claude Code deletes logs after 30
+          days, so the real number's higher.
+        </p>
+        <p class="tokens__date mono">Updated <time datetime={tokens.generated}>{nowDate(tokens.generated)}</time></p>
+      </header>
+
+      <dl class="tokens__stats">
+        {
+          STATS.map(([value, name]) => (
+            <div>
+              <dd>{value}</dd>
+              <dt>{name}</dt>
+            </div>
+          ))
+        }
+      </dl>
+
+      <TokenGraph />
+
+      <p class="tokens__note mono">The graphs start in March 2026, as far back as Claude Code's logs go.</p>
+    </Glass>
+  </div>
+</Base>
+
+<style>
+  /* Bleeds to the frame, then stops above the footer: the painting never sits
+     behind the colophon. The sky is sticky, so it stays put as the glass moves. */
+  .stage {
+    --pad: clamp(1rem, 4vw, 3rem);
+    --sky-top: calc(var(--bar-h) + var(--frame));
+
+    position: relative;
+    /* Up through `.shell`'s top padding and out through its sides. */
+    margin: calc(-1 * clamp(2rem, 4vw, 3rem)) calc(-1 * var(--page-pad)) 0;
+    padding: var(--pad) var(--page-pad);
+  }
+
+  .stage__sky {
+    position: sticky;
+    top: var(--sky-top);
+    height: calc(100lvh - var(--sky-top));
+    margin: calc(-1 * var(--pad)) calc(-1 * var(--page-pad)) calc(var(--pad) + var(--sky-top) - 100lvh);
+    background: var(--surface-3) var(--sky-image) center / cover;
+    will-change: transform;
+  }
+
+  .stage :global(.tokens) {
+    width: min(60rem, 100%);
+    margin-inline: auto;
+    padding: clamp(1.25rem, 4vw, 2.25rem);
+  }
+
+  .stage :global(.page-title) {
+    margin-top: 0;
+  }
+
+  .tokens__date,
+  .tokens__note {
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+  }
+
+  .tokens__date {
+    margin-top: 0.5rem;
+  }
+
+  .tokens__note {
+    margin-top: 1.25rem;
+  }
+
+  .tokens__stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem 2.25rem;
+    margin-block: 1.5rem;
+  }
+
+  .tokens__stats dd {
+    font-family: var(--font-mono);
+    font-size: 1.75rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  .tokens__stats dt {
+    color: var(--text-secondary);
+    font-size: 0.8125rem;
+  }
+
+  .tokens__stats div {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+  }
+</style>

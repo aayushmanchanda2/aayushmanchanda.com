@@ -92,10 +92,20 @@ async function build(): Promise<OgCard[]> {
 
   const now: OgCard = { ...base, page: "/now", section: "now", title: "Now", line: `Updated ${nowDate()}`, label: "" };
 
+  const tokens: OgCard = {
+    ...base,
+    page: "/tokens",
+    section: "now",
+    title: "Tokens",
+    line: "What my coding agents burned, day by day.",
+    label: "",
+  };
+
   return [
     ...indexes,
     about,
     now,
+    tokens,
     ...tools.map((tool) => {
       const logo = assetFor("icons", tool.slug);
       return {

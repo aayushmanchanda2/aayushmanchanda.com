@@ -215,6 +215,8 @@ test("full width is the index pages and nothing else", () => {
     "sites.astro",
     "sites/collection/[slug].astro",
     "sites/domain/[domain].astro",
+    // Not an index: the painting behind its glass runs to the frame.
+    "tokens.astro",
     "tools.astro",
     "tools/category/[category].astro",
     "tools/verdict/[verdict].astro",

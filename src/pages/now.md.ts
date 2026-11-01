@@ -23,6 +23,7 @@ export const GET: APIRoute = () =>
       ...nowGroups(toolCounts(tools)).map((group) =>
         section(group.head, group.list ? list(group.lines.map(line)) : group.lines.map(line).join("\n\n")),
       ),
+      link("What my coding agents burned", absolutize(PAGES.tokens.html)),
       line(NOW_ASK),
     ],
   });
