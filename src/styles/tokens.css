@@ -419,6 +419,12 @@
     display: none;
   }
 
+  /* With the days gone the plot is the only child: left on the two-column track it
+     lands in the gutter, which is zero wide here. */
+  .tg-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .tg-months span:nth-child(even) {
     display: none;
   }
