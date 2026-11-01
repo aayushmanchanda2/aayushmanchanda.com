@@ -39,8 +39,10 @@ export const GRAPH_START = "2026-03-02";
 const COLUMN: Record<Metric, 0 | 1 | 2> = { tokens: 0, output: 1, cost: 2 };
 const CELL = 10;
 const STEP = 12;
-const SHADES = [0.42, 0.58, 0.74, 0.88, 1];
-const MODELS_SHOWN = 9;
+const SHADES = 5;
+const MODELS_SHOWN = 11;
+/** `styles/tokens.css` has one colour per slot, `.model-0` to `.model-15`. */
+const PALETTE = 16;
 const BAR_HEIGHT = 96;
 
 const DAY_MS = 86_400_000;
@@ -109,26 +111,35 @@ function calendar(data: TokenData): string[][] {
   return weeks;
 }
 
-/** Quantiles, not a linear scale: one 3B day would otherwise wash out every other square. */
+/** Which of the five shades a value gets. Quantiles, not a linear scale: one 3B day would otherwise wash out every other square. */
 function shader(values: number[]): (value: number) => number {
   const sorted = [...values].sort((a, b) => a - b);
-  const steps = SHADES.slice(1).map((_, at) => sorted[Math.floor(((at + 1) / SHADES.length) * sorted.length)] ?? 0);
-  return (value) => SHADES[steps.filter((step) => value > step).length] as number;
+  const steps = [1, 2, 3, 4].map((at) => sorted[Math.floor((at / SHADES) * sorted.length)] ?? 0);
+  return (value) => steps.filter((step) => value > step).length;
 }
 
-function months(weeks: string[][]): string {
+function axis(weeks: string[][]): string {
   let last = "";
-  return weeks
-    .map((week, at) => {
-      const month = label(week[0] as string, { month: "short" });
-      if (month === last) return "";
-      last = month;
-      return `<span style="left:${((at / weeks.length) * 100).toFixed(2)}%">${month}</span>`;
-    })
-    .join("");
+  const months = weeks.map((week, at) => {
+    const month = label(week[0] as string, { month: "short" });
+    if (month === last) return "";
+    last = month;
+    return `<span style="left:${((at / weeks.length) * 100).toFixed(2)}%">${month}</span>`;
+  });
+  return `<div class="tg-months" aria-hidden="true">${months.join("")}</div>`;
 }
 
-/** One calendar: each square takes its colour from the day's biggest app. */
+/**
+ * A tooltip: a title, a total, and a row per app or model. The client puts this
+ * back through `innerHTML`, so it's escaped twice on purpose: the names for the
+ * tooltip, then the whole string for the attribute it travels in.
+ */
+function tooltip(title: string, total: string, rows: { name: string; value: string; className: string }[]): string {
+  const lines = rows.map((row) => `<span class="${row.className}"><i></i>${escape(row.name)}</span><b>${row.value}</b>`);
+  return escape(`<strong>${title}</strong><em>${total}</em>${lines.join("")}`);
+}
+
+/** One calendar: each square takes its colour from the day's biggest app, and its tooltip lists them all. */
 export function grid(data: TokenData, apps: string[], metric: Metric, name = "All apps"): string {
   const weeks = calendar(data);
   const column = COLUMN[metric];
@@ -151,65 +162,99 @@ export function grid(data: TokenData, apps: string[], metric: Metric, name = "Al
         empty += `M${x * STEP + 1} ${y * STEP + 1}h${CELL - 2}v${CELL - 2}h-${CELL - 2}z`;
         return;
       }
-      const parts = entry.rows.slice(0, 2).map((row) => `${row.app} ${show(row.value, metric)}`);
-      const tip = `${label(date, { month: "short", day: "numeric" })}: ${show(entry.value, metric)} (${parts.join(", ")})`;
-      squares += `<rect x="${x * STEP}" y="${y * STEP}" width="${CELL}" height="${CELL}" rx="2" class="app-${classPart(entry.rows[0]?.app ?? "")}" fill-opacity="${shade(entry.value)}" data-tip="${escape(tip)}"/>`;
+      const tip = tooltip(
+        label(date, { weekday: "short", month: "short", day: "numeric" }),
+        show(entry.value, metric),
+        entry.rows.map((row) => ({ name: row.app, value: show(row.value, metric), className: `app-${classPart(row.app)}` })),
+      );
+      squares += `<rect x="${x * STEP}" y="${y * STEP}" width="${CELL}" height="${CELL}" rx="2" class="app-${classPart(entry.rows[0]?.app ?? "")} s${shade(entry.value)}" data-tip="${tip}"/>`;
     }),
   );
 
   const total = used.reduce((sum, entry) => sum + entry.value, 0);
   const summed = `${name}: ${show(total, metric)} ${metric === "cost" ? "at list price" : metric} across ${used.length} days since March 2026`;
-  return `<div class="tg-grid"><div class="tg-months" aria-hidden="true">${months(weeks)}</div><svg viewBox="0 0 ${weeks.length * STEP - 2} ${7 * STEP - 2}" role="img" aria-label="${escape(summed)}"><path class="tg-empty" d="${empty}"/>${squares}</svg></div>`;
+  return `<div class="tg-grid"><div class="tg-days" aria-hidden="true"><span>Mon</span><span>Wed</span><span>Fri</span></div><div class="tg-plot">${axis(weeks)}<svg viewBox="0 0 ${weeks.length * STEP - 2} ${7 * STEP - 2}" role="img" aria-label="${escape(summed)}"><path class="tg-empty" d="${empty}"/>${squares}</svg></div></div>`;
+}
+
+/**
+ * The models that get a colour, biggest first: the top few, plus whichever led
+ * any week, or the spring would be one long grey "other". Always counted across
+ * every app in tokens, so a model keeps its colour when a control changes.
+ */
+function modelColours(data: TokenData): Map<string, number> {
+  const totals = new Map<string, number>();
+  const leaders = new Set<string>();
+  for (const week of calendar(data)) {
+    const models = new Map<string, number>();
+    for (const apps of Object.values(data.weeks[week[0] as string] ?? {})) {
+      for (const [model, row] of Object.entries(apps)) {
+        models.set(model, (models.get(model) ?? 0) + row[0]);
+        totals.set(model, (totals.get(model) ?? 0) + row[0]);
+      }
+    }
+    const leader = [...models].sort((a, b) => b[1] - a[1])[0]?.[0];
+    if (leader) leaders.add(leader);
+  }
+  const ranked = [...totals].sort((a, b) => b[1] - a[1]).map(([model]) => model);
+  const kept = ranked.filter((model, at) => at < MODELS_SHOWN || leaders.has(model));
+  return new Map(kept.map((model, at) => [model, at % PALETTE]));
 }
 
 /** Weekly stacked bars by model. Square-root height, so a quiet week still shows up beside a 5B one. */
 export function bars(data: TokenData, apps: string[], metric: Metric): string {
-  const weeks = calendar(data).map((week) => week[0] as string);
+  const weeks = calendar(data);
+  const mondays = weeks.map((week) => week[0] as string);
   const column = COLUMN[metric];
-  const perWeek = weeks.map((week) => {
+  const colours = modelColours(data);
+  const className = (model: string) => {
+    const slot = colours.get(model);
+    return slot === undefined ? "model-other" : `model-${slot}`;
+  };
+
+  const perWeek = mondays.map((monday) => {
     const models = new Map<string, number>();
     for (const app of apps) {
-      for (const [model, row] of Object.entries(data.weeks[week]?.[app] ?? {})) {
-        models.set(model, (models.get(model) ?? 0) + row[column]);
+      for (const [model, row] of Object.entries(data.weeks[monday]?.[app] ?? {})) {
+        if (row[column]) models.set(model, (models.get(model) ?? 0) + row[column]);
       }
     }
     return models;
   });
-
-  const totals = new Map<string, number>();
-  for (const models of perWeek) {
-    for (const [model, value] of models) totals.set(model, (totals.get(model) ?? 0) + value);
-  }
-  const top = [...totals].sort((a, b) => b[1] - a[1]).slice(0, MODELS_SHOWN).map(([model]) => model);
-  const series = [...top, "other"];
-  const biggest = Math.max(...perWeek.map((models) => [...models.values()].reduce((sum, value) => sum + value, 0)), 1);
+  const sum = (values: Iterable<number>) => [...values].reduce((total, value) => total + value, 0);
+  const biggest = Math.max(...perWeek.map((models) => sum(models.values())), 1);
+  const seen = new Set(perWeek.flatMap((models) => [...models.keys()]));
 
   const columns = perWeek.map((models, x) => {
-    const merged = new Map<string, number>();
-    for (const [model, value] of models) {
-      const name = top.includes(model) ? model : "other";
-      merged.set(name, (merged.get(name) ?? 0) + value);
-    }
-    const weekTotal = [...merged.values()].reduce((sum, value) => sum + value, 0);
+    if (!models.size) return "";
+    const weekTotal = sum(models.values());
     const height = Math.sqrt(weekTotal / biggest) * BAR_HEIGHT;
+    const sorted = [...models].sort((a, b) => b[1] - a[1]);
+    const tip = tooltip(
+      `Week of ${label(mondays[x] as string, { month: "short", day: "numeric" })}`,
+      show(weekTotal, metric),
+      sorted.map(([name, value]) => ({ name, value: show(value, metric), className: className(name) })),
+    );
     let y = BAR_HEIGHT;
-    return series
-      .filter((name) => merged.get(name))
-      .map((name) => {
-        const value = merged.get(name) as number;
-        const size = (value / weekTotal) * height;
-        y -= size;
-        const tip = `Week of ${label(weeks[x] as string, { month: "short", day: "numeric" })}: ${name} ${show(value, metric)}`;
-        return `<rect x="${x * STEP}" y="${y.toFixed(1)}" width="${CELL}" height="${size.toFixed(1)}" class="model-${series.indexOf(name) === MODELS_SHOWN ? "other" : series.indexOf(name)}" data-tip="${escape(tip)}"/>`;
-      })
-      .join("");
+    const segment = (value: number, name: string) => {
+      const size = (value / weekTotal) * height;
+      y -= size;
+      return `<rect x="${x * STEP}" y="${y.toFixed(1)}" width="${CELL}" height="${size.toFixed(1)}" class="${name}"/>`;
+    };
+    const coloured = [...colours.keys()].filter((model) => models.has(model));
+    const rest = sum(sorted.filter(([model]) => !colours.has(model)).map(([, value]) => value));
+    const segments = [
+      ...coloured.map((model) => segment(models.get(model) as number, className(model))),
+      rest ? segment(rest, "model-other") : "",
+    ];
+    return `<g data-tip="${tip}"><rect class="tg-hit" x="${x * STEP - 1}" y="0" width="${STEP}" height="${BAR_HEIGHT}"/>${segments.join("")}</g>`;
   });
 
-  const legend = series
-    .filter((name) => totals.has(name) || (name === "other" && totals.size > MODELS_SHOWN))
-    .map((name, at) => `<li class="model-${name === "other" ? "other" : at}"><i></i>${escape(name)}</li>`)
+  const named = [...colours.keys()].filter((model) => seen.has(model));
+  const hasRest = [...seen].some((model) => !colours.has(model));
+  const legend = [...named, ...(hasRest ? ["other"] : [])]
+    .map((name) => `<li class="${className(name)}"><i></i>${escape(name)}</li>`)
     .join("");
-  return `<div class="tg-bars"><h3 class="tg-label">By model, per week</h3><svg viewBox="0 0 ${weeks.length * STEP - 2} ${BAR_HEIGHT}" role="img" aria-label="Weekly ${metric} by model, biggest models: ${escape(top.slice(0, 3).join(", "))}">${columns.join("")}</svg><ul class="tg-legend">${legend}</ul></div>`;
+  return `<div class="tg-bars"><h3 class="tg-label">By model, per week</h3><div class="tg-plot"><svg viewBox="0 0 ${weeks.length * STEP - 2} ${BAR_HEIGHT}" role="img" aria-label="Weekly ${metric} by model: ${escape(named.slice(0, 3).join(", "))}">${columns.join("")}</svg>${axis(weeks)}</div><ul class="tg-legend">${legend}</ul></div>`;
 }
 
 /** The whole graph for one state of the controls, at build and in the browser. */

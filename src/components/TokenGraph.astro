@@ -87,18 +87,38 @@ const LABELS = { tokens: "Tokens", output: "Output only", cost: "Cost" };
       void update();
     });
 
-    // One tooltip, moved by transform, so hovering never touches layout.
-    root.addEventListener("pointermove", (event) => {
-      const text = (event.target as Element).getAttribute("data-tip");
-      tip.hidden = !text;
-      if (!text) return;
-      tip.textContent = text;
+    // One tooltip, moved by transform, so hovering never touches layout. Its
+    // markup comes from `lib/tokens.ts › tooltip`, which escapes the names.
+    let showing: Element | null = null;
+    let wait = 0;
+    const show = (event: PointerEvent) => {
+      const target = (event.target as Element).closest("[data-tip]");
+      tip.hidden = !target;
+      if (target !== showing) tip.innerHTML = target?.getAttribute("data-tip") ?? "";
+      showing = target;
+      if (!target) return;
       const box = root.getBoundingClientRect();
-      const x = Math.min(Math.max(event.clientX - box.left, 110), box.width - 110);
-      tip.style.transform = `translate(calc(${x}px - 50%), calc(${event.clientY - box.top}px - 140%))`;
+      const x = event.clientX - box.left;
+      const y = event.clientY - box.top;
+      const left = x + 14 + tip.offsetWidth > box.width ? x - tip.offsetWidth - 14 : x + 14;
+      const floor = Math.min(box.height, window.innerHeight - box.top);
+      const top = y + 14 + tip.offsetHeight > floor ? y - tip.offsetHeight - 14 : y + 14;
+      tip.style.transform = `translate(${Math.max(0, left)}px, ${Math.max(0, top)}px)`;
+    };
+    root.addEventListener("pointermove", (event) => {
+      if (event.pointerType === "mouse") show(event);
     });
-    root.addEventListener("pointerleave", () => {
-      tip.hidden = true;
+    root.addEventListener("pointerleave", (event) => {
+      if (event.pointerType === "mouse") tip.hidden = true;
+    });
+    // A finger has no hover: a tap shows the tooltip for a few seconds.
+    root.addEventListener("pointerdown", (event) => {
+      if (event.pointerType === "mouse") return;
+      show(event);
+      clearTimeout(wait);
+      wait = window.setTimeout(() => {
+        tip.hidden = true;
+      }, 3000);
     });
   }
 </script>

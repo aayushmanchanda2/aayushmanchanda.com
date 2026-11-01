@@ -22,36 +22,66 @@
   --sky-image: url("/tokens/sky-dusk.webp");
 }
 
-.app-claude { --app: #f2601a; }
-.app-codex { --app: #00b894; }
-.app-hermes { --app: #e6177f; }
-.app-factory { --app: #2a52f5; }
-.app-warp { --app: #54c000; }
-.app-cursor { --app: #00a8e8; }
-.app-cowork { --app: #8b36f2; }
-.app-continue { --app: #f7b500; }
+.app-claude { --app: #ff6a13; }
+.app-codex { --app: #00c2a0; }
+.app-hermes { --app: #f0218c; }
+.app-factory { --app: #2f5bff; }
+.app-warp { --app: #66d000; }
+.app-cursor { --app: #12b5f5; }
+.app-cowork { --app: #9340ff; }
+.app-continue { --app: #ffc000; }
 
-.model-0 { --app: #2a52f5; }
-.model-1 { --app: #e6177f; }
-.model-2 { --app: #00b894; }
-.model-3 { --app: #f2601a; }
-.model-4 { --app: #8b36f2; }
-.model-5 { --app: #f7b500; }
-.model-6 { --app: #00a8e8; }
-.model-7 { --app: #54c000; }
+.model-0 { --app: #2f5bff; }
+.model-1 { --app: #f0218c; }
+.model-2 { --app: #00c2a0; }
+.model-3 { --app: #ff6a13; }
+.model-4 { --app: #9340ff; }
+.model-5 { --app: #ffc000; }
+.model-6 { --app: #12b5f5; }
+.model-7 { --app: #66d000; }
 .model-8 { --app: #ff4f5f; }
+.model-9 { --app: #0a8f6c; }
+.model-10 { --app: #c026d3; }
+.model-11 { --app: #a0622d; }
+.model-12 { --app: #7c8cff; }
+.model-13 { --app: #ff9d4d; }
+.model-14 { --app: #d4486a; }
+.model-15 { --app: #8fb300; }
 .model-other { --app: #8c93b8; }
 
-.tg-grid svg,
-.tg-bars svg {
+.tg-plot {
+  position: relative;
+  min-width: 0;
+}
+
+.tg-plot svg {
   display: block;
   width: 100%;
   height: auto;
 }
 
-.tg-grid rect,
-.tg-bars rect {
-  fill: var(--app, #8c93b8);
+/* Solid colour mixed toward the ground, never opacity: a see-through square takes
+   on whatever part of the painting is behind it and goes muddy. */
+.tg-plot rect {
+  fill: color-mix(in oklab, var(--app, #8c93b8) var(--mix, 100%), var(--tg-floor));
+}
+
+.s0 { --mix: 40%; }
+.s1 { --mix: 58%; }
+.s2 { --mix: 74%; }
+.s3 { --mix: 88%; }
+
+.tg-plot .tg-hit {
+  fill: transparent;
+}
+
+.tg-grid rect:hover {
+  stroke: var(--text-primary);
+  stroke-width: 1;
+}
+
+.tg-bars svg:hover g:not(:hover) {
+  opacity: 0.45;
 }
 
 /* Opacity on the one path, not on its colours: fill and stroke overlap, and two
@@ -67,9 +97,12 @@
 .tg,
 .tbanner {
   --tg-well: light-dark(rgb(30 40 90), rgb(255 255 255));
-  --tg-well-alpha: 0.1;
+  --tg-well-alpha: 0.08;
+  --tg-floor: light-dark(#eef1fb, #1b1740);
+  --tg-plate: light-dark(rgb(255 255 255 / 0.66), rgb(8 10 30 / 0.55));
   --tg-chip: light-dark(rgb(255 255 255 / 0.4), rgb(255 255 255 / 0.1));
   --tg-chip-on: light-dark(rgb(255 255 255 / 0.85), rgb(255 255 255 / 0.24));
+  --tg-gutter: 2rem;
 }
 
 .tg {
@@ -158,9 +191,51 @@
   }
 }
 
+/* The charts sit on their own calm ground inside the glass, the clean page Ben
+   Tossell's colours get, so the painting never competes with them. */
+.tg-view {
+  padding: 1rem;
+  border-radius: 1.125rem;
+  background: var(--tg-plate);
+}
+
 .tg-grid {
-  position: relative;
+  display: grid;
+  grid-template-columns: var(--tg-gutter) minmax(0, 1fr);
+}
+
+.tg-days {
+  display: grid;
+  grid-template-rows: repeat(7, 1fr);
+  align-items: center;
   padding-top: 1.25rem;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  line-height: 1;
+}
+
+/* No height of their own, or seven rows of text would stretch a small calendar. */
+.tg-days span {
+  height: 0;
+  line-height: 0;
+}
+
+.tg-days span:nth-child(2) { grid-row: 3; }
+.tg-days span:nth-child(3) { grid-row: 5; }
+
+.tg-grid .tg-plot {
+  padding-top: 1.25rem;
+}
+
+.tg-split .tg-grid,
+.tbanner .tg-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.tg-split .tg-days,
+.tbanner .tg-days {
+  display: none;
 }
 
 .tg-months {
@@ -176,6 +251,15 @@
 .tg-months span {
   position: absolute;
   top: 0;
+}
+
+.tg-bars .tg-plot {
+  margin-left: var(--tg-gutter);
+}
+
+.tg-bars .tg-months {
+  position: relative;
+  margin-top: 0.375rem;
 }
 
 .tg-label {
@@ -211,20 +295,50 @@
   top: 0;
   left: 0;
   z-index: 2;
-  max-width: 22rem;
-  padding: 0.25rem 0.5rem;
+  display: grid;
+  grid-template-columns: auto auto;
+  gap: 0.125rem 1.25rem;
+  padding: 0.5rem 0.625rem;
   border-radius: var(--r-md);
-  background: var(--text-primary);
-  color: var(--bg);
+  background: #202126;
+  color: #fff;
   font-family: var(--font-mono);
   font-size: 0.6875rem;
+  line-height: 1.5;
   white-space: nowrap;
   pointer-events: none;
+  box-shadow: 0 0 0 1px rgb(255 255 255 / 0.1), 0 10px 28px -10px rgb(0 0 0 / 0.5);
   will-change: transform;
+}
+
+.tg-tip[hidden] {
+  display: none;
+}
+
+.tg-tip strong {
+  font-weight: 600;
+}
+
+.tg-tip em,
+.tg-tip b {
+  font-style: normal;
+  font-weight: 400;
+  text-align: right;
+}
+
+.tg-tip i {
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-right: 0.4375rem;
+  border-radius: 2px;
+  background: var(--app);
 }
 
 /* The banner on /now. */
 .tbanner {
+  --tg-floor: #1b1740;
+
   display: block;
   /* `.doc`'s measure, so the banner and the text under it share a right edge. */
   max-width: 40rem;
@@ -265,6 +379,12 @@
   letter-spacing: -0.02em;
 }
 
+.tbanner__graph {
+  padding: 0.5rem 0.75rem 0.75rem;
+  border-radius: 0.75rem;
+  background: rgb(8 10 30 / 0.55);
+}
+
 .tbanner .tg-months {
   color: rgb(255 255 255 / 0.8);
 }
@@ -284,6 +404,23 @@
 
   .tg-apps button {
     flex: none;
+  }
+
+  /* Every square a phone can spare goes to the calendar. */
+  .tg {
+    --tg-gutter: 0px;
+  }
+
+  .tg-view {
+    padding: 0.75rem;
+  }
+
+  .tg-days {
+    display: none;
+  }
+
+  .tg-months span:nth-child(even) {
+    display: none;
   }
 
   .tbanner__plate {
