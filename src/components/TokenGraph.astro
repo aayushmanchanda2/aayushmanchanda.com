@@ -1,0 +1,124 @@
+---
+/**
+ * TokenGraph — the day calendar and weekly model bars on /tokens.
+ *
+ * The first view is real HTML from the build, so the page paints with no script
+ * and hover needs no data. Pressing a control loads `lib/tokens-data` and
+ * re-renders through `lib/tokens.ts`, the same code the build used. The new view
+ * fades in on the compositor (`styles/tokens.css › .tg-view > *`). A view
+ * transition looked the same and stalled the first press by up to 380ms: it
+ * snapshots the page through the glass filter on the main thread.
+ */
+import { METRICS, appTotals, compact, render } from "../lib/tokens";
+import { tokens } from "../lib/tokens-data";
+import "../styles/tokens.css";
+
+const apps = appTotals(tokens);
+const LABELS = { tokens: "Tokens", output: "Output only", cost: "Cost" };
+---
+
+<div class="tg" data-tg>
+  <div class="tg-controls">
+    <div class="tg-pills" role="group" aria-label="What to count">
+      {
+        METRICS.map((metric) => (
+          <button type="button" data-metric={metric} aria-pressed={metric === "tokens" ? "true" : "false"}>
+            {LABELS[metric]}
+          </button>
+        ))
+      }
+    </div>
+    <button type="button" class="tg-pill" data-split aria-pressed="false">Split by app</button>
+  </div>
+
+  <div class="tg-apps" role="group" aria-label="Apps">
+    {
+      apps.map(({ app, tokens: total }) => (
+        <button type="button" class={`app-${app}`} data-app={app} aria-pressed="true">
+          <i />
+          {app} <span>{compact(total)}</span>
+        </button>
+      ))
+    }
+  </div>
+
+  <div class="tg-view" set:html={render(tokens, { metric: "tokens", split: false, hidden: new Set() })} />
+  <p class="tg-tip" aria-hidden="true" hidden></p>
+</div>
+
+<script>
+  import { render, type Metric, type View } from "../lib/tokens";
+
+  const root = document.querySelector<HTMLElement>("[data-tg]");
+  const out = root?.querySelector(".tg-view");
+  const tip = root?.querySelector<HTMLElement>(".tg-tip");
+
+  if (root && out && tip) {
+    const view: View = { metric: "tokens", split: false, hidden: new Set() };
+
+    const update = async () => {
+      const { tokens } = await import("../lib/tokens-data");
+      out.innerHTML = render(tokens, view);
+    };
+
+    root.addEventListener("click", (event) => {
+      const button = (event.target as Element).closest("button");
+      if (!button) return;
+      const { metric, app } = button.dataset;
+      if (metric) {
+        view.metric = metric as Metric;
+        for (const other of root.querySelectorAll("[data-metric]")) {
+          other.setAttribute("aria-pressed", String(other === button));
+        }
+      } else if (app) {
+        if (view.hidden.has(app)) view.hidden.delete(app);
+        else view.hidden.add(app);
+        // Hiding the last app would leave nothing to look at: start over instead.
+        const chips = root.querySelectorAll("[data-app]");
+        if (view.hidden.size === chips.length) view.hidden.clear();
+        for (const chip of chips) {
+          chip.setAttribute("aria-pressed", String(!view.hidden.has((chip as HTMLElement).dataset.app as string)));
+        }
+      } else {
+        view.split = !view.split;
+        button.setAttribute("aria-pressed", String(view.split));
+      }
+      tip.hidden = true;
+      void update();
+    });
+
+    // One tooltip, moved by transform, so hovering never touches layout. Its
+    // markup comes from `lib/tokens.ts › tooltip`, which escapes the names.
+    let showing: Element | null = null;
+    let wait = 0;
+    const show = (event: PointerEvent) => {
+      const target = (event.target as Element).closest("[data-tip]");
+      tip.hidden = !target;
+      if (target !== showing) tip.innerHTML = target?.getAttribute("data-tip") ?? "";
+      showing = target;
+      if (!target) return;
+      const box = root.getBoundingClientRect();
+      const x = event.clientX - box.left;
+      const y = event.clientY - box.top;
+      const left = x + 14 + tip.offsetWidth > box.width ? x - tip.offsetWidth - 14 : x + 14;
+      const floor = Math.min(box.height, window.innerHeight - box.top);
+      const top = y + 14 + tip.offsetHeight > floor ? y - tip.offsetHeight - 14 : y + 14;
+      tip.style.transform = `translate(${Math.max(0, left)}px, ${Math.max(0, top)}px)`;
+    };
+    root.addEventListener("pointermove", (event) => {
+      if (event.pointerType === "mouse") show(event);
+    });
+    root.addEventListener("pointerleave", (event) => {
+      if (event.pointerType === "mouse") tip.hidden = true;
+    });
+    // A finger has no hover: a tap shows the tooltip for a few seconds.
+    root.addEventListener("pointerdown", (event) => {
+      if (event.pointerType === "mouse") return;
+      show(event);
+      clearTimeout(wait);
+      wait = window.setTimeout(() => {
+        tip.hidden = true;
+      }, 3000);
+    });
+  }
+</script>

@@ -354,6 +354,22 @@ export function nowJsonLd(): JsonLd {
   );
 }
 
+/** /tokens: a `WebPage` dated by the data file, so the weekly push is what moves `dateModified`. */
+export function tokensJsonLd(updated: string): JsonLd {
+  const url = pageUrl("/tokens");
+
+  return graph(
+    {
+      "@type": "WebPage",
+      "@id": `${url}#webpage`,
+      name: "Tokens",
+      url,
+      dateModified: updated,
+    },
+    breadcrumb({ name: "Tokens", path: "/tokens" }),
+  );
+}
+
 /*
  * There is deliberately no builder for the 404. It is served at whatever URL
  * the reader mistyped, so any `url` it claimed would be false, and `@id` needs

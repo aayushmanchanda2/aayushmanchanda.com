@@ -1,0 +1,179 @@
+---
+/**
+ * Glass — a liquid-glass panel over whatever is painted behind it (/tokens, the
+ * /now banner).
+ *
+ * The plain CSS below is the whole panel in Safari and Firefox: a GPU blur, a
+ * tint and a lit rim. Chromium also takes an SVG filter in `backdrop-filter`,
+ * so the script swaps that in and the rim bends the painting too. A filter in
+ * `backdrop-filter` runs on the compositor; the same filter on a copy of the
+ * painting repainted on every scroll tick and on every split-view toggle, which
+ * is what made the first version stutter.
+ *
+ * One per page: the filter's id is fixed.
+ */
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class:list={["glass", className]} data-glass><slot /></div>
+
+<svg class="glass__defs" aria-hidden="true" width="0" height="0">
+  <filter id="bend" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="16" result="frost"></feGaussianBlur>
+    <feGaussianBlur in="SourceGraphic" stdDeviation="2" result="clear"></feGaussianBlur>
+    <feImage preserveAspectRatio="none" result="map"></feImage>
+    <feColorMatrix in="map" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 1 0 0" result="rim"></feColorMatrix>
+    <feComposite in="clear" in2="rim" operator="in" result="edge"></feComposite>
+    <feComposite in="edge" in2="frost" operator="over" result="scene"></feComposite>
+    <feDisplacementMap in="scene" in2="map" xChannelSelector="R" yChannelSelector="G" data-split="0.92" result="r"></feDisplacementMap>
+    <feColorMatrix in="r" type="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0 1" result="red"></feColorMatrix>
+    <feDisplacementMap in="scene" in2="map" xChannelSelector="R" yChannelSelector="G" data-split="1" result="g"></feDisplacementMap>
+    <feColorMatrix in="g" type="matrix" values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 0 1" result="green"></feColorMatrix>
+    <feDisplacementMap in="scene" in2="map" xChannelSelector="R" yChannelSelector="G" data-split="1.08" result="b"></feDisplacementMap>
+    <feColorMatrix in="b" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 0 1" result="blue"></feColorMatrix>
+    <feBlend in="red" in2="green" mode="screen" result="rg"></feBlend>
+    <feBlend in="rg" in2="blue" mode="screen" result="rgb"></feBlend>
+    <feColorMatrix in="rgb" type="saturate" values="1.5"></feColorMatrix>
+  </filter>
+</svg>
+
+<script>
+  /*!
+   * The bend map and the rim follow Glassy UI (https://glassyui.com), MIT License,
+   * Copyright (c) 2026 Glassy UI contributors. Permission is hereby granted, free of
+   * charge, to any person obtaining a copy of this software and associated documentation
+   * files (the "Software"), to deal in the Software without restriction, including without
+   * limitation the rights to use, copy, modify, merge, publish, distribute, sublicense,
+   * and/or sell copies of the Software, and to permit persons to whom the Software is
+   * furnished to do so, subject to the following conditions: The above copyright notice
+   * and this permission notice shall be included in all copies or substantial portions of
+   * the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+   * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+   * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+   * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+   * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+   * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+   */
+  const RIM_PULL = 0.34;
+  const MAX_PIXELS = 160_000;
+
+  /** Red and green push pixels sideways and up near the edge; blue marks the rim band. */
+  function bendMap(width: number, height: number, radius: number, band: number): string {
+    const scale = Math.min(0.5, Math.sqrt(MAX_PIXELS / (width * height)));
+    const w = Math.ceil(width * scale);
+    const h = Math.ceil(height * scale);
+    const data = new Uint8ClampedArray(w * h * 4);
+    for (let row = 0; row < h; row++) {
+      for (let col = 0; col < w; col++) {
+        const px = ((col + 0.5) / w) * width - width / 2;
+        const py = ((row + 0.5) / h) * height - height / 2;
+        const qx = Math.abs(px) - (width / 2 - radius);
+        const qy = Math.abs(py) - (height / 2 - radius);
+        let distance: number;
+        let nx = 0;
+        let ny = 0;
+        if (qx > 0 && qy > 0) {
+          const length = Math.hypot(qx, qy);
+          distance = length - radius;
+          nx = (qx / length) * Math.sign(px);
+          ny = (qy / length) * Math.sign(py);
+        } else if (qx > qy) {
+          distance = qx - radius;
+          nx = Math.sign(px);
+        } else {
+          distance = qy - radius;
+          ny = Math.sign(py);
+        }
+        const depth = Math.min(1, Math.max(0, -distance / band));
+        const fall = (1 - depth) ** 2;
+        const soft = Math.min(1, Math.max(0, (depth - 0.5) * 2));
+        const at = (row * w + col) * 4;
+        data[at] = (0.5 - (nx * fall) / 2) * 255;
+        data[at + 1] = (0.5 - (ny * fall) / 2) * 255;
+        data[at + 2] = (1 - soft * soft * (3 - 2 * soft)) * 255;
+        data[at + 3] = 255;
+      }
+    }
+    const canvas = Object.assign(document.createElement("canvas"), { width: w, height: h });
+    canvas.getContext("2d")?.putImageData(new ImageData(data, w, h), 0, 0);
+    return canvas.toDataURL("image/png");
+  }
+
+  const glass = document.querySelector<HTMLElement>("[data-glass]");
+  const filter = document.getElementById("bend");
+  const image = filter?.querySelector("feImage");
+
+  // Comet, Chrome, Edge and Arc all say Chrome. Safari and Firefox keep the CSS blur.
+  if (glass && filter && image && navigator.userAgent.includes("Chrome/")) {
+    const fit = () => {
+      const width = glass.offsetWidth;
+      const height = glass.offsetHeight;
+      const band = Math.min(64, Math.min(width, height) * 0.2);
+      for (const [name, value] of [["x", 0], ["y", 0], ["width", width], ["height", height]] as const) {
+        filter.setAttribute(name, String(value));
+        image.setAttribute(name, String(value));
+      }
+      image.setAttribute("href", bendMap(width, height, parseFloat(getComputedStyle(glass).borderRadius), band));
+      for (const bend of filter.querySelectorAll<SVGFEDisplacementMapElement>("feDisplacementMap")) {
+        bend.setAttribute("scale", String(2 * band * RIM_PULL * Number(bend.dataset.split)));
+      }
+      glass.style.backdropFilter = "url(#bend)";
+    };
+
+    // In the same frame as the size change: the filter's region is in pixels, so
+    // a late map would leave the bottom of a taller panel unfrosted.
+    new ResizeObserver(fit).observe(glass);
+  }
+</script>
+
+<style>
+  .glass {
+    --tint: light-dark(rgb(255 255 255 / 0.34), rgb(14 18 40 / 0.5));
+
+    position: relative;
+    isolation: isolate;
+    border-radius: var(--glass-radius, 30px);
+    background: var(--glass-tint, var(--tint));
+    -webkit-backdrop-filter: blur(16px) saturate(1.5);
+    backdrop-filter: blur(16px) saturate(1.5);
+    box-shadow:
+      inset 0 0 12px -4px rgb(255 255 255 / 0.75),
+      inset 1.5px 2.5px 1px -2px rgb(255 255 255 / 0.85),
+      inset -1.5px -2.5px 1px -2px rgb(255 255 255 / 0.5),
+      inset 2px 0 3px -1px rgb(80 160 255 / 0.2),
+      inset -2px 0 3px -1px rgb(255 90 150 / 0.2),
+      0 24px 60px -24px rgb(20 30 70 / 0.45);
+  }
+
+  /* The lit edge. A ring, not a border, so it follows the curve at any width. */
+  .glass::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    padding: 1.2px;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgb(255 255 255 / 0.9), rgb(255 255 255 / 0.15) 45%, rgb(255 255 255 / 0.5));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    mask-composite: exclude;
+  }
+
+  /* Reduce Transparency frosts harder. It never goes solid: a white card over a
+     painting is worse than no painting. */
+  @media (prefers-reduced-transparency: reduce) {
+    .glass {
+      --tint: light-dark(rgb(255 255 255 / 0.46), rgb(14 18 40 / 0.58));
+    }
+  }
+
+  .glass__defs {
+    position: absolute;
+  }
+</style>

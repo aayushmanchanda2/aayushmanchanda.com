@@ -365,6 +365,10 @@ Below 900px the column becomes a line and the row stacks title, tags, note, meta
 
 **/experiments reads like entries, not a table** (`pages/experiments.astro`, VET-280). Raspberry mat, a postmark dated by the newest `started`, and under the standfirst a tally of all four statuses in rank order, each chip beside its count; a status with no experiments shows a gray chip (`StatusChip.astro › muted`) and a tertiary zero, since "nothing killed yet" is a fact. Rows are 18px/500 names with the chip beside them, his line at 16px/1.55 in `--text-secondary` capped at 38rem, the start date in the right column (under it below 640px), 20px of padding over a hairline. A killed row keeps its place with its name in `--text-tertiary`.
 
+### The painted pages
+
+`/tokens` and the banner on `/now` are the one place the site is loud on purpose: a painting, and a colour per app (`styles/tokens.css`, the only hexes outside the token files, because `lib/tokens.ts` writes class names into strings). `components/Glass.astro` is the panel: a CSS blur, tint and lit rim everywhere, plus an SVG bend through `backdrop-filter` in Chromium. Keep filters on `backdrop-filter`, on the compositor. The same filter on a copy of the painting stalled scrolling for 250ms in split view, and a view transition stalled the first press for up to 380ms, so a new view fades in with a CSS animation instead.
+
 ## 4. Interactions
 
 **Press.** `styles/global.css › .press` scales to `--press-scale`, default **0.96**, over `--dur-fast`. Wide elements dial it back rather than shrinking by 4%: full-bleed list rows use **0.995** (`index.astro › .row`, `notes/index.astro › .row`, `404.astro`) because a full-width row shrinking 4% reads as a glitch, not a press; A /sites tile has no press: its picture grows 2% on hover instead (VET-242, below), and a card that also shrank under the finger would be two motions for one click.

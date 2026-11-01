@@ -1,0 +1,23 @@
+---
+/**
+ * TokensBanner — the way into /tokens from /now: the dusk painting, a pane of
+ * glass, and the same calendar as the page itself. Hover text is stripped: the
+ * whole banner is one link.
+ */
+import { appTotals, compact, grid, summary } from "../lib/tokens";
+import { tokens } from "../lib/tokens-data";
+import Glass from "./Glass.astro";
+import "../styles/tokens.css";
+
+const total = compact(summary(tokens).tokens);
+const calendar = grid(tokens, appTotals(tokens).map(({ app }) => app), "tokens").replace(/ data-tip="[^"]*"/g, "");
+---
+
+<a class="tbanner" href="/tokens" aria-label={`Token activity: ${total} tokens so far`}>
+  <Glass class="tbanner__glass">
+    <div class="tbanner__plate">
+      <p class="tbanner__total"><strong>{total}</strong> tokens</p>
+      <div class="tbanner__graph" aria-hidden="true" set:html={calendar} />
+    </div>
+  </Glass>
+</a>
