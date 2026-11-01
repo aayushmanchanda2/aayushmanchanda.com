@@ -1,0 +1,28 @@
+---
+/**
+ * Prototype: a lawn of readers above the /library standfirst. The real page is
+ * a full-width index (`components/LibraryViews.astro`); this shows the picture
+ * in the reading column, which is where it would sit above the list.
+ */
+import Plaster from "../../../components/lab/Plaster.astro";
+import { labJsonLd } from "../../../components/lab/lab-schema";
+import Base from "../../../layouts/Base.astro";
+---
+
+<Base
+  jsonLd={labJsonLd("/lab/plaster/library", "Prototype: Library")}
+  title="Prototype: Library · Aayush Manchanda"
+  trail={[{ name: "Library", path: "/library" }]}
+  description="Prototype of plaster art on /library."
+  noindex
+>
+  <header>
+    <h1 class="page-title">Library</h1>
+    <p class="standfirst">
+      Articles, posts and videos I saved to read or watch. My agents digested
+      some: cliff notes and a call on whether they&rsquo;re worth your time.
+    </p>
+  </header>
+
+  <Plaster scene="readers" />
+</Base>

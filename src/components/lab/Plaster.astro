@@ -1,0 +1,17 @@
+---
+/**
+ * Plaster — a prototype: knifed plaster with small figures, faded into the
+ * page. The pictures come from `feature-research/art-plaster/plaster.mjs`;
+ * `styles/plaster.css` picks the day or night one per theme. Decorative: the
+ * page's own words carry the meaning, so it is hidden from screen readers.
+ */
+import "../../styles/plaster.css";
+
+interface Props {
+  scene: "lost" | "post" | "dig" | "readers";
+}
+
+const { scene } = Astro.props;
+---
+
+<div class:list={["plaster", `plaster--${scene}`]} aria-hidden="true"></div>

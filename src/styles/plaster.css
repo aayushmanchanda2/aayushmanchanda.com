@@ -1,0 +1,85 @@
+/* ==========================================================================
+   aayushmanchanda.com — plaster prototypes (/lab/plaster, noindex)
+
+   Knifed plaster with one small figure, drawn by
+   `feature-research/art-plaster/plaster.mjs`. Each theme fetches only its own
+   picture, the /tokens sky's trick: a custom property per theme, read by one
+   `background`. Here and not in `global.css`, which is in the share-card cache key.
+   ========================================================================== */
+
+.plaster--lost { --plaster-image: url("/lab/plaster/lost-day.webp"); --plaster-focus: 69%; --plaster-focus-y: 59%; }
+.plaster--post { --plaster-image: url("/lab/plaster/post-day.webp"); --plaster-focus: 52%; --plaster-focus-y: 60%; }
+.plaster--dig { --plaster-image: url("/lab/plaster/dig-day.webp"); --plaster-focus: 52%; --plaster-focus-y: 60%; }
+.plaster--readers { --plaster-image: url("/lab/plaster/readers-day.webp"); --plaster-focus: 30%; }
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .plaster--lost { --plaster-image: url("/lab/plaster/lost-night.webp"); }
+  :root:not([data-theme="light"]) .plaster--post { --plaster-image: url("/lab/plaster/post-night.webp"); }
+  :root:not([data-theme="light"]) .plaster--dig { --plaster-image: url("/lab/plaster/dig-night.webp"); }
+  :root:not([data-theme="light"]) .plaster--readers { --plaster-image: url("/lab/plaster/readers-night.webp"); }
+}
+
+:root[data-theme="dark"] .plaster--lost { --plaster-image: url("/lab/plaster/lost-night.webp"); }
+:root[data-theme="dark"] .plaster--post { --plaster-image: url("/lab/plaster/post-night.webp"); }
+:root[data-theme="dark"] .plaster--dig { --plaster-image: url("/lab/plaster/dig-night.webp"); }
+:root[data-theme="dark"] .plaster--readers { --plaster-image: url("/lab/plaster/readers-night.webp"); }
+
+/* The plaster has no edge: it fades into the page, so the figure stands on the
+   paper itself instead of inside a framed picture. No motion, so reduced
+   motion has nothing to turn off. */
+.plaster {
+  aspect-ratio: 12 / 5;
+  margin-inline: calc(-1 * var(--page-pad));
+  background: var(--plaster-image) var(--plaster-focus, 50%) var(--plaster-focus-y, 50%) / cover no-repeat;
+  /* Two linear fades intersected: a soft-edged slab, not an oval puddle. */
+  --plaster-fade-x: linear-gradient(to right, transparent, black 14%, black 86%, transparent);
+  --plaster-fade-y: linear-gradient(transparent, black 18%, black 82%, transparent);
+  -webkit-mask-image: var(--plaster-fade-x), var(--plaster-fade-y);
+  -webkit-mask-composite: source-in;
+  mask-image: var(--plaster-fade-x), var(--plaster-fade-y);
+  mask-composite: intersect;
+}
+
+/* An empty state is a small aside, not a hero. */
+.plaster--dig {
+  aspect-ratio: 8 / 3;
+  max-width: 30rem;
+  margin-inline: auto;
+}
+
+/* A phone zooms in around the figure, so it stays about 25px tall. The
+   crowd of readers keeps the whole lawn: the crowd is the picture. */
+@media (max-width: 34rem) {
+  .plaster {
+    aspect-ratio: 3 / 2;
+    background-size: auto 150%;
+  }
+
+  .plaster--readers {
+    background-size: cover;
+  }
+
+  .plaster--dig {
+    aspect-ratio: 2 / 1;
+  }
+}
+
+/* The ground study on the lab index: unfaded tiles, labelled. Backgrounds and
+   not <img>, so the image-budget gate needs no new measured kind for a prototype. */
+.plaster-study {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.plaster-study__tile {
+  aspect-ratio: 64 / 26;
+  border-radius: var(--r-md);
+  background: var(--plaster-image) center / cover no-repeat;
+}
+
+.plaster-study figcaption {
+  margin-top: 0.4rem;
+  color: var(--text-tertiary);
+}

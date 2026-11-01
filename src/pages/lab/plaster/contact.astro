@@ -1,0 +1,161 @@
+---
+/**
+ * Prototype: /contact with plaster art under the masthead. A copy of
+ * `pages/contact.astro` plus one line and `noindex`, without its JSON-LD,
+ * so the real page stays untouched.
+ */
+import Plaster from "../../../components/lab/Plaster.astro";
+import { labJsonLd } from "../../../components/lab/lab-schema";
+import Base from "../../../layouts/Base.astro";
+---
+
+<Base
+  jsonLd={labJsonLd("/lab/plaster/contact", "Prototype: Contact")}
+  title="Prototype: Contact · Aayush Manchanda"
+  trail={[{ name: "Contact", path: "/contact" }]}
+  description="How to reach Aayush Manchanda, and what gets a reply."
+  noindex
+>
+  <header>
+    <h1 class="page-title">Contact</h1>
+    <p class="standfirst">
+      Email, X or GitHub, and what gets a reply.
+    </p>
+  </header>
+
+  <Plaster scene="post" />
+
+  {/*
+    Outside `.doc` on purpose. `.doc a` is the prose-link treatment, bold and
+    underlined, which is right for a link inside a sentence and wrong for the
+    one thing this page exists to let you press. This is the index-row idiom
+    instead: full-bleed, hairline top and bottom, arrow on hover.
+
+    The href is static attribute text and every character of the address is a
+    decimal character reference. See the file header before touching it.
+  */}
+  <a
+    class="mailto press"
+    href="mailto:&#97;&#97;&#121;&#117;&#115;&#104;&#109;&#97;&#110;&#99;&#104;&#97;&#110;&#100;&#97;&#50;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;?subject=Hello%20from%20aayushmanchanda.com&amp;body=Who%20I%20am%3A%0A%0AWhat%20this%20is%20about%3A%0A%0A"
+  >
+    <span class="mailto__label mono">Email me</span>
+    <svg
+      class="mailto__arrow"
+      viewBox="0 0 16 16"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d="M2.5 8h11M9 3.5 13.5 8 9 12.5"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.25"
+      />
+    </svg>
+  </a>
+
+  <div class="doc">
+    <section>
+      <h2 class="doc__head mono">Worth writing about</h2>
+      <p>
+        A tool I should be running, especially if you built it. Tell me what
+        it&rsquo;s for and what it replaces. If it doesn&rsquo;t fit my work,
+        you&rsquo;ll get a fast no.
+      </p>
+      <p>
+        Something wrong here: a dead link, a stale verdict, a screenshot that no
+        longer looks like the site. Corrections get the fastest reply, and you
+        don&rsquo;t need to be polite about it.
+      </p>
+      <p>
+        Work. Vetted takes a small number of clients. A real problem with a real
+        budget is a conversation; put the problem in the first paragraph.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="doc__head mono">Not worth writing about</h2>
+      <p>
+        Link exchanges, guest posts and sponsored placements. The verdicts on <a
+          href="/tools">/tools</a> aren&rsquo;t for sale.
+      </p>
+      <p>
+        Cold pitches, anything that opens by telling me it noticed my website,
+        and requests to add your link to a page. None of these get a reply.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="doc__head mono">Elsewhere</h2>
+      {/*
+        Anchors keep their neighbouring space on the same line: a line break
+        next to a tag is nothing to Astro. See `design.md` §6.
+      */}
+      <p>
+        I&rsquo;m <a class="ext" rel="me noopener" target="_blank"
+          href="https://x.com/amanchanda7">@amanchanda7</a> on X and <a
+          class="ext" rel="me noopener" target="_blank"
+          href="https://github.com/aayushmanchanda2">aayushmanchanda2</a> on
+        GitHub. X for a short question, email for anything longer.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="doc__head mono">A screenshot of your site</h2>
+      <p>
+        If a screenshot in <a href="/sites">/sites</a> is yours and you want it
+        gone, open a GitHub issue; the link is on <a
+          href="/privacy">/privacy</a>. No reason needed.
+      </p>
+    </section>
+  </div>
+</Base>
+
+<style>
+  /* The index-row idiom from the home page, at one row.
+
+     `--press-scale` is dialled back for the same reason it is there: a
+     full-bleed row shrinking by 4% reads as a glitch rather than a press. No
+     `transition-property` on the anchor itself, because `.press` already
+     declares one and a second would race it depending on stylesheet order. */
+  .mailto {
+    --press-scale: 0.995;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    /* the gap a standfirst gets before the body of a footer page; `.doc` below
+       gives its own margin back so the two do not stack into a chasm */
+    margin-top: clamp(3rem, 10vh, 5rem);
+    padding-block: clamp(1.1rem, 2.5vw, 1.4rem);
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .mailto:hover {
+    border-color: var(--hairline-strong);
+    color: var(--accent);
+  }
+
+  .mailto__arrow {
+    width: 16px;
+    height: 16px;
+    color: var(--text-tertiary);
+    transition-property: transform, color;
+    transition-duration: var(--dur);
+    transition-timing-function: var(--ease-out);
+  }
+
+  .mailto:hover .mailto__arrow {
+    color: var(--accent);
+    transform: translateX(4px);
+  }
+
+  /* The row above already carries the distance from the masthead, so the
+     document does not need the full `.doc` gap on top of it. */
+  .doc {
+    margin-top: clamp(2.5rem, 8vh, 4rem);
+  }
+</style>

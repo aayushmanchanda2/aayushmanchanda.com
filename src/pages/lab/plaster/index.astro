@@ -1,0 +1,86 @@
+---
+/**
+ * /lab/plaster — prototypes for plaster art with small figures. `noindex`,
+ * linked from nowhere, and not in the sitemap. The report is
+ * `feature-research/art-plaster/report.md`.
+ */
+import { labJsonLd } from "../../../components/lab/lab-schema";
+import Base from "../../../layouts/Base.astro";
+import "../../../styles/plaster.css";
+
+const PAGES = [
+  ["/lab/plaster/not-found", "404", "The footprints stop at a figure reading a map"],
+  ["/lab/plaster/contact", "Contact", "A queue at the postbox"],
+  ["/lab/plaster/empty", "Empty filter", "A hole dug in clay, nothing in it, and a crowd looking anyway"],
+  ["/lab/plaster/library", "Library", "Readers on towels, three umbrellas"],
+];
+
+const GROUNDS = [
+  ["plaster", "White plaster"],
+  ["crowd", "White plaster, far off"],
+  ["sea", "Sea"],
+  ["pool", "Pool"],
+  ["salt", "Salt pink"],
+  ["clay", "Clay"],
+  ["field", "Colour field"],
+];
+---
+
+<Base jsonLd={labJsonLd("/lab/plaster", "Plaster prototypes")} title="Plaster prototypes · Aayush Manchanda" description="Prototypes for plaster art with small figures." trail={[{ name: "Plaster", path: "/lab/plaster" }]} noindex>
+  <header>
+    <h1 class="page-title">Plaster</h1>
+    <p class="standfirst">Four placements, then figures on seven grounds and scales.</p>
+  </header>
+
+  <ul class="lab-list">
+    {
+      PAGES.map(([href, name, line]) => (
+        <li>
+          <a href={href}>{name}</a>
+          <span>{line}</span>
+        </li>
+      ))
+    }
+  </ul>
+
+  <h2 class="lab-head mono">Grounds</h2>
+  <div class="plaster-study">
+    {
+      GROUNDS.map(([key, name]) => (
+        <figure>
+          <div class="plaster-study__tile" style={`--plaster-image: url("/lab/plaster/study-${key}-day.webp")`} aria-hidden="true" />
+          <figcaption class="mono">{name}</figcaption>
+        </figure>
+      ))
+    }
+  </div>
+</Base>
+
+<style>
+  .lab-list {
+    margin-top: 2rem;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .lab-list li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 1rem;
+    align-items: baseline;
+    padding-block: 0.8rem;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .lab-list a {
+    font-weight: 500;
+  }
+
+  .lab-list span {
+    color: var(--text-secondary);
+  }
+
+  .lab-head {
+    margin-top: 3rem;
+    color: var(--text-tertiary);
+  }
+</style>

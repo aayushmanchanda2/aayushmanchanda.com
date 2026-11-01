@@ -1,0 +1,40 @@
+---
+/**
+ * Prototype: the /tools empty filter with plaster art. The real message lives
+ * in `pages/tools.astro › .empty`, hidden until a filter matches nothing; this
+ * page shows it open so the picture can be judged.
+ */
+import Plaster from "../../../components/lab/Plaster.astro";
+import { labJsonLd } from "../../../components/lab/lab-schema";
+import Base from "../../../layouts/Base.astro";
+---
+
+<Base
+  jsonLd={labJsonLd("/lab/plaster/empty", "Prototype: empty filter")}
+  title="Prototype: empty filter · Aayush Manchanda"
+  trail={[{ name: "Tools", path: "/tools" }]}
+  description="Prototype of the empty filter state on /tools."
+  noindex
+>
+  <header>
+    <h1 class="page-title">Tools</h1>
+    <p class="standfirst">Software I installed and ran, with a dated verdict on each.</p>
+  </header>
+
+  <div class="empty">
+    <Plaster scene="dig" />
+    <p>No tools match both filters. <a href="/tools">Show all</a></p>
+  </div>
+</Base>
+
+<style>
+  .empty {
+    margin-top: var(--gap-masthead);
+    color: var(--text-secondary);
+    text-align: center;
+  }
+
+  .empty p {
+    margin-top: 0.5rem;
+  }
+</style>
