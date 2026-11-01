@@ -36,6 +36,7 @@
  * takedown route is not repeated here; /privacy owns it and this page points at
  * it, because two copies of a promise is one copy that can go stale.
  */
+import Plaster from "../components/lab/Plaster.astro";
 import Base from "../layouts/Base.astro";
 import { contactJsonLd } from "../lib/schema";
 
@@ -54,6 +55,9 @@ const jsonLd = contactJsonLd();
       Email, X or GitHub, and what gets a reply.
     </p>
   </header>
+
+  {/* Branch-only prototype (PR #81, do not merge): the moving plaster queue. */}
+  <Plaster scene="post" />
 
   {/*
     Outside `.doc` on purpose. `.doc a` is the prose-link treatment, bold and

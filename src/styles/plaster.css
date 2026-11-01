@@ -88,6 +88,12 @@
 .plaster--dig { --fx: 0.55; --fy: 0.6; }
 .plaster--readers { --fx: 0.42; --fy: 0.5; }
 
+/* On a full-width index page (the library) the scene keeps the reading
+   column's width instead of running edge to edge. */
+.shell__main--full .plaster {
+  max-width: calc(var(--page-max) + 2 * var(--page-pad));
+}
+
 /* An empty state is a small aside, not a hero. */
 .plaster--dig {
   max-width: 30rem;
