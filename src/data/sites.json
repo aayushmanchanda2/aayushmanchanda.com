@@ -5175,5 +5175,125 @@
       ]
     },
     "collections": []
+  },
+  {
+    "slug": "valley-ai-ai-outbound-platform-for-signal-based-outreach",
+    "title": "Valley AI",
+    "url": "https://www.joinvalley.co/",
+    "domain": "joinvalley.co",
+    "saved_date": "2026-11-01",
+    "shot": "/shots/valley-ai-ai-outbound-platform-for-signal-based-outreach.webp",
+    "palette": [
+      "#f6f8f6",
+      "#172c32",
+      "#a9d0ec",
+      "#d1dad4",
+      "#2f4852",
+      "#2d69b0"
+    ],
+    "design": {
+      "read_date": "2026-11-01",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#f8f9f7"
+        },
+        {
+          "name": "surface",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "text",
+          "hex": "#1c292e"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#52636c"
+        },
+        {
+          "name": "accent",
+          "hex": "#0000ee"
+        },
+        {
+          "name": "border",
+          "hex": "#a9d0ec"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "PP Neue Montreal Medium",
+          "fontSize": "60px",
+          "fontWeight": "500",
+          "lineHeight": "62.4px",
+          "letterSpacing": "-2.1px"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "PP Neue Montreal",
+          "fontSize": "58px",
+          "fontWeight": "500",
+          "lineHeight": "62.06px",
+          "letterSpacing": "-2.03px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "PP Neue Montreal",
+          "fontSize": "18px",
+          "fontWeight": "400",
+          "lineHeight": "27px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "label",
+          "fontFamily": "ValleyFooter",
+          "fontSize": "15px",
+          "fontWeight": "400",
+          "lineHeight": "normal",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "10px",
+          "value": "10px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "22px",
+          "value": "22px"
+        },
+        {
+          "name": "6",
+          "value": "24px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "button",
+          "value": "2px"
+        },
+        {
+          "name": "image",
+          "value": "3px"
+        },
+        {
+          "name": "image-2",
+          "value": "4px"
+        },
+        {
+          "name": "full",
+          "value": "9999px"
+        }
+      ]
+    },
+    "collections": []
   }
 ]
