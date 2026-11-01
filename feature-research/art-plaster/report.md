@@ -5,7 +5,7 @@
 2. **Recommend:** ship plaster scenes where a little figure explains the page: the 404, the empty filter states, then /contact. No motion, one static WebP per theme, 9 to 57 KB.
 3. **Your decision:** white plaster everywhere (quiet, matches the white site), or a coloured ground per section (louder, ties to the section mats).
 
-Previews (noindex, linked from nowhere): `/lab/plaster` on the PR's Vercel preview. Links at the bottom.
+Previews (noindex, linked from nowhere): [index and grounds](https://aayushmanchandacom-git-claude-vibrant-dirac-ugx6fd-vettedinc.vercel.app/lab/plaster/) · [404](https://aayushmanchandacom-git-claude-vibrant-dirac-ugx6fd-vettedinc.vercel.app/lab/plaster/not-found/) · [contact](https://aayushmanchandacom-git-claude-vibrant-dirac-ugx6fd-vettedinc.vercel.app/lab/plaster/contact/) · [empty filter](https://aayushmanchandacom-git-claude-vibrant-dirac-ugx6fd-vettedinc.vercel.app/lab/plaster/empty/) · [library](https://aayushmanchandacom-git-claude-vibrant-dirac-ugx6fd-vettedinc.vercel.app/lab/plaster/library/). PR: [aayushmanchanda2/aayushmanchanda.com#81](https://github.com/aayushmanchanda2/aayushmanchanda.com/pull/81).
 
 ## 1. The art
 
@@ -77,6 +77,6 @@ Measured on the built site: right picture per theme on all 30 loads, no sideways
 - Every claim in §1 is from a search snippet; no source page or image was opened (network policy). Allowing `wernerbronkhorst.com`, `dellasposa.com`, `ocula.com`, `thisiscolossal.com` would fix that in a later session.
 - Whether a hidden empty state skips its download in Safari and Firefox. In Chromium it does: measured, nothing fetched while hidden, fetched once shown. A dark visit fetches only the night file.
 - iOS Safari and real devices: screenshots are headless Chromium.
-- The Vercel preview build: depends on the Vercel GitHub app building this branch.
+- The Vercel preview: it was still building when this was written, and it may sit behind Vercel's login if the team has deployment protection on. Screenshots above are from the local build.
 - Sideways scroll at 320px: checked at 375 only. The skill's `shoot.mjs` and `overflow.mjs` couldn't launch (the repo pins a Playwright that doesn't match this container's Chromium), so I used a small script on the preinstalled browser instead.
 - Gates, run here on the final tree: `astro check` 0 errors, 0 warnings, 1 hint (the known baseline); `npm test` 736 pass; `npm run build` clean; `validate:schema` clean, image-budget within budget. The lab pages carry a one-node `WebPage` JSON-LD so the schema gate passes without an exemption.
