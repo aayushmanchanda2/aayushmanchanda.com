@@ -91,6 +91,12 @@ class Canvas {
     this.shade = new Float32Array(n);
     /** 1 where a figure is: lit flatter, so a dab of colour stays its colour. */
     this.figure = new Float32Array(n);
+    /**
+     * Drawing scale. A sprite is painted at 3x the pixels it shows at, so the
+     * browser scales it down and the figure stays sharp; every drawing call
+     * below multiplies its coordinates, sizes and paint height by this.
+     */
+    this.k = 1;
   }
 
   /**
@@ -205,6 +211,8 @@ class Canvas {
    * @param {number} radius @param {RGB} colour @param {number} [relief]
    */
   dab(ax, ay, bx, by, radius, colour, relief = 1.6) {
+    const k = this.k;
+    [ax, ay, bx, by, radius, relief] = [ax * k, ay * k, bx * k, by * k, radius * k, relief * k];
     const { width: W, height: H } = this;
     const pad = radius + 2;
     const x0 = Math.max(0, Math.floor(Math.min(ax, bx) - pad));
@@ -236,6 +244,8 @@ class Canvas {
    * @param {number} cx @param {number} cy @param {number} w @param {number} h @param {number} angle @param {RGB} colour @param {number} [relief]
    */
   rect(cx, cy, w, h, angle, colour, relief = 0.8) {
+    const k = this.k;
+    [cx, cy, w, h, relief] = [cx * k, cy * k, w * k, h * k, relief * k];
     this.paint(cx, cy, Math.hypot(w, h) / 2 + 2, (x, y) => {
       const u = (x - cx) * Math.cos(angle) + (y - cy) * Math.sin(angle);
       const v = -(x - cx) * Math.sin(angle) + (y - cy) * Math.cos(angle);
@@ -249,11 +259,46 @@ class Canvas {
    * @param {number} cx @param {number} cy @param {number} r @param {RGB[]} colours @param {number} panels @param {number} [relief]
    */
   disc(cx, cy, r, colours, panels, relief = 2.4) {
+    const k = this.k;
+    [cx, cy, r, relief] = [cx * k, cy * k, r * k, relief * k];
     this.paint(cx, cy, r + 2, (x, y) => {
       const d = Math.hypot(x - cx, y - cy);
       const k = Math.floor(((Math.atan2(y - cy, x - cx) + Math.PI) / (Math.PI * 2)) * panels);
       const dome = Math.sqrt(Math.max(0, 1 - (d / (r + 0.5)) ** 2));
       return [Math.min(1, Math.max(0, r - d + 0.5)), colours[k % colours.length] ?? [240, 240, 240], relief * dome];
+    });
+  }
+
+  /**
+   * A convex polygon with rounded corners (a coat, a skirt), domed across its
+   * width so it catches the light like a dab of paint.
+   * @param {number[][]} points corners, clockwise @param {RGB} colour @param {number} [relief] @param {number} [round]
+   */
+  poly(points, colour, relief = 1.8, round = 0.6) {
+    const k = this.k;
+    const pts = points.map(([x = 0, y = 0]) => [x * k, y * k]);
+    const r = round * k;
+    const xs = pts.map((p) => p[0] ?? 0);
+    const ys = pts.map((p) => p[1] ?? 0);
+    const cx = (Math.min(...xs) + Math.max(...xs)) / 2;
+    const cy = (Math.min(...ys) + Math.max(...ys)) / 2;
+    const reach = Math.max(Math.max(...xs) - cx, Math.max(...ys) - cy) + r + 2;
+    const half = (Math.max(...xs) - Math.min(...xs)) / 2 || 1;
+    // Edges as inward half-planes: distance outside is the largest of them.
+    const edges = pts.map((p, i) => {
+      const q = pts[(i + 1) % pts.length] ?? p;
+      const ex = (q[0] ?? 0) - (p[0] ?? 0);
+      const ey = (q[1] ?? 0) - (p[1] ?? 0);
+      const len = Math.hypot(ex, ey) || 1;
+      return { px: p[0] ?? 0, py: p[1] ?? 0, nx: ey / len, ny: -ex / len };
+    });
+    const rel = relief * k;
+    this.paint(cx, cy, reach, (x, y) => {
+      let d = -Infinity;
+      for (const e of edges) d = Math.max(d, (x - e.px) * e.nx + (y - e.py) * e.ny);
+      const cover = Math.min(1, Math.max(0, r - d + 0.5));
+      const dome = Math.sqrt(Math.max(0, 1 - ((x - cx) / (half + r)) ** 2));
+      return [cover, colour, rel * (0.55 + 0.45 * dome)];
     });
   }
 
@@ -294,6 +339,8 @@ class Canvas {
    * @param {number} cx @param {number} cy @param {number} rx @param {number} ry @param {number} strength
    */
   shadow(cx, cy, rx, ry, strength) {
+    const k = this.k;
+    [cx, cy, rx, ry] = [cx * k, cy * k, rx * k, ry * k];
     const { width: W, height: H } = this;
     for (let y = Math.max(0, Math.floor(cy - ry - 2)); y <= Math.min(H - 1, Math.ceil(cy + ry + 2)); y++) {
       for (let x = Math.max(0, Math.floor(cx - rx - 2)); x <= Math.min(W - 1, Math.ceil(cx + rx + 2)); x++) {
@@ -310,6 +357,8 @@ class Canvas {
    * @param {number} cx @param {number} cy @param {number} rx @param {number} ry @param {number} depth @param {number} [angle]
    */
   dent(cx, cy, rx, ry, depth, angle = 0) {
+    const k = this.k;
+    [cx, cy, rx, ry, depth] = [cx * k, cy * k, rx * k, ry * k, depth * k];
     const { width: W, height: H } = this;
     const ca = Math.cos(angle);
     const sa = Math.sin(angle);
@@ -334,6 +383,8 @@ class Canvas {
    * @param {number} cx @param {number} cy @param {number} rx @param {number} ry @param {number} height
    */
   mound(cx, cy, rx, ry, height) {
+    const k = this.k;
+    [cx, cy, rx, ry, height] = [cx * k, cy * k, rx * k, ry * k, height * k];
     const { width: W, height: H } = this;
     for (let y = Math.max(0, Math.floor(cy - ry - 2)); y <= Math.min(H - 1, Math.ceil(cy + ry + 2)); y++) {
       for (let x = Math.max(0, Math.floor(cx - rx - 2)); x <= Math.min(W - 1, Math.ceil(cx + rx + 2)); x++) {
@@ -347,10 +398,15 @@ class Canvas {
   }
 
   /**
-   * Light the height field and return 8-bit RGB.
+   * Light the height field and return 8-bit RGB, or, for a sprite, RGBA:
+   * a figure keeps its lit colour, and bare ground becomes black or white at
+   * the alpha that darkens or lightens whatever plaster it is laid over by the
+   * same amount (a shadow, a dent's lit rim). Flat bare ground lights to
+   * exactly 1, so it comes out fully transparent.
    * @param {Light} light
+   * @param {boolean} [sprite]
    */
-  render(light) {
+  render(light, sprite = false) {
     const { width: W, height: H, h } = this;
     const az = light.azimuth;
     const el = light.elevation;
@@ -359,8 +415,9 @@ class Canvas {
     const ly = L[1] ?? 0;
     const lz = L[2] ?? 1;
     const slope = 0.8; // how steep a unit of paint height reads
-    const blur = boxBlur(h, W, H, 6);
-    const out = Buffer.alloc(W * H * 3);
+    const blur = boxBlur(h, W, H, Math.round(6 * this.k));
+    const channels = sprite ? 4 : 3;
+    const out = Buffer.alloc(W * H * channels);
     const stepX = -lx / Math.hypot(lx, ly);
     const stepY = -ly / Math.hypot(lx, ly);
     const rise = Math.tan(el) / slope;
@@ -376,10 +433,10 @@ class Canvas {
         // Shadow: walk toward the light; anything standing higher than the ray blocks it.
         let lit = 1;
         const h0 = h[i] ?? 0;
-        for (let s = 1; s < 48; s += s < 10 ? 1 : 2) {
+        for (let s = 1; s < 48 * this.k; s += s < 10 ? 1 : 2) {
           const above = at(Math.round(x + stepX * s), Math.round(y + stepY * s)) - (h0 + rise * s);
           if (above > 0) {
-            lit = Math.min(lit, 1 - Math.min(1, above / 3));
+            lit = Math.min(lit, 1 - Math.min(1, above / (3 * this.k)));
             if (lit <= 0) break;
           }
         }
@@ -391,8 +448,31 @@ class Canvas {
         const hz = lz + 1;
         const hn = Math.hypot(lx, ly, hz);
         const spec = Math.max(0, (nx * lx + ny * ly + hz) / (nl * hn)) ** 60 * light.gloss * lit;
-        const crevice = 1 - Math.min(0.22, Math.max(0, ((blur[i] ?? 0) - h0) * 0.06));
+        const crevice = 1 - Math.min(0.22, Math.max(0, ((blur[i] ?? 0) - h0) * (0.06 / this.k)));
         const painted = 1 - (this.shade[i] ?? 0);
+        if (sprite) {
+          // Bare ground: how much darker or lighter than flat plaster.
+          const v = flat * crevice * painted;
+          const dark = Math.min(1, Math.max(0, 1 - v));
+          // No lightening right beside a figure: the slope of its own paint
+          // would ring it with a pale halo. A footprint's rim keeps its light.
+          const reach = Math.round(2 * this.k);
+          const fAt = (/** @type {number} */ xx, /** @type {number} */ yy) => this.figure[Math.min(H - 1, Math.max(0, yy)) * W + Math.min(W - 1, Math.max(0, xx))] ?? 0;
+          const besideFigure = fAt(x - reach, y) + fAt(x + reach, y) + fAt(x, y - reach) + fAt(x, y + reach) > 0;
+          const light2 = besideFigure ? 0 : Math.min(1, Math.max(0, (v - 1) * 1.2 + spec * (1 - fig)));
+          const under = dark > 0 ? 0 : 255;
+          const underA = Math.max(dark, light2);
+          const alpha = fig + (1 - fig) * underA;
+          for (let c = 0; c < 3; c++) {
+            const base = c === 0 ? this.r[i] ?? 0 : c === 1 ? this.g[i] ?? 0 : this.b[i] ?? 0;
+            const tint = (light.colour[c] ?? 255) / 255;
+            const lit = Math.min(255, base * shadeTerm * tint * painted + spec * 255);
+            const v2 = alpha > 0 ? (lit * fig + under * (1 - fig) * underA) / alpha : 0;
+            out[i * 4 + c] = Math.max(0, Math.min(255, Math.round(v2)));
+          }
+          out[i * 4 + 3] = Math.round(Math.min(1, alpha) * 255);
+          continue;
+        }
         for (let c = 0; c < 3; c++) {
           const base = c === 0 ? this.r[i] ?? 0 : c === 1 ? this.g[i] ?? 0 : this.b[i] ?? 0;
           const tint = (light.colour[c] ?? 255) / 255;
@@ -428,8 +508,9 @@ function boxBlur(src, W, H, r) {
   return out;
 }
 
-/** @param {Buffer} rgb @param {number} W @param {number} H */
-function png(rgb, W, H) {
+/** @param {Buffer} rgb RGB, or RGBA when `alpha` @param {number} W @param {number} H @param {boolean} [alpha] */
+function png(rgb, W, H, alpha = false) {
+  const n = alpha ? 4 : 3;
   const crcTable = Array.from({ length: 256 }, (_, n) => {
     let c = n;
     for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
@@ -454,11 +535,11 @@ function png(rgb, W, H) {
   header.writeUInt32BE(W, 0);
   header.writeUInt32BE(H, 4);
   header[8] = 8; // bit depth
-  header[9] = 2; // truecolour
-  const raw = Buffer.alloc((W * 3 + 1) * H);
+  header[9] = alpha ? 6 : 2; // truecolour, with or without alpha
+  const raw = Buffer.alloc((W * n + 1) * H);
   for (let y = 0; y < H; y++) {
-    raw[y * (W * 3 + 1)] = 0;
-    rgb.copy(raw, y * (W * 3 + 1) + 1, y * W * 3, (y + 1) * W * 3);
+    raw[y * (W * n + 1)] = 0;
+    rgb.copy(raw, y * (W * n + 1) + 1, y * W * n, (y + 1) * W * n);
   }
   return Buffer.concat([
     Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
@@ -496,37 +577,140 @@ const PAINT = /** @type {Record<string, RGB>} */ ({
 /** Coats and towels for a crowd, in the order they are handed out. */
 const CROWD = [PAINT.coat, PAINT.blue, PAINT.hat, PAINT.teal, PAINT.pink, PAINT.orange, PAINT.green, PAINT.purple].map((c) => c ?? [200, 60, 50]);
 
+/** Skin and hair, a few of each, so a crowd is not one person repeated. */
+const SKIN = /** @type {RGB[]} */ ([[241, 200, 168], [224, 172, 128], [190, 132, 92], [140, 92, 60], [96, 64, 44]]);
+const HAIR = /** @type {Record<string, RGB>} */ ({ black: [32, 26, 24], brown: [98, 62, 38], blonde: [222, 186, 108], grey: [196, 196, 192], red: [178, 84, 42] });
+
 /**
- * A person standing, about `s` pixels tall, feet at (x, y). `pose` moves the
- * arms; everything else is shared so the three scenes are one hand.
+ * What someone looks like. `top` is a coat (to the knee), a jacket (to the
+ * hip), a tee (short sleeves) or a dress; `bottom` is trousers, shorts or a
+ * skirt. `build` widens the shoulders and hips; `child` makes the head bigger
+ * and the legs shorter, the way a child is built.
+ * @typedef {{ skin: RGB, hair: { style: "short" | "long" | "bun" | "cap" | "beanie" | "bald", colour: RGB, hat?: RGB }, top: { kind: "coat" | "jacket" | "tee" | "dress", colour: RGB }, bottom: { kind: "trousers" | "shorts" | "skirt", colour: RGB }, shoes: RGB, build: number, child?: boolean }} Look
+ */
+
+/** @type {Record<string, Look>} */
+const PEOPLE = {
+  parka: { skin: SKIN[1] ?? [224, 172, 128], hair: { style: "beanie", colour: HAIR.brown ?? [98, 62, 38], hat: [255, 196, 30] }, top: { kind: "jacket", colour: [228, 58, 42] }, bottom: { kind: "trousers", colour: [36, 48, 92] }, shoes: [40, 34, 32], build: 1.05 },
+  camel: { skin: SKIN[2] ?? [190, 132, 92], hair: { style: "short", colour: HAIR.black ?? [32, 26, 24] }, top: { kind: "coat", colour: [196, 148, 92] }, bottom: { kind: "trousers", colour: [44, 46, 58] }, shoes: [30, 26, 24], build: 0.95 },
+  dress: { skin: SKIN[0] ?? [241, 200, 168], hair: { style: "long", colour: HAIR.brown ?? [98, 62, 38] }, top: { kind: "dress", colour: [222, 44, 70] }, bottom: { kind: "skirt", colour: [222, 44, 70] }, shoes: [120, 24, 36], build: 0.85 },
+  kid: { skin: SKIN[1] ?? [224, 172, 128], hair: { style: "short", colour: HAIR.blonde ?? [222, 186, 108] }, top: { kind: "jacket", colour: [255, 204, 0] }, bottom: { kind: "trousers", colour: [40, 110, 210] }, shoes: [200, 40, 40], build: 0.9, child: true },
+  puffer: { skin: SKIN[3] ?? [140, 92, 60], hair: { style: "beanie", colour: HAIR.black ?? [32, 26, 24], hat: [255, 120, 20] }, top: { kind: "jacket", colour: [40, 160, 96] }, bottom: { kind: "trousers", colour: [110, 112, 118] }, shoes: [36, 32, 30], build: 1.3 },
+  skirt: { skin: SKIN[4] ?? [96, 64, 44], hair: { style: "bun", colour: HAIR.black ?? [32, 26, 24] }, top: { kind: "jacket", colour: [0, 168, 164] }, bottom: { kind: "skirt", colour: [36, 36, 44] }, shoes: [30, 28, 28], build: 0.9 },
+  elder: { skin: SKIN[0] ?? [241, 200, 168], hair: { style: "cap", colour: HAIR.grey ?? [196, 196, 192], hat: [70, 72, 84] }, top: { kind: "coat", colour: [120, 124, 134] }, bottom: { kind: "trousers", colour: [60, 52, 46] }, shoes: [40, 30, 26], build: 1.0 },
+  hoodie: { skin: SKIN[1] ?? [224, 172, 128], hair: { style: "short", colour: HAIR.red ?? [178, 84, 42] }, top: { kind: "jacket", colour: [246, 112, 168] }, bottom: { kind: "trousers", colour: [62, 92, 150] }, shoes: [240, 240, 236], build: 0.95 },
+  tee: { skin: SKIN[2] ?? [190, 132, 92], hair: { style: "cap", colour: HAIR.black ?? [32, 26, 24], hat: [36, 110, 236] }, top: { kind: "tee", colour: [250, 250, 246] }, bottom: { kind: "shorts", colour: [196, 172, 120] }, shoes: [40, 40, 44], build: 1.05 },
+  overalls: { skin: SKIN[3] ?? [140, 92, 60], hair: { style: "cap", colour: HAIR.black ?? [32, 26, 24], hat: [228, 58, 42] }, top: { kind: "jacket", colour: [36, 110, 236] }, bottom: { kind: "trousers", colour: [120, 84, 52] }, shoes: [44, 34, 28], build: 1.1 },
+};
+
+/**
+ * A person standing, about `s` pixels tall, feet at (x, y), built to adult
+ * proportions: a head a seventh of their height, shoulders wider than hips,
+ * elbows and knees. `pose.arms` are the two hands, from a point on the chest
+ * just under the shoulders, in tenths of their height.
  * @param {Canvas} c @param {number} x @param {number} y @param {number} s
- * @param {{ arms: number[][], lean?: number, coat?: RGB, hat?: RGB }} pose arms as [hand x, hand y] from the shoulder, in figure units
+ * @param {{ arms: number[][], lean?: number, look?: Look, coat?: RGB, hat?: RGB, stride?: number, turn?: number }} pose `stride` from -1 to 1 swings the legs for a walking frame; `turn` moves the head sideways; `coat` and `hat` recolour the look
  */
 function person(c, x, y, s, pose) {
-  const u = s / 10; // one figure unit
+  const base = pose.look ?? PEOPLE.parka ?? /** @type {Look} */ ({});
+  const look = { ...base, top: { ...base.top, colour: pose.coat ?? base.top.colour }, hair: { ...base.hair, hat: pose.hat ?? base.hair.hat } };
+  const u = s / 10;
+  const b = look.build;
+  const kid = look.child === true;
   const lean = (pose.lean ?? 0) * u;
-  c.shadow(x + 3.2 * u, y + 0.5 * u, 4.2 * u, 0.9 * u, 0.32);
-  // Legs
-  c.dab(x - 0.7 * u, y - 0.2 * u, x - 0.4 * u + lean * 0.2, y - 4.2 * u, 0.62 * u, PAINT.trousers);
-  c.dab(x + 0.7 * u, y - 0.2 * u, x + 0.4 * u + lean * 0.2, y - 4.2 * u, 0.62 * u, PAINT.trousers);
-  // Coat
-  const coat = pose.coat ?? PAINT.coat;
-  c.dab(x + lean * 0.5, y - 4.4 * u, x + lean, y - 7.4 * u, 1.35 * u, coat, 2.2);
-  const sx = x + lean;
-  const sy = y - 7.1 * u;
-  for (const [hx, hy] of pose.arms) {
-    c.dab(sx + Math.sign(hx ?? 0) * 0.9 * u, sy, sx + (hx ?? 0) * u, sy + (hy ?? 0) * u, 0.5 * u, coat, 1.8);
-    c.dab(sx + (hx ?? 0) * u, sy + (hy ?? 0) * u, sx + (hx ?? 0) * u, sy + (hy ?? 0) * u, 0.45 * u, PAINT.skin, 1.8);
+  const stride = (pose.stride ?? 0) * u;
+  const hr = (kid ? 0.92 : 0.68) * u; // head radius
+  const headY = y - s + hr;
+  const shoulderY = headY + hr + (kid ? 0.35 : 0.55) * u;
+  const hipY = y - (kid ? 4.4 : 5.0) * u;
+  const kneeY = y - (kid ? 2.2 : 2.6) * u;
+  const sw = (kid ? 1.0 : 1.15) * u * b; // half the shoulders
+  const hw = 0.95 * u * b; // half the hips
+  /** @param {number} along 0 at the hips, 1 at the shoulders */
+  const tilt = (along) => lean * along;
+
+  c.shadow(x + 3.0 * u, y + 0.45 * u, 3.6 * u * b, 0.8 * u, 0.3);
+
+  // Long hair falls behind the shoulders, so it goes down first.
+  if (look.hair.style === "long") c.dab(x + tilt(1), headY, x + tilt(0.8), shoulderY + 1.6 * u, hr * 1.05, look.hair.colour, 1.6);
+
+  // Legs: hip, knee, foot. A stride swings the knee and foot forward and back.
+  const legColour = look.bottom.kind === "trousers" ? look.bottom.colour : look.skin;
+  for (const side of [-1, 1]) {
+    const swing = -side * stride;
+    const hx = x + side * 0.45 * u * b;
+    const kx = x + side * 0.4 * u + swing * 0.6;
+    const fx = x + side * 0.36 * u + swing;
+    const lift = Math.max(0, side * stride) * 0.2;
+    c.dab(hx + tilt(0), hipY, kx, kneeY - lift * 0.5, 0.44 * u * Math.min(1.15, b), legColour, 1.6);
+    c.dab(kx, kneeY - lift * 0.5, fx, y - 0.3 * u - lift, 0.34 * u, legColour, 1.5);
+    if (look.bottom.kind === "shorts") c.dab(hx, hipY, kx, kneeY - 0.9 * u, 0.48 * u * b, look.bottom.colour, 1.7);
+    c.dab(fx - side * 0.05 * u, y - 0.22 * u - lift, fx + 0.32 * u, y - 0.18 * u - lift, 0.27 * u, look.shoes, 1.4);
   }
-  // Head and hat
-  c.dab(sx, y - 8.7 * u, sx, y - 8.7 * u, 0.95 * u, PAINT.skin, 2);
-  c.dab(sx - 0.45 * u, y - 9.55 * u, sx + 0.45 * u, y - 9.55 * u, 0.5 * u, pose.hat ?? PAINT.hat, 2.2);
+
+  // A skirt, or the skirt of a dress, flares from the hips.
+  if (look.bottom.kind === "skirt" || look.top.kind === "dress") {
+    const hem = y - 2.7 * u;
+    c.poly([[x - hw * 0.95 + tilt(0), hipY - 0.3 * u], [x + hw * 0.95 + tilt(0), hipY - 0.3 * u], [x + hw * 1.45, hem], [x - hw * 1.45, hem]], look.bottom.kind === "skirt" ? look.bottom.colour : look.top.colour, 1.8, 0.25 * u);
+  }
+
+  // The top: shoulders to its hem. A coat reaches the knee and flares a little.
+  const hem = { coat: y - 2.5 * u, jacket: hipY + 0.35 * u, tee: hipY - 0.1 * u, dress: hipY }[look.top.kind];
+  const flare = look.top.kind === "coat" ? 1.18 : 1.0;
+  // Sloped shoulders: narrow at the neck, widest at the shoulder point.
+  c.poly(
+    [
+      [x - 0.5 * u + tilt(1), shoulderY - 0.1 * u],
+      [x + 0.5 * u + tilt(1), shoulderY - 0.1 * u],
+      [x + sw + tilt(0.95), shoulderY + 0.55 * u],
+      [x + hw * flare + tilt(0), hem],
+      [x - hw * flare + tilt(0), hem],
+      [x - sw + tilt(0.95), shoulderY + 0.55 * u],
+    ],
+    look.top.colour,
+    2.2,
+    0.45 * u,
+  );
+
+  // Arms: shoulder, elbow (pushed out and down), hand.
+  const sx = x + tilt(1);
+  const sy = y - 7.1 * u;
+  // Sleeves a shade darker than the body, the way an arm in front of a coat is shaded.
+  const sleeve = /** @type {RGB} */ (look.top.colour.map((v) => Math.round(v * 0.86)));
+  const arm = look.top.kind === "tee" ? look.skin : sleeve;
+  for (const [ax = 0, ay = 0] of pose.arms) {
+    const side = Math.sign(ax) || 1;
+    const shx = sx + side * (sw - 0.2 * u);
+    const shy = shoulderY + 0.6 * u;
+    const hx2 = sx + ax * u;
+    const hy2 = sy + ay * u;
+    const ex = (shx + hx2) / 2 + side * 0.3 * u;
+    const ey = (shy + hy2) / 2 + 0.25 * u;
+    c.dab(shx, shy, shx, shy, 0.4 * u, look.top.kind === "tee" ? look.top.colour : sleeve, 2.4);
+    c.dab(shx, shy, ex, ey, 0.32 * u, look.top.kind === "tee" ? look.top.colour : sleeve, 2.4);
+    c.dab(ex, ey, hx2, hy2, 0.27 * u, arm, 2);
+    c.dab(hx2, hy2, hx2, hy2, 0.3 * u, look.skin, 2);
+  }
+
+  // Neck, head, hair.
+  const hx = sx + (pose.turn ?? 0) * u;
+  c.dab(sx, shoulderY, sx, headY + hr * 0.6, 0.26 * u, look.skin, 1.8);
+  const hair = look.hair;
+  if (hair.style !== "bald") c.dab(hx, headY - hr * 0.2, hx, headY - hr * 0.2, hr * 1.04, hair.colour, 2.2);
+  c.dab(hx + (pose.turn ?? 0) * 0.2 * u, headY + hr * 0.16, hx + (pose.turn ?? 0) * 0.2 * u, headY + hr * 0.16, hr * 0.86, look.skin, 2.3);
+  if (hair.style === "bun") c.dab(hx, headY - hr * 1.15, hx, headY - hr * 1.15, hr * 0.45, hair.colour, 2.4);
+  if (hair.style === "beanie") c.dab(hx - hr * 0.55, headY - hr * 0.55, hx + hr * 0.55, headY - hr * 0.55, hr * 0.62, hair.hat ?? [255, 196, 30], 2.5);
+  if (hair.style === "cap") {
+    c.dab(hx - hr * 0.5, headY - hr * 0.5, hx + hr * 0.5, headY - hr * 0.5, hr * 0.58, hair.hat ?? [36, 110, 236], 2.5);
+    c.dab(hx + hr * 0.2, headY - hr * 0.2, hx + hr * 1.3, headY - hr * 0.15, hr * 0.22, hair.hat ?? [36, 110, 236], 2.5);
+  }
 }
 
 /**
  * Someone lying on their front on a towel, reading, seen from above. `s` is the
  * towel's length; `angle` turns the whole towel.
  * @param {Canvas} c @param {number} x @param {number} y @param {number} s @param {number} angle @param {RGB} towel @param {RGB} top
+ * @returns {number[]} where the book is, and its angle, for the page that turns over it
  */
 function reader(c, x, y, s, angle, towel, top) {
   const u = s / 10;
@@ -549,7 +733,9 @@ function reader(c, x, y, s, angle, towel, top) {
   c.dab(nx, ny, ...at(-3.2, 1.3), 0.38 * u, top, 1.4);
   c.dab(nx, ny, ...at(-3.2, -1.3), 0.38 * u, top, 1.4);
   c.dab(hx, hy, hx, hy, 0.8 * u, PAINT.skin, 1.8);
-  c.rect(...at(-4.6, 0), 0.9 * u, 2.2 * u, angle, PAINT.white, 1.4);
+  const book = at(-4.6, 0);
+  c.rect(...book, 0.9 * u, 2.2 * u, angle, PAINT.white, 1.4);
+  return [...book, angle, u];
 }
 
 /**
@@ -586,99 +772,202 @@ const PAINTS = /** @type {Record<string, RGB[]>} */ ({
 /** @param {RGB[]} paints @param {Light} [light] @returns {Ground} */
 const one = (paints, light = DAY) => ({ fields: [{ until: 1, paints }], light });
 
-/** @type {Scene[]} */
-const SCENES = [
+/**
+ * A sprite: something small that moves, drawn on flat ground so the page can
+ * lay it over the plaster. Frames sit side by side in one strip. Keep the box
+ * at least 8px below the feet: a shadow cut off by the box edge shows as a
+ * hard line on the page.
+ * @typedef {{ name: string, w: number, h: number, ax: number, ay: number, frames: ((c: Canvas, x: number, y: number) => void)[] }} Sprite
+ */
+/**
+ * A living scene: the still part painted into the ground, and the sprites that
+ * move over it. `points` are the positions the page animates between, in the
+ * ground's own pixels; they go into the manifest with the sprites' sizes.
+ * @typedef {{ name: string, width: number, height: number, seed: number, day: Ground, night: Ground, still: (c: Canvas, points: Record<string, number[][]>) => void, sprites: Sprite[], points: Record<string, number[][]> }} Living
+ */
+
+/** The footprint trail on the 404, and the line the walker follows along it. */
+const LOST_END = 930;
+/** @param {number} x */
+const lostY = (x) => {
+  const t = x / LOST_END;
+  return 410 - 80 * t + 14 * Math.sin(t * 5.2);
+};
+
+/** Seven different people in the contact queue, a child among them. */
+const QUEUE = ["camel", "dress", "kid", "puffer", "skirt", "elder", "hoodie"].map((name) => PEOPLE[name] ?? PEOPLE.parka);
+
+/** @type {Living[]} */
+const LIVING = [
   {
-    // 404: footprints come in from the left edge and stop at one figure with a
-    // map held open. Nothing ahead of him but plaster.
+    // 404: someone walks in along a trail of their own footprints and stops to read a map.
     name: "lost",
     width: 1344,
     height: 560,
     seed: 404,
     day: one(PAINTS.plaster ?? []),
     night: one(PAINTS.slate ?? [], NIGHT),
-    figure(c) {
-      const fx = 930;
-      const fy = 330;
-      const r = rng(7);
-      for (let k = 0, x = -10; x < fx - 22; k++, x += 19 + r() * 3) {
-        const t = x / fx;
-        const y = 410 - 80 * t + 14 * Math.sin(t * 5.2) + (k % 2 ? 6 : -6);
-        c.dent(x, y, 5.2, 2.8, 2.6, -0.2);
-      }
-      c.freeze();
-      person(c, fx, fy, 46, { arms: [[-2.6, 1.6], [2.6, 1.6]] });
-      // The map: a pale sheet across both hands.
-      c.dab(fx - 11, fy - 25, fx + 11, fy - 25, 3.2, PAINT.map, 2.4);
-      c.dab(fx, fy - 28, fx, fy - 22, 0.55, PAINT.fold, 2.6);
+    points: {
+      prints: (() => {
+        const r = rng(7);
+        /** @type {number[][]} */
+        const out = [];
+        for (let k = 0, x = 10; x < LOST_END - 22; k++, x += 19 + r() * 3) out.push([Math.round(x), Math.round(lostY(x) + (k % 2 ? 6 : -6))]);
+        return out;
+      })(),
+      path: Array.from({ length: 13 }, (_, k) => {
+        const x = -20 + ((LOST_END + 20) * k) / 12;
+        return [Math.round(x), Math.round(lostY(Math.max(0, x)))];
+      }),
     },
+    still() {},
+    sprites: [
+      { name: "print", w: 16, h: 12, ax: 8, ay: 6, frames: [(c, x, y) => c.dent(x, y, 5.2, 2.8, 2.6, -0.2)] },
+      {
+        name: "walker",
+        w: 62,
+        h: 64,
+        ax: 22,
+        ay: 52,
+        frames: [1, -1].map((side) => (/** @type {Canvas} */ c, /** @type {number} */ x, /** @type {number} */ y) =>
+          person(c, x, y, 46, { arms: [[-1.6 - side * 0.5, 2.7], [1.6 - side * 0.5, 2.7]], stride: side * 0.9, look: PEOPLE.parka }),
+        ),
+      },
+      {
+        name: "reader",
+        w: 62,
+        h: 64,
+        ax: 22,
+        ay: 52,
+        frames: [
+          (c, x, y) => {
+            person(c, x, y, 46, { arms: [[-2.4, 1.6], [2.4, 1.6]], look: PEOPLE.parka });
+            c.rect(x, y - 25.5, 19, 7, 0, [252, 236, 180], 2.6);
+            c.rect(x, y - 25.5, 0.6, 7, 0, PAINT.fold ?? [196, 160, 80], 2.8);
+          },
+          (c, x, y) => {
+            // Map lowered, looking off to the side: which way now?
+            person(c, x, y, 46, { arms: [[-1.4, 2.8], [1.4, 2.8]], turn: 0.45, look: PEOPLE.parka });
+            c.rect(x, y - 20.5, 10, 4.5, 0, [252, 236, 180], 2.6);
+          },
+        ],
+      },
+    ],
   },
   {
-    // Contact: a queue at a pillar box on the drift, the front one posting.
+    // Contact: a queue at the postbox that keeps moving. Each person shuffles up,
+    // posts, and walks off; someone new joins the back.
     name: "post",
     width: 1344,
     height: 560,
     seed: 82,
     day: one(PAINTS.plaster ?? []),
     night: one(PAINTS.slate ?? [], NIGHT),
-    figure(c) {
+    points: {
+      box: [[760, 360]],
+      slots: [0, 1, 2, 3, 4].map((k) => [730 - k * 26, 362 + k * 3]),
+      enter: [[440, 384]],
+      leave: [[800, 398], [930, 420]],
+    },
+    still(c) {
       const bx = 760;
       const by = 360;
       c.freeze();
       c.shadow(bx + 18, by + 3, 22, 4.5, 0.34);
-      c.dab(bx, by - 2, bx, by - 50, 10.5, PAINT.box, 3);
-      c.dab(bx - 12, by - 52, bx + 12, by - 52, 4.2, PAINT.boxDark, 3.4);
+      c.dab(bx, by - 2, bx, by - 50, 10.5, PAINT.box ?? [214, 36, 30], 3);
+      c.dab(bx - 12, by - 52, bx + 12, by - 52, 4.2, PAINT.boxDark ?? [120, 18, 22], 3.4);
       c.dab(bx - 6, by - 38, bx + 6, by - 38, 1.1, [40, 10, 12], 2);
-      c.dab(bx - 11, by - 3, bx + 11, by - 3, 2.2, PAINT.boxDark, 2.8);
-      // A queue of five, each with a letter; the front one is posting.
-      const r = rng(12);
-      for (let k = 4; k >= 1; k--) {
-        const x = bx - 30 - k * 26 - r() * 6;
-        const y = by + 2 + k * 3;
-        person(c, x, y, 42 - k, { arms: [[-0.8, 2.6], [1.8, 1.4]], coat: CROWD[k] ?? PAINT.coat, hat: CROWD[(k + 3) % CROWD.length] });
-        c.dab(x + 1.8 * 4.2 - 1, y - 24, x + 1.8 * 4.2 + 3, y - 24, 1.7, PAINT.paper, 1.6);
-      }
-      person(c, bx - 30, by + 2, 42, { arms: [[3.6, -0.6], [1.2, 2.4]], coat: PAINT.blue });
-      // The letter, at the slot.
-      c.dab(bx - 13, by - 38, bx - 7, by - 38, 2.2, PAINT.paper, 1.6);
+      c.dab(bx - 11, by - 3, bx + 11, by - 3, 2.2, PAINT.boxDark ?? [120, 18, 22], 2.8);
     },
+    sprites: QUEUE.map((look, k) => {
+      const s = look?.child ? 29 : 42 - (k % 3);
+      const u = s / 10;
+      /** The letter sits in the hand: hands are measured from 7.1 tenths up. @param {Canvas} c @param {number} x @param {number} y @param {number} hx @param {number} hy */
+      const letter = (c, x, y, hx, hy) => c.rect(x + hx * u + 1.4, y - 7.1 * u + hy * u - 0.6, 4.2, 2.8, -0.1, PAINT.paper ?? [250, 248, 240], 1.4);
+      return {
+        name: `q${k}`,
+        w: 58,
+        h: 60,
+        ax: 20,
+        ay: 50,
+        frames: [
+          // Waiting, letter in hand.
+          (/** @type {Canvas} */ c, /** @type {number} */ x, /** @type {number} */ y) => {
+            person(c, x, y, s, { arms: [[-1.0, 2.7], [1.9, 1.5]], look });
+            letter(c, x, y, 1.9, 1.5);
+          },
+          // Posting: arm up, letter at the slot.
+          (/** @type {Canvas} */ c, /** @type {number} */ x, /** @type {number} */ y) => {
+            person(c, x, y, s, { arms: [[3.6, -0.6], [-1.0, 2.7]], look });
+            letter(c, x, y, 3.6, -0.6);
+          },
+          // Done, hands empty, walking off.
+          (/** @type {Canvas} */ c, /** @type {number} */ x, /** @type {number} */ y) => person(c, x, y, s, { arms: [[-1.3, 2.8], [1.3, 2.8]], look, stride: 0.6 }),
+        ],
+      };
+    }),
   },
   {
-    // An empty filter: a neat hole dug in clay, nothing in it, and a small crowd looking anyway.
+    // An empty filter: someone keeps digging, a small crowd keeps watching, nothing comes up.
     name: "dig",
     width: 960,
     height: 360,
     seed: 17,
     day: one(PAINTS.clay ?? []),
     night: one(PAINTS.ember ?? [], NIGHT),
-    figure(c) {
+    points: {
+      digger: [[470, 236]],
+      watchers: [[508, 214], [536, 212], [612, 232]],
+      clod: [[514, 226], [532, 196], [552, 200], [566, 219]],
+    },
+    still(c) {
       const hx = 520;
       const hy = 228;
       c.dent(hx, hy, 26, 9, 7);
       c.mound(hx + 52, hy - 3, 20, 9, 9);
       c.freeze();
-      // The hole's floor reads dark.
       c.shadow(hx - 2, hy + 1, 19, 6, 0.55);
-      person(c, hx - 50, hy + 8, 40, { arms: [[2.4, 0.4], [2.0, 2.2]], lean: 0.5, coat: PAINT.blue });
-      // Three onlookers lean over the far side of the hole.
-      person(c, hx - 12, hy - 14, 34, { arms: [[-1, 2.8], [1, 2.8]], lean: 0.6, coat: PAINT.pink, hat: PAINT.white });
-      person(c, hx + 16, hy - 16, 33, { arms: [[-1.2, 2.6], [2.4, 0.6]], lean: -0.6, coat: PAINT.hat, hat: PAINT.coat });
-      person(c, hx + 92, hy + 4, 36, { arms: [[-1.4, 2.8], [1.4, 2.8]], coat: PAINT.teal });
-      // The shovel: handle from the hands down to a blade at the hole's rim.
-      c.dab(hx - 42, hy - 24, hx - 26, hy + 2, 1.1, PAINT.handle, 1.6);
-      c.dab(hx - 27, hy + 1, hx - 22, hy + 7, 3, PAINT.steel, 1.8);
     },
+    sprites: [
+      {
+        name: "digger",
+        w: 56,
+        h: 56,
+        ax: 14,
+        ay: 46,
+        frames: [
+          (c, x, y) => {
+            person(c, x, y, 40, { arms: [[2.4, 0.4], [2.0, 2.2]], lean: 0.5, look: PEOPLE.overalls });
+            c.dab(x + 8, y - 32, x + 24, y - 6, 1.1, PAINT.handle ?? [150, 100, 52], 1.6);
+            c.dab(x + 23, y - 7, x + 28, y - 1, 3, PAINT.steel ?? [150, 156, 166], 1.8);
+          },
+        ],
+      },
+      { name: "clod", w: 12, h: 12, ax: 6, ay: 6, frames: [(c, x, y) => c.dab(x, y, x + 1, y, 2.4, (PAINTS.clay ?? [])[2] ?? [214, 124, 74], 2.2)] },
+      ...[
+        { look: PEOPLE.dress, arms: [[-1, 2.8], [1, 2.8]], lean: 0.6, s: 36 },
+        { look: PEOPLE.kid, arms: [[-1.2, 2.6], [2.4, 0.6]], lean: -0.6, s: 26 },
+        { look: PEOPLE.hoodie, arms: [[-1.4, 2.8], [1.4, 2.8]], lean: 0, s: 38 },
+      ].map(({ look, arms, lean, s }, k) => ({
+        name: `w${k}`,
+        w: 46,
+        h: 50,
+        ax: 14,
+        ay: 40,
+        frames: [(/** @type {Canvas} */ c, /** @type {number} */ x, /** @type {number} */ y) => person(c, x, y, s, { arms, lean, look })],
+      })),
+    ],
   },
   {
-    // /library: a lawn of people reading, scattered at their own small scale,
-    // with umbrellas as the objects. Twenty-eight readers, each about 15px long on a desktop.
+    // /library: a lawn of readers turning pages, and one more walking across with a book.
     name: "readers",
     width: 1344,
     height: 560,
     seed: 31,
     day: one(PAINTS.lawn ?? []),
     night: one(PAINTS.moss ?? [], NIGHT),
-    figure(c) {
+    points: { pages: [], walk: [[-30, 330], [1380, 262]] },
+    still(c, points) {
       c.freeze();
       const r = rng(5);
       /** @type {[number, number][]} */
@@ -688,19 +977,40 @@ const SCENES = [
         umbrella(c, ux ?? 0, uy ?? 0, ur ?? 20, CROWD[Math.floor(r() * CROWD.length)] ?? PAINT.coat, PAINT.white);
         placed.push([ux ?? 0, uy ?? 0]);
       }
+      /** @type {number[][]} */
+      const pages = [];
       for (let k = 0, tries = 0; k < 28 && tries < 4000; tries++) {
         const x = 60 + r() * (c.width - 120);
         const y = 50 + r() * (c.height - 100);
-        // Fewer people toward the edges, where the fade would eat them.
         const edge = Math.min(x, c.width - x) / c.width + Math.min(y, c.height - y) / c.height;
         if (edge < 0.18 * r() + 0.08 || near(x, y, 60)) continue;
         placed.push([x, y]);
         const size = 26 + r() * 8;
-        reader(c, x, y, size, (r() - 0.5) * 1.6 + (r() < 0.2 ? Math.PI : 0), CROWD[k % CROWD.length] ?? PAINT.coat, CROWD[(k * 3 + 1) % CROWD.length] ?? PAINT.white);
+        const book = reader(c, x, y, size, (r() - 0.5) * 1.6 + (r() < 0.2 ? Math.PI : 0), CROWD[k % CROWD.length] ?? PAINT.coat, CROWD[(k * 3 + 1) % CROWD.length] ?? PAINT.white);
+        if (k % 3 === 0) pages.push(book.map((v) => Math.round(v * 100) / 100));
         k++;
       }
+      points.pages = pages;
     },
+    sprites: [
+      { name: "page", w: 10, h: 10, ax: 5, ay: 5, frames: [(c, x, y) => c.rect(x, y, 2.4, 6, 0, PAINT.white ?? [250, 250, 248], 1.6)] },
+      {
+        name: "walker",
+        w: 30,
+        h: 32,
+        ax: 10,
+        ay: 25,
+        frames: [1, -1].map((side) => (/** @type {Canvas} */ c, /** @type {number} */ x, /** @type {number} */ y) => {
+          person(c, x, y, 20, { arms: [[-1.4, 2.7], [1.8, 1.3]], stride: side * 0.9, look: PEOPLE.tee, coat: PAINT.orange });
+          c.rect(x + 4, y - 12, 2.4, 3.2, 0.2, PAINT.white ?? [250, 250, 248], 1.6);
+        }),
+      },
+    ],
   },
+];
+
+/** @type {Scene[]} */
+const SCENES = [
   // The ground study: one figure on each ground, to choose a lane before building more.
   ...[
     { name: "study-plaster", day: one(PAINTS.plaster ?? []) },
@@ -751,17 +1061,59 @@ const { default: sharp } = await import("sharp");
 mkdirSync(OUT, { recursive: true });
 mkdirSync(PNG_DIR, { recursive: true });
 
+/** @param {string} name @param {Buffer} data @param {number} w @param {number} h @param {boolean} alpha */
+async function write(name, data, w, h, alpha) {
+  const file = path.join(PNG_DIR, `${name}.png`);
+  writeFileSync(file, png(data, w, h, alpha));
+  const info = await sharp(file).webp(alpha ? { quality: 82, alphaQuality: 90, effort: 6 } : { quality: 72, effort: 6 }).toFile(path.join(OUT, `${name}.webp`));
+  return info.size;
+}
+
 for (const scene of SCENES) {
   for (const [mood, ground] of /** @type {[string, Ground | undefined][]} */ ([["day", scene.day], ["night", scene.night]])) {
     if (!ground) continue;
     const c = new Canvas(scene.width, scene.height, scene.seed);
     c.plaster(ground.fields, -0.08);
     scene.figure(c);
-    const rgb = c.render(ground.light);
-    const file = path.join(PNG_DIR, `${scene.name}-${mood}.png`);
-    writeFileSync(file, png(rgb, scene.width, scene.height));
-    const webp = path.join(OUT, `${scene.name}-${mood}.webp`);
-    const info = await sharp(file).webp({ quality: 72, effort: 6 }).toFile(webp);
-    console.log(`${scene.name}-${mood}: ${scene.width}x${scene.height}, ${(info.size / 1024).toFixed(1)} KB webp`);
+    const size = await write(`${scene.name}-${mood}`, c.render(ground.light), scene.width, scene.height, false);
+    console.log(`${scene.name}-${mood}: ${scene.width}x${scene.height}, ${(size / 1024).toFixed(1)} KB`);
   }
 }
+
+/** The page reads this: each living scene's size, its points and its sprites. */
+const manifest = /** @type {Record<string, unknown>} */ ({});
+for (const scene of LIVING) {
+  let total = 0;
+  for (const [mood, ground] of /** @type {[string, Ground][]} */ ([["day", scene.day], ["night", scene.night]])) {
+    const c = new Canvas(scene.width, scene.height, scene.seed);
+    c.plaster(ground.fields, -0.08);
+    scene.still(c, scene.points);
+    total += await write(`${scene.name}-${mood}`, c.render(ground.light), scene.width, scene.height, false);
+    for (const sprite of scene.sprites) {
+      // Painted at 3x, so the browser scales it down and the figure stays sharp.
+      const K = 3;
+      const w = sprite.w * K;
+      const h = sprite.h * K;
+      const n = sprite.frames.length;
+      const strip = Buffer.alloc(w * n * h * 4);
+      sprite.frames.forEach((draw, f) => {
+        const s = new Canvas(w, h, scene.seed);
+        s.k = K;
+        s.h.fill(0);
+        s.freeze();
+        draw(s, sprite.ax, sprite.ay);
+        const rgba = s.render(ground.light, true);
+        for (let y = 0; y < h; y++) rgba.copy(strip, (y * w * n + f * w) * 4, y * w * 4, (y + 1) * w * 4);
+      });
+      total += await write(`${scene.name}-${sprite.name}-${mood}`, strip, w * n, h, true);
+    }
+  }
+  manifest[scene.name] = {
+    width: scene.width,
+    height: scene.height,
+    points: scene.points,
+    sprites: Object.fromEntries(scene.sprites.map(({ name, w, h, ax, ay, frames }) => [name, { w, h, ax, ay, frames: frames.length }])),
+  };
+  console.log(`${scene.name}: ground and ${scene.sprites.length} sprites, both moods, ${(total / 1024).toFixed(1)} KB`);
+}
+writeFileSync(path.join(process.cwd(), "src", "components", "lab", "plaster-manifest.json"), `${JSON.stringify(manifest, null, 1)}\n`);

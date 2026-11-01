@@ -1,66 +1,114 @@
 /* ==========================================================================
    aayushmanchanda.com — plaster prototypes (/lab/plaster, noindex)
 
-   Knifed plaster with one small figure, drawn by
-   `feature-research/art-plaster/plaster.mjs`. Each theme fetches only its own
-   picture, the /tokens sky's trick: a custom property per theme, read by one
-   `background`. Here and not in `global.css`, which is in the share-card cache key.
+   Knifed plaster with small figures that move, drawn by
+   `feature-research/art-plaster/plaster.mjs`; `components/lab/Plaster.astro`
+   writes each scene's pictures and keyframes. Here and not in `global.css`,
+   which is in the share-card cache key.
    ========================================================================== */
 
-.plaster--lost { --plaster-image: url("/lab/plaster/lost-day.webp"); --plaster-focus: 69%; --plaster-focus-y: 59%; }
-.plaster--post { --plaster-image: url("/lab/plaster/post-day.webp"); --plaster-focus: 52%; --plaster-focus-y: 60%; }
-.plaster--dig { --plaster-image: url("/lab/plaster/dig-day.webp"); --plaster-focus: 52%; --plaster-focus-y: 60%; }
-.plaster--readers { --plaster-image: url("/lab/plaster/readers-day.webp"); --plaster-focus: 30%; }
-
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) .plaster--lost { --plaster-image: url("/lab/plaster/lost-night.webp"); }
-  :root:not([data-theme="light"]) .plaster--post { --plaster-image: url("/lab/plaster/post-night.webp"); }
-  :root:not([data-theme="light"]) .plaster--dig { --plaster-image: url("/lab/plaster/dig-night.webp"); }
-  :root:not([data-theme="light"]) .plaster--readers { --plaster-image: url("/lab/plaster/readers-night.webp"); }
-}
-
-:root[data-theme="dark"] .plaster--lost { --plaster-image: url("/lab/plaster/lost-night.webp"); }
-:root[data-theme="dark"] .plaster--post { --plaster-image: url("/lab/plaster/post-night.webp"); }
-:root[data-theme="dark"] .plaster--dig { --plaster-image: url("/lab/plaster/dig-night.webp"); }
-:root[data-theme="dark"] .plaster--readers { --plaster-image: url("/lab/plaster/readers-night.webp"); }
-
-/* The plaster has no edge: it fades into the page, so the figure stands on the
-   paper itself instead of inside a framed picture. No motion, so reduced
-   motion has nothing to turn off. */
+/* The window onto the scene. It fades into the page on all four sides, so the
+   figures stand on the paper itself instead of inside a framed picture. */
 .plaster {
-  aspect-ratio: 12 / 5;
+  --zoom: 1;
+  --fx: 0.5;
+  --fy: 0.5;
+  --fade-x: linear-gradient(to right, transparent, black 14%, black 86%, transparent);
+  --fade-y: linear-gradient(transparent, black 18%, black 82%, transparent);
+
+  position: relative;
+  overflow: hidden;
+  container-type: size;
+  aspect-ratio: var(--ar);
   margin-inline: calc(-1 * var(--page-pad));
-  background: var(--plaster-image) var(--plaster-focus, 50%) var(--plaster-focus-y, 50%) / cover no-repeat;
-  /* Two linear fades intersected: a soft-edged slab, not an oval puddle. */
-  --plaster-fade-x: linear-gradient(to right, transparent, black 14%, black 86%, transparent);
-  --plaster-fade-y: linear-gradient(transparent, black 18%, black 82%, transparent);
-  -webkit-mask-image: var(--plaster-fade-x), var(--plaster-fade-y);
+  -webkit-mask-image: var(--fade-x), var(--fade-y);
   -webkit-mask-composite: source-in;
-  mask-image: var(--plaster-fade-x), var(--plaster-fade-y);
+  mask-image: var(--fade-x), var(--fade-y);
   mask-composite: intersect;
 }
 
+/* The scene itself, at the ground picture's own shape. On a desktop it fills
+   the window; on a phone it is zoomed in and slid so the focus point sits in
+   the middle, clamped so no edge of the ground shows. Every sprite is placed
+   in units of the stage's width, so it stays on its spot at any size. */
+.plaster__stage {
+  --stage-w: calc(100cqw * var(--zoom));
+  --stage-h: calc(var(--stage-w) / var(--ar));
+
+  position: absolute;
+  width: var(--stage-w);
+  aspect-ratio: var(--ar);
+  left: clamp(calc(100cqw - var(--stage-w)), calc(50cqw - var(--fx) * var(--stage-w)), 0px);
+  top: clamp(calc(100cqh - var(--stage-h)), calc(50cqh - var(--fy) * var(--stage-h)), 0px);
+  container-type: inline-size;
+  background: var(--ground) 0 0 / 100% 100% no-repeat;
+}
+
+.spr {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--w);
+  aspect-ratio: var(--sar);
+  overflow: hidden;
+}
+
+/* A strip of frames; moving it by one frame's width changes the pose. */
+.spr__strip {
+  display: block;
+  width: calc(var(--n) * 100%);
+  height: 100%;
+  background: var(--img) 0 0 / 100% 100% no-repeat;
+}
+
+/* The still picture: what the scene looks like when nothing moves. */
+.is-offstage,
+.lost-walker {
+  opacity: 0;
+}
+
+/* Motion runs only while the picture is on screen. */
+.plaster:not([data-play]) .spr,
+.plaster:not([data-play]) .spr__strip {
+  animation-play-state: paused !important;
+}
+
+@keyframes frame-2 {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(-50%); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.plaster--lost { --fx: 0.62; --fy: 0.6; }
+.plaster--post { --fx: 0.5; --fy: 0.64; }
+.plaster--dig { --fx: 0.55; --fy: 0.6; }
+.plaster--readers { --fx: 0.42; --fy: 0.5; }
+
 /* An empty state is a small aside, not a hero. */
 .plaster--dig {
-  aspect-ratio: 8 / 3;
   max-width: 30rem;
   margin-inline: auto;
 }
 
-/* A phone zooms in around the figure, so it stays about 25px tall. The
-   crowd of readers keeps the whole lawn: the crowd is the picture. */
+/* A phone zooms in on the figures so they stay about 20px tall. A 3:2 window
+   needs at least 1.6x of a 12:5 ground to leave no gap top or bottom. */
 @media (max-width: 34rem) {
   .plaster {
-    aspect-ratio: 3 / 2;
-    background-size: auto 150%;
+    aspect-ratio: 1.5;
+    --zoom: 1.8;
   }
 
   .plaster--readers {
-    background-size: cover;
+    --zoom: 1.6;
   }
 
   .plaster--dig {
-    aspect-ratio: 2 / 1;
+    aspect-ratio: 2;
+    --zoom: 1.5;
   }
 }
 

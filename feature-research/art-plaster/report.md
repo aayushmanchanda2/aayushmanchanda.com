@@ -1,11 +1,21 @@
 # Plaster art with small figures: research and prototypes
 
 **TLDR**
-1. **Found:** his grounds are thick acrylic gel knifed into ridges, not plaster, and only the snow works are white; others are sea blue, pool blue, salt pink, clay rust, colour fields. The figures are tiny and painted last.
-2. **Recommend:** ship plaster scenes where a little figure explains the page: the 404, the empty filter states, then /contact. No motion, one static WebP per theme, 9 to 57 KB.
-3. **Your decision:** white plaster everywhere (quiet, matches the white site), or a coloured ground per section (louder, ties to the section mats).
+1. **Found:** his grounds are thick acrylic gel spread with a knife, not plaster, and only the snow works are white. The figures are tiny, painted last, often in crowds.
+2. **Recommend:** moving plaster scenes where the figures act out the page: the 404 first, then empty filters, then /contact. Smooth, transform-only motion that stops when off screen and is a still picture with reduced motion on.
+3. **Your decision:** white plaster everywhere (quiet), or a coloured ground per section (louder, ties to the section colours).
 
-Previews (noindex, linked from nowhere): [index and grounds](https://aayushmanchandacom-git-claude-vibrant-dirac-ugx6fd-vettedinc.vercel.app/lab/plaster/) · [404](https://aayushmanchandacom-git-claude-vibrant-dirac-ugx6fd-vettedinc.vercel.app/lab/plaster/not-found/) · [contact](https://aayushmanchandacom-git-claude-vibrant-dirac-ugx6fd-vettedinc.vercel.app/lab/plaster/contact/) · [empty filter](https://aayushmanchandacom-git-claude-vibrant-dirac-ugx6fd-vettedinc.vercel.app/lab/plaster/empty/) · [library](https://aayushmanchandacom-git-claude-vibrant-dirac-ugx6fd-vettedinc.vercel.app/lab/plaster/library/). PR: [aayushmanchanda2/aayushmanchanda.com#81](https://github.com/aayushmanchanda2/aayushmanchanda.com/pull/81).
+Previews (noindex, linked from nowhere; Vercel may ask you to log in): [all](https://aayushmanchandacom-git-claude-vibrant-dirac-ugx6fd-vettedinc.vercel.app/lab/plaster) · [404](https://aayushmanchandacom-git-claude-vibrant-dirac-ugx6fd-vettedinc.vercel.app/lab/plaster/not-found) · [contact](https://aayushmanchandacom-git-claude-vibrant-dirac-ugx6fd-vettedinc.vercel.app/lab/plaster/contact) · [empty filter](https://aayushmanchandacom-git-claude-vibrant-dirac-ugx6fd-vettedinc.vercel.app/lab/plaster/empty) · [library](https://aayushmanchandacom-git-claude-vibrant-dirac-ugx6fd-vettedinc.vercel.app/lab/plaster/library). These pages do not exist on aayushmanchanda.com itself; there they land on the real 404.
+
+## The four scenes, moving
+
+| 404: walks in on their own footprints, stops, reads the map | Contact: the queue shuffles up, posts, walks off |
+|---|---|
+| ![404](motion/not-found-light-1280.webp) | ![Contact](motion/contact-close.webp) |
+| **Empty filter: keeps digging, nothing comes up, they keep watching** | **Library: pages turn, one more reader walks across** |
+| ![Empty filter](motion/empty-close.webp) | ![Library](motion/library-light-1280.webp) |
+
+The 404 walk plays once (12 s), then the figure stays, lowering the map to look around every 7 s. The other three loop. Both themes, phone and desktop, in `screenshots/`; the ground study is `screenshots/grounds.webp`.
 
 ## 1. The art
 
@@ -28,55 +38,40 @@ Every source below is a search-result snippet. The artist's site, the galleries 
 
 **Reuse:** no copyright or licensing statement found. He sells signed print editions (69, 169) and licenses brand work (Malbon Golf, Pockies shorts). Etsy is full of sellers offering paintings "in Werner Bronkhorst style" ([Etsy](https://www.etsy.com/market/werner_bronkhorst)), so the style is widely imitated; that is a reason to keep ours visibly different, not permission.
 
-## 2. How the prototypes are made
+## How it's made
 
-`feature-research/art-plaster/plaster.mjs`, plain Node, about 20 s for all 15 pictures:
-1. Each knife stroke writes colour and paint height into two fields: flat in the middle, a ridge along both edges, an arc-shaped lip where the knife lifts, streaks along its length, skips where older paint shows.
-2. A low light from the upper left reads the height: slope shading, a little gloss, darker crevices, and shadows marched across the height so ridges shade what's behind them.
-3. Figures go on last as small raised dabs with a painted shadow.
-4. The PNG is written by hand with `zlib`. `sharp` (already a dev dependency) re-encodes it to WebP.
+`feature-research/art-plaster/plaster.mjs`, plain Node, ~25 s for everything:
+1. **Ground:** each knife stroke writes colour and paint height into a height field (flat middle, ridged edges, an arc where the knife lifts). A low light from the upper left reads the height, with shadows marched across it. Written as PNG by hand (`zlib`); the repo's existing `sharp` turns it into WebP.
+2. **Figures:** drawn at 3x so they stay sharp when the browser scales them down. Real proportions: a head a seventh of the height, sloped shoulders, elbows, knees, shoes. Ten different people: coats, a dress, a skirt, shorts, a child, five skin tones, five hairstyles.
+3. **Motion:** each moving thing is a small transparent strip of poses laid over the ground. `components/lab/Plaster.astro` turns the points in `plaster-manifest.json` into keyframes. Only `transform` and `opacity` animate.
+4. **Rules it keeps:** a script arms the motion only when reduced motion is off, and pauses it whenever the scene is out of view. Without the script, or with reduced motion, each scene is a finished still (the queue stands in line; the 404 walker is already reading the map). Each theme downloads only its own pictures.
 
-Every scene has a night version (the same plaster in slate under moonlight), so the dark theme gets no white slab. Each theme fetches only its own file, the same CSS-variable trick as the /tokens sky. The plaster fades into the page at its edges, so there's no frame and no outline.
+## Placements
 
-## 3. Placements
+| Rank | Page | What the figures do | KB per visit (light / dark) | Risk |
+|---|---|---|---|---|
+| 1 | **404** | Walk in on their own footprints, stop, read a map | 72 / 30 | Pushes the link list ~230px down on a phone (still above the fold at 375x812) |
+| 2 | **Empty filters** (/tools, library pane, notes) | Keep digging, nothing comes up, a crowd watches | 33 / 22, only fetched once the empty message shows | Low: seen rarely |
+| 3 | **/contact** | A queue at a red postbox; the frame is already a postage stamp | 110 / 68 | Heaviest: 7 people x 3 poses. A shared walking strip would halve it |
+| 4 | **/library** | Readers on towels turn pages; one walks across | 56 / 24 | An index page; a picture above the list costs density |
+| 5 | **/experiments** (not built) | Someone on a ladder looking over a tall ridge of paint | ~60 / ~25 | Crowds the status tally |
 
-| Rank | Page | Idea | Build | Added KB (day / night, one per visit) | Motion | Risk |
-|---|---|---|---|---|---|---|
-| 1 | **404** | Footprints cross the plaster and stop at one figure reading a map. Nothing ahead. | Static WebP, CSS background | 56 / 15 | None | Pushes the link list about 230px down on a phone (still above the fold at 375x812); the 404's job is the list |
-| 2 | **Empty filters** (/tools, library pane, notes) | A hole dug in clay, nothing in it, four people looking anyway | Static WebP, loads only when the empty message shows | 20 / 9 | None | Low. Seen rarely |
-| 3 | **/contact** | A queue of five at a red postbox, the front one posting. The frame is already a postage stamp | Static WebP | 58 / 16 | None | Sits above the Email row; could go below it instead |
-| 4 | **/library** | 28 readers on towels on a lawn, three umbrellas | Static WebP | 53 / 21 | None | An index page; a picture above the list costs density |
-| 5 | **/experiments** (not built) | Someone on a ladder looking over a tall ridge of paint | Static WebP | ~50 / ~15 | None | Experiments has a status tally up top; crowding |
+**Stay plain:** home, /tools and /sites indexes, notes, about, /now (already has the painted banner), /tokens, privacy, footer (every page pays), share cards (one change redraws 364), the ⌘K "No matches".
 
-**Stay plain:** home (the hero and doodles carry it; a painting there makes the whole site loud), /tools and /sites indexes (dense tables and screenshots), notes (reading), about (photo and sparkle), /now (already has the painted banner), /tokens (already painted), privacy, the footer (every page pays the bytes), share cards (one change redraws 364; a picture fights the title at thumbnail size), the ⌘K "No matches" (too small to read).
+**Design rule change:** `design.md` §3 says /tokens and the /now banner are "the one place the site is loud on purpose". Shipping any of this adds a second family, and a moving one. I haven't edited `design.md`; the commit that ships the first scene should.
 
-**Design rule change:** `design.md` §3 says /tokens and the /now banner are "the one place the site is loud on purpose". Shipping any of this makes a second family: plaster scenes on recovery and contact surfaces. I haven't edited `design.md`, since nothing ships here; the line needs rewriting in the commit that ships the first one.
+**Closeness check:** I couldn't view his images, so I checked against the descriptions. Changed: green, purple and white with a court line (matched "Get Served"), clay with a court line ("Let's Clay"), readers on a beach (his beachgoer theme, moved to a lawn). No skiers, surfers, lane swimmers or tennis.
 
-**Closeness check:** I couldn't view his images, so I checked against the descriptions. Two study tiles were too close and I changed them: green, purple and white with a court line matched "Get Served", and clay with a court line matched "Let's Clay". They're now mustard over teal and plain clay. The readers were going to be on a beach; moved to a lawn because aerial beach umbrellas are a beachgoer theme he's known for. No skiers, surfers, swimmers in lanes or tennis.
+## Speed, measured
 
-## 4. Prototypes
+Chrome trace, 4 s of each scene running at 1280px:
+- **Repaints:** 8 in 4 s, the same as a page with no motion (the footer clocks). Under 3 ms of paint in total.
+- **Frames:** 95th percentile 16.7 ms on every scene (60 fps). Worst single frame 50 ms, once, on the dig page.
+- **Main thread:** about 0.2 ms of style work per frame while a scene runs. This isn't the scenes: the same test animation on `/about` or `/tools` costs the same, while on a blank page it costs nothing. Something in the site's shell takes animations off the compositor. Worth finding before more motion ships (the /tokens page would pay it too).
 
-Routes, all `noindex`, out of the sitemap, linked from nowhere: `/lab/plaster` (index and the ground study), `/lab/plaster/not-found`, `/lab/plaster/contact`, `/lab/plaster/empty`, `/lab/plaster/library`. The contact and 404 previews are copies of the real pages plus one line, so the real pages are untouched.
+## Not verified
 
-Each sheet: desktop 1280 light and dark on top, phone 375 light and dark below. Headless Chromium.
-
-| 404 | Contact |
-|---|---|
-| ![404](screenshots/not-found.webp) | ![Contact](screenshots/contact.webp) |
-| **Empty filter** | **Library** |
-| ![Empty filter](screenshots/empty.webp) | ![Library](screenshots/library.webp) |
-
-The ground study, the same method on seven grounds and at two scales (the far-off crowd is a third the size):
-
-![Grounds](screenshots/grounds.webp)
-
-Measured on the built site: right picture per theme on all 30 loads, no sideways scroll at 375, no running animations with reduced motion on or off, no page errors. On a phone the picture zooms 1.5x around the figure so it stays about 25px tall; the readers stay whole because the crowd is the picture.
-
-## 5. Not verified
-
-- Every claim in §1 is from a search snippet; no source page or image was opened (network policy). Allowing `wernerbronkhorst.com`, `dellasposa.com`, `ocula.com`, `thisiscolossal.com` would fix that in a later session.
-- Whether a hidden empty state skips its download in Safari and Firefox. In Chromium it does: measured, nothing fetched while hidden, fetched once shown. A dark visit fetches only the night file.
-- iOS Safari and real devices: screenshots are headless Chromium.
-- The Vercel preview: it was still building when this was written, and it may sit behind Vercel's login if the team has deployment protection on. Screenshots above are from the local build.
-- Sideways scroll at 320px: checked at 375 only. The skill's `shoot.mjs` and `overflow.mjs` couldn't launch (the repo pins a Playwright that doesn't match this container's Chromium), so I used a small script on the preinstalled browser instead.
+- Every claim under "The art" is from a search snippet. The artist's site, the galleries and image search were blocked by this session's network policy, so no source page or image was opened. Allowing `wernerbronkhorst.com`, `dellasposa.com`, `ocula.com`, `thisiscolossal.com` would fix it.
+- Real devices: everything above is headless Chromium. Safari and iOS untested, including whether a hidden empty state skips its download (Chromium does).
+- Sideways scroll at 320px: checked at 375 only. The site's `shoot.mjs` and `overflow.mjs` can't launch here (the repo pins a Playwright that doesn't match this container's browser), so I used my own script.
 - Gates, run here on the final tree: `astro check` 0 errors, 0 warnings, 1 hint (the known baseline); `npm test` 736 pass; `npm run build` clean; `validate:schema` clean, image-budget within budget. The lab pages carry a one-node `WebPage` JSON-LD so the schema gate passes without an exemption.

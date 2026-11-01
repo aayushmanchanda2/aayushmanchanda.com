@@ -1,17 +1,240 @@
 ---
 /**
- * Plaster — a prototype: knifed plaster with small figures, faded into the
- * page. The pictures come from `feature-research/art-plaster/plaster.mjs`;
- * `styles/plaster.css` picks the day or night one per theme. Decorative: the
- * page's own words carry the meaning, so it is hidden from screen readers.
+ * Plaster — a prototype: knifed plaster with small figures that move, faded
+ * into the page. `feature-research/art-plaster/plaster.mjs` paints the still
+ * ground and a strip of frames for each moving thing, and writes
+ * `plaster-manifest.json` with their sizes and the points they move between.
+ * This file turns those points into keyframes.
+ *
+ * Motion is transform and opacity only, so the compositor runs it without
+ * repainting the page. It is armed by the script below only when reduced
+ * motion is off and the script runs, and it pauses whenever the picture is out
+ * of view. Without it (reduced motion, no script) every scene is a still,
+ * finished picture: the 404 walker is already reading the map, the queue is
+ * standing in line.
+ *
+ * Decorative: the words on the page carry the meaning, so it is hidden from screen
+ * readers.
  */
 import "../../styles/plaster.css";
+import MANIFEST from "./plaster-manifest.json";
 
+type Name = "lost" | "post" | "dig" | "readers";
 interface Props {
-  scene: "lost" | "post" | "dig" | "readers";
+  scene: Name;
+}
+
+interface SpriteInfo {
+  w: number;
+  h: number;
+  ax: number;
+  ay: number;
+  frames: number;
+}
+interface SceneInfo {
+  width: number;
+  height: number;
+  points: Record<string, number[][]>;
+  sprites: Record<string, SpriteInfo>;
 }
 
 const { scene } = Astro.props;
+const info = (MANIFEST as unknown as Record<Name, SceneInfo>)[scene];
+const { width: W, height: H, points, sprites } = info;
+
+/**
+ * Where a sprite goes, as a translate in percentages of its own box: the
+ * sprite is sized in stage units, so this lands on the same ground pixel at
+ * any size, and Chrome can run a percentage translate on the compositor (it
+ * cannot with container units, which re-styled the page every frame).
+ */
+const at = (name: string, x: number, y: number) => {
+  const s = sprites[name];
+  return s ? `translate(${(((x - s.ax) / s.w) * 100).toFixed(2)}%, ${(((y - s.ay) / s.h) * 100).toFixed(2)}%)` : "";
+};
+const pct = (v: number) => `${(v * 100).toFixed(2)}%`;
+const P = (key: string, i = 0): [number, number] => {
+  const p = points[key]?.[i] ?? [0, 0];
+  return [p[0] ?? 0, p[1] ?? 0];
+};
+
+/** One moving thing on the stage. */
+interface Item {
+  sprite: string;
+  cls: string;
+  transform: string;
+  origin?: string;
+  /** Extra declarations: an animation delay, a per-item variable. */
+  style?: string;
+}
+const items: Item[] = [];
+let keyframes = "";
+
+if (scene === "lost") {
+  // Walk in along the trail, leave a print at each step, stop, read the map.
+  const path = points.path ?? [];
+  const prints = points.prints ?? [];
+  const walk = 12;
+  const first = path[0]?.[0] ?? -20;
+  const last = path[path.length - 1]?.[0] ?? 930;
+  const end = path[path.length - 1] ?? [930, 318];
+  const stop = walk / (walk + 0.4);
+  const steps = path.map(([x = 0, y = 0], k) => pct((k / (path.length - 1)) * stop) + " { transform: " + at("walker", x, y) + "; }").join("\n    ");
+  keyframes += `@keyframes lost-walk {
+    0% { transform: ${at("walker", P("path")[0], P("path")[1])}; opacity: 0; }
+    3% { opacity: 1; }
+    ${steps}
+    ${pct(stop)} { opacity: 1; }
+    100% { transform: ${at("walker", end[0] ?? 0, end[1] ?? 0)}; opacity: 0; }
+  }
+  .plaster[data-motion] .lost-walker { animation: lost-walk ${walk + 0.4}s linear both; }
+  .plaster[data-motion] .lost-walker .spr__strip { animation: frame-2 0.56s step-end ${Math.round(walk / 0.56)}; }
+  .plaster[data-motion] .lost-print { animation: fade-in 0.5s ease-out both; }
+  .plaster[data-motion] .lost-reader { animation: fade-in 0.4s ease-out ${walk}s both; }
+  .plaster[data-motion] .lost-reader .spr__strip { animation: lost-ponder 7s step-end ${walk + 3}s infinite; }
+  @keyframes lost-ponder { 0% { transform: translateX(0); } 64% { transform: translateX(-50%); } 86% { transform: translateX(0); } }
+  `;
+  items.push({ sprite: "walker", cls: "lost-walker", transform: at("walker", end[0] ?? 0, end[1] ?? 0) });
+  for (const [x = 0, y = 0] of prints) {
+    // Each print appears as the foot of the walker reaches it.
+    const delay = (walk * ((x - first) / (last - first)) * stop + 0.2).toFixed(2);
+    items.push({ sprite: "print", cls: "lost-print", transform: at("print", x, y), style: `animation-delay: ${delay}s` });
+  }
+  items.push({ sprite: "reader", cls: "lost-reader", transform: at("reader", end[0] ?? 0, end[1] ?? 0) });
+} else if (scene === "post") {
+  // A conveyor of seven: walk up, shuffle forward a slot at a time, post, walk off.
+  const S = 2.2;
+  const N = 7;
+  const T = S * N;
+  const slots = points.slots ?? [];
+  const slot = (k: number) => slots[k] ?? [0, 0];
+  const [ex, ey] = P("enter");
+  const [l1x, l1y] = P("leave", 0);
+  const [l2x, l2y] = P("leave", 1);
+  const st = (stage: number) => pct(stage / N);
+  for (let k = 0; k < N; k++) {
+    const name = `q${k}`;
+    const pos = (s: number[]) => at(name, s[0] ?? 0, s[1] ?? 0);
+    keyframes += `@keyframes post-${k} {
+      0% { transform: ${pos([ex, ey])}; opacity: 0; }
+      ${st(0.15)} { opacity: 1; }
+      ${st(1.9)} { transform: ${pos(slot(4))}; }
+      ${st(2)} { transform: ${pos(slot(4))}; }
+      ${st(2.3)} { transform: ${pos(slot(3))}; }
+      ${st(3)} { transform: ${pos(slot(3))}; }
+      ${st(3.3)} { transform: ${pos(slot(2))}; }
+      ${st(4)} { transform: ${pos(slot(2))}; }
+      ${st(4.3)} { transform: ${pos(slot(1))}; }
+      ${st(5)} { transform: ${pos(slot(1))}; }
+      ${st(5.3)} { transform: ${pos(slot(0))}; }
+      ${st(6)} { transform: ${pos(slot(0))}; opacity: 1; }
+      ${st(6.5)} { transform: ${pos([l1x, l1y])}; }
+      ${st(6.9)} { opacity: 1; }
+      100% { transform: ${pos([l2x, l2y])}; opacity: 0; }
+    }
+    .plaster[data-motion] .post-q${k} { animation: post-${k} ${T}s linear ${(-k * S).toFixed(1)}s infinite; }
+    .plaster[data-motion] .post-q${k} .spr__strip { animation: post-hands ${T}s step-end ${(-k * S).toFixed(1)}s infinite; }
+    `;
+    // Still: the first five stand in the queue, front to back; two are off stage.
+    const queued = k <= 4;
+    const still = queued ? pos(slot(k)) : pos([ex, ey]);
+    const cls = queued ? `post-q${k}` : `post-q${k} is-offstage`;
+    items.push({ sprite: name, cls, transform: still });
+  }
+  keyframes += `@keyframes post-hands { 0% { transform: translateX(0); } ${st(5.45)} { transform: translateX(-33.333%); } ${st(5.85)} { transform: translateX(-66.667%); } }`;
+} else if (scene === "dig") {
+  // Dig, lift, throw; a clod arcs onto the heap; the watchers shift their weight.
+  const [dx, dy] = P("digger");
+  const c = points.clod ?? [];
+  const cp = (i: number) => at("clod", c[i]?.[0] ?? 0, c[i]?.[1] ?? 0);
+  const d = sprites.digger;
+  const origin = d ? `${pct(d.ax / d.w)} ${pct(d.ay / d.h)}` : "50% 100%";
+  keyframes += `@keyframes dig-shovel {
+    0%, 100% { transform: ${at("digger", dx, dy)} rotate(0deg); }
+    35%, 55% { transform: ${at("digger", dx, dy)} rotate(7deg); }
+    82% { transform: ${at("digger", dx, dy)} rotate(-5deg); }
+  }
+  @keyframes dig-clod {
+    0%, 76% { transform: ${cp(0)}; opacity: 0; }
+    80% { transform: ${cp(0)}; opacity: 1; }
+    88% { transform: ${cp(1)}; }
+    94% { transform: ${cp(2)}; opacity: 1; }
+    100% { transform: ${cp(3)}; opacity: 0; }
+  }
+  .plaster[data-motion] .dig-digger { animation: dig-shovel 1.9s ease-in-out infinite; }
+  .plaster[data-motion] .dig-clod { animation: dig-clod 1.9s linear infinite; }
+  `;
+  items.push({ sprite: "digger", cls: "dig-digger", transform: `${at("digger", dx, dy)} rotate(0deg)`, origin });
+  items.push({ sprite: "clod", cls: "dig-clod is-offstage", transform: cp(0) });
+  (points.watchers ?? []).forEach(([x = 0, y = 0], k) => {
+    const name = `w${k}`;
+    const s = sprites[name];
+    const sway = [3, -3, 2][k] ?? 2;
+    keyframes += `@keyframes dig-w${k} { 0%, 100% { transform: ${at(name, x, y)} rotate(0deg); } 50% { transform: ${at(name, x, y)} rotate(${sway}deg); } }
+    .plaster[data-motion] .dig-w${k} { animation: dig-w${k} ${[4.2, 5.1, 3.7][k] ?? 4}s ease-in-out ${[-1, -2.3, -0.4][k] ?? 0}s infinite; }
+    `;
+    items.push({ sprite: name, cls: `dig-w${k}`, transform: `${at(name, x, y)} rotate(0deg)`, origin: s ? `${pct(s.ax / s.w)} ${pct(s.ay / s.h)}` : undefined });
+  });
+} else {
+  // Pages turn here and there; one more reader walks across the lawn.
+  const [ax, ay] = P("walk", 0);
+  const [bx, by] = P("walk", 1);
+  keyframes += `@keyframes readers-walk { 0% { transform: ${at("walker", ax, ay)}; } 100% { transform: ${at("walker", bx, by)}; } }
+  @keyframes page-turn { 0%, 88% { transform: scaleX(1); } 93% { transform: scaleX(0.08); } 98%, 100% { transform: scaleX(1); } }
+  .plaster[data-motion] .readers-walker { animation: readers-walk 36s linear -9s infinite; }
+  .plaster[data-motion] .readers-walker .spr__strip { animation: frame-2 0.6s step-end infinite; }
+  .plaster[data-motion] .readers-page .spr__strip { animation: page-turn 7s ease-in-out var(--delay) infinite; }
+  `;
+  (points.pages ?? []).forEach(([x = 0, y = 0, angle = 0], k) => {
+    items.push({ sprite: "page", cls: "readers-page", transform: `${at("page", x, y)} rotate(${angle.toFixed(3)}rad)`, style: `--delay: ${(-k * 2.3).toFixed(1)}s` });
+  });
+  items.push({ sprite: "walker", cls: "readers-walker", transform: at("walker", ax + (bx - ax) * 0.25, ay + (by - ay) * 0.25) });
+}
+
+/** Each theme fetches only its own pictures: one custom property per picture, swapped per theme. */
+const names = Object.keys(sprites);
+const vars = (mood: "day" | "night") =>
+  [`--ground: url("/lab/plaster/${scene}-${mood}.webp");`, ...names.map((n) => `--img-${n}: url("/lab/plaster/${scene}-${n}-${mood}.webp");`)].join(" ");
+const sel = `.plaster--${scene}`;
+const css = `${sel} { ${vars("day")} }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) ${sel} { ${vars("night")} } }
+:root[data-theme="dark"] ${sel} { ${vars("night")} }
+@media (prefers-reduced-motion: no-preference) { ${keyframes} }`;
 ---
 
-<div class:list={["plaster", `plaster--${scene}`]} aria-hidden="true"></div>
+<div class:list={["plaster", `plaster--${scene}`]} style={`--ar: ${(W / H).toFixed(4)}`} data-plaster aria-hidden="true">
+  <div class="plaster__stage">
+    {
+      items.map(({ sprite, cls, transform, origin, style: extra }) => {
+        const s = sprites[sprite];
+        if (!s) return null;
+        const style = [
+          `--w: ${pct(s.w / W)}`,
+          `--sar: ${(s.w / s.h).toFixed(4)}`,
+          `--n: ${s.frames}`,
+          `--img: var(--img-${sprite})`,
+          `transform: ${transform}`,
+          origin ? `transform-origin: ${origin}` : "",
+          extra ?? "",
+        ]
+          .filter(Boolean)
+          .join("; ");
+        return <span class={`spr ${cls}`} style={style}><span class="spr__strip" /></span>;
+      })
+    }
+  </div>
+</div>
+<Fragment set:html={`<style>${css}</style>`} />
+
+<script>
+  // Arm the motion only where it is wanted, and run it only while it is on screen.
+  const motion = matchMedia("(prefers-reduced-motion: no-preference)");
+  for (const el of document.querySelectorAll<HTMLElement>("[data-plaster]")) {
+    if (!motion.matches) continue;
+    el.dataset.motion = "";
+    new IntersectionObserver(([entry]) => {
+      if (entry?.isIntersecting) el.dataset.play = "";
+      else delete el.dataset.play;
+    }).observe(el);
+  }
+</script>
