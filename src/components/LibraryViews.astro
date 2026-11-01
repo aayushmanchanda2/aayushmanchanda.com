@@ -34,6 +34,7 @@ import VideoGrid from "./VideoGrid.astro";
 import type { Kind } from "../lib/library";
 import { KIND_BLURBS, library } from "../lib/library";
 import { FILTER, PREPAINT } from "../lib/library-pane";
+import Plaster from "./Plaster.astro";
 
 interface Props {
   /** The view this route shows: its kind, "" for All. */
@@ -63,6 +64,8 @@ const videos = of("video");
         Articles, posts and videos I saved to read or watch. My agents digested
         some: cliff notes and a call on whether they&rsquo;re worth your time.
       </p>
+      {/* Readers on a lawn turning pages (design.md, The painted pages). */}
+      <Plaster scene="readers" />
       <div class="view__body view__mix">
         <LibraryMix />
       </div>

@@ -1,0 +1,149 @@
+/* ==========================================================================
+   aayushmanchanda.com — plaster prototypes (/lab/plaster, noindex)
+
+   Knifed plaster with small figures that move, drawn by
+   `feature-research/art-plaster/plaster.mjs`; `components/lab/Plaster.astro`
+   writes each scene's pictures and keyframes. Here and not in `global.css`,
+   which is in the share-card cache key.
+   ========================================================================== */
+
+/* The window onto the scene. It fades into the page on all four sides, so the
+   figures stand on the paper itself instead of inside a framed picture. */
+.plaster {
+  --zoom: 1;
+  --fx: 0.5;
+  --fy: 0.5;
+  --fade-x: linear-gradient(to right, transparent, black 14%, black 86%, transparent);
+  --fade-y: linear-gradient(transparent, black 18%, black 82%, transparent);
+
+  position: relative;
+  overflow: hidden;
+  container-type: size;
+  aspect-ratio: var(--ar);
+  margin-inline: calc(-1 * var(--page-pad));
+  -webkit-mask-image: var(--fade-x), var(--fade-y);
+  -webkit-mask-composite: source-in;
+  mask-image: var(--fade-x), var(--fade-y);
+  mask-composite: intersect;
+}
+
+/* The scene itself, at the ground picture's own shape. On a desktop it fills
+   the window; on a phone it is zoomed in and slid so the focus point sits in
+   the middle, clamped so no edge of the ground shows. Every sprite is placed
+   in units of the stage's width, so it stays on its spot at any size. */
+.plaster__stage {
+  --stage-w: calc(100cqw * var(--zoom));
+  --stage-h: calc(var(--stage-w) / var(--ar));
+
+  position: absolute;
+  width: var(--stage-w);
+  aspect-ratio: var(--ar);
+  left: clamp(calc(100cqw - var(--stage-w)), calc(50cqw - var(--fx) * var(--stage-w)), 0px);
+  top: clamp(calc(100cqh - var(--stage-h)), calc(50cqh - var(--fy) * var(--stage-h)), 0px);
+  container-type: inline-size;
+  background: var(--ground) 0 0 / 100% 100% no-repeat;
+}
+
+.spr {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--w);
+  aspect-ratio: var(--sar);
+  overflow: hidden;
+}
+
+/* A strip of frames; moving it by one frame's width changes the pose. */
+.spr__strip {
+  display: block;
+  width: calc(var(--n) * 100%);
+  height: 100%;
+  background: var(--img) 0 0 / 100% 100% no-repeat;
+}
+
+/* Layers that take turns: standing, walking with a letter, walking without. */
+.spr__layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* The still picture: what the scene looks like when nothing moves. */
+.is-offstage,
+.lost-walker,
+.is-walk-letter,
+.is-walk-empty {
+  opacity: 0;
+}
+
+/* Motion runs only while the picture is on screen. */
+.plaster:not([data-play]) .spr,
+.plaster:not([data-play]) .spr__layer,
+.plaster:not([data-play]) .spr__strip {
+  animation-play-state: paused !important;
+}
+
+@keyframes frame-2 {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(-50%); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.plaster--lost { --fx: 0.62; --fy: 0.6; }
+.plaster--post { --fx: 0.5; --fy: 0.64; }
+.plaster--dig { --fx: 0.55; --fy: 0.6; }
+.plaster--readers { --fx: 0.42; --fy: 0.5; }
+
+/* On a full-width index page (the library) the scene keeps the reading
+   column's width instead of running edge to edge. */
+.shell__main--full .plaster {
+  max-width: calc(var(--page-max) + 2 * var(--page-pad));
+}
+
+/* An empty state is a small aside, not a hero. */
+.plaster--dig {
+  max-width: 30rem;
+  margin-inline: auto;
+}
+
+/* A phone zooms in on the figures so they stay about 20px tall. A 3:2 window
+   needs at least 1.6x of a 12:5 ground to leave no gap top or bottom. */
+@media (max-width: 34rem) {
+  .plaster {
+    aspect-ratio: 1.5;
+    --zoom: 1.8;
+  }
+
+  .plaster--readers {
+    --zoom: 1.6;
+  }
+
+  .plaster--dig {
+    aspect-ratio: 2;
+    --zoom: 1.5;
+  }
+}
+
+/* The ground study on the lab index: unfaded tiles, labelled. Backgrounds and
+   not <img>, so the image-budget gate needs no new measured kind for a prototype. */
+.plaster-study {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.plaster-study__tile {
+  aspect-ratio: 64 / 26;
+  border-radius: var(--r-md);
+  background: var(--plaster-image) center / cover no-repeat;
+}
+
+.plaster-study figcaption {
+  margin-top: 0.4rem;
+  color: var(--text-tertiary);
+}
