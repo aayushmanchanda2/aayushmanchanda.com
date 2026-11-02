@@ -5676,6 +5676,28 @@
     "domain": "ampcode.com",
     "saved_date": "2026-11-02",
     "kind": "article",
-    "note": "Amp can now run Orbs on your own infrastructure, keeping its agent environment close to your security policies, internal tools, and private services."
+    "note": "Amp can now run Orbs on your own infrastructure, keeping its agent environment close to your security policies, internal tools, and private services.",
+    "tldr": "Amp now lets teams run Orbs on their own infrastructure by connecting an orb provider to custom spawn, pause, and delete handlers.",
+    "highlights": [
+      {
+        "text": "You can now self-host orbs. You provide the compute and Amp turns it into orbs.",
+        "note": "Orbs can now run on infrastructure the team controls.",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "You can now self-host orbs. You provide the compute and Amp turns it into orbs.",
+    "block": {
+      "best_for": "Teams that want Amp Orbs on their own compute",
+      "tip": "Start with the Docker dispatcher example before adapting spawn, pause, and delete to your infrastructure.",
+      "needs": [
+        "Compute that can start, pause, resume, and scale machines to zero",
+        "Amp CLI"
+      ],
+      "start_here": [
+        "Run amp orb provider with a dispatcher program",
+        "Implement spawn, pause, and delete operations",
+        "Bootstrap each orb with its ORB_TOKEN"
+      ]
+    }
   }
 ]
