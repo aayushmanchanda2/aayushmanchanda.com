@@ -5668,5 +5668,14 @@
         "Choose a model and reasoning level for a pilot"
       ]
     }
+  },
+  {
+    "slug": "self-hosted-orbs",
+    "title": "Self-Hosted Orbs",
+    "url": "https://ampcode.com/news/self-hosted-orbs",
+    "domain": "ampcode.com",
+    "saved_date": "2026-11-02",
+    "kind": "article",
+    "note": "Amp can now run Orbs on your own infrastructure, keeping its agent environment close to your security policies, internal tools, and private services."
   }
 ]
