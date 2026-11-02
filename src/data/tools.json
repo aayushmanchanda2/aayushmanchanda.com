@@ -1507,5 +1507,14 @@
     "verdict": "watching",
     "note": "Namespace runs isolated Mac, Windows and Linux instances for agent-generated code, with SDK access, devboxes and CI runners.",
     "status_date": "2026-10-31"
+  },
+  {
+    "slug": "boardui-react-design-system-for-dashboards",
+    "name": "BoardUI",
+    "url": "https://www.boardui.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-11-02"
   }
 ]
