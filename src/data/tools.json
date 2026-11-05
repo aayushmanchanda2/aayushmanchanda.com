@@ -1516,5 +1516,23 @@
     "verdict": "watching",
     "note": "Saved from Raindrop. Not tested yet.",
     "status_date": "2026-11-02"
+  },
+  {
+    "slug": "magpie-one-model-switcher-for-claude-code-codex-and-gemini-c",
+    "name": "magpie",
+    "url": "https://usemagpie.ai/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A local gateway that lets coding agents use models from multiple providers, with per-agent switching and on-device secret redaction.",
+    "status_date": "2026-11-05"
+  },
+  {
+    "slug": "open-source-ui-kit-for-modern-document-apps",
+    "name": "extend.ai",
+    "url": "https://www.extend.ai/ui?utm_source=twitter&utm_medium=social&utm_campaign=oss-ui-kit-2026",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Open-source React components for viewing PDFs, DOCX, XLSX, and CSV files, with citations, uploads, and e-signing built in.",
+    "status_date": "2026-11-05"
   }
 ]
