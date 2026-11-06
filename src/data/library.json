@@ -5699,5 +5699,14 @@
         "Bootstrap each orb with its ORB_TOKEN"
       ]
     }
+  },
+  {
+    "slug": "state-of-the-art-code-reviews-for-less-than-2",
+    "title": "State-of-the-art code reviews for less than $2",
+    "url": "https://www.doist.dev/state-of-the-art-code-reviews-for-less-than-2/",
+    "domain": "doist.dev",
+    "saved_date": "2026-11-06",
+    "kind": "article",
+    "note": "How Todoist built Doistbot from a GitHub Action into a multi-model review harness that handles 4,500 reviews a month for under $2 each."
   }
 ]
