@@ -5707,6 +5707,34 @@
     "domain": "doist.dev",
     "saved_date": "2026-11-06",
     "kind": "article",
-    "note": "How Todoist built Doistbot from a GitHub Action into a multi-model review harness that handles 4,500 reviews a month for under $2 each."
+    "note": "How Todoist built Doistbot from a GitHub Action into a multi-model review harness that handles 4,500 reviews a month for under $2 each.",
+    "tldr": "Doistbot runs about 4,500 code reviews a month for Todoist, averaging under $2 each through open models and dynamic routing.",
+    "highlights": [
+      {
+        "text": "A year later, Doistbot is critical to how we build and ship at Todoist. It runs about 4,500 reviews each month at an average cost below $2 per review.",
+        "note": "This is operating at production scale, not as a small experiment.",
+        "color": "amber"
+      },
+      {
+        "text": "We went from a scrappy GitHub Action to a proper agentic review harness, then to open models and dynamic routing to keep cost in check.",
+        "note": "The system evolved in layers as review volume grew.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "By August 2025, frontier models and harnesses were reliable enough to complete complex tasks. Our engineering teams were firing on all cylinders, and PR volume was growing by double-digit percent month over month.",
+    "block": {
+      "best_for": "Engineering teams scaling pull request review with AI",
+      "tip": "Start with a focused GitHub Action, then add a review harness, open models, and dynamic routing as volume grows.",
+      "needs": [
+        "GitHub Actions",
+        "A model CLI or review harness",
+        "Repository conventions and architecture guidance"
+      ],
+      "start_here": [
+        "Pass the PR diff and repository guidance to the reviewer",
+        "Run it as a pending GitHub review",
+        "Track review volume and cost before adding dynamic routing"
+      ]
+    }
   }
 ]
