@@ -1534,5 +1534,14 @@
     "verdict": "watching",
     "note": "Open-source React components for viewing PDFs, DOCX, XLSX, and CSV files, with citations, uploads, and e-signing built in.",
     "status_date": "2026-11-05"
+  },
+  {
+    "slug": "instabox-pricing",
+    "name": "InstaBox Pricing",
+    "url": "https://instabox.sh/pricing",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "InstaBox offers one free 4-vCPU sandbox, then paid plans from $20 a month with usage credits and per-second compute billing.",
+    "status_date": "2026-11-09"
   }
 ]
