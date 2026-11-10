@@ -5295,5 +5295,101 @@
       ]
     },
     "collections": []
+  },
+  {
+    "slug": "roadmap-what-is-being-built-for-search-live",
+    "title": "Roadmap",
+    "url": "https://searchbrowser.app/roadmap",
+    "domain": "searchbrowser.app",
+    "saved_date": "2026-11-10",
+    "shot": "/shots/roadmap-what-is-being-built-for-search-live.webp",
+    "palette": [
+      "#ffffff",
+      "#854628",
+      "#d0cfd0",
+      "#4991d2",
+      "#181717",
+      "#b46c36"
+    ],
+    "design": {
+      "read_date": "2026-11-10",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "surface",
+          "hex": "#1f9d55"
+        },
+        {
+          "name": "text",
+          "hex": "#171717"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#1f9d55"
+        },
+        {
+          "name": "border",
+          "hex": "#171717"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Inter",
+          "fontSize": "30px",
+          "fontWeight": "700",
+          "lineHeight": "48px",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "body",
+          "fontFamily": "Inter",
+          "fontSize": "15px",
+          "fontWeight": "400",
+          "lineHeight": "24px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "3px",
+          "value": "3px"
+        },
+        {
+          "name": "6px",
+          "value": "6px"
+        },
+        {
+          "name": "9px",
+          "value": "9px"
+        },
+        {
+          "name": "11px",
+          "value": "11px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "12px"
+        },
+        {
+          "name": "card-2",
+          "value": "14px"
+        },
+        {
+          "name": "full",
+          "value": "9999px"
+        }
+      ]
+    },
+    "collections": []
   }
 ]
