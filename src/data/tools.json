@@ -1543,5 +1543,14 @@
     "verdict": "watching",
     "note": "InstaBox offers one free 4-vCPU sandbox, then paid plans from $20 a month with usage credits and per-second compute billing.",
     "status_date": "2026-11-09"
+  },
+  {
+    "slug": "gpui",
+    "name": "GPUI",
+    "url": "https://gpui.rs/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A GPU-accelerated Rust UI framework from the creators of Zed, with hybrid immediate and retained rendering plus practical examples.",
+    "status_date": "2026-11-10"
   }
 ]
