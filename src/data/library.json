@@ -5789,5 +5789,14 @@
         "Automate one repeated workflow in code and measure the outcome"
       ]
     }
+  },
+  {
+    "slug": "skipper-airbnb-s-embedded-workflow-engine-is-now-open-source",
+    "title": "Skipper, Airbnb’s embedded workflow engine, is now open…",
+    "url": "https://medium.com/airbnb-engineering/skipper-airbnbs-embedded-workflow-engine-is-now-open-source-78dd354f472b",
+    "domain": "medium.com",
+    "saved_date": "2026-11-11",
+    "kind": "article",
+    "note": "Airbnb open-sources Skipper, an embedded Java and Kotlin workflow engine that persists progress and recovers from failures without a separate orchestration cluster."
   }
 ]
