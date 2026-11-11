@@ -5797,6 +5797,33 @@
     "domain": "medium.com",
     "saved_date": "2026-11-11",
     "kind": "article",
-    "note": "Airbnb open-sources Skipper, an embedded Java and Kotlin workflow engine that persists progress and recovers from failures without a separate orchestration cluster."
+    "note": "Airbnb open-sources Skipper, an embedded Java and Kotlin workflow engine that persists progress and recovers from failures without a separate orchestration cluster.",
+    "tldr": "Airbnb open-sourced Skipper, an embedded Java and Kotlin workflow engine that persists progress and recovers from crashes without a separate orchestration cluster.",
+    "highlights": [
+      {
+        "text": "With Skipper, the service’s replicas also run the workflow runtime and scheduler.",
+        "note": "Workflow execution stays inside the service deployment.",
+        "color": "amber"
+      },
+      {
+        "text": "If a replica fails, another can recover the work; takeover timing depends on scheduling and lease settings.",
+        "note": "Recovery uses coordinated leases across replicas.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "Skipper, an embedded workflow engine used in production by teams all across Airbnb, is now available to the open source community. Skipper lets you express multi-step business processes as Java or Kotlin classes, persist their progress, and recover from crashes and transient failures. It runs inside your service and reuses its existing dependencies.",
+    "block": {
+      "best_for": "Java or Kotlin teams that need durable workflows inside an existing service.",
+      "tip": "Use the service’s existing database and dependencies to keep workflow ownership in the same deployment.",
+      "needs": [
+        "A Java or Kotlin service",
+        "A shared database for workflow state and scheduled work"
+      ],
+      "start_here": [
+        "Open the GitHub documentation and runnable examples",
+        "Express a multi-step process as a Java or Kotlin class",
+        "Test crash recovery and lease takeover settings"
+      ]
+    }
   }
 ]
