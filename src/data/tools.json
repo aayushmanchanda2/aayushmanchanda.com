@@ -1552,5 +1552,14 @@
     "verdict": "watching",
     "note": "A GPU-accelerated Rust UI framework from the creators of Zed, with hybrid immediate and retained rendering plus practical examples.",
     "status_date": "2026-11-10"
+  },
+  {
+    "slug": "aria-multiplayer-for-your-ai-agents",
+    "name": "Aria",
+    "url": "https://joinariapp.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A macOS notch app for watching, approving, steering, and replaying Claude Code and Codex sessions without hunting through terminals.",
+    "status_date": "2026-11-11"
   }
 ]
