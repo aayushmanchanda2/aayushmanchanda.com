@@ -5744,6 +5744,50 @@
     "domain": "generalintelligencecompany.com",
     "saved_date": "2026-11-10",
     "kind": "article",
-    "note": "Andrew Pignanelli argues that flat, agent-led organizations are moving from one-person-company theory toward profitable autonomous businesses."
+    "note": "Andrew Pignanelli argues that flat, agent-led organizations are moving from one-person-company theory toward profitable autonomous businesses.",
+    "tldr": "Pignanelli argues autonomous companies need persistent state, flat agent coordination, executable workflows, money, compute, and concrete goals, while demand generation remains difficult.",
+    "highlights": [
+      {
+        "text": "An agent needs to know what the company has already tried, what customers were promised, which work is in progress, and how much money is left.",
+        "note": "Persistent company state prevents locally reasonable but globally wrong decisions.",
+        "color": "amber"
+      },
+      {
+        "text": "The codebase becomes a record of how the company works, and the agents can keep improving it. As a result, all internal workflow is code.",
+        "note": "Repeated workflows become executable infrastructure instead of prose procedures.",
+        "color": "blue"
+      },
+      {
+        "text": "An entirely agent-managed company can keep its decisions, work, and results in the same system.",
+        "note": "One operating system reduces the context gaps created by mixed human and agent management.",
+        "color": "green"
+      },
+      {
+        "text": "You need outcomes the company can actually observe. Customers paying, customers returning, work being delivered, cash remaining after expenses.",
+        "note": "Observable outcomes give agents a reality-based scorecard.",
+        "color": "pink"
+      },
+      {
+        "text": "You still have to find a problem people care about, solve it well, get the solution in front of them, and give them a reason to choose you.",
+        "note": "Automation does not remove the work of finding and serving real demand.",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Two years ago, talk of a “one person billion dollar company” started. This led me to start General Intelligence, with the mission of building the infrastructure for companies run entirely by AI. Now, two years later, I can confidently say we are entering the era of autonomous companies.",
+    "block": {
+      "best_for": "Builders designing agent-run companies or internal operating systems",
+      "tip": "Treat persistent state and observable outcomes as core infrastructure before adding more agents.",
+      "needs": [
+        "A clear company purpose",
+        "Persistent shared state",
+        "A codebase for repeatable workflows",
+        "Budget and tool access"
+      ],
+      "start_here": [
+        "Define an observable company goal and operating limits",
+        "Store decisions, promises, work in progress, and budget in shared state",
+        "Automate one repeated workflow in code and measure the outcome"
+      ]
+    }
   }
 ]
