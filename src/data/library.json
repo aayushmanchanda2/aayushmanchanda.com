@@ -5825,5 +5825,14 @@
         "Test crash recovery and lease takeover settings"
       ]
     }
+  },
+  {
+    "slug": "the-home-repo-pattern",
+    "title": "The Home Repo Pattern",
+    "url": "https://www.aihero.dev/the-home-repo-pattern",
+    "domain": "aihero.dev",
+    "saved_date": "2026-11-12",
+    "kind": "article",
+    "note": "A practical pattern for keeping shared agent instructions and docs in one home repo while pointing to project repos, with a setup prompt."
   }
 ]
