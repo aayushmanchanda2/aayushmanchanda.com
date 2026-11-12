@@ -5833,6 +5833,33 @@
     "domain": "aihero.dev",
     "saved_date": "2026-11-12",
     "kind": "article",
-    "note": "A practical pattern for keeping shared agent instructions and docs in one home repo while pointing to project repos, with a setup prompt."
+    "note": "A practical pattern for keeping shared agent instructions and docs in one home repo while pointing to project repos, with a setup prompt.",
+    "tldr": "A Home Repo centralizes shared agent skills, steering files, and docs while pointing agents at every project repository.",
+    "highlights": [
+      {
+        "text": "A Home Repo is one repository that holds your skills, your AGENTS.md and your shared docs.",
+        "note": "Shared agent context lives in one place.",
+        "color": "amber"
+      },
+      {
+        "text": "Sweeping changes across multiple repos from a single session",
+        "note": "The pattern supports coordinated cross-repo work.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "A Home Repo is one repository that holds your skills, your AGENTS.md and your shared docs. You run your agent in the Home Repo. Its AGENTS.md holds a navigation pointer to each of your other repos, so the agent can open or clone them as it needs to.",
+    "block": {
+      "best_for": "Developers running coding agents across multiple repositories.",
+      "tip": "Keep shared skills and steering files in one Home Repo, then point its AGENTS.md at the other repositories.",
+      "needs": [
+        "A folder containing your repositories",
+        "A coding agent"
+      ],
+      "start_here": [
+        "Inventory the repositories you want the Home Repo to reference.",
+        "Identify shared skills, steering files, and agent docs.",
+        "Agree the migration plan before changing files."
+      ]
+    }
   }
 ]
