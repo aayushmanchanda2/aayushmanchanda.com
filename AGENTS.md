@@ -6,6 +6,8 @@
 
 `aayushmanchanda.com` — a personal site that fills itself. Astro static build, git as the database, deployed on Vercel. No CMS, no drafts folder. Content arrives either from a link saved to Raindrop on a phone (a GitHub Actions cron screenshots it and commits the result) or from a file edited by hand. Everything else is a build step. `README.md` has the full pipeline.
 
+Project hub (which session is working where, what shipped, what waits on Aayush): <https://claude.ai/artifact/VLYG6qk17T7uicDrPDbLFG>. Read it before changing files; add your row.
+
 Zero framework JS ships. Interactions are vanilla scripts inside `.astro` components or plain modules in `src/lib/`.
 
 ## Private /me (VET-274)
