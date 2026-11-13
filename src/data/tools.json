@@ -1561,5 +1561,14 @@
     "verdict": "watching",
     "note": "A macOS notch app for watching, approving, steering, and replaying Claude Code and Codex sessions without hunting through terminals.",
     "status_date": "2026-11-11"
+  },
+  {
+    "slug": "ui-sdk-components",
+    "name": "UI SDK Components",
+    "url": "https://ui-sdk.dev/docs/react/components",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-11-13"
   }
 ]
