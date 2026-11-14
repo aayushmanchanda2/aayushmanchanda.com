@@ -5861,5 +5861,14 @@
         "Agree the migration plan before changing files."
       ]
     }
+  },
+  {
+    "slug": "building-always-on-agents",
+    "title": "Building always-on agents",
+    "url": "https://claude.com/resources/articles/building-always-on-agents",
+    "domain": "claude.com",
+    "saved_date": "2026-11-14",
+    "kind": "article",
+    "note": "Anthropic's guide to the five primitives behind always-on agents: event inboxes, timers, memory, permissions, and outboxes."
   }
 ]
