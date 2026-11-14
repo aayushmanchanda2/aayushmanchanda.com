@@ -5869,6 +5869,45 @@
     "domain": "claude.com",
     "saved_date": "2026-11-14",
     "kind": "article",
-    "note": "Anthropic's guide to the five primitives behind always-on agents: event inboxes, timers, memory, permissions, and outboxes."
+    "note": "Anthropic's guide to the five primitives behind always-on agents: event inboxes, timers, memory, permissions, and outboxes.",
+    "tldr": "Always-on agents combine an event inbox, timers, durable memory, permission controls, and an outbox to act proactively across short, repeatable runs.",
+    "highlights": [
+      {
+        "text": "An always-on agent is not actually “always on.” This is just a description of the user experience.",
+        "note": "The continuous experience is built from discrete, durable runs.",
+        "color": "amber"
+      },
+      {
+        "text": "The inbox should be the source of truth. When the worker is woken up, it should pull the latest events from the inbox first.",
+        "note": "Durability and recovery start with the event queue.",
+        "color": "blue"
+      },
+      {
+        "text": "As a rule of thumb, memory should only hold what the agent can’t look up again.",
+        "note": "Store durable learning, not copies of retrievable state.",
+        "color": "green"
+      }
+    ],
+    "excerpt": "Over the past few months, we’ve seen a resurgence of always-on agents. Always-on agents are stateful and proactive, meaning they manage context across sessions and take actions without direct supervision.",
+    "block": {
+      "best_for": "Teams building proactive agents that operate across unattended, recurring runs.",
+      "tip": "Start with one inbox per user and allow only one active worker per inbox.",
+      "time": {
+        "text": "14 min",
+        "source": "stated"
+      },
+      "needs": [
+        "A durable event store",
+        "A timer store",
+        "Durable memory",
+        "Permission controls",
+        "An outbox"
+      ],
+      "start_here": [
+        "Route every trigger into a durable event inbox.",
+        "Wake one worker to batch pending events into a run.",
+        "Persist memory, then deliver or defer the result through the outbox."
+      ]
+    }
   }
 ]
