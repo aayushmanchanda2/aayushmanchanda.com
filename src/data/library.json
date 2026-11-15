@@ -5917,7 +5917,26 @@
     "domain": "davidobot.net",
     "saved_date": "2026-11-15",
     "kind": "article",
-    "note": "David Khachaturov’s working list of essays on AI-native interfaces, writing, engineering and the ideas he keeps returning to."
+    "note": "David Khachaturov’s working list of essays on AI-native interfaces, writing, engineering and the ideas he keeps returning to.",
+    "tldr": "David Khachaturov’s reference list gathers essays on AI-native interfaces, clear writing, data-heavy engineering, life, motivation and experience.",
+    "highlights": [
+      {
+        "text": "Below is an unstructured list of links, interesting essays, and various tidbits that I find myself having to look up when I want to send them to people.",
+        "note": "The page is a personal reference shelf built for reuse.",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Below is an unstructured list of links, interesting essays, and various tidbits that I find myself having to look up when I want to send them to people.",
+    "block": {
+      "best_for": "Finding foundational essays on AI-native interface design and clear writing.",
+      "tip": "Use the topic headings to jump to the question you are working through.",
+      "needs": [],
+      "start_here": [
+        "Start with the AI-native applications section.",
+        "Read the writing section before drafting.",
+        "Return when you need a reference to share."
+      ]
+    }
   },
   {
     "slug": "pion-andon-labs",
