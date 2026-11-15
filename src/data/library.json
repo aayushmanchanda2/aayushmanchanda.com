@@ -5945,6 +5945,32 @@
     "domain": "andonlabs.com",
     "saved_date": "2026-11-15",
     "kind": "article",
-    "note": "Pion is Andon Labs’ platform for persistent agents that run entire businesses with terminal, browser, email, phone, banking and cards."
+    "note": "Pion is Andon Labs’ platform for persistent agents that run entire businesses with terminal, browser, email, phone, banking and cards.",
+    "tldr": "Pion is Andon Labs’ cloud platform for persistent agents that run businesses using built-in terminal, email, phone, banking and browser tools.",
+    "highlights": [
+      {
+        "text": "Pion is not a platform to set up workflows, or partially automate work. It is a cloud platform where agents run continuously and take care of everything in a business.",
+        "note": "The product is positioned as full business operation, not workflow automation.",
+        "color": "amber"
+      },
+      {
+        "text": "Businesses are run by persistent, long-running agents.",
+        "note": "Persistence is the core operating model.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "We’ve used Pion to run vending machines, stores, cafés and radio stations. How much could it make running yours? Setup is trivial, the agent does the rest, and we’ll fund the best ideas with seed tokens.",
+    "block": {
+      "best_for": "Testing whether a business can be run by persistent autonomous agents.",
+      "tip": "Start with software businesses, which Andon Labs says may work better than others.",
+      "needs": [
+        "A business idea or existing business"
+      ],
+      "start_here": [
+        "Choose a new or existing business.",
+        "Describe it in one or two sentences.",
+        "Set the direction through Andonos."
+      ]
+    }
   }
 ]
