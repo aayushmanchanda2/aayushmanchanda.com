@@ -5909,5 +5909,23 @@
         "Persist memory, then deliver or defer the result through the outbox."
       ]
     }
+  },
+  {
+    "slug": "links-interesting-essays-david-khachaturov",
+    "title": "Links & Interesting Essays | David Khachaturov",
+    "url": "https://davidobot.net/links",
+    "domain": "davidobot.net",
+    "saved_date": "2026-11-15",
+    "kind": "article",
+    "note": "David Khachaturov’s working list of essays on AI-native interfaces, writing, engineering and the ideas he keeps returning to."
+  },
+  {
+    "slug": "pion-andon-labs",
+    "title": "Pion | Andon Labs",
+    "url": "https://andonlabs.com/pion",
+    "domain": "andonlabs.com",
+    "saved_date": "2026-11-15",
+    "kind": "article",
+    "note": "Pion is Andon Labs’ platform for persistent agents that run entire businesses with terminal, browser, email, phone, banking and cards."
   }
 ]
