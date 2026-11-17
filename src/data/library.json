@@ -6004,6 +6004,17 @@
     "domain": "vorflux.com",
     "saved_date": "2026-11-17",
     "kind": "article",
-    "note": "Vorflux prices cloud agent work by machine hour and model tokens, with BYOK, bundled model access, or a Codex subscription covering GPT tokens."
+    "note": "Vorflux prices cloud agent work by machine hour and model tokens, with BYOK, bundled model access, or a Codex subscription covering GPT tokens.",
+    "tldr": "Vorflux offers BYOK, bundled token billing, or Codex subscription access, with hourly compute that auto-stops after one idle hour.",
+    "block": {
+      "best_for": "Comparing Vorflux compute and model billing options",
+      "tip": "Choose BYOK if you already have provider credits, or Codex subscription access if you only need GPT models.",
+      "needs": [],
+      "start_here": [
+        "Choose BYOK, Vorflux tokens, or Codex subscription access",
+        "Pick a server size based on CPU and memory needs",
+        "Review hourly compute and per-million-token rates before starting"
+      ]
+    }
   }
 ]
