@@ -1570,5 +1570,32 @@
     "verdict": "watching",
     "note": "Saved from Raindrop. Not tested yet.",
     "status_date": "2026-11-13"
+  },
+  {
+    "slug": "traces",
+    "name": "Traces",
+    "url": "https://traces.com/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-11-17"
+  },
+  {
+    "slug": "xeet",
+    "name": "xeet",
+    "url": "https://xeet-rs.vercel.app/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A Rust and WebAssembly renderer that turns X posts into deterministic Retina PNGs without running a browser.",
+    "status_date": "2026-11-17"
+  },
+  {
+    "slug": "design-how-vault",
+    "name": "Design How Vault",
+    "url": "https://design.how/vault",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A collection of installable agent skills for recreating expressive type, motion, and graphic effects from concise visual descriptions.",
+    "status_date": "2026-11-17"
   }
 ]

@@ -5972,5 +5972,23 @@
         "Set the direction through Andonos."
       ]
     }
+  },
+  {
+    "slug": "everycut-agent-native-screen-recording-and-editing",
+    "title": "Everycut: agent-native screen recording and editing",
+    "url": "https://cut.every.to/",
+    "domain": "cut.every.to",
+    "saved_date": "2026-11-17",
+    "kind": "article",
+    "note": "A Mac screen recorder and video editor that exposes every control to agents, so recordings can be cut by hand, from the transcript, or through Claude Code and Codex."
+  },
+  {
+    "slug": "vorflux-pricing",
+    "title": "Vorflux pricing",
+    "url": "https://vorflux.com/pricing",
+    "domain": "vorflux.com",
+    "saved_date": "2026-11-17",
+    "kind": "article",
+    "note": "Vorflux prices cloud agent work by machine hour and model tokens, with BYOK, bundled model access, or a Codex subscription covering GPT tokens."
   }
 ]
