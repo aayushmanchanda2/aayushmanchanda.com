@@ -5980,7 +5980,22 @@
     "domain": "cut.every.to",
     "saved_date": "2026-11-17",
     "kind": "article",
-    "note": "A Mac screen recorder and video editor that exposes every control to agents, so recordings can be cut by hand, from the transcript, or through Claude Code and Codex."
+    "note": "A Mac screen recorder and video editor that exposes every control to agents, so recordings can be cut by hand, from the transcript, or through Claude Code and Codex.",
+    "tldr": "Everycut is a Mac video editor that lets people and agents record, edit by transcript, and export locally.",
+    "block": {
+      "best_for": "Editing screen recordings on Apple silicon Macs with human and agent control",
+      "tip": "Use transcript editing to remove words, fillers, and long silences while keeping cuts reversible.",
+      "needs": [
+        "Apple silicon Mac running macOS 14 or newer",
+        "Every account",
+        "Anthropic API key for the in-app agent"
+      ],
+      "start_here": [
+        "Sign in with an Every account and download the Mac app",
+        "Record a display, window, or area with separate camera and audio tracks",
+        "Edit in the timeline or transcript, then export an MP4"
+      ]
+    }
   },
   {
     "slug": "vorflux-pricing",
