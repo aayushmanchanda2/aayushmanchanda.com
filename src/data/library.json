@@ -6024,6 +6024,34 @@
     "domain": "docs.google.com",
     "saved_date": "2026-11-19",
     "kind": "article",
-    "note": "Hiten Shah’s practical guide to turning screenshots, recordings, and AI into a launch video, with a five-question brief, examples, prompts, and a review checklist."
+    "note": "Hiten Shah’s practical guide to turning screenshots, recordings, and AI into a launch video, with a five-question brief, examples, prompts, and a review checklist.",
+    "tldr": "A practical process for turning product screenshots and recordings into clear launch videos, from a five-line brief through review, distribution, and reusable prompts.",
+    "highlights": [
+      {
+        "text": "Start with the moment you need somebody to understand.",
+        "note": "The whole video should make one product outcome unmistakable.",
+        "color": "amber"
+      },
+      {
+        "text": "Before opening an editor, answer these five questions.",
+        "note": "The brief covers viewer, promise, moment, evidence, and next action.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "We made a product launch video for Beam using AI. The first cut showed the window picker, the Dock and how to switch between apps. It looked like something we could publish. Then we noticed the most useful part was barely in the video. Beam puts a window from another Mac onto the one in front of you, where it works like any other window.",
+    "block": {
+      "best_for": "Product teams making an AI-assisted launch video from screenshots and recordings.",
+      "tip": "Start with the one moment the viewer must understand, then choose evidence that proves it.",
+      "needs": [
+        "Product screenshots or recordings",
+        "A clear viewer and situation",
+        "A next action to measure"
+      ],
+      "start_here": [
+        "Write the five-line Video Brief",
+        "Choose the real proof moment",
+        "Plan scenes before rendering"
+      ]
+    }
   }
 ]
