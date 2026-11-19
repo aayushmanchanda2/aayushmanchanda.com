@@ -5623,5 +5623,113 @@
       ]
     },
     "collections": []
+  },
+  {
+    "slug": "best-web-design-inspiration-details-so",
+    "title": "Details.so",
+    "url": "https://www.details.so/inspo",
+    "domain": "details.so",
+    "saved_date": "2026-11-19",
+    "shot": "/shots/best-web-design-inspiration-details-so.webp",
+    "palette": [
+      "#fcfcfc",
+      "#f9d60b",
+      "#2a2a2c",
+      "#6f6d6c",
+      "#51504f",
+      "#8e8d8c"
+    ],
+    "design": {
+      "read_date": "2026-11-19",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#ffffff"
+        },
+        {
+          "name": "surface",
+          "hex": "#f3f2f1"
+        },
+        {
+          "name": "text",
+          "hex": "#0f0f0f"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#6b6866"
+        },
+        {
+          "name": "border",
+          "hex": "#e6e6e6"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Season Collection",
+          "fontSize": "54px",
+          "fontWeight": "560",
+          "lineHeight": "56.7px",
+          "letterSpacing": "-1.08px"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "Season Collection",
+          "fontSize": "32px",
+          "fontWeight": "560",
+          "lineHeight": "38.4px",
+          "letterSpacing": "-0.64px"
+        },
+        {
+          "name": "body",
+          "fontFamily": "Season Collection",
+          "fontSize": "17px",
+          "fontWeight": "560",
+          "lineHeight": "25.5px",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "1",
+          "value": "4px"
+        },
+        {
+          "name": "6px",
+          "value": "6px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "image",
+          "value": "10px"
+        },
+        {
+          "name": "card",
+          "value": "15px"
+        },
+        {
+          "name": "card-2",
+          "value": "18px"
+        },
+        {
+          "name": "full",
+          "value": "9999px"
+        }
+      ]
+    },
+    "collections": []
   }
 ]

@@ -6016,5 +6016,14 @@
         "Review hourly compute and per-million-token rates before starting"
       ]
     }
+  },
+  {
+    "slug": "the-product-launch-video-playbook",
+    "title": "The Product Launch Video Playbook",
+    "url": "https://docs.google.com/document/d/18jpuStgJUqbx-A5M_IGDLT98gNThoRh0D3C0k7sgRJs/mobilebasic",
+    "domain": "docs.google.com",
+    "saved_date": "2026-11-19",
+    "kind": "article",
+    "note": "Hiten Shah’s practical guide to turning screenshots, recordings, and AI into a launch video, with a five-question brief, examples, prompts, and a review checklist."
   }
 ]
