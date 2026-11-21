@@ -6104,6 +6104,39 @@
     "domain": "notion.com",
     "saved_date": "2026-11-21",
     "kind": "article",
-    "note": "Notion’s field guide to giving teams and agents shared context, then turning repeatable workflows into managed AI factories."
+    "note": "Notion’s field guide to giving teams and agents shared context, then turning repeatable workflows into managed AI factories.",
+    "tldr": "Notion’s guide to shared context systems and reusable AI factories that turn one-off chats into durable, compounding team workflows.",
+    "highlights": [
+      {
+        "text": "Rent the intelligence. Own the context.",
+        "note": "Keep the workspace independent from the model provider.",
+        "color": "amber"
+      },
+      {
+        "text": "Start with one workflow, or one team. See if it works for you. Then go from there.",
+        "note": "Adopt the system through a bounded pilot.",
+        "color": "blue"
+      },
+      {
+        "text": "Don’t think of the agent as an assistant: think of it as a computer program that just so happens to execute instructions written in natural language, rather than in code.",
+        "note": "Reliable agents need explicit instructions and tools.",
+        "color": "green"
+      }
+    ],
+    "excerpt": "A field guide for building a shared context system that you, your team, and your agents can work in together.",
+    "block": {
+      "best_for": "Teams moving from one-off AI chats to shared, repeatable workflows.",
+      "tip": "Start with one workflow and improve it before expanding.",
+      "needs": [
+        "A shared context system",
+        "A recurring workflow",
+        "An agent with the right tools"
+      ],
+      "start_here": [
+        "Choose one recurring workflow.",
+        "Give the agent access to shared context.",
+        "Run it, inspect the result, and improve the system."
+      ]
+    }
   }
 ]
