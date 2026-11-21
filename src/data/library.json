@@ -6061,6 +6061,40 @@
     "domain": "jfdi.bot",
     "saved_date": "2026-11-21",
     "kind": "article",
-    "note": "A practical guide to installing signed iPhone builds from a link, skipping cables and TestFlight for devices registered to your Apple developer account."
+    "note": "A practical guide to installing signed iPhone builds from a link, skipping cables and TestFlight for devices registered to your Apple developer account.",
+    "tldr": "iOS can install development-signed apps from expiring HTTPS links, bypassing cables and TestFlight for phones registered to your Apple developer account.",
+    "highlights": [
+      {
+        "text": "The build only installs on phones listed in your Apple developer account.",
+        "note": "The signed build is limited to registered device IDs.",
+        "color": "amber"
+      },
+      {
+        "text": "Three files in a chain: the page, the manifest, the .ipa. All of it has to be HTTPS with a real certificate.",
+        "note": "Every file in the install chain needs valid HTTPS.",
+        "color": "blue"
+      },
+      {
+        "text": "The installer doesn’t act like the browser. Putting the permission in the link, with an expiry, is what makes it work.",
+        "note": "Signed expiring links replace browser authentication.",
+        "color": "green"
+      }
+    ],
+    "excerpt": "The build only installs on phones listed in your Apple developer account. That list is the security model. When Xcode signs a development build, it bakes in the IDs (UDIDs) of the phones allowed to run it. A phone that isn’t on the list gets an error, no matter who has the link.",
+    "block": {
+      "best_for": "Installing development builds on registered iPhones without cables or TestFlight.",
+      "tip": "Use signed, expiring URLs for the page, manifest and .ipa because the installer sends no browser cookies.",
+      "needs": [
+        "Paid Apple Developer account",
+        "Mac with Xcode",
+        "Registered iPhone UDIDs",
+        "HTTPS hosting with a real certificate"
+      ],
+      "start_here": [
+        "Export a development-signed .ipa with Xcode.",
+        "Serve the page, manifest and .ipa over HTTPS.",
+        "Put the signed manifest URL in an itms-services install link."
+      ]
+    }
   }
 ]
