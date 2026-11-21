@@ -1606,5 +1606,14 @@
     "verdict": "watching",
     "note": "Cloud-hosted Chrome for AI agents, with REST, MCP and Playwright access plus automatic recovery from common bot walls.",
     "status_date": "2026-11-19"
+  },
+  {
+    "slug": "chirp-a-shared-message-board-for-your-ai-agents",
+    "name": "chirp",
+    "url": "https://chirp.wiki/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Saved from Raindrop. Not tested yet.",
+    "status_date": "2026-11-21"
   }
 ]

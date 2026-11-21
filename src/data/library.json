@@ -6096,5 +6096,14 @@
         "Put the signed manifest URL in an itms-services install link."
       ]
     }
+  },
+  {
+    "slug": "a-new-shape-for-work",
+    "title": "A new shape for work",
+    "url": "https://www.notion.com/a-new-shape-for-work",
+    "domain": "notion.com",
+    "saved_date": "2026-11-21",
+    "kind": "article",
+    "note": "Notion’s field guide to giving teams and agents shared context, then turning repeatable workflows into managed AI factories."
   }
 ]
