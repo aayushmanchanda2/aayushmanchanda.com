@@ -6053,5 +6053,14 @@
         "Plan scenes before rendering"
       ]
     }
+  },
+  {
+    "slug": "build-an-iphone-app-on-your-iphone-then-install-it-over-the",
+    "title": "Build an iPhone App on Your iPhone, Then Install It Over…",
+    "url": "https://jfdi.bot/blog/build-iphone-app-on-iphone-install-over-the-air",
+    "domain": "jfdi.bot",
+    "saved_date": "2026-11-21",
+    "kind": "article",
+    "note": "A practical guide to installing signed iPhone builds from a link, skipping cables and TestFlight for devices registered to your Apple developer account."
   }
 ]
