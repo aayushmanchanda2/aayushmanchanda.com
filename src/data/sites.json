@@ -98,12 +98,12 @@
     "saved_date": "2026-08-26",
     "shot": "/shots/save-design.webp",
     "palette": [
-      "#090a0b",
-      "#2a2a30",
-      "#b190ba",
-      "#716f71",
-      "#4f4f50",
-      "#53578a"
+      "#09090b",
+      "#2a2a2e",
+      "#8e93bb",
+      "#757473",
+      "#f17127",
+      "#514f4e"
     ],
     "design": {
       "read_date": "2026-09-22",
@@ -1491,12 +1491,12 @@
     "saved_date": "2026-09-14",
     "shot": "/shots/ana-howard.webp",
     "palette": [
-      "#fbfcfc",
+      "#fcfcfc",
+      "#2e2928",
       "#8c8987",
-      "#d2cfce",
-      "#aeebfe",
-      "#b5aafd",
-      "#ceae90"
+      "#d0cfcf",
+      "#aeecfe",
+      "#b5aafd"
     ],
     "design": {
       "read_date": "2026-09-22",
@@ -1769,12 +1769,12 @@
     "saved_date": "2026-09-14",
     "shot": "/shots/wall-of-portfolios.webp",
     "palette": [
-      "#fdfdfd",
-      "#dadada",
-      "#303032",
-      "#e5e2a8",
-      "#afd3e7",
-      "#6f7178"
+      "#fcfcfb",
+      "#2d2d30",
+      "#d2d2d2",
+      "#6f7074",
+      "#afb0b1",
+      "#8e9092"
     ],
     "design": {
       "read_date": "2026-09-22",
@@ -2115,11 +2115,11 @@
     "shot": "/shots/built-by-designers-no-explanation-needed.webp",
     "palette": [
       "#f5f5f3",
-      "#9b9c9c",
-      "#151619",
-      "#cdcdcc",
-      "#0c7bf9",
-      "#ee5c2b"
+      "#9c9d9d",
+      "#cfcfce",
+      "#2c2d2d",
+      "#505050",
+      "#717271"
     ],
     "design": {
       "read_date": "2026-09-22",
@@ -2864,12 +2864,12 @@
     "saved_date": "2026-09-22",
     "shot": "/shots/the-horowitz-andreessen-academy.webp",
     "palette": [
-      "#f7f6f4",
-      "#060404",
-      "#2c3030",
-      "#b3b3b3",
-      "#d1d2d1",
-      "#4d4d4e"
+      "#f6f5f3",
+      "#0b0b0a",
+      "#2e302f",
+      "#4d4e50",
+      "#6d6d6e",
+      "#d1d2d1"
     ],
     "design": {
       "read_date": "2026-09-22",
@@ -3185,12 +3185,12 @@
     "saved_date": "2026-09-24",
     "shot": "/shots/ghost.webp",
     "palette": [
-      "#f9f9f9",
-      "#b2eef7",
-      "#088bed",
-      "#8ed4ea",
-      "#743735",
-      "#e94f17"
+      "#d7d7d7",
+      "#2f2b30",
+      "#8c8e8e",
+      "#4c4f50",
+      "#afb0b2",
+      "#026fb2"
     ],
     "design": {
       "read_date": "2026-09-24",
@@ -3336,11 +3336,11 @@
     "shot": "/shots/the-working-assembly.webp",
     "palette": [
       "#faf8f6",
+      "#080809",
       "#ead7c9",
-      "#312911",
-      "#6d544b",
-      "#959494",
-      "#b3b0ad"
+      "#2d2c2c",
+      "#959393",
+      "#6d544b"
     ],
     "design": {
       "read_date": "2026-10-20",
@@ -3606,11 +3606,11 @@
     "shot": "/shots/launchr-catalog.webp",
     "palette": [
       "#fdfdfd",
-      "#2f302d",
-      "#4f504e",
-      "#6f706e",
-      "#8e8f8d",
-      "#b1b2b0"
+      "#2c2e30",
+      "#adadb0",
+      "#928c92",
+      "#4f4f4e",
+      "#6f6d71"
     ],
     "design": {
       "read_date": "2026-10-20",
@@ -3717,12 +3717,12 @@
     "saved_date": "2026-10-20",
     "shot": "/shots/propaganda-the-internet-is-our-playground.webp",
     "palette": [
-      "#ffffff",
+      "#fefefe",
       "#bababa",
-      "#710fd3",
-      "#8d31e9",
-      "#472ee6",
-      "#ff2b32"
+      "#8c30e9",
+      "#7210d4",
+      "#2a2b2d",
+      "#91afef"
     ],
     "design": {
       "read_date": "2026-10-20",
@@ -4933,12 +4933,12 @@
     "saved_date": "2026-10-30",
     "shot": "/shots/interface-lineage.webp",
     "palette": [
-      "#faf6f4",
-      "#d6d2d0",
-      "#1e1e1d",
-      "#0029f5",
-      "#b4b0b0",
-      "#6b6b6a"
+      "#faf7f5",
+      "#d5d3d0",
+      "#2e2c2c",
+      "#6d6c6c",
+      "#b2b0af",
+      "#939190"
     ],
     "design": {
       "read_date": "2026-10-30",

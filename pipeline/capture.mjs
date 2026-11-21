@@ -29,10 +29,12 @@
  *      headline; the full scroll tells you how it is built. Past `MAX_SHOT_PX`
  *      the picture stops being reference and starts being a megabyte, so the
  *      capture is clipped there and says so in the log.
- *   4. WALK the page before shooting it. `fullPage` renders the document at its
- *      full height in one pass, which is not the same thing as scrolling
- *      through it: lazy images below the fold never fetch, and scroll-revealed
- *      sections never reveal. See `scrollThroughPage`.
+ *   4. SHOOT it a screen at a time. `fullPage` renders the document at its full
+ *      height in one pass, which is not the same thing as scrolling through
+ *      it: lazy media below the fold never fetches, and a section that reveals
+ *      only while it is on screen (and hides again once scrolled past) is
+ *      photographed hidden. So the shot is a stack of viewport tiles, each
+ *      taken while its screen is in view. See `shootTiles`.
  *   5. REFUSE a picture of a bot wall. A challenge page is served at HTTP 200
  *      and renders without error, so every check above it passes and a blank
  *      interstitial publishes as the site. See `challenge.mjs`.
@@ -67,8 +69,15 @@ const DEVICE_SCALE_FACTOR = 1;
 /** After fonts are ready: entrance animations and lazy images land in here. */
 const SETTLE_MS = 2500;
 
-/** Wall-clock ceiling for one shot, navigation and settle included. */
+/** Ceiling for navigation, and for any one page operation. */
 const SHOT_TIMEOUT_MS = 45_000;
+
+/**
+ * Wall-clock ceiling for one whole shot: navigation, settle, the walk, and up
+ * to fourteen tiles. A WebGL page is the slow case: juliaalvarenga.com takes
+ * 30s to load and 3 to 4s per tile screenshot, about 90s in all.
+ */
+const SHOT_DEADLINE_MS = 120_000;
 
 /* ---------------------------------------------------------------------------
    The walk-down
@@ -229,6 +238,300 @@ export async function scrollThroughPage(
   return { steps, depth };
 }
 
+/* ---------------------------------------------------------------------------
+   The tiles
+   --------------------------------------------------------------------------- */
+
+/**
+ * Least time a tile waits after its scroll: long enough for observers to fire
+ * and a reveal transition to start, so `settle` has something to finish.
+ */
+const TILE_MIN_MS = 350;
+
+/** Most time a tile waits for the images and videos on its screen to paint. */
+const TILE_MEDIA_MS = 1500;
+
+/**
+ * What the tile walk needs from a page. Same idea as {@link Scroller}: the
+ * routine gets a plain object, `pageTiler` is the browser half, and the tests
+ * hand it a fake page that hides whatever is off screen.
+ *
+ * @typedef {object} Tiler
+ * @property {() => Promise<number>} viewportHeight
+ * @property {() => Promise<number>} documentHeight
+ * @property {(y: number) => Promise<number>} scrollTo
+ *   Resolves to where the page actually landed, which is less than asked at
+ *   the bottom of the page.
+ * @property {() => Promise<unknown>} settle
+ *   Wait for this screen's media, then finish its running transitions.
+ * @property {() => Promise<unknown>} hideRepeats
+ *   Hide fixed and stuck chrome, which the first tile already holds.
+ * @property {() => Promise<Buffer>} screenshot  The viewport, as PNG.
+ */
+
+/**
+ * Photograph the page a screen at a time, top to bottom, stopping at `maxPx`.
+ *
+ * Each tile is shot while its screen is in view, so a section that is visible
+ * only on screen is visible in its tile, and lazy media on that screen has had
+ * its fetch. From the second tile on, fixed headers, cookie bars and chat
+ * bubbles are hidden first: the first tile has them, and a stitched page with
+ * a header every 900px is a picture of no page anyone has seen.
+ *
+ * @param {Tiler} tiler
+ * @param {object} [options]
+ * @param {number} [options.maxPx]
+ * @param {number} [options.maxSteps]
+ * @param {number} [options.until]
+ *   Epoch ms after which no new tile is started. A slow page (WebGL, 3 to 4s a
+ *   screenshot) then ships the screens it got instead of missing the deadline.
+ * @returns {Promise<{ tiles: { y: number, png: Buffer }[], viewport: number, height: number, documentHeight: number, outOfTime: boolean }>}
+ *   The tiles with the scroll offset each was shot at, and the height the
+ *   stitched picture should be.
+ */
+export async function shootTiles(
+  tiler,
+  { maxPx = MAX_SHOT_PX, maxSteps = MAX_SCROLL_STEPS, until = Infinity } = {},
+) {
+  const measured = await tiler.viewportHeight();
+  const viewport = measured > 0 ? measured : VIEWPORT.height;
+
+  /** @type {{ y: number, png: Buffer }[]} */
+  const tiles = [];
+  let documentHeight = 0;
+  let want = 0;
+  let outOfTime = false;
+
+  while (tiles.length < maxSteps) {
+    if (tiles.length > 0 && Date.now() > until) {
+      outOfTime = true;
+      break;
+    }
+    const y = await tiler.scrollTo(want);
+    const previous = tiles.at(-1);
+    // The page did not move: the last tile already reached the bottom.
+    if (previous !== undefined && y <= previous.y) break;
+    if (previous !== undefined) await tiler.hideRepeats();
+
+    await tiler.settle();
+    tiles.push({ y, png: await tiler.screenshot() });
+
+    // Re-read every tile: content that mounts makes the document taller.
+    documentHeight = await tiler.documentHeight();
+    if (y + viewport >= Math.min(documentHeight, maxPx)) break;
+    want = y + viewport;
+  }
+
+  await tiler.scrollTo(0);
+
+  const last = /** @type {{ y: number }} */ (tiles.at(-1));
+  return {
+    tiles,
+    viewport,
+    height: Math.min(last.y + viewport, Math.max(documentHeight, viewport), maxPx),
+    documentHeight,
+    outOfTime,
+  };
+}
+
+/**
+ * Mean absolute difference, out of 255, below which two consecutive tiles are
+ * the same screen. A pinned section that holds still while the page scrolls
+ * past it (save.design's canvas, theacademysf.com) photographs the same tile
+ * several times over, at 0.0 to 0.8 apart. The next-lowest pair measured on
+ * the flagged sites was 4.0, two sparse dark screens that are kept.
+ */
+const REPEAT_DIFF = 2;
+
+/** @param {Buffer} png */
+const tileThumb = (png) =>
+  sharp(png).greyscale().resize(96, 60, { fit: "fill" }).raw().toBuffer();
+
+/**
+ * Drop each tile that repeats the one before it, and close the gap it leaves:
+ * a pinned section's scroll distance is time on the page, not picture.
+ *
+ * @param {{ y: number, png: Buffer }[]} tiles
+ * @returns {Promise<{ tiles: { y: number, png: Buffer }[], removed: number }>}
+ *   The tiles kept, moved up by what was dropped above them, and how many
+ *   pixels were dropped in all.
+ */
+export async function dropRepeatedTiles(tiles) {
+  /** @type {{ y: number, png: Buffer }[]} */
+  const kept = [];
+  let removed = 0;
+  /** @type {Buffer | null} */
+  let previousThumb = null;
+  let previousY = 0;
+
+  for (const tile of tiles) {
+    const thumb = await tileThumb(tile.png);
+    if (previousThumb !== null) {
+      let total = 0;
+      for (let i = 0; i < thumb.length; i += 1) total += Math.abs(thumb[i] - previousThumb[i]);
+      if (total / thumb.length < REPEAT_DIFF) {
+        removed += tile.y - previousY;
+        previousY = tile.y;
+        continue;
+      }
+    }
+    kept.push({ y: tile.y - removed, png: tile.png });
+    previousThumb = thumb;
+    previousY = tile.y;
+  }
+
+  return { tiles: kept, removed };
+}
+
+/**
+ * Tiles to one PNG. Each tile goes in at its scroll offset; where two overlap
+ * (the last tile, clamped to the bottom), the later one wins, which is the
+ * one shot with that screen in view.
+ *
+ * @param {{ y: number, png: Buffer }[]} tiles
+ * @param {{ width: number, height: number }} size
+ * @returns {Promise<Buffer>}
+ */
+export async function stitchTiles(tiles, { width, height }) {
+  const layers = [];
+  for (const { y, png } of tiles) {
+    if (y >= height) continue;
+    const meta = await sharp(png).metadata();
+    const rows = Math.min(meta.height ?? 0, height - y);
+    const cols = Math.min(meta.width ?? 0, width);
+    if (rows <= 0 || cols <= 0) continue;
+    const input =
+      rows === meta.height && cols === meta.width
+        ? png
+        : await sharp(png).extract({ left: 0, top: 0, width: cols, height: rows }).png().toBuffer();
+    layers.push({ input, left: 0, top: y });
+  }
+
+  return await sharp({
+    create: { width, height, channels: 3, background: "#ffffff" },
+  })
+    .composite(layers)
+    .png()
+    .toBuffer();
+}
+
+/**
+ * A page that scrolls inside a full-height box instead of the window: an app
+ * shell with `body { overflow: hidden }` and a `main` that scrolls. The window
+ * never moves, so every shot of it was one screen tall.
+ *
+ * Let the box grow to its content, and its ancestors with it, so the window
+ * scrolls instead. Only when the window cannot scroll on its own, and only for
+ * a box at least three quarters of the screen tall: a scrolling sidebar or a
+ * code panel is part of the page, not the page.
+ *
+ * @param {import("playwright").Page} page
+ * @returns {Promise<boolean>} Whether a box was let out.
+ */
+export async function releaseInnerScroller(page) {
+  return await page.evaluate(() => {
+    const root = document.scrollingElement ?? document.documentElement;
+    if (root.scrollHeight > window.innerHeight + 1) return false;
+
+    /** @type {Element | null} */
+    let box = null;
+    for (const el of document.querySelectorAll("body *")) {
+      if (el.clientHeight < window.innerHeight * 0.75) continue;
+      if (el.scrollHeight <= el.clientHeight + 1) continue;
+      if (!/^(auto|scroll|overlay)$/.test(getComputedStyle(el).overflowY)) continue;
+      if (box === null || el.scrollHeight > box.scrollHeight) box = el;
+    }
+    if (box === null) return false;
+
+    // A stylesheet rather than inline styles: a framework re-render rewrites
+    // `style` (builtbydesigners.com did, mid-walk), not a data attribute.
+    const pinned = /^(absolute|fixed)$/.test(getComputedStyle(box).position);
+    for (let el = /** @type {Element | null} */ (box); el !== null; el = el.parentElement) {
+      el.setAttribute("data-shot-released", "");
+    }
+    if (pinned) box.setAttribute("data-shot-released-box", "");
+    const sheet = document.createElement("style");
+    sheet.textContent =
+      "[data-shot-released]{height:auto!important;max-height:none!important;overflow-y:visible!important}" +
+      // An absolutely placed box is out of flow: however tall it grows, its
+      // parent and the document stay one screen. Put it back in the flow.
+      "[data-shot-released-box]{position:relative!important;inset:auto!important}";
+    document.head.append(sheet);
+    return true;
+  });
+}
+
+/**
+ * A {@link Tiler} backed by a real Playwright page.
+ *
+ * @param {import("playwright").Page} page
+ * @returns {Tiler}
+ */
+export function pageTiler(page) {
+  return {
+    viewportHeight: () => page.evaluate(() => window.innerHeight),
+    documentHeight: () => page.evaluate(() => document.documentElement.scrollHeight),
+    scrollTo: (y) =>
+      page.evaluate(async (top) => {
+        window.scrollTo({ top, behavior: "instant" });
+        await new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done)));
+        return Math.round(window.scrollY);
+      }, y),
+    settle: async () => {
+      await page.waitForTimeout(TILE_MIN_MS);
+      await page.evaluate(async (budget) => {
+        const onScreen = (/** @type {Element} */ el) => {
+          const r = el.getBoundingClientRect();
+          return r.width > 0 && r.height > 0 && r.bottom > 0 && r.top < window.innerHeight;
+        };
+        const painted = () =>
+          [...document.images].every((img) => !onScreen(img) || (img.complete && img.naturalWidth > 0)) &&
+          [...document.querySelectorAll("video")].every(
+            (video) => !onScreen(video) || video.readyState >= 2 || video.poster !== "" || video.error !== null,
+          );
+        const until = Date.now() + budget;
+        while (!painted() && Date.now() < until) {
+          await new Promise((done) => setTimeout(done, 100));
+        }
+        // A reveal mid-transition is a reveal at half opacity. Jump every
+        // finite animation to its end; an infinite one (a marquee) has none.
+        for (const animation of document.getAnimations()) {
+          try {
+            animation.finish();
+          } catch {
+            // Infinite, or driven by scroll: leave it where it is.
+          }
+        }
+        await new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(done)));
+      }, TILE_MEDIA_MS);
+    },
+    hideRepeats: () =>
+      page.evaluate(() => {
+        const viewport = window.innerHeight;
+        for (const el of document.querySelectorAll("body *")) {
+          const html = /** @type {HTMLElement} */ (el);
+          if (html.dataset.shotHidden !== undefined) continue;
+          const { position } = getComputedStyle(el);
+          if (position !== "fixed" && position !== "sticky") continue;
+          const r = el.getBoundingClientRect();
+          if (r.height === 0) continue;
+          // Taller than a third of the screen is a backdrop or pinned content,
+          // unless it is a fixed layer stacked above the page: a modal and
+          // its dimmed backdrop, which would otherwise tint every tile.
+          // ponytail: z-index is the tell; a backdrop stacked above content
+          // with see-through content on top of it would be hidden too.
+          const overlay = position === "fixed" && Number(getComputedStyle(el).zIndex) > 0;
+          if (!overlay && r.height > viewport / 3) continue;
+          // Sticky only once it is stuck to the top; until then it is content.
+          if (position === "sticky" && r.top > 1) continue;
+          html.style.setProperty("visibility", "hidden", "important");
+          html.dataset.shotHidden = "";
+        }
+      }),
+    screenshot: () => page.screenshot({ type: "png" }),
+  };
+}
+
 /**
  * Rejects if `work` outruns the deadline. The underlying page work is not
  * cancellable, so the caller still has to close the context afterwards —
@@ -314,6 +617,8 @@ export async function loadPage(page, url, slug) {
  */
 async function shoot(browser, url, log, slug, date) {
   const context = await browser.newContext(CONTEXT_OPTIONS);
+  // Leave the stitch, the encode and a last slow tile room inside the deadline.
+  const tilesUntil = Date.now() + SHOT_DEADLINE_MS - 20_000;
 
   try {
     return await withDeadline(
@@ -328,37 +633,31 @@ async function shoot(browser, url, log, slug, date) {
         // any failure: a shot never fails for want of tokens.
         const design = await readDesign(page, date);
 
-        const height = await page.evaluate(() => {
-          const { body, documentElement: root } = document;
-          return Math.max(
-            body?.scrollHeight ?? 0,
-            body?.offsetHeight ?? 0,
-            root.scrollHeight,
-            root.offsetHeight,
-            root.clientHeight,
-          );
-        });
-
-        if (height > MAX_SHOT_PX) {
-          log(
-            `capture: ${slug} is ${height}px tall, clipped to the first ${MAX_SHOT_PX}px`,
-          );
-          // `fullPage` AND `clip`: the two together mean "the whole document,
-          // then this window of it". `clip` on its own is measured against the
-          // viewport, so it would silently hand back the top 900px and call it
-          // a 12,000px capture — which looks like a working clip right up until
-          // you open the file.
-          const png = await page.screenshot({
-            type: "png",
-            fullPage: true,
-            clip: { x: 0, y: 0, width: VIEWPORT.width, height: MAX_SHOT_PX },
-          });
-          return { png, design };
+        // After the tokens, so they are read off the page as it was served.
+        if (await releaseInnerScroller(page)) {
+          log(`capture: ${slug} scrolls inside a box, let it out to the window`);
         }
 
-        return { png: await page.screenshot({ type: "png", fullPage: true }), design };
+        const { tiles, height, documentHeight, outOfTime } = await shootTiles(pageTiler(page), {
+          until: tilesUntil,
+        });
+        if (outOfTime) {
+          log(`capture: ${slug} ran out of time, kept the first ${height}px`);
+        } else if (documentHeight > MAX_SHOT_PX) {
+          log(
+            `capture: ${slug} is ${documentHeight}px tall, clipped to the first ${MAX_SHOT_PX}px`,
+          );
+        }
+
+        const unique = await dropRepeatedTiles(tiles);
+        const png = await stitchTiles(unique.tiles, {
+          width: VIEWPORT.width,
+          height: height - unique.removed,
+        });
+        return { png, design };
       })(),
       `shot of ${url}`,
+      SHOT_DEADLINE_MS,
     );
   } finally {
     await context.close().catch(() => {
