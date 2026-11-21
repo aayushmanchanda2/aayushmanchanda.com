@@ -148,6 +148,13 @@ const year = new Date().getFullYear();
       every other digit that changes in place, which also sets it in mono
       inside the label voice; the name stays a name. */}
   <p class="foot__legal mono">&copy; <span class="tabular-nums">{year}</span> Aayush Manchanda</p>
+
+  {/* The studio he runs built this site: a credit and a way there, so it
+      takes the outbound treatment (design.md §5), without `nofollow`,
+      because it is his own property. */}
+  <p class="foot__credit mono">
+    Site by <a class="foot__quiet ext press" href="https://vetted.tools/?utm_source=aayushmanchanda.com" rel="noopener" target="_blank">vetted.tools</a>
+  </p>
 </footer>
 
 <script>
@@ -302,6 +309,11 @@ const year = new Date().getFullYear();
      line of air against the block of it above. */
   .foot__legal {
     margin: 0.85rem 0 0;
+    color: var(--text-tertiary);
+  }
+
+  .foot__credit {
+    margin: 0.35rem 0 0;
     color: var(--text-tertiary);
   }
 
