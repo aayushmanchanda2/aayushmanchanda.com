@@ -6138,5 +6138,32 @@
         "Run it, inspect the result, and improve the system."
       ]
     }
+  },
+  {
+    "slug": "introducing-the-knowledge-engine",
+    "title": "Introducing the Knowledge Engine",
+    "url": "https://hex.tech/blog/knowledge-engine/",
+    "domain": "hex.tech",
+    "saved_date": "2026-11-24",
+    "kind": "article",
+    "note": "Hex's graph-based context layer reuses agent findings across analytics work, reducing repeated research and making judgment calls visible."
+  },
+  {
+    "slug": "the-new-matter-for-web",
+    "title": "The new Matter for Web",
+    "url": "https://www.getmatter.com/web-app/",
+    "domain": "getmatter.com",
+    "saved_date": "2026-11-24",
+    "kind": "article",
+    "note": "Matter explains the typography, navigation, focus mode, bulk triage, and small interaction details behind its rebuilt web reader."
+  },
+  {
+    "slug": "set-up-notion-for-your-agent",
+    "title": "Set up Notion for your agent",
+    "url": "https://developers.notion.com/prompts/setup",
+    "domain": "developers.notion.com",
+    "saved_date": "2026-11-24",
+    "kind": "article",
+    "note": "Notion’s official guide to using a workspace as durable shared context across agents, with a cautious setup flow that adapts to what you already have."
   }
 ]
