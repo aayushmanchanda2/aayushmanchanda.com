@@ -5731,5 +5731,97 @@
       ]
     },
     "collections": []
+  },
+  {
+    "slug": "ui-feed",
+    "title": "ui-feed",
+    "url": "https://ui-feed.dev/",
+    "domain": "ui-feed.dev",
+    "saved_date": "2026-11-24",
+    "shot": "/shots/ui-feed.webp",
+    "palette": [
+      "#fafafa",
+      "#171717",
+      "#b9d6f8",
+      "#0170f3",
+      "#b4b4b4",
+      "#4b4b4b"
+    ],
+    "design": {
+      "read_date": "2026-11-24",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#fafafa"
+        },
+        {
+          "name": "surface",
+          "hex": "#f0f0f0"
+        },
+        {
+          "name": "text",
+          "hex": "#171717"
+        },
+        {
+          "name": "text-muted",
+          "hex": "#737373"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "geistSerif",
+          "fontSize": "110.4px",
+          "fontWeight": "400",
+          "lineHeight": "114.82px",
+          "letterSpacing": "-1.66px"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "GeistMono",
+          "fontSize": "10px",
+          "fontWeight": "400",
+          "lineHeight": "15px",
+          "letterSpacing": "1.2px"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "6px",
+          "value": "6px"
+        },
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "3",
+          "value": "12px"
+        },
+        {
+          "name": "4",
+          "value": "16px"
+        },
+        {
+          "name": "5",
+          "value": "20px"
+        }
+      ],
+      "radius": [
+        {
+          "name": "card",
+          "value": "1px"
+        },
+        {
+          "name": "card-2",
+          "value": "16px"
+        },
+        {
+          "name": "card-3",
+          "value": "17px"
+        }
+      ]
+    },
+    "collections": []
   }
 ]
