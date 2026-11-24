@@ -6204,6 +6204,28 @@
     "domain": "developers.notion.com",
     "saved_date": "2026-11-24",
     "kind": "article",
-    "note": "Notion’s official guide to using a workspace as durable shared context across agents, with a cautious setup flow that adapts to what you already have."
+    "note": "Notion’s official guide to using a workspace as durable shared context across agents, with a cautious setup flow that adapts to what you already have.",
+    "tldr": "Notion’s official setup guide turns an existing workspace into durable shared context that multiple agents can read, search, and update.",
+    "highlights": [
+      {
+        "text": "Notion gives you, and every agent the user works with, one lasting place to remember what matters and do great work.",
+        "note": "The workspace becomes shared context across tools and agent sessions.",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "This page teaches your agent how to get the most out of Notion. To get started, just share it with your agent.",
+    "block": {
+      "best_for": "People who want several agents to share durable context.",
+      "tip": "Keep the existing workspace structure and let the agent ask before changing anything.",
+      "needs": [
+        "An existing Notion workspace",
+        "An agent with Notion access"
+      ],
+      "start_here": [
+        "Share the official setup page with your agent.",
+        "Let it inspect the workspace you already have.",
+        "Approve changes one step at a time."
+      ]
+    }
   }
 ]
