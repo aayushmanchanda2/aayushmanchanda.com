@@ -6146,7 +6146,28 @@
     "domain": "hex.tech",
     "saved_date": "2026-11-24",
     "kind": "article",
-    "note": "Hex's graph-based context layer reuses agent findings across analytics work, reducing repeated research and making judgment calls visible."
+    "note": "Hex's graph-based context layer reuses agent findings across analytics work, reducing repeated research and making judgment calls visible.",
+    "tldr": "Hex’s Knowledge Engine builds a graph from workspace context and agent findings so analytics agents can reuse prior knowledge instead of starting over.",
+    "highlights": [
+      {
+        "text": "Every night, a background Curator Agent reviews your workspace and adds any new learnings into your graph.",
+        "note": "The graph compounds discoveries instead of discarding them after each thread.",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Today, we’re introducing the Hex Knowledge Engine: a graph-based, self-learning system that re-imagines the context lifecycle for agents and humans.",
+    "block": {
+      "best_for": "Analytics teams using agents across shared data work.",
+      "tip": "Inspect the origin of each graph fact before using it.",
+      "needs": [
+        "A Hex 4.0 workspace"
+      ],
+      "start_here": [
+        "Ask the Hex agent a data question.",
+        "Inspect the facts it references.",
+        "Review new learnings after the nightly curation run."
+      ]
+    }
   },
   {
     "slug": "the-new-matter-for-web",
