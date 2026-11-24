@@ -6227,5 +6227,14 @@
         "Approve changes one step at a time."
       ]
     }
+  },
+  {
+    "slug": "gemini-frontend-design",
+    "title": "Gemini Frontend Design",
+    "url": "https://github.com/google-gemini/demolab/blob/main/skills/gemini-frontend-design/SKILL.md",
+    "domain": "github.com",
+    "saved_date": "2026-11-24",
+    "kind": "article",
+    "note": "Google Gemini's frontend design skill pushes agents to choose a specific visual direction, use disciplined typography and color, and verify the rendered page before finishing."
   }
 ]

@@ -1633,5 +1633,14 @@
     "verdict": "watching",
     "note": "Saved from Raindrop. Not tested yet.",
     "status_date": "2026-11-24"
+  },
+  {
+    "slug": "leverage-computer",
+    "name": "Leverage Computer",
+    "url": "https://leverage.computer/",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "A shared persistent computer for Claude Code, Codex and Grok Build, with Git-backed files, approval gates and live multiplayer sessions.",
+    "status_date": "2026-11-24"
   }
 ]
