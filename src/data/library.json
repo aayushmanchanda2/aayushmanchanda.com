@@ -6176,7 +6176,26 @@
     "domain": "getmatter.com",
     "saved_date": "2026-11-24",
     "kind": "article",
-    "note": "Matter explains the typography, navigation, focus mode, bulk triage, and small interaction details behind its rebuilt web reader."
+    "note": "Matter explains the typography, navigation, focus mode, bulk triage, and small interaction details behind its rebuilt web reader.",
+    "tldr": "Matter’s rebuilt web reader pairs Bringhurst-inspired typography with two-panel reading, focus mode, keyboard shortcuts, and faster library navigation.",
+    "highlights": [
+      {
+        "text": "The new app puts special emphasis on typography, following the guidelines of Robert Bringhurst’s classic, The Elements of Typographic Style.",
+        "note": "The redesign treats reading typography as a system, not decoration.",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Today, we’re rolling out the new Matter for Web. Rebuilt from scratch, it’s faster, more functional, more beautiful, and more customizable than before.",
+    "block": {
+      "best_for": "People who manage and read a large article queue on desktop.",
+      "tip": "Press Return or double-click an article to enter focus mode.",
+      "needs": [],
+      "start_here": [
+        "Choose a font, size, column width, justification, and theme.",
+        "Open an article beside your list in the two-panel layout.",
+        "Press Return to enter focus mode."
+      ]
+    }
   },
   {
     "slug": "set-up-notion-for-your-agent",
