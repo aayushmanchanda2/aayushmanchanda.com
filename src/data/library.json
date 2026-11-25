@@ -6235,6 +6235,25 @@
     "domain": "github.com",
     "saved_date": "2026-11-24",
     "kind": "article",
-    "note": "Google Gemini's frontend design skill pushes agents to choose a specific visual direction, use disciplined typography and color, and verify the rendered page before finishing."
+    "note": "Google Gemini's frontend design skill pushes agents to choose a specific visual direction, use disciplined typography and color, and verify the rendered page before finishing.",
+    "tldr": "Google’s frontend design skill tells agents to choose a clear visual direction, constrain typography and color, and verify the rendered page before finishing.",
+    "highlights": [
+      {
+        "text": "Establish a clear direction up front, sustain that exact craft from top to bottom, and verify the rendered page visually before finishing.",
+        "note": "The skill treats visual verification as part of completion, not polish.",
+        "color": "amber"
+      }
+    ],
+    "excerpt": "Strong web design commits to an unmistakable visual point of view, opens with a first screen tailored to the page's true purpose, and lets typography, proportion, color, imagery, and motion carry the entire experience rather than decorative UI chrome. Establish a clear direction up front, sustain that exact craft from top to bottom, and verify the rendered page visually before finishing.",
+    "block": {
+      "best_for": "Designing or redesigning websites and web apps with AI agents.",
+      "tip": "Choose one visual direction before coding and verify the rendered page visually before finishing.",
+      "needs": [],
+      "start_here": [
+        "Honor the requested style or derive one from the subject and audience.",
+        "Use no more than two font families.",
+        "Render the page and verify it visually before finishing."
+      ]
+    }
   }
 ]
