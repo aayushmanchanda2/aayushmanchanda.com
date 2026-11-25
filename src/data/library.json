@@ -6263,6 +6263,33 @@
     "domain": "decks.lol",
     "saved_date": "2026-11-25",
     "kind": "article",
-    "note": "Decks lets Claude or Cursor turn an outline into one responsive link that renders as widescreen slides on desktop and tap-through stories on phones."
+    "note": "Decks lets Claude or Cursor turn an outline into one responsive link that renders as widescreen slides on desktop and tap-through stories on phones.",
+    "tldr": "Decks lets Claude or Cursor design and publish one link that becomes widescreen slides on desktop and tap-through stories on phones.",
+    "highlights": [
+      {
+        "text": "Slides on desktop, stories on phones.",
+        "note": "One published link adapts to the screen instead of forcing one presentation format.",
+        "color": "amber"
+      },
+      {
+        "text": "Bring your own AI",
+        "note": "Decks works through MCP with Claude, Cursor, or another MCP client.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "You write the words. Your AI designs the deck. It goes out as one link.",
+    "block": {
+      "best_for": "Turning outlines or rough notes into responsive decks with Claude or Cursor.",
+      "tip": "Connect Decks as an MCP server, then ask your AI to write, restyle, or publish the deck.",
+      "needs": [
+        "Claude, Cursor, or another MCP client",
+        "An outline, document, or rough brain dump"
+      ],
+      "start_here": [
+        "Connect Decks to an MCP client.",
+        "Give the AI an outline, document, or rough brain dump.",
+        "Ask it to design and publish the deck."
+      ]
+    }
   }
 ]
