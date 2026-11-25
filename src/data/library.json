@@ -6255,5 +6255,14 @@
         "Render the page and verify it visually before finishing."
       ]
     }
+  },
+  {
+    "slug": "decks",
+    "title": "Decks",
+    "url": "https://decks.lol/home",
+    "domain": "decks.lol",
+    "saved_date": "2026-11-25",
+    "kind": "article",
+    "note": "Decks lets Claude or Cursor turn an outline into one responsive link that renders as widescreen slides on desktop and tap-through stories on phones."
   }
 ]
