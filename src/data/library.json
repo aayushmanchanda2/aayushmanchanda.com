@@ -6341,6 +6341,34 @@
     "domain": "ashkashyap.me",
     "saved_date": "2026-11-26",
     "kind": "article",
-    "note": "Ashish Kashyap shows how 52 custom icons for Turf grew from the product’s art, briefs, and interface constraints."
+    "note": "Ashish Kashyap shows how 52 custom icons for Turf grew from the product’s art, briefs, and interface constraints.",
+    "tldr": "Ashish Kashyap traces 52 custom Turf icons from product art, written briefs, and repeated simplification on a shared grid.",
+    "highlights": [
+      {
+        "text": "I start most icons by looking at many pictures of the thing and noticing what keeps coming back.",
+        "note": "Repeated visual traits reveal the icon core.",
+        "color": "amber"
+      },
+      {
+        "text": "Then I take detail away until one more cut would make him unrecognizable.",
+        "note": "Simplify until the identity is just intact.",
+        "color": "blue"
+      }
+    ],
+    "excerpt": "Turf was a live NFL prediction game: you and your friends called the next play while it was still on TV. Its screens ran on Pikaicons, my icon library, but Turf kept needing things the library didn't have. A coach with a mustache. Its own game ticket. A flame that holds your streak count. A way to draw \"fade.\"",
+    "block": {
+      "best_for": "Icon designers building a product-specific set from a visual brief.",
+      "tip": "Find the recurring visual trait, then remove detail until one more cut would lose the identity.",
+      "needs": [
+        "A shared icon grid",
+        "Existing product art",
+        "A written visual brief"
+      ],
+      "start_here": [
+        "Collect references for the object or concept.",
+        "Sketch the traits that keep recurring.",
+        "Test the simplest version at every required size."
+      ]
+    }
   }
 ]
