@@ -6291,5 +6291,23 @@
         "Ask it to design and publish the deck."
       ]
     }
+  },
+  {
+    "slug": "building-a-software-factory-around-human-attention",
+    "title": "Building a software factory around human attention",
+    "url": "https://kiro.dev/blog/software-factory-human-attention/",
+    "domain": "kiro.dev",
+    "saved_date": "2026-11-26",
+    "kind": "article",
+    "note": "Kiro's software factory turns task-board items into released changes, using specialized agents and pulling people in only for decisions that need human judgment."
+  },
+  {
+    "slug": "turf-icons-ashish-kashyap",
+    "title": "Turf icons — Ashish Kashyap",
+    "url": "https://www.ashkashyap.me/turf-icons",
+    "domain": "ashkashyap.me",
+    "saved_date": "2026-11-26",
+    "kind": "article",
+    "note": "Ashish Kashyap shows how 52 custom icons for Turf grew from the product’s art, briefs, and interface constraints."
   }
 ]
