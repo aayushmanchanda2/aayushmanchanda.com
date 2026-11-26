@@ -6299,7 +6299,40 @@
     "domain": "kiro.dev",
     "saved_date": "2026-11-26",
     "kind": "article",
-    "note": "Kiro's software factory turns task-board items into released changes, using specialized agents and pulling people in only for decisions that need human judgment."
+    "note": "Kiro's software factory turns task-board items into released changes, using specialized agents and pulling people in only for decisions that need human judgment.",
+    "tldr": "Kiro structures autonomous software delivery around human attention, scheduled agent workers, targeted decision points, and learning from every reviewer correction.",
+    "highlights": [
+      {
+        "text": "The limit on how much we can hand to agents is human attention.",
+        "note": "Attention, not code generation, becomes the constraint.",
+        "color": "amber"
+      },
+      {
+        "text": "The factory asks for a person only where one is needed, and gives them enough to decide when it does.",
+        "note": "Escalation is selective and decision-ready.",
+        "color": "blue"
+      },
+      {
+        "text": "The factory also captures every correction a person makes and uses it to improve itself.",
+        "note": "Reviewer feedback becomes system memory.",
+        "color": "green"
+      }
+    ],
+    "excerpt": "Our journey to automate with agents started with one agent on one task in someone’s session. Now we’re moving toward agents working autonomously across the whole software development lifecycle, from triage and exploration through design, implementation, release and monitoring.",
+    "block": {
+      "best_for": "Engineering teams scaling agent-led delivery across the software lifecycle.",
+      "tip": "Design the workflow around where human attention changes the outcome, then capture every correction.",
+      "needs": [
+        "A task board",
+        "Scheduled agent workers",
+        "Explicit human decision points"
+      ],
+      "start_here": [
+        "Map the lifecycle from task to release.",
+        "Assign a worker to each repeatable step.",
+        "Escalate only decisions that need human judgment."
+      ]
+    }
   },
   {
     "slug": "turf-icons-ashish-kashyap",
