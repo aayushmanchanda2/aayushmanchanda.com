@@ -1642,5 +1642,14 @@
     "verdict": "watching",
     "note": "A shared persistent computer for Claude Code, Codex and Grok Build, with Git-backed files, approval gates and live multiplayer sessions.",
     "status_date": "2026-11-24"
+  },
+  {
+    "slug": "warden-quickstart",
+    "name": "Warden Quickstart",
+    "url": "https://warden.sentry.dev/quickstart",
+    "category": "unsorted",
+    "verdict": "watching",
+    "note": "Sentry's Warden runs AI code reviews locally or in GitHub Actions, with configurable skills for security and code quality.",
+    "status_date": "2026-11-27"
   }
 ]
