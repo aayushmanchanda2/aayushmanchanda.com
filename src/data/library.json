@@ -6436,6 +6436,20 @@
     "domain": "lightfield.com",
     "saved_date": "2026-11-27",
     "kind": "article",
-    "note": "An AI-native CRM that learns from every customer interaction, then runs account research, meeting prep, follow-ups, and risk alerts from the resulting business model."
+    "note": "An AI-native CRM that learns from every customer interaction, then runs account research, meeting prep, follow-ups, and risk alerts from the resulting business model.",
+    "tldr": "Lightfield is a self-updating CRM that uses customer interactions to run outbound, flag deals at risk, and prioritize sales work.",
+    "block": {
+      "best_for": "Sales teams that want CRM data to update itself",
+      "tip": "Use customer interactions and buying signals to focus outreach, prep meetings, and flag deals at risk.",
+      "needs": [
+        "Customer calls, emails, and meetings",
+        "Customer and market signals"
+      ],
+      "start_here": [
+        "Connect customer interactions",
+        "Review deals flagged at risk",
+        "Run account research and follow-ups"
+      ]
+    }
   }
 ]
