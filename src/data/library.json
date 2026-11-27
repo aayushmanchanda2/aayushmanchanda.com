@@ -6370,5 +6370,58 @@
         "Test the simplest version at every required size."
       ]
     }
+  },
+  {
+    "slug": "aware-s-proactive-agent-feed-and-task-specific-ui",
+    "title": "\"I don’t feel any products or interfaces operate on this…",
+    "url": "https://x.com/haijunxia/status/2125758246552301998?a=QwQegtGj3h5R194Awh0&s=12",
+    "domain": "x.com",
+    "saved_date": "2026-11-27",
+    "kind": "post",
+    "note": "@HaijunXia: \"I don’t feel any products or interfaces operate on this principle now or handle this problem now.\" Well, Aware handles it. Proactive Agent Feed that shows onging tasks + Post/Task-Specific UI for quick human input.",
+    "post": {
+      "id": "2125758246552301998",
+      "author": "Haijun Xia",
+      "handle": "HaijunXia",
+      "date": "2026-11-26",
+      "text": "\"I don’t feel any products or interfaces operate on this principle now or handle this problem now.\" \n\nWell, Aware handles it. \n\nProactive Agent Feed that shows onging tasks \n+ \nPost/Task-Specific UI for quick human input.",
+      "avatar": "/posts/2125758246552301998/avatar.webp",
+      "media": [
+        {
+          "type": "video",
+          "src": "/posts/2125758246552301998/1.mp4",
+          "poster": "/posts/2125758246552301998/1-poster.webp",
+          "w": 1920,
+          "h": 1080
+        }
+      ],
+      "quoted": {
+        "id": "2125623846934127008",
+        "author": "Kshitij",
+        "handle": "okkshitij",
+        "date": "2026-11-25",
+        "text": "the ceo of anthropic thinks chat is temporary and talks about what the next interface should look like:",
+        "avatar": "/posts/2125623846934127008/avatar.webp",
+        "media": [
+          {
+            "type": "video",
+            "src": "/posts/2125623846934127008/1.mp4",
+            "poster": "/posts/2125623846934127008/1-poster.webp",
+            "w": 1920,
+            "h": 1080
+          }
+        ]
+      }
+    },
+    "media_retrieved": "2026-11-27"
+  },
+  {
+    "slug": "lightfield-ai-native-crm",
+    "title": "Lightfield — AI-native CRM",
+    "url": "https://lightfield.com/",
+    "domain": "lightfield.com",
+    "saved_date": "2026-11-27",
+    "kind": "article",
+    "note": "An AI-native CRM that learns from every customer interaction, then runs account research, meeting prep, follow-ups, and risk alerts from the resulting business model."
   }
 ]

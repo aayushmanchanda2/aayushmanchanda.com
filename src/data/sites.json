@@ -6138,5 +6138,80 @@
       ]
     },
     "collections": []
+  },
+  {
+    "slug": "twenty",
+    "title": "Twenty",
+    "url": "https://www.figma.com/file/xt8O9mFeLl46C5InWwoMrN?kind=file&node-id=120319-31096",
+    "domain": "figma.com",
+    "saved_date": "2026-11-27",
+    "shot": "/shots/twenty.webp",
+    "palette": [
+      "#ffffff",
+      "#91d1f5",
+      "#6d2d0e",
+      "#d99b4b",
+      "#39150e",
+      "#2c6eb9"
+    ],
+    "design": {
+      "read_date": "2026-11-27",
+      "colors": [
+        {
+          "name": "background",
+          "hex": "#808080"
+        },
+        {
+          "name": "border",
+          "hex": "#808080"
+        }
+      ],
+      "type": [
+        {
+          "name": "display",
+          "fontFamily": "Times New Roman",
+          "fontSize": "32px",
+          "fontWeight": "700",
+          "lineHeight": "normal",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "heading",
+          "fontFamily": "Times New Roman",
+          "fontSize": "24px",
+          "fontWeight": "700",
+          "lineHeight": "normal",
+          "letterSpacing": "normal"
+        },
+        {
+          "name": "mono",
+          "fontFamily": "monospace",
+          "fontSize": "13px",
+          "fontWeight": "400",
+          "lineHeight": "normal",
+          "letterSpacing": "normal"
+        }
+      ],
+      "spacing": [
+        {
+          "name": "2",
+          "value": "8px"
+        },
+        {
+          "name": "13px",
+          "value": "13px"
+        },
+        {
+          "name": "5",
+          "value": "20px"
+        },
+        {
+          "name": "21px",
+          "value": "21px"
+        }
+      ],
+      "radius": []
+    },
+    "collections": []
   }
 ]
