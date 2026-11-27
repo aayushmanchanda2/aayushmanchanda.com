@@ -6373,7 +6373,7 @@
   },
   {
     "slug": "aware-s-proactive-agent-feed-and-task-specific-ui",
-    "title": "\"I don’t feel any products or interfaces operate on this…",
+    "title": "Aware's proactive agent feed and task UI",
     "url": "https://x.com/haijunxia/status/2125758246552301998?a=QwQegtGj3h5R194Awh0&s=12",
     "domain": "x.com",
     "saved_date": "2026-11-27",
@@ -6413,7 +6413,21 @@
         ]
       }
     },
-    "media_retrieved": "2026-11-27"
+    "media_retrieved": "2026-11-27",
+    "tldr": "Aware combines a proactive agent feed for ongoing tasks with task-specific UI that lets people give quick input.",
+    "block": {
+      "best_for": "Teams designing interfaces for proactive agents",
+      "tip": "Pair an ongoing-task feed with task-specific UI for quick human input.",
+      "needs": [
+        "An agent that runs ongoing tasks",
+        "A feed for task progress",
+        "Task-specific controls for human input"
+      ],
+      "start_here": [
+        "Show ongoing tasks in one feed",
+        "Add quick input controls for each task"
+      ]
+    }
   },
   {
     "slug": "lightfield-ai-native-crm",
