@@ -6451,5 +6451,14 @@
         "Run account research and follow-ups"
       ]
     }
+  },
+  {
+    "slug": "llm-wiki",
+    "title": "LLM Wiki",
+    "url": "https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f",
+    "domain": "gist.github.com",
+    "saved_date": "2026-11-28",
+    "kind": "article",
+    "note": "Karpathy's pattern for an LLM-maintained Markdown wiki that integrates new sources into persistent synthesis instead of rediscovering them through RAG."
   }
 ]
