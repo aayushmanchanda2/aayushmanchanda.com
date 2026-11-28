@@ -24,7 +24,14 @@ import test from "node:test";
 
 import sharp from "sharp";
 
-import { MAX_SHOT_PX, captureWithFirecrawl, scrollThroughPage } from "./capture.mjs";
+import {
+  MAX_SHOT_PX,
+  captureWithFirecrawl,
+  dropRepeatedTiles,
+  scrollThroughPage,
+  shootTiles,
+  stitchTiles,
+} from "./capture.mjs";
 import { CaptureBlockedError } from "./challenge.mjs";
 
 /**
@@ -389,4 +396,179 @@ test("a page reporting a zero-height viewport falls back to the shot viewport", 
   // Stepping by 1px would take 200 steps to cover 200px and burn the deadline.
   assert.deepEqual(page.visited, [0, 900, 1800, 2700, 3000, 0]);
   assert.equal(steps, 4);
+});
+
+/* ---------------------------------------------------------------------------
+   The tiles
+
+   The bug behind the blank bands on theacademysf.com and save.design: their
+   sections reveal while on screen and hide again once scrolled past, so a
+   one-pass full-page render taken from the top photographs them hidden. The
+   fake below behaves the same way, so a capture that shoots a screen before
+   it has been in view, or stitches from anywhere but the tile that was, comes
+   back with background where the section should be.
+   --------------------------------------------------------------------------- */
+
+const WHITE = /** @type {[number, number, number]} */ ([255, 255, 255]);
+const GREEN = /** @type {[number, number, number]} */ ([40, 180, 90]);
+
+/**
+ * A page whose sections paint only once they have been on screen through a
+ * settle, and stop painting as soon as they leave it. Every row's shade moves
+ * with its depth, so no two screens are the same picture.
+ *
+ * @param {object} options
+ * @param {readonly { colour: [number, number, number], rows: number }[]} options.sections
+ * @param {number} [options.viewport]
+ * @param {number} [options.header]   Rows of fixed header, until hidden.
+ */
+function revealPage({ sections, viewport = 100, header = 0 }) {
+  const width = 40;
+  const height = sections.reduce((total, s) => total + s.rows, 0);
+  const starts = sections.map((_, i) => sections.slice(0, i).reduce((t, s) => t + s.rows, 0));
+  let y = 0;
+  let headerHidden = false;
+  /** @type {Set<number>} */
+  let revealed = new Set();
+  /** @type {number[]} */
+  const shots = [];
+  /** @type {number[]} */
+  const scrolls = [];
+
+  const inView = (/** @type {number} */ i) =>
+    starts[i] < y + viewport && starts[i] + sections[i].rows > y;
+  const sectionAt = (/** @type {number} */ row) =>
+    starts.findLastIndex((start) => start <= row);
+
+  return {
+    shots,
+    scrolls,
+    height,
+    tiler: {
+      viewportHeight: async () => viewport,
+      documentHeight: async () => height,
+      scrollTo: async (/** @type {number} */ want) => {
+        y = Math.max(0, Math.min(want, height - viewport));
+        scrolls.push(y);
+        revealed = new Set([...revealed].filter(inView));
+        return y;
+      },
+      settle: async () => {
+        sections.forEach((_, i) => {
+          if (inView(i)) revealed.add(i);
+        });
+      },
+      hideRepeats: async () => {
+        headerHidden = true;
+      },
+      screenshot: async () => {
+        shots.push(y);
+        const pixels = Buffer.alloc(width * viewport * 3);
+        for (let r = 0; r < viewport; r += 1) {
+          const row = y + r;
+          const i = sectionAt(row);
+          const base = r < header && !headerHidden ? RED : revealed.has(i) ? sections[i].colour : WHITE;
+          const shade = base === WHITE || base === RED ? 0 : row % 40;
+          for (let x = 0; x < width; x += 1) {
+            const o = (r * width + x) * 3;
+            pixels[o] = Math.max(0, base[0] - shade);
+            pixels[o + 1] = Math.max(0, base[1] - shade);
+            pixels[o + 2] = Math.max(0, base[2] - shade);
+          }
+        }
+        return sharp(pixels, { raw: { width, height: viewport, channels: 3 } }).png().toBuffer();
+      },
+    },
+  };
+}
+
+/** The colour of one row of a PNG, read from its middle column. */
+async function rowColour(/** @type {Buffer} */ png, /** @type {number} */ row) {
+  const { data, info } = await sharp(png).raw().toBuffer({ resolveWithObject: true });
+  const o = (row * info.width + Math.floor(info.width / 2)) * info.channels;
+  return [data[o], data[o + 1], data[o + 2]];
+}
+
+const ORANGE = /** @type {[number, number, number]} */ ([200, 120, 40]);
+
+const SECTIONS = [
+  { colour: BLUE, rows: 120 },
+  { colour: GREEN, rows: 150 },
+  { colour: ORANGE, rows: 130 },
+];
+
+test("a section that is visible only on screen is in the stitched shot", async () => {
+  const page = revealPage({ sections: SECTIONS });
+
+  const { tiles, height } = await shootTiles(page.tiler);
+  const png = await stitchTiles(tiles, { width: 40, height });
+
+  assert.equal(height, page.height);
+  for (const row of [10, 60, 130, 200, 260, 330, 399]) {
+    assert.notDeepEqual(
+      await rowColour(png, row),
+      WHITE,
+      `row ${row} came out as background: its section was shot while off screen`,
+    );
+  }
+});
+
+test("each tile is settled before it is shot, and the last one is clamped to the bottom", async () => {
+  const page = revealPage({ sections: SECTIONS });
+
+  const { tiles } = await shootTiles(page.tiler);
+
+  assert.deepEqual(
+    tiles.map((tile) => tile.y),
+    [0, 100, 200, 300],
+    "four screens cover 400 rows; the fourth lands where the page ends",
+  );
+  assert.equal(page.scrolls.at(-1), 0, "the page is left at the top for whatever reads it next");
+});
+
+test("a fixed header is photographed once, on the first tile", async () => {
+  const page = revealPage({ sections: SECTIONS, header: 10 });
+
+  const { tiles, height } = await shootTiles(page.tiler);
+  const png = await stitchTiles(tiles, { width: 40, height });
+
+  assert.deepEqual(await rowColour(png, 5), [...RED], "the first tile keeps its header");
+  for (const row of [105, 205, 305]) {
+    assert.notDeepEqual(await rowColour(png, row), [...RED], `a header repeated at row ${row}`);
+  }
+});
+
+test("the tiles stop at the clip ceiling", async () => {
+  const page = revealPage({ sections: [{ colour: BLUE, rows: 60_000 }], viewport: 900 });
+
+  const { tiles, height, documentHeight } = await shootTiles(page.tiler, { maxPx: MAX_SHOT_PX });
+
+  assert.equal(height, MAX_SHOT_PX);
+  assert.equal(documentHeight, 60_000, "the true height is still reported, for the clip notice");
+  assert.ok((tiles.at(-1)?.y ?? Infinity) < MAX_SHOT_PX);
+});
+
+test("a pinned section's repeated screens are dropped and the page closes up", async () => {
+  const a = await bandedPng([{ colour: BLUE, rows: 30 }, { colour: RED, rows: 30 }], 40);
+  const b = await bandedPng([{ colour: RED, rows: 30 }, { colour: BLUE, rows: 30 }], 40);
+
+  const { tiles, removed } = await dropRepeatedTiles([
+    { y: 0, png: a },
+    { y: 60, png: a },
+    { y: 120, png: a },
+    { y: 180, png: b },
+  ]);
+
+  assert.deepEqual(tiles.map((tile) => tile.y), [0, 60], "the screen after the pin moves up to meet it");
+  assert.equal(removed, 120);
+});
+
+test("a page too slow to tile ships the screens it got instead of timing out", async () => {
+  const page = revealPage({ sections: SECTIONS });
+
+  const { tiles, height, outOfTime } = await shootTiles(page.tiler, { until: Date.now() - 1 });
+
+  assert.equal(outOfTime, true);
+  assert.deepEqual(tiles.map((tile) => tile.y), [0], "the first screen is always taken");
+  assert.equal(height, 100);
 });
